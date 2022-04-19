@@ -4,3 +4,5 @@
 [virtual classes](https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py) system. It unlocks
 customisation for component, attribute (including subtype) and data classes, implements true inheritance and offers a
 simpler authoring  workflow with full support for techniques such as operator overloading.
+
+The full scoop can be found [here](https://kimonmatara.github.io/paya/).
