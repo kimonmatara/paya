@@ -415,8 +415,8 @@ class PlugClassPool(ClassPool):
 
     def getFromPyMELInstance(self, inst):
         """
-        Given a PyNode or PyMEL data type instance, returns a custom class
-        suitable for assignment.
+        Overloads :py:meth:`ClassPool.getFromPyMELInstance` to implement
+        ``MPlug`` inspections.
 
         :param inst: the PyNode or PyMEL data type instance
         :return: The custom class.
