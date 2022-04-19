@@ -1,3 +1,9 @@
+"""
+Defines methods used by :py:mod:`paya.runtime` to manage PyMEL patching.
+
+This module is not intended for direct use.
+"""
+
 import inspect
 
 import pymel.core.nodetypes as _nt
@@ -22,7 +28,10 @@ pyMELIsPatched = False
 
 def patchPyMEL(quiet=False):
     """
-    Patches PyMEL so that it will return custom paya classes instead of its own.
+    Patches PyMEL so that it will return custom paya classes instead of
+    its own. Called by :py:meth:`~paya.runtime.Runtime.start`.
+
+    :param bool quiet: don't print status messages; defaults to False
     """
     global pyMELIsPatched
 
@@ -63,7 +72,10 @@ def patchPyMEL(quiet=False):
 
 def unpatchPyMEL(quiet=False):
     """
-    Returns PyMEL to its factory load state.
+    Reverts PyMEL to its 'factory' state. Called by
+    :py:meth:`~paya.runtime.Runtime.stop`.
+
+    :param bool quiet: don't print status messages; defaults to False
     """
     global pyMELIsPatched
 
@@ -81,31 +93,3 @@ def unpatchPyMEL(quiet=False):
     else:
         if not quiet:
             m.warning("PyMEL is not patched.")
-
-class PatchCtx(object):
-    def __init__(self, *state):
-        if state:
-            self.requested_state = state[0]
-
-        else:
-            self.requested_state = True
-
-    def __enter__(self):
-        self.last_state = pyMELIsPatched
-
-        if pyMELIsPatched and not self.requested_state:
-            unpatchPyMEL()
-
-        elif self.requested_state and not pyMELIsPatched:
-            patchPyMEL()
-
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if pyMELIsPatched and not self.last_state:
-            unpatchPyMEL()
-
-        elif self.last_state and not pyMELIsPatched:
-            patchPyMEL()
-
-        return False

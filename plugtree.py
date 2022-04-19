@@ -1,4 +1,8 @@
-"""Routes custom Maya plug classes based on an abstract tree defined in ``./plugtree.json``.
+"""
+Manages the inheritance tree used to construct the abstract **paya**
+attribute subtypes. The tree is defined inside ``paya/plugtree.json``.
+
+This module is not intended for direct use.
 """
 
 import os
@@ -31,9 +35,10 @@ def getPath(typeName):
     """
     Returns hierarchical type information.
 
-    :param str typeName: The plug type to query
-    :return: A list of abstract type names, ordered
-        similarly to ``nodeType(inherited=True)``.
+    :param str typeName: the plug type to query, for example
+        ``AttributeDoubleLinear``.
+    :return: A list of abstract type names, ordered similarly to
+        :func:`~pymel.core.general.nodeType` called with ``inheritance=True``.
     :rtype: :class:`list`
     """
     foundPath = []
@@ -85,7 +90,7 @@ def enumerator(enum):
 
 def getMPlugPathString(mplug):
 	"""
-	Returns the full DAG path to a given mplug.
+	Returns the full DAG path to a given ``MPlug``.
 
 	:param `OpenMaya.MPlug` mplug: the MPlug instance to query
 	:return: The DAG path to the MPlug.
@@ -108,17 +113,18 @@ def getMPlugPathString(mplug):
 
 def getMPlugTypeInfo(mplug):
     """
-    Returns plug type information on the given MPlug in a
-    dict comprising the following keys:
+    Returns plug type information on the given MPlug in a dictionary
+    comprising the following keys:
 
-    - plugType
-        The basic MObject type, e.g. ``kNumericAttribute``
+    .. list-table::
+       :widths: 25 50
 
-    - dataType
-        If available, the type of data served
-
-    - numericType
-        The numeric subtype (e.g. ``kFloat``) if the plugType was ``kNumericAttribute``
+       * - ``plugType``
+         - The basic ``MObject`` type, e.g. ``kNumericAttribute``.
+       * - ``dataType``
+         - If available, the type of data served.
+       * - ``numericType``
+         - The numeric subtype (e.g. ``kFloat``) if the ``plugType`` was ``kNumericAttribute``.
     """
     out = {}
 

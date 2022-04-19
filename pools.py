@@ -1,3 +1,10 @@
+"""
+Defines the template class interfaces served by the ``nodes``,
+``plugs``, ``comps`` and ``data`` attributes on :py:mod:`paya.runtime`.
+
+This module is not intended for direct use.
+"""
+
 import inspect
 import sys
 import os
@@ -38,6 +45,8 @@ class UnsupportedLookupError(RuntimeError):
 def ispmcls(cls):
     """
     :param cls: The class to query
+    :return: ``True`` if the class is a 'vanilla' PyMEL class,
+        otherwise ``False``.
     :rtype: bool
     """
     return cls.__module__.startswith('pymel.')
@@ -45,6 +54,8 @@ def ispmcls(cls):
 def iscustomcls(cls):
     """
     :param cls: The class to query
+    :return: ``True`` if the class is a **paya** class,
+        otherwise ``False``.
     :rtype: bool
     """
     return rootpkg in cls.__module__
@@ -113,6 +124,9 @@ class payaMeta(type):
 #------------------------------------------------------------|
 
 class ClassPool:
+    """
+    Abstract. Defines base functionality for all template class pools.
+    """
 
     #-------------------------------------------------|    Config
 
@@ -279,10 +293,23 @@ class ClassPool:
     #-------------------------------------------------|    High-level access
 
     def getFromPyMELInstance(self, inst):
+        """
+        Given a PyNode or PyMEL data type instance, returns a custom class
+        suitable for assignment.
+
+        :param inst: the PyNode or PyMEL data type instance
+        :return: The custom class.
+        """
         lookup = inst.__class__.__name__
         return self.getByName(lookup)
 
     def getByName(self, clsname):
+        """
+        Returns a custom class by name.
+
+        :param str clsname: the name of the class to retrieve
+        :return: The custom class.
+        """
         try:
             return self._cache[clsname]
 
@@ -301,6 +328,10 @@ class ClassPool:
     #-------------------------------------------------|    Clearing / reloading
 
     def purge(self):
+        """
+        Clears the cache so that subsequent class lookups will trigger
+        reloads.
+        """
         self._cache.clear()
 
         modsToDelete = [name for name in sys.modules \
@@ -343,6 +374,9 @@ class ClassPool:
 #------------------------------------------------------------|
 
 class NodeClassPool(ClassPool):
+    """
+    Serves custom classes for **nodes**.
+    """
 
     __singular__ = 'node'
     __plural__ = 'nodes'
@@ -353,6 +387,10 @@ nodes = NodeClassPool()
 
 
 class PlugClassPool(ClassPool):
+    """
+    Serves custom classes for **plugs** (attributes) off of an inheritance tree
+    defined inside ``paya/plugtree.json``.
+    """
 
     __singular__ = 'plug'
     __plural__ = 'plugs'
@@ -376,6 +414,13 @@ class PlugClassPool(ClassPool):
     #-------------------------------------------------|    High-level access
 
     def getFromPyMELInstance(self, inst):
+        """
+        Given a PyNode or PyMEL data type instance, returns a custom class
+        suitable for assignment.
+
+        :param inst: the PyNode or PyMEL data type instance
+        :return: The custom class.
+        """
         mplug = inst.__apimplug__()
         lookup = _pt.getTypeFromMPlug(mplug)
         return self.getByName(lookup)
@@ -384,6 +429,9 @@ plugs = PlugClassPool()
 
 
 class CompClassPool(ClassPool):
+    """
+    Serves custom classes for **components**.
+    """
 
     __singular__ = 'comp'
     __plural__ = 'comps'
@@ -414,6 +462,11 @@ def getRootDataClasses():
     return list(set(out))
 
 class DataClassPool(ClassPool):
+    """
+    Serves custom classes for **data objects**, for example
+    :class:`~pymel.core.datatypes.Matrix` instances returned by
+    :py:meth:`~pymel.core.nodetypes.Transform.getMatrix`.
+    """
 
     __unsupported_lookups__ = ['MatrixN', 'Array']
 
@@ -423,6 +476,13 @@ class DataClassPool(ClassPool):
     __pm_root_classes__ = getRootDataClasses()
 
     def getByName(self, clsname):
+        """
+        Overloads :py:meth:`ClassPool.getByName` to prevent customisation of
+        sensitive types such as :py:class:`pymel.core.datatypes.MatrixN`.
+
+        :param str clsname: the name of the class to retrieve
+        :return: The custom class.
+        """
         if clsname in self.__unsupported_lookups__:
             raise UnsupportedLookupError(
                 "Pool {} can't serve class '{}'".format(self, clsname)
