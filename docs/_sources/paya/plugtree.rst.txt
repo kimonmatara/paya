@@ -1,0 +1,54 @@
+=============
+paya.plugtree
+=============
+
+.. py:module:: paya.plugtree
+
+Manages the inheritance tree used to construct the abstract **paya**
+attribute subtypes. The tree is defined inside ``paya/plugtree.json``.
+
+.. py:function:: getPath(typeName)
+
+    Returns hierarchical type information.
+    
+    :param str typeName: the plug type to query, for example
+        ``AttributeDoubleLinear``.
+    :return: A list of abstract type names, ordered similarly to
+        :func:`~pymel.core.general.nodeType` called with ``inheritance=True``.
+    :rtype: :class:`list`
+
+.. py:function:: enumerator(enum)
+
+    Helper for reverse lookups on enumerators such as `MFn.type`.
+
+.. py:function:: getMPlugPathString(mplug)
+
+    Returns the full DAG path to a given ``MPlug``.
+    
+    :param `OpenMaya.MPlug` mplug: the MPlug instance to query
+    :return: The DAG path to the MPlug.
+    :rtype: :class:`str`
+
+.. py:function:: getMPlugTypeInfo(mplug)
+
+    Returns plug type information on the given MPlug in a dictionary
+    comprising the following keys:
+    
+    .. list-table::
+       :widths: 25 50
+    
+       * - ``plugType``
+         - The basic ``MObject`` type, e.g. ``kNumericAttribute``.
+       * - ``dataType``
+         - If available, the type of data served.
+       * - ``numericType``
+         - The numeric subtype (e.g. ``kFloat``) if the ``plugType`` was ``kNumericAttribute``.
+
+.. py:function:: getTypeFromMPlug(mplug, inherited=False)
+
+    Given an MPlug, returns a best-fit name from the abstract class tree.
+    
+    :param OpenMaya.MPlug mplug: the MPlug to query
+    :param bool inherited: return a hierarchy path, defaults to ``False``
+    :return: A full inheritance stack if ``inherited=True``, otherwise a single string.
+    :rtype: ``str`` or ``[str]``

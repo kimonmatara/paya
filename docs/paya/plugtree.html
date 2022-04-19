@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.plugtree &mdash; paya 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="paya.pools" href="pools.html" />
+    <link rel="prev" title="paya.patch" href="patch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../importing_and_patch_management.html">Importing and Patch Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../method_tutorial.html">Tutorial #1: Custom Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../more_customisation.html">More Customisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Module Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools.html">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">paya.util</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../paya.html">paya</a> &raquo;</li>
+      <li>paya.plugtree</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/paya/plugtree.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-paya.plugtree">
+<span id="paya-plugtree"></span><h1>paya.plugtree<a class="headerlink" href="#module-paya.plugtree" title="Permalink to this headline">¶</a></h1>
+<p>Manages the inheritance tree used to construct the abstract <strong>paya</strong>
+attribute subtypes. The tree is defined inside <code class="docutils literal notranslate"><span class="pre">paya/plugtree.json</span></code>.</p>
+<dl class="function">
+<dt id="paya.plugtree.getPath">
+<code class="descname">getPath</code><span class="sig-paren">(</span><em>typeName</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns hierarchical type information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>typeName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the plug type to query, for example
+<code class="docutils literal notranslate"><span class="pre">AttributeDoubleLinear</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of abstract type names, ordered similarly to
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.nodeType.html#pymel.core.general.nodeType" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">nodeType()</span></code></a> called with <code class="docutils literal notranslate"><span class="pre">inheritance=True</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.plugtree.enumerator">
+<code class="descname">enumerator</code><span class="sig-paren">(</span><em>enum</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.enumerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for reverse lookups on enumerators such as <cite>MFn.type</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.plugtree.getMPlugPathString">
+<code class="descname">getMPlugPathString</code><span class="sig-paren">(</span><em>mplug</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getMPlugPathString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the full DAG path to a given <code class="docutils literal notranslate"><span class="pre">MPlug</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mplug</strong> (<em>OpenMaya.MPlug</em>) – the MPlug instance to query</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The DAG path to the MPlug.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.plugtree.getMPlugTypeInfo">
+<code class="descname">getMPlugTypeInfo</code><span class="sig-paren">(</span><em>mplug</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getMPlugTypeInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns plug type information on the given MPlug in a dictionary
+comprising the following keys:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">plugType</span></code></td>
+<td>The basic <code class="docutils literal notranslate"><span class="pre">MObject</span></code> type, e.g. <code class="docutils literal notranslate"><span class="pre">kNumericAttribute</span></code>.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dataType</span></code></td>
+<td>If available, the type of data served.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">numericType</span></code></td>
+<td>The numeric subtype (e.g. <code class="docutils literal notranslate"><span class="pre">kFloat</span></code>) if the <code class="docutils literal notranslate"><span class="pre">plugType</span></code> was <code class="docutils literal notranslate"><span class="pre">kNumericAttribute</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.plugtree.getTypeFromMPlug">
+<code class="descname">getTypeFromMPlug</code><span class="sig-paren">(</span><em>mplug</em>, <em>inherited=False</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getTypeFromMPlug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an MPlug, returns a best-fit name from the abstract class tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mplug</strong> (<em>OpenMaya.MPlug</em>) – the MPlug to query</li>
+<li><strong>inherited</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return a hierarchy path, defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A full inheritance stack if <code class="docutils literal notranslate"><span class="pre">inherited=True</span></code>, otherwise a single string.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">[str]</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="patch.html" class="btn btn-neutral float-left" title="paya.patch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pools.html" class="btn btn-neutral float-right" title="paya.pools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

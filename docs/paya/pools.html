@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.pools &mdash; paya 0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="paya.runtime" href="runtime.html" />
+    <link rel="prev" title="paya.plugtree" href="plugtree.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../importing_and_patch_management.html">Importing and Patch Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../method_tutorial.html">Tutorial #1: Custom Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../more_customisation.html">More Customisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Module Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">paya.util</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../paya.html">paya</a> &raquo;</li>
+      <li>paya.pools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/paya/pools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-paya.pools">
+<span id="paya-pools"></span><h1>paya.pools<a class="headerlink" href="#module-paya.pools" title="Permalink to this headline">¶</a></h1>
+<p>Defines the template class interfaces served by the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>,
+<code class="docutils literal notranslate"><span class="pre">plugs</span></code>, <code class="docutils literal notranslate"><span class="pre">comps</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> attributes on <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
+<dl class="function">
+<dt id="paya.pools.ispmcls">
+<code class="descname">ispmcls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ispmcls" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cls</strong> – The class to query</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the class is a ‘vanilla’ PyMEL class,
+otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.pools.iscustomcls">
+<code class="descname">iscustomcls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.iscustomcls" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cls</strong> – The class to query</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the class is a <strong>paya</strong> class,
+otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="paya.pools.ClassPool">
+<em class="property">class </em><code class="descname">ClassPool</code><a class="headerlink" href="#paya.pools.ClassPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract. Defines base functionality for all template class pools.</p>
+<dl class="method">
+<dt id="paya.pools.ClassPool.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="paya.pools.ClassPool.__new__">
+<em class="property">static </em><code class="descname">__new__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.__new__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a new object.  See help(type) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.pools.ClassPool.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.pools.ClassPool.getByName">
+<code class="descname">getByName</code><span class="sig-paren">(</span><em>clsname</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.getByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a custom class by name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class to retrieve</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The custom class.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.pools.ClassPool.getFromPyMELInstance">
+<code class="descname">getFromPyMELInstance</code><span class="sig-paren">(</span><em>inst</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.getFromPyMELInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a PyNode or PyMEL data type instance, returns a custom class
+suitable for assignment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inst</strong> – the PyNode or PyMEL data type instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The custom class.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.pools.ClassPool.purge">
+<code class="descname">purge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.purge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the cache so that subsequent class lookups will trigger
+reloads.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="paya.pools.NodeClassPool">
+<em class="property">class </em><code class="descname">NodeClassPool</code><a class="headerlink" href="#paya.pools.NodeClassPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serves custom classes for <strong>nodes</strong>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="paya.pools.PlugClassPool">
+<em class="property">class </em><code class="descname">PlugClassPool</code><a class="headerlink" href="#paya.pools.PlugClassPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serves custom classes for <strong>plugs</strong> (attributes) off of an inheritance tree
+defined inside <code class="docutils literal notranslate"><span class="pre">paya/plugtree.json</span></code>.</p>
+<dl class="method">
+<dt id="paya.pools.PlugClassPool.getFromPyMELInstance">
+<code class="descname">getFromPyMELInstance</code><span class="sig-paren">(</span><em>inst</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.PlugClassPool.getFromPyMELInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a PyNode or PyMEL data type instance, returns a custom class
+suitable for assignment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inst</strong> – the PyNode or PyMEL data type instance</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The custom class.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="paya.pools.CompClassPool">
+<em class="property">class </em><code class="descname">CompClassPool</code><a class="headerlink" href="#paya.pools.CompClassPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serves custom classes for <strong>components</strong>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="paya.pools.DataClassPool">
+<em class="property">class </em><code class="descname">DataClassPool</code><a class="headerlink" href="#paya.pools.DataClassPool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serves custom classes for <strong>data objects</strong>, for example
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> instances returned by
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform.getMatrix" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getMatrix()</span></code></a>.</p>
+<dl class="method">
+<dt id="paya.pools.DataClassPool.getByName">
+<code class="descname">getByName</code><span class="sig-paren">(</span><em>clsname</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.DataClassPool.getByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloads <a class="reference internal" href="#paya.pools.ClassPool.getByName" title="paya.pools.ClassPool.getByName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ClassPool.getByName()</span></code></a> to prevent customisation of
+sensitive types such as <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.MatrixN.html#pymel.core.datatypes.MatrixN" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.datatypes.MatrixN</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class to retrieve</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The custom class.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.pools.getPoolFromPmBase">
+<code class="descname">getPoolFromPmBase</code><span class="sig-paren">(</span><em>pmbase</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.getPoolFromPmBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a PyMEL base class, returns the most appropriate class pool
+to source a swap-in from.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="plugtree.html" class="btn btn-neutral float-left" title="paya.plugtree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="runtime.html" class="btn btn-neutral float-right" title="paya.runtime" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

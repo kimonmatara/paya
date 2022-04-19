@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial #1: Custom Methods &mdash; paya 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial 2: Custom Constructors" href="cust_cstr_tutorial.html" />
+    <link rel="prev" title="Using the Runtime Interface" href="using_the_runtime_interface.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial #1: Custom Methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#identifying-the-class-to-customise">1. Identifying the Class to Customise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authoring-the-class">2. Authoring the Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reloading-and-using">3. Reloading and Using</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_customisation.html">More Customisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Tutorial #1: Custom Methods</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/method_tutorial.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="tutorial-1-custom-methods">
+<h1>Tutorial #1: Custom Methods<a class="headerlink" href="#tutorial-1-custom-methods" title="Permalink to this headline">¶</a></h1>
+<p>Suppose you want to create an object-oriented version of
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.modeling/pymel.core.modeling.pointPosition.html#pymel.core.modeling.pointPosition" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pointPosition()</span></code></a> so that you can do this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span><span class="o">.</span><span class="n">vtx</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Instead of this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">pointPosition</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vtx</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="section" id="identifying-the-class-to-customise">
+<h2>1. Identifying the Class to Customise<a class="headerlink" href="#identifying-the-class-to-customise" title="Permalink to this headline">¶</a></h2>
+<p>To find the class to target, you could start by inspecting, say, a vertex
+instance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vertex</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vtx</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="c1"># vertex.__class__ also works</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+<span class="go">&lt;class &#39;paya.comptypes.meshVertex.MeshVertex&#39;&gt;</span>
+</pre></div>
+</div>
+<p>This might suggest that the class you need to work on is
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MeshVertex</span></code>. However, you probably want to add <code class="docutils literal notranslate"><span class="pre">getWorldPosition()</span></code>
+to every component type supported by <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.modeling/pymel.core.modeling.pointPosition.html#pymel.core.modeling.pointPosition" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pointPosition()</span></code></a>.</p>
+<p>Since <strong>paya</strong> supports true inheritance, it would be better to target a more general class, one that
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MeshVertex</span></code> as well as other types like
+<code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveCV</span></code> all inherit from.</p>
+<p>You can inspect the inheritance stack of <code class="xref py py-class docutils literal notranslate"><span class="pre">MeshVertex</span></code>
+via its <code class="docutils literal notranslate"><span class="pre">__mro__</span></code> class attribute, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span>
+<span class="go">(&lt;class &#39;paya.comptypes.meshVertex.MeshVertex&#39;&gt;, &lt;class &#39;pymel.core.general.MeshVertex&#39;&gt;, &lt;class &#39;paya.comptypes.mItComponent1D.MItComponent1D&#39;&gt;, &lt;class &#39;pymel.core.general.MItComponent1D&#39;&gt;, &lt;class &#39;paya.comptypes.mItComponent.MItComponent&#39;&gt;, &lt;class &#39;pymel.core.general.MItComponent&#39;&gt;, &lt;class &#39;paya.comptypes.component1D.Component1D&#39;&gt;, &lt;class &#39;pymel.core.general.Component1D&#39;&gt;, &lt;class &#39;paya.comptypes.discreteComponent.DiscreteComponent&#39;&gt;, &lt;class &#39;pymel.core.general.DiscreteComponent&#39;&gt;, &lt;class &#39;paya.comptypes.dimensionedComponent.DimensionedComponent&#39;&gt;, &lt;class &#39;pymel.core.general.DimensionedComponent&#39;&gt;, &lt;class &#39;paya.comptypes.component.Component&#39;&gt;, &lt;class &#39;pymel.core.general.Component&#39;&gt;, &lt;class &#39;pymel.core.general.PyNode&#39;&gt;, &lt;class &#39;pymel.util.utilitytypes.proxyClass.&lt;locals&gt;.Proxy&#39;&gt;, &lt;class &#39;object&#39;&gt;)</span>
+</pre></div>
+</div>
+<p>Scanning through the members, <code class="xref py py-class docutils literal notranslate"><span class="pre">DiscreteComponent</span></code>
+looks like a better candidate for customisation: <em>discrete</em> suggests that
+point-like components will be included, but continuous components like NURBS
+isoparms will be excluded.</p>
+</div>
+<div class="section" id="authoring-the-class">
+<h2>2. Authoring the Class<a class="headerlink" href="#authoring-the-class" title="Permalink to this headline">¶</a></h2>
+<p>Custom <strong>paya</strong> classes are defined in ‘template’ modules. Depending on type,
+these are stored inside <code class="docutils literal notranslate"><span class="pre">paya/nodetypes</span></code>, <code class="docutils literal notranslate"><span class="pre">paya/comptypes</span></code>, <code class="docutils literal notranslate"><span class="pre">paya/plugtypes</span></code>
+or <code class="docutils literal notranslate"><span class="pre">paya/datatypes</span></code>. Each module name is always the uncapitalised name of the
+class it defines.</p>
+<p>Since we want to start a custom class for
+<code class="xref py py-class docutils literal notranslate"><span class="pre">DiscreteComponent</span></code>, we need to create the following
+file: <code class="docutils literal notranslate"><span class="pre">paya/comptypes/discreteComponent.py</span></code>.</p>
+<p>Authoring the class is very easy. In this case, the module content amounts to this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+
+<span class="k">class</span> <span class="nc">DiscreteComponent</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">getWorldPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">pointPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Those familiar with object-oriented programming in Python might have
+expected to see this instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core.general</span>
+
+<span class="k">class</span> <span class="nc">DiscreteComponent</span><span class="p">(</span><span class="n">pymel</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">DiscreteComponent</span><span class="p">):</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This is not necessary, because template classes are rebuilt by <strong>paya</strong>
+to enforce correct inheritance. While this simplifies class authoring,
+it has a couple of drawbacks:</p>
+<ul class="last">
+<li><p class="first">Template classes should never be imported directly (even by other
+template classes); instead, they must always be accessed via the
+<a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interfaces.</p>
+</li>
+<li><p class="first">If you want to call a superclass method, you can’t use <a class="reference external" href="https://docs.python.org/3/library/functions.html#super" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">super</span></code></a>;
+instead, you must correctly identify and source the parent class for
+the explicit form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymel.core.general</span> <span class="kn">import</span> <span class="n">DiscreteComponent</span>
+
+<span class="k">class</span> <span class="nc">MeshVertex</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">getWorldPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">DiscreteComponent</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="reloading-and-using">
+<h2>3. Reloading and Using<a class="headerlink" href="#reloading-and-using" title="Permalink to this headline">¶</a></h2>
+<p>Your new <code class="docutils literal notranslate"><span class="pre">getWorldPosition()</span></code> method won’t be picked up until you clear the
+class pool caches. You can do this by calling
+<a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.rehash" title="paya.runtime.Runtime.rehash"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rehash()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">rehash</span><span class="p">()</span>
+<span class="go">Purged class pool paya.nodes.</span>
+<span class="go">Purged class pool paya.plugs.</span>
+<span class="go">Purged class pool paya.comps.</span>
+<span class="go">Purged class pool paya.data.</span>
+</pre></div>
+</div>
+<p>That’s it! Your new class will now be reloaded the next time you create a
+component instance, and the <code class="docutils literal notranslate"><span class="pre">getWorldPosition()</span></code> method will be ready to use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vertex</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">vtx</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">vertex</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">())</span>
+<span class="go">[10,10,10]</span>
+
+<span class="go"># Confirm it works on other discrete components too:</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">())</span>
+<span class="go">[0.5,0.0,0.0]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="using_the_runtime_interface.html" class="btn btn-neutral float-left" title="Using the Runtime Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cust_cstr_tutorial.html" class="btn btn-neutral float-right" title="Tutorial 2: Custom Constructors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

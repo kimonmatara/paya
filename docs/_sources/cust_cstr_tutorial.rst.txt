@@ -1,0 +1,37 @@
+Tutorial 2: Custom Constructors
+===============================
+
+The :py:mod:`~paya.runtime` interface offers an elegant interface for custom
+instance constructors. For example, suppose you often call Maya commands with
+the same unwieldy argument lists to create objects, like this:
+
+.. code-block:: python
+
+    skin = r.skinCluster(
+        inf1, inf2, geo,
+        bm=1, dr=4.5, mi=4,
+        nw=1, omi=0, sm=0,
+        tsb=1, wd=0
+        )
+
+A simpler method might look like this:
+
+.. code-block:: python
+
+    skin = r.nodes.SkinCluster.create(influences, geo)
+
+This can be easily implemented using a regular Python class method:
+
+.. code-block:: python
+
+    class SkinCluster:
+
+        @classmethod
+        def create(cls, influences, geo):
+
+            args = list(influences) + [geo]
+            kwargs = {'bm': 1, 'dr': 4.5, 'mi': 4.0,
+                'nw': 1, 'omi': 0, 'sm': 0,
+                'tsb': 1, 'wd': 0}
+
+            return r.skinCluster(*args, **kwargs)

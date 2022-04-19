@@ -1,0 +1,25 @@
+***************************
+Using the Runtime Interface
+***************************
+
+:py:mod:`paya.runtime` doesn't just administer patching; it also imports the entire
+:py:mod:`pymel.core` namespace, and can therefore be used as a drop-in
+replacement:
+
+.. code-block:: python
+
+    >>> import paya.runtime as r
+    >>> meshes = r.ls(type='mesh')
+
+Crucially, it also provides direct access to custom **paya** classes via
+the ``nodes``, ``plugs``, ``comps`` and ``data`` attributes.
+
+.. code-block:: python
+
+    >>> print(r.nodes.Transform)
+    <class 'paya.nodetypes.transform.Transform'>
+
+When developing with **paya**, it's recommended to access PyMEL functionality
+via :py:mod:`paya.runtime`, rather than via :py:mod:`pymel.core`. Aside
+from giving you access to top-level additions like the custom class pools, it
+also clarifies 'modes of operation' within your code.

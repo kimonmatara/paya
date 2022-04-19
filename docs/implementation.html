@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implementation &mdash; paya 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Author" href="author.html" />
+    <link rel="prev" title="paya.util.strings" href="paya/util/strings.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="more_customisation.html">More Customisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#class-construction">1. Class Construction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-interception">2. Instance Interception</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advantages">Advantages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Implementation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/implementation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="implementation">
+<h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
+<p>There are two aspects to the <strong>paya</strong> patching mechanism.</p>
+<div class="section" id="class-construction">
+<h2>1. Class Construction<a class="headerlink" href="#class-construction" title="Permalink to this headline">¶</a></h2>
+<p>Custom <strong>paya</strong> classes are built in the following way:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Where available, content is taken from user (or bundled)
+<span class="xref std std-ref">template classes</span>.</li>
+<li>The custom classes are then built using special metaclasses that
+manage inheritance via an overriden <code class="docutils literal notranslate"><span class="pre">mro()</span></code>.</li>
+</ol>
+</div></blockquote>
+<p>Custom node, component and data types always shadow a PyMEL counterpart in the
+method resolution order. However, when it comes to <strong>plug</strong> (attribute) types,
+PyMEL only provides one class: <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.general.Attribute</span></code></a>. For
+this reason, custom plug types are largely abstract, and constructed according
+to an inheritance tree defined inside <code class="docutils literal notranslate"><span class="pre">paya/plugtree.json</span></code>.</p>
+</div>
+<div class="section" id="instance-interception">
+<h2>2. Instance Interception<a class="headerlink" href="#instance-interception" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">__new__()</span></code> constructors on PyMEL classes inside <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/pymel.core.general.html#module-pymel.core.general" title="(in PyMEL v1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core.general</span></code></a>, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/pymel.core.nodetypes.html#module-pymel.core.nodetypes" title="(in PyMEL v1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core.nodetypes</span></code></a> and
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/pymel.core.datatypes.html#module-pymel.core.datatypes" title="(in PyMEL v1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core.datatypes</span></code></a> are then dynamically replaced with wrappers that capture new PyNode instances and
+change their <code class="docutils literal notranslate"><span class="pre">__class__</span></code> assignment.</p>
+<p>Lookups are cached throughout.</p>
+</div>
+<div class="section" id="advantages">
+<h2>Advantages<a class="headerlink" href="#advantages" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Speed</strong>: Instantiating PyNodes is notoriously slow, and therefore
+avoided entirely.</li>
+<li><strong>Easy coupling / decoupling</strong>: Unpatching PyMEL is merely a case of
+removing the <code class="docutils literal notranslate"><span class="pre">__new__()</span></code> wrappers.</li>
+<li><strong>Compatibility</strong>: PyMEL treats custom objects as its own.</li>
+<li><strong>Simpler Customisation</strong>: Inheritance is managed entirely during the
+rebuilding stage; users do not need to track it for class declarations.</li>
+</ul>
+<p>For more information, take a look inside <a class="reference internal" href="paya/pools.html#module-paya.pools" title="paya.pools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.pools</span></code></a> and <a class="reference internal" href="paya/patch.html#module-paya.patch" title="paya.patch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.patch</span></code></a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="paya/util/strings.html" class="btn btn-neutral float-left" title="paya.util.strings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="author.html" class="btn btn-neutral float-right" title="Author" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

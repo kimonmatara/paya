@@ -1,0 +1,49 @@
+******************************
+Importing and Patch Management
+******************************
+
+To get started with **paya**, run the following in the Script Editor:
+
+.. code-block:: python
+
+    >>> import paya.runtime
+    PyMEL has been patched successfully.
+
+At this point, PyMEL has been patched to return custom **paya** classes
+instead of its own. This can be confirmed thus:
+
+    .. code-block:: python
+
+        >>> import pymel.core as pm
+        >>> cam = pm.PyNode('persp')
+        >>> print(type(cam))
+        <class 'paya.nodetypes.transform.Transform'>
+
+You can remove the patch, and return PyMEL to its 'factory state', like this:
+
+    .. code-block:: python
+
+        >>> paya.runtime.stop()
+        PyMEL has been unpatched successfully.
+
+        >>> cam = pm.PyNode('persp')
+        >>> print(type(cam))
+        <class 'pymel.core.nodetypes.Transform'>
+
+If you wish to re-apply the patch, **import** won't work a second time.
+Instead, you must call :py:meth:`~paya.runtime.Runtime.start`:
+
+    .. code-block:: python
+
+        >>> paya.runtime.start()
+        PyMEL has been patched successfully.
+
+
+.. note::
+
+    Until they are customised, **paya** classes will merely replicate default
+    PyMEL behaviours. This is because they always inherit from a PyMEL base
+    class. As customisations increase, so does the potential to break
+    pipelines that rely on unmodified PyMEL code. In such cases, care should
+    be taken to 'bracket' patching with :py:meth:`~paya.runtime.Runtime.stop`
+    and :py:meth:`~paya.runtime.Runtime.start`.
