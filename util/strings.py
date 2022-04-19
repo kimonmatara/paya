@@ -19,16 +19,3 @@ def uncapitalize(st):
     return st[0].lower()+st[1:]
 
 uncap = uncapitalize
-
-def pad(number, padding):
-    """
-    Simple number padder.
-
-    :param int number: the number to pad
-    :param padding: the padding depth
-    :return: The padded number.
-    """
-    number = str(number)
-    ln = len(number)
-
-    return ('0' * (padding-ln)) + number

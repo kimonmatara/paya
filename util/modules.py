@@ -1,4 +1,3 @@
-import types
 import os
 import sys
 
@@ -33,18 +32,3 @@ def path_to_dotpath(path):
             else: break
 
     return '.'.join(elems)
-
-class LazyModule(object):
-    def __init__(self, moduleName):
-        self._moduleName = moduleName
-        self._module = None
-
-    def __getattr__(self, attrName):
-        if self._module is None:
-            exec('import {}'.format(self._moduleName))
-            self._module = eval(self._moduleName)
-
-        return getattr(self._module, attrName)
-
-    def __repr__(self):
-        return("{}('{}')".format(self.__class__.__name__, self._moduleName))
