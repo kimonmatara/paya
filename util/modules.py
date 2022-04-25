@@ -1,10 +1,18 @@
+"""
+Utilities for managing modules.
+"""
+
 import os
 import sys
 
 def path_to_dotpath(path):
     """
-    Given a full path to a module file, this returns the dot-path to be
-    used in import statements. The path must be reachable by Python.
+    Given a file system path to a module file, returns the dot-path to be
+    used in import statements. ``__init__.py`` files must be present.
+
+    :param str path: the full path to the module file
+    :return: The dotted module name (path).
+    :rtype: str
     """
     current = path
     elems = list()

@@ -243,7 +243,8 @@ defined inside <code class="docutils literal notranslate"><span class="pre">paya
 <dt id="paya.pools.DataClassPool.getByName">
 <code class="descname">getByName</code><span class="sig-paren">(</span><em>clsname</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.DataClassPool.getByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloads <a class="reference internal" href="#paya.pools.ClassPool.getByName" title="paya.pools.ClassPool.getByName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ClassPool.getByName()</span></code></a> to prevent customisation of
-sensitive types such as <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.MatrixN.html#pymel.core.datatypes.MatrixN" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.datatypes.MatrixN</span></code></a>.</p>
+sensitive types such as <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.MatrixN.html#pymel.core.datatypes.MatrixN" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.datatypes.MatrixN</span></code></a> by
+raising <code class="docutils literal notranslate"><span class="pre">UnsupportedLookupError</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

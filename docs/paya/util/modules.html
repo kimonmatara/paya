@@ -99,11 +99,24 @@
              
   <div class="section" id="module-paya.util.modules">
 <span id="paya-util-modules"></span><h1>paya.util.modules<a class="headerlink" href="#module-paya.util.modules" title="Permalink to this headline">¶</a></h1>
+<p>Utilities for managing modules.</p>
 <dl class="function">
 <dt id="paya.util.modules.path_to_dotpath">
 <code class="descname">path_to_dotpath</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.modules.path_to_dotpath" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a full path to a module file, this returns the dot-path to be
-used in import statements. The path must be reachable by Python.</p>
+<dd><p>Given a file system path to a module file, returns the dot-path to be
+used in import statements. <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> files must be present.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the full path to the module file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The dotted module name (path).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

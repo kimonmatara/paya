@@ -478,7 +478,8 @@ class DataClassPool(ClassPool):
     def getByName(self, clsname):
         """
         Overloads :py:meth:`ClassPool.getByName` to prevent customisation of
-        sensitive types such as :py:class:`pymel.core.datatypes.MatrixN`.
+        sensitive types such as :py:class:`pymel.core.datatypes.MatrixN` by
+        raising ``UnsupportedLookupError``.
 
         :param str clsname: the name of the class to retrieve
         :return: The custom class.

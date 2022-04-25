@@ -1,3 +1,7 @@
+"""
+Utilities for managing strings.
+"""
+
 def capitalize(st):
     """
     :shorthand: cap
