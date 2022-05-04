@@ -1,0 +1,64 @@
+============================
+paya.datatypes.matrix.Matrix
+============================
+
+.. py:module:: paya.datatypes.matrix
+
+.. py:class:: Matrix(*args, **kwargs)
+
+    .. py:method:: __add__(other)
+    
+        Implements **addition** (``+``).
+        
+        Overloads :meth:`pymel.core.datatypes.Matrix.__add__` to add
+        support for 16D plugs.
+    
+    .. py:method:: __mul__(other)
+    
+        Implements **multiplication** (``*``).
+        
+        Overloads :meth:`pymel.core.datatypes.Matrix.__mul__` to add
+        support for 16D plugs.
+    
+    .. py:method:: __radd__(other)
+    
+        Implements **reflected addition** (``+``).
+        
+        Overloads :meth:`pymel.core.datatypes.Matrix.__add__` to add
+        support for 16D plugs.
+    
+    .. py:method:: __rmul__(other)
+    
+        Implements **reflected multiplication** (``*``).
+        
+        Overloads :meth:`pymel.core.datatypes.Matrix.__mul__` to add
+        support for 3D and 16D plugs.
+    
+    .. py:method:: __rxor__(other)
+    
+        Uses the exclusive-or operator (``^``) to implement
+        **point-matrix multiplication** for 3D values and plugs.
+    
+    .. py:classmethod:: asOffset()
+    
+        Implemented for parity with :meth:`paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset`.
+        Returns an identity matrix.
+    
+    .. py:method:: pick(translate=None, rotate=None, scale=None, shear=None, default=None)
+    
+        Filters this matrix, similar to Maya's pickMatrix. If 'default' is
+        used, and it's a plug, the output will also be a plug.
+        
+        Flags are defined by omission, Maya-style.
+        
+        :shorthand: pk
+        
+        :param bool translate/t: use translate
+        :param bool rotate/r: use rotate
+        :param bool scale/s: use scale
+        :param shear/sh: use shear
+        :param default: take omitted fields from this matrix; can be a value
+            or plug; defaults to None
+        :type default: list, :class:`Matrix`, str, :class:`AttributeMath16D`
+        :return: The filtered matrix.
+        :rtype: :class:`Matrix` or :class:`AttributeMath16D`

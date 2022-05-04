@@ -1,0 +1,60 @@
+==================================
+paya.plugtypes.attribute.Attribute
+==================================
+
+.. py:module:: paya.plugtypes.attribute
+
+.. py:class:: Attribute(*args, **kwargs)
+
+    .. py:method:: __iter__()
+    
+        Overloads :py:meth:`pymel.core.general.Attribute.__iter__` to support
+        compounds.
+    
+    .. py:method:: put(source, plug=None)
+    
+        Helper for mixed plug / value workflows. If 'source' is an attribute,
+        it will be connected into this plug. Otherwise, this plug will be set
+        to 'source'.
+        
+        :param source: the source value or plug
+        :param plug/p: if you know whether 'source' is a plug or not, specify
+            if here; defaults to None
+        :type plug/p: bool or None
+        :return: self
+    
+    .. py:method:: get(plug=False, **kwargs)
+    
+        Extends :py:meth:`pymel.core.general.Attribute.get` with the ``plug``
+        keyword argument, which is sometimes useful in mixed value / plug
+        workflows.
+        
+        :param bool plug/p: if True, return ``self``; defaults to False
+        :param **kwargs: forwarded to the base method
+        :return: :class:`Attribute` or a value type
+    
+    .. py:method:: setClass(cls)
+    
+        Convenience method to enable chained dot notation when reassigning the
+        plug class (sometimes necessary for ambiguous output types, e.g. on
+        'choice' nodes). Returns ``self``.
+        
+        Equivalent to:
+        
+        .. code-block:: python
+        
+            self.__class__ = cls
+        
+        :param type cls: the class to assign
+        :return: This instance, with a reassigned class.
+        :rtype: :class:`Attribute`
+    
+    .. py:method:: setDimension(dimension)
+    
+        Sources the generic class for the requested dimension and defers to
+        :meth:`setClass`.
+        
+        :param int dimension: the dimension to apply, for example 4
+            for :class:`~paya.plugtypes.attributeMath4D.AttributeMath4D`
+        :return: This instance, with a reassigned class.
+        :rtype: :class:`Attribute`

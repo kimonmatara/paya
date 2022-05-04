@@ -1,7 +1,13 @@
 """
-This module imports the entire :py:mod:`pymel.core` namespace. It is in turn
-served by the :py:mod:`paya.runtime` interface. Any module-level variables or
-functions added here will therefore also become available via that interface.
+The contents of this module can be directly accessed via the
+:py:mod:`paya.runtime` interface. This includes:
+
+    * The entire :py:mod:`pymel.core` namespace
+    * :class:`~paya.names.Name`
+    * :func:`~paya.lib.mathops.makeMatrix` / ``mm``
+
+Any module-level variables or functions added here will also become available
+via :py:mod:`paya.runtime`.
 
 .. warning::
 
@@ -11,3 +17,4 @@ functions added here will therefore also become available via that interface.
 """
 
 from pymel.core import *
+from paya.lib.names import Name

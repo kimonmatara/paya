@@ -1,0 +1,138 @@
+*************
+Maths Rigging
+*************
+
+.. _Using Operators:
+
+===============
+Using Operators
+===============
+
+Paya encourages free mixing of values, attributes and dimensions in mathematical operations. As of version 0.2, you
+can write this:
+
+.. code-block:: python
+
+    ([0.3, 2.0, 1.0] * loc1.worldMatrix) >> loc2.translate
+
+Instead of this:
+
+.. code-block:: python
+
+    pmm = p.createNode('pointMatrixMult')
+    pmm.vectorMultiply.set(True)
+    pmm.inPoint.set([0.3, 2.0, 1.0])
+    loc1.worldMatrix >> pmm.inMatrix
+    pmm.output >> loc2.translate
+
+In fact, all of the following statements are valid, and would generate appropriate node networks:
+
+.. code-block:: python
+
+    loc.translate + 3
+    3 + loc.translate
+    p.datatypes.Vector([1, 2, 3]) * 'locator1.worldMatrix'
+
+However, the following would either error, or yield unexpected results:
+
+.. code-block:: python
+
+    'locator1.translate' + 3
+    [0.3, 2.0, 1.0] * 'locator1.worldMatrix'
+    3 * [0.3, 2.0, 1.0]
+
+This is because when both operands are simple Python types, there is no way to source a Paya method for the operation.
+
+.. note::
+
+    To enable this type of `polymorphism <https://en.wikipedia.org/wiki/Polymorphism_(computer_science)>`_,
+    Paya splits PyMEL's :class:`~pymel.core.general.Attribute` class into subtypes and
+    uses them to provide dynamic counterparts for methods in the data classes. For example, an analogue for
+    :class:`pymel.core.datatypes.Vector.__add__` can now be found in
+    :class:`paya.plugtypes.attribute3D.Attribute3D.__add__`. The data classes are themselves also extended to
+    play well with attributes.
+
+    This is an ongoing project; stay tuned for more upcoming methods!
+
+===========================
+Point-Matrix Multiplication
+===========================
+
+To perform point-matrix multiplication in 'vanilla' PyMEL, the left operand must be a
+:class:`~pymel.core.datatypes.Point` instance. Paya supports and extends this behaviour by adding support for matrix
+plugs:
+
+.. code-block:: python
+
+    point = p.datatypes.Point([0,2,3])
+    point * loc.worldMatrix # point * 'locator1.worldMatrix' also works
+
+The above example would employ a ``pointMatrixMult`` node with vectorMultiply set to False.
+
+Additionally, because in Paya ``translate`` channels always return :class:`~pymel.core.datatypes.Point` instances, the
+following will produce point-matrix multiplication by default:
+
+.. code-block:: python
+
+    loc1.translate.get() * loc2.worldMatrix
+
+    # The following also works
+    loc1.translate.get() * 'locator2.worldMatrix'
+
+For cases where the left operand is of ambiguous type, or a 3D attribute rather than value, Paya provides a new operator
+to coerce point-matrix multiplication: ``^``. For example:
+
+.. code-block:: python
+
+    (loc1.t + loc2.t) ^ loc3.wm # pointMatrixMult.vectorMultiply set to False
+    (loc1.t + loc2.t) * loc3.wm # pointMatrixMult.vectorMultiply set to True
+    pma.output3D.get() ^ loc3.wm.get() # available on values too
+
+===========================
+Preventing Unit Conversions
+===========================
+
+Stub
+
+
+==========================
+Miscellaneous Enhancements
+==========================
+
+.. _More Useful Query Types:
+
+More Useful Query Types
+-----------------------
+
+Paya returns more useful types when :meth:`~pymel.core.general.Attribute.get` is called on a variety of attributes.
+Specifically:
+
+*   The value of the ``translate`` channel on a transform will always be returned as a
+    :class:`~pymel.core.datatypes.Point`
+
+*   The value of the ``rotate`` channel on a transform will always be returned as an
+    :class:`~pymel.core.datatypes.EulerRotation`
+
+*   The value of any four-dimensional compound of scalars will always be returned as a
+    :class:`~pymel.core.datatypes.Quaternion`
+
+This sets you up better for subsequent mixed-mode operations.
+
+Agnostic Getting / Setting
+--------------------------
+
+Paya adds a few enhancements to help develop code where the decision whether to work dynamically or statically
+rests with the end-user:
+
+*   :meth:`~paya.plugtypes..attribute.Attribute.get` now has a new keyword argument, ``plug / p``, which will return
+    the attribute itself if set to True.
+
+*   A new method on attributes, :meth:`~paya.plugtypes.Attribute.put`, sets a value **or** connects an input
+    depending on what's passed.
+
+*   The much-loved double-chevron operator, ``>>``, has accordingly been extended to support values as well as attributes
+    as the left operand, making statements like this valid:
+
+    .. code-block:: python
+
+        3.0 >> loc1.tx

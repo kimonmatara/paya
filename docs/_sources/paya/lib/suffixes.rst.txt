@@ -1,0 +1,63 @@
+=================
+paya.lib.suffixes
+=================
+
+.. py:module:: paya.lib.suffixes
+
+Administers type suffixes of the kind typically found in Maya pipelines. These
+are defined inside ``suffixes.json``. The suffixes that come with paya are
+derived from the 'tags' in the 'node index' of the Maya documentation.
+
+Once read, suffixes are held in the **suffixes** global variable of this
+module.
+
+.. py:function:: getKeyFromNode(node)
+
+    Given a Maya node, returns the appropriate key to use for suffix lookups.
+    
+    If the node is a (strict) transform then, if it has a shape, the shape's
+    node type will be returned. If it doesn't have a shape, 'transform' will
+    be returned.
+    
+    If the node is not a transform then, if it's a shape, None will be
+    returned. If it's not a shape, the node's type will be returned.
+    
+    :param node: the node to inspect
+    :type node: PyNode or str
+    :return: The suffix lookup.
+    :rtype: str
+
+.. py:function:: load()
+
+    Loads suffixes from ``suffixes.json``.
+
+.. py:function:: dump()
+
+    Dumps suffixes into ``suffixes.json``.
+
+.. py:function:: learnFromHelp(htmlpath)
+
+    Populates the suffixes dict from a dumped Maya help file.
+    
+    To use this:
+    
+        -   Navigate to the Maya 'nodes index' page
+        -   Turn on 'tags'
+        -   Dump the main frame source code into an html file
+        -   Pass the file path to this method
+    
+    To make changes permanent, call :func:`dump` afterwards.
+    
+    :param str htmlpath: the path to the saved html file
+
+.. py:function:: getFromName(name)
+
+    Extracts a type suffix from a node name.
+    
+    :param str name: the name to inspect
+    :return: The extracted suffix, if any.
+
+.. py:function:: learnFromScene()
+
+    Learns suffixes from node names in the current scene. To make changes
+    permanent, call :func:`dump` afterwards.

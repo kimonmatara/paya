@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.util.modules &mdash; paya 0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>paya.util.modules &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.util.strings" href="strings.html" />
-    <link rel="prev" title="paya.util" href="../util.html" /> 
+    <link rel="prev" title="paya.util.functions" href="functions.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,7 +29,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.1
+                0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -40,12 +40,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">User Guide</span></p>
+<p class="caption"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../importing_and_patch_management.html">Importing and Patch Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contextual_name_management.html">Contextual Name Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customisation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
@@ -56,18 +62,23 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../util.html">paya.util</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="functions.html">paya.util.functions</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.util.modules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="strings.html">paya.util.strings</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../patch_impl.html">Patch Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
@@ -119,13 +130,45 @@ used in import statements. <code class="docutils literal notranslate"><span clas
 </table>
 </dd></dl>
 
+<dl class="class">
+<dt id="paya.util.modules.LazyModule">
+<em class="property">class </em><code class="descname">LazyModule</code><span class="sig-paren">(</span><em>moduleName</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.modules.LazyModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lazy module loader. Defers module loading until attribute access is
+attempted. Useful for avoiding circular imports.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">LazyModule</span><span class="p">(</span><span class="s1">&#39;paya.runtime&#39;</span><span class="p">)</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span> <span class="c1"># triggers load</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="paya.util.modules.LazyModule.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>moduleName</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.modules.LazyModule.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.util.modules.LazyModule.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.modules.LazyModule.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../util.html" class="btn btn-neutral float-left" title="paya.util" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="functions.html" class="btn btn-neutral float-left" title="paya.util.functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="strings.html" class="btn btn-neutral float-right" title="paya.util.strings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

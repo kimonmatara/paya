@@ -1,48 +1,121 @@
 Paya: PyMEL Unleashed
 =====================
 
-**Paya** is a `patch <https://en.wikipedia.org/wiki/Monkey_patch>`_ for
-`PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_
-to overcome the limitations of the
-`virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system. It unlocks
-customisation for component, attribute (including subtype) and data classes, implements true inheritance
-and offers a simpler authoring workflow with full support for techniques such as
-:doc:`operator overloading <op_overl_tutorial>`.
+Paya is an object-oriented toolkit for Maya riggers and TDs. Unlike other systems, it does not re-wrap ``maya.cmds``
+or the ``OpenMaya`` API. Instead, it adds new methods directly to
+`PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_ objects at runtime.
 
-This first release establishes the :ref:`patching mechanism <implementation>` for anyone who wants to try their hand
-at customisation. Future releases will add methods for TDs.
+Customisation is easy, and goes far beyond PyMEL's
+`virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
+for attribute (including subtype), component and data types with true inheritance for the first time.
 
+Version 0.2 adds a flurry of new functionality, most eminently an elegant implementation for
+**maths rigging using Python operators**. This is seamlessly integrated with PyMEL and allows free mixing of values,
+attributes and dimensions with no need for utility wrappers.
 
-Contents
---------
+See :doc:`What's New <whats_new>` and :doc:`Maths Rigging <maths_rigging>` for the full scoop!
 
-- To install, see :doc:`setup`.
-- To start playing, browse the User Guide.
-- For a reference of every module in the package, go to :doc:`Module Documentation <paya>`.
-- To peek under the hood, see :doc:`implementation`.
-- To report a bug, request a feature or just say hello, head over to :doc:`author`.
+Example #1: Operators
+---------------------
+
+Here's a world-space orient constraint with offset preservation, Paya-style:
+
+.. code-block:: python
+
+    master = p.PyNode('locator1')
+    slave = p.PyNode('pCube1')
+
+    masterMatrix = slave.getMatrix().inverse() \
+        * slave.getMatrix(worldSpace=True) \
+        * master.worldMatrix.pick(rotate=True).asOffset()
+
+    masterMatrix >> slave.offsetParentMatrix
+
+And here's the equivalent in 'vanilla' PyMEL:
+
+.. code-block:: python
+
+    master = p.PyNode('locator1')
+    slave = p.PyNode('pCube1')
+
+    picker = p.createNode('pickMatrix')
+    master.worldMatrix >> picker.inputMatrix
+    picker.useTranslate.set(False)
+    picker.useScale.set(False)
+    picker.useShear.set(False)
+
+    multer1 = p.createNode('multMatrix')
+    picker.outputMatrix >> multer1.matrixIn[0]
+    multer1.matrixIn[1].set(master.worldMatrix.get().inverse())
+
+    initPose = slave.getMatrix(worldSpace=True)
+
+    multer2 = p.createNode('multMatrix')
+    multer2.matrixIn[0].set(slave.getMatrix().inverse() * initPose)
+    multer1.matrixSum >> multer2.matrixIn[1]
+
+    multer2.matrixSum >> slave.offsetParentMatrix
+
+Example #2: Adding a Method to Components
+-----------------------------------------
+
+Tired of using :func:`~pymel.core.modeling.pointPosition`? Here's how to implement a *getWorldPosition()*
+method on all point-like components, from curve and NURBS surface CVs to mesh vertices:
+
+.. code-block:: python
+
+    import pymel.core as p
+
+    class DiscreteComponent:
+
+        def getWorldPosition(self):
+            return p.pointPosition(self, world=True)
+
+Here's how to use it:
+
+.. code-block:: python
+
+    curve = p.PyNode('curve1')
+    curve.cv[0].getWorldPosition()
+    # Result: [0.0, 1.0, 2.0]
+
+And here's the equivalent in 'vanilla' PyMEL:
+
+.. code-block:: python
+
+    raise NotImplementedError(
+        "There is no equivalent. PyMEL's virtual classes do not support components.
+    )
 
 .. toctree::
     :hidden:
 
-    setup
+    What's New <whats_new>
+    Requirements & Installation <req_and_inst>
 
 .. toctree::
-    :caption: User Guide
+    :caption: Functionality
     :hidden:
 
     Importing and Patch Management <importing_and_patch_management>
     Using the Runtime Interface <using_the_runtime_interface>
+    Contextual Name Management <contextual_name_management>
+    Maths Rigging <maths_rigging>
+
+
+.. toctree::
+    :caption: Customisation
+    :hidden:
+
     Tutorial #1: Custom Methods <method_tutorial>
     Tutorial #2: Custom Constructors <cust_cstr_tutorial>
     Tutorial #3: Custom Operators <op_overl_tutorial>
     More Customisation <more_customisation>
-
 
 .. toctree::
     :caption: Appendices
     :hidden:
 
     Module Documentation <paya>
-    implementation
+    Patch Implementation <patch_impl>
     author

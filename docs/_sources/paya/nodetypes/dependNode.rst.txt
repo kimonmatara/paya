@@ -1,0 +1,40 @@
+====================================
+paya.nodetypes.dependNode.DependNode
+====================================
+
+.. py:module:: paya.nodetypes.dependNode
+
+.. py:class:: DependNode(*args, **kwargs)
+
+    .. py:classmethod:: createNode(**nameOptions)
+    
+        Object-oriented version of :func:`pymel.core.general.createNode` with
+        managed naming.
+        
+        :param nameOptions: passed-through to :meth:`~DependNode.makeName`
+        :return: The constructed node.
+        :rtype: :class:`DependNode`
+    
+    .. py:method:: makeName(*elems, name=None, inherit=True, suffix=True, padding=None)
+    
+        Generates a context-appropriate Maya name. Results will vary
+        depending on whether this method is called on a class or on a
+        node instance.
+        
+        :param elems: one or more name elements, packed or unpacked
+        :type elems: int, str
+        :param name/n: pass-through for any elements provided via a
+            ``name/n`` keyword argument; these will always be prepended;
+            defaults to None
+        :type name/n: None, str
+        :param padding/pad: optional padding depth for any integers;
+            defaults to None
+        :type padding/pad: None, int
+        :param bool inherit/i: inherit prefixes from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param suffix/suf: optional override for ``config.autoSuffix``; if
+            ``True``, apply suffixes; if ``False``, omit them; if a
+            string, use it; defaults to None
+        :type suffix/suf: bool, str
+        :return: The name.
+        :rtype: str

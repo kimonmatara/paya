@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paya: PyMEL Unleashed &mdash; paya 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Paya: PyMEL Unleashed &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Setup" href="setup.html" /> 
+    <link rel="next" title="What’s New" href="whats_new.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -28,7 +28,7 @@
             <a href="#" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.1
+                0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,12 +39,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">User Guide</span></p>
+<p class="caption"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contextual_name_management.html">Contextual Name Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customisation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
@@ -53,7 +59,7 @@
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="patch_impl.html">Patch Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
 
@@ -83,24 +89,79 @@
              
   <div class="section" id="paya-pymel-unleashed">
 <h1>Paya: PyMEL Unleashed<a class="headerlink" href="#paya-pymel-unleashed" title="Permalink to this headline">¶</a></h1>
-<p><strong>Paya</strong> is a <a class="reference external" href="https://en.wikipedia.org/wiki/Monkey_patch">patch</a> for
-<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a>
-to overcome the limitations of the
-<a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system. It unlocks
-customisation for component, attribute (including subtype) and data classes, implements true inheritance
-and offers a simpler authoring workflow with full support for techniques such as
-<a class="reference internal" href="op_overl_tutorial.html"><span class="doc">operator overloading</span></a>.</p>
-<p>This first release establishes the <a class="reference internal" href="implementation.html#implementation"><span class="std std-ref">patching mechanism</span></a> for anyone who wants to try their hand
-at customisation. Future releases will add methods for TDs.</p>
-<div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>To install, see <a class="reference internal" href="setup.html"><span class="doc">Setup</span></a>.</li>
-<li>To start playing, browse the User Guide.</li>
-<li>For a reference of every module in the package, go to <a class="reference internal" href="paya.html"><span class="doc">Module Documentation</span></a>.</li>
-<li>To peek under the hood, see <a class="reference internal" href="implementation.html"><span class="doc">Implementation</span></a>.</li>
-<li>To report a bug, request a feature or just say hello, head over to <a class="reference internal" href="author.html"><span class="doc">Author</span></a>.</li>
-</ul>
+<p>Paya is an object-oriented toolkit for Maya riggers and TDs. Unlike other systems, it does not re-wrap <code class="docutils literal notranslate"><span class="pre">maya.cmds</span></code>
+or the <code class="docutils literal notranslate"><span class="pre">OpenMaya</span></code> API. Instead, it adds new methods directly to
+<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a> objects at runtime.</p>
+<p>Customisation is easy, and goes far beyond PyMEL’s
+<a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system to add support
+for attribute (including subtype), component and data types with true inheritance for the first time.</p>
+<p>Version 0.2 adds a flurry of new functionality, most eminently an elegant implementation for
+<strong>maths rigging using Python operators</strong>. This is seamlessly integrated with PyMEL and allows free mixing of values,
+attributes and dimensions with no need for utility wrappers.</p>
+<p>See <a class="reference internal" href="whats_new.html"><span class="doc">What’s New</span></a> and <a class="reference internal" href="maths_rigging.html"><span class="doc">Maths Rigging</span></a> for the full scoop!</p>
+<div class="section" id="example-1-operators">
+<h2>Example #1: Operators<a class="headerlink" href="#example-1-operators" title="Permalink to this headline">¶</a></h2>
+<p>Here’s a world-space orient constraint with offset preservation, Paya-style:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+<span class="n">slave</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+
+<span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> \
+    <span class="o">*</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> \
+    <span class="o">*</span> <span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">asOffset</span><span class="p">()</span>
+
+<span class="n">masterMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
+</pre></div>
+</div>
+<p>And here’s the equivalent in ‘vanilla’ PyMEL:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+<span class="n">slave</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+
+<span class="n">picker</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;pickMatrix&#39;</span><span class="p">)</span>
+<span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">picker</span><span class="o">.</span><span class="n">inputMatrix</span>
+<span class="n">picker</span><span class="o">.</span><span class="n">useTranslate</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">picker</span><span class="o">.</span><span class="n">useScale</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">picker</span><span class="o">.</span><span class="n">useShear</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">multer1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;multMatrix&#39;</span><span class="p">)</span>
+<span class="n">picker</span><span class="o">.</span><span class="n">outputMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">multer1</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">multer1</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">())</span>
+
+<span class="n">initPose</span> <span class="o">=</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">multer2</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;multMatrix&#39;</span><span class="p">)</span>
+<span class="n">multer2</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="n">initPose</span><span class="p">)</span>
+<span class="n">multer1</span><span class="o">.</span><span class="n">matrixSum</span> <span class="o">&gt;&gt;</span> <span class="n">multer2</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">multer2</span><span class="o">.</span><span class="n">matrixSum</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-2-adding-a-method-to-components">
+<h2>Example #2: Adding a Method to Components<a class="headerlink" href="#example-2-adding-a-method-to-components" title="Permalink to this headline">¶</a></h2>
+<p>Tired of using <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.modeling/pymel.core.modeling.pointPosition.html#pymel.core.modeling.pointPosition" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pointPosition()</span></code></a>? Here’s how to implement a <em>getWorldPosition()</em>
+method on all point-like components, from curve and NURBS surface CVs to mesh vertices:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
+
+<span class="k">class</span> <span class="nc">DiscreteComponent</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">getWorldPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">pointPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here’s how to use it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">curve</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span>
+<span class="n">curve</span><span class="o">.</span><span class="n">cv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
+<span class="c1"># Result: [0.0, 1.0, 2.0]</span>
+</pre></div>
+</div>
+<p>And here’s the equivalent in ‘vanilla’ PyMEL:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+    <span class="s2">&quot;There is no equivalent. PyMEL&#39;s virtual classes do not support components.</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -114,7 +175,7 @@ at customisation. Future releases will add methods for TDs.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="setup.html" class="btn btn-neutral float-right" title="Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="whats_new.html" class="btn btn-neutral float-right" title="What’s New" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

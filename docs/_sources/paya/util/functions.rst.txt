@@ -1,0 +1,48 @@
+===================
+paya.util.functions
+===================
+
+.. py:module:: paya.util.functions
+
+.. py:class:: short(**mapping)
+
+    Decorator with keyword arguments, used to mimic Maya's 'shorthand'
+    flags.
+    
+    Example:
+    
+        .. code-block:: python
+    
+            @short(numJoints='nj')
+            def makeJoints(numJoints=16):
+                [...]
+    
+            # This can then be called as:
+            makeJoints(nj=5)
+
+    .. py:method:: __call__(f)
+    
+        Call self as a function.
+    
+    .. py:method:: __init__(**mapping)
+    
+        Initialize self.  See help(type(self)) for accurate signature.
+
+.. py:function:: resolve_flags(*flags)
+
+    Used to mimic Maya flag behaviour.
+    
+    If only a subset of flags are defined, then:
+        -   If the subset are a mixture of True / False, the other flags are
+            set to False.
+    
+        -   If the subset are all True or all False, the remaining flags are
+            set to the opposite.
+    
+    If all flags are None, all flags are set to True.
+    If all flags are NOT None (i.e. all defined), they are all conformed to
+    booleans.
+    
+    :param flags: one or more user flag arguments
+    :return: The resolved flags.
+    :rtype: tuple

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.plugtypes.attributeMath4D.AttributeMath4D &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.pools" href="../pools.html" />
+    <link rel="prev" title="paya.plugtypes.attributeMath3D.AttributeMath3D" href="attributeMath3D.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Functionality</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../importing_and_patch_management.html">Importing and Patch Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contextual_name_management.html">Contextual Name Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../method_tutorial.html">Tutorial #1: Custom Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../more_customisation.html">More Customisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="attribute.html">paya.plugtypes.attribute.Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attributeMath16D.html">paya.plugtypes.attributeMath16D.AttributeMath16D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attributeMath1D.html">paya.plugtypes.attributeMath1D.AttributeMath1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attributeMath2D.html">paya.plugtypes.attributeMath2D.AttributeMath2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attributeMath3D.html">paya.plugtypes.attributeMath3D.AttributeMath3D</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.plugtypes.attributeMath4D.AttributeMath4D</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../patch_impl.html">Patch Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../paya.html">paya</a> &raquo;</li>
+          <li><a href="../plugtypes.html">paya.plugtypes</a> &raquo;</li>
+      <li>paya.plugtypes.attributeMath4D.AttributeMath4D</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/paya/plugtypes/attributeMath4D.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-paya.plugtypes.attributeMath4D">
+<span id="paya-plugtypes-attributemath4d-attributemath4d"></span><h1>paya.plugtypes.attributeMath4D.AttributeMath4D<a class="headerlink" href="#module-paya.plugtypes.attributeMath4D" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D">
+<em class="property">class </em><code class="descname">AttributeMath4D</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D.__add__">
+<code class="descname">__add__</code><span class="sig-paren">(</span><em>other</em>, <em>swap=False</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <strong>addition</strong> (<code class="docutils literal notranslate"><span class="pre">+</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> – a value or plug of dimension 1 or 4</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D.__mul__">
+<code class="descname">__mul__</code><span class="sig-paren">(</span><em>other</em>, <em>swap=False</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <strong>multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> – a value or plug of dimension 1 or 4</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D.__radd__">
+<code class="descname">__radd__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__radd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <strong>reflected addition</strong> (<code class="docutils literal notranslate"><span class="pre">+</span></code>). See <a class="reference internal" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__add__" title="paya.plugtypes.attributeMath4D.AttributeMath4D.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__add__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D.__rmul__">
+<code class="descname">__rmul__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__rmul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <strong>reflected multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>). See <a class="reference internal" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__mul__" title="paya.plugtypes.attributeMath4D.AttributeMath4D.__mul__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__mul__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D.__rsub__">
+<code class="descname">__rsub__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__rsub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <strong>reflected subtraction</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>). See <a class="reference internal" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__sub__" title="paya.plugtypes.attributeMath4D.AttributeMath4D.__sub__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__sub__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D.__sub__">
+<code class="descname">__sub__</code><span class="sig-paren">(</span><em>other</em>, <em>swap=False</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.__sub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <strong>subtraction</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> – a value or plug of dimension 1 or 4</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="paya.plugtypes.attributeMath4D.AttributeMath4D.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>plug=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath4D.AttributeMath4D.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloads <code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.plugtypes.Attribute.get()</span></code> to return
+<a class="reference internal" href="../datatypes/quaternion.html#paya.datatypes.quaternion.Quaternion" title="paya.datatypes.quaternion.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a> instances.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="attributeMath3D.html" class="btn btn-neutral float-left" title="paya.plugtypes.attributeMath3D.AttributeMath3D" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pools.html" class="btn btn-neutral float-right" title="paya.pools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

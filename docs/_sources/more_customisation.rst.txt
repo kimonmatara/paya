@@ -17,7 +17,10 @@ The following configuration flags are defined inside :py:mod:`paya.config`:
      - Description
    * - ``patchOnLoad``
      - ``True``
-     - Call :py:meth:`paya.runtime.Runtime.start` on import.
+     - Call :py:meth:`~paya.runtime.Runtime.start` the first time :mod:`paya.runtime` is imported.
+   * - ``autoSuffix``
+     - ``True``
+     - Apply pipeline suffixes automatically.
 
 More flags may be added in future releases.
 

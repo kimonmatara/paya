@@ -195,7 +195,7 @@ def getMPlugTypeInfo(mplug):
     return out
 
 
-def getTypeFromMPlug(mplug,inherited=False):
+def getTypeFromMPlug(mplug, inherited=False):
     """Given an MPlug, returns a best-fit name from the abstract class tree.
 
     :param OpenMaya.MPlug mplug: the MPlug to query
@@ -221,21 +221,38 @@ def getTypeFromMPlug(mplug,inherited=False):
         numericType = info.get('numericType')
 
         if numericType:
-            return 'AttributeNumeric'+(numericType[1:])
+            out = 'AttributeNumeric'+(numericType[1:])
 
-        out = 'AttributeNumeric'
+        else:
+            out = 'AttributeNumeric'
 
     else:
-        # In all other cases, construct a full fallback name
-        basename = plugType[1:]
+        out = None
 
-        if basename.endswith('Attribute'):
-            basename = basename[:-9]
+        if plugType == 'kCompoundAttribute':
+            # If all the children are scalars, return an abstract maths type
 
-        if not basename.startswith('Attribute'):
-            basename = 'Attribute'+basename
+            numChildren = mplug.numChildren()
 
-        out = basename
+            if numChildren in (2, 3, 4, 16):
+                children = [mplug.child(x) for x in range(numChildren)]
+
+                childInfos = [getTypeFromMPlug(child, inherited=True) for child in children]
+
+                if all(['AttributeMath1D' in childInfo for childInfo in childInfos]):
+                    out = 'AttributeMath{}D'.format(numChildren)
+
+        if out is None:
+            # Construct a full fallback name
+            basename = plugType[1:]
+
+            if basename.endswith('Attribute'):
+                basename = basename[:-9]
+
+            if not basename.startswith('Attribute'):
+                basename = 'Attribute'+basename
+
+            out = basename
 
     # Deal with some odd situations caused by occasional
     # wonky API names like kDataBezierCurveData

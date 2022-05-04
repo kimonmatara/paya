@@ -2,6 +2,19 @@
 Utilities for managing strings.
 """
 
+def pad(number, padding):
+    """
+    Simple number padder.
+
+    :param int number: the number to pad
+    :param int padding: the padding depth
+    :return: The padded number.
+    :rtype: str
+    """
+    tail = str(number)
+    head = '0' * (padding-len(tail))
+    return head+tail
+
 def capitalize(st):
     """
     :shorthand: cap

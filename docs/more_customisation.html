@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>More Customisation &mdash; paya 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>More Customisation &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.1
+                0.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -40,12 +40,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">User Guide</span></p>
-<ul class="current">
+<p class="caption"><span class="caption-text">Functionality</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contextual_name_management.html">Contextual Name Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customisation</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
@@ -58,7 +64,7 @@
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="patch_impl.html">Patch Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
 
@@ -106,7 +112,11 @@
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">patchOnLoad</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
-<td>Call <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.Runtime.start()</span></code></a> on import.</td>
+<td>Call <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a> the first time <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> is imported.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">autoSuffix</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
+<td>Apply pipeline suffixes automatically.</td>
 </tr>
 </tbody>
 </table>

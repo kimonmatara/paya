@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.lib.suffixes &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.nodetypes" href="../nodetypes.html" />
+    <link rel="prev" title="paya.lib.names" href="names.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Functionality</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../importing_and_patch_management.html">Importing and Patch Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contextual_name_management.html">Contextual Name Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../method_tutorial.html">Tutorial #1: Custom Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../more_customisation.html">More Customisation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.suffixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../patch_impl.html">Patch Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../paya.html">paya</a> &raquo;</li>
+          <li><a href="../lib.html">paya.lib</a> &raquo;</li>
+      <li>paya.lib.suffixes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/paya/lib/suffixes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-paya.lib.suffixes">
+<span id="paya-lib-suffixes"></span><h1>paya.lib.suffixes<a class="headerlink" href="#module-paya.lib.suffixes" title="Permalink to this headline">¶</a></h1>
+<p>Administers type suffixes of the kind typically found in Maya pipelines. These
+are defined inside <code class="docutils literal notranslate"><span class="pre">suffixes.json</span></code>. The suffixes that come with paya are
+derived from the ‘tags’ in the ‘node index’ of the Maya documentation.</p>
+<p>Once read, suffixes are held in the <strong>suffixes</strong> global variable of this
+module.</p>
+<dl class="function">
+<dt id="paya.lib.suffixes.getKeyFromNode">
+<code class="descname">getKeyFromNode</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.suffixes.getKeyFromNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a Maya node, returns the appropriate key to use for suffix lookups.</p>
+<p>If the node is a (strict) transform then, if it has a shape, the shape’s
+node type will be returned. If it doesn’t have a shape, ‘transform’ will
+be returned.</p>
+<p>If the node is not a transform then, if it’s a shape, None will be
+returned. If it’s not a shape, the node’s type will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<em>PyNode</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the node to inspect</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The suffix lookup.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.lib.suffixes.load">
+<code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.suffixes.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads suffixes from <code class="docutils literal notranslate"><span class="pre">suffixes.json</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.lib.suffixes.dump">
+<code class="descname">dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.suffixes.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps suffixes into <code class="docutils literal notranslate"><span class="pre">suffixes.json</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.lib.suffixes.learnFromHelp">
+<code class="descname">learnFromHelp</code><span class="sig-paren">(</span><em>htmlpath</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.suffixes.learnFromHelp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates the suffixes dict from a dumped Maya help file.</p>
+<p>To use this:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Navigate to the Maya ‘nodes index’ page</li>
+<li>Turn on ‘tags’</li>
+<li>Dump the main frame source code into an html file</li>
+<li>Pass the file path to this method</li>
+</ul>
+</div></blockquote>
+<p>To make changes permanent, call <a class="reference internal" href="#paya.lib.suffixes.dump" title="paya.lib.suffixes.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">dump()</span></code></a> afterwards.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>htmlpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the path to the saved html file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.lib.suffixes.getFromName">
+<code class="descname">getFromName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.suffixes.getFromName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts a type suffix from a node name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name to inspect</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The extracted suffix, if any.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="paya.lib.suffixes.learnFromScene">
+<code class="descname">learnFromScene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.suffixes.learnFromScene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Learns suffixes from node names in the current scene. To make changes
+permanent, call <a class="reference internal" href="#paya.lib.suffixes.dump" title="paya.lib.suffixes.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">dump()</span></code></a> afterwards.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="names.html" class="btn btn-neutral float-left" title="paya.lib.names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../nodetypes.html" class="btn btn-neutral float-right" title="paya.nodetypes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
