@@ -47,7 +47,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../importing_and_patch_management.html">Importing and Patch Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contextual_name_management.html">Contextual Name Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
@@ -151,16 +151,15 @@ if here; defaults to None</li>
 <dt id="paya.plugtypes.attribute.Attribute.get">
 <code class="descname">get</code><span class="sig-paren">(</span><em>plug=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extends <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute.get" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.general.Attribute.get()</span></code></a> with the <code class="docutils literal notranslate"><span class="pre">plug</span></code>
-keyword argument, which is sometimes useful in mixed value / plug
-workflows.</p>
+keyword argument, which is useful when the decision whether to work
+statically or dynamically rests with the end-user.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, return <code class="docutils literal notranslate"><span class="pre">self</span></code>; defaults to False</li>
-<li><strong>**kwargs</strong> – <p>forwarded to the base method</p>
-</li>
+<li><strong>**kwargs</strong> – forwarded to the base method</li>
 </ul>
 </td>
 </tr>

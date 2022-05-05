@@ -18,7 +18,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
 
                 node.attr('input3D')[0].set(self)
 
@@ -47,7 +47,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
 
                 node.attr('input3D')[1].set(self)
 
@@ -78,7 +78,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
                 node.attr('operation').set(2)
 
                 node.attr('input3D')[0].set(self)
@@ -108,7 +108,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
                 node.attr('operation').set(2)
 
                 node.attr('input3D')[1].set(self)
@@ -140,7 +140,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('input1').set(self)
 
                 if dim is 1:
@@ -168,7 +168,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('input2').set(self)
 
                 if dim is 1:
@@ -198,7 +198,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(2)
                 node.attr('input1').set(self)
 
@@ -227,7 +227,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(2)
                 node.attr('input2').set(self)
 
@@ -258,7 +258,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(3)
                 node.attr('input1').set(self)
 
@@ -287,7 +287,7 @@ class EulerRotation:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(3)
                 node.attr('input2').set(self)
 

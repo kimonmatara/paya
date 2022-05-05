@@ -1,0 +1,96 @@
+###################
+Managing Node Names
+###################
+
+Node names in typical Maya pipelines follow the convention ``<several_prefixes>_<type>``, where
+``<several_prefixes>`` are contributed by various functions that take them as arguments, and ``<type>`` is something
+like ``GRP`` for groups, ``CTRL`` for controls, and so on. Paya gives you a couple ways to generate such names more
+easily.
+
+Automatic Suffixes
+==================
+
+All bundled Paya node constructors apply type suffixes by default. For example:
+
+.. code-block:: python
+
+    r.nodes.Joint.createNode(name='eyeball')
+    # Result: eyeball_JOIN
+
+Suffixes are defined inside ``paya/lib/suffixes.json``. By default they are copied from the 'tags' in the `Maya Module
+Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_. You can override, or disable,
+them on a per-node basis like this:
+
+.. code-block:: python
+
+    r.nodes.Joint.createNode(name='eyeball', suffix=False) # disable
+    # Result: eyeball
+
+    r.nodes.Joint.createNode(name='eyeball', suffix='JNT') # override
+    # Result: eyeball_JNT
+
+You can also redefine or disable suffixes globally. See :doc:`Customise Node Suffixes <customise_node_suffixes>` for
+more information.
+
+Implicit Naming
+===============
+
+Paya's :class:`~paya.lib.names.Name` context manager allows you to build up prefixes implicitly, instead of
+passing them around as function arguments. For example, here's a typical naming pattern:
+
+.. code-block:: python
+
+    def makeLimbGroup(side, typ):
+        return r.group(name='{}_{}_GRP'.format(side, typ), empty=True)
+
+    def makeLimbGroups():
+        for side in 'LR':
+            for typ in ['arm', 'leg']:
+                makeLimbGroupPair(side, typ)
+
+    # Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP
+
+Here's an alternative using :class:`~paya.lib.names.Name`:
+
+.. code-block:: python
+
+    def makeLimbGroup():
+        return r.nodes.Transform.createNode()
+
+    def makeLimbGroups():
+        for side in 'LR':
+            for typ in ['arm', 'leg']:
+                makeLimbGroup()
+
+    # Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP
+
+Notice that the blocks cut through function calling scopes. This is an example of
+`aspect-oriented programming <https://en.wikipedia.org/wiki/Aspect-oriented_programming>`_. It declutters your code
+and makes it easier to refactor.
+
+The :class:`~paya.lib.names.Name` context manager can be accessed directly on :mod:`paya.runtime`, or
+imported from :mod:`paya.lib.names`. See the documentation for :class:`~paya.lib.names.Name`, and constructors like
+:meth:`~paya.nodetypes.dependNode.DependNode.createNode()`, for options to change block naming behaviour.
+
+.. note::
+
+    To use automatic suffixing and :class:`~paya.lib.names.Name` blocks in your code, you'll have to create nodes using
+    the constructors on :mod:`paya.runtime`, since the behaviour of 'vanilla' PyMEL or ``maya.cmds`` functions is
+    unmodified:
+
+    .. code-block:: python
+
+        with r.Name('L', 'eyeball'):
+            r.nodes.Joint.createNode() # produces L_eyeball_inner_JOIN
+            r.createNode('joint') # produces joint1
+
+    Alternatively, you can use :meth:`~paya.nodetypes.dependNode.DependNode.makeName` to construct managed names and
+    pass them along:
+
+    .. code-block:: python
+
+        import paya.runtime as r
+        import maya.cmds as m
+
+        with r.Name('L', 'eyeball'):
+            m.createNode(name=r.nodes.Joint.makeName())

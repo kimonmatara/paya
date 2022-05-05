@@ -18,7 +18,7 @@ class AttributeMath16D:
         other, dim, isplug = _mo.info(other)
 
         if dim is 16:
-            node = r.nodes.AddMatrix.make()
+            node = r.nodes.AddMatrix.createNode()
 
             self >> node.attr('matrixIn')[1 if swap else 0]
             other >> node.attr('matrixIn')[0 if swap else 1]
@@ -44,7 +44,7 @@ class AttributeMath16D:
         other, dim, isplug = _mo.info(other)
 
         if dim is 3 and swap:
-            node = r.nodes.PointMatrixMult.make()
+            node = r.nodes.PointMatrixMult.createNode()
             node.attr('vectorMultiply').set(True)
             self >> node.attr('inMatrix')
             other >> node.attr('inPoint')
@@ -52,7 +52,7 @@ class AttributeMath16D:
             return node.attr('output')
 
         if dim is 16:
-            node = r.nodes.MultMatrix.make()
+            node = r.nodes.MultMatrix.createNode()
 
             self >> node.attr('matrixIn')[1 if swap else 0]
             other >> node.attr('matrixIn')[0 if swap else 1]
@@ -79,7 +79,7 @@ class AttributeMath16D:
         other, dim, isplug = _mo.info(other)
 
         if dim is 3:
-            node = r.nodes.PointMatrixMult.make()
+            node = r.nodes.PointMatrixMult.createNode()
             self >> node.attr('inMatrix')
             other >> node.attr('inPoint')
 
@@ -101,13 +101,13 @@ class AttributeMath16D:
         )
 
         if not any([translate, rotate, scale, shear]):
-            node = r.nodes.HoldMatrix.make()
+            node = r.nodes.HoldMatrix.createNode()
             return node.attr('outMatrix')
 
         if all([translate, rotate, scale, shear]):
             return self.hold()
 
-        node = r.nodes.PickMatrix.make()
+        node = r.nodes.PickMatrix.createNode()
         self >> node.attr('inputMatrix')
 
         for chan, state in zip(
@@ -195,7 +195,7 @@ class AttributeMath16D:
         :return: The inverse of this matrix.
         :rtype: :class:`AttributeMath16D`
         """
-        node = r.nodes.InverseMatrix.make()
+        node = r.nodes.InverseMatrix.createNode()
         self >> node.attr('inputMatrix')
         return node.attr('outputMatrix')
 

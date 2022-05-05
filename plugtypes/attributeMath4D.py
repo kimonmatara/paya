@@ -36,7 +36,7 @@ class AttributeMath4D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 4):
-            node = r.nodes.QuatAdd.make()
+            node = r.nodes.QuatAdd.createNode()
 
             self >> node.attr('input{}Quat'.format(2 if swap else 1))
 
@@ -69,7 +69,7 @@ class AttributeMath4D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 4):
-            node = r.nodes.QuatSub.make()
+            node = r.nodes.QuatSub.createNode()
 
             self >> node.attr('input{}Quat'.format(2 if swap else 1))
 
@@ -105,7 +105,7 @@ class AttributeMath4D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 4):
-            node = r.nodes.QuatProd.make()
+            node = r.nodes.QuatProd.createNode()
 
             self >> node.attr('input{}Quat'.format(2 if swap else 1))
 

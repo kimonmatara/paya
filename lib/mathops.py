@@ -188,7 +188,7 @@ def multMatrices(*matrices):
     if len(outElems) is 1:
         return outElems[0]
 
-    node = r.nodes.MultMatrix.make()
+    node = r.nodes.MultMatrix.createNode()
 
     for i, elem, plugState in zip(
         range(len(outElems)),

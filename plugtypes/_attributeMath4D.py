@@ -43,7 +43,7 @@ class AttributeMath4D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 4):
-            node = r.nodes.QuatAdd.make()
+            node = r.nodes.QuatAdd.createNode()
 
             self >> node.attr('input{}Quat'.format(2 if swap else 1))
 
@@ -75,7 +75,7 @@ class AttributeMath4D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 4):
-            node = r.nodes.QuatSub.make()
+            node = r.nodes.QuatSub.createNode()
 
             self >> node.attr('input{}Quat'.format(2 if swap else 1))
 
@@ -104,7 +104,7 @@ class AttributeMath4D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 4):
-            node = r.nodes.QuatProd.make()
+            node = r.nodes.QuatProd.createNode()
 
             self >> node.attr('input{}Quat'.format(2 if swap else 1))
 
@@ -136,7 +136,7 @@ class AttributeMath4D:
         :return: The negation of this quaternion.
         :rtype: :class:`~paya.plugtypes.attributeMath4D.AttributeMath4D`
         """
-        node = r.nodes.QuatNegate.make()
+        node = r.nodes.QuatNegate.createNode()
         self >> node.attr('inputQuat')
         return conformOutput(node.attr('outputQuat'))
 
@@ -149,7 +149,7 @@ class AttributeMath4D:
         :return: The inverse of this quaternion.
         :rtype: :class:`~paya.plugtypes.attributeMath4D.AttributeMath4D`
         """
-        node = r.nodes.QuatInvert.make()
+        node = r.nodes.QuatInvert.createNode()
         self >> node.attr('inputQuat')
         return conformOutput(node.attr('outputQuat'))
 
@@ -162,7 +162,7 @@ class AttributeMath4D:
         :return: The normalized quaternion.
         :rtype: :class:`~paya.plugtypes.attributeMath4D.AttributeMath4D`
         """
-        node = r.nodes.QuatNormalize.make()
+        node = r.nodes.QuatNormalize.createNode()
         self >> node.attr('inputQuat')
         return conformOutput(node.attr('outputQuat'))
 
@@ -171,7 +171,7 @@ class AttributeMath4D:
         :return: The conjugated quaternion.
         :rtype: :class:`~paya.plugtypes.attributeMath4D.AttributeMath4D`
         """
-        node = r.nodes.QuatConjugate.make()
+        node = r.nodes.QuatConjugate.createNode()
         self >> node.attr('inputQuat')
         return conformOutput(node.attr('outputQuat'))
 
@@ -200,7 +200,7 @@ class AttributeMath4D:
         :return: The blended output.
         :rtype: :class:`~paya.plugtypes.attributeMath4D.AttributeMath4D`
         """
-        node = r.nodes.QuatSlerp.make(n='blend')
+        node = r.nodes.QuatSlerp.createNode(n='blend')
         self >> node.attr('input{}Quat'.format(2 if swap else 1))
         node.attr('input{}Quat'.format(1 if swap else 2)).put(other)
 
@@ -221,7 +221,7 @@ class AttributeMath4D:
         :return: The euler rotation.
         :rtype: :class:`AttributeMath3D`
         """
-        node = r.nodes.QuatToEuler.make()
+        node = r.nodes.QuatToEuler.createNode()
         self >> node.attr('inputQuat')
         node.attr('inputRotateOrder').put(rotateOrder)
         return node.attr('outputRotate')
@@ -233,7 +233,7 @@ class AttributeMath4D:
         :return: The axis (vector) and angle outputs.
         :rtype: :class:`tuple`
         """
-        node = r.nodes.QuatToAxisAngle.make()
+        node = r.nodes.QuatToAxisAngle.createNode()
         self >> node.attr('inputQuat')
         return node.attr('outputAxis'), node.attr('outputAngle')
 
@@ -244,7 +244,7 @@ class AttributeMath4D:
         :return: The rotation matrix.
         :rtype: :class:`AttributeMath16D`
         """
-        node = r.nodes.ComposeMatrix.make()
+        node = r.nodes.ComposeMatrix.createNode()
         self >> node.attr('inputQuat')
         node.attr('useEulerRotation').set(False)
 

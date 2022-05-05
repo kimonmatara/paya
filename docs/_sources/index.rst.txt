@@ -3,17 +3,18 @@ Paya: PyMEL Unleashed
 
 Paya is an object-oriented toolkit for Maya riggers and TDs. Unlike other systems, it does not re-wrap ``maya.cmds``
 or the ``OpenMaya`` API. Instead, it adds new methods directly to
-`PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_ objects at runtime.
+`PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_ objects at runtime. This helps you
+write code with less boilerplate.
 
 Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-Version 0.2 adds a flurry of new functionality, most eminently an elegant implementation for
+Version 0.2 introduces a flurry of new functionality, most eminently an implementation for
 **maths rigging using Python operators**. This is seamlessly integrated with PyMEL and allows free mixing of values,
 attributes and dimensions with no need for utility wrappers.
 
-See :doc:`What's New <whats_new>` and :doc:`Maths Rigging <maths_rigging>` for the full scoop!
+See :doc:`What's New <whats_new>` and :doc:`Maths Rigging <maths_rigging>` for the full scoop.
 
 Example #1: Operators
 ---------------------
@@ -30,6 +31,7 @@ Here's a world-space orient constraint with offset preservation, Paya-style:
         * master.worldMatrix.pick(rotate=True).asOffset()
 
     masterMatrix >> slave.offsetParentMatrix
+    slave.inheritsTransform.set(False)
 
 And here's the equivalent in 'vanilla' PyMEL:
 
@@ -55,6 +57,7 @@ And here's the equivalent in 'vanilla' PyMEL:
     multer1.matrixSum >> multer2.matrixIn[1]
 
     multer2.matrixSum >> slave.offsetParentMatrix
+    slave.inheritsTransform.set(False)
 
 Example #2: Adding a Method to Components
 -----------------------------------------
@@ -71,7 +74,7 @@ method on all point-like components, from curve and NURBS surface CVs to mesh ve
         def getWorldPosition(self):
             return p.pointPosition(self, world=True)
 
-Here's how to use it:
+That's it (no, really). And here's how to use it:
 
 .. code-block:: python
 
@@ -79,12 +82,12 @@ Here's how to use it:
     curve.cv[0].getWorldPosition()
     # Result: [0.0, 1.0, 2.0]
 
-And here's the equivalent in 'vanilla' PyMEL:
+Here's how to do it in 'vanilla' PyMEL:
 
 .. code-block:: python
 
     raise NotImplementedError(
-        "There is no equivalent. PyMEL's virtual classes do not support components.
+        "You can't. PyMEL's virtual classes do not support components.
     )
 
 .. toctree::
@@ -99,7 +102,7 @@ And here's the equivalent in 'vanilla' PyMEL:
 
     Importing and Patch Management <importing_and_patch_management>
     Using the Runtime Interface <using_the_runtime_interface>
-    Contextual Name Management <contextual_name_management>
+    Naming Nodes <naming_nodes>
     Maths Rigging <maths_rigging>
 
 

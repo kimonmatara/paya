@@ -46,7 +46,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contextual_name_management.html">Contextual Name Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
@@ -91,14 +91,15 @@
 <h1>Paya: PyMEL Unleashed<a class="headerlink" href="#paya-pymel-unleashed" title="Permalink to this headline">¶</a></h1>
 <p>Paya is an object-oriented toolkit for Maya riggers and TDs. Unlike other systems, it does not re-wrap <code class="docutils literal notranslate"><span class="pre">maya.cmds</span></code>
 or the <code class="docutils literal notranslate"><span class="pre">OpenMaya</span></code> API. Instead, it adds new methods directly to
-<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a> objects at runtime.</p>
+<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a> objects at runtime. This helps you
+write code with less boilerplate.</p>
 <p>Customisation is easy, and goes far beyond PyMEL’s
 <a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.</p>
-<p>Version 0.2 adds a flurry of new functionality, most eminently an elegant implementation for
+<p>Version 0.2 introduces a flurry of new functionality, most eminently an implementation for
 <strong>maths rigging using Python operators</strong>. This is seamlessly integrated with PyMEL and allows free mixing of values,
 attributes and dimensions with no need for utility wrappers.</p>
-<p>See <a class="reference internal" href="whats_new.html"><span class="doc">What’s New</span></a> and <a class="reference internal" href="maths_rigging.html"><span class="doc">Maths Rigging</span></a> for the full scoop!</p>
+<p>See <a class="reference internal" href="whats_new.html"><span class="doc">What’s New</span></a> and <a class="reference internal" href="maths_rigging.html"><span class="doc">Maths Rigging</span></a> for the full scoop.</p>
 <div class="section" id="example-1-operators">
 <h2>Example #1: Operators<a class="headerlink" href="#example-1-operators" title="Permalink to this headline">¶</a></h2>
 <p>Here’s a world-space orient constraint with offset preservation, Paya-style:</p>
@@ -110,6 +111,7 @@ attributes and dimensions with no need for utility wrappers.</p>
     <span class="o">*</span> <span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">asOffset</span><span class="p">()</span>
 
 <span class="n">masterMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
+<span class="n">slave</span><span class="o">.</span><span class="n">inheritsTransform</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>And here’s the equivalent in ‘vanilla’ PyMEL:</p>
@@ -133,6 +135,7 @@ attributes and dimensions with no need for utility wrappers.</p>
 <span class="n">multer1</span><span class="o">.</span><span class="n">matrixSum</span> <span class="o">&gt;&gt;</span> <span class="n">multer2</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="n">multer2</span><span class="o">.</span><span class="n">matrixSum</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
+<span class="n">slave</span><span class="o">.</span><span class="n">inheritsTransform</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -148,15 +151,15 @@ method on all point-like components, from curve and NURBS surface CVs to mesh ve
         <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">pointPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Here’s how to use it:</p>
+<p>That’s it (no, really). And here’s how to use it:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">curve</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span>
 <span class="n">curve</span><span class="o">.</span><span class="n">cv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
 <span class="c1"># Result: [0.0, 1.0, 2.0]</span>
 </pre></div>
 </div>
-<p>And here’s the equivalent in ‘vanilla’ PyMEL:</p>
+<p>Here’s how to do it in ‘vanilla’ PyMEL:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-    <span class="s2">&quot;There is no equivalent. PyMEL&#39;s virtual classes do not support components.</span>
+    <span class="s2">&quot;You can&#39;t. PyMEL&#39;s virtual classes do not support components.</span>
 <span class="p">)</span>
 </pre></div>
 </div>

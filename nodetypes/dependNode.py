@@ -39,7 +39,7 @@ class MakeName(object):
             else:
                 kwargs['nodeType'] = instype.__melnode__
 
-            return _nm.make(*elems, **kwargs)
+            return _nm.createNode(*elems, **kwargs)
 
         return makeName
 
@@ -58,10 +58,8 @@ class DependNode:
         Object-oriented version of :func:`pymel.core.general.createNode` with
         managed naming.
 
-        :param nameOptions: passed-through to :meth:`~DependNode.makeName`
+        :param \*\*nameOptions: passed-through to :meth:`~DependNode.makeName`
         :return: The constructed node.
         :rtype: :class:`DependNode`
         """
         return r.createNode(cls.__melnode__, n=cls.makeName(**nameOptions))
-
-    make = createNode

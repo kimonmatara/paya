@@ -22,7 +22,7 @@ class AttributeMath1D:
         other, dim, isplug = _mo.info(other)
 
         if dim is 1:
-            node = r.nodes.AddDoubleLinear.make()
+            node = r.nodes.AddDoubleLinear.createNode()
 
             self >> node.attr('input{}'.format(2 if swap else 1))
             other >> node.attr('input{}'.format(1 if swap else 2))
@@ -30,7 +30,7 @@ class AttributeMath1D:
             return node.attr('output')
 
         if dim is 2:
-            node = r.nodes.PlusMinusAverage.make()
+            node = r.nodes.PlusMinusAverage.createNode()
 
             for child in node.attr('input2D')[1 if swap else 0]:
                 self >> child
@@ -40,7 +40,7 @@ class AttributeMath1D:
             return node.attr('output2D')
 
         if dim is 3:
-            node = r.nodes.PlusMinusAverage.make()
+            node = r.nodes.PlusMinusAverage.createNode()
 
             for child in node.attr('input3D')[1 if swap else 0]:
                 self >> child
@@ -50,7 +50,7 @@ class AttributeMath1D:
             return node.attr('output3D')
 
         if dim is 4:
-            node = r.nodes.QuatAdd.make()
+            node = r.nodes.QuatAdd.createNode()
 
             for child in node.attr('input{}Quat'.format(2 if swap else 1)):
                 self >> child
@@ -82,7 +82,7 @@ class AttributeMath1D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 2, 3):
-            node = r.nodes.PlusMinusAverage.make()
+            node = r.nodes.PlusMinusAverage.createNode()
             node.attr('operation').set(2)
 
             if dim is 1:
@@ -122,7 +122,7 @@ class AttributeMath1D:
         other, dim, isplug = _mo.info(other)
 
         if dim is 1:
-            node = r.nodes.MultDoubleLinear.make()
+            node = r.nodes.MultDoubleLinear.createNode()
 
             self >> node.attr('input{}'.format(2 if swap else 1))
             other >> node.attr('input{}'.format(1 if swap else 2))
@@ -130,7 +130,7 @@ class AttributeMath1D:
             return node.attr('output')
 
         if dim is 3:
-            node = r.nodes.MultiplyDivide.make()
+            node = r.nodes.MultiplyDivide.createNode()
 
             for dest in node.attr('input{}'.format(2 if swap else 1)):
                 self >> dest
@@ -160,7 +160,7 @@ class AttributeMath1D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 3):
-            node = r.nodes.MultiplyDivide.make()
+            node = r.nodes.MultiplyDivide.createNode()
             node.attr('operation').set(2)
 
             if dim is 1:
@@ -201,7 +201,7 @@ class AttributeMath1D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 3):
-            node = r.nodes.MultiplyDivide.make()
+            node = r.nodes.MultiplyDivide.createNode()
             node.attr('operation').set(3)
 
             if dim is 1:

@@ -21,7 +21,7 @@ class Matrix:
 
         if isplug:
             if dim is 16:
-                node = r.nodes.AddMatrix.make()
+                node = r.nodes.AddMatrix.createNode()
 
                 node.attr('matrixIn')[0].set(self)
                 other >> node.attr('matrixIn')[1]
@@ -44,7 +44,7 @@ class Matrix:
         if isplug:
 
             if dim is 16:
-                node = r.nodes.AddMatrix.make()
+                node = r.nodes.AddMatrix.createNode()
 
                 node.attr('matrixIn')[1].set(self)
                 other >> node.attr('matrixIn')[0]
@@ -68,7 +68,7 @@ class Matrix:
 
         if isplug:
             if dim is 16:
-                node = r.nodes.MultMatrix.make()
+                node = r.nodes.MultMatrix.createNode()
 
                 node.attr('matrixIn')[0].set(self)
                 other >> node.attr('matrixIn')[1]
@@ -90,7 +90,7 @@ class Matrix:
 
         if isplug:
             if dim is 3:
-                node = r.nodes.PointMatrixMult.make()
+                node = r.nodes.PointMatrixMult.createNode()
                 node.attr('vectorMultiply').set(True)
                 other >> node.attr('inPoint')
                 node.attr('inMatrix').set(self)
@@ -98,7 +98,7 @@ class Matrix:
                 return node.attr('output')
 
             if dim is 16:
-                node = r.nodes.MultMatrix.make()
+                node = r.nodes.MultMatrix.createNode()
 
                 node.attr('matrixIn')[1].set(self)
                 other >> node.attr('matrixIn')[0]
@@ -120,7 +120,7 @@ class Matrix:
 
         if dim is 3:
             if isplug:
-                node = r.nodes.PointMatrixMult.make()
+                node = r.nodes.PointMatrixMult.createNode()
                 other >> node.attr('inPoint')
                 node.attr('inMatrix').set(self)
 

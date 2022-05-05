@@ -18,7 +18,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
 
                 node.attr('input3D')[0].set(self)
 
@@ -47,7 +47,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
 
                 node.attr('input3D')[1].set(self)
 
@@ -78,7 +78,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
                 node.attr('operation').set(2)
 
                 node.attr('input3D')[0].set(self)
@@ -108,7 +108,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.PlusMinusAverage.make()
+                node = r.nodes.PlusMinusAverage.createNode()
                 node.attr('operation').set(2)
 
                 node.attr('input3D')[1].set(self)
@@ -140,7 +140,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('input1').set(self)
 
                 if dim is 1:
@@ -153,7 +153,7 @@ class Vector:
                 return node.attr('output')
 
             elif dim is 16:
-                node = r.nodes.PointMatrixMult.make()
+                node = r.nodes.PointMatrixMult.createNode()
                 node.attr('vectorMultiply').set(not isinstance(self, _dt.Point))
                 node.attr('inPoint').set(self)
                 other >> node.attr('inMatrix')
@@ -176,7 +176,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('input2').set(self)
 
                 if dim is 1:
@@ -206,7 +206,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(2)
                 node.attr('input1').set(self)
 
@@ -235,7 +235,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(2)
                 node.attr('input2').set(self)
 
@@ -267,7 +267,7 @@ class Vector:
 
         if dim is 16:
             if isplug:
-                node = r.nodes.PointMatrixMult.make()
+                node = r.nodes.PointMatrixMult.createNode()
                 node.attr('inPoint').set(self)
                 other >> node.attr('inMatrix')
                 return node.attr('output')
@@ -290,7 +290,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(3)
                 node.attr('input1').set(self)
 
@@ -319,7 +319,7 @@ class Vector:
 
         if isplug:
             if dim in (1, 3):
-                node = r.nodes.MultiplyDivide.make()
+                node = r.nodes.MultiplyDivide.createNode()
                 node.attr('operation').set(3)
                 node.attr('input2').set(self)
 

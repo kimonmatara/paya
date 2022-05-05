@@ -26,11 +26,11 @@ paya.plugtypes.attribute.Attribute
     .. py:method:: get(plug=False, **kwargs)
     
         Extends :py:meth:`pymel.core.general.Attribute.get` with the ``plug``
-        keyword argument, which is sometimes useful in mixed value / plug
-        workflows.
+        keyword argument, which is useful when the decision whether to work
+        statically or dynamically rests with the end-user.
         
         :param bool plug/p: if True, return ``self``; defaults to False
-        :param **kwargs: forwarded to the base method
+        :param \*\*kwargs: forwarded to the base method
         :return: :class:`Attribute` or a value type
     
     .. py:method:: setClass(cls)

@@ -21,7 +21,7 @@ class Quaternion:
 
         if isplug:
             if dim in (1, 4):
-                node = r.nodes.QuatAdd.make()
+                node = r.nodes.QuatAdd.createNode()
 
                 for src, dest in zip(self, node.attr('input1Quat')):
                     dest.set(src)
@@ -54,7 +54,7 @@ class Quaternion:
 
         if isplug:
             if dim in (1, 4):
-                node = r.nodes.QuatAdd.make()
+                node = r.nodes.QuatAdd.createNode()
 
                 for src, dest in zip(self, node.attr('input2Quat')):
                     dest.set(src)
@@ -89,7 +89,7 @@ class Quaternion:
 
         if isplug:
             if dim in (1, 4):
-                node = r.nodes.QuatSub.make()
+                node = r.nodes.QuatSub.createNode()
 
                 for src, dest in zip(self, node.attr('input1Quat')):
                     dest.set(src)
@@ -122,7 +122,7 @@ class Quaternion:
 
         if isplug:
             if dim in (1, 4):
-                node = r.nodes.QuatSub.make()
+                node = r.nodes.QuatSub.createNode()
 
                 for src, dest in zip(self, node.attr('input2Quat')):
                     dest.set(src)
@@ -157,7 +157,7 @@ class Quaternion:
 
         if isplug:
             if dim in (1, 4):
-                node = r.nodes.QuatProd.make()
+                node = r.nodes.QuatProd.createNode()
 
                 for src, dest in zip(self, node.attr('input1Quat')):
                     dest.set(src)
@@ -190,7 +190,7 @@ class Quaternion:
 
         if isplug:
             if dim in (1, 4):
-                node = r.nodes.QuatProd.make()
+                node = r.nodes.QuatProd.createNode()
 
                 for src, dest in zip(self, node.attr('input2Quat')):
                     dest.set(src)

@@ -113,7 +113,7 @@ class AttributeMath3D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 3):
-            node = r.nodes.PlusMinusAverage.make()
+            node = r.nodes.PlusMinusAverage.createNode()
 
             self >> node.attr('input3D')[1 if swap else 0]
 
@@ -145,7 +145,7 @@ class AttributeMath3D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 3):
-            node = r.nodes.PlusMinusAverage.make()
+            node = r.nodes.PlusMinusAverage.createNode()
             node.attr('operation').set(2)
 
             self >> node.attr('input3D')[1 if swap else 0]
@@ -178,7 +178,7 @@ class AttributeMath3D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 3):
-            node = r.nodes.MultiplyDivide.make()
+            node = r.nodes.MultiplyDivide.createNode()
 
             self >> node.attr('input{}'.format(2 if swap else 1))
 
@@ -192,7 +192,7 @@ class AttributeMath3D:
             return node.attr('output')
 
         if dim is 16 and not swap:
-            node = r.nodes.PointMatrixMult.make()
+            node = r.nodes.PointMatrixMult.createNode()
             node.attr('vectorMultiply').set(True)
             self >> node.attr('inPoint')
             other >> node.attr('inMatrix')
@@ -216,7 +216,7 @@ class AttributeMath3D:
 
         :param other: a matrix value or plug
         """
-        node = r.nodes.PointMatrixMult.make()
+        node = r.nodes.PointMatrixMult.createNode()
         self >> node.attr('inPoint')
         other >> node.attr('inMatrix')
         return node.attr('output')
@@ -232,7 +232,7 @@ class AttributeMath3D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 3):
-            node = r.nodes.MultiplyDivide.make()
+            node = r.nodes.MultiplyDivide.createNode()
             node.attr('operation').set(2)
 
             self >> node.attr('input{}'.format(2 if swap else 1))
@@ -265,7 +265,7 @@ class AttributeMath3D:
         other, dim, isplug = _mo.info(other)
 
         if dim in (1, 3):
-            node = r.nodes.MultiplyDivide.make()
+            node = r.nodes.MultiplyDivide.createNode()
             node.attr('operation').set(3)
 
             self >> node.attr('input{}'.format(2 if swap else 1))
