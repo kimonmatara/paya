@@ -45,7 +45,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Functionality</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Maths Rigging</a><ul>
@@ -67,9 +67,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_classes.html">Customising Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bracketing.html">Bracketing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
@@ -116,9 +115,8 @@ common node-based workflows as methods on both.</p>
 <p class="last"><a class="reference external" href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)">Polymorphism</a> for maths rigging in Paya is an
 ongoing project. Stay tuned for more methods in upcoming Paya releases.</p>
 </div>
-<p>Before delving further, it’s worth bearing in mind a few enhancements to PyMEL’s base behaviours that may crop up in
-upcoming examples:</p>
-<ul>
+<p>Before delving further, take note of a few enhancements you may encounter later:</p>
+<ul id="extended-chevrons">
 <li><p class="first">In Paya, the double-chevron operator <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> can be used to <strong>set values</strong> as well as connect attributes:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mf">3.0</span> <span class="o">&gt;&gt;</span> <span class="n">loc</span><span class="o">.</span><span class="n">tx</span>
 
@@ -127,9 +125,10 @@ upcoming examples:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">To set you up for mixed-mode operations, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> behaves somewhat
-differently:</p>
-<ul class="simple">
+</ul>
+<ul class="simple" id="more-useful-query-types">
+<li>To set you up for mixed-mode operations, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> behaves somewhat
+differently:<ul>
 <li>When called on the <code class="docutils literal notranslate"><span class="pre">translate</span></code> channel of a transform, it returns a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></li>
 <li>When called on the <code class="docutils literal notranslate"><span class="pre">rotate</span></code> channel of a transform, it returns an

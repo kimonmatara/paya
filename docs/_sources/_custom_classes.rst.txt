@@ -1,0 +1,118 @@
+###################
+Customising Classes
+###################
+
+*****************************
+Identifying Classes to Target
+*****************************
+
+The first step in adding functionality to Paya objects is to identify the type (class) to target. To do this, it's
+useful to understand how it manages inheritance compared to PyMEL.
+
+PyMEL Inheritance
+=================
+
+PyMEL classes follow an inheritance stack broadly derived from the Maya API. To see this, make sure you're running
+PyMEL in 'unpatched' mode, and pass ``inherited=True`` to the standard :func:`~pymel.core.general.nodeType` command:
+
+.. code-block:: python
+
+    import pymel.core as p
+    joint = p.joint()
+    stack = joint.nodeType(inherited=True) # Called as PyMEL method
+    print(stack)
+    # ['containerBase', 'entity', 'dagNode', 'transform', 'joint']
+
+    # The following does the same:
+    import maya.cmds as m
+    joint = 'joint1'
+    stack = m.nodeType(joint, inherited=True)
+    print(stack)
+
+In the returned list, the node's most specific type (class) comes last, and its most general type comes first. In other
+words, joints inherit functionality from transforms, which in turn inherit functionality from dagNodes, and
+so on.
+
+While some of these types, like :class:`~pymel.core.nodetypes.Transform`, can be created as Maya objects (e.g. groups),
+others, like :class:`~pymel.core.nodetypes.DagNode`, can't. They are `abstract <https://en.wikipedia.org/wiki/Abstract_type>`_,
+existing only to define functionality that will be inherited.
+
+Deeper Inspections
+==================
+
+:func:`~pymel.core.general.nodeType` returns a truncated list, and only works on nodes. For a more comprehensive
+inspection of any PyMEL node, attribute, component or data instance, do the following:
+
+    1.  Get the PyMEL instance (don't start with a string)
+    2.  Get the class of the instance, either by calling :class:`type` on it, or via its ``__class__`` attribute
+    3.  Get the **method resolution order** of the class via its ``__mro__`` attribute
+
+Here's an example:
+
+.. code-block:: python
+
+    joint = p.PyNode('joint') # get a PyMEL instance
+    cls = joint.__class__ # or type(joint)
+
+    print(cls.__mro__) # get the inheritance stack
+    # (<class 'pymel.core.nodetypes.Joint'>, <class 'pymel.core.nodetypes.Transform'>, <class 'pymel.core.nodetypes.DagNode'>, <class 'pymel.core.nodetypes.Entity'>, <class 'pymel.core.nodetypes.ContainerBase'>, <class 'pymel.core.nodetypes.DependNode'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+    # Also works with plug, component and data types:
+
+    plug = joint.translate
+    print(plug.__class__.__mro__) # or type(plug)
+    # (<class 'pymel.core.general.Attribute'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+    mesh = p.PyNode('pCube1')
+    print(mesh.vtx[0].__class__.__mro__) # or type(mesh.vtx[0])
+    # (<class 'pymel.core.general.MeshVertex'>, <class 'pymel.core.general.MItComponent1D'>, <class 'pymel.core.general.MItComponent'>, <class 'pymel.core.general.Component1D'>, <class 'pymel.core.general.DiscreteComponent'>, <class 'pymel.core.general.DimensionedComponent'>, <class 'pymel.core.general.Component'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+    matrix = joint.worldMatrix.get()
+    print(matrix.__class__.__mro__) # or type(matrix)
+    # (<class 'pymel.core.datatypes.Matrix'>, <class 'pymel.util.arrays.MatrixN'>, <class 'pymel.util.arrays.Array'>, <class 'maya.OpenMaya.MMatrix'>, <class 'object'>)
+
+Notice the following differences from :func:`~pymel.core.general.nodeType`:
+
+*   Instead of strings, actual Python classes are returned; these can be further inspected using :func:`help`,
+    :func:`dir` or :mod:`inspect`
+*   The order is reversed, with the most specific class on the left and the most generic one on the right
+*   More 'esoteric' classes like :class:`~pymel.core.nodetypes.DependNode` are now included, all the way up to the
+    most fundamental class in Python, :class:`object`.
+
+.. note::
+
+    The **method resolution order** describes all the classes that Python will visit to find a method you've requested.
+    For example, when you call :meth:`~pymel.core.nodetypes.DagNode.getParent` on a joint instance, the method is not
+    retrieved from the :class:`~pymel.core.nodetypes.Joint` class; it's actually defined inside
+    :class:`~pymel.core.nodetypes.DagNode`, a class that other Maya DAG objects, like mesh shapes, also inherit from.
+
+The Paya Inheritance Stack
+==========================
+
+When Paya patches PyMEL at runtime, it inserts a custom descendant for every PyMEL class into the inheritance stack,
+resulting in a 'doubled' method resolution order:
+
+.. code-block:: python
+
+    import pymel.core as p
+    import paya.runtime
+    # PyMEL has been patched successfully.
+
+    joint = p.PyNode('joint1')
+    print(joint.__class__.__mro__)
+    # (<class 'paya.nodetypes.joint.Joint'>, <class 'pymel.core.nodetypes.Joint'>, <class 'paya.nodetypes.transform.Transform'>, <class 'pymel.core.nodetypes.Transform'>, <class 'paya.nodetypes.dagNode.DagNode'>, <class 'pymel.core.nodetypes.DagNode'>, <class 'paya.nodetypes.entity.Entity'>, <class 'pymel.core.nodetypes.Entity'>, <class 'paya.nodetypes.containerBase.ContainerBase'>, <class 'pymel.core.nodetypes.ContainerBase'>, <class 'paya.nodetypes.dependNode.DependNode'>, <class 'pymel.core.nodetypes.DependNode'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+This approach overcomes the limitations of PyMEL's
+`virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system in the following
+ways:
+
+    *   PyMEL classes themselves inherit from Paya classes, so that any added methods will trickle down properly
+    *   Many more classes can be targeted for customisation, including components, attribute, data and abstract types
+
+Attribute Subtypes
+==================
+
+PyMEL provides just one class for attributes: :class:`~pymel.core.general.Attribute`. Paya splits this into more
+subtypes using an abstract inheritance tree, itself broadly derived from the Maya API.
+
+

@@ -1,0 +1,263 @@
+###################
+Customising Classes
+###################
+
+*******************************
+Identifying the Class to Target
+*******************************
+
+Introduction
+------------
+
+Every PyMEL `object <https://en.wikipedia.org/wiki/Object_(computer_science)>`_, whether 'converted' from a string via
+:class:`~pymel.core.general.PyNode` or returned by a method such as :meth:`~pymel.core.nodetypes.Transform.getMatrix`,
+derives from a Python `class <https://en.wikipedia.org/wiki/Class_(computer_programming)>`_. The class defines the
+`methods <https://en.wikipedia.org/wiki/Method_(computer_programming)>`_, or functionality, available on the object.
+PyMEL's classes are broadly derived from the Maya API, and organised in a hierarchy with more specific classes at the
+bottom and more generic ones at the top.
+
+To determine where to add your custom methods, you must first find out which classes an object inherits from.
+
+Finding Ancestors
+-----------------
+
+You may already be familiar with the standard Maya :func:`~pymel.core.general.nodeType` command. When called with
+``inheritance=True``, it returns a list of type names:
+
+.. code-block:: python
+
+    import pymel.core as p
+    print(p.nodeType('joint1', inherited=True))
+    # ['containerBase', 'entity', 'dagNode', 'transform', 'joint']
+
+    # The following also works:
+    joint = p.PyNode('joint1')
+    print(joint.nodeType(inherited=True))
+
+The most specific type is last on the list, and the most general one one is first. In other words, joints inherit
+functionality from transforms, which inherit functionality from dagNodes, and so on.
+
+.. note::
+    Some of these types can exist as Maya objects, namely ``joint`` and ``transform``. Others, like ``dagNode``, can't:
+    they are `abstract <https://en.wikipedia.org/wiki/Abstract_type>`_ types, existing merely to define functionality that
+    will be inherited by their descendants.
+
+Picking the Right One
+---------------------
+
+Inspecting a shape node reveals that, like the joint in the previous example, it, too, inherits from ``dagNode``:
+
+.. code-block:: python
+
+    import pymel.core as p
+    print(p.nodeType('pCubeShape1', inherited=True))
+    # ['containerBase', 'entity', 'dagNode', 'shape', 'geometryShape', 'deformableShape', 'controlPoint', 'surfaceShape', 'mesh']
+
+This suggests that, if you want to make a new method available on all shape-like and transform-like objects
+(collecting known in Maya as DAG nodes), you can merely add it to the ``dagNode`` type, rather than duplicating it
+across ``joint``, ``transform``, ``mesh`` and so on.
+
+Deeper Inspections
+------------------
+
+:func:`~pymel.core.general.nodeType` returns a truncated list of types, and only works on nodes. Here's how to get more
+comprehensive information on any PyMEL object, including attributes, components and 'data' objects:
+
+1.  Get a PyMEL instance (i.e., don't start with a string)
+2.  Get the class of the instance via its ``__class__`` attribute, or by calling :class:`type`
+3.  Access the ``__mro__`` attribute of the class
+
+.. note:: Make sure you are running PyMEL in **unpatched** mode for the following example.
+
+.. code-block:: python
+
+    # Get an instance
+    joint = p.PyNode('joint1')
+
+    # Get the class
+    cls = joint.__class__ # or: type(joint)
+
+    print(cls.__mro__)
+    # (<class 'pymel.core.nodetypes.Joint'>, <class 'pymel.core.nodetypes.Transform'>, <class 'pymel.core.nodetypes.DagNode'>, <class 'pymel.core.nodetypes.Entity'>, <class 'pymel.core.nodetypes.ContainerBase'>, <class 'pymel.core.nodetypes.DependNode'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+Note these differences from :func:`~pymel.core.general.nodeType`:
+
+*   The order is reversed, with the most specific class on the left, and the most general one on the right
+*   Instead of strings, the list contains actual classes; these can be further inspected using :func:`help`, :func:`dir`
+    and :mod:`inspect`
+*   More 'esoteric' types are included, all the way up to the base Python :class:`object`.
+
+The following all work too:
+
+.. code-block:: python
+
+    print(joint.translate.__class__.__mro__) # attributes
+    print(cube.vtx[2].__class__.__mro__) # components
+    print(joint.getMatrix().__class__.__mro__) # data
+
+.. note::
+
+    ``__mro__`` stands for **method resolution order**; this is the list of every class Python will visit to retrieve a
+    method you have requested. For example, when you call :meth:`~pymel.core.nodetypes.DagNode.getParent` on a group
+    node, the method is not retrieved from :class:`~pymel.core.nodetypes.Transform`; it is in fact defined inside
+    the more general class :class:`~pymel.core.nodetypes.DagNode`, and this is why it's also available on shapes.
+
+Paya Inheritance
+----------------
+
+When Paya patches PyMEL, it inserts a custom ancestor for almost every PyMEL class into the inheritance stack. The
+result is a nearly 'doubled' method resolution order:
+
+.. code-block:: python
+
+    import pymel.core as p
+    import paya.runtime
+    # PyMEL has been patched successfully.
+
+    joint = p.PyNode('joint1')
+    print(joint.__class__.__mro__)
+    # (<class 'paya.nodetypes.joint.Joint'>, <class 'pymel.core.nodetypes.Joint'>, <class 'paya.nodetypes.transform.Transform'>, <class 'pymel.core.nodetypes.Transform'>, <class 'paya.nodetypes.dagNode.DagNode'>, <class 'pymel.core.nodetypes.DagNode'>, <class 'paya.nodetypes.entity.Entity'>, <class 'pymel.core.nodetypes.Entity'>, <class 'paya.nodetypes.containerBase.ContainerBase'>, <class 'pymel.core.nodetypes.ContainerBase'>, <class 'paya.nodetypes.dependNode.DependNode'>, <class 'pymel.core.nodetypes.DependNode'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+This overcomes the limitations of PyMEL's
+`virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system in the
+following ways:
+
+*   PyMEL classes inherit from Paya classes, ensuring that functionality trickles down correctly
+*   More classes can be customised, including component, attribute, data and abstract types
+
+Attribute Subtypes
+------------------
+
+PyMEL provides only one class for attribute instances, :class:`~pymel.core.general.Attribute`. Paya splits this into
+multiple subtypes, themselves derived from the Maya API. Here's an example inspection of a ``translate`` channel,
+showing potential hooks for 3D arithmetic methods:
+
+.. code-block:: python
+
+    # Unpatched
+    print(joint.translate.__class__.__mro__)
+    (<class 'pymel.core.general.Attribute'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+    import paya.runtime as r
+    # PyMEL patched succesfully.
+
+    print(joint.translate.__class__.__mro__)
+    (<class 'paya.plugtypes.attribute3Double.Attribute3Double'>, <class 'paya.plugtypes.attributeMath3D.AttributeMath3D'>, <class 'paya.plugtypes.attributeMath.AttributeMath'>, <class 'paya.plugtypes.attribute.Attribute'>, <class 'pymel.core.general.Attribute'>, <class 'pymel.core.general.PyNode'>, <class 'pymel.util.utilitytypes.proxyClass.<locals>.Proxy'>, <class 'object'>)
+
+***************
+Writing Classes
+***************
+
+Custom Paya classes are derived from **template classes**. Each template class receives its own module, and the module
+name is the uncapitalized name of the class it contains. These modules live inside :doc:`paya/nodetypes`,
+:doc:`paya/plugtypes`, :doc:`paya/comptypes` and :doc:`paya/datatypes`. So, to add methods to the
+:class:`pymel.core.nodetypes.Transform` class, you would work inside ``paya/nodetypes/transform.py``.
+
+Inside the module, a class with basic content can be started like this:
+
+.. code-block:: python
+
+    class Transform:
+
+        def doSomething(self):
+            return 'Hello, world!'
+
+That's it. (No, really!)
+
+.. note::
+
+    Programmers experienced with object-oriented programming in Python might have expected to see this instead:
+
+    .. code-block:: python
+
+        import pymel.core.nodetypes
+
+        class Joint(pymel.core.nodetypes.Joint):
+
+            [...]
+
+    This isn't necessary. Template classes are so named because they are never imported directly; they merely define
+    content used to construct 'final' classes which are fully managed for inheritance.
+
+    Although this greatly reduces bugs and simplifies customisation, it has one drawback: :class:`super` cannot be
+    used to overload superclass methods. Instead, the appropriate parent must be sourced via the :mod:`paya.runtime`
+    interface so that the explicit form can be used:
+
+    .. code-block:: python
+
+        import paya.runtime as r
+
+        class Joint:
+
+            def doSomething(self):
+                out = r.nodes.Transform.sayHello(self) # See earlier example
+                return out+" By the way, I'm a joint!"  # i.e. "Hello, world! By the way, I'm a joint!"
+
+.. note::
+
+    Where a template module doesn't exist, Paya auto-generates an empty class for insertion into the inheritance
+    stack.
+
+***************
+Writing Methods
+***************
+
+Methods can be added to classes in standard Python form:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    class Transform:
+
+        # Instance method
+        def dropToFloor(self):
+            self.ty.set(0)
+
+        # Class method
+        @classmethod
+        def createAtMatrix(cls, matrix):
+            out = cls.createNode()
+            out.setMatrix(matrix)
+            return out
+
+        # Static method
+        @staticmethod
+        def groupTransforms(*transforms):
+            return r.group(*transforms)
+
+*****************
+Writing Operators
+*****************
+
+Python magic methods are fully supported. Here's an excerpt from the bundled template classes, showing the
+implementation for the new ``^`` operator:
+
+.. code-block:: python
+
+    def __xor__(self, other):
+        node = r.nodes.PointMatrixMult.createNode()
+        self >> node.attr('inPoint')
+        other >> node.attr('inMatrix')
+        return node.attr('output')
+
+********************
+Writing Constructors
+********************
+
+In
+
+Paya constructors are merely class methods that create nodes with custom configurations or options. They are designed
+to be accessed via ``paya.runtime.nodes``. For example
+
+For example,
+
+
+*********
+Reloading
+*********
+
+
+**********
+Bracketing
+**********

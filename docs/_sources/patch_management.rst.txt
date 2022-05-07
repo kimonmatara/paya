@@ -1,0 +1,17 @@
+****************
+Patch Management
+****************
+
+Recall that, once
+
+
+Classes bundled with the standard Paya distribution add functionality without modifying any standard methods they
+inherit from PyMEL's own classes. This is crucial to protect pipeline scripts that rely on unmodified PyMEL code.
+
+
+
+
+
+
+    If you have customised Paya yourself, you should consider 'bracketing' your build scripts with calls to
+    :py:meth:`~paya.runtime.Runtime.stop` and :py:meth:`~paya.runtime.Runtime.start`

@@ -1,0 +1,19 @@
+**********
+Bracketing
+**********
+
+Recall that, once patched, PyMEL will continue to return custom Paya classes until :meth:`paya.runtime.Runtime.stop`
+is called. For this reason, new versions of Paya are carefully written to add functionality without modifying any
+
+
+
+Bundled Paya classes add functionality without modifying any standard methods they inherit from PyMEL's own classes.
+
+
+
+
+
+
+If you have customised Paya yourself, you should consider 'bracketing' your build scripts with calls to
+:py:meth:`~paya.runtime.Runtime.stop` and :py:meth:`~paya.runtime.Runtime.start`
+

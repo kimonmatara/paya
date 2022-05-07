@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Importing and Patch Management &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Importing and Patching &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -45,7 +45,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Functionality</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Importing and Patch Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
@@ -53,9 +53,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_classes.html">Customising Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bracketing.html">Bracketing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
@@ -80,9 +79,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Importing and Patch Management</li>
+      <li>Importing and Patching</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/importing_and_patch_management.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/importing_and_patching.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -90,26 +89,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="importing-and-patch-management">
-<h1>Importing and Patch Management<a class="headerlink" href="#importing-and-patch-management" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="importing-and-patching">
+<h1>Importing and Patching<a class="headerlink" href="#importing-and-patching" title="Permalink to this headline">¶</a></h1>
 <p>To get started with <strong>paya</strong>, run the following in the Script Editor:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">paya.runtime</span>
 <span class="go">PyMEL has been patched successfully.</span>
 </pre></div>
 </div>
-<p>At this point, PyMEL has been patched to return custom <strong>paya</strong> classes
-instead of its own. This can be confirmed thus:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">pm</span>
+<p>At this point, PyMEL has been patched to return custom Paya classes
+instead of its own. To confirm this, run the following and note the class returned by <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cam</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;persp&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">cam</span><span class="p">))</span>
 <span class="go">&lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;</span>
 </pre></div>
 </div>
-</div></blockquote>
-<p>You can remove the patch, and return PyMEL to its ‘factory state’, like this:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paya</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<p>Now remove the patch, restoring PyMEL to its ‘factory state’, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paya</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 <span class="go">PyMEL has been unpatched successfully.</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cam</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;persp&#39;</span><span class="p">)</span>
@@ -117,24 +113,32 @@ instead of its own. This can be confirmed thus:</p>
 <span class="go">&lt;class &#39;pymel.core.nodetypes.Transform&#39;&gt;</span>
 </pre></div>
 </div>
-</div></blockquote>
+<p>Notice that <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a> now returns the PyMEL base class, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.nodetypes.Transform</span></code></a>, instead.</p>
 <p>If you wish to re-apply the patch, <strong>import</strong> won’t work a second time.
 Instead, you must call <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a>:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paya</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paya</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 <span class="go">PyMEL has been patched successfully.</span>
 </pre></div>
 </div>
-</div></blockquote>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Until they are customised, <strong>paya</strong> classes will merely replicate default
-PyMEL behaviours. This is because they always inherit from a PyMEL base
-class. As customisations increase, so does the potential to break
-pipelines that rely on unmodified PyMEL code. In such cases, care should
-be taken to ‘bracket’ patching with <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a>
-and <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Bundled Paya classes add functionality without modifying any standard methods they inherit from PyMEL’s own classes.
+If you have customised Paya yourself, you should consider ‘bracketing’ your build scripts with calls to
+<a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a> and <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a></p>
 </div>
+<dl class="docutils">
+<dt>and can therefore be used to access standard PyMEL methods.</dt>
+<dd><p class="first">Additional functionality is carefully written so as not to alter the behaviour of</p>
+<p class="last">Paya classes always inherit from their PyMEL base class, and every new</p>
+</dd>
+<dt>and additional functionality bundled with new versions is</dt>
+<dd><p class="first">carefully developed to preserve the behaviour of standard PyMEL methods.</p>
+<p>When customising Paya yourself, be aware that the potential to break studio pipeline</p>
+<p class="last">When customising Paya yourself, consider ‘bracketing’ calls yto</p>
+</dd>
+<dt>your code with calls to <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a> and</dt>
+<dd><a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a>.</dd>
+</dl>
 </div>
 
 

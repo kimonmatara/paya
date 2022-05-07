@@ -1,0 +1,68 @@
+**********************
+Importing and Patching
+**********************
+
+To get started with **paya**, run the following in the Script Editor:
+
+.. code-block:: python
+
+    >>> import paya.runtime
+    PyMEL has been patched successfully.
+
+At this point, PyMEL has been patched to return custom Paya classes
+instead of its own. To confirm this, run the following and note the class returned by :class:`type`:
+
+.. code-block:: python
+
+    >>> import pymel.core as pm
+    >>> cam = pm.PyNode('persp')
+    >>> print(type(cam))
+    <class 'paya.nodetypes.transform.Transform'>
+
+Now remove the patch, restoring PyMEL to its 'factory state', like this:
+
+.. code-block:: python
+
+    >>> paya.runtime.stop()
+    PyMEL has been unpatched successfully.
+
+    >>> cam = pm.PyNode('persp')
+    >>> print(type(cam))
+    <class 'pymel.core.nodetypes.Transform'>
+
+Notice that :class:`type` now returns the PyMEL base class, :class:`pymel.core.nodetypes.Transform`, instead.
+
+If you wish to re-apply the patch, **import** won't work a second time.
+Instead, you must call :py:meth:`~paya.runtime.Runtime.start`:
+
+.. code-block:: python
+
+    >>> paya.runtime.start()
+    PyMEL has been patched successfully.
+
+
+.. warning::
+
+    Bundled Paya classes add functionality without modifying any standard methods they inherit from PyMEL's own classes.
+    If you have customised Paya yourself, you should consider 'bracketing' your build scripts with calls to
+    :py:meth:`~paya.runtime.Runtime.stop` and :py:meth:`~paya.runtime.Runtime.start`
+
+
+and can therefore be used to access standard PyMEL methods.
+    Additional functionality is carefully written so as not to alter the behaviour of
+
+    Paya classes always inherit from their PyMEL base class, and every new
+
+and additional functionality bundled with new versions is
+    carefully developed to preserve the behaviour of standard PyMEL methods.
+
+    When customising Paya yourself, be aware that the potential to break studio pipeline
+
+
+
+
+    When customising Paya yourself, consider 'bracketing' calls yto
+
+
+your code with calls to :py:meth:`~paya.runtime.Runtime.stop` and
+    :py:meth:`~paya.runtime.Runtime.start`.

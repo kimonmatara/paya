@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customising Classes &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bracketing" href="bracketing.html" />
+    <link rel="prev" title="Discovering Functionality" href="discovering_func.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Functionality</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customisation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Customising Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#identifying-the-class-to-target">Identifying the Class to Target</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#finding-ancestors">Finding Ancestors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#picking-the-right-one">Picking the Right One</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deeper-inspections">Deeper Inspections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paya-inheritance">Paya Inheritance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#attribute-subtypes">Attribute Subtypes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-classes">Writing Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-methods">Writing Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-operators">Writing Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-constructors">Writing Constructors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reloading">Reloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bracketing">Bracketing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bracketing.html">Bracketing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Customising Classes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/custom_classes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="customising-classes">
+<h1>Customising Classes<a class="headerlink" href="#customising-classes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="identifying-the-class-to-target">
+<h2>Identifying the Class to Target<a class="headerlink" href="#identifying-the-class-to-target" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>Every PyMEL <a class="reference external" href="https://en.wikipedia.org/wiki/Object_(computer_science)">object</a>, whether ‘converted’ from a string via
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> or returned by a method such as <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform.getMatrix" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getMatrix()</span></code></a>,
+derives from a Python <a class="reference external" href="https://en.wikipedia.org/wiki/Class_(computer_programming)">class</a>. The class defines the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Method_(computer_programming)">methods</a>, or functionality, available on the object.
+PyMEL’s classes are broadly derived from the Maya API, and organised in a hierarchy with more specific classes at the
+bottom and more generic ones at the top.</p>
+<p>To determine where to add your custom methods, you must first find out which classes an object inherits from.</p>
+</div>
+<div class="section" id="finding-ancestors">
+<h3>Finding Ancestors<a class="headerlink" href="#finding-ancestors" title="Permalink to this headline">¶</a></h3>
+<p>You may already be familiar with the standard Maya <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.nodeType.html#pymel.core.general.nodeType" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">nodeType()</span></code></a> command. When called with
+<code class="docutils literal notranslate"><span class="pre">inheritance=True</span></code>, it returns a list of type names:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">nodeType</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">,</span> <span class="n">inherited</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># [&#39;containerBase&#39;, &#39;entity&#39;, &#39;dagNode&#39;, &#39;transform&#39;, &#39;joint&#39;]</span>
+
+<span class="c1"># The following also works:</span>
+<span class="n">joint</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">nodeType</span><span class="p">(</span><span class="n">inherited</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The most specific type is last on the list, and the most general one one is first. In other words, joints inherit
+functionality from transforms, which inherit functionality from dagNodes, and so on.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Some of these types can exist as Maya objects, namely <code class="docutils literal notranslate"><span class="pre">joint</span></code> and <code class="docutils literal notranslate"><span class="pre">transform</span></code>. Others, like <code class="docutils literal notranslate"><span class="pre">dagNode</span></code>, can’t:
+they are <a class="reference external" href="https://en.wikipedia.org/wiki/Abstract_type">abstract</a> types, existing merely to define functionality that
+will be inherited by their descendants.</p>
+</div>
+</div>
+<div class="section" id="picking-the-right-one">
+<h3>Picking the Right One<a class="headerlink" href="#picking-the-right-one" title="Permalink to this headline">¶</a></h3>
+<p>Inspecting a shape node reveals that, like the joint in the previous example, it, too, inherits from <code class="docutils literal notranslate"><span class="pre">dagNode</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">nodeType</span><span class="p">(</span><span class="s1">&#39;pCubeShape1&#39;</span><span class="p">,</span> <span class="n">inherited</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># [&#39;containerBase&#39;, &#39;entity&#39;, &#39;dagNode&#39;, &#39;shape&#39;, &#39;geometryShape&#39;, &#39;deformableShape&#39;, &#39;controlPoint&#39;, &#39;surfaceShape&#39;, &#39;mesh&#39;]</span>
+</pre></div>
+</div>
+<p>This suggests that, if you want to make a new method available on all shape-like and transform-like objects
+(collecting known in Maya as DAG nodes), you can merely add it to the <code class="docutils literal notranslate"><span class="pre">dagNode</span></code> type, rather than duplicating it
+across <code class="docutils literal notranslate"><span class="pre">joint</span></code>, <code class="docutils literal notranslate"><span class="pre">transform</span></code>, <code class="docutils literal notranslate"><span class="pre">mesh</span></code> and so on.</p>
+</div>
+<div class="section" id="deeper-inspections">
+<h3>Deeper Inspections<a class="headerlink" href="#deeper-inspections" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.nodeType.html#pymel.core.general.nodeType" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">nodeType()</span></code></a> returns a truncated list of types, and only works on nodes. Here’s how to get more
+comprehensive information on any PyMEL object, including attributes, components and ‘data’ objects:</p>
+<ol class="arabic simple">
+<li>Get a PyMEL instance (i.e., don’t start with a string)</li>
+<li>Get the class of the instance via its <code class="docutils literal notranslate"><span class="pre">__class__</span></code> attribute, or by calling <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li>Access the <code class="docutils literal notranslate"><span class="pre">__mro__</span></code> attribute of the class</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Make sure you are running PyMEL in <strong>unpatched</strong> mode for the following example.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get an instance</span>
+<span class="n">joint</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
+
+<span class="c1"># Get the class</span>
+<span class="bp">cls</span> <span class="o">=</span> <span class="n">joint</span><span class="o">.</span><span class="vm">__class__</span> <span class="c1"># or: type(joint)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span>
+<span class="c1"># (&lt;class &#39;pymel.core.nodetypes.Joint&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.Transform&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.DagNode&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.Entity&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.ContainerBase&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.DependNode&#39;&gt;, &lt;class &#39;pymel.core.general.PyNode&#39;&gt;, &lt;class &#39;pymel.util.utilitytypes.proxyClass.&lt;locals&gt;.Proxy&#39;&gt;, &lt;class &#39;object&#39;&gt;)</span>
+</pre></div>
+</div>
+<p>Note these differences from <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.nodeType.html#pymel.core.general.nodeType" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">nodeType()</span></code></a>:</p>
+<ul class="simple">
+<li>The order is reversed, with the most specific class on the left, and the most general one on the right</li>
+<li>Instead of strings, the list contains actual classes; these can be further inspected using <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#dir" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">dir()</span></code></a>
+and <a class="reference external" href="https://docs.python.org/3/library/inspect.html#module-inspect" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">inspect</span></code></a></li>
+<li>More ‘esoteric’ types are included, all the way up to the base Python <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a>.</li>
+</ul>
+<p>The following all work too:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span> <span class="c1"># attributes</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">vtx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span> <span class="c1"># components</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span> <span class="c1"># data</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">__mro__</span></code> stands for <strong>method resolution order</strong>; this is the list of every class Python will visit to retrieve a
+method you have requested. For example, when you call <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DagNode.html#pymel.core.nodetypes.DagNode.getParent" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getParent()</span></code></a> on a group
+node, the method is not retrieved from <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>; it is in fact defined inside
+the more general class <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DagNode.html#pymel.core.nodetypes.DagNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a>, and this is why it’s also available on shapes.</p>
+</div>
+</div>
+<div class="section" id="paya-inheritance">
+<h3>Paya Inheritance<a class="headerlink" href="#paya-inheritance" title="Permalink to this headline">¶</a></h3>
+<p>When Paya patches PyMEL, it inserts a custom ancestor for almost every PyMEL class into the inheritance stack. The
+result is a nearly ‘doubled’ method resolution order:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
+<span class="kn">import</span> <span class="nn">paya.runtime</span>
+<span class="c1"># PyMEL has been patched successfully.</span>
+
+<span class="n">joint</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span>
+<span class="c1"># (&lt;class &#39;paya.nodetypes.joint.Joint&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.Joint&#39;&gt;, &lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.Transform&#39;&gt;, &lt;class &#39;paya.nodetypes.dagNode.DagNode&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.DagNode&#39;&gt;, &lt;class &#39;paya.nodetypes.entity.Entity&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.Entity&#39;&gt;, &lt;class &#39;paya.nodetypes.containerBase.ContainerBase&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.ContainerBase&#39;&gt;, &lt;class &#39;paya.nodetypes.dependNode.DependNode&#39;&gt;, &lt;class &#39;pymel.core.nodetypes.DependNode&#39;&gt;, &lt;class &#39;pymel.core.general.PyNode&#39;&gt;, &lt;class &#39;pymel.util.utilitytypes.proxyClass.&lt;locals&gt;.Proxy&#39;&gt;, &lt;class &#39;object&#39;&gt;)</span>
+</pre></div>
+</div>
+<p>This overcomes the limitations of PyMEL’s
+<a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system in the
+following ways:</p>
+<ul class="simple">
+<li>PyMEL classes inherit from Paya classes, ensuring that functionality trickles down correctly</li>
+<li>More classes can be customised, including component, attribute, data and abstract types</li>
+</ul>
+</div>
+<div class="section" id="attribute-subtypes">
+<h3>Attribute Subtypes<a class="headerlink" href="#attribute-subtypes" title="Permalink to this headline">¶</a></h3>
+<p>PyMEL provides only one class for attribute instances, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>. Paya splits this into
+multiple subtypes, themselves derived from the Maya API. Here’s an example inspection of a <code class="docutils literal notranslate"><span class="pre">translate</span></code> channel,
+showing potential hooks for 3D arithmetic methods:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Unpatched
+print(joint.translate.__class__.__mro__)
+(&lt;class &#39;pymel.core.general.Attribute&#39;&gt;, &lt;class &#39;pymel.core.general.PyNode&#39;&gt;, &lt;class &#39;pymel.util.utilitytypes.proxyClass.&lt;locals&gt;.Proxy&#39;&gt;, &lt;class &#39;object&#39;&gt;)
+
+import paya.runtime as r
+# PyMEL patched succesfully.
+
+print(joint.translate.__class__.__mro__)
+(&lt;class &#39;paya.plugtypes.attribute3Double.Attribute3Double&#39;&gt;, &lt;class &#39;paya.plugtypes.attributeMath3D.AttributeMath3D&#39;&gt;, &lt;class &#39;paya.plugtypes.attributeMath.AttributeMath&#39;&gt;, &lt;class &#39;paya.plugtypes.attribute.Attribute&#39;&gt;, &lt;class &#39;pymel.core.general.Attribute&#39;&gt;, &lt;class &#39;pymel.core.general.PyNode&#39;&gt;, &lt;class &#39;pymel.util.utilitytypes.proxyClass.&lt;locals&gt;.Proxy&#39;&gt;, &lt;class &#39;object&#39;&gt;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="writing-classes">
+<h2>Writing Classes<a class="headerlink" href="#writing-classes" title="Permalink to this headline">¶</a></h2>
+<p>Custom Paya classes are derived from <strong>template classes</strong>. Each template class receives its own module, and the module
+name is the uncapitalized name of the class it contains. These modules live inside <a class="reference internal" href="paya/nodetypes.html"><span class="doc">paya.nodetypes</span></a>,
+<a class="reference internal" href="paya/plugtypes.html"><span class="doc">paya.plugtypes</span></a>, <a class="reference internal" href="paya/comptypes.html"><span class="doc">paya.comptypes</span></a> and <a class="reference internal" href="paya/datatypes.html"><span class="doc">paya.datatypes</span></a>. So, to add methods to the
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.nodetypes.Transform</span></code></a> class, you would work inside <code class="docutils literal notranslate"><span class="pre">paya/nodetypes/transform.py</span></code>.</p>
+<p>Inside the module, a class with basic content can be started like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Transform</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">doSomething</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Hello, world!&#39;</span>
+</pre></div>
+</div>
+<p>That’s it. (No, really!)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Programmers experienced with object-oriented programming in Python might have expected to see this instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core.nodetypes</span>
+
+<span class="k">class</span> <span class="nc">Joint</span><span class="p">(</span><span class="n">pymel</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">nodetypes</span><span class="o">.</span><span class="n">Joint</span><span class="p">):</span>
+
+    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This isn’t necessary. Template classes are so named because they are never imported directly; they merely define
+content used to construct ‘final’ classes which are fully managed for inheritance.</p>
+<p>Although this greatly reduces bugs and simplifies customisation, it has one drawback: <a class="reference external" href="https://docs.python.org/3/library/functions.html#super" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super</span></code></a> cannot be
+used to overload superclass methods. Instead, the appropriate parent must be sourced via the <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>
+interface so that the explicit form can be used:</p>
+<div class="last highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+
+<span class="k">class</span> <span class="nc">Joint</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">doSomething</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">sayHello</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># See earlier example</span>
+        <span class="k">return</span> <span class="n">out</span><span class="o">+</span><span class="s2">&quot; By the way, I&#39;m a joint!&quot;</span>  <span class="c1"># i.e. &quot;Hello, world! By the way, I&#39;m a joint!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Where a template module doesn’t exist, Paya auto-generates an empty class for insertion into the inheritance
+stack.</p>
+</div>
+</div>
+<div class="section" id="writing-methods">
+<h2>Writing Methods<a class="headerlink" href="#writing-methods" title="Permalink to this headline">¶</a></h2>
+<p>Methods can be added to classes in standard Python form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+
+<span class="k">class</span> <span class="nc">Transform</span><span class="p">:</span>
+
+    <span class="c1"># Instance method</span>
+    <span class="k">def</span> <span class="nf">dropToFloor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ty</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Class method</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">createAtMatrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">matrix</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">setMatrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="c1"># Static method</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">groupTransforms</span><span class="p">(</span><span class="o">*</span><span class="n">transforms</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="o">*</span><span class="n">transforms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="writing-operators">
+<h2>Writing Operators<a class="headerlink" href="#writing-operators" title="Permalink to this headline">¶</a></h2>
+<p>Python magic methods are fully supported. Here’s an excerpt from the bundled template classes, showing the
+implementation for the new <code class="docutils literal notranslate"><span class="pre">^</span></code> operator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">PointMatrixMult</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span>
+    <span class="bp">self</span> <span class="o">&gt;&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;inPoint&#39;</span><span class="p">)</span>
+    <span class="n">other</span> <span class="o">&gt;&gt;</span> <span class="n">node</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;inMatrix&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="writing-constructors">
+<h2>Writing Constructors<a class="headerlink" href="#writing-constructors" title="Permalink to this headline">¶</a></h2>
+<p>In</p>
+<p>Paya constructors are merely class methods that create nodes with custom configurations or options. They are designed
+to be accessed via <code class="docutils literal notranslate"><span class="pre">paya.runtime.nodes</span></code>. For example</p>
+<p>For example,</p>
+</div>
+<div class="section" id="reloading">
+<h2>Reloading<a class="headerlink" href="#reloading" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="bracketing">
+<h2>Bracketing<a class="headerlink" href="#bracketing" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="discovering_func.html" class="btn btn-neutral float-left" title="Discovering Functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bracketing.html" class="btn btn-neutral float-right" title="Bracketing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
