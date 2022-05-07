@@ -49,13 +49,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../more_customisation.html">More Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar.html">Sugar</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul class="current">
@@ -78,7 +80,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../patch_impl.html">Patch Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
@@ -144,16 +146,15 @@ flags.</p>
 <dt id="paya.util.functions.resolve_flags">
 <code class="descname">resolve_flags</code><span class="sig-paren">(</span><em>*flags</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.resolve_flags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used to mimic Maya flag behaviour.</p>
-<dl class="docutils">
-<dt>If only a subset of flags are defined, then:</dt>
-<dd><ul class="first last simple">
+<p>If only a subset of flags are defined, then:</p>
+<blockquote>
+<div><ul class="simple">
 <li>If the subset are a mixture of True / False, the other flags are
 set to False.</li>
 <li>If the subset are all True or all False, the remaining flags are
 set to the opposite.</li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <p>If all flags are None, all flags are set to True.
 If all flags are NOT None (i.e. all defined), they are all conformed to
 booleans.</p>

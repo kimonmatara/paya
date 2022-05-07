@@ -48,18 +48,20 @@
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="more_customisation.html">More Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patch_impl.html">Patch Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
 
@@ -96,10 +98,18 @@ write code with less boilerplate.</p>
 <p>Customisation is easy, and goes far beyond PyMEL’s
 <a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.</p>
+<div class="admonition-new-in-version-0-2 admonition">
+<p class="first admonition-title">New in Version 0.2</p>
+<ul class="simple">
+<li><a class="reference internal" href="maths_rigging.html"><span class="doc">Maths rigging using Python operators</span></a></li>
+<li><a class="reference internal" href="naming_nodes.html"><span class="doc">Smart node naming</span></a></li>
+<li><a class="reference internal" href="whats_new.html"><span class="doc">And more!</span></a></li>
+</ul>
 <p>Version 0.2 introduces a flurry of new functionality, most eminently an implementation for
 <strong>maths rigging using Python operators</strong>. This is seamlessly integrated with PyMEL and allows free mixing of values,
 attributes and dimensions with no need for utility wrappers.</p>
-<p>See <a class="reference internal" href="whats_new.html"><span class="doc">What’s New</span></a> and <a class="reference internal" href="maths_rigging.html"><span class="doc">Maths Rigging</span></a> for the full scoop.</p>
+<p class="last">See <a class="reference internal" href="whats_new.html"><span class="doc">What’s New</span></a> and <a class="reference internal" href="maths_rigging.html"><span class="doc">Maths Rigging</span></a> for the full scoop.</p>
+</div>
 <div class="section" id="example-1-operators">
 <h2>Example #1: Operators<a class="headerlink" href="#example-1-operators" title="Permalink to this headline">¶</a></h2>
 <p>Here’s a world-space orient constraint with offset preservation, Paya-style:</p>
@@ -141,8 +151,9 @@ attributes and dimensions with no need for utility wrappers.</p>
 </div>
 <div class="section" id="example-2-adding-a-method-to-components">
 <h2>Example #2: Adding a Method to Components<a class="headerlink" href="#example-2-adding-a-method-to-components" title="Permalink to this headline">¶</a></h2>
-<p>Tired of using <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.modeling/pymel.core.modeling.pointPosition.html#pymel.core.modeling.pointPosition" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pointPosition()</span></code></a>? Here’s how to implement a <em>getWorldPosition()</em>
-method on all point-like components, from curve and NURBS surface CVs to mesh vertices:</p>
+<p>Wouldn’t it be nice to have a <cite>getWorldPosition</cite> method on all point-like components, instead of
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.modeling/pymel.core.modeling.pointPosition.html#pymel.core.modeling.pointPosition" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pointPosition()</span></code></a>? Start a file at <code class="docutils literal notranslate"><span class="pre">paya/comptypes/discreteComponent.py</span></code>, and
+add the following lines:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
 
 <span class="k">class</span> <span class="nc">DiscreteComponent</span><span class="p">:</span>
@@ -152,9 +163,12 @@ method on all point-like components, from curve and NURBS surface CVs to mesh ve
 </pre></div>
 </div>
 <p>That’s it (no, really). And here’s how to use it:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">curve</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
+<span class="kn">import</span> <span class="nn">paya.runtime</span>
+
+<span class="n">curve</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span>
 <span class="n">curve</span><span class="o">.</span><span class="n">cv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
-<span class="c1"># Result: [0.0, 1.0, 2.0]</span>
+<span class="c1"># [0.0, 1.0, 2.0]</span>
 </pre></div>
 </div>
 <p>Here’s how to do it in ‘vanilla’ PyMEL:</p>

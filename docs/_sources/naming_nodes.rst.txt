@@ -7,6 +7,8 @@ Node names in typical Maya pipelines follow the convention ``<several_prefixes>_
 like ``GRP`` for groups, ``CTRL`` for controls, and so on. Paya gives you a couple ways to generate such names more
 easily.
 
+.. _Automatic Suffixes:
+
 Automatic Suffixes
 ==================
 
@@ -17,9 +19,19 @@ All bundled Paya node constructors apply type suffixes by default. For example:
     r.nodes.Joint.createNode(name='eyeball')
     # Result: eyeball_JOIN
 
-Suffixes are defined inside ``paya/lib/suffixes.json``. By default they are copied from the 'tags' in the `Maya Module
-Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_. You can override, or disable,
-them on a per-node basis like this:
+Suffixes are mapped to node types, and applied according to this rule:
+
+-   If the node is a transform, then:
+
+    -   If the node has a shape, the lookup is the shape's node type
+    -   Otherwise, the lookup is the transform's node type
+
+-   Otherwise:
+
+    -   If the node is a shape, no suffix is applied
+    -   Otherwise, the lookup is the shape's node type
+
+Suffixes can be overriden, or disabled, on a per-node basis like this:
 
 .. code-block:: python
 
@@ -29,8 +41,9 @@ them on a per-node basis like this:
     r.nodes.Joint.createNode(name='eyeball', suffix='JNT') # override
     # Result: eyeball_JNT
 
-You can also redefine or disable suffixes globally. See :doc:`Customise Node Suffixes <customise_node_suffixes>` for
-more information.
+Default Paya suffixes are derived from the 'tags' in the
+`Maya Module Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_. To redefine or disable
+them globally, see :doc:`Package Configuration <package_config>`.
 
 Implicit Naming
 ===============
@@ -40,13 +53,12 @@ passing them around as function arguments. For example, here's a typical naming 
 
 .. code-block:: python
 
-    def makeLimbGroup(side, typ):
-        return r.group(name='{}_{}_GRP'.format(side, typ), empty=True)
+    def makeLimb(prefix):
+        r.group(empty=True, name='{}_GRP'.format(prefix))
 
-    def makeLimbGroups():
-        for side in 'LR':
-            for typ in ['arm', 'leg']:
-                makeLimbGroupPair(side, typ)
+    for side in 'LR':
+        for typ in ['arm', 'leg']:
+            makeLimb('{}_{}'.format(side))
 
     # Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP
 
@@ -54,21 +66,30 @@ Here's an alternative using :class:`~paya.lib.names.Name`:
 
 .. code-block:: python
 
-    def makeLimbGroup():
+    def makeLimb(): # no prefix argument
         return r.nodes.Transform.createNode()
 
-    def makeLimbGroups():
-        for side in 'LR':
-            for typ in ['arm', 'leg']:
-                makeLimbGroup()
+    for side in 'LR':
+        for typ in ['arm', 'leg']:
+            with r.Name(side, typ):
+                makeLimb()
 
     # Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP
 
-Notice that the blocks cut through function calling scopes. This is an example of
-`aspect-oriented programming <https://en.wikipedia.org/wiki/Aspect-oriented_programming>`_. It declutters your code
-and makes it easier to refactor.
+This also works with maths operations:
 
-The :class:`~paya.lib.names.Name` context manager can be accessed directly on :mod:`paya.runtime`, or
+.. code-block:: python
+
+    with r.Name('mech'):
+        loc1.t ^ loc2.wm
+
+    # Produces a pointMatrixMult node named mech_DPMM
+
+:class:`~paya.lib.names.Name` can be nested arbitrarily deeply. Notice that the blocks cut through function calling
+scopes. This is an example of `aspect-oriented programming <https://en.wikipedia.org/wiki/Aspect-oriented_programming>`_.
+It declutters your code and makes it easier to refactor.
+
+:class:`~paya.lib.names.Name` can be accessed directly on :mod:`paya.runtime`, or
 imported from :mod:`paya.lib.names`. See the documentation for :class:`~paya.lib.names.Name`, and constructors like
 :meth:`~paya.nodetypes.dependNode.DependNode.createNode()`, for options to change block naming behaviour.
 
@@ -93,4 +114,4 @@ imported from :mod:`paya.lib.names`. See the documentation for :class:`~paya.lib
         import maya.cmds as m
 
         with r.Name('L', 'eyeball'):
-            m.createNode(name=r.nodes.Joint.makeName())
+            m.createNode('joint', name=r.nodes.Joint.makeName())

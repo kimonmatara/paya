@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using the Runtime Interface &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Sugar &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,8 +17,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Managing Node Names" href="naming_nodes.html" />
-    <link rel="prev" title="Importing and Patch Management" href="importing_and_patch_management.html" /> 
+    <link rel="next" title="paya" href="paya.html" />
+    <link rel="prev" title="Package Configuration" href="package_config.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,20 +44,20 @@
 <li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Functionality</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sugar</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul>
@@ -80,9 +80,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Using the Runtime Interface</li>
+      <li>Sugar</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/using_the_runtime_interface.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/sugar.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -90,33 +90,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="using-the-runtime-interface">
-<h1>Using the Runtime Interface<a class="headerlink" href="#using-the-runtime-interface" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> doesn’t just administer patching; it also imports the entire
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace, and can therefore be used as a drop-in
-replacement:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">meshes</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;mesh&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Crucially, it also provides direct access to custom <strong>paya</strong> classes via
-the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">plugs</span></code>, <code class="docutils literal notranslate"><span class="pre">comps</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> attributes.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="p">)</span>
-<span class="go">&lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;</span>
-</pre></div>
-</div>
-<p>When developing with <strong>paya</strong>, it’s recommended to access PyMEL functionality
-via <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>, rather than via <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>. Aside
-from giving you access to top-level additions like the custom class pools, it
-also clarifies ‘modes of operation’ within your code.</p>
+  <div class="section" id="sugar">
+<h1>Sugar<a class="headerlink" href="#sugar" title="Permalink to this headline">¶</a></h1>
+<p>Paya provides a few utilities to emulate Maya command behaviours in your own methods:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="paya/util/functions.html#paya.util.functions.short" title="paya.util.functions.short"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.util.functions.short()</span></code></a></td>
+<td>Accept shorthand versions of keyword arguments</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="paya/util/functions.html#paya.util.functions.resolve_flags" title="paya.util.functions.resolve_flags"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.util.functions.resolve_flags()</span></code></a></td>
+<td>Define flags ‘by omission’, Maya-style</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="importing_and_patch_management.html" class="btn btn-neutral float-left" title="Importing and Patch Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="naming_nodes.html" class="btn btn-neutral float-right" title="Managing Node Names" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="package_config.html" class="btn btn-neutral float-left" title="Package Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="paya.html" class="btn btn-neutral float-right" title="paya" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

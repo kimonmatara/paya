@@ -38,6 +38,7 @@ def resolve_flags(*flags):
     Used to mimic Maya flag behaviour.
 
     If only a subset of flags are defined, then:
+
         -   If the subset are a mixture of True / False, the other flags are
             set to False.
 

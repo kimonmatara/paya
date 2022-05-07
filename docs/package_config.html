@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>More Customisation &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Package Configuration &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,7 +16,9 @@
         <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sugar" href="sugar.html" />
+    <link rel="prev" title="Tutorial #3: Custom Operators" href="op_overl_tutorial.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,11 +52,15 @@
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Package Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#flags">Flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#node-suffixes">Node Suffixes</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Appendices</span></p>
@@ -78,9 +84,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>More Customisation</li>
+      <li>Package Configuration</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/more_customisation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/package_config.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -88,10 +94,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="more-customisation">
-<h1>More Customisation<a class="headerlink" href="#more-customisation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="base-paya-configuration">
-<h2>Base Paya Configuration<a class="headerlink" href="#base-paya-configuration" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="package-configuration">
+<h1>Package Configuration<a class="headerlink" href="#package-configuration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="flags">
+<h2>Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h2>
 <p>The following configuration flags are defined inside <a class="reference internal" href="paya/config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a>:</p>
 <table border="1" class="colwidths-given docutils">
 <colgroup>
@@ -112,33 +118,27 @@
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">autoSuffix</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
-<td>Apply pipeline suffixes automatically.</td>
+<td>Apply <a class="reference internal" href="naming_nodes.html#automatic-suffixes"><span class="std std-ref">node suffixes</span></a> automatically.</td>
 </tr>
 </tbody>
 </table>
-<p>More flags may be added in future releases.</p>
+<p>More options may be added in future Paya releases.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Changes to <a class="reference internal" href="paya/config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a> won’t be picked up until Maya is relaunched.</p>
+<p class="last">Any changes to <a class="reference internal" href="paya/config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a> will require a Maya relaunch.</p>
 </div>
 </div>
-<div class="section" id="runtime-interface-content">
-<h2>Runtime Interface Content<a class="headerlink" href="#runtime-interface-content" title="Permalink to this headline">¶</a></h2>
-<p>The runtime interface (<a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>) serves the entire content of
-<a class="reference internal" href="paya/cmds.html#module-paya.cmds" title="paya.cmds"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.cmds</span></code></a> which, in turn, imports the entire
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace. Any functions or variables that you wish to
-make available directly on <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> can therefore be added to
-<a class="reference internal" href="paya/cmds.html#module-paya.cmds" title="paya.cmds"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.cmds</span></code></a>.</p>
+<div class="section" id="node-suffixes">
+<span id="redefining-node-suffixes"></span><h2>Node Suffixes<a class="headerlink" href="#node-suffixes" title="Permalink to this headline">¶</a></h2>
+<p>Paya <a class="reference internal" href="naming_nodes.html#automatic-suffixes"><span class="std std-ref">node suffixes</span></a> are defined inside <code class="docutils literal notranslate"><span class="pre">paya/lib/suffixes.json</span></code>. To change them, you can:</p>
+<ul class="simple">
+<li>Edit the file directly and then call <a class="reference internal" href="paya/lib/suffixes.html#paya.lib.suffixes.load" title="paya.lib.suffixes.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.suffixes.load()</span></code></a></li>
+<li>Use <a class="reference internal" href="paya/lib/suffixes.html#paya.lib.suffixes.learnFromScene" title="paya.lib.suffixes.learnFromScene"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.suffixes.learnFromScene()</span></code></a> interactively and then call <a class="reference internal" href="paya/lib/suffixes.html#paya.lib.suffixes.dump" title="paya.lib.suffixes.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.suffixes.dump()</span></code></a></li>
+</ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">When adding content to <a class="reference internal" href="paya/cmds.html#module-paya.cmds" title="paya.cmds"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.cmds</span></code></a>, take care not to <strong>shadow</strong>
-factory PyMEL commands from <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>. Doing so may break code
-that accesses such commands via <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Changes to <a class="reference internal" href="paya/cmds.html#module-paya.cmds" title="paya.cmds"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.cmds</span></code></a> won’t be picked up until
-<a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.rehash" title="paya.runtime.Runtime.rehash"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.Runtime.rehash()</span></code></a> is called or Maya is relaunched.</p>
+<p class="last">If you’ve already written automation code that depends on default Paya behaviours, changing the base Paya
+configuration may break it.</p>
 </div>
 </div>
 </div>
@@ -146,7 +146,10 @@ that accesses such commands via <a class="reference internal" href="paya/runtime
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="op_overl_tutorial.html" class="btn btn-neutral float-left" title="Tutorial #3: Custom Operators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sugar.html" class="btn btn-neutral float-right" title="Sugar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

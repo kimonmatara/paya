@@ -10,9 +10,12 @@ Defines package-level configuration flags. Currently, these are:
      - Description
    * - ``patchOnLoad``
      - ``True``
-     - Call :py:meth:`paya.runtime.Runtime.start` on import.
+     - Call :py:meth:`~paya.runtime.Runtime.start` the first time :mod:`paya.runtime` is imported.
+   * - ``autoSuffix``
+     - ``True``
+     - Apply :ref:`node suffixes <Automatic Suffixes>` automatically.
 
-More options may be added in future releases.
+More options may be added in future Paya releases.
 """
 import maya.mel as mel
 

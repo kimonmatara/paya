@@ -2,54 +2,24 @@
 Maths Rigging
 *************
 
-============
-Introduction
-============
+==========
+Operations
+==========
 
-Paya allows you to work with values and plugs interchangeably in your rigging scripts, without having to wire-up nodes
-explicitly. To achieve this, it copies methods from PyMEL's data classes onto attributes and, conversely, implements
-common node-based workflows as methods on both.
+Arithmetic Operators
+--------------------
 
-.. note::
+Paya implements a wide range of arithmetic operators, with support for mixing of values, attributes and dimensions. In
+general, functionality reserved for PyMEL's data classes has been extended to attributes. Some niche cases, like
+elementwise operations across array plugs, are omitted.
 
-    `Polymorphism <https://en.wikipedia.org/wiki/Polymorphism_(computer_science)>`_ for maths rigging in Paya is an
-    ongoing project. Stay tuned for more methods in upcoming Paya releases.
-
-Before delving further, it's worth bearing in mind a few enhancements to PyMEL's base behaviours that may crop up in
-upcoming examples:
-
-*   In Paya, the double-chevron operator ``>>`` can be used to **set values** as well as connect attributes:
-
-    .. code-block:: python
-
-        3.0 >> loc.tx
-
-        # Equivalent to:
-        loc.tx.set(3.0)
-
-*   To set you up for mixed-mode operations, :meth:`~paya.plugtypes.attribute.Attribute.get` behaves somewhat
-    differently:
-
-    -   When called on the ``translate`` channel of a transform, it returns a
-        :class:`~pymel.core.datatypes.point.Point`
-
-    -   When called on the ``rotate`` channel of a transform, it returns an
-        :class:`~pymel.core.datatypes.eulerRotation.EulerRotation`
-
-    -   When called on scalar compounds with four children, it returns a
-        :class:`~pymel.core.datatypes.Quaternion`
-
-=========
-Operators
-=========
-
-As of version 0.2, all of the following statements are valid, and will generate appropriate node networks implicitly:
+All of the following statements are valid, and will generate appropriate node networks:
 
 .. code-block:: python
 
-    loc.translate + 3 # creates plusMinusAverage
-    3 + loc.translate # creates plusMinusAverage
-    p.datatypes.Vector([1, 2, 3]) * 'locator1.worldMatrix' # creates pointMatrixMult with vectorMultiply on
+    loc.translate + 3
+    3 + loc.translate
+    p.datatypes.Vector([1, 2, 3]) * 'locator1.worldMatrix'
 
 However, the following would error, or yield unexpected results:
 
@@ -64,10 +34,6 @@ This is because when both operands are simple Python types, it's impossible to d
 method.
 
 Available operators are documented under :doc:`paya/plugtypes` and :doc:`paya/datatypes`.
-
-===========================
-Point-Matrix Multiplication
-===========================
 
 Point-Matrix Multiplication
 ---------------------------
@@ -104,6 +70,7 @@ new ``^`` operator for point-matrix multiplication:
     (loc1.t + loc2.t) * loc3.wm # pointMatrixMult.vectorMultiply set to True
     pma.output3D.get() ^ loc3.wm.get() # available on values too
 
+
 =====================
 Working with Matrices
 =====================
@@ -134,25 +101,24 @@ Because this is such a common recipe, Paya provides a convenient macro for it,
 
     (slavePose * master.worldMatrix.asOffset()) >> slave.offsetParentMatrix
 
-For polymorphic parity, the method has also been made available on :class:`~paya.datatypes.matrix.Matrix`, where it will
-merely return an identity matrix.
+For polymorphic parity, the method has also been made available on :class:`~paya.datatypes.matrix.Matrix`.
 
 Filtering
 ---------
 
-Matrix filtering via ``pickMatrix`` nodes can be concisely performed using the
+Matrix filtering via ``pickMatrix`` nodes is now available via a
 :meth:`~paya.plugtypes.attributeMath16D.AttributeMath16D.pick` method on matrix attributes, also available via the
 shorthand ``pk``. The method has also been replicated statically on :class:`~paya.datatypes.matrix.Matrix` objects:
 
 .. code-block:: python
 
     master.worldMatrix.pick(rotate=True) >> slave.offsetParentMatrix # dynamic
-    master.worldMatrix.get().pick(rotate=True) >> slave.offsetParentMatrix # static
+    master.worldMatrix.get().pick(rotate=True) >> slave.offsetParentMatrix # static; note chevrons for value assignment
 
-Both versions also accept a ``default`` argument, allowing you to take omitted fields from a fallback matrix plug or
-value. The returned matrix is recombined according to Maya's transformation model, i.e.
-``scale * shear * rotate * translate``. This allows you to create 'partial' matrix constraints, akin to
-connecting specific outputs of a ``decomposeMatrix``:
+Both versions also accept a ``default`` argument, allowing you to take omitted fields from a fallback input (or value).
+The resulting matrix is correctly recombined according to Maya's transform model, i.e.
+``scale * shear * rotate * translate``. This allows you to create 'partial' matrix constraints, somewhat akin to
+connecting only certain outputs of a ``decomposeMatrix``:
 
 .. code-block:: python
 
@@ -161,6 +127,8 @@ connecting specific outputs of a ``decomposeMatrix``:
     masterMatrix >> p.PyNode('locator2').offsetParentMatrix
 
 In the above example, 'locator2' would take rotation from 'locator1', and translate, scale and shear from 'root_XFRM'.
+
+.. _Preventing Unit Conversions:
 
 ===========================
 Preventing Unit Conversions
@@ -195,3 +163,45 @@ In both cases Maya unit preferences are restored on block exit.
     This approach greatly simplifies working with arithmetic operations, but means you will be working with radians rather
     than degrees. If you find degrees more intuitive to inspect, you can use :func:`pymel.util.radians` and
     :func:`pymel.util.degrees` for conversions.
+
+==========================
+Miscellaneous Enhancements
+==========================
+
+.. _More Useful Query Types:
+
+More Useful Query Types
+-----------------------
+
+Paya returns more useful types when :meth:`~paya.plugtypes.attribute.Attribute.get` is called on a variety of attributes.
+Specifically:
+
+*   The value of the ``translate`` channel on a transform will always be returned as a
+    :class:`~pymel.core.datatypes.Point`
+
+*   The value of the ``rotate`` channel on a transform will always be returned as an
+    :class:`~pymel.core.datatypes.EulerRotation`
+
+*   The value of any four-dimensional compound of scalars will always be returned as a
+    :class:`~pymel.core.datatypes.Quaternion`
+
+This sets you up better for subsequent mixed-mode operations.
+
+Agnostic Getting / Setting
+--------------------------
+
+Paya adds a few enhancements to help develop code where the decision whether to work dynamically or statically
+rests with the end-user:
+
+*   :meth:`~paya.plugtypes.attribute.Attribute.get` has a new keyword argument, ``plug / p``, which will return
+    the attribute itself if set to True.
+
+*   A new method on attributes, :meth:`~paya.plugtypes.attribute.Attribute.put`, sets a value **or** connects an input
+    depending on what's passed.
+
+*   The popular PyMEL double-chevron operator, ``>>``, has accordingly been extended to support values as well as
+    attributes as the left operand, making statements like this valid:
+
+    .. code-block:: python
+
+        3.0 >> loc1.tx

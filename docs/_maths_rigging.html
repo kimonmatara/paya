@@ -16,9 +16,7 @@
         <script type="text/javascript" src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Discovering Functionality" href="discovering_func.html" />
-    <link rel="prev" title="Managing Node Names" href="naming_nodes.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,25 +42,11 @@
 <li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Functionality</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patch_management.html">Importing and Patch Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Maths Rigging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#operators">Operators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#point-matrix-multiplication">Point-Matrix Multiplication</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Point-Matrix Multiplication</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#working-with-matrices">Working with Matrices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#maintain-offset">Maintain Offset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#filtering">Filtering</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#preventing-unit-conversions">Preventing Unit Conversions</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
@@ -96,7 +80,7 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Maths Rigging</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/maths_rigging.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/_maths_rigging.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -106,46 +90,17 @@
              
   <div class="section" id="maths-rigging">
 <h1>Maths Rigging<a class="headerlink" href="#maths-rigging" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>Paya allows you to work with values and plugs interchangeably in your rigging scripts, without having to wire-up nodes
-explicitly. To achieve this, it copies methods from PyMEL’s data classes onto attributes and, conversely, implements
-common node-based workflows as methods on both.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><a class="reference external" href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)">Polymorphism</a> for maths rigging in Paya is an
-ongoing project. Stay tuned for more methods in upcoming Paya releases.</p>
-</div>
-<p>Before delving further, it’s worth bearing in mind a few enhancements to PyMEL’s base behaviours that may crop up in
-upcoming examples:</p>
-<ul>
-<li><p class="first">In Paya, the double-chevron operator <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> can be used to <strong>set values</strong> as well as connect attributes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mf">3.0</span> <span class="o">&gt;&gt;</span> <span class="n">loc</span><span class="o">.</span><span class="n">tx</span>
-
-<span class="c1"># Equivalent to:</span>
-<span class="n">loc</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">To set you up for mixed-mode operations, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> behaves somewhat
-differently:</p>
-<ul class="simple">
-<li>When called on the <code class="docutils literal notranslate"><span class="pre">translate</span></code> channel of a transform, it returns a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></li>
-<li>When called on the <code class="docutils literal notranslate"><span class="pre">rotate</span></code> channel of a transform, it returns an
-<code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></li>
-<li>When called on scalar compounds with four children, it returns a
-<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Quaternion.html#pymel.core.datatypes.Quaternion" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="operators">
-<h2>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h2>
-<p>As of version 0.2, all of the following statements are valid, and will generate appropriate node networks implicitly:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loc</span><span class="o">.</span><span class="n">translate</span> <span class="o">+</span> <span class="mi">3</span> <span class="c1"># creates plusMinusAverage</span>
-<span class="mi">3</span> <span class="o">+</span> <span class="n">loc</span><span class="o">.</span><span class="n">translate</span> <span class="c1"># creates plusMinusAverage</span>
-<span class="n">p</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">*</span> <span class="s1">&#39;locator1.worldMatrix&#39;</span> <span class="c1"># creates pointMatrixMult with vectorMultiply on</span>
+<div class="section" id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="arithmetic-operators">
+<h3>Arithmetic Operators<a class="headerlink" href="#arithmetic-operators" title="Permalink to this headline">¶</a></h3>
+<p>Paya implements a wide range of arithmetic operators, with support for mixing of values, attributes and dimensions. In
+general, functionality reserved for PyMEL’s data classes has been extended to attributes. Some niche cases, like
+elementwise operations across array plugs, are omitted.</p>
+<p>All of the following statements are valid, and will generate appropriate node networks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loc</span><span class="o">.</span><span class="n">translate</span> <span class="o">+</span> <span class="mi">3</span>
+<span class="mi">3</span> <span class="o">+</span> <span class="n">loc</span><span class="o">.</span><span class="n">translate</span>
+<span class="n">p</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">*</span> <span class="s1">&#39;locator1.worldMatrix&#39;</span>
 </pre></div>
 </div>
 <p>However, the following would error, or yield unexpected results:</p>
@@ -160,9 +115,7 @@ method.</p>
 <p>Available operators are documented under <a class="reference internal" href="paya/plugtypes.html"><span class="doc">paya.plugtypes</span></a> and <a class="reference internal" href="paya/datatypes.html"><span class="doc">paya.datatypes</span></a>.</p>
 </div>
 <div class="section" id="point-matrix-multiplication">
-<h2>Point-Matrix Multiplication<a class="headerlink" href="#point-matrix-multiplication" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>Point-Matrix Multiplication<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>Point-Matrix Multiplication<a class="headerlink" href="#point-matrix-multiplication" title="Permalink to this headline">¶</a></h3>
 <p>PyMEL uses the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator both for vector-matrix and point-matrix multiplication. The latter is triggered when
 the left operand is a <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Point.html#pymel.core.datatypes.Point" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a> rather than a <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Vector.html#pymel.core.datatypes.Vector" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> instance.
 Paya extends this behaviour to support matrix attributes:</p>
@@ -212,22 +165,21 @@ Maya’s constraints like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">slavePose</span> <span class="o">*</span> <span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">asOffset</span><span class="p">())</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
 </pre></div>
 </div>
-<p>For polymorphic parity, the method has also been made available on <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>, where it will
-merely return an identity matrix.</p>
+<p>For polymorphic parity, the method has also been made available on <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>.</p>
 </div>
 <div class="section" id="filtering">
 <h3>Filtering<a class="headerlink" href="#filtering" title="Permalink to this headline">¶</a></h3>
-<p>Matrix filtering via <code class="docutils literal notranslate"><span class="pre">pickMatrix</span></code> nodes can be concisely performed using the
+<p>Matrix filtering via <code class="docutils literal notranslate"><span class="pre">pickMatrix</span></code> nodes is now available via a
 <a class="reference internal" href="paya/plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D.pick" title="paya.plugtypes.attributeMath16D.AttributeMath16D.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a> method on matrix attributes, also available via the
 shorthand <code class="docutils literal notranslate"><span class="pre">pk</span></code>. The method has also been replicated statically on <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> objects:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span> <span class="c1"># dynamic</span>
-<span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span> <span class="c1"># static</span>
+<span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span> <span class="c1"># static; note chevrons for value assignment</span>
 </pre></div>
 </div>
-<p>Both versions also accept a <code class="docutils literal notranslate"><span class="pre">default</span></code> argument, allowing you to take omitted fields from a fallback matrix plug or
-value. The returned matrix is recombined according to Maya’s transformation model, i.e.
-<code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">*</span> <span class="pre">shear</span> <span class="pre">*</span> <span class="pre">rotate</span> <span class="pre">*</span> <span class="pre">translate</span></code>. This allows you to create ‘partial’ matrix constraints, akin to
-connecting specific outputs of a <code class="docutils literal notranslate"><span class="pre">decomposeMatrix</span></code>:</p>
+<p>Both versions also accept a <code class="docutils literal notranslate"><span class="pre">default</span></code> argument, allowing you to take omitted fields from a fallback input (or value).
+The resulting matrix is correctly recombined according to Maya’s transform model, i.e.
+<code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">*</span> <span class="pre">shear</span> <span class="pre">*</span> <span class="pre">rotate</span> <span class="pre">*</span> <span class="pre">translate</span></code>. This allows you to create ‘partial’ matrix constraints, somewhat akin to
+connecting only certain outputs of a <code class="docutils literal notranslate"><span class="pre">decomposeMatrix</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fallbackMatrix</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;root_XFRM&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">worldMatrix</span>
 <span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">pk</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">fallbackMatrix</span><span class="p">)</span>
 <span class="n">masterMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
@@ -237,7 +189,7 @@ connecting specific outputs of a <code class="docutils literal notranslate"><spa
 </div>
 </div>
 <div class="section" id="preventing-unit-conversions">
-<h2>Preventing Unit Conversions<a class="headerlink" href="#preventing-unit-conversions" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Preventing Unit Conversions<a class="headerlink" href="#preventing-unit-conversions" title="Permalink to this headline">¶</a></h2>
 <p>Paya doesn’t attempt to account for <code class="docutils literal notranslate"><span class="pre">unitConversion</span></code> nodes. Instead, it’s written under the assumption that Maya is
 configured for native units (namely, centimetres and radians) so that these nodes won’t be generated at all, and gives
 you a couple of tools to enforce this for blocks you specify.</p>
@@ -264,15 +216,48 @@ than degrees. If you find degrees more intuitive to inspect, you can use <code c
 <code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.util.degrees()</span></code> for conversions.</p>
 </div>
 </div>
+<div class="section" id="miscellaneous-enhancements">
+<h2>Miscellaneous Enhancements<a class="headerlink" href="#miscellaneous-enhancements" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="more-useful-query-types">
+<span id="id2"></span><h3>More Useful Query Types<a class="headerlink" href="#more-useful-query-types" title="Permalink to this headline">¶</a></h3>
+<p>Paya returns more useful types when <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> is called on a variety of attributes.
+Specifically:</p>
+<ul class="simple">
+<li>The value of the <code class="docutils literal notranslate"><span class="pre">translate</span></code> channel on a transform will always be returned as a
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Point.html#pymel.core.datatypes.Point" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></li>
+<li>The value of the <code class="docutils literal notranslate"><span class="pre">rotate</span></code> channel on a transform will always be returned as an
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.EulerRotation.html#pymel.core.datatypes.EulerRotation" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a></li>
+<li>The value of any four-dimensional compound of scalars will always be returned as a
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Quaternion.html#pymel.core.datatypes.Quaternion" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></li>
+</ul>
+<p>This sets you up better for subsequent mixed-mode operations.</p>
+</div>
+<div class="section" id="agnostic-getting-setting">
+<h3>Agnostic Getting / Setting<a class="headerlink" href="#agnostic-getting-setting" title="Permalink to this headline">¶</a></h3>
+<p>Paya adds a few enhancements to help develop code where the decision whether to work dynamically or statically
+rests with the end-user:</p>
+<ul>
+<li><p class="first"><a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> has a new keyword argument, <code class="docutils literal notranslate"><span class="pre">plug</span> <span class="pre">/</span> <span class="pre">p</span></code>, which will return
+the attribute itself if set to True.</p>
+</li>
+<li><p class="first">A new method on attributes, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.put" title="paya.plugtypes.attribute.Attribute.put"><code class="xref py py-meth docutils literal notranslate"><span class="pre">put()</span></code></a>, sets a value <strong>or</strong> connects an input
+depending on what’s passed.</p>
+</li>
+<li><p class="first">The popular PyMEL double-chevron operator, <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code>, has accordingly been extended to support values as well as
+attributes as the left operand, making statements like this valid:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mf">3.0</span> <span class="o">&gt;&gt;</span> <span class="n">loc1</span><span class="o">.</span><span class="n">tx</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
 </div>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="naming_nodes.html" class="btn btn-neutral float-left" title="Managing Node Names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="discovering_func.html" class="btn btn-neutral float-right" title="Discovering Functionality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

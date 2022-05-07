@@ -5,10 +5,22 @@ paya.lib.suffixes
 .. py:module:: paya.lib.suffixes
 
 Administers type suffixes of the kind typically found in Maya pipelines. These
-are defined inside ``suffixes.json``. The suffixes that come with paya are
-derived from the 'tags' in the 'node index' of the Maya documentation.
+are defined inside ``paya/lib/suffixes.json``, and are derived from the 'tags'
+in the `Maya Module Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_.
 
-Once read, suffixes are held in the **suffixes** global variable of this
+Suffixes are applied according to this rule:
+
+-   If the node is a transform, then:
+
+    -   If the node has a shape, the lookup is the shape's node type
+    -   Otherwise, the lookup is the transform's node type
+
+-   Otherwise:
+
+    -   If the node is a shape, no suffix is applied
+    -   Otherwise, the lookup is the shape's node type
+
+Once read, suffixes are held in the ``suffixes`` global variable of this
 module.
 
 .. py:function:: getKeyFromNode(node)

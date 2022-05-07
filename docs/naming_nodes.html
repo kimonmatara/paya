@@ -53,18 +53,20 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="more_customisation.html">More Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patch_impl.html">Patch Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
 
@@ -99,15 +101,26 @@
 like <code class="docutils literal notranslate"><span class="pre">GRP</span></code> for groups, <code class="docutils literal notranslate"><span class="pre">CTRL</span></code> for controls, and so on. Paya gives you a couple ways to generate such names more
 easily.</p>
 <div class="section" id="automatic-suffixes">
-<h2>Automatic Suffixes<a class="headerlink" href="#automatic-suffixes" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Automatic Suffixes<a class="headerlink" href="#automatic-suffixes" title="Permalink to this headline">¶</a></h2>
 <p>All bundled Paya node constructors apply type suffixes by default. For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">)</span>
 <span class="c1"># Result: eyeball_JOIN</span>
 </pre></div>
 </div>
-<p>Suffixes are defined inside <code class="docutils literal notranslate"><span class="pre">paya/lib/suffixes.json</span></code>. By default they are copied from the ‘tags’ in the <a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html">Maya Module
-Index</a>. You can override, or disable,
-them on a per-node basis like this:</p>
+<p>Suffixes are mapped to node types, and applied according to this rule:</p>
+<ul class="simple">
+<li>If the node is a transform, then:<ul>
+<li>If the node has a shape, the lookup is the shape’s node type</li>
+<li>Otherwise, the lookup is the transform’s node type</li>
+</ul>
+</li>
+<li>Otherwise:<ul>
+<li>If the node is a shape, no suffix is applied</li>
+<li>Otherwise, the lookup is the shape’s node type</li>
+</ul>
+</li>
+</ul>
+<p>Suffixes can be overriden, or disabled, on a per-node basis like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># disable</span>
 <span class="c1"># Result: eyeball</span>
 
@@ -115,40 +128,47 @@ them on a per-node basis like this:</p>
 <span class="c1"># Result: eyeball_JNT</span>
 </pre></div>
 </div>
-<p>You can also redefine or disable suffixes globally. See <span class="xref std std-doc">Customise Node Suffixes</span> for
-more information.</p>
+<p>Default Paya suffixes are derived from the ‘tags’ in the
+<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html">Maya Module Index</a>. To redefine or disable
+them globally, see <a class="reference internal" href="package_config.html"><span class="doc">Package Configuration</span></a>.</p>
 </div>
 <div class="section" id="implicit-naming">
 <h2>Implicit Naming<a class="headerlink" href="#implicit-naming" title="Permalink to this headline">¶</a></h2>
 <p>Paya’s <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> context manager allows you to build up prefixes implicitly, instead of
 passing them around as function arguments. For example, here’s a typical naming pattern:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeLimbGroup</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">_GRP&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">typ</span><span class="p">),</span> <span class="n">empty</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeLimb</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">empty</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_GRP&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">))</span>
 
-<span class="k">def</span> <span class="nf">makeLimbGroups</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="s1">&#39;leg&#39;</span><span class="p">]:</span>
-            <span class="n">makeLimbGroupPair</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="s1">&#39;leg&#39;</span><span class="p">]:</span>
+        <span class="n">makeLimb</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">side</span><span class="p">))</span>
 
 <span class="c1"># Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP</span>
 </pre></div>
 </div>
 <p>Here’s an alternative using <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeLimbGroup</span><span class="p">():</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeLimb</span><span class="p">():</span> <span class="c1"># no prefix argument</span>
     <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">makeLimbGroups</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="s1">&#39;leg&#39;</span><span class="p">]:</span>
-            <span class="n">makeLimbGroup</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="s1">&#39;leg&#39;</span><span class="p">]:</span>
+        <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
+            <span class="n">makeLimb</span><span class="p">()</span>
 
 <span class="c1"># Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP</span>
 </pre></div>
 </div>
-<p>Notice that the blocks cut through function calling scopes. This is an example of
-<a class="reference external" href="https://en.wikipedia.org/wiki/Aspect-oriented_programming">aspect-oriented programming</a>. It declutters your code
-and makes it easier to refactor.</p>
-<p>The <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> context manager can be accessed directly on <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>, or
+<p>This also works with maths operations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;mech&#39;</span><span class="p">):</span>
+    <span class="n">loc1</span><span class="o">.</span><span class="n">t</span> <span class="o">^</span> <span class="n">loc2</span><span class="o">.</span><span class="n">wm</span>
+
+<span class="c1"># Produces a pointMatrixMult node named mech_DPMM</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> can be nested arbitrarily deeply. Notice that the blocks cut through function calling
+scopes. This is an example of <a class="reference external" href="https://en.wikipedia.org/wiki/Aspect-oriented_programming">aspect-oriented programming</a>.
+It declutters your code and makes it easier to refactor.</p>
+<p><a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> can be accessed directly on <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>, or
 imported from <a class="reference internal" href="paya/lib/names.html#module-paya.lib.names" title="paya.lib.names"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.names</span></code></a>. See the documentation for <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a>, and constructors like
 <a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.createNode" title="paya.nodetypes.dependNode.DependNode.createNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createNode()</span></code></a>, for options to change block naming behaviour.</p>
 <div class="admonition note">
@@ -167,7 +187,7 @@ pass them along:</p>
 <span class="kn">import</span> <span class="nn">maya.cmds</span> <span class="k">as</span> <span class="nn">m</span>
 
 <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;eyeball&#39;</span><span class="p">):</span>
-    <span class="n">m</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">makeName</span><span class="p">())</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;joint&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">makeName</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>

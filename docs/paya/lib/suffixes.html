@@ -49,13 +49,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../more_customisation.html">More Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar.html">Sugar</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul class="current">
@@ -78,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../patch_impl.html">Patch Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
@@ -111,9 +113,22 @@
   <div class="section" id="module-paya.lib.suffixes">
 <span id="paya-lib-suffixes"></span><h1>paya.lib.suffixes<a class="headerlink" href="#module-paya.lib.suffixes" title="Permalink to this headline">¶</a></h1>
 <p>Administers type suffixes of the kind typically found in Maya pipelines. These
-are defined inside <code class="docutils literal notranslate"><span class="pre">suffixes.json</span></code>. The suffixes that come with paya are
-derived from the ‘tags’ in the ‘node index’ of the Maya documentation.</p>
-<p>Once read, suffixes are held in the <strong>suffixes</strong> global variable of this
+are defined inside <code class="docutils literal notranslate"><span class="pre">paya/lib/suffixes.json</span></code>, and are derived from the ‘tags’
+in the <a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html">Maya Module Index</a>.</p>
+<p>Suffixes are applied according to this rule:</p>
+<ul class="simple">
+<li>If the node is a transform, then:<ul>
+<li>If the node has a shape, the lookup is the shape’s node type</li>
+<li>Otherwise, the lookup is the transform’s node type</li>
+</ul>
+</li>
+<li>Otherwise:<ul>
+<li>If the node is a shape, no suffix is applied</li>
+<li>Otherwise, the lookup is the shape’s node type</li>
+</ul>
+</li>
+</ul>
+<p>Once read, suffixes are held in the <code class="docutils literal notranslate"><span class="pre">suffixes</span></code> global variable of this
 module.</p>
 <dl class="function">
 <dt id="paya.lib.suffixes.getKeyFromNode">

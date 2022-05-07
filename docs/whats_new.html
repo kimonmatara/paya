@@ -59,18 +59,20 @@
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="method_tutorial.html">Tutorial #1: Custom Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cust_cstr_tutorial.html">Tutorial #2: Custom Constructors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="op_overl_tutorial.html">Tutorial #3: Custom Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="more_customisation.html">More Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Appendices</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="patch_impl.html">Patch Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
 
@@ -105,15 +107,15 @@
 <div class="section" id="additions">
 <h3>Additions<a class="headerlink" href="#additions" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>A wide range of <a class="reference internal" href="maths_rigging.html#using-operators"><span class="std std-ref">maths operators</span></a>, spread across <a class="reference internal" href="paya/plugtypes.html"><span class="doc">paya.plugtypes</span></a> and <a class="reference internal" href="paya/datatypes.html"><span class="doc">paya.datatypes</span></a>, with support
+<li>A wide range of <span class="xref std std-ref">maths operators</span>, spread across <a class="reference internal" href="paya/plugtypes.html"><span class="doc">paya.plugtypes</span></a> and <a class="reference internal" href="paya/datatypes.html"><span class="doc">paya.datatypes</span></a>, with support
 for bidirectional mixing of values and plugs</li>
 <li>Added  <a class="reference internal" href="paya/plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D.pick" title="paya.plugtypes.attributeMath16D.AttributeMath16D.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a> and <a class="reference internal" href="paya/plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset" title="paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a>
 to <a class="reference internal" href="paya/plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D" title="paya.plugtypes.attributeMath16D.AttributeMath16D"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code></a></li>
 <li>Added  <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.pick" title="paya.datatypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a> and <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.asOffset" title="paya.datatypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a>
 to <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></li>
-<li><a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns <a class="reference internal" href="maths_rigging.html#more-useful-query-types"><span class="std std-ref">more useful types</span></a></li>
+<li><a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns <a class="reference internal" href="_maths_rigging.html#more-useful-query-types"><span class="std std-ref">more useful types</span></a></li>
 <li><a class="reference internal" href="naming_nodes.html"><span class="doc">Contextual name management</span></a> with <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.lib.names.Name</span></code></a> and pipeline suffixes</li>
-<li>Dodge unit conversion nodes with <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.NativeUnits" title="paya.lib.mathops.NativeUnits"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.lib.mathops.NativeUnits</span></code></a> and <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.nativeUnits" title="paya.lib.mathops.nativeUnits"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.nativeUnits()</span></code></a></li>
+<li><a class="reference internal" href="_maths_rigging.html#preventing-unit-conversions"><span class="std std-ref">Dodge unit conversion nodes</span></a> with <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.NativeUnits" title="paya.lib.mathops.NativeUnits"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.lib.mathops.NativeUnits</span></code></a> and <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.nativeUnits" title="paya.lib.mathops.nativeUnits"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.nativeUnits()</span></code></a></li>
 </ul>
 </div>
 </div>

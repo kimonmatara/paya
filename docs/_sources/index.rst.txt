@@ -10,11 +10,17 @@ Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-Version 0.2 introduces a flurry of new functionality, most eminently an implementation for
-**maths rigging using Python operators**. This is seamlessly integrated with PyMEL and allows free mixing of values,
-attributes and dimensions with no need for utility wrappers.
+.. admonition:: New in Version 0.2
 
-See :doc:`What's New <whats_new>` and :doc:`Maths Rigging <maths_rigging>` for the full scoop.
+    * :doc:`Maths rigging using Python operators <maths_rigging>`
+    * :doc:`Smart node naming <naming_nodes>`
+    * :doc:`And more! <whats_new>`
+
+    Version 0.2 introduces a flurry of new functionality, most eminently an implementation for
+    **maths rigging using Python operators**. This is seamlessly integrated with PyMEL and allows free mixing of values,
+    attributes and dimensions with no need for utility wrappers.
+
+    See :doc:`What's New <whats_new>` and :doc:`Maths Rigging <maths_rigging>` for the full scoop.
 
 Example #1: Operators
 ---------------------
@@ -62,8 +68,9 @@ And here's the equivalent in 'vanilla' PyMEL:
 Example #2: Adding a Method to Components
 -----------------------------------------
 
-Tired of using :func:`~pymel.core.modeling.pointPosition`? Here's how to implement a *getWorldPosition()*
-method on all point-like components, from curve and NURBS surface CVs to mesh vertices:
+Wouldn't it be nice to have a `getWorldPosition` method on all point-like components, instead of
+:func:`~pymel.core.modeling.pointPosition`? Start a file at ``paya/comptypes/discreteComponent.py``, and
+add the following lines:
 
 .. code-block:: python
 
@@ -78,9 +85,12 @@ That's it (no, really). And here's how to use it:
 
 .. code-block:: python
 
+    import pymel.core as p
+    import paya.runtime
+
     curve = p.PyNode('curve1')
     curve.cv[0].getWorldPosition()
-    # Result: [0.0, 1.0, 2.0]
+    # [0.0, 1.0, 2.0]
 
 Here's how to do it in 'vanilla' PyMEL:
 
@@ -104,7 +114,7 @@ Here's how to do it in 'vanilla' PyMEL:
     Using the Runtime Interface <using_the_runtime_interface>
     Naming Nodes <naming_nodes>
     Maths Rigging <maths_rigging>
-
+    Discovering Functionality <discovering_func>
 
 .. toctree::
     :caption: Customisation
@@ -113,12 +123,13 @@ Here's how to do it in 'vanilla' PyMEL:
     Tutorial #1: Custom Methods <method_tutorial>
     Tutorial #2: Custom Constructors <cust_cstr_tutorial>
     Tutorial #3: Custom Operators <op_overl_tutorial>
-    More Customisation <more_customisation>
+    Package Configuration <package_config>
+    sugar
 
 .. toctree::
     :caption: Appendices
     :hidden:
 
     Module Documentation <paya>
-    Patch Implementation <patch_impl>
+    implementation
     author
