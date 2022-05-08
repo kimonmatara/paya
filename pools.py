@@ -501,12 +501,19 @@ data = DataClassPool()
 
 pools = [nodes, plugs, comps, data]
 
+poolLookupsCache = {}
+
 def getPoolFromPmBase(pmbase):
     """
     Given a PyMEL base class, returns the most appropriate class pool
     to source a swap-in from.
     """
-    for cls in pmbase.__mro__:
-        for pool in pools:
-            if cls in pool.__pm_root_classes__:
-                return pool
+    try:
+        return poolLookupsCache[pmbase]
+
+    except KeyError:
+        for cls in pmbase.__mro__:
+            for pool in pools:
+                if cls in pool.__pm_root_classes__:
+                    poolLookupsCache[pmbase] = pool
+                    return pool
