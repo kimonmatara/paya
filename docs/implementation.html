@@ -67,6 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#instance-interception">2. Instance Interception</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advantages">Advantages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#disadvantages">Disadvantages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance">Performance</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
@@ -126,8 +127,7 @@ reason, custom plug types are largely abstract, and constructed according to an 
 <div class="section" id="advantages">
 <h2>Advantages<a class="headerlink" href="#advantages" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><strong>Speed</strong>: Instantiating PyNodes is notoriously slow, and therefore
-avoided entirely.</li>
+<li><strong>Speed</strong>: Re-instantiating PyNodes is notoriously slow, and therefore avoided entirely.</li>
 <li><strong>Easy coupling / decoupling</strong>: Unpatching PyMEL is merely a case of
 removing the <code class="docutils literal notranslate"><span class="pre">__new__()</span></code> wrappers.</li>
 <li><strong>Compatibility</strong>: PyMEL treats custom objects as its own.</li>
@@ -140,6 +140,11 @@ rebuilding stage; users do not need to track it for class declarations.</li>
 <p>Because PyMEL patching is persistent, it’s entirely incumbent on the developer to ensure their customisations won’t
 break external pipeline code by overriding common PyMEL methods.</p>
 <p>For more information, take a look inside <a class="reference internal" href="paya/pools.html#module-paya.pools" title="paya.pools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.pools</span></code></a> and <a class="reference internal" href="paya/patch.html#module-paya.patch" title="paya.patch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.patch</span></code></a>.</p>
+</div>
+<div class="section" id="performance">
+<h2>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h2>
+<p>Where rigging code involves a lot of PyNode instantiation, Paya runs at most 13% slower than ‘vanilla’ PyMEL. In
+typical use scenarios this isn’t noticeable.</p>
 </div>
 </div>
 

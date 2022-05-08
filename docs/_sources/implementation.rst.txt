@@ -33,8 +33,7 @@ Lookups are cached throughout.
 Advantages
 ----------
 
--   **Speed**: Instantiating PyNodes is notoriously slow, and therefore
-    avoided entirely.
+-   **Speed**: Re-instantiating PyNodes is notoriously slow, and therefore avoided entirely.
 
 -   **Easy coupling / decoupling**: Unpatching PyMEL is merely a case of
     removing the ``__new__()`` wrappers.
@@ -51,3 +50,8 @@ Because PyMEL patching is persistent, it's entirely incumbent on the developer t
 break external pipeline code by overriding common PyMEL methods.
 
 For more information, take a look inside :py:mod:`paya.pools` and :py:mod:`paya.patch`.
+
+Performance
+-----------
+Where rigging code involves a lot of PyNode instantiation, Paya runs at most 13% slower than 'vanilla' PyMEL. In
+typical use scenarios this isn't noticeable.

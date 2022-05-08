@@ -22,8 +22,8 @@ Here's a world-space orient constraint with offset preservation, Paya-style:
 
 .. code-block:: python
 
-    master = p.PyNode('locator1')
-    slave = p.PyNode('pCube1')
+    master = r.PyNode('locator1')
+    slave = r.PyNode('pCube1')
 
     masterMatrix = slave.getMatrix().inverse() \
         * slave.getMatrix(worldSpace=True) \
@@ -78,10 +78,10 @@ That's it (no, really). And here's how to use it:
 
 .. code-block:: python
 
-    import pymel.core as p
-    import paya.runtime
+    import paya.runtime as r
+    r.rehash()
 
-    curve = p.PyNode('curve1')
+    curve = r.PyNode('curve1')
     curve.cv[0].getWorldPosition()
     # [0.0, 1.0, 2.0]
 

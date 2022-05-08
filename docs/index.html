@@ -108,8 +108,8 @@ for attribute (including subtype), component and data types with true inheritanc
 <div class="section" id="example-1-operators">
 <h2>Example #1: Operators<a class="headerlink" href="#example-1-operators" title="Permalink to this headline">¶</a></h2>
 <p>Here’s a world-space orient constraint with offset preservation, Paya-style:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
-<span class="n">slave</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+<span class="n">slave</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
 
 <span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> \
     <span class="o">*</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> \
@@ -158,10 +158,10 @@ add the following lines:</p>
 </pre></div>
 </div>
 <p>That’s it (no, really). And here’s how to use it:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
-<span class="kn">import</span> <span class="nn">paya.runtime</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+<span class="n">r</span><span class="o">.</span><span class="n">rehash</span><span class="p">()</span>
 
-<span class="n">curve</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span>
 <span class="n">curve</span><span class="o">.</span><span class="n">cv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
 <span class="c1"># [0.0, 1.0, 2.0]</span>
 </pre></div>
