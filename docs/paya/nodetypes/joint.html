@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.plugtypes.attributeMath2D.AttributeMath2D &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>paya.nodetypes.joint.Joint &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,8 +17,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.plugtypes.attributeMath3D.AttributeMath3D" href="attributeMath3D.html" />
-    <link rel="prev" title="paya.plugtypes.attributeMath1D.AttributeMath1D" href="attributeMath1D.html" /> 
+    <link rel="next" title="paya.patch" href="../patch.html" />
+    <link rel="prev" title="paya.nodetypes.dependNode.DependNode" href="dependNode.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -67,18 +67,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="attribute.html">paya.plugtypes.attribute.Attribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath16D.html">paya.plugtypes.attributeMath16D.AttributeMath16D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath1D.html">paya.plugtypes.attributeMath1D.AttributeMath1D</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.plugtypes.attributeMath2D.AttributeMath2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath3D.html">paya.plugtypes.attributeMath3D.AttributeMath3D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath4D.html">paya.plugtypes.attributeMath4D.AttributeMath4D</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dependNode.html">paya.nodetypes.dependNode.DependNode</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.nodetypes.joint.Joint</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
@@ -103,10 +99,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../paya.html">paya</a> &raquo;</li>
-          <li><a href="../plugtypes.html">paya.plugtypes</a> &raquo;</li>
-      <li>paya.plugtypes.attributeMath2D.AttributeMath2D</li>
+          <li><a href="../nodetypes.html">paya.nodetypes</a> &raquo;</li>
+      <li>paya.nodetypes.joint.Joint</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/paya/plugtypes/attributeMath2D.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/paya/nodetypes/joint.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -114,13 +110,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-paya.plugtypes.attributeMath2D">
-<span id="paya-plugtypes-attributemath2d-attributemath2d"></span><h1>paya.plugtypes.attributeMath2D.AttributeMath2D<a class="headerlink" href="#module-paya.plugtypes.attributeMath2D" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-paya.nodetypes.joint">
+<span id="paya-nodetypes-joint-joint"></span><h1>paya.nodetypes.joint.Joint<a class="headerlink" href="#module-paya.nodetypes.joint" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="paya.plugtypes.attributeMath2D.AttributeMath2D">
-<em class="property">class </em><code class="descname">AttributeMath2D</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attributeMath2D.AttributeMath2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class defines no functionality; it merely tags the math dimension.</p>
-</dd></dl>
+<dt id="paya.nodetypes.joint.Joint">
+<em class="property">class </em><code class="descname">Joint</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.joint.Joint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 
@@ -128,8 +123,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="attributeMath1D.html" class="btn btn-neutral float-left" title="paya.plugtypes.attributeMath1D.AttributeMath1D" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="attributeMath3D.html" class="btn btn-neutral float-right" title="paya.plugtypes.attributeMath3D.AttributeMath3D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dependNode.html" class="btn btn-neutral float-left" title="paya.nodetypes.dependNode.DependNode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../patch.html" class="btn btn-neutral float-right" title="paya.patch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

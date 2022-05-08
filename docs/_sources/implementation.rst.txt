@@ -2,8 +2,6 @@
 Implementation
 **************
 
-== EXPAND TO PATCH AND PLUG TREE ==
-
 There are two aspects to the **paya** patching mechanism.
 
 1. Class Construction
@@ -15,20 +13,20 @@ Custom **paya** classes are built in the following way:
         :ref:`template classes <template modules>`.
 
     2.  The custom classes are then built using special metaclasses that
-        manage inheritance via an overriden ``mro()``.
+        manage inheritance via an overriden :meth:`~paya.pools.payaMeta.mro`.
 
-Custom node, component and data types always shadow a PyMEL counterpart in the
-method resolution order. However, when it comes to **plug** (attribute) types,
-PyMEL only provides one class: :py:class:`pymel.core.general.Attribute`. For
-this reason, custom plug types are largely abstract, and constructed according
-to an inheritance tree defined inside ``paya/plugtree.json``.
+Custom node, component and data types always shadow a PyMEL counterpart in the method resolution order. However, when it
+comes to **plug** (attribute) types, PyMEL only provides one class: :py:class:`pymel.core.general.Attribute`. For this
+reason, custom plug types are largely abstract, and constructed according to an inheritance tree defined inside
+``paya/plugtree.json`` (this should not be edited).
 
 2. Instance Interception
 ------------------------
 
 ``__new__()`` constructors on PyMEL classes inside :py:mod:`pymel.core.general`, :py:mod:`pymel.core.nodetypes` and
-:py:mod:`pymel.core.datatypes` are then dynamically replaced with wrappers that capture new PyNode instances and
-change their ``__class__`` assignment.
+:py:mod:`pymel.core.datatypes` are then dynamically replaced with wrappers that capture the original
+:class:`~pymel.core.general.PyNode` instance, look up a relevant custom class, and assign it directly to the
+``__class__`` attribute of the instance.
 
 Lookups are cached throughout.
 
@@ -45,5 +43,11 @@ Advantages
 
 -   **Simpler Customisation**: Inheritance is managed entirely during the
     rebuilding stage; users do not need to track it for class declarations.
+
+Disadvantages
+-------------
+
+Because PyMEL patching is persistent, it's entirely incumbent on the developer to ensure their customisations won't
+break external pipeline code by overriding common PyMEL methods.
 
 For more information, take a look inside :py:mod:`paya.pools` and :py:mod:`paya.patch`.

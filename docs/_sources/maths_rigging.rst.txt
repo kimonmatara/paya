@@ -81,7 +81,7 @@ Paya extends this behaviour to support matrix attributes:
 
 .. code-block:: python
 
-    point = p.datatypes.Point([0,2,3])
+    point = r.data.Point([0,2,3])
     point * loc.worldMatrix # point * 'locator1.worldMatrix' also works
 
 The above example would configure a ``pointMatrixMult`` node with vectorMultiply set to False.
@@ -119,8 +119,8 @@ Maya's constraints like this:
 
 .. code-block:: python
 
-    master = p.PyNode('locator1')
-    slave = p.PyNode('locator2')
+    master = r.PyNode('locator1')
+    slave = r.PyNode('locator2')
 
     masterMatrix = master.worldMatrix
     masterMatrix = masterMatrix * masterMatrix.get().inverse() # to identity once
@@ -159,9 +159,9 @@ connecting specific outputs of a ``decomposeMatrix``:
 
 .. code-block:: python
 
-    fallbackMatrix = p.PyNode('root_XFRM').worldMatrix
-    masterMatrix = p.PyNode('locator1').worldMatrix.pk(rotate=True, default=fallbackMatrix)
-    masterMatrix >> p.PyNode('locator2').offsetParentMatrix
+    fallbackMatrix = r.PyNode('root_XFRM').worldMatrix
+    masterMatrix = r.PyNode('locator1').worldMatrix.pk(rotate=True, default=fallbackMatrix)
+    masterMatrix >> r.PyNode('locator2').offsetParentMatrix
 
 In the above example, 'locator2' would take rotation from 'locator1', and translate, scale and shear from 'root_XFRM'.
 

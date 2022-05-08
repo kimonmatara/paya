@@ -7,7 +7,7 @@ details on inherited PyMEL methods and classes:
 
 .. code-block:: python
 
-    cam = p.PyNode('persp')
+    cam = r.PyNode('persp')
     help(cam)
 
 Looking for a specific method? Use :func:`dir` on the object **class** instead. Here's an algorithm to print any method
@@ -26,5 +26,5 @@ Python's :mod:`inspect` gives you even more options. For example, to find the mo
 .. code-block:: python
 
     import inspect
-    print(inspect.getfile(p.PyNode('persp').createNode))
+    print(inspect.getfile(r.PyNode('persp').createNode))
     # C:\Users\RobertSapolsky\My Documents\Maya\2022\scripts\paya\nodetypes\dependNode.py

@@ -1,10 +1,9 @@
 Paya: PyMEL Unleashed
 =====================
 
-Paya is an object-oriented toolkit for Maya riggers and TDs. Unlike other systems, it does not re-wrap ``maya.cmds``
-or the ``OpenMaya`` API. Instead, it adds new methods directly to
-`PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_ objects at runtime. This helps you
-write code with less boilerplate.
+Paya is an object-oriented toolkit for Maya riggers and TDs that adds new functionality to
+`PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_ at runtime. This helps you
+write concise code with a 'native' feel.
 
 Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
@@ -12,9 +11,11 @@ for attribute (including subtype), component and data types with true inheritanc
 
 .. admonition:: New in Version 0.2
 
-    * :doc:`Maths rigging using Python operators <maths_rigging>`
-    * :doc:`Smart node naming <naming_nodes>`
-    * :doc:`And more! <whats_new>`
+    * Maths rigging using Python operators
+    * Smart node naming
+    * And more!
+
+See `here <https://kimonmatara.github.io/paya/>`_ for full documentation.
 
 Example #1: Operators
 ---------------------
@@ -23,8 +24,8 @@ Here's a world-space orient constraint with offset preservation, Paya-style:
 
 .. code-block:: python
 
-    master = p.PyNode('locator1')
-    slave = p.PyNode('pCube1')
+    master = r.PyNode('locator1')
+    slave = r.PyNode('pCube1')
 
     masterMatrix = slave.getMatrix().inverse() \
         * slave.getMatrix(worldSpace=True) \
@@ -79,10 +80,10 @@ That's it (no, really). And here's how to use it:
 
 .. code-block:: python
 
-    import pymel.core as p
-    import paya.runtime
+    import paya.runtime as r
+    r.rehash()
 
-    curve = p.PyNode('curve1')
+    curve = r.PyNode('curve1')
     curve.cv[0].getWorldPosition()
     # [0.0, 1.0, 2.0]
 
@@ -104,7 +105,7 @@ Here's how to do it in 'vanilla' PyMEL:
     :caption: Functionality
     :hidden:
 
-    Importing and Patch Management <importing_and_patch_management>
+    Importing and Patching <importing_and_patching>
     Using the Runtime Interface <using_the_runtime_interface>
     Naming Nodes <naming_nodes>
     Maths Rigging <maths_rigging>
@@ -114,9 +115,9 @@ Here's how to do it in 'vanilla' PyMEL:
     :caption: Customisation
     :hidden:
 
-    Tutorial #1: Custom Methods <method_tutorial>
-    Tutorial #2: Custom Constructors <cust_cstr_tutorial>
-    Tutorial #3: Custom Operators <op_overl_tutorial>
+    Adding Object-Oriented Functionality <adding_oo_functionality>
+    bracketing
+    Top-Level Methods <top_level_methods>
     Package Configuration <package_config>
     sugar
 

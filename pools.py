@@ -65,8 +65,14 @@ def iscustomcls(cls):
 #------------------------------------------------------------|
 
 class payaMeta(type):
-
+    """
+    Base Paya metaclass. This is never used directly, but rather subclassed as
+    a mix-in for PyMEL's standard metaclasses.
+    """
     def mro(cls):
+        """
+        Explicitly controls Paya class inheritance.
+        """
         clsname = cls.__name__
 
         defaultmro = super().mro()

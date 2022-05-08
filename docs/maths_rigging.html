@@ -67,8 +67,9 @@
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="custom_classes.html">Customising Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bracketing.html">Bracketing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="top_level_methods.html">Top-Level Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
@@ -165,7 +166,7 @@ method.</p>
 <p>PyMEL uses the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator both for vector-matrix and point-matrix multiplication. The latter is triggered when
 the left operand is a <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Point.html#pymel.core.datatypes.Point" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a> rather than a <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Vector.html#pymel.core.datatypes.Vector" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> instance.
 Paya extends this behaviour to support matrix attributes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">point</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">point</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 <span class="n">point</span> <span class="o">*</span> <span class="n">loc</span><span class="o">.</span><span class="n">worldMatrix</span> <span class="c1"># point * &#39;locator1.worldMatrix&#39; also works</span>
 </pre></div>
 </div>
@@ -194,8 +195,8 @@ new <code class="docutils literal notranslate"><span class="pre">^</span></code>
 <h3>Maintain Offset<a class="headerlink" href="#maintain-offset" title="Permalink to this headline">¶</a></h3>
 <p>When developing matrix-based constraints with Paya, you can emulate the <code class="docutils literal notranslate"><span class="pre">maintainOffset/mo</span></code> constraint option in
 Maya’s constraints like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
-<span class="n">slave</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+<span class="n">slave</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span>
 
 <span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span>
 <span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">masterMatrix</span> <span class="o">*</span> <span class="n">masterMatrix</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="c1"># to identity once</span>
@@ -227,9 +228,9 @@ shorthand <code class="docutils literal notranslate"><span class="pre">pk</span>
 value. The returned matrix is recombined according to Maya’s transformation model, i.e.
 <code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">*</span> <span class="pre">shear</span> <span class="pre">*</span> <span class="pre">rotate</span> <span class="pre">*</span> <span class="pre">translate</span></code>. This allows you to create ‘partial’ matrix constraints, akin to
 connecting specific outputs of a <code class="docutils literal notranslate"><span class="pre">decomposeMatrix</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fallbackMatrix</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;root_XFRM&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">worldMatrix</span>
-<span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">pk</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">fallbackMatrix</span><span class="p">)</span>
-<span class="n">masterMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fallbackMatrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;root_XFRM&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">worldMatrix</span>
+<span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">pk</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">fallbackMatrix</span><span class="p">)</span>
+<span class="n">masterMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
 </pre></div>
 </div>
 <p>In the above example, ‘locator2’ would take rotation from ‘locator1’, and translate, scale and shear from ‘root_XFRM’.</p>

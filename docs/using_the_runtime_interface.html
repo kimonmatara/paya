@@ -46,15 +46,21 @@
 <p class="caption"><span class="caption-text">Functionality</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Runtime Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Runtime Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#replacing-pymel-core">Replacing pymel.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#class-pools">Class Pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#top-level-tools">Top-Level Tools</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="custom_classes.html">Customising Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bracketing.html">Bracketing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="top_level_methods.html">Top-Level Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
@@ -91,23 +97,63 @@
              
   <div class="section" id="using-the-runtime-interface">
 <h1>Using the Runtime Interface<a class="headerlink" href="#using-the-runtime-interface" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> doesn’t just administer patching; it also imports the entire
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace, and can therefore be used as a drop-in
-replacement:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">meshes</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;mesh&#39;</span><span class="p">)</span>
+<p>So far, we’ve been importing <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> merely to trigger patching, and then using PyMEL via the customary
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Order of imports doesn&#39;t matter</span>
+<span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
+<span class="kn">import</span> <span class="nn">paya.runtime</span>
+<span class="c1"># PyMEL patched successfully</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">polyCube</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+<span class="c1"># &lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;</span>
 </pre></div>
 </div>
-<p>Crucially, it also provides direct access to custom <strong>paya</strong> classes via
-the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">plugs</span></code>, <code class="docutils literal notranslate"><span class="pre">comps</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> attributes.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="p">)</span>
-<span class="go">&lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;</span>
+<div class="section" id="replacing-pymel-core">
+<h2>Replacing pymel.core<a class="headerlink" href="#replacing-pymel-core" title="Permalink to this headline">¶</a></h2>
+<p>A better way to work is to use <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> as a drop-in-replacement, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+<span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;transform&#39;</span><span class="p">)</span> <span class="c1"># etc; all standard PyMEL methods are available</span>
 </pre></div>
 </div>
-<p>When developing with <strong>paya</strong>, it’s recommended to access PyMEL functionality
-via <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>, rather than via <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>. Aside
-from giving you access to top-level additions like the custom class pools, it
-also clarifies ‘modes of operation’ within your code.</p>
+<p>This cuts down on importing boilerplate and clearly delineates code that expects patched PyMEL. It also gives you
+access to features only available via <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
+</div>
+<div class="section" id="class-pools">
+<span id="id1"></span><h2>Class Pools<a class="headerlink" href="#class-pools" title="Permalink to this headline">¶</a></h2>
+<p>Paya classes can be sourced directly via the <strong>class pools</strong>, available via the  <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">plugs</span></code>, <code class="docutils literal notranslate"><span class="pre">comps</span></code> and
+<code class="docutils literal notranslate"><span class="pre">data</span></code> attributes of <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="p">)</span>
+<span class="c1"># &lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;</span>
+</pre></div>
+</div>
+<p>You will need the pools if you want to:</p>
+<ul>
+<li><p class="first">Call Paya <strong>node constructors</strong> with extra features, such as an object-oriented version of
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">createNode()</span></code></a> with support for <a class="reference internal" href="naming_nodes.html"><span class="doc">name management</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">)</span>
+<span class="c1"># root_XFRM</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><span class="xref std std-ref">Source Paya classes for superclass overloading</span></p>
+</li>
+</ul>
+</div>
+<div class="section" id="top-level-tools">
+<h2>Top-Level Tools<a class="headerlink" href="#top-level-tools" title="Permalink to this headline">¶</a></h2>
+<p>Tools like the <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> context manager are best accessed via the <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.runtime</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;limb&#39;</span><span class="p">):</span>
+    <span class="n">limb</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span>
+    <span class="c1"># limb_XFRM</span>
+
+    <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;controls&#39;</span><span class="p">):</span>
+        <span class="n">ctsGp</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span>
+        <span class="c1"># limb_controls_GRP</span>
+</pre></div>
+</div>
+<p>Upcoming Paya releases are expected to add more top-level tools.</p>
+</div>
 </div>
 
 

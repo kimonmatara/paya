@@ -53,8 +53,9 @@
 </ul>
 <p class="caption"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="custom_classes.html">Customising Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bracketing.html">Bracketing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="top_level_methods.html">Top-Level Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
 </ul>
@@ -65,6 +66,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#class-construction">1. Class Construction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#instance-interception">2. Instance Interception</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advantages">Advantages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disadvantages">Disadvantages</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
@@ -96,7 +98,6 @@
              
   <div class="section" id="implementation">
 <h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
-<p>== EXPAND TO PATCH AND PLUG TREE ==</p>
 <p>There are two aspects to the <strong>paya</strong> patching mechanism.</p>
 <div class="section" id="class-construction">
 <h2>1. Class Construction<a class="headerlink" href="#class-construction" title="Permalink to this headline">¶</a></h2>
@@ -106,20 +107,20 @@
 <li>Where available, content is taken from user (or bundled)
 <span class="xref std std-ref">template classes</span>.</li>
 <li>The custom classes are then built using special metaclasses that
-manage inheritance via an overriden <code class="docutils literal notranslate"><span class="pre">mro()</span></code>.</li>
+manage inheritance via an overriden <code class="xref py py-meth docutils literal notranslate"><span class="pre">mro()</span></code>.</li>
 </ol>
 </div></blockquote>
-<p>Custom node, component and data types always shadow a PyMEL counterpart in the
-method resolution order. However, when it comes to <strong>plug</strong> (attribute) types,
-PyMEL only provides one class: <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.general.Attribute</span></code></a>. For
-this reason, custom plug types are largely abstract, and constructed according
-to an inheritance tree defined inside <code class="docutils literal notranslate"><span class="pre">paya/plugtree.json</span></code>.</p>
+<p>Custom node, component and data types always shadow a PyMEL counterpart in the method resolution order. However, when it
+comes to <strong>plug</strong> (attribute) types, PyMEL only provides one class: <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.general.Attribute</span></code></a>. For this
+reason, custom plug types are largely abstract, and constructed according to an inheritance tree defined inside
+<code class="docutils literal notranslate"><span class="pre">paya/plugtree.json</span></code> (this should not be edited).</p>
 </div>
 <div class="section" id="instance-interception">
 <h2>2. Instance Interception<a class="headerlink" href="#instance-interception" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">__new__()</span></code> constructors on PyMEL classes inside <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/pymel.core.general.html#module-pymel.core.general" title="(in PyMEL v1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core.general</span></code></a>, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/pymel.core.nodetypes.html#module-pymel.core.nodetypes" title="(in PyMEL v1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core.nodetypes</span></code></a> and
-<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/pymel.core.datatypes.html#module-pymel.core.datatypes" title="(in PyMEL v1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core.datatypes</span></code></a> are then dynamically replaced with wrappers that capture new PyNode instances and
-change their <code class="docutils literal notranslate"><span class="pre">__class__</span></code> assignment.</p>
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/pymel.core.datatypes.html#module-pymel.core.datatypes" title="(in PyMEL v1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core.datatypes</span></code></a> are then dynamically replaced with wrappers that capture the original
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> instance, look up a relevant custom class, and assign it directly to the
+<code class="docutils literal notranslate"><span class="pre">__class__</span></code> attribute of the instance.</p>
 <p>Lookups are cached throughout.</p>
 </div>
 <div class="section" id="advantages">
@@ -133,6 +134,11 @@ removing the <code class="docutils literal notranslate"><span class="pre">__new_
 <li><strong>Simpler Customisation</strong>: Inheritance is managed entirely during the
 rebuilding stage; users do not need to track it for class declarations.</li>
 </ul>
+</div>
+<div class="section" id="disadvantages">
+<h2>Disadvantages<a class="headerlink" href="#disadvantages" title="Permalink to this headline">¶</a></h2>
+<p>Because PyMEL patching is persistent, it’s entirely incumbent on the developer to ensure their customisations won’t
+break external pipeline code by overriding common PyMEL methods.</p>
 <p>For more information, take a look inside <a class="reference internal" href="paya/pools.html#module-paya.pools" title="paya.pools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.pools</span></code></a> and <a class="reference internal" href="paya/patch.html#module-paya.patch" title="paya.patch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.patch</span></code></a>.</p>
 </div>
 </div>
