@@ -1,6 +1,6 @@
-*************
-Maths Rigging
-*************
+**********
+Arithmetic
+**********
 
 ============
 Introduction
@@ -72,12 +72,18 @@ Available operators are documented under :doc:`paya/plugtypes` and :doc:`paya/da
 Point-Matrix Multiplication
 ===========================
 
-Point-Matrix Multiplication
----------------------------
+Paya introduces a new operator, ``^``, to ensure point-matrix multiplication where the left operand if of ambiguous
+type. This works with values as well as attributes:
 
-PyMEL uses the ``*`` operator both for vector-matrix and point-matrix multiplication. The latter is triggered when
-the left operand is a :class:`~pymel.core.datatypes.Point` rather than a :class:`~pymel.core.datatypes.Vector` instance.
-Paya extends this behaviour to support matrix attributes:
+.. code-block:: python
+
+    (loc1.t + loc2.t) ^ loc3.wm # pointMatrixMult.vectorMultiply set to False
+    (loc1.t + loc2.t) * loc3.wm # pointMatrixMult.vectorMultiply set to True
+    pma.output3D.get() ^ loc3.wm.get() # available on values too
+
+'Vanilla' PyMEL uses the ``*`` operator both for vector-matrix and point-matrix multiplication. The latter is triggered
+when the left operand is a :class:`~pymel.core.datatypes.Point` rather than a :class:`~pymel.core.datatypes.Vector`
+instance. Paya extends this behaviour to support matrix attributes:
 
 .. code-block:: python
 
@@ -87,7 +93,7 @@ Paya extends this behaviour to support matrix attributes:
 The above example would configure a ``pointMatrixMult`` node with vectorMultiply set to False.
 
 Additionally, because in Paya :meth:`~paya.plugtypes.Attribute.get` called on ``translate`` channels always returns a
-:class:`~pymel.core.datatypes.Point` instance, the following will produce point-matrix multiplication by default:
+:class:`~pymel.core.datatypes.Point` instance, the following will also produce point-matrix multiplication by default:
 
 .. code-block:: python
 
@@ -95,17 +101,6 @@ Additionally, because in Paya :meth:`~paya.plugtypes.Attribute.get` called on ``
 
     # The following also works
     loc1.translate.get() * 'locator2.worldMatrix'
-
-
-Paya also supports triple scalar attributes (i.e., ``double3``) as the left operand. However, since Maya doesn't
-distinguish between point and vector attributes, ``*`` always treats them as vectors. In such cases you can use a
-new ``^`` operator for point-matrix multiplication:
-
-.. code-block:: python
-
-    (loc1.t + loc2.t) ^ loc3.wm # pointMatrixMult.vectorMultiply set to False
-    (loc1.t + loc2.t) * loc3.wm # pointMatrixMult.vectorMultiply set to True
-    pma.output3D.get() ^ loc3.wm.get() # available on values too
 
 =====================
 Working with Matrices
@@ -164,6 +159,13 @@ connecting specific outputs of a ``decomposeMatrix``:
     masterMatrix >> r.PyNode('locator2').offsetParentMatrix
 
 In the above example, 'locator2' would take rotation from 'locator1', and translate, scale and shear from 'root_XFRM'.
+
+Other Methods
+-------------
+
+Dynamic versions of static methods on :class:`~pymel.core.datatypes.Matrix` are still being added to
+:class:`~paya.plugtypes.attributeMath16D.AttributeMath16D`. So far these include
+:meth:`~paya.plugtypes.attributeMath16D.AttributeMath16D.inverse`, with more to follow soon.
 
 ===========================
 Preventing Unit Conversions

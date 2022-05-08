@@ -18,6 +18,11 @@ paya.plugtypes.attributeMath3D.AttributeMath3D
         
         :param other: a value or plug of dimension 1, 3 or right-only 16.
     
+    .. py:method:: __neg__()
+    
+        Implements unary negation (``-``).
+        :return: ``self * -1.0``
+    
     .. py:method:: __pow__(other, swap=False)
     
         Implements **power** (``**``).

@@ -213,4 +213,3 @@ class AttributeMath16D:
         :rtype: :class:`AttributeMath16D`
         """
         return self.get().inverse() * self
-

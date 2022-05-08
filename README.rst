@@ -11,11 +11,9 @@ for attribute (including subtype), component and data types with true inheritanc
 
 .. admonition:: New in Version 0.2
 
-    * Maths rigging using Python operators
-    * Smart node naming
-    * And more!
-
-See `here <https://kimonmatara.github.io/paya/>`_ for full documentation.
+    * Maths rigging using Python operators 
+    * Smart node naming 
+    * And more! 
 
 Example #1: Operators
 ---------------------
@@ -94,3 +92,4 @@ Here's how to do it in 'vanilla' PyMEL:
     raise NotImplementedError(
         "You can't. PyMEL's virtual classes do not support components.
     )
+

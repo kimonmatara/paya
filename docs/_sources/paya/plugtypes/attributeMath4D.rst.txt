@@ -18,6 +18,10 @@ paya.plugtypes.attributeMath4D.AttributeMath4D
         
         :param other: a value or plug of dimension 1 or 4
     
+    .. py:method:: __neg__()
+    
+        Implements unary negation (``-``) via ``quatNegate``.
+    
     .. py:method:: __radd__(other)
     
         Implements **reflected addition** (``+``). See :meth:`__add__`.

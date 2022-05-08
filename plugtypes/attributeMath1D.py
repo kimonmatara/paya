@@ -229,3 +229,15 @@ class AttributeMath1D:
         Implements **reflected power** (``**``). See :meth:`__pow__`.
         """
         return self.__pow__(other, swap=True)
+
+    #-----------------------------------------------------------|    Unary
+
+    def __neg__(self):
+        """
+        Implements unary negation (``-``).
+        :return: ``self * -1.0``
+        """
+        mdl = r.nodes.MultDoubleLinear.createNode()
+        self >> mdl.attr('input1')
+        mdl.attr('input2').set(-1.0)
+        return mdl.attr('output')

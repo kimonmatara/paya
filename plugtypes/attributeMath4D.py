@@ -129,3 +129,13 @@ class AttributeMath4D:
         Implements **reflected multiplication** (``*``). See :meth:`__mul__`.
         """
         return self.__mul__(other, swap=True)
+
+    #-----------------------------------------------------------|    Unary
+
+    def __neg__(self):
+        """
+        Implements unary negation (``-``) via ``quatNegate``.
+        """
+        qn = r.nodes.QuatNegate.createNode()
+        self >> node.attr('inputQuat')
+        return node.attr('outputQuat')

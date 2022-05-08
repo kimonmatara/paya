@@ -286,3 +286,18 @@ class AttributeMath3D:
         Implements **reflected power** (``**``). See :meth:`__pow__`.
         """
         return self.__pow__(other, swap=True)
+
+    #-----------------------------------------------------------|    Unary
+
+    def __neg__(self):
+        """
+        Implements unary negation (``-``).
+        :return: ``self * -1.0``
+        """
+        mdv = r.nodes.MultiplyDivide.createNode()
+        self >> mdv.attr('input1')
+
+        for child in mdv.attr('input2').getChildren():
+            child.set(-1.0)
+
+        return mdv.attr('output')

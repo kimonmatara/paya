@@ -18,6 +18,11 @@ paya.plugtypes.attributeMath1D.AttributeMath1D
         
         :param other: a value or plug of dimension 1 or 3
     
+    .. py:method:: __neg__()
+    
+        Implements unary negation (``-``).
+        :return: ``self * -1.0``
+    
     .. py:method:: __pow__(other, modulo=None, swap=False)
     
         Implements **power** (``**``). The *modulo* keyword argument is
