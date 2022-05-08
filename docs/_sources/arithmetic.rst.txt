@@ -147,7 +147,7 @@ shorthand ``pk``. The method has also been replicated statically on :class:`~pay
     master.worldMatrix.pick(rotate=True) >> slave.offsetParentMatrix # dynamic
     master.worldMatrix.get().pick(rotate=True) >> slave.offsetParentMatrix # static
 
-Both versions also accept a ``default`` argument, allowing you to take omitted fields from a fallback matrix plug or
+Both versions accept a ``default`` argument, allowing you to take omitted fields from a fallback matrix plug or
 value. The returned matrix is recombined according to Maya's transformation model, i.e.
 ``scale * shear * rotate * translate``. This allows you to create 'partial' matrix constraints, akin to
 connecting specific outputs of a ``decomposeMatrix``:
