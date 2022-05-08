@@ -62,7 +62,7 @@ Example #2: Adding a Method to Components
 -----------------------------------------
 
 Wouldn't it be nice to have a `getWorldPosition` method on all point-like components, instead of
-:func:`~pymel.core.modeling.pointPosition`? Start a file at ``paya/comptypes/discreteComponent.py``, and
+``pointPosition``? Start a file at ``paya/comptypes/discreteComponent.py``, and
 add the following lines:
 
 .. code-block:: python
