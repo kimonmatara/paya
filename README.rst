@@ -94,37 +94,3 @@ Here's how to do it in 'vanilla' PyMEL:
     raise NotImplementedError(
         "You can't. PyMEL's virtual classes do not support components.
     )
-
-.. toctree::
-    :hidden:
-
-    What's New <whats_new>
-    Requirements & Installation <req_and_inst>
-
-.. toctree::
-    :caption: Functionality
-    :hidden:
-
-    Importing and Patching <importing_and_patching>
-    Using the Runtime Interface <using_the_runtime_interface>
-    Naming Nodes <naming_nodes>
-    Maths Rigging <maths_rigging>
-    Discovering Functionality <discovering_func>
-
-.. toctree::
-    :caption: Customisation
-    :hidden:
-
-    Adding Object-Oriented Functionality <adding_oo_functionality>
-    bracketing
-    Top-Level Methods <top_level_methods>
-    Package Configuration <package_config>
-    sugar
-
-.. toctree::
-    :caption: Appendices
-    :hidden:
-
-    Module Documentation <paya>
-    implementation
-    author
