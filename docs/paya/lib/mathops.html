@@ -249,7 +249,7 @@ Otherwise, it will be a value.</p>
 <strong>five</strong> arguments, in both cases passed as unpacked pairs of
 row identifier: vector input or value.</p>
 <p>If <strong>four</strong> arguments are passed, they will be used to construct an
-orthonormal matrix, with the first vector as the ‘aim’ and the second
+orthogonal matrix, with the first vector as the ‘aim’ and the second
 as the ‘up’, for example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">createMatrix</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">loc1</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">loc2</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
 </pre></div>
@@ -267,7 +267,7 @@ populate the matrix rows. This may result in a non-orthornormal
 <a class="reference internal" href="../plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – A <strong>translate</strong> component for the matrix; this can be
 a point value or plug; defaults to None</p></li>
 <li><p><strong>preserveSecondLength/psl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if six arguments were passed;
-preserve the second vector’s length when performing orthonormal
+preserve the second vector’s length when performing orthogonal
 construction; defaults to True</p></li>
 <li><p><strong>thirdLength/tl</strong> (None, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>,
 <a class="reference internal" href="../plugtypes/math1D.html#paya.plugtypes.math1D.Math1D" title="paya.plugtypes.math1D.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – ignored is six arguments were passed; if provided,

@@ -88,7 +88,7 @@ plug workflows.
         row identifier: vector input or value.
     
         If **four** arguments are passed, they will be used to construct an
-        orthonormal matrix, with the first vector as the 'aim' and the second
+        orthogonal matrix, with the first vector as the 'aim' and the second
         as the 'up', for example:
     
         .. code-block:: python
@@ -111,7 +111,7 @@ plug workflows.
         :class:`~paya.datatypes.Vector`, :class:`~paya.datatypes.Point`,
         :class:`~paya.plugtypes.math3D.Math3D`
     :param bool preserveSecondLength/psl: ignored if six arguments were passed;
-        preserve the second vector's length when performing orthonormal
+        preserve the second vector's length when performing orthogonal
         construction; defaults to True
     :param thirdLength/tl: ignored is six arguments were passed; if provided,
         defines the third (derived) vector's length; defaults to None
