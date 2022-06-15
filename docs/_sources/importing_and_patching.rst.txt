@@ -39,11 +39,3 @@ Instead, you must call :py:meth:`~paya.runtime.Runtime.start`:
 
     >>> paya.runtime.start()
     PyMEL has been patched successfully.
-
-.. note::
-
-    It's important to remember that, once patched, PyMEL will continue to return Paya classes until
-    :meth:`~paya.runtime.Runtime.stop` is called. This is not an issue with standard Paya distributions,
-    because they do not interfere with standard PyMEL functionality; however, the more customisations
-    you add, the more the potential to break external studio's pipeline scripts increases. See
-    :ref:`Bracketing` to learn how to customise Paya safely.

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Point-Matrix Multiplication &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Matrices" href="matrices.html" />
+    <link rel="prev" title="Vectors" href="vectors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="operator_basics.html">Operator Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scalars.html">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="angles_and_rotations.html">Angles and Rotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Point-Matrix Multiplication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relevant-classes">Relevant Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-dedicated-operator">A Dedicated Operator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="matrices.html">Matrices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="maths_rigging.html">Maths Rigging</a> &raquo;</li>
+      <li>Point-Matrix Multiplication</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/point_matrix_mult.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="point-matrix-multiplication">
+<h1>Point-Matrix Multiplication<a class="headerlink" href="#point-matrix-multiplication" title="Permalink to this headline"></a></h1>
+<section id="relevant-classes">
+<h2>Relevant Classes<a class="headerlink" href="#relevant-classes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Static</p></th>
+<th class="head"><p>Dynamic</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>N/A</p></td>
+<td><p><a class="reference internal" href="paya/plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.math3D.Math3D</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.vector.Vector</span></code></a></p></td>
+<td><p><a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.vector.Vector</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.point.Point</span></code></a></p></td>
+<td><p>N/A</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline"></a></h2>
+<p>Although vectors can, for the most part, be manipulated in the same ways as points, they must be transformed
+differently. In simple terms, where <em>vector-matrix</em> multiplication only rotates and scales the input, <em>point-matrix</em>
+multiplication also applies translation.</p>
+<p>In PyMEL’s data classes, the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator performs point-matrix multiplication when the left operand is an instance of
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Point.html#pymel.core.datatypes.Point" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a> rather than <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Vector.html#pymel.core.datatypes.Vector" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>. Paya extends this behaviour to
+support matrix attributes as the right operand.</p>
+<p>In the case of attributes it’s impossible to choose an implementation, because Maya itself doesn’t distinguish between
+points and vectors. In such cases, the <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> <code class="docutils literal notranslate"><span class="pre">*</span></code> will always default to vector-matrix multiplication.</p>
+</section>
+<section id="a-dedicated-operator">
+<h2>A Dedicated Operator<a class="headerlink" href="#a-dedicated-operator" title="Permalink to this headline"></a></h2>
+<p>To get around this limitation, Paya adds a dedicated <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> operator for point-matrix multiplication: <code class="docutils literal notranslate"><span class="pre">^</span></code>.
+In the following <a class="reference internal" href="glossary.html#term-Dynamic"><span class="xref std std-term">dynamic</span></a> example, the position of a cube is transformed by a joint and applied to a cone. Taking
+a cue from Maya’s constraints, <code class="docutils literal notranslate"><span class="pre">parentMatrix</span></code> and <code class="docutils literal notranslate"><span class="pre">parentInverseMatrix</span></code> are used to drive the setup in world space:</p>
+<div class="sphinx-tabs docutils container" id="pmm-example">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+<span class="n">cone</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCone1&#39;</span><span class="p">)</span>
+<span class="n">joint</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
+
+<span class="c1"># Get world position of cube</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">)</span> <span class="o">^</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;parentMatrix&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Transform by joint</span>
+<span class="n">position</span> <span class="o">^=</span> <span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span>
+
+<span class="c1"># Drive the cone in world space</span>
+<span class="n">position</span> <span class="o">^=</span> <span class="n">cone</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;parentInverseMatrix&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">position</span> <span class="o">&gt;&gt;</span> <span class="n">cone</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/pmm_with_cube_and_cone.png" src="_images/pmm_with_cube_and_cone.png" />
+</figure>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/point_matrix_mult_with_op.gif" src="_images/point_matrix_mult_with_op.gif" />
+</figure>
+</div></div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vectors.html" class="btn btn-neutral float-left" title="Vectors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="matrices.html" class="btn btn-neutral float-right" title="Matrices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

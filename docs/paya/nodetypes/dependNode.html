@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.nodetypes.dependNode.DependNode &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>paya.nodetypes.dependNode.DependNode &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.nodetypes.joint.Joint" href="joint.html" />
+    <link rel="next" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix" href="fourByFourMatrix.html" />
     <link rel="prev" title="paya.nodetypes" href="../nodetypes.html" /> 
 </head>
 
@@ -29,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -43,31 +46,32 @@
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.nodetypes.dependNode.DependNode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="joint.html">paya.nodetypes.joint.Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">paya.nodetypes.fourByFourMatrix.FourByFourMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shape.html">paya.nodetypes.shape.Shape</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
@@ -109,75 +113,70 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-paya.nodetypes.dependNode">
-<span id="paya-nodetypes-dependnode-dependnode"></span><h1>paya.nodetypes.dependNode.DependNode<a class="headerlink" href="#module-paya.nodetypes.dependNode" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="paya.nodetypes.dependNode.DependNode">
-<em class="property">class </em><code class="descname">DependNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dependNode.DependNode" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="classmethod">
-<dt id="paya.nodetypes.dependNode.DependNode.createNode">
-<em class="property">classmethod </em><code class="descname">createNode</code><span class="sig-paren">(</span><em>**nameOptions</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dependNode.DependNode.createNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object-oriented version of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a> with
-managed naming.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**nameOptions</strong> – passed-through to <a class="reference internal" href="#paya.nodetypes.dependNode.DependNode.makeName" title="paya.nodetypes.dependNode.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The constructed node.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#paya.nodetypes.dependNode.DependNode" title="paya.nodetypes.dependNode.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="paya.nodetypes.dependNode.DependNode.makeName">
-<code class="descname">makeName</code><span class="sig-paren">(</span><em>*elems</em>, <em>name=None</em>, <em>inherit=True</em>, <em>suffix=True</em>, <em>padding=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dependNode.DependNode.makeName" title="Permalink to this definition">¶</a></dt>
+  <section id="module-paya.nodetypes.dependNode">
+<span id="paya-nodetypes-dependnode-dependnode"></span><h1>paya.nodetypes.dependNode.DependNode<a class="headerlink" href="#module-paya.nodetypes.dependNode" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.nodetypes.dependNode.DependNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DependNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dependNode.DependNode" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.dependNode.DependNode.makeName">
+<span class="sig-name descname"><span class="pre">makeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inherit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dependNode.DependNode.makeName" title="Permalink to this definition"></a></dt>
 <dd><p>Generates a context-appropriate Maya name. Results will vary
 depending on whether this method is called on a class or on a
 node instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elems</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – one or more name elements, packed or unpacked</li>
-<li><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – pass-through for any elements provided via a
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>elems</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – one or more name elements, packed or unpacked</p></li>
+<li><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – pass-through for any elements provided via a
 <code class="docutils literal notranslate"><span class="pre">name/n</span></code> keyword argument; these will always be prepended;
-defaults to None</li>
-<li><strong>padding/pad</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – optional padding depth for any integers;
-defaults to None</li>
-<li><strong>inherit/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit prefixes from
-<a class="reference internal" href="../lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</li>
-<li><strong>suffix/suf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – optional override for <code class="docutils literal notranslate"><span class="pre">config.autoSuffix</span></code>; if
+defaults to None</p></li>
+<li><p><strong>padding/pad</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – optional padding depth for any integers;
+defaults to None</p></li>
+<li><p><strong>inherit/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit prefixes from
+<a class="reference internal" href="../lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
+<li><p><strong>suffix/suf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – optional override for <code class="docutils literal notranslate"><span class="pre">config.autoSuffix</span></code>; if
 <code class="docutils literal notranslate"><span class="pre">True</span></code>, apply suffixes; if <code class="docutils literal notranslate"><span class="pre">False</span></code>, omit them; if a
-string, use it; defaults to None</li>
+string, use it; defaults to None</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The name.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The name.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.dependNode.DependNode.createNode">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">nameOptions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dependNode.DependNode.createNode" title="Permalink to this definition"></a></dt>
+<dd><p>Object-oriented version of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a> with
+managed naming.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**nameOptions</strong> – passed-through to <a class="reference internal" href="#paya.nodetypes.dependNode.DependNode.makeName" title="paya.nodetypes.dependNode.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The constructed node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.nodetypes.dependNode.DependNode" title="paya.nodetypes.dependNode.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../nodetypes.html" class="btn btn-neutral float-left" title="paya.nodetypes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="joint.html" class="btn btn-neutral float-right" title="paya.nodetypes.joint.Joint" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fourByFourMatrix.html" class="btn btn-neutral float-right" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

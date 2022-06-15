@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paya: PyMEL Unleashed &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Paya: PyMEL for Riggers &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,7 +32,7 @@
             <a href="#" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -42,22 +46,23 @@
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
@@ -78,7 +83,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Paya: PyMEL Unleashed</li>
+      <li>Paya: PyMEL for Riggers</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,89 +93,141 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="paya-pymel-unleashed">
-<h1>Paya: PyMEL Unleashed<a class="headerlink" href="#paya-pymel-unleashed" title="Permalink to this headline">¶</a></h1>
-<p>Paya is an object-oriented toolkit for Maya riggers and TDs that adds new functionality to
-<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a> at runtime. This helps you
-write concise code with a ‘native’ feel.</p>
+  <section id="paya-pymel-for-riggers">
+<h1>Paya: PyMEL for Riggers<a class="headerlink" href="#paya-pymel-for-riggers" title="Permalink to this headline"></a></h1>
+<p>Paya lets you write radically condensed rigging code for Autodesk Maya. Unlike other libraries, it does not re-wrap
+<code class="docutils literal notranslate"><span class="pre">maya.cmds</span></code> or the <a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=Maya_SDK_Maya_Python_API_html">OpenMaya</a>
+API. Instead, it adds functionality to
+<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a> objects at runtime for a fully
+integrated experience.</p>
+<p>Included is a deep, and intuitive, implementation for <a class="reference internal" href="maths_rigging.html"><span class="doc">maths rigging using Python operators</span></a>.
+This eliminates boilerplate for node hookups and lets you freely mix values and attributes in the same expression.</p>
 <p>Customisation is easy, and goes far beyond PyMEL’s
 <a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.</p>
-<div class="admonition-new-in-version-0-2 admonition">
-<p class="first admonition-title">New in Version 0.2</p>
-<ul class="last simple">
-<li><a class="reference internal" href="arithmetic.html"><span class="doc">Maths rigging using Python operators</span></a></li>
-<li><a class="reference internal" href="naming_nodes.html"><span class="doc">Smart node naming</span></a></li>
-<li><a class="reference internal" href="whats_new.html"><span class="doc">And more!</span></a></li>
+<div class="admonition-new-in-version-0-3 admonition">
+<p class="admonition-title">New in Version 0.3</p>
+<ul class="simple">
+<li><p>Over <a class="reference internal" href="whats_new.html"><span class="doc">100 new methods</span></a>, from scalar looping and DG logic gates to vector, quaternion and matrix
+operations.</p></li>
+<li><p>A one-stop method for constructing static and dynamic matrices: <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a></p></li>
+<li><p>Attribute subtypes have been reworked for better handling of angle channels</p></li>
 </ul>
 </div>
-<div class="section" id="example-1-operators">
-<h2>Example #1: Operators<a class="headerlink" href="#example-1-operators" title="Permalink to this headline">¶</a></h2>
-<p>Here’s a world-space orient constraint with offset preservation, Paya-style:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
-<span class="n">slave</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+<section id="example-rigging-a-radial-repulsor">
+<h2>Example: Rigging a Radial Repulsor<a class="headerlink" href="#example-rigging-a-radial-repulsor" title="Permalink to this headline"></a></h2>
+<img alt="_images/repulsor.gif" src="_images/repulsor.gif" />
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">PyMEL</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span>
+<span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+<span class="kn">from</span> <span class="nn">paya.util</span> <span class="kn">import</span> <span class="n">pad</span>
 
-<span class="n">masterMatrix</span> <span class="o">=</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> \
-    <span class="o">*</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> \
-    <span class="o">*</span> <span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">asOffset</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">createRadialRepulsor</span><span class="p">(</span>
+        <span class="n">repulseRadius</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span>
+        <span class="n">swarmRadius</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">numBees</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">beeRadius</span><span class="o">=</span><span class="mf">0.2</span>
+<span class="p">):</span>
+    <span class="n">repLoc</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">spaceLocator</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="s1">&#39;repulsion_centre_LOCT&#39;</span><span class="p">)</span>
+    <span class="n">repLoc</span><span class="o">.</span><span class="n">addAttr</span><span class="p">(</span><span class="s1">&#39;repulseRadius&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dv</span><span class="o">=</span><span class="n">repulseRadius</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">repulseRadius</span> <span class="o">=</span> <span class="n">repLoc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;repulseRadius&#39;</span><span class="p">)</span>
+    <span class="n">repCentre</span> <span class="o">=</span> <span class="n">repLoc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
 
-<span class="n">masterMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
-<span class="n">slave</span><span class="o">.</span><span class="n">inheritsTransform</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numBees</span><span class="p">):</span>
+        <span class="n">sphere</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">polySphere</span><span class="p">(</span>
+            <span class="n">ch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">beeRadius</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="s1">&#39;collider_</span><span class="si">{}</span><span class="s1">_NRSF&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pad</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">initPosition</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span>
+            <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">])</span><span class="o">.</span><span class="n">normal</span><span class="p">()</span> <span class="o">*</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">swarmRadius</span><span class="p">)</span>
+
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">initPosition</span> <span class="o">-</span> <span class="n">repCentre</span>
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">normal</span><span class="p">()</span> <span class="o">*</span> <span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">repulseRadius</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">repCentre</span> <span class="o">+</span> <span class="n">vector</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">sphere</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>And here’s the equivalent in ‘vanilla’ PyMEL:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">master</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
-<span class="n">slave</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span>
+<span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
 
-<span class="n">picker</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;pickMatrix&#39;</span><span class="p">)</span>
-<span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">picker</span><span class="o">.</span><span class="n">inputMatrix</span>
-<span class="n">picker</span><span class="o">.</span><span class="n">useTranslate</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">picker</span><span class="o">.</span><span class="n">useScale</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">picker</span><span class="o">.</span><span class="n">useShear</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">createRadialRepulsor</span><span class="p">(</span>
+        <span class="n">repulseRadius</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span>
+        <span class="n">swarmRadius</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">numBees</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">beeRadius</span><span class="o">=</span><span class="mf">0.2</span>
+<span class="p">):</span>
+    <span class="n">repLoc</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">spaceLocator</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="s1">&#39;repulsion_centre_LOCT&#39;</span><span class="p">)</span>
+    <span class="n">repLoc</span><span class="o">.</span><span class="n">addAttr</span><span class="p">(</span><span class="s1">&#39;repulseRadius&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dv</span><span class="o">=</span><span class="n">repulseRadius</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">repulseRadius</span> <span class="o">=</span> <span class="n">repLoc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;repulseRadius&#39;</span><span class="p">)</span>
+    <span class="n">repCentre</span> <span class="o">=</span> <span class="n">repLoc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
 
-<span class="n">multer1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;multMatrix&#39;</span><span class="p">)</span>
-<span class="n">picker</span><span class="o">.</span><span class="n">outputMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">multer1</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">multer1</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">master</span><span class="o">.</span><span class="n">worldMatrix</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numBees</span><span class="p">):</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">))</span> <span class="o">+</span> <span class="n">num</span>
 
-<span class="n">initPose</span> <span class="o">=</span> <span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sphere</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">polySphere</span><span class="p">(</span>
+            <span class="n">ch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">radius</span><span class="o">=</span><span class="n">beeRadius</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="s1">&#39;collider_</span><span class="si">{}</span><span class="s1">_NRSF&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="n">multer2</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;multMatrix&#39;</span><span class="p">)</span>
-<span class="n">multer2</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">slave</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="n">initPose</span><span class="p">)</span>
-<span class="n">multer1</span><span class="o">.</span><span class="n">matrixSum</span> <span class="o">&gt;&gt;</span> <span class="n">multer2</span><span class="o">.</span><span class="n">matrixIn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">initPosition</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span>
+            <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">])</span><span class="o">.</span><span class="n">normal</span><span class="p">()</span> <span class="o">*</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">swarmRadius</span><span class="p">)</span>
 
-<span class="n">multer2</span><span class="o">.</span><span class="n">matrixSum</span> <span class="o">&gt;&gt;</span> <span class="n">slave</span><span class="o">.</span><span class="n">offsetParentMatrix</span>
-<span class="n">slave</span><span class="o">.</span><span class="n">inheritsTransform</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">pma</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;plusMinusAverage&#39;</span><span class="p">)</span>
+        <span class="n">pma</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;operation&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">pma</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input3D&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">initPosition</span><span class="p">)</span>
+        <span class="n">repCentre</span> <span class="o">&gt;&gt;</span> <span class="n">pma</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input3D&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">pma</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;output3D&#39;</span><span class="p">)</span>
+
+        <span class="n">db</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;distanceBetween&#39;</span><span class="p">)</span>
+        <span class="n">vector</span> <span class="o">&gt;&gt;</span> <span class="n">db</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;point2&#39;</span><span class="p">)</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;distance&#39;</span><span class="p">)</span>
+
+        <span class="n">mdv</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;multiplyDivide&#39;</span><span class="p">)</span>
+        <span class="n">mdv</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;operation&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">vector</span> <span class="o">&gt;&gt;</span> <span class="n">mdv</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input1&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">mdv</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getChildren</span><span class="p">():</span>
+            <span class="n">mag</span> <span class="o">&gt;&gt;</span> <span class="n">child</span>
+
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+
+        <span class="n">cond</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">)</span>
+        <span class="n">mag</span> <span class="o">&gt;&gt;</span> <span class="n">cond</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;firstTerm&#39;</span><span class="p">)</span>
+        <span class="n">repulseRadius</span> <span class="o">&gt;&gt;</span> <span class="n">cond</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;secondTerm&#39;</span><span class="p">)</span>
+        <span class="n">cond</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;operation&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">mag</span> <span class="o">&gt;&gt;</span> <span class="n">cond</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;colorIfTrueR&#39;</span><span class="p">)</span>
+        <span class="n">repulseRadius</span> <span class="o">&gt;&gt;</span> <span class="n">cond</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;colorIfFalseR&#39;</span><span class="p">)</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="n">cond</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;outColorR&#39;</span><span class="p">)</span>
+
+        <span class="n">mdv</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;multiplyDivide&#39;</span><span class="p">)</span>
+        <span class="n">vector</span> <span class="o">&gt;&gt;</span> <span class="n">mdv</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input1&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">mdv</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getChildren</span><span class="p">():</span>
+            <span class="n">mag</span> <span class="o">&gt;&gt;</span> <span class="n">child</span>
+
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+
+        <span class="n">pma</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;plusMinusAverage&#39;</span><span class="p">)</span>
+        <span class="n">repCentre</span> <span class="o">&gt;&gt;</span> <span class="n">pma</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input3D&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">vector</span> <span class="o">&gt;&gt;</span> <span class="n">pma</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;input3D&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">pma</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;output3D&#39;</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">sphere</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-2-adding-a-method-to-components">
-<h2>Example #2: Adding a Method to Components<a class="headerlink" href="#example-2-adding-a-method-to-components" title="Permalink to this headline">¶</a></h2>
-<p>Wouldn’t it be nice to have a <cite>getWorldPosition</cite> method on all point-like components, instead of
-<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.modeling/pymel.core.modeling.pointPosition.html#pymel.core.modeling.pointPosition" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pointPosition()</span></code></a>? Start a file at <code class="docutils literal notranslate"><span class="pre">paya/comptypes/discreteComponent.py</span></code>, and
-add the following lines:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
-
-<span class="k">class</span> <span class="nc">DiscreteComponent</span><span class="p">:</span>
-
-    <span class="k">def</span> <span class="nf">getWorldPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">pointPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>That’s it (no, really). And here’s how to use it:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
-<span class="n">r</span><span class="o">.</span><span class="n">rehash</span><span class="p">()</span>
-
-<span class="n">curve</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span>
-<span class="n">curve</span><span class="o">.</span><span class="n">cv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
-<span class="c1"># [0.0, 1.0, 2.0]</span>
-</pre></div>
-</div>
-<p>Here’s how to do it in ‘vanilla’ PyMEL:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-    <span class="s2">&quot;You can&#39;t. PyMEL&#39;s virtual classes do not support components.</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+</div></div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -179,8 +236,8 @@ add the following lines:</p>
 </div>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

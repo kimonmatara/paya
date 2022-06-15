@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Importing and Patching &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Importing and Patching &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,22 +46,23 @@
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
@@ -89,8 +93,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="importing-and-patching">
-<h1>Importing and Patching<a class="headerlink" href="#importing-and-patching" title="Permalink to this headline">¶</a></h1>
+  <section id="importing-and-patching">
+<h1>Importing and Patching<a class="headerlink" href="#importing-and-patching" title="Permalink to this headline"></a></h1>
 <p>To get started with <strong>paya</strong>, run the following in the Script Editor:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">paya.runtime</span>
 <span class="go">PyMEL has been patched successfully.</span>
@@ -120,15 +124,7 @@ Instead, you must call <a class="reference internal" href="paya/runtime.html#pay
 <span class="go">PyMEL has been patched successfully.</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">It’s important to remember that, once patched, PyMEL will continue to return Paya classes until
-<a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a> is called. This is not an issue with standard Paya distributions,
-because they do not interfere with standard PyMEL functionality; however, the more customisations
-you add, the more the potential to break external studio’s pipeline scripts increases. See
-<a class="reference internal" href="adding_oo_functionality.html#bracketing"><span class="std std-ref">Bracketing</span></a> to learn how to customise Paya safely.</p>
-</div>
-</div>
+</section>
 
 
            </div>

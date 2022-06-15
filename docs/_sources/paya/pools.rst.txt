@@ -27,24 +27,18 @@ This module is not intended for direct use.
 
     Abstract. Defines base functionality for all template class pools.
 
-    .. py:method:: __init__()
-    
-        Initialize self.  See help(type(self)) for accurate signature.
-    
     .. py:staticmethod:: __new__()
     
         Create and return a new object.  See help(type) for accurate signature.
     
-    .. py:method:: __repr__()
+    .. py:method:: __init__()
     
-        Return repr(self).
+        Initialize self.  See help(type(self)) for accurate signature.
     
-    .. py:method:: getByName(clsname)
+    .. py:method:: _getTemplateFilePath(clsname)
     
-        Returns a custom class by name.
-        
-        :param str clsname: the name of the class to retrieve
-        :return: The custom class.
+        Caution: For speed, this doesn't check for duplicates; the first
+        match is always returned.
     
     .. py:method:: getFromPyMELInstance(inst)
     
@@ -54,10 +48,21 @@ This module is not intended for direct use.
         :param inst: the PyNode or PyMEL data type instance
         :return: The custom class.
     
+    .. py:method:: getByName(clsname)
+    
+        Returns a custom class by name.
+        
+        :param str clsname: the name of the class to retrieve
+        :return: The custom class.
+    
     .. py:method:: purge()
     
         Clears the cache so that subsequent class lookups will trigger
         reloads.
+    
+    .. py:method:: __repr__()
+    
+        Return repr(self).
 
 .. py:class:: NodeClassPool
 

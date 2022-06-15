@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.datatypes.matrix.Matrix &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>paya.datatypes.matrix.Matrix &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.datatypes.quaternion.Quaternion" href="quaternion.html" />
+    <link rel="next" title="paya.datatypes.point.Point" href="point.html" />
     <link rel="prev" title="paya.datatypes.eulerRotation.EulerRotation" href="eulerRotation.html" /> 
 </head>
 
@@ -29,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -43,29 +46,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../datatypes.html">paya.datatypes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">paya.datatypes.eulerRotation.EulerRotation</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.datatypes.matrix.Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="point.html">paya.datatypes.point.Point</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quaternion.html">paya.datatypes.quaternion.Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vector.html">paya.datatypes.vector.Vector</a></li>
 </ul>
@@ -111,100 +115,230 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-paya.datatypes.matrix">
-<span id="paya-datatypes-matrix-matrix"></span><h1>paya.datatypes.matrix.Matrix<a class="headerlink" href="#module-paya.datatypes.matrix" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="paya.datatypes.matrix.Matrix">
-<em class="property">class </em><code class="descname">Matrix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="paya.datatypes.matrix.Matrix.__add__">
-<code class="descname">__add__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__add__" title="Permalink to this definition">¶</a></dt>
+  <section id="module-paya.datatypes.matrix">
+<span id="paya-datatypes-matrix-matrix"></span><h1>paya.datatypes.matrix.Matrix<a class="headerlink" href="#module-paya.datatypes.matrix" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.createLocator">
+<span class="sig-name descname"><span class="pre">createLocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.createLocator" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a locator and drives its SRT channels using this matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Shorthand</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">cl</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the locator display scale; defaults to 1.0</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The locator.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.decompose">
+<span class="sig-name descname"><span class="pre">decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotateOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xyz'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.decompose" title="Permalink to this definition"></a></dt>
+<dd><p>Decomposes this matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rotateOrder/ro</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the rotate order to apply; defaults to ‘xyz’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary of {channelName: <a class="reference internal" href="point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
+<a class="reference internal" href="vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>
+or <a class="reference internal" href="eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation" title="paya.datatypes.eulerRotation.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__add__" title="Permalink to this definition"></a></dt>
 <dd><p>Implements <strong>addition</strong> (<code class="docutils literal notranslate"><span class="pre">+</span></code>).</p>
 <p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix.__add__" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.datatypes.Matrix.__add__()</span></code></a> to add
 support for 16D plugs.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="paya.datatypes.matrix.Matrix.__mul__">
-<code class="descname">__mul__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__mul__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements <strong>multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
-<p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix.__mul__" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.datatypes.Matrix.__mul__()</span></code></a> to add
-support for 16D plugs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="paya.datatypes.matrix.Matrix.__radd__">
-<code class="descname">__radd__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__radd__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.__radd__">
+<span class="sig-name descname"><span class="pre">__radd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__radd__" title="Permalink to this definition"></a></dt>
 <dd><p>Implements <strong>reflected addition</strong> (<code class="docutils literal notranslate"><span class="pre">+</span></code>).</p>
 <p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix.__add__" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.datatypes.Matrix.__add__()</span></code></a> to add
 support for 16D plugs.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="paya.datatypes.matrix.Matrix.__rmul__">
-<code class="descname">__rmul__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__rmul__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements <strong>reflected multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__mul__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
 <p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix.__mul__" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.datatypes.Matrix.__mul__()</span></code></a> to add
-support for 3D and 16D plugs.</p>
+support for 16D plugs.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="paya.datatypes.matrix.Matrix.__rxor__">
-<code class="descname">__rxor__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__rxor__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.__rmul__">
+<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__rmul__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>reflected multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
+<p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix.__rmul__" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.datatypes.Matrix.__rmul__()</span></code></a> to add
+support for 3D and 16D plugs as well as simple types.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.__rxor__">
+<span class="sig-name descname"><span class="pre">__rxor__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.__rxor__" title="Permalink to this definition"></a></dt>
 <dd><p>Uses the exclusive-or operator (<code class="docutils literal notranslate"><span class="pre">^</span></code>) to implement
 <strong>point-matrix multiplication</strong> for 3D values and plugs.</p>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="paya.datatypes.matrix.Matrix.asOffset">
-<em class="property">classmethod </em><code class="descname">asOffset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.asOffset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implemented for parity with <a class="reference internal" href="../plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset" title="paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset()</span></code></a>.
-Returns an identity matrix.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="paya.datatypes.matrix.Matrix.pick">
-<code class="descname">pick</code><span class="sig-paren">(</span><em>translate=None</em>, <em>rotate=None</em>, <em>scale=None</em>, <em>shear=None</em>, <em>default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.pick" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.pick">
+<span class="sig-name descname"><span class="pre">pick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.pick" title="Permalink to this definition"></a></dt>
 <dd><p>Filters this matrix, similar to Maya’s pickMatrix. If ‘default’ is
 used, and it’s a plug, the output will also be a plug.</p>
 <p>Flags are defined by omission, Maya-style.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Shorthand:</th><td class="field-body"><p class="first">pk</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – use translate</li>
-<li><strong>rotate/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – use rotate</li>
-<li><strong>scale/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – use scale</li>
-<li><strong>shear/sh</strong> – use shear</li>
-<li><strong>default</strong> (list, <a class="reference internal" href="#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>, str, <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code>) – take omitted fields from this matrix; can be a value
-or plug; defaults to None</li>
+<dl class="field-list simple">
+<dt class="field-odd">Shorthand</dt>
+<dd class="field-odd"><p>pk</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – use translate</p></li>
+<li><p><strong>rotate/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – use rotate</p></li>
+<li><p><strong>scale/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – use scale</p></li>
+<li><p><strong>shear/sh</strong> – use shear</p></li>
+<li><p><strong>default</strong> (list, <a class="reference internal" href="#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>, str, <a class="reference internal" href="../plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>) – take omitted fields from this matrix; can be a value
+or plug; defaults to None</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The filtered matrix.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The filtered matrix.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> or <a class="reference internal" href="../plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.asOffset">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">asOffset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.asOffset" title="Permalink to this definition"></a></dt>
+<dd><p>Implemented for parity with <a class="reference internal" href="../plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asOffset" title="paya.plugtypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix.asOffset()</span></code></a>.
+Returns an identity matrix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.getAxis">
+<span class="sig-name descname"><span class="pre">getAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.getAxis" title="Permalink to this definition"></a></dt>
+<dd><p>Extracts the specified axis from this matrix as a vector or point
+value. Used to implement the following properties: <strong>x</strong>, <strong>y</strong>,
+<strong>z</strong> and <strong>translate</strong>/<strong>t</strong>. The property versions will always
+return non-normalized values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to extract, one of ‘x’, ‘y’, ‘z’, ‘-x’,
+‘-y’, ‘-z’ or ‘translate’ / ‘t’</p></li>
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – normalize the extracted vector; defaults
+to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.setAxis">
+<span class="sig-name descname"><span class="pre">setAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.setAxis" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the values for the specified axis row. Used to implement the
+following properties: <strong>x</strong>, <strong>y</strong>, <strong>z</strong> and <strong>translate</strong>/<strong>t</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to extract, one of ‘x’, ‘y’, ‘z’, ‘-x’,
+‘-y’, ‘-z’ or ‘translate’ / ‘t’.</p></li>
+<li><p><strong>vals</strong> (<a class="reference internal" href="vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, list) – the values to assign to the row</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.getX">
+<span class="sig-name descname"><span class="pre">getX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.getX" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">getAxis('x')</span></code>.
+Getter for the <strong>x</strong> property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.setX">
+<span class="sig-name descname"><span class="pre">setX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.setX" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">setAxis('x')</span></code>.
+Setter for the <strong>x</strong> property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.getY">
+<span class="sig-name descname"><span class="pre">getY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.getY" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">getAxis('y')</span></code>.
+Getter for the <strong>y</strong> property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.setY">
+<span class="sig-name descname"><span class="pre">setY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.setY" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">setAxis('y')</span></code>.
+Setter for the <strong>y</strong> property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.getZ">
+<span class="sig-name descname"><span class="pre">getZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.getZ" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">getAxis('z')</span></code>.
+Getter for the <strong>z</strong> property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.setZ">
+<span class="sig-name descname"><span class="pre">setZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.setZ" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">setAxis('z')</span></code>.
+Setter for the <strong>z</strong> property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.getTranslate">
+<span class="sig-name descname"><span class="pre">getTranslate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.getTranslate" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">getAxis('translate')</span></code>.
+Getter for the <strong>translate</strong>/<strong>t</strong> property.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.datatypes.matrix.Matrix.setTranslate">
+<span class="sig-name descname"><span class="pre">setTranslate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.matrix.Matrix.setTranslate" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">setAxis('translate')</span></code>.
+Setter for the <strong>translate</strong>/<strong>t</strong> property.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="eulerRotation.html" class="btn btn-neutral float-left" title="paya.datatypes.eulerRotation.EulerRotation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="quaternion.html" class="btn btn-neutral float-right" title="paya.datatypes.quaternion.Quaternion" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="point.html" class="btn btn-neutral float-right" title="paya.datatypes.point.Point" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

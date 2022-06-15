@@ -429,6 +429,7 @@ class PlugClassPool(ClassPool):
         """
         mplug = inst.__apimplug__()
         lookup = _pt.getTypeFromMPlug(mplug)
+
         return self.getByName(lookup)
 
 plugs = PlugClassPool()

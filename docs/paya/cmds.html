@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.cmds &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>paya.cmds &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="paya.comptypes" href="comptypes.html" />
+    <link rel="next" title="paya.config" href="config.html" />
     <link rel="prev" title="paya" href="../paya.html" /> 
 </head>
 
@@ -29,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -43,25 +46,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
@@ -104,33 +107,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-paya.cmds">
-<span id="paya-cmds"></span><h1>paya.cmds<a class="headerlink" href="#module-paya.cmds" title="Permalink to this headline">¶</a></h1>
+  <section id="module-paya.cmds">
+<span id="paya-cmds"></span><h1>paya.cmds<a class="headerlink" href="#module-paya.cmds" title="Permalink to this headline"></a></h1>
 <p>The contents of this module can be directly accessed via the
 <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interface. This includes:</p>
 <blockquote>
 <div><ul class="simple">
-<li>The entire <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace</li>
-<li><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></li>
-<li><code class="xref py py-func docutils literal notranslate"><span class="pre">makeMatrix()</span></code> / <code class="docutils literal notranslate"><span class="pre">mm</span></code></li>
+<li><p>The entire <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace</p></li>
+<li><p><a class="reference internal" href="lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a></p></li>
+<li><p><a class="reference internal" href="lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> / <code class="docutils literal notranslate"><span class="pre">cm</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>Any module-level variables or functions added here will also become available
 via <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">When customising this module, take care not to <strong>shadow</strong> factory commands from
+<p class="admonition-title">Warning</p>
+<p>When customising this module, take care not to <strong>shadow</strong> factory commands from
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>. Doing so may break code that accesses such commands via
 <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
 </div>
-</div>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../paya.html" class="btn btn-neutral float-left" title="paya" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="comptypes.html" class="btn btn-neutral float-right" title="paya.comptypes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="config.html" class="btn btn-neutral float-right" title="paya.config" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

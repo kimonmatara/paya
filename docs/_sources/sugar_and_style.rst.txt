@@ -1,0 +1,67 @@
+*************
+Sugar & Style
+*************
+
+================
+Attribute Access
+================
+
+For clarity, examples of attribute access in the Paya documentation always use the long form, i.e.:
+
+.. code-block:: python
+
+    cube.attr('translate')
+    loc.attr('worldMatrix')
+    joint.attr('offsetParentMatrix')
+
+In practice you may want to use Maya short names instead:
+
+.. code-block:: python
+
+    cube.attr('t')
+    loc.attr('wm')
+    joint.attr('opm')
+
+PyMEL and Paya also allow you to use dot-syntax, for example ``cube.t``. However this isn't recommended, as it may
+shadow any current, or future, implementations of custom methods or properties with the same name.
+
+============================
+Method / Function Shorthands
+============================
+
+Many Paya methods and functions are available in shorthand form and they, in turn, can accept shorthand keyword
+arguments. Where available, these will be listed in the documentation. Here are several degrees of reduction for
+:meth:`~paya.plugtypes.matrix.Matrix.pick`:
+
+.. code-block:: python
+
+    # Long
+    tmtx = loc.attr('wm').pick(translate=True)
+
+    # Shorter
+    tmtx = loc.attr('wm').pk(translate=True)
+
+    # Shortest
+    tmtx = loc.attr('wm').pk(t=True)
+
+Keyword argument shorthands are implemented using the utility function :func:`paya.util.function.short`, which you
+use in your own scripts. Here's an example:
+
+.. code-block:: python
+
+    from paya.util import short
+
+    @short(numJoints='nj')
+    def createJoints(numJoints=3):
+        ...
+
+    createJoints(nj=10)
+
+Another utility, :func:`paya.util.functions.resolve_flags`, lets you create MEL-like interfaces where arguments are
+defined by omission. For example, in the case of :meth:`~paya.plugtypes.matrix.Matrix.pick`, passing
+``t=True`` will automatically set the other channels to ``False``. This is implemented as:
+
+.. code-block:: python
+
+    def pick(self, translate=None, rotate=None, scale=None, shear=None):
+        translate, rotate, scale, shear = resolve_flags(translate, rotate, scale, shear)

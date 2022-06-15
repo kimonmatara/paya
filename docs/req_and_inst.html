@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Requirements &amp; Installation &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Requirements &amp; Installation &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,22 +46,23 @@
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
@@ -89,28 +93,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="requirements-installation">
-<h1>Requirements &amp; Installation<a class="headerlink" href="#requirements-installation" title="Permalink to this headline">¶</a></h1>
+  <section id="requirements-installation">
+<h1>Requirements &amp; Installation<a class="headerlink" href="#requirements-installation" title="Permalink to this headline"></a></h1>
 <p><strong>Paya</strong> requires Python 3.0 and Maya 2022 or higher. To install it, download the package directory from
-<a class="reference external" href="https://github.com/kimonmatara/paya">here</a>, unzip,  move into your Maya <code class="docutils literal notranslate"><span class="pre">scripts</span></code> folder and relaunch Maya.</p>
-<table border="1" class="colwidths-given docutils">
+<a class="reference external" href="https://github.com/kimonmatara/paya/archive/refs/tags/v0.2.zip">here</a>, unzip,  move into your Maya <code class="docutils literal notranslate"><span class="pre">scripts</span></code>
+folder and relaunch Maya.</p>
+<table class="colwidths-given docutils align-default">
 <colgroup>
-<col width="5%" />
-<col width="95%" />
+<col style="width: 5%" />
+<col style="width: 95%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><strong>Windows</strong></td>
-<td><code class="docutils literal notranslate"><span class="pre">C:\Users\&lt;username&gt;\My</span> <span class="pre">Documents\Maya\&lt;version&gt;\scripts</span></code></td>
+<tbody>
+<tr class="row-odd"><td><p><strong>Windows</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C:\Users\&lt;username&gt;\My</span> <span class="pre">Documents\Maya\&lt;version&gt;\scripts</span></code></p></td>
 </tr>
-<tr class="row-even"><td><strong>Mac</strong></td>
-<td><code class="docutils literal notranslate"><span class="pre">/Users/&lt;username&gt;/Library/Preferences/Autodesk/Maya/&lt;version&gt;/scripts</span></code></td>
+<tr class="row-even"><td><p><strong>Mac</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/Users/&lt;username&gt;/Library/Preferences/Autodesk/Maya/&lt;version&gt;/scripts</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><strong>Linux</strong></td>
-<td><code class="docutils literal notranslate"><span class="pre">~&lt;username&gt;/Maya/&lt;version&gt;/scripts</span></code></td>
+<tr class="row-odd"><td><p><strong>Linux</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">~&lt;username&gt;/Maya/&lt;version&gt;/scripts</span></code></p></td>
 </tr>
 </tbody>
 </table>
-</div>
+</section>
 
 
            </div>

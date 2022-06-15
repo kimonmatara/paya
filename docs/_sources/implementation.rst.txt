@@ -10,15 +10,14 @@ There are two aspects to the **paya** patching mechanism.
 Custom **paya** classes are built in the following way:
 
     1.  Where available, content is taken from user (or bundled)
-        :ref:`template classes <template modules>`.
+        :ref:`template classes <template_classes>`.
 
     2.  The custom classes are then built using special metaclasses that
         manage inheritance via an overriden :meth:`~paya.pools.payaMeta.mro`.
 
 Custom node, component and data types always shadow a PyMEL counterpart in the method resolution order. However, when it
 comes to **plug** (attribute) types, PyMEL only provides one class: :py:class:`pymel.core.general.Attribute`. For this
-reason, custom plug types are largely abstract, and constructed according to an inheritance tree defined inside
-``paya/plugtree.json`` (this should not be edited).
+reason, custom plug types are derived from an abstract inheritance tree served by :mod:`paya.plugtree`.
 
 2. Instance Interception
 ------------------------
@@ -46,11 +45,8 @@ Advantages
 Disadvantages
 -------------
 
-Because PyMEL patching is persistent, it's incumbent on the developer to ensure their customisations won't break
-external pipeline code by overriding common PyMEL methods and / or to
-:ref:`apply patching in a controlled way <Bracketing>`.
+-   Because PyMEL patching is persistent, it's incumbent on the developer to ensure their customisations won't break
+    external pipeline code by overriding common PyMEL methods and / or to :ref:`apply patching in a controlled way
+    <Bracketing>`.
 
-Performance
------------
-Where rigging code involves a lot of PyNode instantiation, Paya runs at most 13% slower than 'vanilla' PyMEL. This isn't
-noticeable under typical usage.
+-   Paya slows down PyMEL by 13% at most.

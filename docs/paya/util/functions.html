@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.util.functions &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>paya.util.functions &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -29,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -43,25 +46,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
@@ -110,11 +113,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-paya.util.functions">
-<span id="paya-util-functions"></span><h1>paya.util.functions<a class="headerlink" href="#module-paya.util.functions" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="paya.util.functions.short">
-<em class="property">class </em><code class="descname">short</code><span class="sig-paren">(</span><em>**mapping</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short" title="Permalink to this definition">¶</a></dt>
+  <section id="module-paya.util.functions">
+<span id="paya-util-functions"></span><h1>paya.util.functions<a class="headerlink" href="#module-paya.util.functions" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.util.functions.short">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">short</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short" title="Permalink to this definition"></a></dt>
 <dd><p>Decorator with keyword arguments, used to mimic Maya’s ‘shorthand’
 flags.</p>
 <p>Example:</p>
@@ -128,51 +131,50 @@ flags.</p>
 </pre></div>
 </div>
 </div></blockquote>
-<dl class="method">
-<dt id="paya.util.functions.short.__call__">
-<code class="descname">__call__</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call self as a function.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="paya.util.functions.short.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>**mapping</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short.__init__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.util.functions.short.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.util.functions.short.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short.__call__" title="Permalink to this definition"></a></dt>
+<dd><p>Call self as a function.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="paya.util.functions.resolve_flags">
-<code class="descname">resolve_flags</code><span class="sig-paren">(</span><em>*flags</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.resolve_flags" title="Permalink to this definition">¶</a></dt>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.util.functions.resolve_flags">
+<span class="sig-name descname"><span class="pre">resolve_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.resolve_flags" title="Permalink to this definition"></a></dt>
 <dd><p>Used to mimic Maya flag behaviour.</p>
 <p>If only a subset of flags are defined, then:</p>
 <blockquote>
 <div><ul class="simple">
-<li>If the subset are a mixture of True / False, the other flags are
-set to False.</li>
-<li>If the subset are all True or all False, the remaining flags are
-set to the opposite.</li>
+<li><p>If the subset are a mixture of True / False, the other flags are
+set to False.</p></li>
+<li><p>If the subset are all True or all False, the remaining flags are
+set to the opposite.</p></li>
 </ul>
 </div></blockquote>
 <p>If all flags are None, all flags are set to True.
 If all flags are NOT None (i.e. all defined), they are all conformed to
 booleans.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flags</strong> – one or more user flag arguments</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The resolved flags.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>flags</strong> – one or more user flag arguments</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The resolved flags.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>

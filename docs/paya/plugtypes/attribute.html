@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.plugtypes.attribute.Attribute &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>paya.plugtypes.attribute.Attribute &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.plugtypes.attributeMath16D.AttributeMath16D" href="attributeMath16D.html" />
-    <link rel="prev" title="paya.plugtypes" href="../plugtypes.html" /> 
+    <link rel="next" title="paya.plugtypes.compound.Compound" href="compound.html" />
+    <link rel="prev" title="paya.plugtypes.angle.Angle" href="angle.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -43,25 +46,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
@@ -69,12 +72,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="angle.html">paya.plugtypes.angle.Angle</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.plugtypes.attribute.Attribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath16D.html">paya.plugtypes.attributeMath16D.AttributeMath16D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath1D.html">paya.plugtypes.attributeMath1D.AttributeMath1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath2D.html">paya.plugtypes.attributeMath2D.AttributeMath2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath3D.html">paya.plugtypes.attributeMath3D.AttributeMath3D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attributeMath4D.html">paya.plugtypes.attributeMath4D.AttributeMath4D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compound.html">paya.plugtypes.compound.Compound</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum.html">paya.plugtypes.enum.Enum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">paya.plugtypes.eulerRotation.EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math1D.html">paya.plugtypes.math1D.Math1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math2D.html">paya.plugtypes.math2D.Math2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math3D.html">paya.plugtypes.math3D.Math3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="matrix.html">paya.plugtypes.matrix.Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quaternion.html">paya.plugtypes.quaternion.Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="string.html">paya.plugtypes.string.String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vector.html">paya.plugtypes.vector.Vector</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
@@ -113,68 +122,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-paya.plugtypes.attribute">
-<span id="paya-plugtypes-attribute-attribute"></span><h1>paya.plugtypes.attribute.Attribute<a class="headerlink" href="#module-paya.plugtypes.attribute" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="paya.plugtypes.attribute.Attribute">
-<em class="property">class </em><code class="descname">Attribute</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="paya.plugtypes.attribute.Attribute.__iter__">
-<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.__iter__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute.__iter__" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.general.Attribute.__iter__()</span></code></a> to support
-compounds.</p>
+  <section id="module-paya.plugtypes.attribute">
+<span id="paya-plugtypes-attribute-attribute"></span><h1>paya.plugtypes.attribute.Attribute<a class="headerlink" href="#module-paya.plugtypes.attribute" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.plugtypes.attribute.Attribute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.plugtypes.attribute.Attribute.plugType">
+<span class="sig-name descname"><span class="pre">plugType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inherited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.plugType" title="Permalink to this definition"></a></dt>
+<dd><p>Returns abstract type information for this plug.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inherited/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return the full hierarchy stack instead
+of just a single type; defaults to False</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The type information.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="paya.plugtypes.attribute.Attribute.put">
-<code class="descname">put</code><span class="sig-paren">(</span><em>source</em>, <em>plug=None</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.put" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper for mixed plug / value workflows. If ‘source’ is an attribute,
-it will be connected into this plug. Otherwise, this plug will be set
-to ‘source’.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>source</strong> – the source value or plug</li>
-<li><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – if you know whether ‘source’ is a plug or not, specify
-if here; defaults to None</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">self</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="paya.plugtypes.attribute.Attribute.get">
-<code class="descname">get</code><span class="sig-paren">(</span><em>plug=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extends <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute.get" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.general.Attribute.get()</span></code></a> with the <code class="docutils literal notranslate"><span class="pre">plug</span></code>
-keyword argument, which is useful when the decision whether to work
-statically or dynamically rests with the end-user.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, return <code class="docutils literal notranslate"><span class="pre">self</span></code>; defaults to False</li>
-<li><strong>**kwargs</strong> – forwarded to the base method</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> or a value type</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="paya.plugtypes.attribute.Attribute.setClass">
-<code class="descname">setClass</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.setClass" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.plugtypes.attribute.Attribute.setClass">
+<span class="sig-name descname"><span class="pre">setClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.setClass" title="Permalink to this definition"></a></dt>
 <dd><p>Convenience method to enable chained dot notation when reassigning the
 plug class (sometimes necessary for ambiguous output types, e.g. on
 ‘choice’ nodes). Returns <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
@@ -182,50 +155,68 @@ plug class (sometimes necessary for ambiguous output types, e.g. on
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="bp">cls</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cls</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><em>type</em></a>) – the class to assign</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">This instance, with a reassigned class.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cls</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><em>type</em></a>) – the class to assign</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This instance, with a reassigned class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="paya.plugtypes.attribute.Attribute.setDimension">
-<code class="descname">setDimension</code><span class="sig-paren">(</span><em>dimension</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.setDimension" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sources the generic class for the requested dimension and defers to
-<a class="reference internal" href="#paya.plugtypes.attribute.Attribute.setClass" title="paya.plugtypes.attribute.Attribute.setClass"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setClass()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dimension</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the dimension to apply, for example 4
-for <a class="reference internal" href="attributeMath4D.html#paya.plugtypes.attributeMath4D.AttributeMath4D" title="paya.plugtypes.attributeMath4D.AttributeMath4D"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath4D</span></code></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">This instance, with a reassigned class.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.plugtypes.attribute.Attribute.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.get" title="Permalink to this definition"></a></dt>
+<dd><p>Extends <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute.get" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.general.Attribute.get()</span></code></a> with the <code class="docutils literal notranslate"><span class="pre">plug</span></code>
+keyword argument, which is useful when the decision whether to work
+statically or dynamically rests with the end-user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, return <code class="docutils literal notranslate"><span class="pre">self</span></code>; defaults to False</p></li>
+<li><p><strong>**kwargs</strong> – forwarded to the base method</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> or a value type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.plugtypes.attribute.Attribute.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.attribute.Attribute.put" title="Permalink to this definition"></a></dt>
+<dd><p>Helper for mixed plug / value workflows. If ‘source’ is an attribute,
+it will be connected into this plug. Otherwise, this plug will be set
+to ‘source’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – the source value or plug</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em> or </em><em>None</em>) – if you know whether ‘source’ is a plug or not, specify
+if here; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../plugtypes.html" class="btn btn-neutral float-left" title="paya.plugtypes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="attributeMath16D.html" class="btn btn-neutral float-right" title="paya.plugtypes.attributeMath16D.AttributeMath16D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="angle.html" class="btn btn-neutral float-left" title="paya.plugtypes.angle.Angle" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compound.html" class="btn btn-neutral float-right" title="paya.plugtypes.compound.Compound" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

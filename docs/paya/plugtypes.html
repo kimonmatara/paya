@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.plugtypes &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>paya.plugtypes &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="paya.plugtypes.attribute.Attribute" href="plugtypes/attribute.html" />
+    <link rel="next" title="paya.plugtypes.angle.Angle" href="plugtypes/angle.html" />
     <link rel="prev" title="paya.plugtree" href="plugtree.html" /> 
 </head>
 
@@ -29,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -43,25 +46,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
@@ -69,12 +72,18 @@
 <li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">paya.plugtypes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/angle.html">paya.plugtypes.angle.Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="plugtypes/attribute.html">paya.plugtypes.attribute.Attribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugtypes/attributeMath16D.html">paya.plugtypes.attributeMath16D.AttributeMath16D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugtypes/attributeMath1D.html">paya.plugtypes.attributeMath1D.AttributeMath1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugtypes/attributeMath2D.html">paya.plugtypes.attributeMath2D.AttributeMath2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugtypes/attributeMath3D.html">paya.plugtypes.attributeMath3D.AttributeMath3D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugtypes/attributeMath4D.html">paya.plugtypes.attributeMath4D.AttributeMath4D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/compound.html">paya.plugtypes.compound.Compound</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/enum.html">paya.plugtypes.enum.Enum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/eulerRotation.html">paya.plugtypes.eulerRotation.EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/math1D.html">paya.plugtypes.math1D.Math1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/math2D.html">paya.plugtypes.math2D.Math2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/math3D.html">paya.plugtypes.math3D.Math3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/matrix.html">paya.plugtypes.matrix.Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/quaternion.html">paya.plugtypes.quaternion.Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/string.html">paya.plugtypes.string.String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugtypes/vector.html">paya.plugtypes.vector.Vector</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pools.html">paya.pools</a></li>
@@ -112,26 +121,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="paya-plugtypes">
-<h1>paya.plugtypes<a class="headerlink" href="#paya-plugtypes" title="Permalink to this headline">¶</a></h1>
+  <section id="paya-plugtypes">
+<h1>paya.plugtypes<a class="headerlink" href="#paya-plugtypes" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/angle.html">paya.plugtypes.angle.Angle</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plugtypes/attribute.html">paya.plugtypes.attribute.Attribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugtypes/attributeMath16D.html">paya.plugtypes.attributeMath16D.AttributeMath16D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugtypes/attributeMath1D.html">paya.plugtypes.attributeMath1D.AttributeMath1D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugtypes/attributeMath2D.html">paya.plugtypes.attributeMath2D.AttributeMath2D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugtypes/attributeMath3D.html">paya.plugtypes.attributeMath3D.AttributeMath3D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugtypes/attributeMath4D.html">paya.plugtypes.attributeMath4D.AttributeMath4D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/compound.html">paya.plugtypes.compound.Compound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/enum.html">paya.plugtypes.enum.Enum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/eulerRotation.html">paya.plugtypes.eulerRotation.EulerRotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/math1D.html">paya.plugtypes.math1D.Math1D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/math2D.html">paya.plugtypes.math2D.Math2D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/math3D.html">paya.plugtypes.math3D.Math3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/matrix.html">paya.plugtypes.matrix.Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/quaternion.html">paya.plugtypes.quaternion.Quaternion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/string.html">paya.plugtypes.string.String</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugtypes/vector.html">paya.plugtypes.vector.Vector</a></li>
 </ul>
 </div>
-</div>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="plugtree.html" class="btn btn-neutral float-left" title="paya.plugtree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="plugtypes/attribute.html" class="btn btn-neutral float-right" title="paya.plugtypes.attribute.Attribute" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plugtypes/angle.html" class="btn btn-neutral float-right" title="paya.plugtypes.angle.Angle" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

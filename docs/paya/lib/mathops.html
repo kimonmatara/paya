@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.mathops &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>paya.lib.mathops &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -29,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -43,25 +46,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
@@ -110,134 +113,182 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-paya.lib.mathops">
-<span id="paya-lib-mathops"></span><h1>paya.lib.mathops<a class="headerlink" href="#module-paya.lib.mathops" title="Permalink to this headline">¶</a></h1>
+  <section id="module-paya.lib.mathops">
+<span id="paya-lib-mathops"></span><h1>paya.lib.mathops<a class="headerlink" href="#module-paya.lib.mathops" title="Permalink to this headline"></a></h1>
 <p>Defines supporting methods for maths rigging and, more broadly, mixed value /
 plug workflows.</p>
-<dl class="function">
-<dt id="paya.lib.mathops.getBaseVector">
-<code class="descname">getBaseVector</code><span class="sig-paren">(</span><em>axis</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getBaseVector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given an axis letter (or ‘t’ for ‘translate’), returns an appropriate
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code> instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis for which to retrieve a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code>;
-must be one of: ‘x’, ‘y’, ‘z’, ‘-x’, ‘-y’, ‘-z’ or ‘t’
-(for ‘translate’)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The vector or point.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.isTupleOrListOfScalarValues">
+<span class="sig-name descname"><span class="pre">isTupleOrListOfScalarValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.isTupleOrListOfScalarValues" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if x is a tuple or list of scalar values, otherwise False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="paya.lib.mathops.isTupleOrListOfScalarValues">
-<code class="descname">isTupleOrListOfScalarValues</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.isTupleOrListOfScalarValues" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – the item to inspect</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if x is a tuple or list of scalar values, otherwise False.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="paya.lib.mathops.NativeUnits">
-<em class="property">class </em><code class="descname">NativeUnits</code><a class="headerlink" href="#paya.lib.mathops.NativeUnits" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.mathops.NativeUnits">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NativeUnits</span></span><a class="headerlink" href="#paya.lib.mathops.NativeUnits" title="Permalink to this definition"></a></dt>
 <dd><p>Context manager. Switches Maya to centimetres and radians.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="paya.lib.mathops.nativeUnits">
-<code class="descname">nativeUnits</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.nativeUnits" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.nativeUnits">
+<span class="sig-name descname"><span class="pre">nativeUnits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.nativeUnits" title="Permalink to this definition"></a></dt>
 <dd><p>Decorator version of <a class="reference internal" href="#paya.lib.mathops.NativeUnits" title="paya.lib.mathops.NativeUnits"><code class="xref py py-class docutils literal notranslate"><span class="pre">NativeUnits</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="paya.lib.mathops.info">
-<code class="descname">info</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.info" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.info" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a tuple of three members:
 -   The item conformed to the highest-level type available
 -   The item’s mathematical dimension (e.g. 16 for matrices)
 -   <code class="docutils literal notranslate"><span class="pre">True</span></code> if the item is a plug, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 <p>In short: item, dimension, isplug.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>item</strong> (<em>any type</em>) – the item to process</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> (<em>any type</em>) – the item to process</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NonPlugStringError</strong> – <code class="docutils literal notranslate"><span class="pre">item</span></code> is a string that could not be
+instantiated as a plug.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="paya.lib.mathops.conform">
-<code class="descname">conform</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.conform" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.asValue">
+<span class="sig-name descname"><span class="pre">asValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.asValue" title="Permalink to this definition"></a></dt>
+<dd><p>If x is a plug, returns its value. Otherwise, returns x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the item to inspect</p></li>
+<li><p><strong>plug/p</strong> – if you already know whether x is a plug, specify it
+here.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.conform">
+<span class="sig-name descname"><span class="pre">conform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.conform" title="Permalink to this definition"></a></dt>
 <dd><p>If x is a <strong>value</strong>, then:</p>
 <blockquote>
 <div><ul class="simple">
-<li>If its dimension is 3, it’s returned as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></li>
-<li>If its dimension is 4, it’s returned as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></li>
-<li>If its dimension is 16, it’s returned as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></li>
-<li>In all other cases, it’s returned as-is</li>
+<li><p>If its dimension is 3, it’s returned as a <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p></li>
+<li><p>If its dimension is 4, it’s returned as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></p></li>
+<li><p>If its dimension is 16, it’s returned as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></p></li>
+<li><p>In all other cases, it’s returned as-is</p></li>
 </ul>
 </div></blockquote>
 <p>If x is a <strong>plug</strong>, then it’s returned as an instance of the appropriate
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – the item to conform</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The conformed item.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>,
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – the item to conform</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The conformed item.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>
-or <code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></td>
-</tr>
-</tbody>
-</table>
+or <code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="paya.lib.mathops.multMatrices">
-<code class="descname">multMatrices</code><span class="sig-paren">(</span><em>*matrices</em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.multMatrices" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.multMatrices">
+<span class="sig-name descname"><span class="pre">multMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.multMatrices" title="Permalink to this definition"></a></dt>
 <dd><p>Performs efficient multiplication of any combination of matrix values or
 plugs. Consecutive values are reduced and consecutive plugs are grouped
 into <code class="docutils literal notranslate"><span class="pre">multMatrix</span></code> nodes.</p>
 <p>If any of the matrices are plugs, the return will also be a plug.
 Otherwise, it will be a value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*matrices</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code>, list or str) – the matrices to multiply (unpacked)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The matrix product.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*matrices</strong> (<a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>, list or str) – the matrices to multiply (unpacked)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The matrix product.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.createMatrix">
+<span class="sig-name descname"><span class="pre">createMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">rowHints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserveSecondLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thirdLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.createMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Constructs static or dynamic transformation matrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Shorthand</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">cm</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>*rowHints</strong> – <p>If provided, this must comprise exactly <strong>four</strong> or
+<strong>five</strong> arguments, in both cases passed as unpacked pairs of
+row identifier: vector input or value.</p>
+<p>If <strong>four</strong> arguments are passed, they will be used to construct an
+orthonormal matrix, with the first vector as the ‘aim’ and the second
+as the ‘up’, for example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">createMatrix</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">loc1</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">loc2</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>If <strong>six</strong> arguments are passed, they will be used to directly
+populate the matrix rows. This may result in a non-orthornormal
+(shear) matrix.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">createMatrix</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">loc1</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">loc2</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">loc3</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If this argument is omitted, an identity matrix will be returned.</p>
+</p></li>
+<li><p><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code>,
+<a class="reference internal" href="../plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – A <strong>translate</strong> component for the matrix; this can be
+a point value or plug; defaults to None</p></li>
+<li><p><strong>preserveSecondLength/psl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if six arguments were passed;
+preserve the second vector’s length when performing orthonormal
+construction; defaults to True</p></li>
+<li><p><strong>thirdLength/tl</strong> (None, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>,
+<a class="reference internal" href="../plugtypes/math1D.html#paya.plugtypes.math1D.Math1D" title="paya.plugtypes.math1D.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – ignored is six arguments were passed; if provided,
+defines the third (derived) vector’s length; defaults to None</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if you already know whether the passed arguments contain
+plugs, specify it here to avoid extraneous checks; if no arguments
+have been passed, this will specify whether the returned identity
+matrix is a plug or value; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The constructed matrix.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix</span></code></a> or
+<a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a>, depending on inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 
 
            </div>

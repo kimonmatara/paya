@@ -5,46 +5,50 @@ attribute subtypes. The tree is defined inside ``paya/plugtree.json``.
 This module is not intended for direct use.
 """
 
-import os
+import re
 import json
+from pprint import pprint
 
 import maya.OpenMaya as om
-import maya.cmds as m
 
-#-----------------------------------------------------|
-#-----------------------------------------------------|    UTILS
-#-----------------------------------------------------|
+#------------------------------------------------------|    Tree construction
 
-cap = lambda x: x[0].upper()+x[1:]
+def printTree():
+    pprint(tree)
 
-#-----------------------------------------------------|
-#-----------------------------------------------------|    TREE MANAGEMENT
-#-----------------------------------------------------|
+global tree
+tree = {}
 
-jsonpath = os.path.join(
-    os.path.dirname(__file__),
-    'plugtree.json'
-)
+def insert(typeName, parent=None):
+    if parent:
+        path = getPath(parent)
 
-with open(jsonpath,'r') as f:
-    data = f.read()
+    else:
+        path = ['Attribute']
 
-dct = json.loads(data)
+    container = tree[path[0]]
+
+    for key in path[1:]:
+        container = container[key]
+
+    container[typeName] = {}
+
+class NoPathError(RuntimeError):
+    pass
 
 def getPath(typeName):
     """
     Returns hierarchical type information.
 
-    :param str typeName: the plug type to query, for example
-        ``AttributeDoubleLinear``.
-    :return: A list of abstract type names, ordered similarly to
-        :func:`~pymel.core.general.nodeType` called with ``inheritance=True``.
+    :param str typeName: The plug type to query
+    :return: A list of abstract type names, ordered
+        similarly to ``nodeType(inherited=True)``.
     :rtype: :class:`list`
     """
+    global tree
     foundPath = []
 
-    def parseDict(dct,result,pathToHere=[]):
-
+    def parseDict(dct, result, pathToHere=[]):
         for k, v in dct.items():
             thisPath = pathToHere + [k]
 
@@ -53,213 +57,325 @@ def getPath(typeName):
                 break
 
             else:
-                parseDict(v,result,pathToHere=thisPath)
+                parseDict(v, result, pathToHere=thisPath)
 
     result = []
-    parseDict(dct,result,[])
+    parseDict(tree, result, [])
 
     if result:
-        out = result
+        return list(map(str, result))
+
+    raise NoPathError(
+        "Couldn't find class '{}' in the abstract plug tree".format(typeName)
+    )
+
+
+def initTree():
+    global tree
+
+    tree = {
+        'Attribute':{
+            'Compound': {
+                'Math2D': {},
+                'Math3D':{
+                    'EulerRotation': {},
+                    'Vector': {}
+                },
+                'Quaternion': {}
+            },
+            'Math1D':{
+                'Unit':{
+                    'Distance': {},
+                    'Time': {},
+                    'Angle': {}
+                },
+                'Boolean': {},
+                'Enum': {}
+            },
+            'Matrix': {},
+            'Data':{
+                'Geometry':{
+                    'PluginGeometry': {},
+                    'Mesh': {},
+                    'Lattice': {},
+                    'NurbsCurve': {
+                        'BezierCurve': {}
+                    },
+                    'NurbsSurface': {},
+                    'Sphere': {},
+                    'SubdSurface': {},
+                    'DynSweptGeometry': {}
+                },
+                'DynArrayAttrs': {},
+                'ComponentList': {},
+                'DataNumeric': {}, # Dump non-DG-manipulatable plugs here
+                'DataArray': {}, # Expand dynamically via MFnData
+                # Include all the rest here, except for Matrix data, which should be piped to Matrix
+            },
+        }
+    }
+
+    # Expand data types
+
+    ignore = ('kMatrix', 'kInvalid', 'kLast', 'kNumeric')
+
+    dataTypes = filter(
+        lambda x: re.match(r"^k[A-Z].*$", x) and x not in ignore,
+        om.MFnData.__dict__.keys()
+    )
+
+    for dataType in dataTypes:
+
+        mt = re.match(r"^k(.*?)(Array)?$", dataType)
+
+        basename, array = mt.groups()
+
+        if array:
+            clsname = '{}Array'.format(basename)
+            insert(clsname, parent='DataArray')
+
+        else:
+            clsname = '{}'.format(basename)
+
+            try:
+                getPath(clsname)
+
+            except NoPathError: # not already added manually
+                insert(clsname, parent='Data')
+
+    ignore = ('kInvalid', 'kLast')
+
+    numericDataTypes = filter(
+        lambda x: re.match(r"^k.*$", x) and x not in ignore,
+        om.MFnNumericData.__dict__.keys()
+    )
+
+    for numericDataType in numericDataTypes:
+        mt = re.match("^k([2-4].*)$", numericDataType)
+
+        if mt:
+            clsname = "Data{}".format(mt.groups()[0])
+            insert(clsname, parent='DataNumeric')
+
+initTree()
+
+#------------------------------------------------------|    Type analysis
+
+def numericUnitTypeIs1D(unitType):
+    for item in [
+        om.MFnNumericData.k2Short,
+        om.MFnNumericData.k3Short,
+
+        om.MFnNumericData.k2Long,
+        om.MFnNumericData.k2Int,
+        om.MFnNumericData.k3Long,
+        om.MFnNumericData.k3Int,
+
+        om.MFnNumericData.k2Float,
+        om.MFnNumericData.k3Float,
+
+        om.MFnNumericData.k2Double,
+        om.MFnNumericData.k3Double,
+        om.MFnNumericData.k4Double
+    ]:
+        if unitType == item:
+            return False
+
+    return True
+
+def getTypeFromDataBlock(mplug, asString=False):
+    if mplug.isArray():
+        _mplug = mplug.elementByLogicalIndex(0)
 
     else:
-        # Invent a path
+        _mplug = mplug
 
-        out = ['Attribute',typeName]
+    hnd = _mplug.asMDataHandle()
+    data = hnd.data()
 
-    out = map(str,out)
-    return list(out)
+    return data.apiTypeStr() if asString else data.apiType()
 
-#-----------------------------------------------------|
-#-----------------------------------------------------|    PLUG INSPECTION
-#-----------------------------------------------------|
-
-def enumerator(enum):
+def _getTypeFromMPlug(mplug):
     """
-    Helper for reverse lookups on enumerators such as `MFn.type`.
+    Pseudo
+        If compound:
+            If num children in (2, 3, 4):
+                If number is 3:
+                    For each child:
+                        If it's a numeric attribute:
+                            If it's a 1D type, record a type of '1D'
+                            Otherwise: return general compound key
+
+                        elif it's a unit attribute:
+                            If it's an angle, record a type of 'angle'
+                            Otherwise, record a type of '1D'
+
+                        else:
+                            return general compound type
+
+                If number is 4:
+                    If all children are numbers (regardless), return as Quaternion
+                    Otherwise, return compound
+
+                if number is 2:
+                    if all children are numbers, return Math2D
+
+            else:
+                return compound
+
+        else:
+            if numeric:
+                we know it's not a compound type.
+                return an appropriate key
+
+            elif it's unit:
+                if it's angle, return angle
+                otherwise return a subclass of Math1D, i.e. distance or time
+
+            elif it's matrix: return matrix
+
+            elif is typed or generic:
+                get the type from the data block
+
+            else:
+                return attribute
     """
-    out = dict()
+    if mplug.isCompound():
+        compoundMfn = om.MFnCompoundAttribute(mplug.attribute())
+        numChildren = compoundMfn.numChildren()
 
-    for key,value in enum.__dict__.items():
-        if not key.startswith('k'):
-            continue
+        if numChildren in (2, 3, 4):
+            childMObjects = [compoundMfn.child(x) for x in range(numChildren)]
 
-        if isinstance(value,int):
-            out[value] = key
+            if numChildren is 3:
+                types = []
 
-    return out
+                for childMObject in childMObjects:
+                    if childMObject.hasFn(om.MFn.kNumericAttribute):
+                        mfn = om.MFnNumericAttribute(childMObject)
 
-def getMPlugPathString(mplug):
-	"""
-	Returns the full DAG path to a given ``MPlug``.
+                        if numericUnitTypeIs1D(mfn.unitType()):
+                            types.append('1D')
 
-	:param `OpenMaya.MPlug` mplug: the MPlug instance to query
-	:return: The DAG path to the MPlug.
-	:rtype: :class:`str`
-	"""
-	name = '.'.join(mplug.name().split('.')[1:])
-	node = mplug.node()
+                        else:
+                            return 'Compound'
 
-	if node.hasFn(om.MFn.kDagNode):
-		# Need to get resolved path
-		dp = om.MDagPath()
-		om.MFnDagNode(node).getPath(dp)
-		name = dp.partialPathName()+'.'+name
+                    elif childMObject.hasFn(om.MFn.kUnitAttribute):
+                        mfn = om.MFnUnitAttribute(childMObject)
+                        ut = mfn.unitType()
 
-	else:
-		name = om.MFnDependencyNode(node).name()+'.'+name
+                        if ut == om.MFnUnitAttribute.kAngle:
+                            types.append('angle')
 
-	return name
+                        else:
+                            types.append('1D')
 
+                    else:
+                        return 'Compound'
 
-def getMPlugTypeInfo(mplug):
-    """
-    Returns plug type information on the given MPlug in a dictionary
-    comprising the following keys:
+                if len(set(types)) is 1:
+                    type = types[0]
 
-    .. list-table::
-       :widths: 25 50
+                    if type == 'angle':
+                        return 'EulerRotation'
 
-       * - ``plugType``
-         - The basic ``MObject`` type, e.g. ``kNumericAttribute``.
-       * - ``dataType``
-         - If available, the type of data served.
-       * - ``numericType``
-         - The numeric subtype (e.g. ``kFloat``) if the ``plugType`` was ``kNumericAttribute``.
-    """
-    out = {}
+                    return 'Vector'
 
-    # Plug type
-    plugType = out['plugType'] = mplug.attribute().apiTypeStr()
+                return 'Compound'
 
-    # Data type
-    if plugType in ('kGenericAttribute','kTypedAttribute'):
+            else:
+                for childMObject in childMObjects:
+                    if childMObject.hasFn(om.MFn.kNumericAttribute):
+                        mfn = om.MFnNumericAttribute(childMObject)
 
-        # Evaluate if dirty, as data type might change
-        fullpath = getMPlugPathString(mplug)
+                        if numericUnitTypeIs1D(mfn.unitType()):
+                            continue
 
-        try:
-            if m.isDirty(fullpath):
-                m.dgeval(fullpath)
+                        else:
+                            return 'Compound'
 
-        except RuntimeError as exc:
-            m.warning(__name__+'.getMPlugTypeInfo(): '+
-                      'Could not evaluate plug '+fullpath+
-                      '. The error was: '+str(exc.message))
+                    elif childMObject.hasFn(om.MFn.kUnitAttribute):
+                        continue
 
-        # Try and extract a data type by getting the data
-        # packet using asMObject()... especially relevant
-        # for nodes that spit out different types of geometry
-        # depending on their inputs
+                    return 'Compound'
 
-        try:
-            _dtp = mplug.asMObject().apiTypeStr()
+                return 'Quaternion' if numChildren is 4 else 'Math2D'
 
-        except:
-            _dtp = None
+        else:
+            return 'Compound'
 
-        if not _dtp:
-            # Fall back to non-API methods, as PyMEL does in
-            # pymel.core.general.Attribute.type()
+    mobj = mplug.attribute()
 
-            _dtp = m.getAttr(fullpath,type=1)
+    if mobj.hasFn(om.MFn.kNumericAttribute):
+        # We already know it's not a numeric compound or a data type,
+        # so can only be a boolean or other 1D type
 
-            if not _dtp:
-                # From PyMEL: Sometimes getAttr fails with
-                # dynamic attributes...
+        mfn = om.MFnNumericAttribute(mobj)
+        unitType = mfn.unitType()
 
-                if om.MFnAttribute(mplug.attribute()).isDynamic():
-                    try:
-                        _dtp = m.addAttr(fullpath,q=1,dt=1)
+        if unitType == om.MFnNumericData.kBoolean:
+            return 'Boolean'
 
-                    except:
-                        pass
-        if _dtp:
+        return 'Math1D'
 
-            if isinstance(_dtp,(tuple,list)):
-                _dtp = _dtp[0]
+    if mobj.hasFn(om.MFn.kUnitAttribute):
+        mfn = om.MFnUnitAttribute(mobj)
+        unitType = mfn.unitType()
 
-            if not _dtp.startswith('k'):
-                _dtp = 'k'+cap(_dtp)+'Data'
+        if unitType == om.MFnUnitAttribute.kDistance:
+            return 'Distance'
 
-            out['dataType'] = str(_dtp)
+        elif unitType == om.MFnUnitAttribute.kAngle:
+            return 'Angle'
 
-    # Numeric subtype
-    if plugType == 'kNumericAttribute':
+        else:
+            return 'Time'
 
-        # Get numeric subtype
-        fn = om.MFnNumericAttribute(mplug.attribute())
+    if mobj.hasFn(om.MFn.kEnumAttribute):
+        return 'Enum'
 
-        out['numericType'] = enumerator(
-            om.MFnNumericData)[fn.unitType()]
+    if mobj.hasFn(om.MFn.kMatrixAttribute):
+        return 'Matrix'
 
-    return out
+    dataType = None
 
+    isTyped = mobj.hasFn(om.MFn.kTypedAttribute)
+
+    if isTyped:
+        isGeneric = False
+
+    else:
+        isGeneric = mobj.hasFn(om.MFn.kGenericAttribute)
+
+    if isTyped or isGeneric:
+        dataType = getTypeFromDataBlock(mplug, asString=True)
+
+        if dataType == 'kInvalid':
+            return 'Data'
+
+        if dataType == 'kNumericData':
+            return 'DataNumeric'
+
+        if dataType == 'kMatrixData':
+            return 'Matrix'
+
+        mt = re.match(r"^k(.*?)(Array)?Data$", dataType)
+
+        basename, array = mt.groups()
+
+        if array:
+            return '{}Array'.format(basename)
+            insert(clsname, parent='DataArray')
+
+        else:
+            return '{}'.format(basename)
+
+    return 'Attribute'
 
 def getTypeFromMPlug(mplug, inherited=False):
-    """Given an MPlug, returns a best-fit name from the abstract class tree.
-
-    :param OpenMaya.MPlug mplug: the MPlug to query
-    :param bool inherited: return a hierarchy path, defaults to ``False``
-    :return: A full inheritance stack if ``inherited=True``, otherwise a single string.
-    :rtype: ``str`` or ``[str]``
-    """
-    info = getMPlugTypeInfo(mplug)
-
-    plugType = info['plugType']
-    dataType = info.get('dataType')
-
-    if dataType:
-        if dataType.endswith('Data'):
-            _dataType = dataType[1:-4]
-
-        else:
-            _dataType = dataType[1:]
-
-        out = 'AttributeData'+_dataType
-
-    elif plugType == 'kNumericAttribute':
-        numericType = info.get('numericType')
-
-        if numericType:
-            out = 'AttributeNumeric'+(numericType[1:])
-
-        else:
-            out = 'AttributeNumeric'
-
-    else:
-        out = None
-
-        if plugType == 'kCompoundAttribute':
-            # If all the children are scalars, return an abstract maths type
-
-            numChildren = mplug.numChildren()
-
-            if numChildren in (2, 3, 4, 16):
-                children = [mplug.child(x) for x in range(numChildren)]
-
-                childInfos = [getTypeFromMPlug(child, inherited=True) for child in children]
-
-                if all(['AttributeMath1D' in childInfo for childInfo in childInfos]):
-                    out = 'AttributeMath{}D'.format(numChildren)
-
-        if out is None:
-            # Construct a full fallback name
-            basename = plugType[1:]
-
-            if basename.endswith('Attribute'):
-                basename = basename[:-9]
-
-            if not basename.startswith('Attribute'):
-                basename = 'Attribute'+basename
-
-            out = basename
-
-    # Deal with some odd situations caused by occasional
-    # wonky API names like kDataBezierCurveData
-
-    out = out.replace('DataData','Data')
+    typ = _getTypeFromMPlug(mplug)
 
     if inherited:
-        out = getPath(out)
+        return getPath(typ)
 
-    return out
+    return typ

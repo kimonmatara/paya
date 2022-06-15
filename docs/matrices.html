@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matrices &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Managing Node Names" href="naming_nodes.html" />
+    <link rel="prev" title="Point-Matrix Multiplication" href="point_matrix_mult.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="operator_basics.html">Operator Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scalars.html">Scalars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="angles_and_rotations.html">Angles and Rotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vectors.html">Vectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point_matrix_mult.html">Point-Matrix Multiplication</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Matrices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relevant-classes">Relevant Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiplying">Multiplying</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inverting">Inverting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#applying">Applying</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filtering">Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#offsetting">Offsetting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating">Creating</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#orthogonal-construction">Orthogonal Construction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#explicit-assembly">Explicit Assembly</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-testing">Quick Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="maths_rigging.html">Maths Rigging</a> &raquo;</li>
+      <li>Matrices</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/matrices.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="matrices">
+<h1>Matrices<a class="headerlink" href="#matrices" title="Permalink to this headline"></a></h1>
+<section id="relevant-classes">
+<h2>Relevant Classes<a class="headerlink" href="#relevant-classes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Static</p></th>
+<th class="head"><p>Dynamic</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a></p></td>
+<td><p><a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="multiplying">
+<h2>Multiplying<a class="headerlink" href="#multiplying" title="Permalink to this headline"></a></h2>
+<p>Static and dynamic matrices can be multiplied using the <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> <code class="docutils literal notranslate"><span class="pre">*</span></code> operator. Recall from <a class="reference internal" href="operator_basics.html"><span class="doc">Operator
+Basics</span></a> that at least one of the operands must be an instance of
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> or <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver1</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+<span class="n">driver2</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span>
+<span class="n">driven</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">driver1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">driver2</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span>
+<span class="n">matrix</span> <span class="o">&gt;&gt;</span>  <span class="n">driven</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/mults_viewport.gif" src="_images/mults_viewport.gif" />
+</figure>
+</div></div>
+</section>
+<section id="inverting">
+<h2>Inverting<a class="headerlink" href="#inverting" title="Permalink to this headline"></a></h2>
+<p>Use the <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> <code class="xref py py-func docutils literal notranslate"><span class="pre">invert()</span></code> method to reverse a transformation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matrix3</span> <span class="o">=</span> <span class="n">matrix1</span> <span class="o">*</span> <span class="n">matrix2</span>
+<span class="n">matrix1</span> <span class="o">=</span> <span class="n">matrix3</span> <span class="o">*</span> <span class="n">matrix2</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="applying">
+<h2>Applying<a class="headerlink" href="#applying" title="Permalink to this headline"></a></h2>
+<p>The most performant way in Maya to apply a matrix to a transform node is to set, or connect, the node’s
+<code class="docutils literal notranslate"><span class="pre">offsetParentMatrix</span></code> input. This also has the advantage of leaving the SRT channels free for editing:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">PyMEL / Paya</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">spaceLocator</span><span class="p">()</span>
+<span class="n">driven</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">polyCube</span><span class="p">(</span><span class="n">ch</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">driver</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">driven</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/opm_drive.gif" src="_images/opm_drive.gif" />
+</figure>
+</div></div>
+<p>Alternatively, you could decompose the matrix into translate, rotate, scale and shear outputs (or values) for the
+transform’s channels. To set every channel at once using a static matrix, use PyMEL’s
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform.setMatrix" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setMatrix()</span></code></a> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span>
+<span class="n">cube</span><span class="o">.</span><span class="n">setMatrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="selective-application">For dynamic matrices, use <code class="xref py py-func docutils literal notranslate"><span class="pre">decompose()</span></code>. This is a <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> method that returns channel values / outputs in
+a dictionary, allowing you to pick what to apply:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-2-2-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-2" name="2-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">translate</span> <span class="o">=</span> <span class="n">locator1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decompose</span><span class="p">()[</span><span class="s1">&#39;translate&#39;</span><span class="p">]</span>
+<span class="n">rotate</span> <span class="o">=</span> <span class="n">locator2</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span>
+    <span class="n">ro</span><span class="o">=</span><span class="n">driven</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;rotateOrder&#39;</span><span class="p">)</span>
+    <span class="p">)[</span><span class="s1">&#39;rotate&#39;</span><span class="p">]</span>
+
+<span class="n">translate</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">)</span>
+<span class="n">rotate</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;rotate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/decomp_graph.png" src="_images/decomp_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-2-2-2" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-2" name="2-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/decomp.gif" src="_images/decomp.gif" />
+</figure>
+</div></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When using <code class="xref py py-func docutils literal notranslate"><span class="pre">decompose()</span></code> it’s important to specify <strong>rotation order</strong> via a <code class="docutils literal notranslate"><span class="pre">rotateOrder</span> <span class="pre">/</span> <span class="pre">ro</span></code> keyword
+argument. This can be provided as an enum index, a lowercase string or even, as in the example above, an attribute.
+If an attribute is passed it is connected into the graph, ensuring that the solution holds when the driven object’s
+rotation order changes.</p>
+</div>
+</section>
+<section id="filtering">
+<h2>Filtering<a class="headerlink" href="#filtering" title="Permalink to this headline"></a></h2>
+<p>To quickly configure and connect a <code class="docutils literal notranslate"><span class="pre">pickMatrix</span></code> node, use <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.pick" title="paya.plugtypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>. This has also
+been implemented on data classes. Here’s a variant of the earlier <a class="reference internal" href="#selective-application"><span class="std std-ref">selective-application</span></a>
+example without matrix decomposition:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-3-3-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-2" name="3-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">translationMatrix</span> <span class="o">=</span> <span class="n">locator1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">rotationMatrix</span> <span class="o">=</span> <span class="n">locator2</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">combinedMatrix</span> <span class="o">=</span> <span class="n">rotationMatrix</span> <span class="o">*</span> <span class="n">translationMatrix</span>
+
+<span class="n">combinedMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-1" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-1" name="3-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/pickmatrix_graph.png" src="_images/pickmatrix_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-3-3-2" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-2" name="3-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/decomp.gif" src="_images/decomp.gif" />
+</figure>
+</div></div>
+</section>
+<section id="offsetting">
+<h2>Offsetting<a class="headerlink" href="#offsetting" title="Permalink to this headline"></a></h2>
+<p>Use <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asOffset" title="paya.plugtypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a> to preserve relative pose when applying a dynamic matrix to a
+transform. This is functionally the same as the <code class="docutils literal notranslate"><span class="pre">maintainOffset</span></code> option on Maya’s constraints:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-4-4-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-2" name="4-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">initialPose</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">initialPose</span> <span class="o">*</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">asOffset</span><span class="p">()</span>
+
+<span class="n">decomposition</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">ro</span><span class="o">=</span><span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;rotateOrder&#39;</span><span class="p">))</span>
+<span class="n">decomposition</span><span class="p">[</span><span class="s1">&#39;translate&#39;</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">)</span>
+<span class="n">decomposition</span><span class="p">[</span><span class="s1">&#39;rotate&#39;</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;rotate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-4-1" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-1" name="4-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/maintainOffset_graph.png" src="_images/maintainOffset_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-4-4-2" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-2" name="4-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/maintainOffset.gif" src="_images/maintainOffset.gif" />
+</figure>
+</div></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul>
+<li><p>When using a direct connection into <code class="docutils literal notranslate"><span class="pre">offsetParentMatrix</span></code> instead of decomposition, the above example won’t
+work as-is. This is because the driven object’s local transformation will be applied twice: once through
+<code class="docutils literal notranslate"><span class="pre">initialPose</span></code>, and again by the untouched SRT channels themselves. To get around this, you could reset the
+driven object’s local matrix to zero-out the SRT channels:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loc</span><span class="o">.</span><span class="n">setMatrix</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Matrix</span><span class="p">())</span> <span class="c1"># identity matrix</span>
+<span class="n">matrix</span> <span class="o">&gt;&gt;</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, you could ‘dodge’ the SRT channels by incorporating an inversion of the driven object’s local
+matrix into the driver matrix:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span>
+    <span class="p">)</span> <span class="o">*</span> <span class="n">initialPose</span> <span class="o">*</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">asOffset</span><span class="p">()</span>
+
+<span class="n">matrix</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>For polymorphic parity, <code class="docutils literal notranslate"><span class="pre">asOffset</span></code> has also been implemented on <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a>, where
+it merely returns an identity (‘null’) matrix.</p></li>
+<li><p>On the dynamic class, the expansion of <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asOffset" title="paya.plugtypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a> is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section id="creating">
+<h2>Creating<a class="headerlink" href="#creating" title="Permalink to this headline"></a></h2>
+<p>To create static or dynamic matrices from vectors and points, use the <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a>
+<a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> function. Available on <a class="reference internal" href="paya/lib/mathops.html#module-paya.lib.mathops" title="paya.lib.mathops"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.mathops</span></code></a> as well as the top-level
+<a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interface, it’s designed to use as few nodes and operations as possible.</p>
+<section id="orthogonal-construction">
+<h3>Orthogonal Construction<a class="headerlink" href="#orthogonal-construction" title="Permalink to this headline"></a></h3>
+<p>An orthogonal matrix can be constructed by passing two <em>axis</em>:<em>vector</em> pairs as four arguments to
+<a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a>. The first pair can be thought of as the ‘aim’, with the second as the ‘up’.
+Translation can be specified via the <code class="docutils literal notranslate"><span class="pre">translate</span></code> / <code class="docutils literal notranslate"><span class="pre">t</span></code> keyword argument, and there are additional options to control
+the lengths of the second and third axis vectors:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-5-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-5-5-0" name="5-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-5-5-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-1" name="5-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-5-5-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-2" name="5-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-5-5-0" class="sphinx-tabs-panel" id="panel-5-5-0" name="5-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aim</span> <span class="o">=</span> <span class="n">locator1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
+<span class="n">up</span> <span class="o">=</span> <span class="n">locator2</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
+
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">createMatrix</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">aim</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">matrix</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-5-1" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-1" name="5-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/ortho_matrix_graph.png" src="_images/ortho_matrix_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-5-5-2" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-2" name="5-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/ortho_matrix.gif" src="_images/ortho_matrix.gif" />
+</figure>
+</div></div>
+</section>
+<section id="explicit-assembly">
+<h3>Explicit Assembly<a class="headerlink" href="#explicit-assembly" title="Permalink to this headline"></a></h3>
+<p>To specify a matrix completely, pass three <em>axis</em>:<em>vector</em> pairs (i.e. six arguments) to
+<a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> instead. If the input vectors are not orthogonal, the result will be a shear
+matrix:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-6-6-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-6-6-0" name="6-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-6-6-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-6-6-1" name="6-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-6-6-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-6-6-2" name="6-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-6-6-0" class="sphinx-tabs-panel" id="panel-6-6-0" name="6-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+<span class="n">zVector</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
+<span class="n">xVector</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
+<span class="n">yVector</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">createMatrix</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">zVector</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">xVector</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">yVector</span><span class="p">)</span>
+
+<span class="n">matrix</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-6-1" class="sphinx-tabs-panel" hidden="true" id="panel-6-6-1" name="6-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/shear_matrix.png" src="_images/shear_matrix.png" />
+</figure>
+</div><div aria-labelledby="tab-6-6-2" class="sphinx-tabs-panel" hidden="true" id="panel-6-6-2" name="6-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/shear_matrix.gif" src="_images/shear_matrix.gif" />
+</figure>
+</div></div>
+</section>
+</section>
+<section id="quick-testing">
+<h2>Quick Testing<a class="headerlink" href="#quick-testing" title="Permalink to this headline"></a></h2>
+<p>To quickly test a matrix, call <code class="xref py py-func docutils literal notranslate"><span class="pre">createLocator()</span></code> / <code class="xref py py-func docutils literal notranslate"><span class="pre">cl()</span></code> on any static matrix or matrix attribute. This will
+create a locator to represent the matrix:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loc</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">createLocator</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="point_matrix_mult.html" class="btn btn-neutral float-left" title="Point-Matrix Multiplication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="naming_nodes.html" class="btn btn-neutral float-right" title="Managing Node Names" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

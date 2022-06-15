@@ -1,0 +1,13 @@
+================================
+paya.plugtypes.compound.Compound
+================================
+
+.. py:module:: paya.plugtypes.compound
+
+.. py:class:: Compound(*args, **kwargs)
+
+    .. py:method:: __iter__()
+    
+        Extends iteration to compounds. If this is a compound AND a multi,
+        array iteration will take precedence. In those cases, use
+        :meth:`~pymel.core.general.Attribute.getChildren` to disambiguate.

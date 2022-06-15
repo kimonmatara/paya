@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>What’s New &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>What’s New &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Requirements &amp; Installation" href="req_and_inst.html" />
-    <link rel="prev" title="Paya: PyMEL Unleashed" href="index.html" /> 
+    <link rel="prev" title="Paya: PyMEL for Riggers" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -41,6 +44,15 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-3">Version 0.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-changes">General Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bugs-fixed">Bugs Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additions-to-modules">Additions to Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additions-to-node-types">Additions to Node Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additions-to-plug-types">Additions to Plug Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additions-to-data-types">Additions to Data Types</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-2">Version 0.2</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#additions">Additions</a></li>
 </ul>
@@ -53,22 +65,23 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
@@ -99,43 +112,216 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="what-s-new">
-<h1>What’s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="version-0-2">
-<h2>Version 0.2<a class="headerlink" href="#version-0-2" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="additions">
-<h3>Additions<a class="headerlink" href="#additions" title="Permalink to this headline">¶</a></h3>
+  <section id="what-s-new">
+<h1>What’s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline"></a></h1>
+<section id="version-0-3">
+<h2>Version 0.3<a class="headerlink" href="#version-0-3" title="Permalink to this headline"></a></h2>
+<section id="general-changes">
+<h3>General Changes<a class="headerlink" href="#general-changes" title="Permalink to this headline"></a></h3>
+<p>The abstract plug tree has been reworked to make names more intuitive and to better support angles
+and euler rotations.</p>
+</section>
+<section id="bugs-fixed">
+<h3>Bugs Fixed<a class="headerlink" href="#bugs-fixed" title="Permalink to this headline"></a></h3>
 <ul class="simple">
-<li>A wide range of <span class="xref std std-ref">maths operators</span>, spread across <a class="reference internal" href="paya/plugtypes.html"><span class="doc">paya.plugtypes</span></a> and <a class="reference internal" href="paya/datatypes.html"><span class="doc">paya.datatypes</span></a>, with support
-for bidirectional mixing of values and plugs</li>
-<li>Added  <a class="reference internal" href="paya/plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D.pick" title="paya.plugtypes.attributeMath16D.AttributeMath16D.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a> and <a class="reference internal" href="paya/plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset" title="paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a>
-to <a class="reference internal" href="paya/plugtypes/attributeMath16D.html#paya.plugtypes.attributeMath16D.AttributeMath16D" title="paya.plugtypes.attributeMath16D.AttributeMath16D"><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code></a></li>
-<li>Added  <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.pick" title="paya.datatypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a> and <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.asOffset" title="paya.datatypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a>
-to <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></li>
-<li><a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns <a class="reference internal" href="arithmetic.html#more-useful-query-types"><span class="std std-ref">more useful types</span></a></li>
-<li>The double-chevron operator <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> <a class="reference internal" href="arithmetic.html#extended-chevrons"><span class="std std-ref">now supports value-setting</span></a></li>
-<li><a class="reference internal" href="naming_nodes.html"><span class="doc">Contextual name management</span></a> with <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.lib.names.Name</span></code></a> and pipeline suffixes</li>
-<li><span class="xref std std-ref">Dodge unit conversion nodes</span> with <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.NativeUnits" title="paya.lib.mathops.NativeUnits"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.lib.mathops.NativeUnits</span></code></a> and <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.nativeUnits" title="paya.lib.mathops.nativeUnits"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.nativeUnits()</span></code></a></li>
+<li><p>Contextual naming misapplied when
+<a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.createNode" title="paya.nodetypes.dependNode.DependNode.createNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createNode()</span></code></a> is used for shapes</p></li>
+<li><p>Some <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> operators don’t work properly when called on
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.point.Point</span></code></a> rather than <a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.vector.Vector</span></code></a></p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="version-0-1">
-<h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>Additions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="additions-to-modules">
+<h3>Additions to Modules<a class="headerlink" href="#additions-to-modules" title="Permalink to this headline"></a></h3>
 <ul class="simple">
-<li>Patching engine</li>
-<li><a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interface</li>
+<li><p>On <a class="reference internal" href="paya/lib/mathops.html#module-paya.lib.mathops" title="paya.lib.mathops"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.mathops</span></code></a>: <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.asValue" title="paya.lib.mathops.asValue"><code class="xref py py-func docutils literal notranslate"><span class="pre">asValue()</span></code></a></p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+<section id="additions-to-node-types">
+<h3>Additions to Node Types<a class="headerlink" href="#additions-to-node-types" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>On <a class="reference internal" href="paya/nodetypes/fourByFourMatrix.html#paya.nodetypes.fourByFourMatrix.FourByFourMatrix" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourByFourMatrix</span></code></a>:
+<a class="reference internal" href="paya/nodetypes/fourByFourMatrix.html#paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getAxis" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getAxis"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAxis()</span></code></a>
+<a class="reference internal" href="paya/nodetypes/fourByFourMatrix.html#paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getX" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getX"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getX()</span></code></a>
+<a class="reference internal" href="paya/nodetypes/fourByFourMatrix.html#paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getY" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getY"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getY()</span></code></a>
+<a class="reference internal" href="paya/nodetypes/fourByFourMatrix.html#paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getZ" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getZ"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getZ()</span></code></a>
+<a class="reference internal" href="paya/nodetypes/fourByFourMatrix.html#paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getTranslate" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getTranslate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getTranslate()</span></code></a>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">translate/t</span></code>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">x</span></code> <code class="xref py py-attr docutils literal notranslate"><span class="pre">y</span></code> <code class="xref py py-attr docutils literal notranslate"><span class="pre">z</span></code></p></li>
+<li><p>On <a class="reference internal" href="paya/nodetypes/shape.html#paya.nodetypes.shape.Shape" title="paya.nodetypes.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>: <a class="reference internal" href="paya/nodetypes/shape.html#paya.nodetypes.shape.Shape.createNode" title="paya.nodetypes.shape.Shape.createNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createNode()</span></code></a></p></li>
+</ul>
+</section>
+<section id="additions-to-plug-types">
+<h3>Additions to Plug Types<a class="headerlink" href="#additions-to-plug-types" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>On <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.plugType" title="paya.plugtypes.attribute.Attribute.plugType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plugType()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/angle.html#paya.plugtypes.angle.Angle" title="paya.plugtypes.angle.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/angle.html#paya.plugtypes.angle.Angle.get" title="paya.plugtypes.angle.Angle.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/compound.html#paya.plugtypes.compound.Compound" title="paya.plugtypes.compound.Compound"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compound</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/compound.html#paya.plugtypes.compound.Compound.__iter__" title="paya.plugtypes.compound.Compound.__iter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/enum.html#paya.plugtypes.enum.Enum" title="paya.plugtypes.enum.Enum"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/enum.html#paya.plugtypes.enum.Enum.put" title="paya.plugtypes.enum.Enum.put"><code class="xref py py-meth docutils literal notranslate"><span class="pre">put()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/eulerRotation.html#paya.plugtypes.eulerRotation.EulerRotation" title="paya.plugtypes.eulerRotation.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/eulerRotation.html#paya.plugtypes.eulerRotation.EulerRotation.get" title="paya.plugtypes.eulerRotation.EulerRotation.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/eulerRotation.html#paya.plugtypes.eulerRotation.EulerRotation.isRotateChannel" title="paya.plugtypes.eulerRotation.EulerRotation.isRotateChannel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">isRotateChannel()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/eulerRotation.html#paya.plugtypes.eulerRotation.EulerRotation.asQuaternion" title="paya.plugtypes.eulerRotation.EulerRotation.asQuaternion"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asQuaternion()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/eulerRotation.html#paya.plugtypes.eulerRotation.EulerRotation.asRotateMatrix" title="paya.plugtypes.eulerRotation.EulerRotation.asRotateMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asRotateMatrix()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D" title="paya.plugtypes.math1D.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.sqrt" title="paya.plugtypes.math1D.Math1D.sqrt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sqrt()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.__neg__" title="paya.plugtypes.math1D.Math1D.__neg__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__neg__()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.abs" title="paya.plugtypes.math1D.Math1D.abs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">abs()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.cycle" title="paya.plugtypes.math1D.Math1D.cycle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cycle()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.remap" title="paya.plugtypes.math1D.Math1D.remap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remap()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.clamp" title="paya.plugtypes.math1D.Math1D.clamp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clamp()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.minClamp" title="paya.plugtypes.math1D.Math1D.minClamp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">minClamp()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.min" title="paya.plugtypes.math1D.Math1D.min"><code class="xref py py-meth docutils literal notranslate"><span class="pre">min()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.eq" title="paya.plugtypes.math1D.Math1D.eq"><code class="xref py py-meth docutils literal notranslate"><span class="pre">eq()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.ne" title="paya.plugtypes.math1D.Math1D.ne"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ne()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.gt" title="paya.plugtypes.math1D.Math1D.gt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gt()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.ge" title="paya.plugtypes.math1D.Math1D.ge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ge()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.lt" title="paya.plugtypes.math1D.Math1D.lt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lt()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.le" title="paya.plugtypes.math1D.Math1D.le"><code class="xref py py-meth docutils literal notranslate"><span class="pre">le()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.choose" title="paya.plugtypes.math1D.Math1D.choose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">choose()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.blend" title="paya.plugtypes.math1D.Math1D.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blend()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.unaryExpr" title="paya.plugtypes.math1D.Math1D.unaryExpr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unaryExpr()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.degrees" title="paya.plugtypes.math1D.Math1D.degrees"><code class="xref py py-meth docutils literal notranslate"><span class="pre">degrees()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.radians" title="paya.plugtypes.math1D.Math1D.radians"><code class="xref py py-meth docutils literal notranslate"><span class="pre">radians()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.cos" title="paya.plugtypes.math1D.Math1D.cos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cos()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.sin" title="paya.plugtypes.math1D.Math1D.sin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sin()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.tan" title="paya.plugtypes.math1D.Math1D.tan"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tan()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.acos" title="paya.plugtypes.math1D.Math1D.acos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">acos()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.asin" title="paya.plugtypes.math1D.Math1D.asin"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asin()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.atan" title="paya.plugtypes.math1D.Math1D.atan"><code class="xref py py-meth docutils literal notranslate"><span class="pre">atan()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.atTime" title="paya.plugtypes.math1D.Math1D.atTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">atTime()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/math3D.html#paya.plugtypes.math3D.Math3D.get" title="paya.plugtypes.math3D.Math3D.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/math3D.html#paya.plugtypes.math3D.Math3D.blend" title="paya.plugtypes.math3D.Math3D.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blend()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.createLocator" title="paya.plugtypes.matrix.Matrix.createLocator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createLocator()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.pick" title="paya.plugtypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.inverse" title="paya.plugtypes.matrix.Matrix.inverse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inverse()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asOffset" title="paya.plugtypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.getAxis" title="paya.plugtypes.matrix.Matrix.getAxis"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAxis()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.getX" title="paya.plugtypes.matrix.Matrix.getX"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getX()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.getY" title="paya.plugtypes.matrix.Matrix.getY"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getY()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.getZ" title="paya.plugtypes.matrix.Matrix.getZ"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getZ()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.getTranslate" title="paya.plugtypes.matrix.Matrix.getTranslate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getTranslate()</span></code></a>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">x</span></code> <code class="xref py py-attr docutils literal notranslate"><span class="pre">y</span></code> <code class="xref py py-attr docutils literal notranslate"><span class="pre">z</span></code> <code class="xref py py-attr docutils literal notranslate"><span class="pre">translate/t</span></code>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.transpose" title="paya.plugtypes.matrix.Matrix.transpose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transpose()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.decompose" title="paya.plugtypes.matrix.Matrix.decompose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decompose()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.hold" title="paya.plugtypes.matrix.Matrix.hold"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hold()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asEulerRotation" title="paya.plugtypes.matrix.Matrix.asEulerRotation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asEulerRotation()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asQuaternion" title="paya.plugtypes.matrix.Matrix.asQuaternion"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asQuaternion()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion" title="paya.plugtypes.quaternion.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.inverse" title="paya.plugtypes.quaternion.Quaternion.inverse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inverse()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.normal" title="paya.plugtypes.quaternion.Quaternion.normal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normal()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.conjugate" title="paya.plugtypes.quaternion.Quaternion.conjugate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">conjugate()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.blend" title="paya.plugtypes.quaternion.Quaternion.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blend()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.asEulerRotation" title="paya.plugtypes.quaternion.Quaternion.asEulerRotation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asEulerRotation()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.asAxisAngle" title="paya.plugtypes.quaternion.Quaternion.asAxisAngle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asAxisAngle()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.asRotateMatrix" title="paya.plugtypes.quaternion.Quaternion.asRotateMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asRotateMatrix()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/string.html#paya.plugtypes.string.String" title="paya.plugtypes.string.String"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/string.html#paya.plugtypes.string.String.put" title="paya.plugtypes.string.String.put"><code class="xref py py-meth docutils literal notranslate"><span class="pre">put()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>:
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.dot" title="paya.plugtypes.vector.Vector.dot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dot()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.length" title="paya.plugtypes.vector.Vector.length"><code class="xref py py-meth docutils literal notranslate"><span class="pre">length()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.normal" title="paya.plugtypes.vector.Vector.normal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normal()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.cross" title="paya.plugtypes.vector.Vector.cross"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cross()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.angle" title="paya.plugtypes.vector.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">angle()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.asTranslateMatrix" title="paya.plugtypes.vector.Vector.asTranslateMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asTranslateMatrix()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.asScaleMatrix" title="paya.plugtypes.vector.Vector.asScaleMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asScaleMatrix()</span></code></a>
+<a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.asEulerRotation" title="paya.plugtypes.vector.Vector.asEulerRotation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asEulerRotation()</span></code></a></p></li>
+</ul>
+</section>
+<section id="additions-to-data-types">
+<h3>Additions to Data Types<a class="headerlink" href="#additions-to-data-types" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>On <a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation" title="paya.datatypes.eulerRotation.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>:
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__add__" title="paya.datatypes.eulerRotation.EulerRotation.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__add__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__radd__" title="paya.datatypes.eulerRotation.EulerRotation.__radd__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__radd__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__sub__" title="paya.datatypes.eulerRotation.EulerRotation.__sub__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__sub__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__mul__" title="paya.datatypes.eulerRotation.EulerRotation.__mul__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__mul__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__rmul__" title="paya.datatypes.eulerRotation.EulerRotation.__rmul__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__rmul__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__truediv__" title="paya.datatypes.eulerRotation.EulerRotation.__truediv__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__truediv__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__rtruediv__" title="paya.datatypes.eulerRotation.EulerRotation.__rtruediv__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__rtruediv__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__pow__" title="paya.datatypes.eulerRotation.EulerRotation.__pow__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__pow__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__rpow__" title="paya.datatypes.eulerRotation.EulerRotation.__rpow__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__rpow__()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>:
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.createLocator" title="paya.datatypes.matrix.Matrix.createLocator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createLocator()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.decompose" title="paya.datatypes.matrix.Matrix.decompose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decompose()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.pick" title="paya.datatypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.asOffset" title="paya.datatypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">hold()</span></code>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.getAxis" title="paya.datatypes.matrix.Matrix.getAxis"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAxis()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.setAxis" title="paya.datatypes.matrix.Matrix.setAxis"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setAxis()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.getX" title="paya.datatypes.matrix.Matrix.getX"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getX()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.setX" title="paya.datatypes.matrix.Matrix.setX"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setX()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.getY" title="paya.datatypes.matrix.Matrix.getY"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getY()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.setY" title="paya.datatypes.matrix.Matrix.setY"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setY()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.getZ" title="paya.datatypes.matrix.Matrix.getZ"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getZ()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.setZ" title="paya.datatypes.matrix.Matrix.setZ"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setZ()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.getTranslate" title="paya.datatypes.matrix.Matrix.getTranslate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getTranslate()</span></code></a>
+<a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.setTranslate" title="paya.datatypes.matrix.Matrix.setTranslate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setTranslate()</span></code></a>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">x</span></code>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">y</span></code>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">z</span></code>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">translate</span></code> / <code class="xref py py-attr docutils literal notranslate"><span class="pre">t</span></code></p></li>
+<li><p>On <a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>:
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__add__" title="paya.datatypes.point.Point.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__add__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__radd__" title="paya.datatypes.point.Point.__radd__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__radd__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__sub__" title="paya.datatypes.point.Point.__sub__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__sub__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__rsub__" title="paya.datatypes.point.Point.__rsub__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__rsub__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__mul__" title="paya.datatypes.point.Point.__mul__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__mul__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__rmul__" title="paya.datatypes.point.Point.__rmul__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__rmul__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__truediv__" title="paya.datatypes.point.Point.__truediv__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__truediv__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__rtruediv__" title="paya.datatypes.point.Point.__rtruediv__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__rtruediv__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__pow__" title="paya.datatypes.point.Point.__pow__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__pow__()</span></code></a>
+<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point.__rpow__" title="paya.datatypes.point.Point.__rpow__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__rpow__()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>:
+<a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector.blend" title="paya.datatypes.vector.Vector.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blend()</span></code></a>
+<a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector.dot" title="paya.datatypes.vector.Vector.dot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dot()</span></code></a>
+<a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector.cross" title="paya.datatypes.vector.Vector.cross"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cross()</span></code></a>
+<a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector.angle" title="paya.datatypes.vector.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">angle()</span></code></a></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="version-0-2">
+<h2>Version 0.2<a class="headerlink" href="#version-0-2" title="Permalink to this headline"></a></h2>
+<section id="additions">
+<h3>Additions<a class="headerlink" href="#additions" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>A wide range of maths operators, spread across <a class="reference internal" href="paya/plugtypes.html"><span class="doc">paya.plugtypes</span></a> and <a class="reference internal" href="paya/datatypes.html"><span class="doc">paya.datatypes</span></a>, with support for
+bidirectional mixing of values and plugs</p></li>
+<li><p>Added  <code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code>
+to <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code></p></li>
+<li><p>Added  <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.pick" title="paya.datatypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a> and <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.asOffset" title="paya.datatypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a>
+to <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p></li>
+<li><p><a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns <a class="reference internal" href="operator_basics.html#more-useful-query-types"><span class="std std-ref">more useful types</span></a></p></li>
+<li><p>The double-chevron operator <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> <a class="reference internal" href="operator_basics.html#extended-chevrons"><span class="std std-ref">now supports value-setting</span></a></p></li>
+<li><p><a class="reference internal" href="naming_nodes.html"><span class="doc">Contextual name management</span></a> with <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.lib.names.Name</span></code></a> and pipeline suffixes</p></li>
+<li><p><a class="reference internal" href="angles_and_rotations.html#preventing-unit-conversions"><span class="std std-ref">Dodge unit conversion nodes</span></a> with <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.NativeUnits" title="paya.lib.mathops.NativeUnits"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.lib.mathops.NativeUnits</span></code></a> and <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.nativeUnits" title="paya.lib.mathops.nativeUnits"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.nativeUnits()</span></code></a></p></li>
+</ul>
+</section>
+</section>
+<section id="version-0-1">
+<h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3>Additions<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Patching engine</p></li>
+<li><p><a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interface</p></li>
+</ul>
+</section>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Paya: PyMEL Unleashed" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Paya: PyMEL for Riggers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="req_and_inst.html" class="btn btn-neutral float-right" title="Requirements &amp; Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

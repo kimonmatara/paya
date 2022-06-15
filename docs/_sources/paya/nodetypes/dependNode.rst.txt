@@ -6,15 +6,6 @@ paya.nodetypes.dependNode.DependNode
 
 .. py:class:: DependNode(*args, **kwargs)
 
-    .. py:classmethod:: createNode(**nameOptions)
-    
-        Object-oriented version of :func:`pymel.core.general.createNode` with
-        managed naming.
-        
-        :param \*\*nameOptions: passed-through to :meth:`~DependNode.makeName`
-        :return: The constructed node.
-        :rtype: :class:`DependNode`
-    
     .. py:method:: makeName(*elems, name=None, inherit=True, suffix=True, padding=None)
     
         Generates a context-appropriate Maya name. Results will vary
@@ -38,3 +29,12 @@ paya.nodetypes.dependNode.DependNode
         :type suffix/suf: bool, str
         :return: The name.
         :rtype: str
+    
+    .. py:classmethod:: createNode(**nameOptions)
+    
+        Object-oriented version of :func:`pymel.core.general.createNode` with
+        managed naming.
+        
+        :param \*\*nameOptions: passed-through to :meth:`~DependNode.makeName`
+        :return: The constructed node.
+        :rtype: :class:`DependNode`

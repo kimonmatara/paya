@@ -1,7 +1,11 @@
 import maya.cmds as m
 import pymel.core as p
+
+from paya.plugtree import getPath
 from paya.util import short
 import paya.runtime as r
+
+uncap = lambda x: x[0].lower()+x[1:]
 
 
 class Attribute:
@@ -9,6 +13,23 @@ class Attribute:
     __math_dimension__ = None
 
     #-----------------------------------------------------------------|    Type management
+
+    @short(inherited='i')
+    def plugType(self, inherited=False):
+        """
+        Returns abstract type information for this plug.
+
+        :param bool inherited/i: return the full hierarchy stack instead
+            of just a single type; defaults to False
+        :return: The type information.
+        :rtype: str or list
+        """
+        out = getPath(self.__class__.__name__)
+
+        if inherited:
+            return list(map(uncap, out))
+
+        return uncap(out[-1])
 
     def setClass(self, cls):
         """
@@ -29,21 +50,6 @@ class Attribute:
         self.__class__ = cls
 
         return self
-
-    def setDimension(self, dimension):
-        """
-        Sources the generic class for the requested dimension and defers to
-        :meth:`setClass`.
-
-        :param int dimension: the dimension to apply, for example 4
-            for :class:`~paya.plugtypes.attributeMath4D.AttributeMath4D`
-        :return: This instance, with a reassigned class.
-        :rtype: :class:`Attribute`
-        """
-        className = 'Attribute{}D'.format(dimension)
-        cls = getattr(r.plugs, className)
-
-        return self.setClass(cls)
 
     #-----------------------------------------------------------------|    Get() overload
 
@@ -79,14 +85,7 @@ class Attribute:
         :return: self
         """
         if plug is None:
-            if isinstance(source, p.Attribute):
-                plug = True
-
-            elif isinstance(source, str):
-                plug = '.' in source and m.objExists(source)
-
-            else:
-                plug = False
+            plug = isinstance(source, (str, p.Attribute))
 
         if plug:
             r.connectAttr(source, self, f=True)
@@ -97,19 +96,3 @@ class Attribute:
         return self
 
     __rrshift__ = put
-
-    #-----------------------------------------------------------------|    Multis and compounds
-
-    def __iter__(self):
-        """
-        Overloads :py:meth:`pymel.core.general.Attribute.__iter__` to support
-        compounds.
-        """
-        if self.isMulti():
-            return p.Attribute.__iter__(self)
-
-        else:
-            if self.isCompound():
-                return iter(self.getChildren())
-
-        return p.Attribute.__iter__(self)

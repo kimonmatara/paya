@@ -1,0 +1,180 @@
+*********************************
+Working with Angles and Rotations
+*********************************
+
+================
+Relevant Classes
+================
+
+.. list-table::
+    :header-rows: 1
+    :widths: 200 200
+
+    *   - Static
+        - Dynamic
+    *   - N/A
+        - :class:`paya.plugtypes.math1D.Math1D`
+    *   - :class:`paya.datatypes.angle.Angle`
+        - :class:`paya.plugtypes.angle.Angle`
+    *   - :class:`paya.datatypes.eulerRotation.EulerRotation`
+        - :class:`paya.plugtypes.eulerRotation.EulerRotation`
+
+============
+Radians Rule
+============
+
+When Maya's unit preferences are configured for **degrees** rather than radians, connecting a ``doubleAngle`` attribute
+to other types of scalars (e.g. an input on a ``multDoubleLinear``) will always generate a ``unitConversion`` node. This
+quickly clutters the dependency graph and occasionally leads to issues that have to be wrangled explicitly.
+
+.. _Preventing Unit Conversions:
+
+Paya doesn't attempt to housekeep these nodes. Instead, it assumes that rigs are built with Maya configured for
+**radians**, and gives you a couple of tools to enforce this for blocks you specify.
+
+The first is the :class:`paya.lib.mathops.NativeUnits` context manager:
+
+.. code-block:: python
+
+    from paya.lib.mathops import NativeUnits
+
+    with NativeUnits():
+        rotation = r.PyNode('locator1').attr('r') * 10
+        rotation >> r.PyNode('locator2').attr('r')
+
+The second is :func:`paya.lib.mathops.nativeUnits`, a decorator version of the same thing:
+
+.. code-block:: python
+
+    from paya.lib.mathops import nativeUnits
+
+    @nativeUnits
+    def editRotation():
+        rotation = r.PyNode('locator1').attr('r') * 10
+        rotation >> r.PyNode('locator2').attr('r')
+
+In both cases, Maya's unit preferences are reverted on block exit. Switching the scene to degrees after building does
+not affect rig behaviour; it only changes how rotation channels are displayed.
+
+.. tip::
+
+    To specify or inspect angles in degrees within your rigging scripts when Maya is set to radians, use
+    :func:`pymel.util.radians` and :func:`pymel.util.degrees`:
+
+    .. code-block:: python
+
+        from pymel.util import radians, degrees
+
+        joint.attr('rx').set(radians(-180))
+        print(degrees(joint.attr('rx').get()))
+
+.. _trigonometry:
+
+============
+Trigonometry
+============
+
+Paya makes trigonometric functions available as methods on all scalar attributes. These are implemented using expression
+nodes. Here's an example using :meth:`~paya.plugtypes.math1D.Math1D.cos`:
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: trig.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            import paya.runtime as r
+
+            a = r.PyNode('A').worldPosition
+            b = r.PyNode('B').worldPosition
+            c = r.PyNode('C').worldPosition
+
+            adjVec = c-a
+            hypVec = b-a
+            hypLen = hypVec.length()
+
+            cosTheta = hypVec.angle(adjVec).cos()
+            adjLen = cosTheta * hypLen
+
+            adjVec = adjVec.normal() * adjLen
+            corner = a + adjVec
+
+            curve = r.curve(d=1, p=[(0,0,0)]*4)
+
+            for i, pt in enumerate([a, b, corner, a]):
+                pt >> curve.attr('controlPoints')[i]
+
+    .. tab:: Graph
+
+        .. figure:: trig_graph.png
+
+
+.. tip::
+
+    *   The statement ``cosTheta = hypVec.angle(adjVec).cos()`` can be replaced with
+        ``cosTheta = hypVec.dot(adjVec, normalize=True)``. This would generate a sparser graph, since the dot product is
+        already the cosine of the angle between two vectors.
+
+    *   The trigonometric methods are not available on simple Python types like :class:`float`. Functional analogues can
+        be found under :mod:`math`.
+
+=========================
+Switching Representations
+=========================
+
+Consider the following example, where two euler rotations can't be usefully interpolated using
+:meth:`paya.plugtypes.eulerRotation.EulerRotation.blend` due to differing rotation orders and gimbal lock:
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: linear_blend.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            a.attr('rotate').blend(b.attr('rotate')) >> c.attr('rotate')
+
+    .. tab:: Graph
+
+        .. figure:: euler_blend.png
+            :align: center
+
+This can be solved by converting the euler rotations to quaternions, so that an implementation of ``blend()`` with
+spherical linear interpolation (slerp) can be used instead:
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: slerp_blend.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            quat1 = a.attr('rotate').asQuaternion(rotateOrder=a.attr('rotateOrder'))
+            quat2 = b.attr('rotate').asQuaternion(rotateOrder=b.attr('rotateOrder'))
+            quat3 = quat1.blend(quat2)
+            quat3.asEulerRotation(rotateOrder=c.attr('rotateOrder')) >> c.attr('rotate')
+
+    .. tab:: Graph
+
+        .. figure:: slerp_blend.png
+            :align: center
+
+.. tip::
+
+    When converting to or from euler rotations, it's important to specify **rotation order** via a ``rotateOrder / ro``
+    keyword argument. This can be provided as an enum index, a lowercase string or even, as in the example above, an
+    attribute. If an attribute is passed it is connected into the graph, ensuring that the solution holds when the
+    rotation order changes.

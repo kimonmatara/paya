@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using the Runtime Interface &mdash; paya 0.2 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Using the Runtime Interface &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Managing Node Names" href="naming_nodes.html" />
+    <link rel="next" title="Maths Rigging" href="maths_rigging.html" />
     <link rel="prev" title="Importing and Patching" href="importing_and_patching.html" /> 
 </head>
 
@@ -29,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.2
+                0.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,7 +46,7 @@
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Runtime Interface</a><ul>
@@ -52,18 +55,19 @@
 <li class="toctree-l2"><a class="reference internal" href="#top-level-tools">Top-Level Tools</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rigging.html">Rigging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customisation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sugar.html">Sugar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Appendices</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
@@ -94,8 +98,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="using-the-runtime-interface">
-<h1>Using the Runtime Interface<a class="headerlink" href="#using-the-runtime-interface" title="Permalink to this headline">¶</a></h1>
+  <section id="using-the-runtime-interface">
+<h1>Using the Runtime Interface<a class="headerlink" href="#using-the-runtime-interface" title="Permalink to this headline"></a></h1>
 <p>So far, we’ve been importing <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> merely to trigger patching, and then using PyMEL via the customary
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Order of imports doesn&#39;t matter</span>
@@ -107,8 +111,8 @@
 <span class="c1"># &lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;</span>
 </pre></div>
 </div>
-<div class="section" id="replacing-pymel-core">
-<h2>Replacing pymel.core<a class="headerlink" href="#replacing-pymel-core" title="Permalink to this headline">¶</a></h2>
+<section id="replacing-pymel-core">
+<h2>Replacing pymel.core<a class="headerlink" href="#replacing-pymel-core" title="Permalink to this headline"></a></h2>
 <p>A better way to work is to use <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> as a drop-in-replacement, like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
 <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;transform&#39;</span><span class="p">)</span> <span class="c1"># etc; all standard PyMEL methods are available</span>
@@ -116,9 +120,9 @@
 </div>
 <p>This cuts down on importing boilerplate and clearly delineates code that expects patched PyMEL. It also gives you
 access to features only available via <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
-</div>
-<div class="section" id="class-pools">
-<span id="id1"></span><h2>Class Pools<a class="headerlink" href="#class-pools" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="class-pools">
+<span id="id1"></span><h2>Class Pools<a class="headerlink" href="#class-pools" title="Permalink to this headline"></a></h2>
 <p>Paya classes can be sourced directly via the <strong>class pools</strong>, available via the  <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">plugs</span></code>, <code class="docutils literal notranslate"><span class="pre">comps</span></code> and
 <code class="docutils literal notranslate"><span class="pre">data</span></code> attributes of <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
@@ -128,20 +132,20 @@ access to features only available via <a class="reference internal" href="paya/r
 </div>
 <p>You will need the pools if you want to:</p>
 <ul>
-<li><p class="first">Call Paya <strong>node constructors</strong> with extra features, such as an object-oriented version of
+<li><p>Call Paya <strong>node constructors</strong> with extra features, such as an object-oriented version of
 <a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.createNode" title="paya.nodetypes.dependNode.DependNode.createNode"><code class="xref py py-func docutils literal notranslate"><span class="pre">createNode()</span></code></a> with support for <a class="reference internal" href="naming_nodes.html"><span class="doc">name management</span></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">)</span>
 <span class="c1"># root_XFRM</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first"><span class="xref std std-ref">Source Paya classes for superclass overloading</span></p>
-</li>
+<li><p><a class="reference internal" href="adding_oo_functionality.html#importing-template-classes"><span class="std std-ref">Source Paya classes for superclass overloading</span></a></p></li>
 </ul>
-</div>
-<div class="section" id="top-level-tools">
-<h2>Top-Level Tools<a class="headerlink" href="#top-level-tools" title="Permalink to this headline">¶</a></h2>
-<p>Tools like the <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> context manager are best accessed via the <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.runtime</span></code>:</p>
+</section>
+<section id="top-level-tools">
+<h2>Top-Level Tools<a class="headerlink" href="#top-level-tools" title="Permalink to this headline"></a></h2>
+<p>Tools like <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> or <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> are best accessed via the
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.runtime</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;limb&#39;</span><span class="p">):</span>
     <span class="n">limb</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span>
     <span class="c1"># limb_XFRM</span>
@@ -152,15 +156,15 @@ access to features only available via <a class="reference internal" href="paya/r
 </pre></div>
 </div>
 <p>Upcoming Paya releases are expected to add more top-level tools.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="importing_and_patching.html" class="btn btn-neutral float-left" title="Importing and Patching" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="naming_nodes.html" class="btn btn-neutral float-right" title="Managing Node Names" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="maths_rigging.html" class="btn btn-neutral float-right" title="Maths Rigging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

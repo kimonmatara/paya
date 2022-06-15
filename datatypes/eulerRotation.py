@@ -24,10 +24,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input3D')[1]:
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input3D')[1]
+                    node.attr('input3D')[1].put(other, p=isplug)
 
                 return node.attr('output3D')
 
@@ -48,15 +48,14 @@ class EulerRotation:
         if isplug:
             if dim in (1, 3):
                 node = r.nodes.PlusMinusAverage.createNode()
-
                 node.attr('input3D')[1].set(self)
 
                 if dim is 1:
                     for child in node.attr('input3D')[0]:
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input3D')[0]
+                    node.attr('input3D')[0].put(other, p=isplug)
 
                 return node.attr('output3D')
 
@@ -85,10 +84,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input3D')[1]:
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input3D')[1]
+                    node.attr('input3D')[1].put(other, p=isplug)
 
                 return node.attr('output3D')
 
@@ -115,10 +114,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input3D')[0]:
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input3D')[0]
+                    node.attr('input3D')[0].put(other, p=isplug)
 
                 return node.attr('output3D')
 
@@ -145,10 +144,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input2'):
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input2')
+                    node.attr('input2').put(other, p=isplug)
 
                 return node.attr('output')
 
@@ -173,10 +172,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input1'):
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input1')
+                    node.attr('input1').put(other, p=isplug)
 
                 return node.attr('output')
 
@@ -204,10 +203,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input2'):
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input2')
+                    node.attr('input2').put(other, p=isplug)
 
                 return node.attr('output')
 
@@ -233,10 +232,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input1'):
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input1')
+                    node.attr('input1').put(other, p=isplug)
 
                 return node.attr('output')
 
@@ -264,10 +263,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input2'):
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input2')
+                    node.attr('input2').put(other, p=isplug)
 
                 return node.attr('output')
 
@@ -293,10 +292,10 @@ class EulerRotation:
 
                 if dim is 1:
                     for child in node.attr('input1'):
-                        other >> child
+                        child.put(other, p=isplug)
 
                 else:
-                    other >> node.attr('input1')
+                    node.attr('input1').put(other, p=isplug)
 
                 return node.attr('output')
 

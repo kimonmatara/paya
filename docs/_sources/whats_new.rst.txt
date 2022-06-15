@@ -3,15 +3,201 @@ What's New
 ##########
 
 ***********
+Version 0.3
+***********
+
+General Changes
+===============
+
+The abstract plug tree has been reworked to make names more intuitive and to better support angles
+and euler rotations.
+
+Bugs Fixed
+==========
+
+*   Contextual naming misapplied when
+    :meth:`~paya.nodetypes.dependNode.DependNode.createNode` is used for shapes
+*   Some :term:`universal` operators don't work properly when called on
+    :class:`paya.datatypes.point.Point` rather than :class:`paya.datatypes.vector.Vector`
+
+Additions to Modules
+====================
+
+*   On :mod:`paya.lib.mathops`: :func:`~paya.lib.mathops.createMatrix` :func:`~paya.lib.mathops.asValue`
+
+Additions to Node Types
+=======================
+
+*   On :class:`~paya.nodetypes.fourByFourMatrix.FourByFourMatrix`:
+    :meth:`~paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getAxis`
+    :meth:`~paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getX`
+    :meth:`~paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getY`
+    :meth:`~paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getZ`
+    :meth:`~paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getTranslate`
+    :attr:`translate/t`
+    :attr:`x` :attr:`y` :attr:`z`
+
+*   On :class:`~paya.nodetypes.shape.Shape`: :meth:`~paya.nodetypes.shape.Shape.createNode`
+
+Additions to Plug Types
+=======================
+
+*   On :class:`~paya.plugtypes.attribute.Attribute`:
+    :meth:`~paya.plugtypes.attribute.Attribute.plugType`
+
+*   On :class:`~paya.plugtypes.angle.Angle`:
+    :meth:`~paya.plugtypes.angle.Angle.get`
+
+*   On :class:`~paya.plugtypes.compound.Compound`:
+    :meth:`~paya.plugtypes.compound.Compound.__iter__`
+
+*   On :class:`~paya.plugtypes.enum.Enum`:
+    :meth:`~paya.plugtypes.enum.Enum.put`
+
+*   On :class:`~paya.plugtypes.eulerRotation.EulerRotation`:
+    :meth:`~paya.plugtypes.eulerRotation.EulerRotation.get`
+    :meth:`~paya.plugtypes.eulerRotation.EulerRotation.isRotateChannel`
+    :meth:`~paya.plugtypes.eulerRotation.EulerRotation.asQuaternion`
+    :meth:`~paya.plugtypes.eulerRotation.EulerRotation.asRotateMatrix`
+
+*   On :class:`~paya.plugtypes.math1D.Math1D`:
+    :meth:`~paya.plugtypes.math1D.Math1D.sqrt`
+    :meth:`~paya.plugtypes.math1D.Math1D.__neg__`
+    :meth:`~paya.plugtypes.math1D.Math1D.abs`
+    :meth:`~paya.plugtypes.math1D.Math1D.cycle`
+    :meth:`~paya.plugtypes.math1D.Math1D.remap`
+    :meth:`~paya.plugtypes.math1D.Math1D.clamp`
+    :meth:`~paya.plugtypes.math1D.Math1D.minClamp`
+    :meth:`~paya.plugtypes.math1D.Math1D.min`
+    :meth:`~paya.plugtypes.math1D.Math1D.eq`
+    :meth:`~paya.plugtypes.math1D.Math1D.ne`
+    :meth:`~paya.plugtypes.math1D.Math1D.gt`
+    :meth:`~paya.plugtypes.math1D.Math1D.ge`
+    :meth:`~paya.plugtypes.math1D.Math1D.lt`
+    :meth:`~paya.plugtypes.math1D.Math1D.le`
+    :meth:`~paya.plugtypes.math1D.Math1D.choose`
+    :meth:`~paya.plugtypes.math1D.Math1D.blend`
+    :meth:`~paya.plugtypes.math1D.Math1D.unaryExpr`
+    :meth:`~paya.plugtypes.math1D.Math1D.degrees`
+    :meth:`~paya.plugtypes.math1D.Math1D.radians`
+    :meth:`~paya.plugtypes.math1D.Math1D.cos`
+    :meth:`~paya.plugtypes.math1D.Math1D.sin`
+    :meth:`~paya.plugtypes.math1D.Math1D.tan`
+    :meth:`~paya.plugtypes.math1D.Math1D.acos`
+    :meth:`~paya.plugtypes.math1D.Math1D.asin`
+    :meth:`~paya.plugtypes.math1D.Math1D.atan`
+    :meth:`~paya.plugtypes.math1D.Math1D.atTime`
+
+*   On :class:`~paya.plugtypes.math3D.Math3D`:
+    :meth:`~paya.plugtypes.math3D.Math3D.get`
+    :meth:`~paya.plugtypes.math3D.Math3D.blend`
+
+*   On :class:`~paya.plugtypes.matrix.Matrix`:
+    :meth:`~paya.plugtypes.matrix.Matrix.createLocator`
+    :meth:`~paya.plugtypes.matrix.Matrix.pick`
+    :meth:`~paya.plugtypes.matrix.Matrix.inverse`
+    :meth:`~paya.plugtypes.matrix.Matrix.asOffset`
+    :meth:`~paya.plugtypes.matrix.Matrix.getAxis`
+    :meth:`~paya.plugtypes.matrix.Matrix.getX`
+    :meth:`~paya.plugtypes.matrix.Matrix.getY`
+    :meth:`~paya.plugtypes.matrix.Matrix.getZ`
+    :meth:`~paya.plugtypes.matrix.Matrix.getTranslate`
+    :attr:`x` :attr:`y` :attr:`z` :attr:`translate/t`
+    :meth:`~paya.plugtypes.matrix.Matrix.transpose`
+    :meth:`~paya.plugtypes.matrix.Matrix.decompose`
+    :meth:`~paya.plugtypes.matrix.Matrix.hold`
+    :meth:`~paya.plugtypes.matrix.Matrix.asEulerRotation`
+    :meth:`~paya.plugtypes.matrix.Matrix.asQuaternion`
+
+*   On :class:`~paya.plugtypes.quaternion.Quaternion`:
+    :meth:`~paya.plugtypes.quaternion.Quaternion.inverse`
+    :meth:`~paya.plugtypes.quaternion.Quaternion.normal`
+    :meth:`~paya.plugtypes.quaternion.Quaternion.conjugate`
+    :meth:`~paya.plugtypes.quaternion.Quaternion.blend`
+    :meth:`~paya.plugtypes.quaternion.Quaternion.asEulerRotation`
+    :meth:`~paya.plugtypes.quaternion.Quaternion.asAxisAngle`
+    :meth:`~paya.plugtypes.quaternion.Quaternion.asRotateMatrix`
+
+*   On :class:`~paya.plugtypes.string.String`:
+    :meth:`~paya.plugtypes.string.String.put`
+
+*   On :class:`~paya.plugtypes.vector.Vector`:
+    :meth:`~paya.plugtypes.vector.Vector.dot`
+    :meth:`~paya.plugtypes.vector.Vector.length`
+    :meth:`~paya.plugtypes.vector.Vector.normal`
+    :meth:`~paya.plugtypes.vector.Vector.cross`
+    :meth:`~paya.plugtypes.vector.Vector.angle`
+    :meth:`~paya.plugtypes.vector.Vector.asTranslateMatrix`
+    :meth:`~paya.plugtypes.vector.Vector.asScaleMatrix`
+    :meth:`~paya.plugtypes.vector.Vector.asEulerRotation`
+
+Additions to Data Types
+=======================
+
+
+*   On :class:`~paya.datatypes.eulerRotation.EulerRotation`:
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__add__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__radd__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__sub__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__mul__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__rmul__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__truediv__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__rtruediv__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__pow__`
+    :meth:`~paya.datatypes.eulerRotation.EulerRotation.__rpow__`
+
+*   On :class:`~paya.datatypes.matrix.Matrix`:
+    :meth:`~paya.datatypes.matrix.Matrix.createLocator`
+    :meth:`~paya.datatypes.matrix.Matrix.decompose`
+    :meth:`~paya.datatypes.matrix.Matrix.pick`
+    :meth:`~paya.datatypes.matrix.Matrix.asOffset`
+    :meth:`~paya.datatypes.matrix.Matrix.hold`
+    :meth:`~paya.datatypes.matrix.Matrix.getAxis`
+    :meth:`~paya.datatypes.matrix.Matrix.setAxis`
+    :meth:`~paya.datatypes.matrix.Matrix.getX`
+    :meth:`~paya.datatypes.matrix.Matrix.setX`
+    :meth:`~paya.datatypes.matrix.Matrix.getY`
+    :meth:`~paya.datatypes.matrix.Matrix.setY`
+    :meth:`~paya.datatypes.matrix.Matrix.getZ`
+    :meth:`~paya.datatypes.matrix.Matrix.setZ`
+    :meth:`~paya.datatypes.matrix.Matrix.getTranslate`
+    :meth:`~paya.datatypes.matrix.Matrix.setTranslate`
+    :attr:`~paya.datatypes.matrix.Matrix.x`
+    :attr:`~paya.datatypes.matrix.Matrix.y`
+    :attr:`~paya.datatypes.matrix.Matrix.z`
+    :attr:`~paya.datatypes.matrix.Matrix.translate` / :attr:`~paya.datatypes.matrix.Matrix.t`
+
+*   On :class:`~paya.datatypes.point.Point`:
+    :meth:`~paya.datatypes.point.Point.__add__`
+    :meth:`~paya.datatypes.point.Point.__radd__`
+    :meth:`~paya.datatypes.point.Point.__sub__`
+    :meth:`~paya.datatypes.point.Point.__rsub__`
+    :meth:`~paya.datatypes.point.Point.__mul__`
+    :meth:`~paya.datatypes.point.Point.__rmul__`
+    :meth:`~paya.datatypes.point.Point.__truediv__`
+    :meth:`~paya.datatypes.point.Point.__rtruediv__`
+    :meth:`~paya.datatypes.point.Point.__pow__`
+    :meth:`~paya.datatypes.point.Point.__rpow__`
+
+*   On :class:`~paya.datatypes.vector.Vector`:
+    :meth:`~paya.datatypes.vector.Vector.blend`
+    :meth:`~paya.datatypes.vector.Vector.dot`
+    :meth:`~paya.datatypes.vector.Vector.cross`
+    :meth:`~paya.datatypes.vector.Vector.angle`
+
+-----
+
+***********
 Version 0.2
 ***********
 
 Additions
 =========
 
-*   A wide range of :ref:`maths operators <Using Operators>`, spread across :doc:`paya/plugtypes` and :doc:`paya/datatypes`, with support
-    for bidirectional mixing of values and plugs
-*   Added  :meth:`~paya.plugtypes.attributeMath16D.AttributeMath16D.pick` and :meth:`~paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset`
+*   A wide range of maths operators, spread across :doc:`paya/plugtypes` and :doc:`paya/datatypes`, with support for
+    bidirectional mixing of values and plugs
+*   Added  :meth:`~paya.plugtypes.attributeMath16D.AttributeMath16D.pick` and
+    :meth:`~paya.plugtypes.attributeMath16D.AttributeMath16D.asOffset`
     to :class:`~paya.plugtypes.attributeMath16D.AttributeMath16D`
 *   Added  :meth:`~paya.datatypes.matrix.Matrix.pick` and :meth:`~paya.datatypes.matrix.Matrix.asOffset`
     to :class:`~paya.datatypes.matrix.Matrix`
@@ -29,5 +215,3 @@ Additions
 
 *   Patching engine
 *   :mod:`paya.runtime` interface
-
-
