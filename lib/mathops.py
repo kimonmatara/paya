@@ -3,11 +3,16 @@ Defines supporting methods for maths rigging and, more broadly, mixed value /
 plug workflows.
 """
 
+from collections import UserDict
 from functools import wraps, reduce
 
+import maya.OpenMaya as om
 import maya.cmds as m
 import pymel.core as p
 from pymel.util.arrays import Array
+import pymel.util as _pu
+
+from paya.config import defaultDownAxis, defaultUpAxis
 from paya.util import short, LazyModule
 
 r = LazyModule('paya.runtime')
@@ -172,8 +177,8 @@ def conform(x):
     :param x: the item to conform
     :return: The conformed item.
     :rtype: :class:`~paya.datatypes.vector.Vector`,
-        :class:`~paya.datatypes.Quaternion`, :class:`~paya.datatypes.Matrix`
-        or :class:`~paya.plugtypes.Attribute`
+        :class:`~paya.datatypes.Quaternion`, :class:`~paya.datatypes.matrix.Matrix`
+        or :class:`~paya.plugtypes.attribute.Attribute`
     """
     return info(x)[0]
 
@@ -189,7 +194,7 @@ def multMatrices(*matrices):
     :param \*matrices: the matrices to multiply (unpacked)
     :type \*matrices: :class:`~paya.datatypes.matrix.Matrix`, :class:`~paya.attributeMatrix.Matrix`, list or str
     :return: The matrix product.
-    :rtype: :class:`~paya.datatypes.matrix.Matrix` or :class:`~paya.attributeMatrix.Matrix`
+    :rtype: :class:`paya.datatypes.matrix.Matrix` or :class:`paya.plugtypes.matrix.Matrix`
     """
     outElems = []
     plugStates = []
@@ -501,3 +506,381 @@ def createMatrix(
             return matrix
 
 cm = createMatrix
+
+class NoInterpolationKeysError(RuntimeError):
+    """
+    A blending or interpolation operation has no keys to work with.
+    """
+
+class LinearInterpolator(UserDict):
+    """
+    Simple, dict-like interpolator implementation, similar to a linear
+    animation curve in Maya. Works with any value type that can be handled by
+    :func:`pymel.util.arrays.blend`, but types should not be mixed.
+
+    :Example:
+
+        .. code-block:: python
+
+            interp = LinearInterpolator()
+            interp[10] = 30
+            interp[20] = 40
+            print(interp[11])
+            # Result: 31.0
+    """
+    def __setitem__(self, ratio, value):
+        ratio = float(ratio)
+        super(LinearInterpolator, self).__setitem__(ratio, value)
+
+    def __getitem__(self, sampleRatio):
+        sampleRatio = float(sampleRatio)
+
+        try:
+            return self.data[sampleRatio]
+
+        except KeyError:
+            ratios = list(sorted(self.keys()))
+
+            ln = len(ratios)
+
+            if ln:
+                values = [self[ratio] for ratio in ratios]
+
+                if ln is 1:
+                    return values[0]
+
+                if ln >= 2:
+                    if sampleRatio <= ratios[0]:
+                        return values[0]
+
+                    if sampleRatio >= ratios[-1]:
+                        return values[-1]
+
+                    startEndRatios = zip(ratios, ratios[1:])
+                    startEndValues = zip(values, values[1:])
+
+                    for startEndRatio, startEndValue in zip(
+                            startEndRatios, startEndValues):
+                        startRatio, endRatio = startEndRatio
+
+                        if sampleRatio >= startRatio and \
+                                sampleRatio <= endRatio:
+                            ratioRatio = (sampleRatio-startRatio
+                                          ) / (endRatio-startRatio)
+                            startValue, endValue = startEndValue
+
+                            return _pu.blend(startValue,
+                                             endValue, weight=ratioRatio)
+
+                    raise RuntimeError("Could not bracket a sample value.")
+
+        raise NoInterpolationKeysError
+
+def floatRange(start, end, numValues):
+    """
+    A variant of Python's :class:`range` for floats.
+
+    :param float start: the minimum value
+    :param float end: the maximum value
+    :param int numValues: the number of values to generate
+    :return: A list of float values between ``start`` and ``end``,
+        inclusively.
+    :rtype: list
+    """
+    grain = (float(end)-float(start)) / (numValues-1)
+    return [grain * x for x in range(numValues)]
+
+def chaseNones(source):
+    """
+    Resolves ``None`` members in an iterable by filling in with neighbouring
+    values. If the first member is ``None``, the next defined value is used.
+    If any internal member is ``None``, the last resolved value is used.
+
+    :param source: the iterable to fill-in
+    :return: A list with no ``None`` members.
+    :rtype: list
+    """
+    source = list(source)
+    ln = len(source)
+
+    if ln:
+        nn = source.count(None)
+
+        if nn is ln:
+            raise NoInterpolationKeysError
+
+        resolved = []
+
+        for i, member in enumerate(source):
+            if member is None:
+                if i is 0:
+                    for nextMember in source[1:]:
+                        if nextMember is not None:
+                            resolved.append(nextMember)
+                            break
+
+                else:
+                    resolved.append(resolved[-1])
+
+            else:
+                resolved.append(member)
+
+        return resolved
+
+    return []
+
+def blendNones(source, ratios=None):
+    """
+    A blending version of :func:`chaseNones`.
+
+    :param source: the iterable to fill-in
+    :param ratios: if provided, it should be a list of ratios from 0.0 to
+        1.0 (one per member) to bias the blending; if omitted, it will be
+        autogenerated using :func:`floatRange`; defaults to None
+    :return: A list with no ``None`` members.
+    :rtype: list
+    """
+    source = list(source)
+    ln = len(source)
+
+    if ln:
+        nn = source.count(None)
+
+        if nn is ln:
+            raise NoInterpolationKeysError
+
+        if ratios:
+            ratios = list(ratios)
+
+            if len(ratios) is not ln:
+                raise RuntimeError(
+                    "If provided, 'ratios' should be of "+
+                    "the same length as 'source'."
+                )
+
+        else:
+            ratios = floatRange(0, 1, ln)
+
+        interpolator = LinearInterpolator()
+
+        for ratio, member in zip(ratios, source):
+            if member is not None:
+                interpolator[ratio] = member
+
+        resolved = []
+
+        for ratio, member in zip(ratios, source):
+            if member is None:
+                resolved.append(interpolator[ratio])
+
+            else:
+                resolved.append(member)
+
+        return resolved
+
+    return []
+
+@short(tolerance='tol')
+def getAimVectorsFromPoints(points, tolerance=1e-7):
+    """
+    Derives aim vectors from points. Needs at least two points. The length of
+    the returned list will always be one less than the length of the points.
+
+    :param points: the source points (values)
+    :param float tolerance/tol: any vectors below this length will be
+        replaced by neighbouring vectors; defaults to 1e-7
+    :raises NoInterpolationKeysError: none of the derived vectors were
+        longer than the specified tolerance
+    :return: The list of aim vectors.
+    :rtype: :class:`list` of :class:`~paya.datatypes.vector.Vector`
+    """
+    points = list(map(p.datatypes.Point, points))
+
+    if len(points) > 1:
+        vectors = []
+
+        for i, point in enumerate(points[1:], start=1):
+            prev = points[i-1]
+            vector = point-prev
+            ln = vector.length()
+
+            if vector.length() < tolerance:
+                vector = None
+
+            vectors.append(vector)
+
+        return chaseNones(vectors)
+
+def deflipVectors(vectors):
+    """
+    Returns a list where each vector is flipped if that would bring it closer
+    to the previous one.
+
+    :param vectors: the source vectors (values)
+    :return: The deflipped vectors.
+    :rtype: :class:`list` of :class:`~paya.datatypes.vector.Vector`
+    """
+    vectors = [p.datatypes.Vector(v).normal() for v in vectors]
+    ln = len(vectors)
+
+    if ln > 1:
+
+        out = [vectors[0]]
+
+        for i, vector in enumerate(vectors[1:], start=1):
+            prev = vectors[i-1]
+
+            neg = vector *-1
+            dot = prev.dot(vector)
+            negDot = prev.dot(neg)
+
+            if negDot > dot:
+                vector = neg
+
+            out.append(vector)
+
+        return out
+
+    return vectors
+
+@short(tolerance='tol')
+def getAimAndUpVectorsFromPoints(points, refVector, tolerance=1e-7):
+    """
+    Given a list of points and a reference up vector, returns aim vectors and
+    up vectors that can be used in matrix construction, for example to draw
+    chains.
+
+    :param points: the source points (values)
+    :param refVector: a reference up vector
+    :type refVector: :class:`~paya.datatypes.vector.Vector`, list
+    :param float tolerance/tol: aim vectors or cross products with lengths
+        below this tolerance will be replaced with neighbouring ones;
+        defaults to 1e-7
+    :return: A list of aim vectors and a list of up vectors
+    :rtype: tuple
+    """
+    points = list(map(p.datatypes.Point, points))
+    ln = len(points)
+
+    if ln > 1:
+        refVector = p.datatypes.Vector(refVector).normal()
+
+        if ln is 2:
+            aimVecs = [points[1]-points[0]] * 2
+            upVecs = [refVector] * 2
+
+            return aimVecs, upVecs
+
+        else:
+            aimVecs = getAimVectorsFromPoints(points, tol=tolerance)
+
+            # Get interpolation info to use later in up vector calcs
+
+            lengthRatios = [0.0]
+            aimVecLengths = [aimVec.length() for aimVec in aimVecs]
+            fullLength = sum(aimVecLengths)
+            cumulLength = 0.0
+
+            for aimVec, aimVecLength in zip(aimVecs, aimVecLengths):
+                cumulLength += aimVecLength
+                lengthRatios.append(cumulLength / fullLength)
+
+            # Get up vectors
+
+            upVecs = []
+
+            for i, aimVec in enumerate(aimVecs[1:], start=1):
+                prev = aimVecs[i-1]
+                upVec = prev.normal().cross(aimVec.normal())
+
+                if upVec.length() < tolerance:
+                    upVec = None
+
+                else:
+                    upVec = upVec.normal()
+
+                upVecs.append(upVec)
+
+            if upVecs.count(None) == len(upVecs):
+                upVecs = [refVector] * (len(aimVecs)-1)
+
+            else:
+                # First, bias towards the reference vector, dodging Nones
+
+                _upVecs = []
+
+                for upVec in upVecs:
+                    if upVec is None:
+                        _upVecs.append(upVec)
+
+                    else:
+                        neg = upVec * -1
+
+                        if refVector.dot(neg) > refVector.dot(upVec):
+                            upVec = neg
+
+                    _upVecs.append(upVec)
+
+                upVecs = _upVecs
+
+                upVecs = blendNones(upVecs, lengthRatios[1:-1])
+                upVecs = deflipVectors(upVecs)
+
+            # Pad
+
+            upVecs = [upVecs[0]] + upVecs + [upVecs[-1]]
+            aimVecs.append(aimVecs[-1])
+
+            return aimVecs, upVecs
+
+    raise RuntimeError("Need at least two points.")
+
+@short(
+    downAxis='da',
+    upAxis='ua',
+    tolerance='tol'
+)
+def getAimingMatricesFromPoints(
+        points,
+        refVector,
+        downAxis=defaultDownAxis,
+        upAxis=defaultUpAxis,
+        tolerance=1e-7
+):
+    """
+    Given a list of points and a reference up vector, returns aiming matrices
+    which can be used to draw chains and other systems.
+
+    :param points: the source points (values)
+    :param refVector: a reference up vector
+    :type refVector: :class:`~paya.datatypes.vector.Vector`, list
+    :param str downAxis/da: the aiming axis; defaults to
+        :attr:`paya.config.defaultDownAxis`
+    :param str upAxis/ua: the axis to bias towards the reference vector;
+        defaults to :attr:`paya.config.defaultUpAxis`
+    :param float tolerance/tol: aim vectors or cross products with lengths
+        below this tolerance will be replaced with neighbouring ones;
+        defaults to 1e-7
+    :return: A list of matrices
+    :rtype: :class:`list` of :class:`~paya.datatypes.matrix.Matrix`
+    """
+    aimVectors, upVectors = getAimAndUpVectorsFromPoints(
+        points, refVector, tol=tolerance
+    )
+
+    out = []
+
+    for point, aimVector, upVector in zip(
+        points,
+        aimVectors,
+        upVectors
+    ):
+        matrix = createMatrix(
+            downAxis, aimVector,
+            upAxis, upVector,
+            t=point
+        ).pk(t=True, r=True)
+
+        out.append(matrix)
+
+    return out

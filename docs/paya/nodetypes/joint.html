@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.nodetypes.shape.Shape &mdash; paya 0.3 documentation</title>
+  <title>paya.nodetypes.joint.Joint &mdash; paya 0.3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.patch" href="../patch.html" />
-    <link rel="prev" title="paya.nodetypes.joint.Joint" href="joint.html" /> 
+    <link rel="next" title="paya.nodetypes.shape.Shape" href="shape.html" />
+    <link rel="prev" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix" href="fourByFourMatrix.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -71,8 +71,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="dependNode.html">paya.nodetypes.dependNode.DependNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">paya.nodetypes.fourByFourMatrix.FourByFourMatrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="joint.html">paya.nodetypes.joint.Joint</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.nodetypes.shape.Shape</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.nodetypes.joint.Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shape.html">paya.nodetypes.shape.Shape</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
@@ -104,9 +104,9 @@
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../paya.html">paya</a> &raquo;</li>
           <li><a href="../nodetypes.html">paya.nodetypes</a> &raquo;</li>
-      <li>paya.nodetypes.shape.Shape</li>
+      <li>paya.nodetypes.joint.Joint</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/paya/nodetypes/shape.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/paya/nodetypes/joint.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -114,25 +114,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-paya.nodetypes.shape">
-<span id="paya-nodetypes-shape-shape"></span><h1>paya.nodetypes.shape.Shape<a class="headerlink" href="#module-paya.nodetypes.shape" title="Permalink to this headline"></a></h1>
+  <section id="module-paya.nodetypes.joint">
+<span id="paya-nodetypes-joint-joint"></span><h1>paya.nodetypes.joint.Joint<a class="headerlink" href="#module-paya.nodetypes.joint" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.nodetypes.shape.Shape">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.shape.Shape" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.nodetypes.joint.Joint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Joint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.joint.Joint" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="paya.nodetypes.shape.Shape.createNode">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">nameOptions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.shape.Shape.createNode" title="Permalink to this definition"></a></dt>
-<dd><p>Object-oriented version of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a> with
-managed naming.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>**nameOptions</strong> – passed-through to <code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></p>
+<dt class="sig sig-object py" id="paya.nodetypes.joint.Joint.skinClusters">
+<span class="sig-name descname"><span class="pre">skinClusters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.joint.Joint.skinClusters" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All the skinClusters this joint participates in, in no
+particular order.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The constructed node.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -145,8 +141,8 @@ managed naming.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="joint.html" class="btn btn-neutral float-left" title="paya.nodetypes.joint.Joint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../patch.html" class="btn btn-neutral float-right" title="paya.patch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fourByFourMatrix.html" class="btn btn-neutral float-left" title="paya.nodetypes.fourByFourMatrix.FourByFourMatrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="shape.html" class="btn btn-neutral float-right" title="paya.nodetypes.shape.Shape" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

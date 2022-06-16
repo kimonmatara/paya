@@ -30,3 +30,8 @@ patchOnLoad = True # runs PyMEL patching as soon as paya.runtime is loaded
 # Name management
 
 autoSuffix = True
+
+# Default skeleton building
+
+defaultDownAxis = 'y'
+defaultUpAxis = 'x'

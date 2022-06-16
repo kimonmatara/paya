@@ -7,7 +7,8 @@ class MakeName(object):
 
      def __get__(self, inst, instype):
         @short(name='n', inherit='i', suffix='s', padding='pad')
-        def makeName(*elems, name=None, inherit=True, suffix=True, padding=None):
+        def makeName(*elems, name=None,
+                     inherit=True, suffix=True, padding=None):
             """
             Generates a context-appropriate Maya name. Results will vary
             depending on whether this method is called on a class or on a
@@ -27,7 +28,7 @@ class MakeName(object):
             :param suffix/suf: optional override for ``config.autoSuffix``; if
                 ``True``, apply suffixes; if ``False``, omit them; if a
                 string, use it; defaults to None
-            :type suffix/suf: bool, str
+            :type suffix/s: bool, str
             :return: The name.
             :rtype: str
             """
