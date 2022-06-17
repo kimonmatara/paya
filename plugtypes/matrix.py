@@ -1,7 +1,7 @@
 import pymel.core.nodetypes as _nt
 import paya.runtime as r
 import paya.lib.mathops as _mo
-from paya.util import resolve_flags, short, cap
+from paya.util import resolveFlags, short, cap
 
 
 class Matrix:
@@ -133,7 +133,7 @@ class Matrix:
             scale=None,
             shear=None
     ):
-        translate, rotate, scale, shear = resolve_flags(
+        translate, rotate, scale, shear = resolveFlags(
             translate, rotate, scale, shear
         )
 
@@ -186,7 +186,7 @@ class Matrix:
         :return: The filtered matrix.
         :rtype: :class:`~paya.plugtypes.attributeMatrix.Matrix`
         """
-        translate, rotate, scale, shear = resolve_flags(
+        translate, rotate, scale, shear = resolveFlags(
             translate, rotate, scale, shear
         )
 
@@ -384,6 +384,160 @@ class Matrix:
             breakout[chan] = node.attr('output{}'.format(cap(chan)))
 
         return breakout
+
+    @short(
+        translate='t',
+        rotate='r',
+        scale='s',
+        shear='sh',
+        compensatePivots='cp',
+        compensateJointOrient='cjo',
+        compensateRotateAxis='cra',
+        compensateJointScale='cjs'
+    )
+    def decomposeAndApply(
+            self,
+            transform,
+            translate=None,
+            rotate=None,
+            scale=None,
+            shear=None,
+            compensatePivots=False,
+            compensateJointOrient=True,
+            compensateRotateAxis=True,
+            compensateJointScale=True,
+            fast=False
+    ):
+        """
+        Decomposes and applies this matrix to a transform.
+
+        :param transform: the transform node to drive
+        :type transform: str, :class:`~paya.nodetypes.transform.Transform`
+        :param bool translate/t: apply translation
+        :param bool rotate/r: apply rotation
+        :param bool scale/s: apply scale
+        :param bool shear/sh: apply shear
+        :param bool fast: skip all compensations; defaults to False
+        :param bool compensateJointScale/cjs: account for
+            segmentScaleCompensate on joints; defaults to True
+        :param bool compensateJointOrient/cjo: account for jointOrient on
+            joints; defaults to True
+        :param bool compensateRotateAxis/cra: account for ``rotateAxis``,
+            set this to False to emulate Maya constraint behaviour; defaults
+            to True
+        :param bool compensatePivots/cp: compensate for pivots (non-joint
+            transforms only); this is expensive, so defaults to False
+        :return: For convenience, the return of :meth:`decompose` is passed
+            along
+        :rtype: dict
+        """
+        #-------------------------------------|    Prep
+
+        translate, rotate, scale, shear = \
+            resolveFlags(translate, rotate, scale, shear)
+
+        xf = r.PyNode(transform)
+
+        if fast:
+            compensateJointScale \
+                = compensateJointOrient \
+                = compensateRotateAxis \
+                = compensatePivots \
+                = False
+
+        else:
+            fast = not any([
+                compensateJointOrient,
+                compensateRotateAxis,
+                compensateJointScale,
+                compensatePivots
+            ])
+
+        #-------------------------------------|    Fast bail
+
+        if fast:
+            decomposition = self.decompose(ro=xf.attr('ro'))
+
+            for channel, state in zip(
+                ['translate', 'rotate', 'scale', 'shear'],
+                [translate, rotate, scale, shear]
+            ):
+                try:
+                    decomposition[channel] >> xf.attr(channel)
+
+                except:
+                    continue
+
+            return decomposition
+
+        #-------------------------------------|    Main implementation
+
+        isJoint = isinstance(xf, _nt.Joint)
+        matrix = self
+
+        #-------------------------|    Disassemble
+
+        tmtx = matrix.pk(t=True)
+
+        if isJoint and compensateJointScale:
+            pismtx = xf.attr('inverseScale').asScaleMatrix()
+
+            matrix = xf.attr('segmentScaleCompensate').ifElse(
+                matrix * pismtx,
+                matrix
+                )
+
+        smtx = matrix.pk(s=True, sh=True)
+        rmtx = matrix.pk(r=True)
+
+        #-------------------------|    Rotation compensations
+
+        if compensateRotateAxis:
+            ramtx = xf.attr('rotateAxis').asRotateMatrix()
+            rmtx = ramtx.inverse() * rmtx
+
+        if isJoint and compensateJointOrient:
+            jomtx = xf.attr('jointOrient').asRotateMatrix()
+            rmtx *= jomtx.inverse()
+
+        #-------------------------|    Pivot compensations
+
+        if compensatePivots and not isJoint:
+            # Solve as Maya would
+
+            ramtx = xf.attr('rotateAxis').asRotateMatrix()
+            spmtx = xf.attr('scalePivot').asTranslateMatrix()
+            stmtx = xf.attr('scalePivotTranslate').asTranslateMatrix()
+            rpmtx = xf.attr('rotatePivot').asTranslateMatrix()
+            rtmtx = xf.attr('rotatePivotTranslate').asTranslateMatrix()
+
+            partialMatrix = spmtx.inverse() * smtx * spmtx * stmtx * \
+                            rpmtx.inverse() * ramtx * rmtx * rpmtx * rtmtx
+
+            # Capture and negate translation contribution
+            translateContribution = partialMatrix.pk(t=True)
+            tmtx *= translateContribution.inverse()
+
+        #-------------------------|    Reassemble & apply
+
+        matrix = smtx * rmtx * tmtx
+        decomposition = matrix.decompose(ro=xf.attr('ro'))
+
+        for channel, state in zip(
+                ('translate', 'rotate', 'scale', 'shear'),
+                (translate, rotate, scale, shear)
+        ):
+            if state:
+                source = decomposition[channel]
+                dest = xf.attr(channel)
+
+                try:
+                     source >> dest
+
+                except:
+                    r.warning("Could not connect into {}".format(dest))
+
+        return decomposition
 
     #--------------------------------------------------------------------|    Hold
 

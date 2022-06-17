@@ -33,7 +33,7 @@ class short:
 
         return wrapper
 
-def resolve_flags(*flags):
+def resolveFlags(*flags):
     """
     Used to mimic Maya flag behaviour.
 

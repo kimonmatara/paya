@@ -3,7 +3,7 @@ from functools import reduce
 import pymel.core.datatypes as _dt
 import paya.lib.mathops as _mo
 import paya.runtime as r
-from paya.util import short, resolve_flags
+from paya.util import short, resolveFlags
 
 fieldsmap = {
     'x': ['a00','a01','a02'],
@@ -200,7 +200,7 @@ class Matrix:
             scale=None,
             shear=None
     ):
-        translate, rotate, scale, shear = resolve_flags(
+        translate, rotate, scale, shear = resolveFlags(
             translate, rotate, scale, shear
         )
 
@@ -272,7 +272,7 @@ class Matrix:
         :return: The filtered matrix.
         :rtype: :class:`~paya.datatypes.matrix.Matrix` or :class:`~paya.plugtypes.matrix.Matrix`
         """
-        translate, rotate, scale, shear = resolve_flags(
+        translate, rotate, scale, shear = resolveFlags(
             translate, rotate, scale, shear
         )
 
