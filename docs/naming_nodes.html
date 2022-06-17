@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Managing Node Names &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Discovering Functionality" href="discovering_func.html" />
+    <link rel="prev" title="Matrices" href="matrices.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Naming Nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-suffixes">Automatic Suffixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implicit-naming">Implicit Naming</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Managing Node Names</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/naming_nodes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="managing-node-names">
+<h1>Managing Node Names<a class="headerlink" href="#managing-node-names" title="Permalink to this headline"></a></h1>
+<p>Node names in typical Maya pipelines follow the convention <code class="docutils literal notranslate"><span class="pre">&lt;several_prefixes&gt;_&lt;type&gt;</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">&lt;several_prefixes&gt;</span></code> are contributed by various functions that take them as arguments, and <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code> is something
+like <code class="docutils literal notranslate"><span class="pre">GRP</span></code> for groups, <code class="docutils literal notranslate"><span class="pre">CTRL</span></code> for controls, and so on. Paya gives you a couple ways to generate such names more
+easily.</p>
+<section id="automatic-suffixes">
+<span id="id1"></span><h2>Automatic Suffixes<a class="headerlink" href="#automatic-suffixes" title="Permalink to this headline"></a></h2>
+<p>All bundled Paya node constructors apply type suffixes by default. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">)</span>
+<span class="c1"># Result: eyeball_JOIN</span>
+</pre></div>
+</div>
+<p>Suffixes are mapped to node types, and applied according to this rule:</p>
+<ul class="simple">
+<li><p>If the node is a transform, then:</p>
+<ul>
+<li><p>If the node has a shape, the lookup is the shape’s node type</p></li>
+<li><p>Otherwise, the lookup is the transform’s node type</p></li>
+</ul>
+</li>
+<li><p>Otherwise:</p>
+<ul>
+<li><p>If the node is a shape, no suffix is applied</p></li>
+<li><p>Otherwise, the lookup is the shape’s node type</p></li>
+</ul>
+</li>
+</ul>
+<p>Suffixes can be overriden, or disabled, on a per-node basis like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># disable</span>
+<span class="c1"># Result: eyeball</span>
+
+<span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;eyeball&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;JNT&#39;</span><span class="p">)</span> <span class="c1"># override</span>
+<span class="c1"># Result: eyeball_JNT</span>
+</pre></div>
+</div>
+<p>Default Paya suffixes are derived from the ‘tags’ in the
+<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html">Maya Module Index</a>. To redefine or disable
+them globally, see <a class="reference internal" href="package_config.html"><span class="doc">Package Configuration</span></a>.</p>
+</section>
+<section id="implicit-naming">
+<h2>Implicit Naming<a class="headerlink" href="#implicit-naming" title="Permalink to this headline"></a></h2>
+<p>Paya’s <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> context manager allows you to build up prefixes implicitly, instead of
+passing them around as function arguments. For example, here’s a typical naming pattern:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeLimb</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">empty</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_GRP&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="s1">&#39;leg&#39;</span><span class="p">]:</span>
+        <span class="n">makeLimb</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">side</span><span class="p">))</span>
+
+<span class="c1"># Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP</span>
+</pre></div>
+</div>
+<p>Here’s an alternative using <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeLimb</span><span class="p">():</span> <span class="c1"># no prefix argument</span>
+    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">,</span> <span class="s1">&#39;leg&#39;</span><span class="p">]:</span>
+        <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
+            <span class="n">makeLimb</span><span class="p">()</span>
+
+<span class="c1"># Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP</span>
+</pre></div>
+</div>
+<p>This also works with maths operations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;mech&#39;</span><span class="p">):</span>
+    <span class="n">loc1</span><span class="o">.</span><span class="n">t</span> <span class="o">^</span> <span class="n">loc2</span><span class="o">.</span><span class="n">wm</span>
+
+<span class="c1"># Produces a pointMatrixMult node named mech_DPMM</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> can be nested arbitrarily deeply. Notice that the blocks cut through function calling
+scopes. This is an example of <a class="reference external" href="https://en.wikipedia.org/wiki/Aspect-oriented_programming">aspect-oriented programming</a>.
+It declutters your code and makes it easier to refactor. See the documentation for <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a>, and
+constructors like <a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.createNode" title="paya.nodetypes.dependNode.DependNode.createNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createNode()</span></code></a>, for options to change block naming
+behaviour.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To use automatic suffixing and <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks in your code, you’ll have to create nodes using
+the constructors on <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>, since the behaviour of ‘vanilla’ PyMEL or <code class="docutils literal notranslate"><span class="pre">maya.cmds</span></code> functions is
+unmodified:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;eyeball&#39;</span><span class="p">):</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span> <span class="c1"># produces L_eyeball_inner_JOIN</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;joint&#39;</span><span class="p">)</span> <span class="c1"># produces joint1</span>
+</pre></div>
+</div>
+<p>Alternatively, you can use <a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.makeName" title="paya.nodetypes.dependNode.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a> to construct managed names and
+pass them along:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+<span class="kn">import</span> <span class="nn">maya.cmds</span> <span class="k">as</span> <span class="nn">m</span>
+
+<span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;eyeball&#39;</span><span class="p">):</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;joint&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">makeName</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="matrices.html" class="btn btn-neutral float-left" title="Matrices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="discovering_func.html" class="btn btn-neutral float-right" title="Discovering Functionality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Importing and Patching &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using the Runtime Interface" href="using_the_runtime_interface.html" />
+    <link rel="prev" title="Requirements &amp; Installation" href="req_and_inst.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Importing and Patching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Importing and Patching</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/importing_and_patching.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="importing-and-patching">
+<h1>Importing and Patching<a class="headerlink" href="#importing-and-patching" title="Permalink to this headline"></a></h1>
+<p>To get started with <strong>paya</strong>, run the following in the Script Editor:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">paya.runtime</span>
+<span class="go">PyMEL has been patched successfully.</span>
+</pre></div>
+</div>
+<p>At this point, PyMEL has been patched to return custom Paya classes
+instead of its own. To confirm this, run the following and note the class returned by <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cam</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;persp&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">cam</span><span class="p">))</span>
+<span class="go">&lt;class &#39;paya.nodetypes.transform.Transform&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Now remove the patch, restoring PyMEL to its ‘factory state’, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paya</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="go">PyMEL has been unpatched successfully.</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cam</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;persp&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">cam</span><span class="p">))</span>
+<span class="go">&lt;class &#39;pymel.core.nodetypes.Transform&#39;&gt;</span>
+</pre></div>
+</div>
+<p>Notice that <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a> now returns the PyMEL base class, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.nodetypes.Transform</span></code></a>, instead.</p>
+<p>If you wish to re-apply the patch, <strong>import</strong> won’t work a second time.
+Instead, you must call <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paya</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="go">PyMEL has been patched successfully.</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="req_and_inst.html" class="btn btn-neutral float-left" title="Requirements &amp; Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_the_runtime_interface.html" class="btn btn-neutral float-right" title="Using the Runtime Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

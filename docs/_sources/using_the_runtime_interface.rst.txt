@@ -1,0 +1,73 @@
+***************************
+Using the Runtime Interface
+***************************
+
+So far, we've been importing :mod:`paya.runtime` merely to trigger patching, and then using PyMEL via the customary
+:mod:`pymel.core`:
+
+.. code-block:: python
+
+    # Order of imports doesn't matter
+    import pymel.core as p
+    import paya.runtime
+    # PyMEL patched successfully
+
+    print(type(p.polyCube())[0])
+    # <class 'paya.nodetypes.transform.Transform'>
+
+Replacing pymel.core
+====================
+
+A better way to work is to use :mod:`paya.runtime` as a drop-in-replacement, like this:
+
+.. code-block:: python
+
+    import paya.runtime as r
+    r.ls(type='transform') # etc; all standard PyMEL methods are available
+
+This cuts down on importing boilerplate and clearly delineates code that expects patched PyMEL. It also gives you
+access to features only available via :mod:`paya.runtime`.
+
+.. _class pools:
+
+Class Pools
+===========
+
+Paya classes can be sourced directly via the **class pools**, available via the  ``nodes``, ``plugs``, ``comps`` and
+``data`` attributes of :mod:`paya.runtime`:
+
+.. code-block:: python
+
+    import paya.runtime as r
+    print(r.nodes.Transform)
+    # <class 'paya.nodetypes.transform.Transform'>
+
+You will need the pools if you want to:
+
+*   Call Paya **node constructors** with extra features, such as an object-oriented version of
+    :func:`~paya.nodetypes.dependNode.DependNode.createNode` with support for :doc:`name management <naming_nodes>`:
+
+    .. code-block:: python
+
+        r.nodes.Transform.createNode(name='root')
+        # root_XFRM
+
+*   :ref:`Source Paya classes for superclass overloading <Importing Template Classes>`
+
+Top-Level Tools
+===============
+
+Tools like :class:`~paya.lib.names.Name` or :func:`~paya.lib.mathops.createMatrix` are best accessed via the
+:mod:`pymel.runtime`:
+
+.. code-block:: python
+
+    with r.Name('limb'):
+        limb = r.nodes.Transform.createNode()
+        # limb_XFRM
+
+        with r.Name('controls'):
+            ctsGp = r.nodes.Transform.createNode()
+            # limb_controls_GRP
+
+Upcoming Paya releases are expected to add more top-level tools.

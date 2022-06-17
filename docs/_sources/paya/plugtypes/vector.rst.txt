@@ -1,0 +1,104 @@
+============================
+paya.plugtypes.vector.Vector
+============================
+
+.. py:module:: paya.plugtypes.vector
+
+.. py:class:: Vector(*args, **kwargs)
+
+    .. py:method:: isTranslateChannel()
+    
+        :return: True if this is the ``translate`` channel of a transform
+            node, otherwise False.
+        :rtype: bool
+    
+    .. py:method:: get(plug=False, **kwargs)
+    
+        Overrides :meth:`~paya.plugtypes.attribute.Attribute.get` to return
+        :class:`~paya.datatypes.point.Point` values if this is the translate
+        channel of a transform node.
+    
+    .. py:method:: __mul__(other, swap=False)
+    
+        Implements **multiplication** (``*``).
+    
+    .. py:method:: __rmul__(other)
+    
+        Implements **reflected multiplication** (``*``).
+    
+    .. py:method:: __xor__(other)
+    
+        Uses the exclusive-or operator (``^``) to implement
+        **point-matrix multiplication**.
+        
+        :param other: a matrix value or plug
+    
+    .. py:method:: dot(other, normalize=False)
+    
+        Returns the dot product of ``self`` and ``other``.
+        
+        :param other: the other vector
+        :type other: :class:`list`, :class:`tuple`, :class:`~paya.plugtypes.math3D.Math3D`
+        :param bool normalize/nr: normalize the output; defaults to False
+        :return: :class:`paya.plugtypes.math1D.Math1D`
+    
+    .. py:method:: length()
+    
+        Returns the length of this vector.
+        
+        :return: The length of this vector.
+        :rtype: :class:`~paya.plugtypes.math1D.Math1D`
+    
+    .. py:method:: normal()
+    
+        :return: This vector, normalized.
+        :rtype: :class:`~paya.plugtypes.vector.Vector`
+    
+    .. py:method:: cross(other, normalize=False)
+    
+        Returns the cross product of ``self`` and ``other``.
+        
+        :param other: the other vector
+        :type other: :class:`list`, :class:`tuple`, :class:`~paya.plugtypes.math3D.Math3D`
+        :param bool normalize/nr: normalize the output; defaults to False
+        :return: :class:`paya.plugtypes.vector.Vector`
+    
+    .. py:method:: angle(other, euler=False, axisAngle=False)
+    
+        Returns the unsigned, 180-degree-range angle between this vector and
+        ``other``.
+        
+        :param other: the other vector
+        :type other: :class:`~paya.plugtypes.math3D.Math3D`,
+            :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.datatypes.point.Point`, list, str
+        :param bool euler: return an euler angle
+            triple compound, defaults to False
+        :param bool axisAngle: return an axis, angle tuple;
+            defaults to False
+        :return: A single angle output, a triple euler compound,
+            or a tuple of *(axis vector, angle)*, depending on flags
+        :rtype: :class:`~paya.plugtypes.vector.Vector` or :class:`tuple`
+    
+    .. py:method:: asTranslateMatrix()
+    
+        Inserts this into the translate row of an identity matrix, and
+        returns the matrix.
+        
+        :return: The translate matrix.
+        :rtype: :class:`~paya.plugtypes.matrix.Matrix`
+    
+    .. py:method:: asScaleMatrix()
+    
+        Uses this output's three components as the magnitudes of
+        an identity matrix's base vectors.
+        
+        :return: The scale matrix.
+        :rtype: :class:`~paya.plugtypes.matrix.Matrix`
+    
+    .. py:method:: asEulerRotation()
+    
+        Returns XYZ euler rotations for this vector.
+        
+        :return: A compound of three euler channels.
+        :rtype: :class:`~paya.plugtypes.eulerRotation.EulerRotation`

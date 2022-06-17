@@ -1,0 +1,71 @@
+==============
+paya.lib.names
+==============
+
+.. py:module:: paya.lib.names
+
+Node-naming utilities, usually called indirectly by custom class methods.
+
+.. py:function:: legalise(name)
+
+    Modifies a string so that Maya will accept it as a node name.
+    
+    :param str name: the string to conform
+    :return: The Maya name.
+
+.. py:function:: conformElems(*elems, padding=None)
+
+    Cleans up user name elements, typically specified through ``*args``
+    and / or the ``name/n`` keyword argument.
+    
+    :param elems: one or more name elements, packed or unpacked
+    :type elems: int, str
+    :param padding/pad: optional padding depth for any integers; defaults
+        to None
+    :type padding/pad: None, int
+    :return: The conformed elements.
+    :rtype: list
+
+.. py:class:: Name(*elems, inherit=True, suffix=None, padding=None)
+
+    Context manager. Accumulates name elements hierarchically.
+    
+    :param elems: one or more name elements, packed or unpacked
+    :type elems: int, str
+    :param padding/pad: optional padding depth for any integers; defaults
+        to None
+    :param bool inherit/i: inherit from containing blocks; defaults to True
+    :param suffix/suf: optional override for ``config.autoSuffix``;
+        defaults to None
+    :type suffix/suf: None, bool
+
+    .. py:method:: __init__(*elems, inherit=True, suffix=None, padding=None)
+    
+        Initialize self.  See help(type(self)) for accurate signature.
+
+.. py:function:: make(*elems, name=None, inherit=True, suffix=None, node=None, nodeType=None, padding=None)
+
+    Constructs Maya node names.
+    
+    :param elems: one or more name elements, packed or unpacked
+    :type elems: int, str
+    :param name/n: pass-through for any elements provided via a ``name/n``
+        keyword argument; these will always be prepended; defaults to None
+    :type name/n: None, str
+    :param padding/pad: optional padding depth for any integers; defaults
+        to None
+    :type padding/pad: None, int
+    :param bool inherit/i: inherit prefixes from :class:`Name` blocks;
+        defaults to True
+    :param suffix/suf: optional override for ``config.autoSuffix``; if
+        ``True``, apply suffixes; if ``False``, omit them; if a string,
+        use it; defaults to None
+    :type suffix/suf: bool, str
+    :param node: ignored if ``nodeType`` is provided; a node to inspect
+        for an appropriate suffix lookup; defaults to None
+    :type node: PyNode, str, None
+    :param nodeType/nt: ignored if ``suffix`` is a string; if provided, will
+        be used as the suffix lookup; defaults to None
+    :type nodeType/nt: bool, None
+    :return: The name.
+    :rtype: str

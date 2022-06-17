@@ -1,0 +1,115 @@
+###################
+Managing Node Names
+###################
+
+Node names in typical Maya pipelines follow the convention ``<several_prefixes>_<type>``, where
+``<several_prefixes>`` are contributed by various functions that take them as arguments, and ``<type>`` is something
+like ``GRP`` for groups, ``CTRL`` for controls, and so on. Paya gives you a couple ways to generate such names more
+easily.
+
+.. _Automatic Suffixes:
+
+Automatic Suffixes
+==================
+
+All bundled Paya node constructors apply type suffixes by default. For example:
+
+.. code-block:: python
+
+    r.nodes.Joint.createNode(name='eyeball')
+    # Result: eyeball_JOIN
+
+Suffixes are mapped to node types, and applied according to this rule:
+
+-   If the node is a transform, then:
+
+    -   If the node has a shape, the lookup is the shape's node type
+    -   Otherwise, the lookup is the transform's node type
+
+-   Otherwise:
+
+    -   If the node is a shape, no suffix is applied
+    -   Otherwise, the lookup is the shape's node type
+
+Suffixes can be overriden, or disabled, on a per-node basis like this:
+
+.. code-block:: python
+
+    r.nodes.Joint.createNode(name='eyeball', suffix=False) # disable
+    # Result: eyeball
+
+    r.nodes.Joint.createNode(name='eyeball', suffix='JNT') # override
+    # Result: eyeball_JNT
+
+Default Paya suffixes are derived from the 'tags' in the
+`Maya Module Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_. To redefine or disable
+them globally, see :doc:`Package Configuration <package_config>`.
+
+Implicit Naming
+===============
+
+Paya's :class:`~paya.lib.names.Name` context manager allows you to build up prefixes implicitly, instead of
+passing them around as function arguments. For example, here's a typical naming pattern:
+
+.. code-block:: python
+
+    def makeLimb(prefix):
+        r.group(empty=True, name='{}_GRP'.format(prefix))
+
+    for side in 'LR':
+        for typ in ['arm', 'leg']:
+            makeLimb('{}_{}'.format(side))
+
+    # Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP
+
+Here's an alternative using :class:`~paya.lib.names.Name`:
+
+.. code-block:: python
+
+    def makeLimb(): # no prefix argument
+        return r.nodes.Transform.createNode()
+
+    for side in 'LR':
+        for typ in ['arm', 'leg']:
+            with r.Name(side, typ):
+                makeLimb()
+
+    # Produces L_arm_GRP, R_arm_GRP, L_leg_GRP, R_leg_GRP
+
+This also works with maths operations:
+
+.. code-block:: python
+
+    with r.Name('mech'):
+        loc1.t ^ loc2.wm
+
+    # Produces a pointMatrixMult node named mech_DPMM
+
+:class:`~paya.lib.names.Name` can be nested arbitrarily deeply. Notice that the blocks cut through function calling
+scopes. This is an example of `aspect-oriented programming <https://en.wikipedia.org/wiki/Aspect-oriented_programming>`_.
+It declutters your code and makes it easier to refactor. See the documentation for :class:`~paya.lib.names.Name`, and
+constructors like :meth:`~paya.nodetypes.dependNode.DependNode.createNode()`, for options to change block naming
+behaviour.
+
+.. note::
+
+    To use automatic suffixing and :class:`~paya.lib.names.Name` blocks in your code, you'll have to create nodes using
+    the constructors on :mod:`paya.runtime`, since the behaviour of 'vanilla' PyMEL or ``maya.cmds`` functions is
+    unmodified:
+
+    .. code-block:: python
+
+        with r.Name('L', 'eyeball'):
+            r.nodes.Joint.createNode() # produces L_eyeball_inner_JOIN
+            r.createNode('joint') # produces joint1
+
+    Alternatively, you can use :meth:`~paya.nodetypes.dependNode.DependNode.makeName` to construct managed names and
+    pass them along:
+
+    .. code-block:: python
+
+        import paya.runtime as r
+        import maya.cmds as m
+
+        with r.Name('L', 'eyeball'):
+            m.createNode('joint', name=r.nodes.Joint.makeName())

@@ -1,0 +1,23 @@
+==================================
+paya.nodetypes.transform.Transform
+==================================
+
+.. py:module:: paya.nodetypes.transform
+
+.. py:class:: Transform(*args, **kwargs)
+
+    .. py:method:: getWorldPosition(plug=False, useLocatorShape=True)
+    
+        Returns the world translation of this transform. Pivots are ignored.
+        
+        :shorthand: ``gwp``
+        :param bool plug/p: return an attribute instead of a value; if
+            'useLocatorShape' is True then, where available, the locator
+            shape's 'worldPosition' attribute will be returned; otherwise,
+            a 'worldPosition' attribute will be retrieved, or initialised,
+            on the transform itself, with its input configured as self.t ^
+            self.pm[0]; defaults to False
+        :param bool useLocatorShape/uls: True
+        :return: The position attribute or value.
+        :rtype: :class:`~paya.datatypes.point.Point` or
+            :class:`~paya.plugtypes.vector.Vector`

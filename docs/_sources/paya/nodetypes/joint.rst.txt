@@ -1,0 +1,21 @@
+==========================
+paya.nodetypes.joint.Joint
+==========================
+
+.. py:module:: paya.nodetypes.joint
+
+.. py:class:: Joint(*args, **kwargs)
+
+    .. py:method:: skinClusters()
+    
+        :return: All the skinClusters this joint participates in, in no
+            particular order.
+        :rtype: list
+    
+    .. py:method:: chainFromHere(end=None)
+    
+        :param end: an optional end joint
+        :type end: str or :class:`~paya.nodetypes.joint.Joint`
+        :return: A chain from this joint up to and including 'end'
+            (if provided), or terminating before the first branch.
+        :rtype: :class:`~paya.lib.skel.Chain`

@@ -1,0 +1,229 @@
+================
+paya.lib.mathops
+================
+
+.. py:module:: paya.lib.mathops
+
+Defines supporting methods for maths rigging and, more broadly, mixed value /
+plug workflows.
+
+.. py:function:: isTupleOrListOfScalarValues(x)
+
+    :param x: the item to inspect
+    :return: True if x is a tuple or list of scalar values, otherwise False.
+    :rtype: bool
+
+.. py:class:: NativeUnits
+
+    Context manager. Switches Maya to centimetres and radians.
+
+.. py:function:: nativeUnits(f)
+
+    Decorator version of :class:`NativeUnits`.
+
+.. py:function:: info(item, angle=False)
+
+    Returns a tuple of three members:
+    -   The item conformed to the highest-level type available
+    -   The item's mathematical dimension (e.g. 16 for matrices)
+    -   ``True`` if the item is a plug, otherwise ``False``
+    
+    In short: item, dimension, isplug.
+    
+    :param item: the item to process
+    :type item: any type
+    :raises NonPlugStringError: ``item`` is a string that could not be
+        instantiated as a plug.
+    :return: :class:`tuple`
+
+.. py:function:: asValue(x, plug=None)
+
+    If x is a plug, returns its value. Otherwise, returns x.
+    
+    :param x: the item to inspect
+    :param plug/p: if you already know whether x is a plug, specify it
+        here.
+    :return: The value
+
+.. py:function:: conform(x)
+
+    If x is a **value**, then:
+    
+        - If its dimension is 3, it's returned as a :class:`~paya.datatypes.vector.Vector`
+        - If its dimension is 4, it's returned as a :class:`~paya.datatypes.Quaternion`
+        - If its dimension is 16, it's returned as a :class:`~paya.datatypes.Matrix`
+        - In all other cases, it's returned as-is
+    
+    If x is a **plug**, then it's returned as an instance of the appropriate
+    :class:`~paya.plugtypes.Attribute`
+    
+    :param x: the item to conform
+    :return: The conformed item.
+    :rtype: :class:`~paya.datatypes.vector.Vector`,
+        :class:`~paya.datatypes.Quaternion`, :class:`~paya.datatypes.matrix.Matrix`
+        or :class:`~paya.plugtypes.attribute.Attribute`
+
+.. py:function:: multMatrices(*matrices)
+
+    Performs efficient multiplication of any combination of matrix values or
+    plugs. Consecutive values are reduced and consecutive plugs are grouped
+    into ``multMatrix`` nodes.
+    
+    If any of the matrices are plugs, the return will also be a plug.
+    Otherwise, it will be a value.
+    
+    :param \*matrices: the matrices to multiply (unpacked)
+    :type \*matrices: :class:`~paya.datatypes.matrix.Matrix`, :class:`~paya.attributeMatrix.Matrix`, list or str
+    :return: The matrix product.
+    :rtype: :class:`paya.datatypes.matrix.Matrix` or :class:`paya.plugtypes.matrix.Matrix`
+
+.. py:function:: createMatrix(*rowHints, preserveSecondLength=False, thirdLength=None, translate=None, plug=None)
+
+    Constructs static or dynamic transformation matrices.
+    
+    :shorthand: ``cm``
+    
+    :param \*rowHints: If provided, this must comprise exactly **four** or
+        **five** arguments, in both cases passed as unpacked pairs of
+        row identifier: vector input or value.
+    
+        If **four** arguments are passed, they will be used to construct an
+        orthogonal matrix, with the first vector as the 'aim' and the second
+        as the 'up', for example:
+    
+        .. code-block:: python
+    
+            matrix = r.createMatrix('y', loc1.t, 'x', loc2.t)
+    
+        If **six** arguments are passed, they will be used to directly
+        populate the matrix rows. This may result in a non-orthornormal
+        (shear) matrix.
+    
+        .. code-block:: python
+    
+            matrix = r.createMatrix('y', loc1.t, 'x', loc2.t, 'z', loc3.t)
+    
+        If this argument is omitted, an identity matrix will be returned.
+    
+    :param translate/t: A **translate** component for the matrix; this can be
+        a point value or plug; defaults to None
+    :type translate/t: :class:`str`, :class:`list`, :class:`tuple`,
+        :class:`~paya.datatypes.Vector`, :class:`~paya.datatypes.Point`,
+        :class:`~paya.plugtypes.math3D.Math3D`
+    :param bool preserveSecondLength/psl: ignored if six arguments were passed;
+        preserve the second vector's length when performing orthogonal
+        construction; defaults to True
+    :param thirdLength/tl: ignored is six arguments were passed; if provided,
+        defines the third (derived) vector's length; defaults to None
+    :type thirdLength/tl: None, :class:`float`, :class:`int`,
+        :class:`~paya.plugtypes.math1D.Math1D`, :class:`str`
+    :param bool plug/p: if you already know whether the passed arguments contain
+        plugs, specify it here to avoid extraneous checks; if no arguments
+        have been passed, this will specify whether the returned identity
+        matrix is a plug or value; defaults to None
+    :return: The constructed matrix.
+    :rtype: :class:`paya.plugtypes.matrix.Matrix` or
+        :class:`paya.datatypes.matrix.Matrix`, depending on inputs.
+
+.. py:class:: LinearInterpolator(*args, **kwargs)
+
+    Simple, dict-like interpolator implementation, similar to a linear
+    animation curve in Maya. Works with any value type that can be handled by
+    :func:`pymel.util.arrays.blend`, but types should not be mixed.
+    
+    :Example:
+    
+        .. code-block:: python
+    
+            interp = LinearInterpolator()
+            interp[10] = 30
+            interp[20] = 40
+            print(interp[11])
+            # Result: 31.0
+
+.. py:function:: floatRange(start, end, numValues)
+
+    A variant of Python's :class:`range` for floats.
+    
+    :param float start: the minimum value
+    :param float end: the maximum value
+    :param int numValues: the number of values to generate
+    :return: A list of float values between ``start`` and ``end``,
+        inclusively.
+    :rtype: list
+
+.. py:function:: chaseNones(source)
+
+    Resolves ``None`` members in an iterable by filling in with neighbouring
+    values. If the first member is ``None``, the next defined value is used.
+    If any internal member is ``None``, the last resolved value is used.
+    
+    :param source: the iterable to fill-in
+    :return: A list with no ``None`` members.
+    :rtype: list
+
+.. py:function:: blendNones(source, ratios=None)
+
+    A blending version of :func:`chaseNones`.
+    
+    :param source: the iterable to fill-in
+    :param ratios: if provided, it should be a list of ratios from 0.0 to
+        1.0 (one per member) to bias the blending; if omitted, it will be
+        autogenerated using :func:`floatRange`; defaults to None
+    :return: A list with no ``None`` members.
+    :rtype: list
+
+.. py:function:: getAimVectorsFromPoints(points, tolerance=1e-07)
+
+    Derives aim vectors from points. Needs at least two points. The length of
+    the returned list will always be one less than the length of the points.
+    
+    :param points: the source points (values)
+    :param float tolerance/tol: any vectors below this length will be
+        replaced by neighbouring vectors; defaults to 1e-7
+    :raises NoInterpolationKeysError: none of the derived vectors were
+        longer than the specified tolerance
+    :return: The list of aim vectors.
+    :rtype: :class:`list` of :class:`~paya.datatypes.vector.Vector`
+
+.. py:function:: deflipVectors(vectors)
+
+    Returns a list where each vector is flipped if that would bring it closer
+    to the previous one.
+    
+    :param vectors: the source vectors (values)
+    :return: The deflipped vectors.
+    :rtype: :class:`list` of :class:`~paya.datatypes.vector.Vector`
+
+.. py:function:: getAimAndUpVectorsFromPoints(points, refVector, tolerance=1e-07)
+
+    Given a list of points and a reference up vector, returns aim vectors and
+    up vectors that can be used in matrix construction, for example to draw
+    chains.
+    
+    :param points: the source points (values)
+    :param refVector: a reference up vector
+    :type refVector: :class:`~paya.datatypes.vector.Vector`, list
+    :param float tolerance/tol: aim vectors or cross products with lengths
+        below this tolerance will be replaced with neighbouring ones;
+        defaults to 1e-7
+    :return: A list of aim vectors and a list of up vectors
+    :rtype: tuple
+
+.. py:function:: getAimingMatricesFromPoints(points, refVector, downAxis='y', upAxis='x', tolerance=1e-07)
+
+    Given a list of points and a reference up vector, returns aiming matrices
+    which can be used to draw chains and other systems.
+    
+    :param points: the source points (values)
+    :param refVector: a reference up vector
+    :type refVector: :class:`~paya.datatypes.vector.Vector`, list
+    :param str downAxis/da: the aiming axis; defaults to
+        :attr:`paya.config.defaultDownAxis`
+    :param str upAxis/ua: the axis to bias towards the reference vector;
+        defaults to :attr:`paya.config.defaultUpAxis`
+    :param float tolerance/tol: aim vectors or cross products with lengths
+        below this tolerance will be replaced with neighbouring ones;
+        defaults to 1e-7
+    :return: A list of matrices
+    :rtype: :class:`list` of :class:`~paya.datatypes.matrix.Matrix`

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sugar &amp; Style &mdash; paya 0.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Package Configuration" href="package_config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sugar and Style</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#attribute-access">Attribute Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#method-function-shorthands">Method / Function Shorthands</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Sugar &amp; Style</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sugar_and_style.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sugar-style">
+<h1>Sugar &amp; Style<a class="headerlink" href="#sugar-style" title="Permalink to this headline"></a></h1>
+<section id="attribute-access">
+<h2>Attribute Access<a class="headerlink" href="#attribute-access" title="Permalink to this headline"></a></h2>
+<p>For clarity, examples of attribute access in the Paya documentation always use the long form, i.e.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">)</span>
+<span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span>
+<span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In practice you may want to use Maya short names instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
+<span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;wm&#39;</span><span class="p">)</span>
+<span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;opm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>PyMEL and Paya also allow you to use dot-syntax, for example <code class="docutils literal notranslate"><span class="pre">cube.t</span></code>. However this isn’t recommended, as it may
+shadow any current, or future, implementations of custom methods or properties with the same name.</p>
+</section>
+<section id="method-function-shorthands">
+<h2>Method / Function Shorthands<a class="headerlink" href="#method-function-shorthands" title="Permalink to this headline"></a></h2>
+<p>Many Paya methods and functions are available in shorthand form and they, in turn, can accept shorthand keyword
+arguments. Where available, these will be listed in the documentation. Here are several degrees of reduction for
+<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.pick" title="paya.plugtypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Long</span>
+<span class="n">tmtx</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;wm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Shorter</span>
+<span class="n">tmtx</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;wm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pk</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Shortest</span>
+<span class="n">tmtx</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;wm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pk</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Keyword argument shorthands are implemented using the utility function <code class="xref py py-func docutils literal notranslate"><span class="pre">paya.util.function.short()</span></code>, which you
+use in your own scripts. Here’s an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">paya.util</span> <span class="kn">import</span> <span class="n">short</span>
+
+<span class="nd">@short</span><span class="p">(</span><span class="n">numJoints</span><span class="o">=</span><span class="s1">&#39;nj&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">createJoints</span><span class="p">(</span><span class="n">numJoints</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="n">createJoints</span><span class="p">(</span><span class="n">nj</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another utility, <a class="reference internal" href="paya/util/functions.html#paya.util.functions.resolve_flags" title="paya.util.functions.resolve_flags"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.util.functions.resolve_flags()</span></code></a>, lets you create MEL-like interfaces where arguments are
+defined by omission. For example, in the case of <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.pick" title="paya.plugtypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>, passing
+<code class="docutils literal notranslate"><span class="pre">t=True</span></code> will automatically set the other channels to <code class="docutils literal notranslate"><span class="pre">False</span></code>. This is implemented as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shear</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">translate</span><span class="p">,</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">shear</span> <span class="o">=</span> <span class="n">resolve_flags</span><span class="p">(</span><span class="n">translate</span><span class="p">,</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">shear</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="package_config.html" class="btn btn-neutral float-left" title="Package Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+==========
+paya.pools
+==========
+
+.. py:module:: paya.pools
+
+Defines the template class interfaces served by the ``nodes``,
+``plugs``, ``comps`` and ``data`` attributes on :py:mod:`paya.runtime`.
+
+This module is not intended for direct use.
+
+.. py:function:: ispmcls()
+
+    :param cls: The class to query
+    :return: ``True`` if the class is a 'vanilla' PyMEL class,
+        otherwise ``False``.
+    :rtype: bool
+
+.. py:function:: iscustomcls()
+
+    :param cls: The class to query
+    :return: ``True`` if the class is a **paya** class,
+        otherwise ``False``.
+    :rtype: bool
+
+.. py:class:: ClassPool
+
+    Abstract. Defines base functionality for all template class pools.
+
+    .. py:staticmethod:: __new__()
+    
+        Create and return a new object.  See help(type) for accurate signature.
+    
+    .. py:method:: __init__()
+    
+        Initialize self.  See help(type(self)) for accurate signature.
+    
+    .. py:method:: _getTemplateFilePath(clsname)
+    
+        Caution: For speed, this doesn't check for duplicates; the first
+        match is always returned.
+    
+    .. py:method:: getFromPyMELInstance(inst)
+    
+        Given a PyNode or PyMEL data type instance, returns a custom class
+        suitable for assignment.
+        
+        :param inst: the PyNode or PyMEL data type instance
+        :return: The custom class.
+    
+    .. py:method:: getByName(clsname)
+    
+        Returns a custom class by name.
+        
+        :param str clsname: the name of the class to retrieve
+        :return: The custom class.
+    
+    .. py:method:: purge()
+    
+        Clears the cache so that subsequent class lookups will trigger
+        reloads.
+    
+    .. py:method:: __repr__()
+    
+        Return repr(self).
+
+.. py:class:: NodeClassPool
+
+    Serves custom classes for **nodes**.
+
+.. py:class:: PlugClassPool
+
+    Serves custom classes for **plugs** (attributes) off of an inheritance tree
+    defined inside ``paya/plugtree.json``.
+
+    .. py:method:: getFromPyMELInstance(inst)
+    
+        Overloads :py:meth:`ClassPool.getFromPyMELInstance` to implement
+        ``MPlug`` inspections.
+        
+        :param inst: the PyNode or PyMEL data type instance
+        :return: The custom class.
+
+.. py:class:: CompClassPool
+
+    Serves custom classes for **components**.
+
+.. py:class:: DataClassPool
+
+    Serves custom classes for **data objects**, for example
+    :class:`~pymel.core.datatypes.Matrix` instances returned by
+    :py:meth:`~pymel.core.nodetypes.Transform.getMatrix`.
+
+    .. py:method:: getByName(clsname)
+    
+        Overloads :py:meth:`ClassPool.getByName` to prevent customisation of
+        sensitive types such as :py:class:`pymel.core.datatypes.MatrixN` by
+        raising ``UnsupportedLookupError``.
+        
+        :param str clsname: the name of the class to retrieve
+        :return: The custom class.
+
+.. py:function:: getPoolFromPmBase(pmbase)
+
+    Given a PyMEL base class, returns the most appropriate class pool
+    to source a swap-in from.

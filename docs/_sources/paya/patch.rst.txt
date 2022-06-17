@@ -1,0 +1,23 @@
+==========
+paya.patch
+==========
+
+.. py:module:: paya.patch
+
+Defines methods used by :py:mod:`paya.runtime` to manage PyMEL patching.
+
+This module is not intended for direct use.
+
+.. py:function:: patchPyMEL(quiet=False)
+
+    Patches PyMEL so that it will return custom paya classes instead of
+    its own. Called by :py:meth:`~paya.runtime.Runtime.start`.
+    
+    :param bool quiet: don't print status messages; defaults to False
+
+.. py:function:: unpatchPyMEL(quiet=False)
+
+    Reverts PyMEL to its 'factory' state. Called by
+    :py:meth:`~paya.runtime.Runtime.stop`.
+    
+    :param bool quiet: don't print status messages; defaults to False

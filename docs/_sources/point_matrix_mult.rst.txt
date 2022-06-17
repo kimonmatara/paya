@@ -1,0 +1,76 @@
+***************************
+Point-Matrix Multiplication
+***************************
+
+================
+Relevant Classes
+================
+
+.. list-table::
+    :header-rows: 1
+    :widths: 200 200
+
+    *   - Static
+        - Dynamic
+    *   - N/A
+        - :class:`paya.plugtypes.math3D.Math3D`
+    *   - :class:`paya.datatypes.vector.Vector`
+        - :class:`paya.plugtypes.vector.Vector`
+    *   - :class:`paya.datatypes.point.Point`
+        - N/A
+
+==========
+Background
+==========
+
+Although vectors can, for the most part, be manipulated in the same ways as points, they must be transformed
+differently. In simple terms, where *vector-matrix* multiplication only rotates and scales the input, *point-matrix*
+multiplication also applies translation.
+
+In PyMEL's data classes, the ``*`` operator performs point-matrix multiplication when the left operand is an instance of
+:class:`~pymel.core.datatypes.Point` rather than :class:`~pymel.core.datatypes.Vector`. Paya extends this behaviour to
+support matrix attributes as the right operand.
+
+In the case of attributes it's impossible to choose an implementation, because Maya itself doesn't distinguish between
+points and vectors. In such cases, the :term:`universal` ``*`` will always default to vector-matrix multiplication.
+
+====================
+A Dedicated Operator
+====================
+
+To get around this limitation, Paya adds a dedicated :term:`universal` operator for point-matrix multiplication: ``^``.
+In the following :term:`dynamic` example, the position of a cube is transformed by a joint and applied to a cone. Taking
+a cue from Maya's constraints, ``parentMatrix`` and ``parentInverseMatrix`` are used to drive the setup in world space:
+
+.. _pmm_example:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            cube = r.PyNode('pCube1')
+            cone = r.PyNode('pCone1')
+            joint = r.PyNode('joint1')
+
+            # Get world position of cube
+            position = cube.attr('translate') ^ cube.attr('parentMatrix')[0]
+
+            # Transform by joint
+            position ^= joint.attr('worldMatrix')
+
+            # Drive the cone in world space
+            position ^= cone.attr('parentInverseMatrix')[0]
+            position >> cone.attr('translate')
+
+
+    .. tab:: Graph
+
+        .. figure:: pmm_with_cube_and_cone.png
+            :align: center
+
+    .. tab:: Viewport
+
+        .. figure:: point_matrix_mult_with_op.gif
+            :align: center
