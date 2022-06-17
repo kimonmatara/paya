@@ -49,3 +49,18 @@ class Transform:
         return r.data.Point(r.xform(self, q=True, t=True, a=True, ws=True))
 
     gwp = getWorldPosition
+
+    @short(plug='p')
+    def getWorldMatrix(self, plug=False):
+        """:param bool plug/p: return a plug instead of a value; defaults to
+            False
+        :return: The world matrix of this transform, as a value or plug.
+        :rtype: :class:`paya.datatypes.matrix.Matrix` or
+            :class:`paya.plugtypes.matrix.Matrix`
+        """
+        if plug:
+            return self.attr('wm')
+
+        return self.getMatrix(worldSpace=True)
+
+    gwm = getWorldMatrix
