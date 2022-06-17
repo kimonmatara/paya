@@ -21,3 +21,11 @@ paya.nodetypes.transform.Transform
         :return: The position attribute or value.
         :rtype: :class:`~paya.datatypes.point.Point` or
             :class:`~paya.plugtypes.vector.Vector`
+    
+    .. py:method:: getWorldMatrix(plug=False)
+    
+        :param bool plug/p: return a plug instead of a value; defaults to
+            False
+        :return: The world matrix of this transform, as a value or plug.
+        :rtype: :class:`paya.datatypes.matrix.Matrix` or
+            :class:`paya.plugtypes.matrix.Matrix`
