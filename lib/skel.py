@@ -115,9 +115,9 @@ class Chain(UserList):
 
         :param points: a world position for each joint
         :param upVector: the reference up vector
-        :param downAxis/da: the 'bone' axis; defaults to
+        :param str downAxis/da: the 'bone' axis; defaults to
             ``paya.config.defaultDownAxis``
-        :param upAxis/ua: the axis to map to the up vector; defaults to
+        :param str upAxis/ua: the axis to map to the up vector; defaults to
             ``paya.config.defaultUpAxis``
         :param under/u: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
@@ -134,6 +134,91 @@ class Chain(UserList):
         )
 
         return cls.createFromMatrices(matrices, u=under)
+
+    @classmethod
+    @short(
+        upCurve='upc',
+        upVector='upv',
+        downAxis='da',
+        upAxis='ua',
+        tolerance='tol'
+    )
+    def createFromCurve(
+            cls,
+            curve,
+            numberOrFractions,
+            upCurve=None,
+            upVector=None,
+            downAxis=defaultDownAxis,
+            upAxis=defaultUpAxis,
+            tolerance=1e-7
+    ):
+        """
+        Draws a chain (once) along a curve. Either 'upCurve' or 'upVector'
+        must be provided.
+
+        :param curve: the curve along which to distribute joints
+        :type curve: str or :class:`~pymel.core.general.PyNode`
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :param upCurve/upc: a curve to aim towards; defaults to None
+        :type upCurve/upc: str or :class:`~pymel.core.general.PyNode`
+        :param upVector/upv: a reference up vector
+        :type upVector/upv: list, tuple or
+            :class:`~paya.datatypes.vector.Vector`
+        :param str downAxis/da: the 'bone' axis; defaults to
+            ``paya.config.defaultDownAxis``
+        :param str upAxis/ua: the axis to map to the up vector(s); defaults to
+            ``paya.config.defaultUpAxis``
+        :param float tolerance/tol: see
+            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+        :return: The constructed chain.
+        :rtype: :class:`Chain`
+        """
+        if upCurve:
+            upCurve = r.PyNode(upCurve)
+
+        elif upVector:
+            upVector = r.data.Vector(upVector)
+
+        else:
+            raise RuntimeError(
+                "Please provide either 'upCurve' or 'upVector'."
+            )
+
+        curve = r.PyNode(curve)
+        points = curve.distributePoints(numberOrFractions)
+
+        if upCurve:
+            aimVectors = _mo.getAimVectorsFromPoints(points)
+            aimVectors.append(aimVectors[-1])
+
+            upVectors = []
+
+            for point in points:
+                upPoint = upCurve.takeClosestPoint(point)
+                upVector = upPoint-point
+                upVectors.append(upVector)
+
+        else:
+            aimVectors, upVectors = _mo.getAimAndUpVectorsFromPoints(
+                points, upVector, tol=tolerance
+            )
+
+        matrices = []
+
+        for point, aimVector, upVector in zip(
+            points, aimVectors, upVectors
+        ):
+            matrix = r.createMatrix(
+                downAxis, aimVector,
+                upAxis, upVector,
+                t=point
+            ).pk(t=True, r=True)
+
+            matrices.append(matrix)
+
+        return cls.createFromMatrices(matrices)
 
     #------------------------------------------------------------|    Orient
 
