@@ -11,6 +11,12 @@ paya.plugtypes.eulerRotation.EulerRotation
         Overrides :meth:`~paya.plugtypes.attribute.Attribute.get` to return
         :class:`~paya.datatypes.eulerRotation.EulerRotation` values.
     
+    .. py:method:: set(value, **kwargs)
+    
+        Overloads :meth:`~paya.plugtypes.attribute.Attribute.get` to ensure
+        that instances of :class:`~paya.datatypes.eulerRotation.EulerRotation`
+        with units that don't match the UI setting are set correctly.
+    
     .. py:method:: isRotateChannel()
     
         :return: True if this is the ``rotate`` channel on a transform,

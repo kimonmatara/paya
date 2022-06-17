@@ -146,3 +146,11 @@ paya.datatypes.vector.Vector
             :class:`Point`, list, str
         :return: The angle.
         :rtype: :class:`~paya.plugtypes.attributeMath1D.AttributeMath1D` or float
+    
+    .. py:method:: asScaleMatrix()
+    
+        Uses this vectors's three components as the magnitudes of an identity
+        matrix's base vectors.
+        
+        :return: The scale matrix.
+        :rtype: :class:`~paya.datatypes.matrix.Matrix`

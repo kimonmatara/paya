@@ -473,3 +473,20 @@ class Vector:
             return node.attr('angle')
 
         return _dt.Vector.angle(self, other)
+
+    #--------------------------------------------------------------------|    Conversions
+
+    def asScaleMatrix(self):
+        """
+        Uses this vectors's three components as the magnitudes of an identity
+        matrix's base vectors.
+
+        :return: The scale matrix.
+        :rtype: :class:`~paya.datatypes.matrix.Matrix`
+        """
+        matrix = r.data.Matrix()
+        matrix.x = r.data.Vector([1, 0, 0]) * self[0]
+        matrix.y = r.data.Vector([0, 1, 0]) * self[1]
+        matrix.z = r.data.Vector([0, 0, 1]) * self[2]
+
+        return matrix

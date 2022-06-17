@@ -29,3 +29,14 @@ paya.nodetypes.transform.Transform
         :return: The world matrix of this transform, as a value or plug.
         :rtype: :class:`paya.datatypes.matrix.Matrix` or
             :class:`paya.plugtypes.matrix.Matrix`
+    
+    .. py:method:: getRotateAxisMatrix(plug=False)
+    
+        Returns the rotate axis as a rotation matrix.
+        
+        :param bool plug/p: return an attribute instead of a value; this will
+            be cooked only once, and afterwards retrieved via a
+            'rotateAxisMatrix' attribute on the node; defaults to False
+        :return: The rotate axis matrix.
+        :rtype: :class:`paya.datatypes.matrix.Matrix` or
+            :class:`paya.plugtypes.matrix.Matrix`

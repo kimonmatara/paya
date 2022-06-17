@@ -1,3 +1,5 @@
+import maya.OpenMaya as om
+import pymel.util as _pu
 import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
 import paya.lib.mathops as _mo
@@ -24,6 +26,24 @@ class EulerRotation:
             return r.data.EulerRotation(result)
 
         return result
+
+    def set(self, value, **kwargs):
+        """
+        Overloads :meth:`~paya.plugtypes.attribute.Attribute.get` to ensure
+        that instances of :class:`~paya.datatypes.eulerRotation.EulerRotation`
+        with units that don't match the UI setting are set correctly.
+        """
+        if isinstance(value, _dt.EulerRotation):
+            currentUnit = om.MAngle.uiUnit()
+
+            if currentUnit == om.MAngle.kRadians:
+                if value.unit != 'radians':
+                    value = _pu.radians(value)
+
+            elif value.unit != 'degrees':
+                value = _pu.degrees(value)
+
+        return r.plugs.Math3D.set(self, value, **kwargs)
 
     def isRotateChannel(self):
         """

@@ -462,11 +462,15 @@ class Matrix:
                 ['translate', 'rotate', 'scale', 'shear'],
                 [translate, rotate, scale, shear]
             ):
+                dest = xf.attr(channel)
+
                 try:
-                    decomposition[channel] >> xf.attr(channel)
+                    decomposition[channel] >> dest
 
                 except:
-                    continue
+                    r.warning(
+                        "Couldn't connect into attribute: {}".format(dest)
+                    )
 
             return decomposition
 
@@ -493,11 +497,11 @@ class Matrix:
         #-------------------------|    Rotation compensations
 
         if compensateRotateAxis:
-            ramtx = xf.attr('rotateAxis').asRotateMatrix()
+            ramtx = xf.getRotateAxisMatrix(p=True)
             rmtx = ramtx.inverse() * rmtx
 
         if isJoint and compensateJointOrient:
-            jomtx = xf.attr('jointOrient').asRotateMatrix()
+            jomtx = xf.getJointOrientMatrix(p=True)
             rmtx *= jomtx.inverse()
 
         #-------------------------|    Pivot compensations
@@ -505,7 +509,7 @@ class Matrix:
         if compensatePivots and not isJoint:
             # Solve as Maya would
 
-            ramtx = xf.attr('rotateAxis').asRotateMatrix()
+            ramtx = xf.getRotateAxisMatrix(p=True)
             spmtx = xf.attr('scalePivot').asTranslateMatrix()
             stmtx = xf.attr('scalePivotTranslate').asTranslateMatrix()
             rpmtx = xf.attr('rotatePivot').asTranslateMatrix()
@@ -535,7 +539,9 @@ class Matrix:
                      source >> dest
 
                 except:
-                    r.warning("Could not connect into {}".format(dest))
+                    r.warning(
+                        "Couldn't connect into attribute: {}".format(dest)
+                    )
 
         return decomposition
 

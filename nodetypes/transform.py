@@ -64,3 +64,30 @@ class Transform:
         return self.getMatrix(worldSpace=True)
 
     gwm = getWorldMatrix
+
+    @short(plug='p')
+    def getRotateAxisMatrix(self, plug=False):
+        """
+        Returns the rotate axis as a rotation matrix.
+
+        :param bool plug/p: return an attribute instead of a value; this will
+            be cooked only once, and afterwards retrieved via a
+            'rotateAxisMatrix' attribute on the node; defaults to False
+        :return: The rotate axis matrix.
+        :rtype: :class:`paya.datatypes.matrix.Matrix` or
+            :class:`paya.plugtypes.matrix.Matrix`
+        """
+        if plug:
+            attrName = 'rotateAxisMatrix'
+
+            if not self.hasAttr(attrName):
+                self.addAttr(attrName, at='matrix')
+
+            attr = self.attr(attrName)
+
+            if not attr.inputs():
+                self.attr('rotateAxis').asRotateMatrix() >> attr
+
+            return attr
+
+        return self.attr('rotateAxis').get().asRotateMatrix()

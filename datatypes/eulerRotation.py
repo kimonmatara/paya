@@ -303,3 +303,7 @@ class EulerRotation:
                 return NotImplemented
 
         return _dt.EulerRotation.__rpow__(self, other)
+
+    @property
+    def asRotateMatrix(self):
+        return self.asMatrix

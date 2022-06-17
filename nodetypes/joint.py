@@ -71,3 +71,32 @@ class Joint:
             return r.Chain.getFromStartEnd(self, end)
 
         return r.Chain.getFromRoot(self)
+
+    #------------------------------------------------------------|    Sampling
+
+    @short(plug='p')
+    def getJointOrientMatrix(self, plug=False):
+        """
+        Returns joint orientation as a rotation matrix.
+
+        :param bool plug/p: return an attribute instead of a value; this will
+            be cooked only once, and afterwards retrieved via a
+            'jointOrientMatrix' attribute on the node; defaults to False
+        :return: The joint orient matrix.
+        :rtype: :class:`paya.datatypes.matrix.Matrix` or
+            :class:`paya.plugtypes.matrix.Matrix`
+        """
+        if plug:
+            attrName = 'jointOrientMatrix'
+
+            if not self.hasAttr(attrName):
+                self.addAttr(attrName, at='matrix')
+
+            attr = self.attr(attrName)
+
+            if not attr.inputs():
+                self.attr('jointOrient').asRotateMatrix() >> attr
+
+            return attr
+
+        return self.attr('jointOrient').get().asRotateMatrix()
