@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.datatypes &mdash; paya 0.3 documentation</title>
+  <title>paya.comptypes &mdash; paya 0.3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="paya.datatypes.eulerRotation.EulerRotation" href="datatypes/eulerRotation.html" />
-    <link rel="prev" title="paya.config" href="config.html" /> 
+    <link rel="next" title="paya.comptypes.nurbsCurveParameter.NurbsCurveParameter" href="comptypes/nurbsCurveParameter.html" />
+    <link rel="prev" title="paya.cmds" href="cmds.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -65,16 +65,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="comptypes.html">paya.comptypes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.datatypes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="datatypes/eulerRotation.html">paya.datatypes.eulerRotation.EulerRotation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="datatypes/matrix.html">paya.datatypes.matrix.Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="datatypes/point.html">paya.datatypes.point.Point</a></li>
-<li class="toctree-l3"><a class="reference internal" href="datatypes/quaternion.html">paya.datatypes.quaternion.Quaternion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="datatypes/vector.html">paya.datatypes.vector.Vector</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.comptypes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="comptypes/nurbsCurveParameter.html">paya.comptypes.nurbsCurveParameter.NurbsCurveParameter</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodetypes.html">paya.nodetypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
@@ -105,9 +101,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../paya.html">paya</a> &raquo;</li>
-      <li>paya.datatypes</li>
+      <li>paya.comptypes</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/paya/datatypes.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/paya/comptypes.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -115,15 +111,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="paya-datatypes">
-<h1>paya.datatypes<a class="headerlink" href="#paya-datatypes" title="Permalink to this headline"></a></h1>
+  <section id="paya-comptypes">
+<h1>paya.comptypes<a class="headerlink" href="#paya-comptypes" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="datatypes/eulerRotation.html">paya.datatypes.eulerRotation.EulerRotation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes/matrix.html">paya.datatypes.matrix.Matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes/point.html">paya.datatypes.point.Point</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes/quaternion.html">paya.datatypes.quaternion.Quaternion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes/vector.html">paya.datatypes.vector.Vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comptypes/nurbsCurveParameter.html">paya.comptypes.nurbsCurveParameter.NurbsCurveParameter</a></li>
 </ul>
 </div>
 </section>
@@ -132,8 +124,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="config.html" class="btn btn-neutral float-left" title="paya.config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="datatypes/eulerRotation.html" class="btn btn-neutral float-right" title="paya.datatypes.eulerRotation.EulerRotation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cmds.html" class="btn btn-neutral float-left" title="paya.cmds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="comptypes/nurbsCurveParameter.html" class="btn btn-neutral float-right" title="paya.comptypes.nurbsCurveParameter.NurbsCurveParameter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.util.functions &mdash; paya 0.3 documentation</title>
+  <title>paya.comptypes.nurbsCurveParameter.NurbsCurveParameter &mdash; paya 0.3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.util.modules" href="modules.html" />
-    <link rel="prev" title="paya.util" href="../util.html" /> 
+    <link rel="next" title="paya.config" href="../config.html" />
+    <link rel="prev" title="paya.comptypes" href="../comptypes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -65,7 +65,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../comptypes.html">paya.comptypes</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.comptypes.nurbsCurveParameter.NurbsCurveParameter</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
@@ -75,12 +78,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../util.html">paya.util</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.util.functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules.html">paya.util.modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="strings.html">paya.util.strings</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
@@ -103,10 +101,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../paya.html">paya</a> &raquo;</li>
-          <li><a href="../util.html">paya.util</a> &raquo;</li>
-      <li>paya.util.functions</li>
+          <li><a href="../comptypes.html">paya.comptypes</a> &raquo;</li>
+      <li>paya.comptypes.nurbsCurveParameter.NurbsCurveParameter</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/paya/util/functions.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/paya/comptypes/nurbsCurveParameter.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -114,65 +112,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-paya.util.functions">
-<span id="paya-util-functions"></span><h1>paya.util.functions<a class="headerlink" href="#module-paya.util.functions" title="Permalink to this headline"></a></h1>
+  <section id="module-paya.comptypes.nurbsCurveParameter">
+<span id="paya-comptypes-nurbscurveparameter-nurbscurveparameter"></span><h1>paya.comptypes.nurbsCurveParameter.NurbsCurveParameter<a class="headerlink" href="#module-paya.comptypes.nurbsCurveParameter" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.util.functions.short">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">short</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short" title="Permalink to this definition"></a></dt>
-<dd><p>Decorator with keyword arguments, used to mimic Maya’s ‘shorthand’
-flags.</p>
-<p>Example:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@short</span><span class="p">(</span><span class="n">numJoints</span><span class="o">=</span><span class="s1">&#39;nj&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">makeJoints</span><span class="p">(</span><span class="n">numJoints</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
-    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
-
-<span class="c1"># This can then be called as:</span>
-<span class="n">makeJoints</span><span class="p">(</span><span class="n">nj</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.util.functions.short.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short.__init__" title="Permalink to this definition"></a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.util.functions.short.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short.__call__" title="Permalink to this definition"></a></dt>
-<dd><p>Call self as a function.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.util.functions.resolveFlags">
-<span class="sig-name descname"><span class="pre">resolveFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.resolveFlags" title="Permalink to this definition"></a></dt>
-<dd><p>Used to mimic Maya flag behaviour.</p>
-<p>If only a subset of flags are defined, then:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>If the subset are a mixture of True / False, the other flags are
-set to False.</p></li>
-<li><p>If the subset are all True or all False, the remaining flags are
-set to the opposite.</p></li>
-</ul>
-</div></blockquote>
-<p>If all flags are None, all flags are set to True.
-If all flags are NOT None (i.e. all defined), they are all conformed to
-booleans.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>flags</strong> – one or more user flag arguments</p>
+<dt class="sig sig-object py" id="paya.comptypes.nurbsCurveParameter.NurbsCurveParameter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NurbsCurveParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.comptypes.nurbsCurveParameter.NurbsCurveParameter" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.comptypes.nurbsCurveParameter.NurbsCurveParameter.__float__">
+<span class="sig-name descname"><span class="pre">__float__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.comptypes.nurbsCurveParameter.NurbsCurveParameter.__float__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>This parameter as a float.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The resolved flags.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -181,8 +138,8 @@ booleans.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../util.html" class="btn btn-neutral float-left" title="paya.util" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="modules.html" class="btn btn-neutral float-right" title="paya.util.modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../comptypes.html" class="btn btn-neutral float-left" title="paya.comptypes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../config.html" class="btn btn-neutral float-right" title="paya.config" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

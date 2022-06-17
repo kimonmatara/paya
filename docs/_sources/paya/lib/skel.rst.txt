@@ -44,11 +44,34 @@ paya.lib.skel
         
         :param points: a world position for each joint
         :param upVector: the reference up vector
-        :param downAxis/da: the 'bone' axis; defaults to
+        :param str downAxis/da: the 'bone' axis; defaults to
             ``paya.config.defaultDownAxis``
-        :param upAxis/ua: the axis to map to the up vector; defaults to
+        :param str upAxis/ua: the axis to map to the up vector; defaults to
             ``paya.config.defaultUpAxis``
         :param under/u: an optional parent for the chain; defaults to None
+        :param float tolerance/tol: see
+            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+        :return: The constructed chain.
+        :rtype: :class:`Chain`
+    
+    .. py:classmethod:: createFromCurve(curve, numberOrFractions, upCurve=None, upVector=None, downAxis='y', upAxis='x', tolerance=1e-07)
+    
+        Draws a chain (once) along a curve. Either 'upCurve' or 'upVector'
+        must be provided.
+        
+        :param curve: the curve along which to distribute joints
+        :type curve: str or :class:`~pymel.core.general.PyNode`
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :param upCurve/upc: a curve to aim towards; defaults to None
+        :type upCurve/upc: str or :class:`~pymel.core.general.PyNode`
+        :param upVector/upv: a reference up vector
+        :type upVector/upv: list, tuple or
+            :class:`~paya.datatypes.vector.Vector`
+        :param str downAxis/da: the 'bone' axis; defaults to
+            ``paya.config.defaultDownAxis``
+        :param str upAxis/ua: the axis to map to the up vector(s); defaults to
+            ``paya.config.defaultUpAxis``
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: The constructed chain.
