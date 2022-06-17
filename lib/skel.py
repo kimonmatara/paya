@@ -184,18 +184,15 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Inspections
 
-    def points(self):
+    @short(plug='p')
+    def points(self, plug=False):
         """
+        :param bool plug/p: return attributes instead of values; defaults to
+            False
         :return: A world position for each joint in this chain.
         :rtype: :class:`list` of :class:`~paya.datatypes.point.Point`
         """
-        out = []
-
-        for joint in self:
-            pos = r.data.Point(r.xform(joint, q=True, t=True, ws=True))
-            out.append(pos)
-
-        return out
+        return [joint.gwp(p=plug) for joint in self]
 
     def contiguous(self):
         """
