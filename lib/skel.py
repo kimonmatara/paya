@@ -351,3 +351,21 @@ class Chain(UserList):
 
         return self
 
+    #------------------------------------------------------------|    Pose management
+
+    def reset(self):
+        """
+        Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
+
+        :return: ``self``
+        """
+        for joint in self:
+            for ax in 'xyz':
+                attr = joint.attr('r'+ax)
+                try:
+                    attr.set(0.0)
+
+                except:
+                    r.warning("Couldn't set attribute: {}".format(attr))
+
+        return self
