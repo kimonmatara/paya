@@ -1,16 +1,13 @@
-====================================
-paya.nodetypes.dependNode.DependNode
-====================================
+================================
+paya.nodetypes.ikHandle.IkHandle
+================================
 
-.. py:module:: paya.nodetypes.dependNode
+.. py:module:: paya.nodetypes.ikHandle
 
-.. py:class:: DependNode(*args, **kwargs)
+.. py:class:: IkHandle(*args, **kwargs)
 
-    .. py:classmethod:: createNode(name=None, suffix=None, inheritName=True)
+    .. py:classmethod:: create(name=None, suffix=None, inheritName=True, **mayaOptions)
     
-        Object-oriented version of :func:`pymel.core.general.createNode` with
-        managed naming.
-        
         :param name/n: one or more name elements; defaults to None
         :type name/n: None, str, int, or list
         :param suffix/suf: if string, append; if ``True``, look up a type
@@ -19,5 +16,7 @@ paya.nodetypes.dependNode.DependNode
         :type suffix/suf: None, bool, str
         :param bool inheritName/inn: inherit names from
             :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param \*\*mayaOptions: all overflow keyword arguments are forwarded
+            to :func:`~pymel.core.animation.ikHandle`
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`

@@ -46,6 +46,8 @@ class MakeName(object):
 
             return _nm.make(*elems, **kwargs)
 
+        return makeName
+
 
 class DependNode:
 

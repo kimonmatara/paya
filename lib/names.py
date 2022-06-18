@@ -1,5 +1,5 @@
 """
-Node-naming utilities, usually called indirectly by custom class methods.
+Node-naming utilities, usually called indirectly.
 """
 
 import re
@@ -40,8 +40,8 @@ def conformElems(*elems):
     Cleans up user name elements, typically specified through ``*args``
     and / or the ``name/n`` keyword argument.
 
-    :param elems: one or more name elements, packed or unpacked
-    :type elems: int, str
+    :param \*elems: one or more name elements, packed or unpacked
+    :type \*elems: int, str
     :return: The conformed elements.
     :rtype: list
     """
@@ -72,13 +72,14 @@ class Name:
         self._elems = _pu.expandArgs(*elems)
 
     def __enter__(self):
-        self._prev_elems = Name.__elems__
+        self._prev_elems = Name.__elems__[:]
         Name.__elems__ += conformElems(self._elems)
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         Name.__elems__ = self._prev_elems
+
         return False
 
 @short(
@@ -97,6 +98,7 @@ def make(
 ):
     """
     Constructs Maya node names.
+
     :param \*elems: one or more name elements
     :type \*elems: int, str, list
     :param name/n: elements passed-through via a ``name`` argument;

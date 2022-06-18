@@ -10,6 +10,8 @@ r = LazyModule('paya.runtime')
 
 class Chain(UserList):
 
+    __solver__ = 'ikRPsolver'
+
     #------------------------------------------------------------|    Instantiation
 
     def __new__(cls, *joints):
@@ -351,6 +353,18 @@ class Chain(UserList):
 
         return list(set(out))
 
+    def ikHandles(self):
+        """
+        :return: IK handles affecting this chain.
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        """
+        out = []
+
+        for joint in self:
+            out += joint.ikHandles()
+
+        return list(set(out))
+
     #------------------------------------------------------------|    Hierarchy editing
 
     def compose(self):
@@ -393,6 +407,54 @@ class Chain(UserList):
 
         return self
 
+    #------------------------------------------------------------|    IK
+
+    @short(
+        solver='sol',
+        startJoint='sj',
+        endEffector='ee'
+    )
+    def createIkHandle(self, solver=None, **createOptions):
+        """
+        Creates an IK handle for this chain.
+
+        :param str solver/sol: the solver to use; defaults to 'ikRPsolver' if
+            this chain has more than two joints, otherwise 'ikSCsolver'
+        :param \*\*createOptions: all overflow arguments are forwarded to
+            :meth:`~paya.nodetypes.ikHandle.IkHandle.create`
+        :return: The IK handle.
+        :rtype: :class:`~paya.nodetypes.ikHandle.IkHandle`
+        """
+        ln = len(self)
+
+        if ln < 2:
+            raise RuntimeError("Need two or more joints.")
+
+        if solver is None:
+            solver = self.__solver__
+
+        createOptions['solver'] = solver
+        createOptions['startJoint'] = self[0]
+        createOptions['endEffector'] = self[-1]
+
+        return r.nodes.IkHandle.create(**createOptions)
+
+    def createIkHandles(self):
+        """
+        Creates One IK handle per bone in this chain. The IK handles will
+        all use a single-chain solver.
+
+        :return: The IK handles
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        """
+        out = []
+
+        for i, bone in enumerate(self.bones()):
+            with r.Name(i+1):
+                out.append(bone.createIkHandle())
+
+        return out
+
     #------------------------------------------------------------|    Repr
 
     def __repr__(self):
@@ -406,12 +468,13 @@ class Chain(UserList):
 
         return "{}({})".format(self.__class__.__name__, content)
 
+
 class Bone(Chain):
     """
     A specialised subclass of :class:`~paya.lib.skel.Chain` for two-joint
     chains.
     """
-    pass
+    __solver__ = 'ikSCsolver'
 
 
 class Triad(Chain):
@@ -419,4 +482,3 @@ class Triad(Chain):
     A specialised subclass of :class:`~paya.lib.skel.Chain` for three-joint
     chains.
     """
-    pass

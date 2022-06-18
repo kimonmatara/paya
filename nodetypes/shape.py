@@ -4,6 +4,8 @@ import paya.runtime as r
 
 class Shape:
 
+    #-----------------------------------------------------------|    Constructors
+
     @classmethod
     @short(name='n', suffix='suf', inheritName='inn')
     def createNode(cls, name=None, suffix=None, inheritName=True):

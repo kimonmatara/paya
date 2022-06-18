@@ -1,4 +1,5 @@
 from paya.util import short
+import maya.cmds as m
 import paya.runtime as r
 
 
@@ -77,18 +78,34 @@ class Joint:
 
         return list(set(out))
 
+    @short(includeAsTip='iat')
+    def ikHandles(self, includeAsTip=True):
+        """
+        :param bool includeAsTip/iat: Include IK systems for which this joint
+            is the tip; defaults to True
+        :return: IK handles this joint participates in.
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        """
+        out = []
+
+        for ikHandle in r.ls(type='ikHandle'):
+            if self in ikHandle.getJointList(it=includeAsTip):
+                out.append(ikHandle)
+
+        return list(set(out))
+
     #------------------------------------------------------------|    Chain
 
-    def chainFromHere(self, end=None):
+    def chainFromHere(self, to=None):
         """
-        :param end: an optional end joint
-        :type end: str or :class:`~paya.nodetypes.joint.Joint`
-        :return: A chain from this joint up to and including 'end'
+        :param to: an optional to joint
+        :type to: str or :class:`~paya.nodetypes.joint.Joint`
+        :return: A chain from this joint up to and including 'to'
             (if provided), or terminating before the first branch.
         :rtype: :class:`~paya.lib.skel.Chain`
         """
-        if end:
-            return r.Chain.getFromStartEnd(self, end)
+        if to:
+            return r.Chain.getFromStartEnd(self, to)
 
         return r.Chain.getFromRoot(self)
 
