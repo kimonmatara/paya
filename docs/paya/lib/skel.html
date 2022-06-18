@@ -121,6 +121,12 @@
 <dt class="sig sig-object py" id="paya.lib.skel.Chain">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.__new__" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return a new object.  See help(type) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.__init__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -271,6 +277,20 @@ fractions, or a number</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.bones">
+<span class="sig-name descname"><span class="pre">bones</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.bones" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="#paya.lib.skel.Bone" title="paya.lib.skel.Bone"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bone</span></code></a> instance for every joint pair
+in the chain.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.skel.Bone" title="paya.lib.skel.Bone"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bone</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.points">
 <span class="sig-name descname"><span class="pre">points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.points" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -352,6 +372,26 @@ no particular order.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.skel.Bone">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Bone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Bone" title="Permalink to this definition"></a></dt>
+<dd><p>A specialised subclass of <a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a> for two-joint
+chains.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.skel.Triad">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Triad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Triad" title="Permalink to this definition"></a></dt>
+<dd><p>A specialised subclass of <a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a> for three-joint
+chains.</p>
 </dd></dl>
 
 </section>

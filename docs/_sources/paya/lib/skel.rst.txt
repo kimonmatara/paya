@@ -6,6 +6,10 @@ paya.lib.skel
 
 .. py:class:: Chain(*joints)
 
+    .. py:staticmethod:: __new__(*joints)
+    
+        Create and return a new object.  See help(type) for accurate signature.
+    
     .. py:method:: __init__(*joints)
     
         :param \*joints: the joint content for the
@@ -93,6 +97,12 @@ paya.lib.skel
         :return: ``self``
         :rtype: :class:`Chain`
     
+    .. py:method:: bones()
+    
+        :return: A :class:`~paya.lib.skel.Bone` instance for every joint pair
+            in the chain.
+        :rtype: :class:`~paya.lib.skel.Bone`
+    
     .. py:method:: points(plug=False)
     
         :param bool plug/p: return attributes instead of values; defaults to
@@ -131,3 +141,17 @@ paya.lib.skel
         Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
         
         :return: ``self``
+    
+    .. py:method:: __repr__()
+    
+        Return repr(self).
+
+.. py:class:: Bone(*joints)
+
+    A specialised subclass of :class:`~paya.lib.skel.Chain` for two-joint
+    chains.
+
+.. py:class:: Triad(*joints)
+
+    A specialised subclass of :class:`~paya.lib.skel.Chain` for three-joint
+    chains.
