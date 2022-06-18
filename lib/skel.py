@@ -13,6 +13,10 @@ class Chain(UserList):
     #------------------------------------------------------------|    Instantiation
 
     def __init__(self, *joints):
+        """
+        :param \*joints: the joint content for the
+            :class:`~paya.lib.skel.Chain` instance
+        """
         joints = _pu.expandArgs(*joints)
         joints = map(r.PyNode, joints)
         super(Chain, self).__init__(joints)
@@ -78,7 +82,6 @@ class Chain(UserList):
         :param under/u: an optional parent for the chain; defaults to None
         :return: :class:`Chain`
         """
-
         joints = []
 
         for i, matrix in enumerate(matrices):

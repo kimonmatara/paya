@@ -24,6 +24,26 @@ class Joint:
             inherit=True,
             suffix=True
     ):
+        """
+        Creates a joint.
+
+        :param bool displayLocalAxis/dla: display local axis; defaults to True
+        :param worldMatrix/wm: an optional world matrix for the joint;
+            defaults to None
+        :type worldMatrix/wm: None, list,
+            :class:`~paya.datatypes.matrix.Matrix`
+        :param under/u: an optional parent for the joint; defaults to None
+        :type under/u: None, str, :class:`~pymel.core.general.PyNode`
+        :param name/n: one or more name elements for the joint; defaults to
+            None
+        :type name/n: None, str, list or tuple
+        :param bool inherit/i: inherit names from :class:`~paya.lib.names.Name`
+            blocks; defaults to True
+        :param suffix/s: if True, look up and apply a type suffix; if string,
+            apply as suffix; if False, omit suffix; defaults to True
+        :return: The joint.
+        :rtype: :class:`~paya.nodetypes.joint.Joint`
+        """
         joint = cls.createNode(n=name, i=inherit, s=suffix)
 
         if under:
