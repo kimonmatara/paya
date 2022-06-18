@@ -27,7 +27,7 @@ def legalise(name):
             name = '_'+name
 
         # Fuse all internal illegal characters into single underscores
-        name = re.sub(r'([^_a-zA-Z0-9\:]+)', '_', name)
+        name = re.sub(r'([^_a-zA-Z0-9:]+)', '_', name)
 
     if name:
         return name

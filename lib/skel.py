@@ -388,6 +388,28 @@ class Chain(UserList):
 
         return self
 
+    @short(replaceTip='rt')
+    def appendChain(self, otherChain, replaceTip=True):
+        """
+        This is an in-place operation. Splices ``otherChain`` to the bottom of
+        this chain and updates the membership.
+
+        :param otherChain: the chain to append to this one
+        :type otherChain: list or :class:`Chain`
+        :param bool replaceTip/rt: replace this chain's tip joint; defaults
+            to True
+        :return: ``self``
+        :rtype: :class:`Chain`
+        """
+        if replaceTip:
+            tip = self.pop(-1)
+            r.delete(tip)
+
+        r.parent(otherChain[0], self[-1])
+        self += otherChain
+        self._updateClass()
+        return self
+
     #------------------------------------------------------------|    Pose management
 
     def reset(self):
@@ -454,6 +476,11 @@ class Chain(UserList):
                 out.append(bone.createIkHandle())
 
         return out
+
+    #------------------------------------------------------------|    Type management
+
+    def _updateClass(self):
+        self.__class__ =  {2: Bone, 3: Triad}.get(len(self), Chain)
 
     #------------------------------------------------------------|    Repr
 
