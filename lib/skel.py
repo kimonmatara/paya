@@ -365,7 +365,30 @@ class Chain(UserList):
 
         return list(set(out))
 
-    #------------------------------------------------------------|    Hierarchy editing
+    #------------------------------------------------------------|    Editing
+
+    @short(inheritName='inn',suffix='suf')
+    def rename(self, *elems, inheritName=True, suffix=None, start=1):
+        """
+        Renames this chain. Numbers will be added before the suffix.
+
+        :param \*elems: one or more name elements
+        :type \*elems: list, str, int
+        :param bool inheritName/inn: inherit from
+            :class:`~paya.lib.names.Name` blocks; defualts to True
+        :param bool suffix/suf: if string, append; if True, apply the joint
+            suffix; if False; omit suffix; defaults to
+            :attr:`paya.config.autoSuffix`
+        :param int start: the number to start from; defaults to 1
+        :return: ``self``
+        """
+        for i, joint in enumerate(self):
+            with r.Name(i+start):
+                name = r.nodes.Joint.makeName(
+                    *elems, inn=inheritName, suf=suffix)
+                joint.rename(name)
+
+        return self
 
     def compose(self):
         """
