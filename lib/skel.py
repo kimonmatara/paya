@@ -12,6 +12,19 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Instantiation
 
+    def __new__(cls, *joints):
+        if cls is Chain:
+            joints = _pu.expandArgs(*joints)
+            num = len(joints)
+
+            if num is 2:
+                cls = Bone
+
+            elif num is 3:
+                cls = Triad
+
+        return object.__new__(cls)
+
     def __init__(self, *joints):
         """
         :param \*joints: the joint content for the
@@ -272,6 +285,16 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Inspections
 
+    def bones(self):
+        """
+        :return: A :class:`~paya.lib.skel.Bone` instance for every joint pair
+            in the chain.
+        :rtype: :class:`~paya.lib.skel.Bone`
+        """
+        pairs = zip(self, self[1:])
+        bones = map(Bone, pairs)
+        return list(bones)
+
     @short(plug='p')
     def points(self, plug=False):
         """
@@ -369,3 +392,31 @@ class Chain(UserList):
                     r.warning("Couldn't set attribute: {}".format(attr))
 
         return self
+
+    #------------------------------------------------------------|    Repr
+
+    def __repr__(self):
+        ln = len(self)
+
+        if ln > 2:
+            content = '[{}...{}]'.format(repr(self[0]), repr(self[-1]))
+
+        else:
+            content = repr(self.data)
+
+        return "{}({})".format(self.__class__.__name__, content)
+
+class Bone(Chain):
+    """
+    A specialised subclass of :class:`~paya.lib.skel.Chain` for two-joint
+    chains.
+    """
+    pass
+
+
+class Triad(Chain):
+    """
+    A specialised subclass of :class:`~paya.lib.skel.Chain` for three-joint
+    chains.
+    """
+    pass
