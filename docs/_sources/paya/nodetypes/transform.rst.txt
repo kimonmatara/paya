@@ -1,0 +1,42 @@
+==================================
+paya.nodetypes.transform.Transform
+==================================
+
+.. py:module:: paya.nodetypes.transform
+
+.. py:class:: Transform(*args, **kwargs)
+
+    .. py:method:: getWorldPosition(plug=False, useLocatorShape=True)
+    
+        Returns the world translation of this transform. Pivots are ignored.
+        
+        :shorthand: ``gwp``
+        :param bool plug/p: return an attribute instead of a value; if
+            'useLocatorShape' is True then, where available, the locator
+            shape's 'worldPosition' attribute will be returned; otherwise,
+            a 'worldPosition' attribute will be retrieved, or initialised,
+            on the transform itself, with its input configured as self.t ^
+            self.pm[0]; defaults to False
+        :param bool useLocatorShape/uls: True
+        :return: The position attribute or value.
+        :rtype: :class:`~paya.datatypes.point.Point` or
+            :class:`~paya.plugtypes.vector.Vector`
+    
+    .. py:method:: getWorldMatrix(plug=False)
+    
+        :param bool plug/p: return a plug instead of a value; defaults to
+            False
+        :return: The world matrix of this transform, as a value or plug.
+        :rtype: :class:`paya.datatypes.matrix.Matrix` or
+            :class:`paya.plugtypes.matrix.Matrix`
+    
+    .. py:method:: getRotateAxisMatrix(plug=False)
+    
+        Returns the rotate axis as a rotation matrix.
+        
+        :param bool plug/p: return an attribute instead of a value; this will
+            be cooked only once, and afterwards retrieved via a
+            'rotateAxisMatrix' attribute on the node; defaults to False
+        :return: The rotate axis matrix.
+        :rtype: :class:`paya.datatypes.matrix.Matrix` or
+            :class:`paya.plugtypes.matrix.Matrix`

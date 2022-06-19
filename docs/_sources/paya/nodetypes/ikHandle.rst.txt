@@ -1,0 +1,59 @@
+================================
+paya.nodetypes.ikHandle.IkHandle
+================================
+
+.. py:module:: paya.nodetypes.ikHandle
+
+.. py:class:: IkHandle(*args, **kwargs)
+
+    .. py:classmethod:: create(name=None, suffix=None, inheritName=True, **mayaOptions)
+    
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, or list
+        :param suffix/suf: if string, append; if ``True``, look up a type
+            suffix and apply it; if ``False``, omit; defaults to
+            :attr:`~paya.config.autoSuffix`
+        :type suffix/suf: None, bool, str
+        :param bool inheritName/inn: inherit names from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param \*\*mayaOptions: all overflow keyword arguments are forwarded
+            to :func:`~pymel.core.animation.ikHandle`
+        :return: The constructed node.
+        :rtype: :class:`~pymel.core.general.PyNode`
+    
+    .. py:method:: getTipJoint()
+    
+        :return: The tip joint for the chain driven by this IK handle.
+        :rtype: :class:`~paya.nodetypes.joint.Joint`
+    
+    .. py:method:: getJointList(includeTip=False)
+    
+        Overloads :meth:`~paya.core.nodetypes.Joint.getJointList` to add the
+        ``includeTip/it`` option. Note that, for parity with PyMEL, this is
+        set to False by default.
+        
+        :param bool includeTip/it: include the tip joint; defaults to False
+        :return: Joints driven by this IK handle.
+        :rtype: list
+    
+    .. py:method:: chain()
+    
+        :return: The driven chain, including tip.
+        :rtype: :class:`~paya.lib.skel.Chain`
+    
+    .. py:method:: setTwistVectors(startVector, endVector, upAxis, downAxis=None)
+    
+        For spline handles only. Activates advanced twist options and
+        configures the start / end vectors.
+        
+        :param startVector: the start 'up' vector
+        :type startVector: list, :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.plugtypes.math3D.Math3D`
+        :param endVector: the end 'up' vector
+        :type endVector: list, :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.plugtypes.math3D.Math3D`
+        :param str upAxis: the chain axis to map to the 'up' vectors, for
+            example 'z'
+        :param str downAxis/da: if you know the 'bone' axis of the chain,
+            provide it here to avoid extraneous calculations; defaults to None
+        :return: ``self``

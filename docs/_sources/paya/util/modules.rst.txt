@@ -1,0 +1,37 @@
+=================
+paya.util.modules
+=================
+
+.. py:module:: paya.util.modules
+
+Utilities for managing modules.
+
+.. py:function:: path_to_dotpath(path)
+
+    Given a file system path to a module file, returns the dot-path to be
+    used in import statements. ``__init__.py`` files must be present.
+    
+    :param str path: the full path to the module file
+    :return: The dotted module name (path).
+    :rtype: str
+
+.. py:class:: LazyModule(moduleName)
+
+    Lazy module loader. Defers module loading until attribute access is
+    attempted. Useful for avoiding circular imports.
+    
+    :Example:
+    
+        .. code-block:: python
+    
+            r = LazyModule('paya.runtime')
+    
+            r.ls() # triggers load
+
+    .. py:method:: __init__(moduleName)
+    
+        Initialize self.  See help(type(self)) for accurate signature.
+    
+    .. py:method:: __repr__()
+    
+        Return repr(self).
