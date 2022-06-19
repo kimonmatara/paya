@@ -48,6 +48,12 @@ paya.datatypes.point.Point
         Overloads :meth:`pymel.core.datatypes.Point.__rmul__` to add
         support for 1D and 3D plugs.
     
+    .. py:method:: __neg__()
+    
+        Implements **unary negation** (``-``).
+        
+        :return: ``self * -1.0``
+    
     .. py:method:: __truediv__(other)
     
         Implements **division** (``/``).

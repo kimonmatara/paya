@@ -149,8 +149,8 @@ to <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.nodetypes.ikHandle.IkHandle.getTipJoint">
-<span class="sig-name descname"><span class="pre">getTipJoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.ikHandle.IkHandle.getTipJoint" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.nodetypes.ikHandle.IkHandle.getEndJoint">
+<span class="sig-name descname"><span class="pre">getEndJoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.ikHandle.IkHandle.getEndJoint" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The tip joint for the chain driven by this IK handle.</p>
@@ -209,6 +209,24 @@ configures the start / end vectors.</p>
 example ‘z’</p></li>
 <li><p><strong>downAxis/da</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – if you know the ‘bone’ axis of the chain,
 provide it here to avoid extraneous calculations; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.ikHandle.IkHandle.setPolePoint">
+<span class="sig-name descname"><span class="pre">setPolePoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maintainOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.ikHandle.IkHandle.setPolePoint" title="Permalink to this definition"></a></dt>
+<dd><p>Configures the pole vector by aiming towards <code class="docutils literal notranslate"><span class="pre">point</span></code> in world-space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point</strong> (list, tuple, <a class="reference internal" href="../datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>
+or <a class="reference internal" href="../plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – the point to aim towards</p></li>
+<li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – preserve chain state; defaults to False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

@@ -6,6 +6,20 @@ paya.plugtypes.eulerRotation.EulerRotation
 
 .. py:class:: EulerRotation(*args, **kwargs)
 
+    .. py:method:: createLocator(name=None, rotateOrder='xyz')
+    
+        :shorthand: ``cl``
+        
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :param rotateOrder/ro: the rotate order of this euler rotation;
+            defaults to 'xyz'
+        :type rotateOrder/ro: int, str,
+            :class:`~paya.plugtypes.attribute.Attribute`
+        :return: A locator with this euler rotation piped into its
+            ``rotate`` channels.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+    
     .. py:method:: get(plug=False, **kwargs)
     
         Overrides :meth:`~paya.plugtypes.attribute.Attribute.get` to return

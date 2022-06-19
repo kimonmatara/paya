@@ -6,6 +6,16 @@ paya.datatypes.vector.Vector
 
 .. py:class:: Vector(*args, **kwargs)
 
+    .. py:method:: createLocator(name=None)
+    
+        :shorthand: ``cl``
+        
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :return: A locator with this vector / point piped into its
+            ``translate`` channel.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+    
     .. py:method:: __add__(other)
     
         Implements **addition** (``+``).
@@ -146,6 +156,12 @@ paya.datatypes.vector.Vector
             :class:`Point`, list, str
         :return: The angle.
         :rtype: :class:`~paya.plugtypes.attributeMath1D.AttributeMath1D` or float
+    
+    .. py:method:: asTranslateMatrix()
+    
+        :return: An identity matrix with this vector / point as the translate
+            component.
+        :rtype: :class:`~paya.datatypes.matrix.Matrix`
     
     .. py:method:: asScaleMatrix()
     

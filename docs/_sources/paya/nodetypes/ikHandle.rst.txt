@@ -21,7 +21,7 @@ paya.nodetypes.ikHandle.IkHandle
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`
     
-    .. py:method:: getTipJoint()
+    .. py:method:: getEndJoint()
     
         :return: The tip joint for the chain driven by this IK handle.
         :rtype: :class:`~paya.nodetypes.joint.Joint`
@@ -56,4 +56,14 @@ paya.nodetypes.ikHandle.IkHandle
             example 'z'
         :param str downAxis/da: if you know the 'bone' axis of the chain,
             provide it here to avoid extraneous calculations; defaults to None
+        :return: ``self``
+    
+    .. py:method:: setPolePoint(point, maintainOffset=False)
+    
+        Configures the pole vector by aiming towards ``point`` in world-space.
+        
+        :param point: the point to aim towards
+        :type point: list, tuple, :class:`~paya.datatypes.point.Point`
+            or :class:`~paya.plugtypes.math3D.Math3D`
+        :param bool maintainOffset/mo: preserve chain state; defaults to False
         :return: ``self``

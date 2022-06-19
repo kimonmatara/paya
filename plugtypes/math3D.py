@@ -6,6 +6,25 @@ import paya.runtime as r
 class Math3D:
     __math_dimension__ = 3
 
+    #-----------------------------------------------------------|    Testing
+
+    @short(name='n')
+    def createLocator(self, name=None):
+        """
+        :shorthand: ``cl``
+
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :return: A locator with this 3D compound piped into its
+            ``translate`` channel.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        loc = r.nodes.Locator.createNode(n=name).getParent()
+        self >> loc.attr('t')
+        return loc
+
+    cl = createLocator
+
     #-----------------------------------------------------------|    Getter
 
     @short(plug='p')

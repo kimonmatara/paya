@@ -10,17 +10,19 @@ class Matrix:
 
     #-----------------------------------------------------------|    Testing
 
-    def createLocator(self, scale=1.0):
+    @short(name='n')
+    def createLocator(self, scale=1.0, name=None):
         """
         Creates a locator and drives its SRT channels using this matrix.
 
         :shorthand: ``cl``
 
+        :param str name/n: one or more name elements; defaults to None
         :param float scale: the locator display scale; defaults to 1.0
         :return: The locator.
         :rtype: :class:`~paya.nodetypes.transform.Transform`
         """
-        loc = r.nodes.Locator.createNode().getParent()
+        loc = r.nodes.Locator.createNode(n=name).getParent()
         loc.attr('displayLocalAxis').set(True)
         loc.attr('localScale').set([scale] * 3)
 

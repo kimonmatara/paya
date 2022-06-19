@@ -7,6 +7,25 @@ r = LazyModule('paya.runtime')
 
 class Vector:
 
+    #-----------------------------------------------------------|    Testing
+
+    @short(name='n')
+    def createLocator(self, name=None):
+        """
+        :shorthand: ``cl``
+
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :return: A locator with this vector / point piped into its
+            ``translate`` channel.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        loc = r.nodes.Locator.createNode(n=name).getParent()
+        loc.attr('t').set(self)
+        return loc
+
+    cl = createLocator
+
     #-----------------------------------------------------------|    Addition
 
     def __add__(self, other):
@@ -475,6 +494,16 @@ class Vector:
         return _dt.Vector.angle(self, other)
 
     #--------------------------------------------------------------------|    Conversions
+
+    def asTranslateMatrix(self):
+        """
+        :return: An identity matrix with this vector / point as the translate
+            component.
+        :rtype: :class:`~paya.datatypes.matrix.Matrix`
+        """
+        out = r.data.Matrix()
+        out.t = self
+        return out
 
     def asScaleMatrix(self):
         """

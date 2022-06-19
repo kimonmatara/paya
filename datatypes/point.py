@@ -193,6 +193,14 @@ class Point:
                 return NotImplemented
 
         return _dt.Point.__rmul__(self, other)
+
+    def __neg__(self):
+        """
+        Implements **unary negation** (``-``).
+
+        :return: ``self * -1.0``
+        """
+        return self * -1.0
     
     #-----------------------------------------------------------|    Division
     

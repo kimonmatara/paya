@@ -9,6 +9,31 @@ import paya.runtime as r
 
 class EulerRotation:
 
+    #-----------------------------------------------------------|    Testing
+
+    @short(name='n', rotateOrder='ro')
+    def createLocator(self, name=None, rotateOrder='xyz'):
+        """
+        :shorthand: ``cl``
+
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :param rotateOrder/ro: the rotate order of this euler rotation;
+            defaults to 'xyz'
+        :type rotateOrder/ro: int, str,
+            :class:`~paya.plugtypes.attribute.Attribute`
+        :return: A locator with this euler rotation piped into its
+            ``rotate`` channels.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        loc = r.nodes.Locator.createNode(n=name).getParent()
+        rotateOrder >> loc.attr('ro')
+        self >> loc.attr('r')
+
+        return loc
+
+    cl = createLocator
+
     #-----------------------------------------------------------|    Getter
 
     @short(plug='p')

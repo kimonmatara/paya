@@ -6,12 +6,13 @@ paya.datatypes.matrix.Matrix
 
 .. py:class:: Matrix(*args, **kwargs)
 
-    .. py:method:: createLocator(scale=1.0)
+    .. py:method:: createLocator(scale=1.0, name=None)
     
         Creates a locator and drives its SRT channels using this matrix.
         
         :shorthand: ``cl``
         
+        :param str name/n: one or more name elements; defaults to None
         :param float scale: the locator display scale; defaults to 1.0
         :return: The locator.
         :rtype: :class:`~paya.nodetypes.transform.Transform`

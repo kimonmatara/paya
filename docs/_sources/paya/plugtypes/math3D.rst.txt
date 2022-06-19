@@ -6,6 +6,16 @@ paya.plugtypes.math3D.Math3D
 
 .. py:class:: Math3D(*args, **kwargs)
 
+    .. py:method:: createLocator(name=None)
+    
+        :shorthand: ``cl``
+        
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :return: A locator with this 3D compound piped into its
+            ``translate`` channel.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+    
     .. py:method:: get(plug=False, **kwargs)
     
         Overloads :meth:`paya.plugtypes.attribute.Attribute.get` to return

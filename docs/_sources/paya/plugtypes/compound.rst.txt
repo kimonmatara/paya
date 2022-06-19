@@ -6,6 +6,13 @@ paya.plugtypes.compound.Compound
 
 .. py:class:: Compound(*args, **kwargs)
 
+    .. py:method:: splitInputs()
+    
+        Splits any compound-level input into per-child connections. The
+        compound-level connection is maintained.
+        
+        :return: ``self``
+    
     .. py:method:: __iter__()
     
         Extends iteration to compounds. If this is a compound AND a multi,

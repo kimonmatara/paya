@@ -1,9 +1,30 @@
+from paya.util import short
 import pymel.core.datatypes as _dt
 import paya.lib.mathops as _mo
 import paya.runtime as r
 
 
 class EulerRotation:
+
+    #-----------------------------------------------------------|    Testing
+
+    @short(name='n')
+    def createLocator(self, name=None):
+        """
+        :shorthand: ``cl``
+
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :return: A locator with this euler rotation piped into its
+            ``rotate`` channels.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        loc = r.nodes.Locator.createNode(n=name).getParent()
+        loc.attr('ro').set(self.order.lower())
+        loc.attr('r').set(self)
+        return loc
+
+    cl = createLocator
 
     #-----------------------------------------------------------|    Addition
 

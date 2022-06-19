@@ -130,14 +130,17 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.matrix.Matrix" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="paya.plugtypes.matrix.Matrix.createLocator">
-<span class="sig-name descname"><span class="pre">createLocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.matrix.Matrix.createLocator" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">createLocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.matrix.Matrix.createLocator" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a locator and drives its SRT channels using this matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Shorthand</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">cl</span></code></p>
 </dd>
 <dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the locator display scale; defaults to 1.0</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – one or more name elements; defaults to None</p></li>
+<li><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the locator display scale; defaults to 1.0</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The locator.</p>

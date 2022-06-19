@@ -1,3 +1,4 @@
+import paya.lib.mathops as _mo
 import pymel.core.nodetypes as _nt
 from paya.util import short
 import paya.runtime as r
@@ -43,7 +44,7 @@ class IkHandle:
 
     #------------------------------------------------------------|    Inspections
 
-    def getTipJoint(self):
+    def getEndJoint(self):
         """
         :return: The tip joint for the chain driven by this IK handle.
         :rtype: :class:`~paya.nodetypes.joint.Joint`
@@ -74,7 +75,7 @@ class IkHandle:
         out = _nt.IkHandle.getJointList(self)
 
         if includeTip:
-            out.append(self.getTipJoint())
+            out.append(self.getEndJoint())
 
         return out
 
@@ -129,5 +130,73 @@ class IkHandle:
 
         startVector >> self.attr('dWorldUpVector')
         endVector >> self.attr('dWorldUpVectorEnd')
+
+        return self
+
+    #------------------------------------------------------------|    Pole vector
+
+    @short(maintainOffset='mo')
+    def setPolePoint(self, point, maintainOffset=False):
+        """
+        Configures the pole vector by aiming towards ``point`` in world-space.
+
+        :param point: the point to aim towards
+        :type point: list, tuple, :class:`~paya.datatypes.point.Point`
+            or :class:`~paya.plugtypes.math3D.Math3D`
+        :param bool maintainOffset/mo: preserve chain state; defaults to False
+        :return: ``self``
+        """
+        point, dim, isplug = _mo.info(point)
+        chordStart = self.getStartJoint().getWorldPosition(p=True)
+        poleVec = point-chordStart
+
+        if maintainOffset:
+            # Gather info
+            chordEnd = self.getWorldPosition(p=True)
+            chordVec = chordEnd-chordStart
+
+            _point = point.get()
+            _initPoleVec = self.attr('poleVector'
+                ).get() * self.attr('pm')[0].get()
+
+            _chordStart = chordStart.get()
+            _chordEnd = chordEnd.get()
+            _chordVec = chordVec.get()
+            _poleVec = poleVec.get()
+
+            # 'Spin' the user point into an inert position
+            # that wouldn't move the chain
+            _defaultSpinMtx = r.createMatrix(
+                'y', _chordVec,
+                'x', _initPoleVec,
+                t=_chordStart
+            ).pk(t=True, r=True)
+
+            _solvedSpinMtx = r.createMatrix(
+                'y', _chordVec,
+                'x', _poleVec,
+                t=_chordStart
+            ).pk(t=True, r=True)
+
+            compensation = _solvedSpinMtx.inverse() * _defaultSpinMtx
+            _defaultPoint = _point ^ compensation
+
+            # Create the 'real' pole vector spin matrix, transform the inert
+            # point with an offset
+            solveMtx = r.createMatrix(
+                'y', chordVec,
+                'x', poleVec,
+                t=chordStart
+            ).pk(t=1, r=1)
+
+            point = _defaultPoint ^ solveMtx.asOffset()
+
+            # Rederive pole vector in world space
+            poleVec = point-chordStart
+
+        # Localise and connect
+        poleVec *= self.attr('pim')[0]
+        poleVec >> self.attr('poleVector')
+        self.attr('poleVector').splitInputs()
 
         return self
