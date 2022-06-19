@@ -13,6 +13,14 @@ paya.plugtypes.compound.Compound
         
         :return: ``self``
     
+    .. py:method:: release(recursive=False)
+    
+        Unlocks this attribute and disconnects any inputs.
+        
+        :param bool recursive/r: if this is a compound, release child attributes
+            too; defaults to False
+        :return:
+    
     .. py:method:: __iter__()
     
         Extends iteration to compounds. If this is a compound AND a multi,

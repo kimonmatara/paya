@@ -41,6 +41,14 @@ paya.plugtypes.attribute.Attribute
         :param \*\*kwargs: forwarded to the base method
         :return: :class:`Attribute` or a value type
     
+    .. py:method:: release(recursive=False)
+    
+        Unlocks this attribute and disconnects any inputs.
+        
+        :param bool recursive/r: if this is a compound, release child attributes
+            too; defaults to False
+        :return:
+    
     .. py:method:: put(source, plug=None)
     
         Helper for mixed plug / value workflows. If 'source' is an attribute,

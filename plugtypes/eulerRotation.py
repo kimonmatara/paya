@@ -52,23 +52,28 @@ class EulerRotation:
 
         return result
 
-    def set(self, value, **kwargs):
+    def set(self, *args, **kwargs):
         """
         Overloads :meth:`~paya.plugtypes.attribute.Attribute.get` to ensure
         that instances of :class:`~paya.datatypes.eulerRotation.EulerRotation`
         with units that don't match the UI setting are set correctly.
         """
-        if isinstance(value, _dt.EulerRotation):
-            currentUnit = om.MAngle.uiUnit()
+        if args:
+            value = args[0]
 
-            if currentUnit == om.MAngle.kRadians:
-                if value.unit != 'radians':
-                    value = _pu.radians(value)
+            if isinstance(value, _dt.EulerRotation):
+                currentUnit = om.MAngle.uiUnit()
 
-            elif value.unit != 'degrees':
-                value = _pu.degrees(value)
+                if currentUnit == om.MAngle.kRadians:
+                    if value.unit != 'radians':
+                        value = _pu.radians(value)
 
-        return r.plugs.Math3D.set(self, value, **kwargs)
+                elif value.unit != 'degrees':
+                    value = _pu.degrees(value)
+
+                args = [value]
+
+        r.plugs.Math3D.set(self, *args, **kwargs)
 
     def isRotateChannel(self):
         """

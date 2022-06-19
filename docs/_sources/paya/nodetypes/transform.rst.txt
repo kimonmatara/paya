@@ -6,6 +6,12 @@ paya.nodetypes.transform.Transform
 
 .. py:class:: Transform(*args, **kwargs)
 
+    .. py:method:: releaseSRT()
+    
+        Unlocks and disconnects every SRT channel, recursively.
+        
+        :return: ``self``
+    
     .. py:method:: getWorldPosition(plug=False, useLocatorShape=True)
     
         Returns the world translation of this transform. Pivots are ignored.

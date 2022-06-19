@@ -138,6 +138,21 @@ paya.lib.skel
         :return: The 'bone' axis of this chain (e.g. 'x')
         :rtype: str
     
+    .. py:method:: duplicate(name=None, inheritName=True, suffix=None, start=1)
+    
+        Duplicates this chain, with smart reparenting if it's not contiguous.
+        
+        :param name/n: one or more name elements
+        :type name/n: list, str, int
+        :param bool inheritName/inn: inherit from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param bool suffix/suf: if string, append; if True, apply the joint
+            suffix; if False; omit suffix; defaults to
+            :attr:`paya.config.autoSuffix`
+        :param int start/s: the number to start from; defaults to 1
+        :return: The chain duplicate.
+        :rtype: :class:`~paya.lib.skel.Chain`
+    
     .. py:method:: rename(*elems, inheritName=True, suffix=None, start=1)
     
         Renames this chain. Numbers will be added before the suffix.
@@ -145,11 +160,11 @@ paya.lib.skel
         :param \*elems: one or more name elements
         :type \*elems: list, str, int
         :param bool inheritName/inn: inherit from
-            :class:`~paya.lib.names.Name` blocks; defualts to True
+            :class:`~paya.lib.names.Name` blocks; defaults to True
         :param bool suffix/suf: if string, append; if True, apply the joint
             suffix; if False; omit suffix; defaults to
             :attr:`paya.config.autoSuffix`
-        :param int start: the number to start from; defaults to 1
+        :param int start/s: the number to start from; defaults to 1
         :return: ``self``
     
     .. py:method:: compose()
@@ -169,6 +184,34 @@ paya.lib.skel
         :type otherChain: list or :class:`Chain`
         :param bool replaceTip/rt: replace this chain's tip joint; defaults
             to True
+        :return: ``self``
+        :rtype: :class:`Chain`
+    
+    .. py:method:: getDefaultPolePoint(distance=1.0)
+    
+        This method creates a temporary IK handle and samples its default
+        ``poleVector`` value. For this reason it will be affected by any
+        ``preferredAngle`` values.
+        
+        :param distance/d: the pole point's distance from the chain's chord
+            vector axis; defaults to 1.0
+        :type distance/d: float or int
+        :return: An inert world-position point target for a pole vector
+            constraint or
+            :meth:`~paya.nodetypes.ikhandle.IkHandle.setPolePoint`.
+        :rtype: :class:`~paya.datatypes.point.Point`
+    
+    .. py:method:: autoPreferredAngle(upAxis, upVector=None)
+    
+        Automatically configures ``preferredAngle`` on the internal joints to
+        prevent lockout when creating an IK handle on an in-line chain.
+        
+        :param upAxis: the dominant chain 'bend' axis, e.g. '-x'
+        :param upVector/upv: an optional 'up' vector; used to override wind
+            direction
+        :type upVector/upv: list, tuple or
+            :class:`~paya.datatypes.vector.Vector`
+        :raises AssertionError: the chain is not contiguous
         :return: ``self``
         :rtype: :class:`Chain`
     

@@ -9,7 +9,6 @@ r = LazyModule('paya.runtime')
 
 
 class Chain(UserList):
-
     __solver__ = 'ikRPsolver'
 
     #------------------------------------------------------------|    Instantiation
@@ -385,7 +384,7 @@ class Chain(UserList):
         axes.sort(key=lambda x: axes.count(x))
         return axes[-1]
 
-    #------------------------------------------------------------|    Editing
+    #------------------------------------------------------------|    DAG editing
 
     @short(name='n', inheritName='inn', suffix='suf', start='s')
     def duplicate(self, name=None, inheritName=True, suffix=None, start=1):
@@ -498,6 +497,90 @@ class Chain(UserList):
         r.parent(otherChain[0], self[-1])
         self += otherChain
         self._updateClass()
+        return self
+
+    #------------------------------------------------------------|    Pole vector management
+
+    @short(distance='d')
+    def getDefaultPolePoint(self, distance=1.0):
+        """
+        This method creates a temporary IK handle and samples its default
+        ``poleVector`` value. For this reason it will be affected by any
+        ``preferredAngle`` values.
+
+        :param distance/d: the pole point's distance from the chain's chord
+            vector axis; defaults to 1.0
+        :type distance/d: float or int
+        :return: An inert world-position point target for a pole vector
+            constraint or
+            :meth:`~paya.nodetypes.ikhandle.IkHandle.setPolePoint`.
+        :rtype: :class:`~paya.datatypes.point.Point`
+        """
+        dup = self.duplicate().compose()
+        ikh = dup.createIkHandle(solver='ikRPsolver')
+        poleVec = ikh.attr('poleVector').get() * ikh.attr('pm')[0].get()
+        r.delete(ikh, dup)
+
+        chordStart = self[0].getWorldPosition()
+        chordEnd = self[-1].getWorldPosition()
+        chordVec = chordEnd-chordStart
+
+        anchorPt = chordStart + (chordVec * 0.5)
+
+        x1 = chordVec.cross(poleVec)
+        poleVec = x1.cross(chordVec).normal()
+
+        return anchorPt + (poleVec * distance)
+
+    @short(upVector='upv', flip='fl')
+    def autoPreferredAngle(self, upAxis, upVector=None):
+        """
+        Automatically configures ``preferredAngle`` on the internal joints to
+        prevent lockout when creating an IK handle on an in-line chain.
+
+        :param upAxis: the dominant chain 'bend' axis, e.g. '-x'
+        :param upVector/upv: an optional 'up' vector; used to override wind
+            direction
+        :type upVector/upv: list, tuple or
+            :class:`~paya.datatypes.vector.Vector`
+        :raises AssertionError: the chain is not contiguous
+        :return: ``self``
+        :rtype: :class:`Chain`
+        """
+        assert self.isContiguous(), "The chain is not contiguous."
+
+        val = _pu.radians(22.5)
+
+        if '-' in upAxis:
+            val *= -1.0
+
+        upAxis = upAxis.strip('-')
+        axisIndex = 'xyz'.index(upAxis)
+
+        if upVector:
+            upVector = r.data.Vector(upVector).normal()
+
+        for joint in self[1:-1]:
+            thisVal = val
+
+            if upVector:
+                upAxisVector = joint.getMatrix(
+                    worldSpace=True).getAxis(upAxis).normal()
+
+                negUpAxisVector = -upAxisVector
+
+                dot = upAxisVector.dot(upVector)
+                negDot = negUpAxisVector.dot(upVector)
+
+                if negDot > dot:
+                    thisVal *= -1.0
+
+            euler = [0.0, 0.0, 0.0]
+            euler[axisIndex] = thisVal
+            euler = r.data.EulerRotation(euler, unit='radians')
+
+            joint.attr('preferredAngle').set(euler)
+
         return self
 
     #------------------------------------------------------------|    Pose management
