@@ -350,6 +350,54 @@ no particular order.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.ikHandles">
+<span class="sig-name descname"><span class="pre">ikHandles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.ikHandles" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>IK handles affecting this chain.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.downAxis">
+<span class="sig-name descname"><span class="pre">downAxis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.downAxis" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The ‘bone’ axis of this chain (e.g. ‘x’)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.rename">
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.rename" title="Permalink to this definition"></a></dt>
+<dd><p>Renames this chain. Numbers will be added before the suffix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*elems</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – one or more name elements</p></li>
+<li><p><strong>inheritName/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit from
+<a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defualts to True</p></li>
+<li><p><strong>suffix/suf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if string, append; if True, apply the joint
+suffix; if False; omit suffix; defaults to
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.autoSuffix</span></code></p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number to start from; defaults to 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.compose">
 <span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.compose" title="Permalink to this definition"></a></dt>
 <dd><p>Ensures that every member of this chain is a child of its predecessor.</p>
@@ -362,12 +410,71 @@ no particular order.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.appendChain">
+<span class="sig-name descname"><span class="pre">appendChain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">otherChain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replaceTip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.appendChain" title="Permalink to this definition"></a></dt>
+<dd><p>This is an in-place operation. Splices <code class="docutils literal notranslate"><span class="pre">otherChain</span></code> to the bottom of
+this chain and updates the membership.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>otherChain</strong> (list or <a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a>) – the chain to append to this one</p></li>
+<li><p><strong>replaceTip/rt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – replace this chain’s tip joint; defaults
+to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.reset" title="Permalink to this definition"></a></dt>
 <dd><p>Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.createIkHandle">
+<span class="sig-name descname"><span class="pre">createIkHandle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">createOptions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createIkHandle" title="Permalink to this definition"></a></dt>
+<dd><p>Creates an IK handle for this chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver/sol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the solver to use; defaults to ‘ikRPsolver’ if
+this chain has more than two joints, otherwise ‘ikSCsolver’</p></li>
+<li><p><strong>**createOptions</strong> – all overflow arguments are forwarded to
+<a class="reference internal" href="../nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.create" title="paya.nodetypes.ikHandle.IkHandle.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The IK handle.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.createIkHandles">
+<span class="sig-name descname"><span class="pre">createIkHandles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createIkHandles" title="Permalink to this definition"></a></dt>
+<dd><p>Creates One IK handle per bone in this chain. The IK handles will
+all use a single-chain solver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The IK handles</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

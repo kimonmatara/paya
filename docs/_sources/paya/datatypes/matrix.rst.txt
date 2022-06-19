@@ -171,3 +171,9 @@ paya.datatypes.matrix.Matrix
     
         Equivalent to ``setAxis('translate')``.
         Setter for the **translate**/**t** property.
+    
+    .. py:method:: closestAxisToVector(vector)
+    
+        :return: The axis on this matrix that's most closely aligned to the
+            given reference vector, e.g. '-x'.
+        :rtype: str

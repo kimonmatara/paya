@@ -365,6 +365,26 @@ class Chain(UserList):
 
         return list(set(out))
 
+    def downAxis(self):
+        """
+        :return: The 'bone' axis of this chain (e.g. 'x')
+        :rtype: str
+        """
+        axes = []
+
+        for i, thisJoint in enumerate(self[:-1]):
+            thisPoint = thisJoint.getWorldPosition()
+            nextJoint = self[i+1]
+            nextPoint = nextJoint.getWorldPosition()
+
+            vector = nextPoint-thisPoint
+            matrix = thisJoint.getMatrix(worldSpace=True)
+
+            axes.append(matrix.closestAxisToVector(vector))
+
+        axes.sort(key=lambda x: axes.count(x))
+        return axes[-1]
+
     #------------------------------------------------------------|    Editing
 
     @short(inheritName='inn',suffix='suf')

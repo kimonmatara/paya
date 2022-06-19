@@ -63,8 +63,7 @@ class Joint:
 
     def skinClusters(self):
         """
-        :return: All the skinClusters this joint participates in, in no
-            particular order.
+        :return: Associated skinClusters, in no particular order.
         :rtype: list
         """
         outputs = self.attr('worldMatrix'
@@ -83,7 +82,7 @@ class Joint:
         """
         :param bool includeAsTip/iat: Include IK systems for which this joint
             is the tip; defaults to True
-        :return: IK handles this joint participates in.
+        :return: Associated IK handles, in no particular order.
         :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
         """
         out = []
@@ -98,7 +97,7 @@ class Joint:
 
     def chainFromHere(self, to=None):
         """
-        :param to: an optional to joint
+        :param to: an optional terminator joint; defaults to None
         :type to: str or :class:`~paya.nodetypes.joint.Joint`
         :return: A chain from this joint up to and including 'to'
             (if provided), or terminating before the first branch.

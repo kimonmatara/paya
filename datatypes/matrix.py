@@ -597,7 +597,34 @@ class Matrix:
 
     translate = t = property(fget=getTranslate, fset=setTranslate)
 
-    #--------------------------------------------------------------------|    Plug interop
+    #-----------------------------------------------------------|    Misc
+
+    def closestAxisToVector(self, vector):
+        """
+        :return: The axis on this matrix that's most closely aligned to the
+            given reference vector, e.g. '-x'.
+        :rtype: str
+        """
+        vector = _dt.Vector(vector).normal()
+
+        bestDot = None
+        bestAxis = None
+
+        for axis in ['x','y','z','-x','-y','-z']:
+            homeVec = self.getAxis(axis).normal()
+            dot = homeVec.dot(vector)
+
+            if bestDot is None:
+                bestDot = dot
+                bestAxis = axis
+
+            elif dot > bestDot:
+                bestDot = dot
+                bestAxis = axis
+
+        return bestAxis
+
+    #-----------------------------------------------------------|    Plug interop
 
     @property
     def hold(self):

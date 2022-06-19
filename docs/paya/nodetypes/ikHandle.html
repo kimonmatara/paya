@@ -148,6 +148,75 @@ to <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.ikHandle.IkHandle.getTipJoint">
+<span class="sig-name descname"><span class="pre">getTipJoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.ikHandle.IkHandle.getTipJoint" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The tip joint for the chain driven by this IK handle.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="joint.html#paya.nodetypes.joint.Joint" title="paya.nodetypes.joint.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.ikHandle.IkHandle.getJointList">
+<span class="sig-name descname"><span class="pre">getJointList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">includeTip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.ikHandle.IkHandle.getJointList" title="Permalink to this definition"></a></dt>
+<dd><p>Overloads <code class="xref py py-meth docutils literal notranslate"><span class="pre">getJointList()</span></code> to add the
+<code class="docutils literal notranslate"><span class="pre">includeTip/it</span></code> option. Note that, for parity with PyMEL, this is
+set to False by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>includeTip/it</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – include the tip joint; defaults to False</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Joints driven by this IK handle.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.ikHandle.IkHandle.chain">
+<span class="sig-name descname"><span class="pre">chain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.ikHandle.IkHandle.chain" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The driven chain, including tip.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.ikHandle.IkHandle.setTwistVectors">
+<span class="sig-name descname"><span class="pre">setTwistVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.ikHandle.IkHandle.setTwistVectors" title="Permalink to this definition"></a></dt>
+<dd><p>For spline handles only. Activates advanced twist options and
+configures the start / end vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>startVector</strong> (list, <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – the start ‘up’ vector</p></li>
+<li><p><strong>endVector</strong> (list, <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – the end ‘up’ vector</p></li>
+<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the chain axis to map to the ‘up’ vectors, for
+example ‘z’</p></li>
+<li><p><strong>downAxis/da</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – if you know the ‘bone’ axis of the chain,
+provide it here to avoid extraneous calculations; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

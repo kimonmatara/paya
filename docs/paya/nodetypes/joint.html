@@ -157,8 +157,7 @@ apply as suffix; if False, omit suffix; defaults to True</p></li>
 <span class="sig-name descname"><span class="pre">skinClusters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.joint.Joint.skinClusters" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>All the skinClusters this joint participates in, in no
-particular order.</p>
+<dd class="field-odd"><p>Associated skinClusters, in no particular order.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
@@ -167,14 +166,31 @@ particular order.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.nodetypes.joint.Joint.chainFromHere">
-<span class="sig-name descname"><span class="pre">chainFromHere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.joint.Joint.chainFromHere" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.nodetypes.joint.Joint.ikHandles">
+<span class="sig-name descname"><span class="pre">ikHandles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">includeAsTip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.joint.Joint.ikHandles" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>end</strong> (str or <a class="reference internal" href="#paya.nodetypes.joint.Joint" title="paya.nodetypes.joint.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>) – an optional end joint</p>
+<dd class="field-odd"><p><strong>includeAsTip/iat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Include IK systems for which this joint
+is the tip; defaults to True</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A chain from this joint up to and including ‘end’
+<dd class="field-even"><p>Associated IK handles, in no particular order.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.joint.Joint.chainFromHere">
+<span class="sig-name descname"><span class="pre">chainFromHere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.joint.Joint.chainFromHere" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>to</strong> (str or <a class="reference internal" href="#paya.nodetypes.joint.Joint" title="paya.nodetypes.joint.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>) – an optional terminator joint; defaults to None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A chain from this joint up to and including ‘to’
 (if provided), or terminating before the first branch.</p>
 </dd>
 <dt class="field-odd">Return type</dt>

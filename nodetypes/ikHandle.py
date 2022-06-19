@@ -77,3 +77,57 @@ class IkHandle:
             out.append(self.getTipJoint())
 
         return out
+
+    def chain(self):
+        """
+        :return: The driven chain, including tip.
+        :rtype: :class:`~paya.lib.skel.Chain`
+        """
+        return r.Chain(self.getJointList(it=True))
+
+    #------------------------------------------------------------|    Twist
+
+    @short(downAxis='da')
+    def setTwistVectors(self, startVector, endVector, upAxis, downAxis=None):
+        """
+        For spline handles only. Activates advanced twist options and
+        configures the start / end vectors.
+
+        :param startVector: the start 'up' vector
+        :type startVector: list, :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.plugtypes.math3D.Math3D`
+        :param endVector: the end 'up' vector
+        :type endVector: list, :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.plugtypes.math3D.Math3D`
+        :param str upAxis: the chain axis to map to the 'up' vectors, for
+            example 'z'
+        :param str downAxis/da: if you know the 'bone' axis of the chain,
+            provide it here to avoid extraneous calculations; defaults to None
+        :return: ``self``
+        """
+        self.attr('dTwistControlEnable').set(True)
+        self.attr('dWorldUpType').set(6) # Vector Start / End
+
+        if downAxis is None:
+            downAxis = self.chain().downAxis()
+
+        for axisValue, attrName in zip(
+                (downAxis, upAxis),
+                ('dForwardAxis', 'dWorldUpAxis')
+        ):
+            if isinstance(axisValue, str):
+                axisValue = {
+                    'x': 'Positive X',
+                    'y': 'Positive Y',
+                    'z': 'Positive Z',
+                    '-x': 'Negative X',
+                    '-y': 'Negative Y',
+                    '-z': 'Negative Z'
+                }.get(axisValue, axisValue)
+
+            self.attr(attrName).set(axisValue)
+
+        startVector >> self.attr('dWorldUpVector')
+        endVector >> self.attr('dWorldUpVectorEnd')
+
+        return self

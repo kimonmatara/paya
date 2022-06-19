@@ -128,6 +128,30 @@ paya.lib.skel
             no particular order.
         :rtype: list
     
+    .. py:method:: ikHandles()
+    
+        :return: IK handles affecting this chain.
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+    
+    .. py:method:: downAxis()
+    
+        :return: The 'bone' axis of this chain (e.g. 'x')
+        :rtype: str
+    
+    .. py:method:: rename(*elems, inheritName=True, suffix=None, start=1)
+    
+        Renames this chain. Numbers will be added before the suffix.
+        
+        :param \*elems: one or more name elements
+        :type \*elems: list, str, int
+        :param bool inheritName/inn: inherit from
+            :class:`~paya.lib.names.Name` blocks; defualts to True
+        :param bool suffix/suf: if string, append; if True, apply the joint
+            suffix; if False; omit suffix; defaults to
+            :attr:`paya.config.autoSuffix`
+        :param int start: the number to start from; defaults to 1
+        :return: ``self``
+    
     .. py:method:: compose()
     
         Ensures that every member of this chain is a child of its predecessor.
@@ -136,11 +160,42 @@ paya.lib.skel
     
         Reparents every joint under the parent of the first joint.
     
+    .. py:method:: appendChain(otherChain, replaceTip=True)
+    
+        This is an in-place operation. Splices ``otherChain`` to the bottom of
+        this chain and updates the membership.
+        
+        :param otherChain: the chain to append to this one
+        :type otherChain: list or :class:`Chain`
+        :param bool replaceTip/rt: replace this chain's tip joint; defaults
+            to True
+        :return: ``self``
+        :rtype: :class:`Chain`
+    
     .. py:method:: reset()
     
         Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
         
         :return: ``self``
+    
+    .. py:method:: createIkHandle(solver=None, **createOptions)
+    
+        Creates an IK handle for this chain.
+        
+        :param str solver/sol: the solver to use; defaults to 'ikRPsolver' if
+            this chain has more than two joints, otherwise 'ikSCsolver'
+        :param \*\*createOptions: all overflow arguments are forwarded to
+            :meth:`~paya.nodetypes.ikHandle.IkHandle.create`
+        :return: The IK handle.
+        :rtype: :class:`~paya.nodetypes.ikHandle.IkHandle`
+    
+    .. py:method:: createIkHandles()
+    
+        Creates One IK handle per bone in this chain. The IK handles will
+        all use a single-chain solver.
+        
+        :return: The IK handles
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
     
     .. py:method:: __repr__()
     
