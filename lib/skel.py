@@ -387,7 +387,54 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Editing
 
-    @short(inheritName='inn',suffix='suf')
+    @short(name='n', inheritName='inn', suffix='suf', start='s')
+    def duplicate(self, name=None, inheritName=True, suffix=None, start=1):
+        """
+        Duplicates this chain, with smart reparenting if it's not contiguous.
+
+        :param name/n: one or more name elements
+        :type name/n: list, str, int
+        :param bool inheritName/inn: inherit from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param bool suffix/suf: if string, append; if True, apply the joint
+            suffix; if False; omit suffix; defaults to
+            :attr:`paya.config.autoSuffix`
+        :param int start/s: the number to start from; defaults to 1
+        :return: The chain duplicate.
+        :rtype: :class:`~paya.lib.skel.Chain`
+        """
+        parents = []
+
+        for i, joint in enumerate(self):
+            parent = joint.getParent()
+
+            if i > 0 and parent is not None:
+                try:
+                    parent = self.index(parent)
+
+                except ValueError:
+                    pass
+
+            parents.append(parent)
+
+        copies = []
+
+        for i, joint in enumerate(self):
+            _name = r.nodes.Joint.makeName(
+                name, i+start, suf=suffix, inn=inheritName)
+
+            copy = joint.duplicate(n=_name, po=True)[0].releaseSRT()
+            copies.append(copy)
+
+        for copy, parent in zip(copies, parents):
+            if isinstance(parent, int):
+                parent = copies[parent]
+
+            copy.setParent(parent)
+
+        return Chain(copies)
+
+    @short(inheritName='inn',suffix='suf', start='s')
     def rename(self, *elems, inheritName=True, suffix=None, start=1):
         """
         Renames this chain. Numbers will be added before the suffix.
@@ -395,11 +442,11 @@ class Chain(UserList):
         :param \*elems: one or more name elements
         :type \*elems: list, str, int
         :param bool inheritName/inn: inherit from
-            :class:`~paya.lib.names.Name` blocks; defualts to True
+            :class:`~paya.lib.names.Name` blocks; defaults to True
         :param bool suffix/suf: if string, append; if True, apply the joint
             suffix; if False; omit suffix; defaults to
             :attr:`paya.config.autoSuffix`
-        :param int start: the number to start from; defaults to 1
+        :param int start/s: the number to start from; defaults to 1
         :return: ``self``
         """
         for i, joint in enumerate(self):

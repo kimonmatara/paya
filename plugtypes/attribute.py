@@ -69,6 +69,21 @@ class Attribute:
 
         return p.general.Attribute.get(self, **kwargs)
 
+    #-----------------------------------------------------------------|    State management
+
+    @short(recursive='r')
+    def release(self, recursive=False):
+        """
+        Unlocks this attribute and disconnects any inputs.
+
+        :param bool recursive/r: if this is a compound, release child attributes
+            too; defaults to False
+        :return:
+        """
+        self.unlock()
+        self.disconnect(inputs=True)
+        return self
+
     #-----------------------------------------------------------------|    Connections
 
     @short(plug='p')

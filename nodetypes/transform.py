@@ -5,6 +5,19 @@ import paya.runtime as r
 
 class Transform:
 
+    #--------------------------------------------------------|    Attr management
+
+    def releaseSRT(self):
+        """
+        Unlocks and disconnects every SRT channel, recursively.
+
+        :return: ``self``
+        """
+        for channel in ['translate', 'rotate', 'scale', 'shear']:
+            self.attr(channel).release(recursive=True)
+
+        return self
+
     #--------------------------------------------------------|    Sampling
 
     @short(plug='p', useLocatorShape='uls')
