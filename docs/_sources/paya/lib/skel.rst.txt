@@ -137,7 +137,7 @@ paya.lib.skel
         :return: The length of this chain.
         :rtype: :class:`float` or :class:`~paya.plugtypes.math1D.Math1D`
     
-    .. py:method:: insertJointsAtRatios(ratios, skipNumberingIfSingle=True, startNumber=1, name=None, inheritNames=True, suffix=None)
+    .. py:method:: insertJointsAtRatios(ratios, skipNumberingIfSingle=True, startNumber=1, name=None)
     
         Inserts joints at the specified ratios, 'subdividing' the chain.
         This is an in-place operation, and this Chain instance's membership
@@ -150,11 +150,6 @@ paya.lib.skel
             defaults to 1
         :param name/n: one or more name elements; defaults to None
         :type name/n: None, str, int, list or tuple
-        :param bool inheritNames/inn: inherit names from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param suffix/suf: if string, append to name; if ``True``, look up a
-            type suffix; if ``False``, omit suffixes; defaults to
-            :attr:`paya.config.suffix`
         :raises AssertionError: not all ratios are in the 0.0 -> 1.0 range
         :return: The new joints.
         :rtype: :class:`list`
@@ -175,33 +170,23 @@ paya.lib.skel
         :return: The 'bone' axis of this chain (e.g. 'x')
         :rtype: str
     
-    .. py:method:: duplicate(name=None, inheritNames=True, suffix=None, start=1)
+    .. py:method:: duplicate(name=None, startNumber=1)
     
         Duplicates this chain, with smart reparenting if it's not contiguous.
         
         :param name/n: one or more name elements
         :type name/n: list, str, int
-        :param bool inheritNames/inn: inherit from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param bool suffix/suf: if string, append; if True, apply the joint
-            suffix; if False; omit suffix; defaults to
-            :attr:`paya.config.suffix`
-        :param int start/s: the number to start from; defaults to 1
+        :param int startNumber/sn: the number to start from; defaults to 1
         :return: The chain duplicate.
         :rtype: :class:`~paya.lib.skel.Chain`
     
-    .. py:method:: rename(*elems, inheritNames=True, suffix=None, start=1)
+    .. py:method:: rename(*elems, startNumber=1)
     
         Renames this chain. Numbers will be added before the suffix.
         
         :param \*elems: one or more name elements
         :type \*elems: list, str, int
-        :param bool inheritNames/inn: inherit from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param bool suffix/suf: if string, append; if True, apply the joint
-            suffix; if False; omit suffix; defaults to
-            :attr:`paya.config.suffix`
-        :param int start/s: the number to start from; defaults to 1
+        :param int startNumber/sn: the number to start from; defaults to 1
         :return: ``self``
     
     .. py:method:: compose()
@@ -286,7 +271,7 @@ paya.lib.skel
     A specialised subclass of :class:`~paya.lib.skel.Chain` for two-joint
     chains.
 
-    .. py:method:: insertJoints(number, skipNumberingIfSingle=True, startNumber=1, name=None, inheritNames=True, suffix=None)
+    .. py:method:: insertJoints(number, skipNumberingIfSingle=True, startNumber=1, name=None)
     
         Variant of :meth:`~Chain.insertJointsAtRatios`; inserts joints
         uniformly along the bone.
@@ -298,11 +283,6 @@ paya.lib.skel
             defaults to 1
         :param name/n: one or more name elements; defaults to None
         :type name/n: None, str, int, list or tuple
-        :param bool inheritNames/inn: inherit names from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param suffix/suf: if string, append to name; if ``True``, look up a
-            type suffix; if ``False``, omit suffixes; defaults to
-            :attr:`paya.config.suffix`
         :return: The new joints.
         :rtype: :class:`list`
 

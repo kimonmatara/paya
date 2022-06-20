@@ -13,7 +13,7 @@ Node-naming utilities, usually called indirectly.
     :param str name: the string to conform
     :return: The Maya name.
 
-.. py:function:: conformElems(*elems, padding=None)
+.. py:function:: conformElems(*elems)
 
     Cleans up user name elements, typically specified through ``*args``
     and / or the ``name/n`` keyword argument.
@@ -21,8 +21,6 @@ Node-naming utilities, usually called indirectly.
     :config keys: ``padding``
     :param \*elems: one or more name elements, packed or unpacked
     :type \*elems: int, str
-    :param int padding/pad: padding to use for any encountered integers;
-        defaults to :attr:`paya.config.padding`
     :return: The conformed elements.
     :rtype: list
 

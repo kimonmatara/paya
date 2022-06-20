@@ -374,7 +374,7 @@ to False</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.insertJointsAtRatios">
-<span class="sig-name descname"><span class="pre">insertJointsAtRatios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratios</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipNumberingIfSingle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startNumber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.insertJointsAtRatios" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">insertJointsAtRatios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratios</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipNumberingIfSingle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startNumber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.insertJointsAtRatios" title="Permalink to this definition"></a></dt>
 <dd><p>Inserts joints at the specified ratios, ‘subdividing’ the chain.
 This is an in-place operation, and this Chain instance’s membership
 will be modified.</p>
@@ -387,11 +387,6 @@ don’t add numbering; defaults to True</p></li>
 <li><p><strong>startNumber/sn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – for joint names, the starting number;
 defaults to 1</p></li>
 <li><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – one or more name elements; defaults to None</p></li>
-<li><p><strong>inheritNames/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit names from
-<a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
-<li><p><strong>suffix/suf</strong> – if string, append to name; if <code class="docutils literal notranslate"><span class="pre">True</span></code>, look up a
-type suffix; if <code class="docutils literal notranslate"><span class="pre">False</span></code>, omit suffixes; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -448,18 +443,13 @@ no particular order.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.duplicate">
-<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.duplicate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startNumber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.duplicate" title="Permalink to this definition"></a></dt>
 <dd><p>Duplicates this chain, with smart reparenting if it’s not contiguous.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – one or more name elements</p></li>
-<li><p><strong>inheritNames/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit from
-<a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
-<li><p><strong>suffix/suf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if string, append; if True, apply the joint
-suffix; if False; omit suffix; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
-<li><p><strong>start/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number to start from; defaults to 1</p></li>
+<li><p><strong>startNumber/sn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number to start from; defaults to 1</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -473,18 +463,13 @@ suffix; if False; omit suffix; defaults to
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.rename">
-<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.rename" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startNumber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.rename" title="Permalink to this definition"></a></dt>
 <dd><p>Renames this chain. Numbers will be added before the suffix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*elems</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – one or more name elements</p></li>
-<li><p><strong>inheritNames/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit from
-<a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
-<li><p><strong>suffix/suf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if string, append; if True, apply the joint
-suffix; if False; omit suffix; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
-<li><p><strong>start/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number to start from; defaults to 1</p></li>
+<li><p><strong>startNumber/sn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number to start from; defaults to 1</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -638,7 +623,7 @@ all use a single-chain solver.</p>
 chains.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Bone.insertJoints">
-<span class="sig-name descname"><span class="pre">insertJoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipNumberingIfSingle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startNumber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Bone.insertJoints" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">insertJoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipNumberingIfSingle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startNumber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Bone.insertJoints" title="Permalink to this definition"></a></dt>
 <dd><p>Variant of <a class="reference internal" href="#paya.lib.skel.Chain.insertJointsAtRatios" title="paya.lib.skel.Chain.insertJointsAtRatios"><code class="xref py py-meth docutils literal notranslate"><span class="pre">insertJointsAtRatios()</span></code></a>; inserts joints
 uniformly along the bone.</p>
 <dl class="field-list simple">
@@ -650,11 +635,6 @@ don’t add numbering; defaults to True</p></li>
 <li><p><strong>startNumber/sn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – for joint names, the starting number;
 defaults to 1</p></li>
 <li><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – one or more name elements; defaults to None</p></li>
-<li><p><strong>inheritNames/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit names from
-<a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
-<li><p><strong>suffix/suf</strong> – if string, append to name; if <code class="docutils literal notranslate"><span class="pre">True</span></code>, look up a
-type suffix; if <code class="docutils literal notranslate"><span class="pre">False</span></code>, omit suffixes; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

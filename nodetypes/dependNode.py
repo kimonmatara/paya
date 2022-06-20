@@ -14,7 +14,12 @@ class MakeName(object):
             depending on whether this method is called on a class or on a
             node instance.
 
-            :config keys: ``inheritNames``, ``padding``, ``suffixNodes``
+            Construction is determined by the following keys inside
+                :mod:`paya.config`: ``inheritNames``, ``padding``,
+                ``suffixNodes``
+
+            Settings can be overriden using :class:`~paya.override.Override`.
+
             :param \*elems: one or more name elements
             :param name/n: elements contributed via ``name`` keyword
                 arguments; these will always be prepended; defaults to None

@@ -6,18 +6,12 @@ paya.nodetypes.shape.Shape
 
 .. py:class:: Shape(*args, **kwargs)
 
-    .. py:classmethod:: createNode(name=None, suffix=None, inheritNames=True)
+    .. py:classmethod:: createNode(name=None)
     
         Object-oriented version of :func:`pymel.core.general.createNode` with
         managed naming.
         
         :param name/n: one or more name elements; defaults to None
         :type name/n: None, str, int, or list
-        :param suffix/suf: if string, append; if ``True``, look up a type
-            suffix and apply it; if ``False``, omit; defaults to
-            :attr:`~paya.config.autoSuffix`
-        :type suffix/suf: None, bool, str
-        :param bool inheritNames/inn: inherit names from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`
