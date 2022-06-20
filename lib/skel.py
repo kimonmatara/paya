@@ -297,6 +297,24 @@ class Chain(UserList):
         return list(bones)
 
     @short(plug='p')
+    def vectors(self, plug=False):
+        """
+        :param bool plug/p: return attributes instead of values; defaults to
+            False
+        :return: A vector for each bone in this chain.
+        :rtype: :class:`list` of :class:`~paya.plugtypes.vector.Vector`
+            or :class:`~paya.datatypes.vector.Vector`
+        """
+        points = self.points(p=plug)
+        out = []
+
+        for i, thisPoint in enumerate(points[1:], start=1):
+            prevPoint = points[i-1]
+            out.append(thisPoint-prevPoint)
+
+        return out
+
+    @short(plug='p')
     def points(self, plug=False):
         """
         :param bool plug/p: return attributes instead of values; defaults to
@@ -338,6 +356,135 @@ class Chain(UserList):
                     out.append(joint)
 
         return out
+
+    @short(plug='p')
+    def length(self, plug=False):
+        """
+        :param bool plug/p: return an attribute instead of a value; defaults
+            to False
+        :return: The length of this chain.
+        :rtype: :class:`float` or :class:`~paya.plugtypes.math1D.Math1D`
+        """
+        lengths = [vector.length() for vector in self.vectors(p=plug)]
+
+        if plug:
+            pma = r.createNode('plusMinusAverage')
+
+            for i, length in enumerate(lengths):
+                length >> pma.attr('input1D')[i]
+
+            return pma.attr('output1D')
+
+        return sum(lengths)
+
+    @short(
+        skipNumberingIfSingle='sns',
+        startNumber='sn',
+        name='n',
+        inheritNames='inn',
+        suffix='suf'
+    )
+    def insertJointsAtRatios(
+            self,
+            ratios,
+            skipNumberingIfSingle=True,
+            startNumber=1,
+            name=None,
+            inheritNames=True,
+            suffix=None
+    ):
+        """
+        Inserts joints at the specified ratios, 'subdividing' the chain.
+        This is an in-place operation, and this Chain instance's membership
+        will be modified.
+
+        :param list ratios: the ratios at which to insert joints
+        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
+            don't add numbering; defaults to True
+        :param int startNumber/sn: for joint names, the starting number;
+            defaults to 1
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, list or tuple
+        :param bool inheritNames/inn: inherit names from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param suffix/suf: if string, append to name; if ``True``, look up a
+            type suffix; if ``False``, omit suffixes; defaults to
+            :attr:`paya.config.autoSuffix`
+        :raises AssertionError: not all ratios are in the 0.0 -> 1.0 range
+        :return: The new joints.
+        :rtype: :class:`list`
+        """
+        assert all([ratio >= 0.0 and ratio <= 1.0 for ratio in ratios]), \
+            "Ratios must be in the 0.0 -> 1.0 range."
+
+        numRatios = len(ratios)
+
+        points = self.points()
+        vectors = []
+        cumulativeLengths = [0.0]
+
+        for i, thisPoint in enumerate(points[1:], start=1):
+            prevPoint = points[i-1]
+            vector = thisPoint-prevPoint
+            vectors.append(vector)
+            cumulativeLengths.append(
+                cumulativeLengths[-1] + vector.length())
+
+        fullLength = cumulativeLengths[-1]
+        jointRatios = [0.0] + [cumulativeLength / fullLength for \
+                          cumulativeLength in cumulativeLengths[1:]]
+
+        insertions = {}
+
+        for i, ratio in enumerate(ratios):
+
+            for ii, thisJoint in enumerate(self[:-1]):
+                thisRatio = jointRatios[ii]
+                nextRatio = jointRatios[ii+1]
+
+                if ratio >= thisRatio and ratio <= nextRatio:
+                    startPoint = points[ii]
+                    vector = vectors[ii]
+
+                    localRatio = (ratio-thisRatio) / (nextRatio-thisRatio)
+                    point = startPoint + vector * localRatio
+
+                    nameElems = [name]
+
+                    if not(skipNumberingIfSingle and numRatios is 1):
+                        nameElems.append(i+startNumber)
+
+                    thisName = r.nodes.Joint.makeName(
+                        nameElems, suf=suffix, inn=inheritNames)
+
+                    joint = thisJoint.duplicate(po=True, n=thisName)[0]
+                    joint.releaseSRT()
+
+                    matrix = thisJoint.getMatrix(worldSpace=True)
+                    matrix.t = point
+
+                    joint.setMatrix(matrix, worldSpace=True)
+                    pool = insertions.setdefault(thisJoint, [])
+                    pool += [joint]
+
+                    break
+
+        newMembership = []
+
+        for i, joint in enumerate(self):
+            newMembership.append(joint)
+
+            try:
+                newMembership += insertions[joint]
+
+            except KeyError:
+                continue
+
+        self.data[:] = newMembership
+        self._updateClass()
+        self.compose()
+
+        return [insertion[1] for insertion in insertions]
 
     def skinClusters(self):
         """
@@ -675,6 +822,52 @@ class Bone(Chain):
     chains.
     """
     __solver__ = 'ikSCsolver'
+
+    @short(
+        skipNumberingIfSingle='sns',
+        startNumber='sn',
+        name='n',
+        inheritNames='inn',
+        suffix='suf'
+    )
+    def insertJoints(
+            self,
+            number,
+            skipNumberingIfSingle=True,
+            startNumber=1,
+            name=None,
+            inheritNames=True,
+            suffix=None
+    ):
+        """
+        Variant of :meth:`~Chain.insertJointsAtRatios`; inserts joints
+        uniformly along the bone.
+
+        :param int number: the number of joints to insert
+        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
+            don't add numbering; defaults to True
+        :param int startNumber/sn: for joint names, the starting number;
+            defaults to 1
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, list or tuple
+        :param bool inheritNames/inn: inherit names from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param suffix/suf: if string, append to name; if ``True``, look up a
+            type suffix; if ``False``, omit suffixes; defaults to
+            :attr:`paya.config.autoSuffix`
+        :return: The new joints.
+        :rtype: :class:`list`
+        """
+        ratios = _mo.floatRange(0, 1, number+2)[1:-1]
+
+        return self.insertJointsAtRatios(
+            ratios,
+            sns=skipNumberingIfSingle,
+            sn=startNumber,
+            n=name,
+            inn=inheritNames,
+            suf=suffix
+        )
 
 
 class Triad(Chain):
