@@ -131,22 +131,25 @@
 <dd><p>Generates a context-appropriate Maya name. Results will vary
 depending on whether this method is called on a class or on a
 node instance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Config keys</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">inheritNames</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">suffixNodes</span></code></p>
+<dl class="simple">
+<dt>Construction is determined by the following keys inside</dt><dd><p><a class="reference internal" href="../config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a>: <code class="docutils literal notranslate"><span class="pre">inheritNames</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>,
+<code class="docutils literal notranslate"><span class="pre">suffixNodes</span></code></p>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><ul class="simple">
+</dl>
+<p>Settings can be overriden using <a class="reference internal" href="../override.html#paya.override.Override" title="paya.override.Override"><code class="xref py py-class docutils literal notranslate"><span class="pre">Override</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>*elems</strong> – one or more name elements</p></li>
 <li><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – elements contributed via <code class="docutils literal notranslate"><span class="pre">name</span></code> keyword
 arguments; these will always be prepended; defaults to None</p></li>
 </ul>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The node name.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The node name.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
 </dd></dl>

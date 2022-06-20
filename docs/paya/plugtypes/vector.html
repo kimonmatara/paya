@@ -177,6 +177,28 @@ channel of a transform node.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.plugtypes.vector.Vector.rotateByAxisAngle">
+<span class="sig-name descname"><span class="pre">rotateByAxisAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axisVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.vector.Vector.rotateByAxisAngle" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axisVector</strong> (list, tuple, <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>
+or <a class="reference internal" href="#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the vector around which to rotate this vector</p></li>
+<li><p><strong>angle</strong> (float, <code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code>, str or
+class:<cite>~paya.plugtypes.math3D.Math3D</cite>) – the angle of rotation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This vector, rotated around <code class="docutils literal notranslate"><span class="pre">axisVector</span></code> by the specified
+<code class="docutils literal notranslate"><span class="pre">angle</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.plugtypes.vector.Vector.dot">
 <span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.vector.Vector.dot" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the dot product of <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
