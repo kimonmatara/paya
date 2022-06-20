@@ -12,18 +12,14 @@ class Joint:
         displayLocalAxis='dla',
         worldMatrix='wm',
         under='u',
-        name='n',
-        inherit='i',
-        suffix='s'
+        name='n'
     )
     def create(
             cls,
             displayLocalAxis=True,
             worldMatrix=None,
             under=None,
-            name=None,
-            inherit=True,
-            suffix=True
+            name=None
     ):
         """
         Creates a joint.
@@ -38,14 +34,10 @@ class Joint:
         :param name/n: one or more name elements for the joint; defaults to
             None
         :type name/n: None, str, list or tuple
-        :param bool inherit/i: inherit names from :class:`~paya.lib.names.Name`
-            blocks; defaults to True
-        :param suffix/s: if True, look up and apply a type suffix; if string,
-            apply as suffix; if False, omit suffix; defaults to True
         :return: The joint.
         :rtype: :class:`~paya.nodetypes.joint.Joint`
         """
-        joint = cls.createNode(n=name, i=inherit, s=suffix)
+        joint = cls.createNode(n=name)
 
         if under:
             joint.setParent(under)

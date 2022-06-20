@@ -13,13 +13,16 @@ Node-naming utilities, usually called indirectly.
     :param str name: the string to conform
     :return: The Maya name.
 
-.. py:function:: conformElems(*elems)
+.. py:function:: conformElems(*elems, padding=None)
 
     Cleans up user name elements, typically specified through ``*args``
     and / or the ``name/n`` keyword argument.
     
+    :config keys: ``padding``
     :param \*elems: one or more name elements, packed or unpacked
     :type \*elems: int, str
+    :param int padding/pad: padding to use for any encountered integers;
+        defaults to :attr:`paya.config.padding`
     :return: The conformed elements.
     :rtype: list
 
@@ -34,20 +37,16 @@ Node-naming utilities, usually called indirectly.
     
         Initialize self.  See help(type(self)) for accurate signature.
 
-.. py:function:: make(*elems, name=None, inheritName=True, suffix=None, node=None, nodeType=None)
+.. py:function:: make(*elems, name=None, node=None, nodeType=None)
 
     Constructs Maya node names.
     
+    :config keys: ``suffixNodes``, ``padding``, ``inheritNames``
     :param \*elems: one or more name elements
     :type \*elems: int, str, list
     :param name/n: elements passed-through via a ``name`` argument;
         these will always be prepended to \*elems; defaults to None
     :type name/n: int, str, list, None
-    :param bool inheritName/inn: inherit names from :class:`Name` blocks;
-        defaults to True
-    :param bool suffix/suf: if string, append; if ``True``, look up a type
-        suffix; if ``False``, omit suffix; defaults to
-        :attr:`~paya.config.autoSuffix`
     :param node: ignored if ``nodeType`` has been provided; a node to inspect
         to determine the node type suffix; defaults to None
     :type node: None, str, :class:`~pymel.core.general.PyNode`

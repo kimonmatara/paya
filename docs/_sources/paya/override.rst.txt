@@ -1,0 +1,37 @@
+=============
+paya.override
+=============
+
+.. py:module:: paya.override
+
+.. py:class:: Override(**overrides)
+
+    Context manager. Overrides paya configuration keys for the block. The
+    configuration keys must exist.
+    
+    This class can be imported from :mod:`paya.overrides` or accessed
+    directly on :mod:`paya.runtime`.
+    
+    :Example:
+        .. code-block:: python
+    
+            with r.Override(suffix=False):
+                r.createNode('joint')
+    
+    :raises ConfigKeyNotFoundError: The configuration key doesn't exist.
+
+    .. py:method:: __init__(**overrides)
+    
+        Initialize self.  See help(type(self)) for accurate signature.
+
+.. py:function:: resolve(argName, userVal)
+
+    Internal use. Used for quick resolution of user arguments. If an argument
+    is None, a default is sought under config and returned. Otherwise, the
+    user value is returned. The argument must exist as a configuration key.
+    
+    :param argName: the argument name
+    :param userVal: the user value
+    :raises ConfigKeyNotFoundError: No configuration key with a matching name
+        was found.
+    :return: The resolved value for the argument.

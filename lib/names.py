@@ -6,8 +6,9 @@ import re
 
 import pymel.util as _pu
 
-from paya.util import short
+from paya.util import short, pad
 import paya.config as config
+import paya.override as override
 import paya.lib.suffixes as _suf
 
 def legalise(name):
@@ -35,21 +36,24 @@ def legalise(name):
     else:
         return '_'
 
+@short(padding='pad')
 def conformElems(*elems):
     """
     Cleans up user name elements, typically specified through ``*args``
     and / or the ``name/n`` keyword argument.
 
+    :config keys: ``padding``
     :param \*elems: one or more name elements, packed or unpacked
     :type \*elems: int, str
     :return: The conformed elements.
     :rtype: list
     """
     out = []
+    padding = config.padding
 
     for elem in _pu.expandArgs(*elems):
         if isinstance(elem, int):
-            elem = str(elem)
+            elem = pad(elem, padding)
 
         elif not elem:
             continue
@@ -82,33 +86,17 @@ class Name:
 
         return False
 
-@short(
-    inheritName='inn',
-    suffix='suf',
-    name='n',
-    nodeType='nt'
-)
-def make(
-        *elems,
-        name=None,
-        inheritName=True,
-        suffix=None,
-        node=None,
-        nodeType=None
-):
+@short(name='n', nodeType='nt')
+def make(*elems, name=None, node=None, nodeType=None):
     """
     Constructs Maya node names.
 
+    :config keys: ``suffixNodes``, ``padding``, ``inheritNames``
     :param \*elems: one or more name elements
     :type \*elems: int, str, list
     :param name/n: elements passed-through via a ``name`` argument;
         these will always be prepended to \*elems; defaults to None
     :type name/n: int, str, list, None
-    :param bool inheritName/inn: inherit names from :class:`Name` blocks;
-        defaults to True
-    :param bool suffix/suf: if string, append; if ``True``, look up a type
-        suffix; if ``False``, omit suffix; defaults to
-        :attr:`~paya.config.autoSuffix`
     :param node: ignored if ``nodeType`` has been provided; a node to inspect
         to determine the node type suffix; defaults to None
     :type node: None, str, :class:`~pymel.core.general.PyNode`
@@ -125,27 +113,18 @@ def make(
 
     elems = conformElems(elems)
 
-    if inheritName:
+    if config.inheritNames:
         if Name.__elems__:
             elems = Name.__elems__ + elems
 
-    if isinstance(suffix, str):
-        elems.append(suffix)
+    if config.suffixNodes:
+        if nodeType is None:
+            if node:
+                nodeType = _suf.getKeyFromNode(node)
 
-    else:
-        if suffix is None:
-            suffix = config.autoSuffix
-
-        if suffix:
-            if nodeType is None:
-                if node:
-                    nodeType = _suf.getKeyFromNode(node)
-
-            if nodeType:
-                suffix = _suf.suffixes.get(nodeType)
-
-            if suffix:
-                elems.append(suffix)
+        if nodeType:
+            suffix = _suf.suffixes.get(nodeType)
+            elems.append(suffix)
 
     name = '_'.join(elems)
     name = legalise(name)

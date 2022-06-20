@@ -1,6 +1,6 @@
 from collections import UserList
 
-from paya.config import defaultDownAxis, defaultUpAxis
+import paya.override as override
 import paya.lib.mathops as _mo
 from paya.util import short, LazyModule
 import pymel.util as _pu
@@ -120,8 +120,8 @@ class Chain(UserList):
             cls,
             points,
             upVector,
-            downAxis=defaultDownAxis,
-            upAxis=defaultUpAxis,
+            downAxis=None,
+            upAxis=None,
             under=None,
             tolerance=1e-7
     ):
@@ -133,9 +133,9 @@ class Chain(UserList):
         :param points: a world position for each joint
         :param upVector: the reference up vector
         :param str downAxis/da: the 'bone' axis; defaults to
-            ``paya.config.defaultDownAxis``
+            ``paya.config.downAxis``
         :param str upAxis/ua: the axis to map to the up vector; defaults to
-            ``paya.config.defaultUpAxis``
+            ``paya.config.upAxis``
         :param under/u: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
@@ -166,8 +166,8 @@ class Chain(UserList):
             numberOrFractions,
             upCurve=None,
             upVector=None,
-            downAxis=defaultDownAxis,
-            upAxis=defaultUpAxis,
+            downAxis=None,
+            upAxis=None,
             tolerance=1e-7
     ):
         """
@@ -184,9 +184,9 @@ class Chain(UserList):
         :type upVector/upv: list, tuple or
             :class:`~paya.datatypes.vector.Vector`
         :param str downAxis/da: the 'bone' axis; defaults to
-            ``paya.config.defaultDownAxis``
+            ``paya.config.downAxis``
         :param str upAxis/ua: the axis to map to the up vector(s); defaults to
-            ``paya.config.defaultUpAxis``
+            ``paya.config.upAxis``
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: The constructed chain.
@@ -205,6 +205,9 @@ class Chain(UserList):
 
         curve = r.PyNode(curve)
         points = curve.distributePoints(numberOrFractions)
+
+        downAxis = override.resolve('downAxis', downAxis)
+        upAxis = override.resolve('upAxis', upAxis)
 
         if upCurve:
             aimVectors = _mo.getAimVectorsFromPoints(points)
@@ -239,27 +242,17 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Orient
 
-    @short(
-        tolerance='tol',
-        downAxis='da',
-        upAxis='ua'
-    )
-    def orient(
-            self,
-            upVector,
-            downAxis=defaultDownAxis,
-            upAxis=defaultUpAxis,
-            tolerance=1e-7
-    ):
+    @short(tolerance='tol', downAxis='da', upAxis='ua')
+    def orient(self, upVector, downAxis=None, upAxis=None, tolerance=1e-7):
         """
         Orients this chain.
 
         :param upVector: a reference up vector
         :type upVector: list, :class:`~paya.datatypes.vector.Vector`
         :param str downAxis/da: the aiming (bone) axis; defaults to
-            :attr:`paya.config.defaultDownAxis`
+            :attr:`paya.config.downAxis`
         :param str upAxis: the axis to map to the up vector; defaults to
-            :attr:`paya.config.defaultUpAxis`
+            :attr:`paya.config.upAxis`
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: ``self``
@@ -380,18 +373,14 @@ class Chain(UserList):
     @short(
         skipNumberingIfSingle='sns',
         startNumber='sn',
-        name='n',
-        inheritNames='inn',
-        suffix='suf'
+        name='n'
     )
     def insertJointsAtRatios(
             self,
             ratios,
             skipNumberingIfSingle=True,
             startNumber=1,
-            name=None,
-            inheritNames=True,
-            suffix=None
+            name=None
     ):
         """
         Inserts joints at the specified ratios, 'subdividing' the chain.
@@ -405,11 +394,6 @@ class Chain(UserList):
             defaults to 1
         :param name/n: one or more name elements; defaults to None
         :type name/n: None, str, int, list or tuple
-        :param bool inheritNames/inn: inherit names from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param suffix/suf: if string, append to name; if ``True``, look up a
-            type suffix; if ``False``, omit suffixes; defaults to
-            :attr:`paya.config.autoSuffix`
         :raises AssertionError: not all ratios are in the 0.0 -> 1.0 range
         :return: The new joints.
         :rtype: :class:`list`
@@ -454,9 +438,7 @@ class Chain(UserList):
                     if not(skipNumberingIfSingle and numRatios is 1):
                         nameElems.append(i+startNumber)
 
-                    thisName = r.nodes.Joint.makeName(
-                        nameElems, suf=suffix, inn=inheritNames)
-
+                    thisName = r.nodes.Joint.makeName(nameElems)
                     joint = thisJoint.duplicate(po=True, n=thisName)[0]
                     joint.releaseSRT()
 
@@ -533,19 +515,14 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    DAG editing
 
-    @short(name='n', inheritName='inn', suffix='suf', start='s')
-    def duplicate(self, name=None, inheritName=True, suffix=None, start=1):
+    @short(name='n', start='sn')
+    def duplicate(self, name=None, startNumber=1):
         """
         Duplicates this chain, with smart reparenting if it's not contiguous.
 
         :param name/n: one or more name elements
         :type name/n: list, str, int
-        :param bool inheritName/inn: inherit from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param bool suffix/suf: if string, append; if True, apply the joint
-            suffix; if False; omit suffix; defaults to
-            :attr:`paya.config.autoSuffix`
-        :param int start/s: the number to start from; defaults to 1
+        :param int startNumber/sn: the number to start from; defaults to 1
         :return: The chain duplicate.
         :rtype: :class:`~paya.lib.skel.Chain`
         """
@@ -566,9 +543,7 @@ class Chain(UserList):
         copies = []
 
         for i, joint in enumerate(self):
-            _name = r.nodes.Joint.makeName(
-                name, i+start, suf=suffix, inn=inheritName)
-
+            _name = r.nodes.Joint.makeName(name, i+startNumber)
             copy = joint.duplicate(n=_name, po=True)[0].releaseSRT()
             copies.append(copy)
 
@@ -580,25 +555,19 @@ class Chain(UserList):
 
         return Chain(copies)
 
-    @short(inheritName='inn',suffix='suf', start='s')
-    def rename(self, *elems, inheritName=True, suffix=None, start=1):
+    @short(startNumber='sn')
+    def rename(self, *elems, startNumber=1):
         """
         Renames this chain. Numbers will be added before the suffix.
 
         :param \*elems: one or more name elements
         :type \*elems: list, str, int
-        :param bool inheritName/inn: inherit from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param bool suffix/suf: if string, append; if True, apply the joint
-            suffix; if False; omit suffix; defaults to
-            :attr:`paya.config.autoSuffix`
-        :param int start/s: the number to start from; defaults to 1
+        :param int startNumber/sn: the number to start from; defaults to 1
         :return: ``self``
         """
         for i, joint in enumerate(self):
-            with r.Name(i+start):
-                name = r.nodes.Joint.makeName(
-                    *elems, inn=inheritName, suf=suffix)
+            with r.Name(i+startNumber):
+                name = r.nodes.Joint.makeName(*elems)
                 joint.rename(name)
 
         return self
@@ -826,18 +795,14 @@ class Bone(Chain):
     @short(
         skipNumberingIfSingle='sns',
         startNumber='sn',
-        name='n',
-        inheritNames='inn',
-        suffix='suf'
+        name='n'
     )
     def insertJoints(
             self,
             number,
             skipNumberingIfSingle=True,
             startNumber=1,
-            name=None,
-            inheritNames=True,
-            suffix=None
+            name=None
     ):
         """
         Variant of :meth:`~Chain.insertJointsAtRatios`; inserts joints
@@ -850,11 +815,6 @@ class Bone(Chain):
             defaults to 1
         :param name/n: one or more name elements; defaults to None
         :type name/n: None, str, int, list or tuple
-        :param bool inheritNames/inn: inherit names from
-            :class:`~paya.lib.names.Name` blocks; defaults to True
-        :param suffix/suf: if string, append to name; if ``True``, look up a
-            type suffix; if ``False``, omit suffixes; defaults to
-            :attr:`paya.config.autoSuffix`
         :return: The new joints.
         :rtype: :class:`list`
         """
@@ -864,9 +824,7 @@ class Bone(Chain):
             ratios,
             sns=skipNumberingIfSingle,
             sn=startNumber,
-            n=name,
-            inn=inheritNames,
-            suf=suffix
+            n=name
         )
 
 

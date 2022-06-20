@@ -68,6 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
@@ -76,6 +77,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../override.html">paya.override</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
@@ -193,7 +195,7 @@ exactly; no attempt is made to orient the chain.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.createFromPoints">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromPoints" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromPoints" title="Permalink to this definition"></a></dt>
 <dd><p>Builds a chain from points. The side (‘up’) axis will be calculated
 using cross products, but those will be biased towards the reference
 up vector.</p>
@@ -203,9 +205,9 @@ up vector.</p>
 <li><p><strong>points</strong> – a world position for each joint</p></li>
 <li><p><strong>upVector</strong> – the reference up vector</p></li>
 <li><p><strong>downAxis/da</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the ‘bone’ axis; defaults to
-<code class="docutils literal notranslate"><span class="pre">paya.config.defaultDownAxis</span></code></p></li>
+<code class="docutils literal notranslate"><span class="pre">paya.config.downAxis</span></code></p></li>
 <li><p><strong>upAxis/ua</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to map to the up vector; defaults to
-<code class="docutils literal notranslate"><span class="pre">paya.config.defaultUpAxis</span></code></p></li>
+<code class="docutils literal notranslate"><span class="pre">paya.config.upAxis</span></code></p></li>
 <li><p><strong>under/u</strong> – an optional parent for the chain; defaults to None</p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see
 <a class="reference internal" href="mathops.html#paya.lib.mathops.getAimingMatricesFromPoints" title="paya.lib.mathops.getAimingMatricesFromPoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getAimingMatricesFromPoints()</span></code></a></p></li>
@@ -222,7 +224,7 @@ up vector.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.createFromCurve">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curve</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromCurve" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curve</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromCurve" title="Permalink to this definition"></a></dt>
 <dd><p>Draws a chain (once) along a curve. Either ‘upCurve’ or ‘upVector’
 must be provided.</p>
 <dl class="field-list simple">
@@ -235,9 +237,9 @@ fractions, or a number</p></li>
 <li><p><strong>upVector/upv</strong> (list, tuple or
 <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – a reference up vector</p></li>
 <li><p><strong>downAxis/da</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the ‘bone’ axis; defaults to
-<code class="docutils literal notranslate"><span class="pre">paya.config.defaultDownAxis</span></code></p></li>
+<code class="docutils literal notranslate"><span class="pre">paya.config.downAxis</span></code></p></li>
 <li><p><strong>upAxis/ua</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to map to the up vector(s); defaults to
-<code class="docutils literal notranslate"><span class="pre">paya.config.defaultUpAxis</span></code></p></li>
+<code class="docutils literal notranslate"><span class="pre">paya.config.upAxis</span></code></p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see
 <a class="reference internal" href="mathops.html#paya.lib.mathops.getAimingMatricesFromPoints" title="paya.lib.mathops.getAimingMatricesFromPoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getAimingMatricesFromPoints()</span></code></a></p></li>
 </ul>
@@ -253,16 +255,16 @@ fractions, or a number</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.orient">
-<span class="sig-name descname"><span class="pre">orient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.orient" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">orient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.orient" title="Permalink to this definition"></a></dt>
 <dd><p>Orients this chain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upVector</strong> (list, <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – a reference up vector</p></li>
 <li><p><strong>downAxis/da</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the aiming (bone) axis; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.defaultDownAxis</span></code></p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.downAxis</span></code></p></li>
 <li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to map to the up vector; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.defaultUpAxis</span></code></p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.upAxis</span></code></p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see
 <a class="reference internal" href="mathops.html#paya.lib.mathops.getAimingMatricesFromPoints" title="paya.lib.mathops.getAimingMatricesFromPoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getAimingMatricesFromPoints()</span></code></a></p></li>
 </ul>
@@ -389,7 +391,7 @@ defaults to 1</p></li>
 <a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
 <li><p><strong>suffix/suf</strong> – if string, append to name; if <code class="docutils literal notranslate"><span class="pre">True</span></code>, look up a
 type suffix; if <code class="docutils literal notranslate"><span class="pre">False</span></code>, omit suffixes; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.autoSuffix</span></code></p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -446,17 +448,17 @@ no particular order.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.duplicate">
-<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.duplicate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.duplicate" title="Permalink to this definition"></a></dt>
 <dd><p>Duplicates this chain, with smart reparenting if it’s not contiguous.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – one or more name elements</p></li>
-<li><p><strong>inheritName/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit from
+<li><p><strong>inheritNames/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit from
 <a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
 <li><p><strong>suffix/suf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if string, append; if True, apply the joint
 suffix; if False; omit suffix; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.autoSuffix</span></code></p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
 <li><p><strong>start/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number to start from; defaults to 1</p></li>
 </ul>
 </dd>
@@ -471,17 +473,17 @@ suffix; if False; omit suffix; defaults to
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.rename">
-<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.rename" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inheritNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.rename" title="Permalink to this definition"></a></dt>
 <dd><p>Renames this chain. Numbers will be added before the suffix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*elems</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – one or more name elements</p></li>
-<li><p><strong>inheritName/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit from
+<li><p><strong>inheritNames/inn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – inherit from
 <a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
 <li><p><strong>suffix/suf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if string, append; if True, apply the joint
 suffix; if False; omit suffix; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.autoSuffix</span></code></p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
 <li><p><strong>start/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number to start from; defaults to 1</p></li>
 </ul>
 </dd>
@@ -652,7 +654,7 @@ defaults to 1</p></li>
 <a class="reference internal" href="names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks; defaults to True</p></li>
 <li><p><strong>suffix/suf</strong> – if string, append to name; if <code class="docutils literal notranslate"><span class="pre">True</span></code>, look up a
 type suffix; if <code class="docutils literal notranslate"><span class="pre">False</span></code>, omit suffixes; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.autoSuffix</span></code></p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.suffix</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

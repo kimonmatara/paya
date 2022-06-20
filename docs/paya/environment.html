@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.cmds &mdash; paya 0.3 documentation</title>
+  <title>paya.environment &mdash; paya 0.3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="paya.comptypes" href="comptypes.html" />
-    <link rel="prev" title="paya" href="../paya.html" /> 
+    <link rel="next" title="paya.lib" href="lib.html" />
+    <link rel="prev" title="paya.datatypes.vector.Vector" href="datatypes/vector.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -64,11 +64,11 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Module Documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datatypes.html">paya.datatypes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html">paya.environment</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodetypes.html">paya.nodetypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="override.html">paya.override</a></li>
@@ -100,9 +100,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../paya.html">paya</a> &raquo;</li>
-      <li>paya.cmds</li>
+      <li>paya.environment</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/paya/cmds.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/paya/environment.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -110,34 +110,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-paya.cmds">
-<span id="paya-cmds"></span><h1>paya.cmds<a class="headerlink" href="#module-paya.cmds" title="Permalink to this headline"></a></h1>
-<p>The contents of this module can be directly accessed via the
-<a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interface. This includes:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>The entire <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace</p></li>
-<li><p><a class="reference internal" href="lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a></p></li>
-<li><p><a class="reference internal" href="lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> / <code class="docutils literal notranslate"><span class="pre">cm</span></code></p></li>
-<li><p><a class="reference internal" href="lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p></li>
-</ul>
-</div></blockquote>
-<p>Any module-level variables or functions added here will also become available
-via <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>When customising this module, take care not to <strong>shadow</strong> factory commands from
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>. Doing so may break code that accesses such commands via
-<a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
-</div>
+  <section id="module-paya.environment">
+<span id="paya-environment"></span><h1>paya.environment<a class="headerlink" href="#module-paya.environment" title="Permalink to this headline"></a></h1>
+<p>Provides relevant environment information.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../paya.html" class="btn btn-neutral float-left" title="paya" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="comptypes.html" class="btn btn-neutral float-right" title="paya.comptypes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="datatypes/vector.html" class="btn btn-neutral float-left" title="paya.datatypes.vector.Vector" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lib.html" class="btn btn-neutral float-right" title="paya.lib" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

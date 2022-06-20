@@ -19,19 +19,17 @@ More options may be added in future Paya releases.
 """
 import maya.mel as mel
 
-# General inspections
-
-hasDagLocalMatrix = int(mel.eval('getApplicationVersionAsFloat')) > 2022
-
 # Importing behaviour
 
 patchOnLoad = True # runs PyMEL patching as soon as paya.runtime is loaded
 
 # Name management
 
-autoSuffix = True
+suffixNodes = True
+padding = 0
+inheritNames = True
 
 # Default skeleton building
 
-defaultDownAxis = 'y'
-defaultUpAxis = 'x'
+downAxis = 'y'
+upAxis = 'x'

@@ -5,6 +5,7 @@ plug workflows.
 
 from collections import UserDict
 from functools import wraps, reduce
+import paya.override as override
 
 import maya.OpenMaya as om
 import maya.cmds as m
@@ -12,7 +13,6 @@ import pymel.core as p
 from pymel.util.arrays import Array
 import pymel.util as _pu
 
-from paya.config import defaultDownAxis, defaultUpAxis
 from paya.util import short, LazyModule
 
 r = LazyModule('paya.runtime')
@@ -843,8 +843,8 @@ def getAimAndUpVectorsFromPoints(points, refVector, tolerance=1e-7):
 def getAimingMatricesFromPoints(
         points,
         refVector,
-        downAxis=defaultDownAxis,
-        upAxis=defaultUpAxis,
+        downAxis=None,
+        upAxis=None,
         tolerance=1e-7
 ):
     """
@@ -855,15 +855,18 @@ def getAimingMatricesFromPoints(
     :param refVector: a reference up vector
     :type refVector: :class:`~paya.datatypes.vector.Vector`, list
     :param str downAxis/da: the aiming axis; defaults to
-        :attr:`paya.config.defaultDownAxis`
+        :attr:`paya.config.downAxis`
     :param str upAxis/ua: the axis to bias towards the reference vector;
-        defaults to :attr:`paya.config.defaultUpAxis`
+        defaults to :attr:`paya.config.upAxis`
     :param float tolerance/tol: aim vectors or cross products with lengths
         below this tolerance will be replaced with neighbouring ones;
         defaults to 1e-7
     :return: A list of matrices
     :rtype: :class:`list` of :class:`~paya.datatypes.matrix.Matrix`
     """
+    downAxis = override.resolve('downAxis', downAxis)
+    upAxis = override.resolve('upAxis', upAxis)
+
     aimVectors, upVectors = getAimAndUpVectorsFromPoints(
         points, refVector, tol=tolerance
     )

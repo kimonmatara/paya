@@ -210,7 +210,7 @@ plug workflows.
     :return: A list of aim vectors and a list of up vectors
     :rtype: tuple
 
-.. py:function:: getAimingMatricesFromPoints(points, refVector, downAxis='y', upAxis='x', tolerance=1e-07)
+.. py:function:: getAimingMatricesFromPoints(points, refVector, downAxis=None, upAxis=None, tolerance=1e-07)
 
     Given a list of points and a reference up vector, returns aiming matrices
     which can be used to draw chains and other systems.
@@ -219,9 +219,9 @@ plug workflows.
     :param refVector: a reference up vector
     :type refVector: :class:`~paya.datatypes.vector.Vector`, list
     :param str downAxis/da: the aiming axis; defaults to
-        :attr:`paya.config.defaultDownAxis`
+        :attr:`paya.config.downAxis`
     :param str upAxis/ua: the axis to bias towards the reference vector;
-        defaults to :attr:`paya.config.defaultUpAxis`
+        defaults to :attr:`paya.config.upAxis`
     :param float tolerance/tol: aim vectors or cross products with lengths
         below this tolerance will be replaced with neighbouring ones;
         defaults to 1e-7

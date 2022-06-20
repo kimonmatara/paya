@@ -68,6 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
@@ -76,6 +77,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../override.html">paya.override</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
@@ -443,7 +445,7 @@ defaults to 1e-7</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.mathops.getAimingMatricesFromPoints">
-<span class="sig-name descname"><span class="pre">getAimingMatricesFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getAimingMatricesFromPoints" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getAimingMatricesFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getAimingMatricesFromPoints" title="Permalink to this definition"></a></dt>
 <dd><p>Given a list of points and a reference up vector, returns aiming matrices
 which can be used to draw chains and other systems.</p>
 <dl class="field-list simple">
@@ -452,9 +454,9 @@ which can be used to draw chains and other systems.</p>
 <li><p><strong>points</strong> – the source points (values)</p></li>
 <li><p><strong>refVector</strong> (<a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list) – a reference up vector</p></li>
 <li><p><strong>downAxis/da</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the aiming axis; defaults to
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.defaultDownAxis</span></code></p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.downAxis</span></code></p></li>
 <li><p><strong>upAxis/ua</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to bias towards the reference vector;
-defaults to <code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.defaultUpAxis</span></code></p></li>
+defaults to <code class="xref py py-attr docutils literal notranslate"><span class="pre">paya.config.upAxis</span></code></p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – aim vectors or cross products with lengths
 below this tolerance will be replaced with neighbouring ones;
 defaults to 1e-7</p></li>

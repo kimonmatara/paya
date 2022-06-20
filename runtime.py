@@ -25,7 +25,7 @@ class Runtime:
         from paya import patch
         self._pt = patch
 
-        from paya import config
+        import paya.config as config
 
         if config.patchOnLoad:
             self.start()
