@@ -391,6 +391,35 @@ class Vector:
         
     #--------------------------------------------------------------------|    Vector operations
 
+    def rotateByAxisAngle(self, axisVector, angle):
+        """
+        :param axisVector: the vector around which to rotate this vector
+        :type axisVector: list, tuple, :class:`~paya.datatypes.vector.Vector`
+            or :class:`~paya.plugtypes.vector.Vector`
+        :param angle: the angle of rotation
+        :type angle: float, :class:`~paya.datatypes.angle.Angle`, str or
+            class:`~paya.plugtypes.math3D.Math3D`
+        :return: This vector, rotated around ``axisVector`` by the specified
+            ``angle``.
+        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        """
+        axisVector, axisVectorDim, axisVectorIsPlug = _mo.info(axisVector)
+        angle, angleDim, angleIsPlug = _mo.info(angle)
+
+        hasPlugs = axisVectorIsPlug or angleIsPlug
+
+        if hasPlugs:
+            axisAngle = r.nodes.AxisAngleToQuat.createNode()
+            axisVector >> axisAngle.attr('inputAxis')
+            angle >> axisAngle.attr('inputAngle')
+            quat = axisAngle.attr('outputQuat')
+            matrix = quat.asRotateMatrix()
+
+            return self * matrix
+
+        else:
+            return self.rotateBy(axisVector, angle)
+
     @short(normalize='nr')
     def dot(self, other, normalize=False):
         """

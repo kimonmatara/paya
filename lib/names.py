@@ -124,7 +124,9 @@ def make(*elems, name=None, node=None, nodeType=None):
 
         if nodeType:
             suffix = _suf.suffixes.get(nodeType)
-            elems.append(suffix)
+
+            if suffix:
+                elems.append(suffix)
 
     name = '_'.join(elems)
     name = legalise(name)

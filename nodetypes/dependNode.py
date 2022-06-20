@@ -58,4 +58,5 @@ class DependNode:
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`
         """
-        return r.createNode(cls.__melnode__, n=cls.makeName(name))
+        name = cls.makeName(name)
+        return r.createNode(cls.__melnode__, n=name)
