@@ -103,6 +103,14 @@ paya.lib.skel
             in the chain.
         :rtype: :class:`~paya.lib.skel.Bone`
     
+    .. py:method:: vectors(plug=False)
+    
+        :param bool plug/p: return attributes instead of values; defaults to
+            False
+        :return: A vector for each bone in this chain.
+        :rtype: :class:`list` of :class:`~paya.plugtypes.vector.Vector`
+            or :class:`~paya.datatypes.vector.Vector`
+    
     .. py:method:: points(plug=False)
     
         :param bool plug/p: return attributes instead of values; defaults to
@@ -121,6 +129,35 @@ paya.lib.skel
         :return: The first joint, and any member which is not a child of its
             predecessor.
         :rtype: list
+    
+    .. py:method:: length(plug=False)
+    
+        :param bool plug/p: return an attribute instead of a value; defaults
+            to False
+        :return: The length of this chain.
+        :rtype: :class:`float` or :class:`~paya.plugtypes.math1D.Math1D`
+    
+    .. py:method:: insertJointsAtRatios(ratios, skipNumberingIfSingle=True, startNumber=1, name=None, inheritNames=True, suffix=None)
+    
+        Inserts joints at the specified ratios, 'subdividing' the chain.
+        This is an in-place operation, and this Chain instance's membership
+        will be modified.
+        
+        :param list ratios: the ratios at which to insert joints
+        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
+            don't add numbering; defaults to True
+        :param int startNumber/sn: for joint names, the starting number;
+            defaults to 1
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, list or tuple
+        :param bool inheritNames/inn: inherit names from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param suffix/suf: if string, append to name; if ``True``, look up a
+            type suffix; if ``False``, omit suffixes; defaults to
+            :attr:`paya.config.autoSuffix`
+        :raises AssertionError: not all ratios are in the 0.0 -> 1.0 range
+        :return: The new joints.
+        :rtype: :class:`list`
     
     .. py:method:: skinClusters()
     
@@ -248,6 +285,26 @@ paya.lib.skel
 
     A specialised subclass of :class:`~paya.lib.skel.Chain` for two-joint
     chains.
+
+    .. py:method:: insertJoints(number, skipNumberingIfSingle=True, startNumber=1, name=None, inheritNames=True, suffix=None)
+    
+        Variant of :meth:`~Chain.insertJointsAtRatios`; inserts joints
+        uniformly along the bone.
+        
+        :param int number: the number of joints to insert
+        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
+            don't add numbering; defaults to True
+        :param int startNumber/sn: for joint names, the starting number;
+            defaults to 1
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, list or tuple
+        :param bool inheritNames/inn: inherit names from
+            :class:`~paya.lib.names.Name` blocks; defaults to True
+        :param suffix/suf: if string, append to name; if ``True``, look up a
+            type suffix; if ``False``, omit suffixes; defaults to
+            :attr:`paya.config.autoSuffix`
+        :return: The new joints.
+        :rtype: :class:`list`
 
 .. py:class:: Triad(*joints)
 
