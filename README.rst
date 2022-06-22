@@ -13,7 +13,7 @@ Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-.. admonition:: New in version 0.4.1
+.. admonition:: New in version 0.4
 
     *   A brand new toolset for skeletal chains and IK handles, spread across ``Joint``,
         ``IkHandle`` and ``Chain``
@@ -24,4 +24,4 @@ for attribute (including subtype), component and data types with true inheritanc
 
     *   Improvements to name management and plug setting
 
-See `here <https://kimonmatara.github.io>`_ for full documentation.
+See `here <https://kimonmatara.github.io/paya/index.html>`_ for full documentation.
