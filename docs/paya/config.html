@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.config &mdash; paya 0.3 documentation</title>
+  <title>paya.config &mdash; paya 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -44,19 +44,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../req_and_inst.html">Requirements &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../importing_and_patching.html">Importing and Patching</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths Rigging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../discovering_func.html">Discovering Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Your Own Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
@@ -112,31 +110,28 @@
              
   <section id="module-paya.config">
 <span id="paya-config"></span><h1>paya.config<a class="headerlink" href="#module-paya.config" title="Permalink to this headline"></a></h1>
-<p>Defines package-level configuration flags. Currently, these are:</p>
-<table class="colwidths-given docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Flag</p></th>
-<th class="head"><p>Default Value</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">patchOnLoad</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
-<td><p>Call <a class="reference internal" href="runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a> the first time <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> is imported.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">autoSuffix</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
-<td><p>Apply <a class="reference internal" href="../naming_nodes.html#automatic-suffixes"><span class="std std-ref">node suffixes</span></a> automatically.</p></td>
-</tr>
-</tbody>
-</table>
-<p>More options may be added in future Paya releases.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.config.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.config.Config" title="Permalink to this definition"></a></dt>
+<dd><p>Dict-like object, inserted into <code class="xref py py-attr docutils literal notranslate"><span class="pre">sys.modules</span></code> as a module. Initial
+values are read from <code class="docutils literal notranslate"><span class="pre">paya/config.json</span></code> on startup. Edits are only
+valid for the current session. The object can also be used as a context
+manager, with temporary overrides passed-in as keyword arguments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.config</span> <span class="k">as</span> <span class="nn">config</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;suffixNodes&#39;</span><span class="p">])</span>
+<span class="c1"># True</span>
+
+<span class="k">with</span> <span class="n">config</span><span class="p">(</span><span class="n">suffixNodes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;suffixNodes&#39;</span><span class="p">])</span>
+<span class="c1"># False</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;suffixNodes&#39;</span><span class="p">])</span>
+<span class="c1"># False</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 
 

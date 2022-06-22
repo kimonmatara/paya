@@ -27,8 +27,10 @@ class Runtime:
 
         import paya.config as config
 
-        if config.patchOnLoad:
+        if config['patchOnLoad']:
             self.start()
+
+        self.config = config
 
         import paya.cmds
         self.cmds = paya.cmds

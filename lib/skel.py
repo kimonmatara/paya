@@ -1,6 +1,4 @@
 from collections import UserList
-
-import paya.override as override
 import paya.lib.mathops as _mo
 from paya.util import short, LazyModule
 import pymel.util as _pu
@@ -9,33 +7,12 @@ r = LazyModule('paya.runtime')
 
 
 class Chain(UserList):
-    __solver__ = 'ikRPsolver'
 
     #------------------------------------------------------------|    Instantiation
 
-    def __new__(cls, *joints):
-        if cls is Chain:
-            joints = _pu.expandArgs(*joints)
-            num = len(joints)
-
-            if num is 2:
-                cls = Bone
-
-            elif num is 3:
-                cls = Triad
-
-        return object.__new__(cls)
-
     def __init__(self, *joints):
-        """
-        :param \*joints: the joint content for the
-            :class:`~paya.lib.skel.Chain` instance
-        """
-        joints = _pu.expandArgs(*joints)
-        joints = map(r.PyNode, joints)
+        joints = map(r.PyNode, _pu.expandArgs(*joints))
         super(Chain, self).__init__(joints)
-
-    #------------------------------------------------------------|    Constructors
 
     @classmethod
     def getFromStartEnd(cls, startJoint, endJoint):
@@ -85,6 +62,8 @@ class Chain(UserList):
 
         return cls(out)
 
+    #------------------------------------------------------------|    Construction
+
     @classmethod
     @short(under='u')
     def createFromMatrices(cls, matrices, under=None):
@@ -100,7 +79,7 @@ class Chain(UserList):
 
         for i, matrix in enumerate(matrices):
             joint = r.nodes.Joint.create(
-                wm=matrix,
+                wm=matrix.pick(t=True, r=True),
                 n=i+1,
                 under=joints[-1] if joints else under
             )
@@ -111,17 +90,15 @@ class Chain(UserList):
 
     @classmethod
     @short(
-        downAxis='da',
-        upAxis='ua',
         under='u',
         tolerance='tol'
     )
     def createFromPoints(
             cls,
             points,
+            downAxis,
+            upAxis,
             upVector,
-            downAxis=None,
-            upAxis=None,
             under=None,
             tolerance=1e-7
     ):
@@ -131,11 +108,11 @@ class Chain(UserList):
         up vector.
 
         :param points: a world position for each joint
-        :param upVector: the reference up vector
-        :param str downAxis/da: the 'bone' axis; defaults to
+        :param str downAxis: the 'bone' axis; defaults to
             ``paya.config.downAxis``
-        :param str upAxis/ua: the axis to map to the up vector; defaults to
+        :param str upAxis: the axis to map to the up vector; defaults to
             ``paya.config.upAxis``
+        :param upVector: the reference up vector
         :param under/u: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
@@ -144,72 +121,51 @@ class Chain(UserList):
         """
         matrices = _mo.getAimingMatricesFromPoints(
             points,
+            downAxis,
+            upAxis,
             upVector,
-            da=downAxis,
-            ua=upAxis,
             tol=tolerance
         )
 
         return cls.createFromMatrices(matrices, u=under)
 
     @classmethod
-    @short(
-        upCurve='upc',
-        upVector='upv',
-        downAxis='da',
-        upAxis='ua',
-        tolerance='tol'
-    )
+    @short(tolerance='tol')
     def createFromCurve(
             cls,
             curve,
             numberOrFractions,
-            upCurve=None,
-            upVector=None,
-            downAxis=None,
-            upAxis=None,
+            downAxis,
+            upAxis,
+            upVectorOrCurve,
             tolerance=1e-7
     ):
         """
         Draws a chain (once) along a curve. Either 'upCurve' or 'upVector'
         must be provided.
 
-        :param curve: the curve along which to distribute joints
-        :type curve: str or :class:`~pymel.core.general.PyNode`
         :param numberOrFractions: this can either be a list of length
             fractions, or a number
-        :param upCurve/upc: a curve to aim towards; defaults to None
-        :type upCurve/upc: str or :class:`~pymel.core.general.PyNode`
-        :param upVector/upv: a reference up vector
-        :type upVector/upv: list, tuple or
-            :class:`~paya.datatypes.vector.Vector`
-        :param str downAxis/da: the 'bone' axis; defaults to
-            ``paya.config.downAxis``
-        :param str upAxis/ua: the axis to map to the up vector(s); defaults to
-            ``paya.config.upAxis``
+        :param curve: the curve along which to distribute joints
+        :type curve: str or :class:`~pymel.core.general.PyNode`
+        :param str downAxis: the 'bone' axis
+        :param str upAxis: the axis to map to the up vector(s)
+        :param upVectorOrCurve: either an up vector, or an up curve
+        :type upVectorOrCurve: list, :class:`~paya.datatypes.Vector`, str,
+            :class:`~paya.nodetypes.dagNode.DagNode`
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: The constructed chain.
         :rtype: :class:`Chain`
         """
-        if upCurve:
-            upCurve = r.PyNode(upCurve)
-
-        elif upVector:
-            upVector = r.data.Vector(upVector)
-
-        else:
-            raise RuntimeError(
-                "Please provide either 'upCurve' or 'upVector'."
-            )
-
         curve = r.PyNode(curve)
         points = curve.distributePoints(numberOrFractions)
 
         downAxis = override.resolve('downAxis', downAxis)
         upAxis = override.resolve('upAxis', upAxis)
 
-        if upCurve:
+        if isinstance(upVectorOrCurve, (str, r.PyNode)):
+            upCurve = r.PyNode(upVectorOrCurve)
             aimVectors = _mo.getAimVectorsFromPoints(points)
             aimVectors.append(aimVectors[-1])
 
@@ -222,7 +178,7 @@ class Chain(UserList):
 
         else:
             aimVectors, upVectors = _mo.getAimAndUpVectorsFromPoints(
-                points, upVector, tol=tolerance
+                points, upVectorOrCurve, tol=tolerance
             )
 
         matrices = []
@@ -242,17 +198,15 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Orient
 
-    @short(tolerance='tol', downAxis='da', upAxis='ua')
-    def orient(self, upVector, downAxis=None, upAxis=None, tolerance=1e-7):
+    @short(tolerance='tol')
+    def orient(self, downAxis, upAxis, upVector, tolerance=1e-7):
         """
         Orients this chain.
 
         :param upVector: a reference up vector
+        :param str downAxis: the aiming (bone) axis
+        :param str upAxis: the axis to map to the up vector
         :type upVector: list, :class:`~paya.datatypes.vector.Vector`
-        :param str downAxis/da: the aiming (bone) axis; defaults to
-            :attr:`paya.config.downAxis`
-        :param str upAxis: the axis to map to the up vector; defaults to
-            :attr:`paya.config.upAxis`
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: ``self``
@@ -262,31 +216,35 @@ class Chain(UserList):
 
         matrices = _mo.getAimingMatricesFromPoints(
             points,
+            downAxis,
+            upAxis,
             upVector,
-            da=downAxis,
-            ua=upAxis,
             tol=tolerance
         )
 
-        self.explode()
+        parents = []
+
+        for joint in self:
+            parents.append(joint.getParent())
+            joint.setParent(None)
 
         for joint, point, matrix in zip(self, points, matrices):
             matrix.t = point
             joint.setMatrix(matrix, worldSpace=True)
             r.makeIdentity(joint, apply=True, r=True, jo=False)
 
-        return self.compose()
+        for joint, parent in zip(self, parents):
+            joint.setParent(parent)
 
     #------------------------------------------------------------|    Inspections
 
     def bones(self):
         """
-        :return: A :class:`~paya.lib.skel.Bone` instance for every joint pair
-            in the chain.
-        :rtype: :class:`~paya.lib.skel.Bone`
+        :return: One :class:`Chain` instance per overlapping pair of joints.
+        :rtype: :class:`list` of :class:`Chain`
         """
         pairs = zip(self, self[1:])
-        bones = map(Bone, pairs)
+        bones = map(Chain, pairs)
         return list(bones)
 
     @short(plug='p')
@@ -370,104 +328,6 @@ class Chain(UserList):
 
         return sum(lengths)
 
-    @short(
-        skipNumberingIfSingle='sns',
-        startNumber='sn',
-        name='n'
-    )
-    def insertJointsAtRatios(
-            self,
-            ratios,
-            skipNumberingIfSingle=True,
-            startNumber=1,
-            name=None
-    ):
-        """
-        Inserts joints at the specified ratios, 'subdividing' the chain.
-        This is an in-place operation, and this Chain instance's membership
-        will be modified.
-
-        :param list ratios: the ratios at which to insert joints
-        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
-            don't add numbering; defaults to True
-        :param int startNumber/sn: for joint names, the starting number;
-            defaults to 1
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, list or tuple
-        :raises AssertionError: not all ratios are in the 0.0 -> 1.0 range
-        :return: The new joints.
-        :rtype: :class:`list`
-        """
-        assert all([ratio >= 0.0 and ratio <= 1.0 for ratio in ratios]), \
-            "Ratios must be in the 0.0 -> 1.0 range."
-
-        numRatios = len(ratios)
-
-        points = self.points()
-        vectors = []
-        cumulativeLengths = [0.0]
-
-        for i, thisPoint in enumerate(points[1:], start=1):
-            prevPoint = points[i-1]
-            vector = thisPoint-prevPoint
-            vectors.append(vector)
-            cumulativeLengths.append(
-                cumulativeLengths[-1] + vector.length())
-
-        fullLength = cumulativeLengths[-1]
-        jointRatios = [0.0] + [cumulativeLength / fullLength for \
-                          cumulativeLength in cumulativeLengths[1:]]
-
-        insertions = {}
-
-        for i, ratio in enumerate(ratios):
-
-            for ii, thisJoint in enumerate(self[:-1]):
-                thisRatio = jointRatios[ii]
-                nextRatio = jointRatios[ii+1]
-
-                if ratio >= thisRatio and ratio <= nextRatio:
-                    startPoint = points[ii]
-                    vector = vectors[ii]
-
-                    localRatio = (ratio-thisRatio) / (nextRatio-thisRatio)
-                    point = startPoint + vector * localRatio
-
-                    nameElems = [name]
-
-                    if not(skipNumberingIfSingle and numRatios is 1):
-                        nameElems.append(i+startNumber)
-
-                    thisName = r.nodes.Joint.makeName(nameElems)
-                    joint = thisJoint.duplicate(po=True, n=thisName)[0]
-                    joint.releaseSRT()
-
-                    matrix = thisJoint.getMatrix(worldSpace=True)
-                    matrix.t = point
-
-                    joint.setMatrix(matrix, worldSpace=True)
-                    pool = insertions.setdefault(thisJoint, [])
-                    pool += [joint]
-
-                    break
-
-        newMembership = []
-
-        for i, joint in enumerate(self):
-            newMembership.append(joint)
-
-            try:
-                newMembership += insertions[joint]
-
-            except KeyError:
-                continue
-
-        self.data[:] = newMembership
-        self._updateClass()
-        self.compose()
-
-        return [insertion[1] for insertion in insertions]
-
     def skinClusters(self):
         """
         :return: Any skinClusters associated with any joint in this chain, in
@@ -478,18 +338,6 @@ class Chain(UserList):
 
         for joint in self:
             out += joint.skinClusters()
-
-        return list(set(out))
-
-    def ikHandles(self):
-        """
-        :return: IK handles affecting this chain.
-        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
-        """
-        out = []
-
-        for joint in self:
-            out += joint.ikHandles()
 
         return list(set(out))
 
@@ -513,7 +361,116 @@ class Chain(UserList):
         axes.sort(key=lambda x: axes.count(x))
         return axes[-1]
 
-    #------------------------------------------------------------|    DAG editing
+    #------------------------------------------------------------|    Hierarchy editing
+
+    def _insertJointsAtRatios(self, userRatios):
+        newJoints = []
+
+        if userRatios:
+            assert all([userRatio >= 0.0 and \
+                userRatio <= 1.0 for userRatio in userRatios]), \
+                "Each cut ratio must be greater than 0.0 and less than 1.0."
+
+            points = self.points()
+            vectors = []
+            cumulativeLengths = [0.0]
+
+            for i, thisPoint in enumerate(points[1:], start=1):
+                prevPoint = points[i-1]
+                vector = thisPoint-prevPoint
+                vectors.append(vector)
+                cumulativeLengths.append(cumulativeLengths[-1]+vector.length())
+
+            fullLength = cumulativeLengths[-1]
+
+            jointRatios = [0.0] + [cumulativeLength / fullLength for \
+                cumulativeLength in cumulativeLengths[1:-1]] + [1.0]
+
+            ln = len(self)
+
+            insertions = {}
+
+            for i, userRatio in enumerate(userRatios):
+                for x in range(ln-1):
+                    thisRatio = jointRatios[x]
+                    nextRatio = jointRatios[x+1]
+
+                    if userRatio >= thisRatio and userRatio <= nextRatio:
+                        thisJoint = self[x]
+                        nextJoint = self[x+1]
+
+                        localRatio = (userRatio-thisRatio)/(nextRatio-thisRatio)
+
+                        startPoint = points[x]
+                        vector = vectors[x]
+
+                        position = startPoint + vector * localRatio
+                        matrix = thisJoint.getMatrix(worldSpace=True)
+                        matrix.t = position
+
+                        dup = thisJoint.duplicate(
+                            name=r.nodes.Joint.makeName(i+1), po=True)[0]
+
+                        dup.setMatrix(matrix, worldSpace=True)
+                        pool = insertions.setdefault(thisJoint, [])
+                        pool.append(dup)
+                        break
+
+            membership = []
+
+            for joint in self:
+                membership.append(joint)
+
+                try:
+                    theseInsertions = insertions[joint]
+                    membership += theseInsertions
+                    newJoints += theseInsertions
+
+                except KeyError:
+                    continue
+
+            self.data[:] = membership
+            self.compose()
+
+        return newJoints
+
+    def insertJoints(self, *numberOrRatios):
+        """
+        Inserts joints along the chain.
+
+        :param \*numberOrRatios: either a single integer or one or more
+            floats; if floats are passed, they must each be greater than 0.0
+            and less than 1.0, and will be used to cut the chain at those
+            length ratios; if an integer is passed, this number of cuts will
+            be performed at regular intervals
+        :return: Joints created by the operation.
+        :rtype: list
+        """
+        floatNums = []
+        intNums = []
+
+        for arg in _pu.expandArgs(*numberOrRatios):
+            if isinstance(arg, int):
+                intNums.append(arg)
+
+            elif isinstance(arg, float):
+                floatNums.append(arg)
+
+            else:
+                raise TypeError("Not an int or float: {}".format(arg))
+
+        if floatNums and intNums:
+            raise RuntimeError("Mixed integers / floats.")
+
+        if floatNums:
+            return self._insertJointsAtRatios(floatNums)
+
+        elif intNums:
+            assert len(intNums) is 1, "Multiple integers."
+            ratios = _mo.floatRange(0, 1, intNums[0]+2)[1:-1]
+            return self._insertJointsAtRatios(ratios)
+
+        return []
 
     @short(name='n', start='sn')
     def duplicate(self, name=None, startNumber=1):
@@ -566,9 +523,8 @@ class Chain(UserList):
         :return: ``self``
         """
         for i, joint in enumerate(self):
-            with r.Name(i+startNumber):
-                name = r.nodes.Joint.makeName(*elems)
-                joint.rename(name)
+            name = r.nodes.Joint.makeName(*elems, i+startNumber)
+            joint.rename(name)
 
         return self
 
@@ -612,13 +568,32 @@ class Chain(UserList):
 
         r.parent(otherChain[0], self[-1])
         self += otherChain
-        self._updateClass()
+
         return self
 
-    #------------------------------------------------------------|    Pole vector management
+    #------------------------------------------------------------|    Pose management
+
+    def reset(self):
+        """
+        Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
+
+        :return: ``self``
+        """
+        for joint in self:
+            for ax in 'xyz':
+                attr = joint.attr('r'+ax)
+                try:
+                    attr.set(0.0)
+
+                except:
+                    r.warning("Couldn't set attribute: {}".format(attr))
+
+        return self
+
+    #------------------------------------------------------------|    IK management
 
     @short(distance='d')
-    def getDefaultPolePoint(self, distance=1.0):
+    def getPolePoint(self, distance=1.0):
         """
         This method creates a temporary IK handle and samples its default
         ``poleVector`` value. For this reason it will be affected by any
@@ -647,6 +622,34 @@ class Chain(UserList):
         poleVec = x1.cross(chordVec).normal()
 
         return anchorPt + (poleVec * distance)
+
+    def ikHandles(self):
+        """
+        :return: IK handles affecting this chain.
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        """
+        out = []
+
+        for joint in self:
+            out += joint.ikHandles()
+
+        return list(set(out))
+
+    def createIkHandles(self):
+        """
+        Creates One IK handle per bone in this chain. The IK handles will
+        all use a single-chain solver.
+
+        :return: The IK handles
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        """
+        out = []
+
+        for i, bone in enumerate(self.bones()):
+            with r.Name(i+1):
+                out.append(bone.createIkHandle())
+
+        return out
 
     @short(upVector='upv', flip='fl')
     def autoPreferredAngle(self, upAxis, upVector=None):
@@ -699,137 +702,15 @@ class Chain(UserList):
 
         return self
 
-    #------------------------------------------------------------|    Pose management
-
-    def reset(self):
-        """
-        Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
-
-        :return: ``self``
-        """
-        for joint in self:
-            for ax in 'xyz':
-                attr = joint.attr('r'+ax)
-                try:
-                    attr.set(0.0)
-
-                except:
-                    r.warning("Couldn't set attribute: {}".format(attr))
-
-        return self
-
-    #------------------------------------------------------------|    IK
-
-    @short(
-        solver='sol',
-        startJoint='sj',
-        endEffector='ee'
-    )
-    def createIkHandle(self, solver=None, **createOptions):
-        """
-        Creates an IK handle for this chain.
-
-        :param str solver/sol: the solver to use; defaults to 'ikRPsolver' if
-            this chain has more than two joints, otherwise 'ikSCsolver'
-        :param \*\*createOptions: all overflow arguments are forwarded to
-            :meth:`~paya.nodetypes.ikHandle.IkHandle.create`
-        :return: The IK handle.
-        :rtype: :class:`~paya.nodetypes.ikHandle.IkHandle`
-        """
-        ln = len(self)
-
-        if ln < 2:
-            raise RuntimeError("Need two or more joints.")
-
-        if solver is None:
-            solver = self.__solver__
-
-        createOptions['solver'] = solver
-        createOptions['startJoint'] = self[0]
-        createOptions['endEffector'] = self[-1]
-
-        return r.nodes.IkHandle.create(**createOptions)
-
-    def createIkHandles(self):
-        """
-        Creates One IK handle per bone in this chain. The IK handles will
-        all use a single-chain solver.
-
-        :return: The IK handles
-        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
-        """
-        out = []
-
-        for i, bone in enumerate(self.bones()):
-            with r.Name(i+1):
-                out.append(bone.createIkHandle())
-
-        return out
-
-    #------------------------------------------------------------|    Type management
-
-    def _updateClass(self):
-        self.__class__ =  {2: Bone, 3: Triad}.get(len(self), Chain)
-
-    #------------------------------------------------------------|    Repr
-
-    def __repr__(self):
-        ln = len(self)
-
-        if ln > 2:
-            content = '[{}...{}]'.format(repr(self[0]), repr(self[-1]))
-
-        else:
-            content = repr(self.data)
-
-        return "{}({})".format(self.__class__.__name__, content)
-
-
-class Bone(Chain):
-    """
-    A specialised subclass of :class:`~paya.lib.skel.Chain` for two-joint
-    chains.
-    """
-    __solver__ = 'ikSCsolver'
-
-    @short(
-        skipNumberingIfSingle='sns',
-        startNumber='sn',
-        name='n'
-    )
-    def insertJoints(
-            self,
-            number,
-            skipNumberingIfSingle=True,
-            startNumber=1,
-            name=None
-    ):
-        """
-        Variant of :meth:`~Chain.insertJointsAtRatios`; inserts joints
-        uniformly along the bone.
-
-        :param int number: the number of joints to insert
-        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
-            don't add numbering; defaults to True
-        :param int startNumber/sn: for joint names, the starting number;
-            defaults to 1
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, list or tuple
-        :return: The new joints.
-        :rtype: :class:`list`
-        """
-        ratios = _mo.floatRange(0, 1, number+2)[1:-1]
-
-        return self.insertJointsAtRatios(
-            ratios,
-            sns=skipNumberingIfSingle,
-            sn=startNumber,
-            n=name
-        )
-
-
-class Triad(Chain):
-    """
-    A specialised subclass of :class:`~paya.lib.skel.Chain` for three-joint
-    chains.
-    """
+    # #------------------------------------------------------------|    Repr
+    #
+    # def __repr__(self):
+    #     ln = len(self)
+    #
+    #     if ln > 2:
+    #         content = '[{} -> {}]'.format(repr(self[0]), repr(self[-1]))
+    #
+    #     else:
+    #         content = repr(self.data)
+    #
+    #     return "{}({})".format(self.__class__.__name__, content)

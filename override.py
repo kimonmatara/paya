@@ -9,10 +9,8 @@ class ConfigKeyNotFoundError(RuntimeError):
 class Override(object):
     """
     Context manager. Overrides paya configuration keys for the block. The
-    configuration keys must exist.
-
-    This class can be imported from :mod:`paya.overrides` or accessed
-    directly on :mod:`paya.runtime`.
+    configuration keys must exist. This class can be imported from
+    :mod:`paya.overrides` or accessed directly on :mod:`paya.runtime`.
 
     :Example:
         .. code-block:: python
@@ -48,8 +46,8 @@ class Override(object):
 
 def resolve(argName, userVal):
     """
-    Internal use. Used for quick resolution of user arguments. If an argument
-    is None, a default is sought under config and returned. Otherwise, the
+    Used for quick resolution of user arguments. If an argument is None, a
+    default is sought under :mod:`paya.config` and returned. Otherwise, the
     user value is returned. The argument must exist as a configuration key.
 
     :param argName: the argument name

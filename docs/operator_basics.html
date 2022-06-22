@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Operator Basics &mdash; paya 0.3 documentation</title>
+  <title>Operator Basics &mdash; paya 0.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Scalars" href="scalars.html" />
-    <link rel="prev" title="Maths Rigging" href="maths_rigging.html" /> 
+    <link rel="prev" title="Maths" href="maths_rigging.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,15 +45,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maths_rigging.html">Maths</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Operator Basics</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#valid-statements">Valid Statements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mixing-dimensions">Mixing Dimensions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#operator-implementations">Operator Implementations</a></li>
@@ -67,12 +64,12 @@
 <li class="toctree-l2"><a class="reference internal" href="matrices.html">Matrices</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Your Own Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
@@ -99,7 +96,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="maths_rigging.html">Maths Rigging</a> &raquo;</li>
+          <li><a href="maths_rigging.html">Maths</a> &raquo;</li>
       <li>Operator Basics</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/operator_basics.rst.txt" rel="nofollow"> View page source</a>
@@ -112,33 +109,6 @@
              
   <section id="operator-basics">
 <h1>Operator Basics<a class="headerlink" href="#operator-basics" title="Permalink to this headline"></a></h1>
-<section id="background">
-<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline"></a></h2>
-<p>If you’re familiar with PyMEL, you’ve probably already used its powerful and intuitive data classes. These let you use
-simple operators to perform linear algebra tasks, for example to extract an axis from a transform as a vector:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">joint</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
-<span class="n">jointZAxisVector</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">joint</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Unfortunately, these classes only work with <a class="reference internal" href="glossary.html#term-Static"><span class="xref std std-term">static</span></a> values. To perform the same operations
-<a class="reference internal" href="glossary.html#term-Dynamic"><span class="xref std std-term">dynamically</span></a>, you must hook up Maya’s utility nodes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">joint</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
-<span class="n">pmm</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;pointMatrixMult&#39;</span><span class="p">)</span>
-<span class="n">pmm</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;vectorMultiply&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pmm</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;inPoint&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">pmm</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;inMatrix&#39;</span><span class="p">)</span>
-<span class="n">jointZAxisVector</span> <span class="o">=</span> <span class="n">pmm</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The code here is very different, with the main logic buried under a pile of boilerplate. To overcome this, Paya extends
-operator notation to attributes, creating the requisite node networks automatically. This makes it possible to write
-this instead:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">joint</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
-<span class="n">jointZAxisVector</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">datatypes</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Notice that, this time, the second operand (the matrix) is an attribute.</p>
-</section>
 <section id="valid-statements">
 <h2>Valid Statements<a class="headerlink" href="#valid-statements" title="Permalink to this headline"></a></h2>
 <p>There isn’t much to learn about operators in Paya; there are no special modules to import or wrappers to use. The main
@@ -263,7 +233,7 @@ work when the left operand is a simple string:</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="maths_rigging.html" class="btn btn-neutral float-left" title="Maths Rigging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="maths_rigging.html" class="btn btn-neutral float-left" title="Maths" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="scalars.html" class="btn btn-neutral float-right" title="Scalars" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

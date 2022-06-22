@@ -1,6 +1,6 @@
-####################################
-Adding Object-Oriented Functionality
-####################################
+#######################
+Adding Your Own Methods
+#######################
 
 =================================
 Determining Which Class to Target
@@ -67,7 +67,7 @@ Notice the following differences from :func:`~pymel.core.general.nodeType`:
     * The order is reversed, with more specific classes first and more general ones last
     * The list is longer and includes more esoteric types such as :class:`~pymel.core.nodetypes.DependNode`
 
-When PyMEL has been :doc:`patched <importing_and_patching>` by Paya, the ``__mro__`` listing is expanded, with almost
+When PyMEL has been :ref:`patched <Importing and Patching>` by Paya, the ``__mro__`` listing is expanded, with almost
 every PyMEL class 'shadowed' by a Paya namesake:
 
 .. code-block:: python
@@ -94,7 +94,7 @@ name of the class. For example, :class:`paya.plugtypes.matrix.Matrix` is defined
 
 These modules should not be imported directly. The 'template' classes they contain are rebuilt by Paya to enforce
 correct inheritance and then assigned to PyMEL objects on-the-fly; these 'final' classes can be retrieved via the
-:ref:`class pool accessors <class pools>` instead.
+:ref:`class pool accessors <class pools>`, for example ``r.nodes.Transform``.
 
 Where a template class doesn't exist, Paya will automatically create a 'dummy' class for insertion into the method
 resolution order.
@@ -174,11 +174,11 @@ To ensure your method appears on any new PyMEL / Paya object instances:
 Bracketing
 ==========
 
-Recall that, once patched, PyMEL will continue to return Paya classes until :meth:`~paya.runtime.Runtime.stop` is
-called. This isn't noticeable with the standard Paya distribution, but if you add methods that override standard PyMEL
-behaviours, you may break external pipeline scripts.
+Once patched, PyMEL will continue to return Paya classes until :meth:`~paya.runtime.Runtime.stop` is called. This isn't
+noticeable with the standard Paya distribution, but if you add methods that override standard PyMEL behaviours, you may
+break external pipeline scripts.
 
-In such cases, you should consider 'bracketing' your rigging code with paired calls to
+To safeguard against this, consider 'bracketing' your rigging code with paired calls to
 :meth:`~paya.runtime.Runtime.start` and :meth:`~paya.runtime.Runtime.stop`. Here's an example top-level build call with
 dummy module names:
 

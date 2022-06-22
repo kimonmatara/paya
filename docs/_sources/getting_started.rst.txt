@@ -1,0 +1,114 @@
+***********
+Quick Start
+***********
+
+=============================
+Requirements and Installation
+=============================
+
+Paya requires **Python 3.x** and **Maya 2022 or higher**. To install it, download the package from
+`here <https://github.com/kimonmatara/paya/archive/refs/tags/v0.4.zip>`_, unzip, move into your ``scripts`` directory
+and relaunch Maya.
+
+.. list-table::
+    :widths: 5 100
+
+    * - **Windows**
+      - ``C:\Users\<username>\My Documents\Maya\<version>\scripts``
+    * - **Mac**
+      - ``/Users/<username>/Library/Preferences/Autodesk/Maya/<version>/scripts``
+    * - **Linux**
+      - ``~<username>/Maya/<version>/scripts``
+
+.. _Importing and Patching:
+
+======================
+Importing and Patching
+======================
+
+Paya extends PyMEL using a fast `runtime patch <https://en.wikipedia.org/wiki/Monkey_patch>`_. The patch is applied when
+you first import :mod:`paya.runtime`:
+
+.. code-block:: python
+
+    import pymel.core as p
+    import paya.runtime as r
+    # PyMEL patched successfully.
+
+    cam = p.PyNode('persp')
+    print(cam.__class__)
+    # <class 'paya.nodetypes.transform.Transform'>
+
+Notice the inspected class of the camera instance; PyMEL will continue to return custom Paya classes instead of its
+own until :meth:`~paya.runtime.Runtime.stop` is called:
+
+.. code-block:: python
+
+    r.stop()
+    # PyMEL unpatched successfully.
+
+    cam = p.PyNode('persp')
+    print(cam.__class__)
+    # <class 'pymel.core.nodetypes.Transform'>
+
+At this point, PyMEL has been restored to its 'factory' state. If you want to re-apply the patch, importing
+:mod:`paya.runtime` won't work a second time. Instead, you must call :meth:`~paya.runtime.Runtime.start`:
+
+.. code-block:: python
+
+    r.start()
+    # PyMEL patched successfully.
+
+===========================
+Using the Runtime Interface
+===========================
+
+In previous examples, we used :mod:`paya.runtime` merely to manage patching, with PyMEL imported separately via
+:mod:`pymel.core` as is the custom. In fact :mod:`paya.runtime` includes the entire :mod:`pymel.core` namespace, and
+can therefore be used as a drop-in replacement:
+
+.. code-block:: python
+
+    import paya.runtime as r
+    # PyMEL patched successfully.
+
+    cameras = r.ls(type='camera') # etc
+
+Using :mod:`paya.runtime` in this way gives you easy access to top-level Paya-only tools such as
+:meth:`paya.lib.mathops.createMatrix`; it also exposes the ``nodes``, ``plugs``, ``comps`` and ``data`` *class pools*,
+which can be used to call special constructors on custom Paya classes:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    joint = r.nodes.Joint.createNode() # Paya only
+
+Importing :mod:`paya.runtime` instead of :mod:`pymel.core` also helps to signal that a code block is designed for
+'patched' PyMEL.
+
+=========================
+Discovering Functionality
+=========================
+
+For a structured, workflow-oriented introduction to Paya, visit the *Rigging* sections of this documentation. If you'd
+rather just shop for methods, call :func:`help` on any PyMEL instance inside Maya:
+
+.. code-block:: python
+
+    joint = r.PyNode('joint')
+    help(joint.attr('r')) # list methods on rotational attributes
+
+This will print out the same information as found inside the :doc:`Module Documentation <paya>`. If you're looking for
+a method and you're not sure what it's called, use :func:`dir` on a **class**:
+
+.. code-block:: python
+
+    jointClass = joint.__class__ # type(joint) also works
+
+    for x in dir(jointClass):
+        if 'chain' in x.lower(): print x
+
+    # chainFromHere
+
+    help(joint.chainFromHere) # Now that you've found the method, get the docs

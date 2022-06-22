@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.override &mdash; paya 0.3 documentation</title>
+  <title>paya.override &mdash; paya 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -44,19 +44,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../req_and_inst.html">Requirements &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../importing_and_patching.html">Importing and Patching</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths Rigging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../discovering_func.html">Discovering Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Your Own Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sugar_and_style.html">Sugar and Style</a></li>
 </ul>
@@ -116,9 +114,8 @@
 <dt class="sig sig-object py" id="paya.override.Override">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Override</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.override.Override" title="Permalink to this definition"></a></dt>
 <dd><p>Context manager. Overrides paya configuration keys for the block. The
-configuration keys must exist.</p>
-<p>This class can be imported from <code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.overrides</span></code> or accessed
-directly on <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
+configuration keys must exist. This class can be imported from
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.overrides</span></code> or accessed directly on <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Example</dt>
 <dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Override</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -141,8 +138,8 @@ directly on <a class="reference internal" href="runtime.html#module-paya.runtime
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.override.resolve">
 <span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userVal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.override.resolve" title="Permalink to this definition"></a></dt>
-<dd><p>Internal use. Used for quick resolution of user arguments. If an argument
-is None, a default is sought under config and returned. Otherwise, the
+<dd><p>Used for quick resolution of user arguments. If an argument is None, a
+default is sought under <a class="reference internal" href="config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a> and returned. Otherwise, the
 user value is returned. The argument must exist as a configuration key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

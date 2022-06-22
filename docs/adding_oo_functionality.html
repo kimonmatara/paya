@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adding Object-Oriented Functionality &mdash; paya 0.3 documentation</title>
+  <title>Adding Your Own Methods &mdash; paya 0.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Package Configuration" href="package_config.html" />
-    <link rel="prev" title="Discovering Functionality" href="discovering_func.html" /> 
+    <link rel="prev" title="Node Names" href="naming_nodes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,19 +44,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding Object-Oriented Functionality</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding Your Own Methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#determining-which-class-to-target">Determining Which Class to Target</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inspecting-inheritance">Inspecting Inheritance</a></li>
@@ -96,7 +94,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Adding Object-Oriented Functionality</li>
+      <li>Adding Your Own Methods</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/adding_oo_functionality.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -106,8 +104,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="adding-object-oriented-functionality">
-<h1>Adding Object-Oriented Functionality<a class="headerlink" href="#adding-object-oriented-functionality" title="Permalink to this headline"></a></h1>
+  <section id="adding-your-own-methods">
+<h1>Adding Your Own Methods<a class="headerlink" href="#adding-your-own-methods" title="Permalink to this headline"></a></h1>
 <section id="determining-which-class-to-target">
 <h2>Determining Which Class to Target<a class="headerlink" href="#determining-which-class-to-target" title="Permalink to this headline"></a></h2>
 <section id="background">
@@ -162,7 +160,7 @@ attribute on the object’s class. Try the following with PyMEL unpatched:</p>
 <li><p>The list is longer and includes more esoteric types such as <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p></li>
 </ul>
 </div></blockquote>
-<p>When PyMEL has been <a class="reference internal" href="importing_and_patching.html"><span class="doc">patched</span></a> by Paya, the <code class="docutils literal notranslate"><span class="pre">__mro__</span></code> listing is expanded, with almost
+<p>When PyMEL has been <a class="reference internal" href="getting_started.html#importing-and-patching"><span class="std std-ref">patched</span></a> by Paya, the <code class="docutils literal notranslate"><span class="pre">__mro__</span></code> listing is expanded, with almost
 every PyMEL class ‘shadowed’ by a Paya namesake:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
 <span class="n">r</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -183,7 +181,7 @@ name of the class. For example, <a class="reference internal" href="paya/plugtyp
 <code class="docutils literal notranslate"><span class="pre">paya/plugtypes</span></code> class pool for attributes.</p>
 <p>These modules should not be imported directly. The ‘template’ classes they contain are rebuilt by Paya to enforce
 correct inheritance and then assigned to PyMEL objects on-the-fly; these ‘final’ classes can be retrieved via the
-<a class="reference internal" href="using_the_runtime_interface.html#class-pools"><span class="std std-ref">class pool accessors</span></a> instead.</p>
+<span class="xref std std-ref">class pool accessors</span>, for example <code class="docutils literal notranslate"><span class="pre">r.nodes.Transform</span></code>.</p>
 <p>Where a template class doesn’t exist, Paya will automatically create a ‘dummy’ class for insertion into the method
 resolution order.</p>
 <p>To implement a new method, all you need to do is add it to a template class. Instance methods, class methods, static
@@ -192,7 +190,7 @@ methods, magic methods, descriptors and properties are all supported.</p>
 <p class="admonition-title">Note</p>
 <p id="importing-template-classes">Template classes simplify authoring, because developers don’t have to assign base classes and metaclasses manually.
 The downside is that <code class="xref py py-func docutils literal notranslate"><span class="pre">super()</span></code> will no longer work: To call a superclass method, the correct ancestor must be
-sourced via the <a class="reference internal" href="using_the_runtime_interface.html#class-pools"><span class="std std-ref">class pool accessors</span></a> so that the long form can be used instead:</p>
+sourced via the <span class="xref std std-ref">class pool accessors</span> so that the long form can be used instead:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
 
 <span class="k">class</span> <span class="nc">Transform</span><span class="p">:</span>
@@ -251,10 +249,10 @@ PyMEL components. In our earlier examples, we discovered that vertices inherit f
 </section>
 <section id="bracketing">
 <span id="id2"></span><h2>Bracketing<a class="headerlink" href="#bracketing" title="Permalink to this headline"></a></h2>
-<p>Recall that, once patched, PyMEL will continue to return Paya classes until <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a> is
-called. This isn’t noticeable with the standard Paya distribution, but if you add methods that override standard PyMEL
-behaviours, you may break external pipeline scripts.</p>
-<p>In such cases, you should consider ‘bracketing’ your rigging code with paired calls to
+<p>Once patched, PyMEL will continue to return Paya classes until <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a> is called. This isn’t
+noticeable with the standard Paya distribution, but if you add methods that override standard PyMEL behaviours, you may
+break external pipeline scripts.</p>
+<p>To safeguard against this, consider ‘bracketing’ your rigging code with paired calls to
 <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a> and <a class="reference internal" href="paya/runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a>. Here’s an example top-level build call with
 dummy module names:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
@@ -280,7 +278,7 @@ dummy module names:</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="discovering_func.html" class="btn btn-neutral float-left" title="Discovering Functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="naming_nodes.html" class="btn btn-neutral float-left" title="Node Names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="package_config.html" class="btn btn-neutral float-right" title="Package Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

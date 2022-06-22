@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; paya 0.3 documentation</title>
+  <title>Index &mdash; paya 0.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -42,19 +42,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Your Own Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
@@ -185,12 +183,8 @@
         <li><a href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.__neg__">(Quaternion method)</a>
 </li>
       </ul></li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.__new__">__new__() (Chain static method)</a>
-
-      <ul>
-        <li><a href="paya/pools.html#paya.pools.ClassPool.__new__">(ClassPool static method)</a>
+      <li><a href="paya/pools.html#paya.pools.ClassPool.__new__">__new__() (ClassPool static method)</a>
 </li>
-      </ul></li>
       <li><a href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation.__pow__">__pow__() (EulerRotation method)</a>
 
       <ul>
@@ -221,11 +215,9 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.__repr__">__repr__() (Chain method)</a>
+      <li><a href="paya/pools.html#paya.pools.ClassPool.__repr__">__repr__() (ClassPool method)</a>
 
       <ul>
-        <li><a href="paya/pools.html#paya.pools.ClassPool.__repr__">(ClassPool method)</a>
-</li>
         <li><a href="paya/util/modules.html#paya.util.modules.LazyModule.__repr__">(LazyModule method)</a>
 </li>
       </ul></li>
@@ -385,6 +377,12 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="paya/nodetypes/dagNode.html#paya.nodetypes.dagNode.DagNode.basename">basename() (DagNode method)</a>
+
+      <ul>
+        <li><a href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.basename">(DependNode method)</a>
+</li>
+      </ul></li>
       <li><a href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.blend">blend() (Math1D method)</a>
 
       <ul>
@@ -398,8 +396,6 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/lib/mathops.html#paya.lib.mathops.blendNones">blendNones() (in module paya.lib.mathops)</a>
-</li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Bone">Bone (class in paya.lib.skel)</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.bones">bones() (Chain method)</a>
 </li>
@@ -433,16 +429,18 @@
 </li>
       <li><a href="paya/plugtypes/compound.html#paya.plugtypes.compound.Compound">Compound (class in paya.plugtypes.compound)</a>
 </li>
+      <li><a href="paya/config.html#paya.config.Config">Config (class in paya.config)</a>
+</li>
       <li><a href="paya/lib/mathops.html#paya.lib.mathops.conform">conform() (in module paya.lib.mathops)</a>
 </li>
       <li><a href="paya/lib/names.html#paya.lib.names.conformElems">conformElems() (in module paya.lib.names)</a>
 </li>
       <li><a href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.conjugate">conjugate() (Quaternion method)</a>
 </li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.contiguous">contiguous() (Chain method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.contiguous">contiguous() (Chain method)</a>
+</li>
       <li><a href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.cos">cos() (Math1D method)</a>
 </li>
       <li><a href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.create">create() (IkHandle class method)</a>
@@ -456,8 +454,6 @@
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromMatrices">createFromMatrices() (Chain class method)</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromPoints">createFromPoints() (Chain class method)</a>
-</li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createIkHandle">createIkHandle() (Chain method)</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createIkHandles">createIkHandles() (Chain method)</a>
 </li>
@@ -489,6 +485,8 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="paya/nodetypes/dagNode.html#paya.nodetypes.dagNode.DagNode">DagNode (class in paya.nodetypes.dagNode)</a>
+</li>
       <li><a href="paya/pools.html#paya.pools.DataClassPool">DataClassPool (class in paya.pools)</a>
 </li>
       <li><a href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.decompose">decompose() (Matrix method)</a>, <a href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.decompose">[1]</a>
@@ -499,10 +497,10 @@
 </li>
       <li><a href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.degrees">degrees() (Math1D method)</a>
 </li>
-      <li><a href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode">DependNode (class in paya.nodetypes.dependNode)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode">DependNode (class in paya.nodetypes.dependNode)</a>
+</li>
       <li><a href="paya/nodetypes/nurbsCurve.html#paya.nodetypes.nurbsCurve.NurbsCurve.distributePoints">distributePoints() (NurbsCurve method)</a>
 </li>
       <li><a href="paya/datatypes/vector.html#paya.datatypes.vector.Vector.dot">dot() (Vector method)</a>, <a href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.dot">[1]</a>
@@ -587,8 +585,6 @@
         <li><a href="paya/pools.html#paya.pools.DataClassPool.getByName">(DataClassPool method)</a>
 </li>
       </ul></li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.getDefaultPolePoint">getDefaultPolePoint() (Chain method)</a>
-</li>
       <li><a href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.getEndJoint">getEndJoint() (IkHandle method)</a>
 </li>
       <li><a href="paya/lib/suffixes.html#paya.lib.suffixes.getFromName">getFromName() (in module paya.lib.suffixes)</a>
@@ -599,10 +595,10 @@
         <li><a href="paya/pools.html#paya.pools.PlugClassPool.getFromPyMELInstance">(PlugClassPool method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.getFromRoot">getFromRoot() (Chain class method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.getFromStartEnd">getFromStartEnd() (Chain class method)</a>
 </li>
       <li><a href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.getJointList">getJointList() (IkHandle method)</a>
@@ -612,6 +608,8 @@
       <li><a href="paya/lib/suffixes.html#paya.lib.suffixes.getKeyFromNode">getKeyFromNode() (in module paya.lib.suffixes)</a>
 </li>
       <li><a href="paya/plugtree.html#paya.plugtree.getPath">getPath() (in module paya.plugtree)</a>
+</li>
+      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.getPolePoint">getPolePoint() (Chain method)</a>
 </li>
       <li><a href="paya/pools.html#paya.pools.getPoolFromPmBase">getPoolFromPmBase() (in module paya.pools)</a>
 </li>
@@ -625,8 +623,12 @@
       </ul></li>
       <li><a href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform.getWorldMatrix">getWorldMatrix() (Transform method)</a>
 </li>
-      <li><a href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform.getWorldPosition">getWorldPosition() (Transform method)</a>
+      <li><a href="paya/nodetypes/dagNode.html#paya.nodetypes.dagNode.DagNode.getWorldPosition">getWorldPosition() (DagNode method)</a>
+
+      <ul>
+        <li><a href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform.getWorldPosition">(Transform method)</a>
 </li>
+      </ul></li>
       <li><a href="paya/nodetypes/fourByFourMatrix.html#paya.nodetypes.fourByFourMatrix.FourByFourMatrix.getX">getX() (FourByFourMatrix method)</a>
 
       <ul>
@@ -673,18 +675,16 @@
       </ul></li>
       <li><a href="paya/lib/mathops.html#paya.lib.mathops.info">info() (in module paya.lib.mathops)</a>
 </li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Bone.insertJoints">insertJoints() (Bone method)</a>
+      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.insertJoints">insertJoints() (Chain method)</a>
 </li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.insertJointsAtRatios">insertJointsAtRatios() (Chain method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.inverse">inverse() (Matrix method)</a>
 
       <ul>
         <li><a href="paya/plugtypes/quaternion.html#paya.plugtypes.quaternion.Quaternion.inverse">(Quaternion method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/pools.html#paya.pools.iscustomcls">iscustomcls() (in module paya.pools)</a>
 </li>
       <li><a href="paya/pools.html#paya.pools.ispmcls">ispmcls() (in module paya.pools)</a>
@@ -694,6 +694,8 @@
       <li><a href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector.isTranslateChannel">isTranslateChannel() (Vector method)</a>
 </li>
       <li><a href="paya/lib/mathops.html#paya.lib.mathops.isTupleOrListOfScalarValues">isTupleOrListOfScalarValues() (in module paya.lib.mathops)</a>
+</li>
+      <li><a href="paya/lib/names.html#paya.lib.names.isTypeSuffix">isTypeSuffix() (in module paya.lib.names)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -792,6 +794,8 @@
         <li><a href="paya/lib/skel.html#module-paya.lib.skel">paya.lib.skel</a>
 </li>
         <li><a href="paya/lib/suffixes.html#module-paya.lib.suffixes">paya.lib.suffixes</a>
+</li>
+        <li><a href="paya/nodetypes/dagNode.html#module-paya.nodetypes.dagNode">paya.nodetypes.dagNode</a>
 </li>
         <li><a href="paya/nodetypes/dependNode.html#module-paya.nodetypes.dependNode">paya.nodetypes.dependNode</a>
 </li>
@@ -998,6 +1002,13 @@
 </li>
       </ul></li>
       <li>
+    paya.nodetypes.dagNode
+
+      <ul>
+        <li><a href="paya/nodetypes/dagNode.html#module-paya.nodetypes.dagNode">module</a>
+</li>
+      </ul></li>
+      <li>
     paya.nodetypes.dependNode
 
       <ul>
@@ -1053,6 +1064,8 @@
         <li><a href="paya/override.html#module-paya.override">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     paya.patch
 
@@ -1060,8 +1073,6 @@
         <li><a href="paya/patch.html#module-paya.patch">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     paya.plugtree
 
@@ -1284,11 +1295,13 @@
 </li>
       <li><a href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.setZ">setZ() (Matrix method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/nodetypes/shape.html#paya.nodetypes.shape.Shape">Shape (class in paya.nodetypes.shape)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/util/functions.html#paya.util.functions.short">short (class in paya.util.functions)</a>
+</li>
+      <li><a href="paya/lib/names.html#paya.lib.names.shorten">shorten() (in module paya.lib.names)</a>
 </li>
       <li><a href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.sin">sin() (Math1D method)</a>
 </li>
@@ -1322,17 +1335,15 @@
 </li>
       <li><a href="paya/nodetypes/nurbsCurve.html#paya.nodetypes.nurbsCurve.NurbsCurve.takePointAtFraction">takePointAtFraction() (NurbsCurve method)</a>
 </li>
-      <li><a href="paya/nodetypes/nurbsCurve.html#paya.nodetypes.nurbsCurve.NurbsCurve.takePointAtParam">takePointAtParam() (NurbsCurve method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="paya/nodetypes/nurbsCurve.html#paya.nodetypes.nurbsCurve.NurbsCurve.takePointAtParam">takePointAtParam() (NurbsCurve method)</a>
+</li>
       <li><a href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.tan">tan() (Math1D method)</a>
 </li>
       <li><a href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform">Transform (class in paya.nodetypes.transform)</a>
 </li>
       <li><a href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.transpose">transpose() (Matrix method)</a>
-</li>
-      <li><a href="paya/lib/skel.html#paya.lib.skel.Triad">Triad (class in paya.lib.skel)</a>
 </li>
   </ul></td>
 </tr></table>

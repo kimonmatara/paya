@@ -3,6 +3,123 @@ What's New
 ##########
 
 ***********
+Version 0.4
+***********
+
+General Changes
+===============
+
+*   Naming arguments on :meth:`~paya.nodetypes.dependNode.DependNode.createNode` and elsewhere have been simplified,
+    with many moved into :mod:`paya.config` instead.
+
+Additions to Modules
+====================
+
+*   Added :mod:`paya.config`
+*   Added :mod:`paya.lib.skel`, including :class:`~paya.lib.skel.Chain` and subclasses
+
+Additions to Data Types
+=======================
+
+*   On :class:`~paya.datatypes.vector.Vector`:
+    :meth:`~paya.datatypes.vector.Vector.rotateByAxisAngle`
+    :meth:`~paya.datatypes.vector.Vector.asScaleMatrix`
+
+*   On :class:`~paya.datatypes.matrix.Matrix`:
+    :meth:`~paya.datatypes.matrix.Matrix.decomposeAndApply`
+
+Additions / Changes to Plug Types
+=================================
+
+*   On :class:`~paya.plugtypes.attribute.Attribute`:
+    :meth:`~paya.plugtypes.attribute.Attribute.release`
+
+*   On :class:`~paya.plugtypes.compound.Compound`:
+    :meth:`~paya.plugtypes.compound.Compound.release`
+    :meth:`~paya.plugtypes.compound.Compound.splitInputs`
+
+*   On :class:`~paya.plugtypes.vector.Vector`:
+    :meth:`~paya.plugtypes.vector.Vector.rotateByAxisAngle`
+
+*   On :class:`~paya.plugtypes.angle.Angle`:
+    :meth:`~paya.plugtypes.angle.Angle.set`
+
+*   On :class:`~paya.plugtypes.eulerRotation.EulerRotation`:
+    :meth:`~paya.plugtypes.eulerRotation.EulerRotation.set` now auto-converts units when the value is an
+    :class:`~paya.datatypes.eulerRotation.EulerRotation`; added
+    :meth:`~paya.plugtypes.eulerRotation.EulerRotation.asRotateMatrix`
+
+*   On :class:`~paya.plugtypes.matrix.Matrix`:
+    :meth:`~paya.plugtypes.matrix.Matrix.decomposeAndApply`
+
+Additions to Node Types
+=======================
+
+*   On :class:`~paya.nodetypes.transform.Transform`:
+    :meth:`~paya.nodetypes.transform.Transform.releaseSRT`
+    :meth:`~paya.nodetypes.transform.Transform.getWorldMatrix`
+    :meth:`~paya.nodetypes.transform.Transform.getWorldPosition`
+    :meth:`~paya.nodetypes.transform.Transform.getRotateAxisMatrix`
+
+*   On :class:`~paya.nodetypes.joint.Joint`:
+    :meth:`~paya.nodetypes.joint.Joint.skinClusters`
+    :meth:`~paya.nodetypes.joint.Joint.ikHandles`
+    :meth:`~paya.nodetypes.joint.Joint.chainFromHere`
+    :meth:`~paya.nodetypes.joint.Joint.getJointOrientMatrix`
+
+*   On :class:`~paya.nodetypes.ikHandle.IkHandle`:
+    :meth:`~paya.nodetypes.ikHandle.IkHandle.create`
+    :meth:`~paya.nodetypes.ikHandle.IkHandle.getEndJoint`
+    :meth:`~paya.nodetypes.ikHandle.IkHandle.getJointList` (overload for ``includeTip``)
+    :meth:`~paya.nodetypes.ikHandle.IkHandle.chain`
+    :meth:`~paya.nodetypes.ikHandle.IkHandle.setTwistVectors`
+    :meth:`~paya.nodetypes.ikHandle.IkHandle.setPolePoint`
+
+*   On :class:`~paya.nodetypes.nurbsCurve.NurbsCurve`:
+    :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.takeClosestPoint`
+    :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.takePointAtParam`
+    :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.takeParamAtFraction`
+    :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.takePointAtFraction`
+    :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.distributePoints`
+
+Additions to General Classes
+============================
+
+*   On :class:`~paya.lib.skel.Chain`:
+    :meth:`~paya.lib.skel.Chain.getFromStartEnd`
+    :meth:`~paya.lib.skel.Chain.getFromRoot`
+    :meth:`~paya.lib.skel.Chain.createFromMatrices`
+    :meth:`~paya.lib.skel.Chain.createFromPoints`
+    :meth:`~paya.lib.skel.Chain.createFromCurve`
+    :meth:`~paya.lib.skel.Chain.createFromCurve`
+    :meth:`~paya.lib.skel.Chain.orient`
+    :meth:`~paya.lib.skel.Chain.bones`
+    :meth:`~paya.lib.skel.Chain.vectors`
+    :meth:`~paya.lib.skel.Chain.points`
+    :meth:`~paya.lib.skel.Chain.contiguous`
+    :meth:`~paya.lib.skel.Chain.roots`
+    :meth:`~paya.lib.skel.Chain.length`
+    :meth:`~paya.lib.skel.Chain.insertJointsAtRatios`
+    :meth:`~paya.lib.skel.Chain.skinClusters`
+    :meth:`~paya.lib.skel.Chain.ikHandles`
+    :meth:`~paya.lib.skel.Chain.downAxis`
+    :meth:`~paya.lib.skel.Chain.duplicate`
+    :meth:`~paya.lib.skel.Chain.rename`
+    :meth:`~paya.lib.skel.Chain.compose`
+    :meth:`~paya.lib.skel.Chain.explode`
+    :meth:`~paya.lib.skel.Chain.appendChain`
+    :meth:`~paya.lib.skel.Chain.getPolePoint`
+    :meth:`~paya.lib.skel.Chain.autoPreferredAngle`
+    :meth:`~paya.lib.skel.Chain.reset`
+    :meth:`~paya.lib.skel.Chain.createIkHandle`
+    :meth:`~paya.lib.skel.Chain.createIkHandles`
+
+*   On :class:`~paya.lib.skel.Bone`:
+    :meth:`~paya.lib.skel.Bone.insertJoints`
+
+----
+
+***********
 Version 0.3
 ***********
 
@@ -205,6 +322,8 @@ Additions
 *   The double-chevron operator ``>>`` :ref:`now supports value-setting <Extended Chevrons>`
 *   :doc:`Contextual name management <naming_nodes>` with :class:`paya.lib.names.Name` and pipeline suffixes
 *   :ref:`Dodge unit conversion nodes <Preventing Unit Conversions>` with :class:`paya.lib.mathops.NativeUnits` and :func:`paya.lib.mathops.nativeUnits`
+
+-----
 
 ***********
 Version 0.1

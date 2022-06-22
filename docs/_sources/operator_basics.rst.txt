@@ -2,41 +2,6 @@
 Operator Basics
 ***************
 
-==========
-Background
-==========
-
-If you're familiar with PyMEL, you've probably already used its powerful and intuitive data classes. These let you use
-simple operators to perform linear algebra tasks, for example to extract an axis from a transform as a vector:
-
-.. code-block:: python
-
-    joint = p.PyNode('joint1')
-    jointZAxisVector = p.datatypes.Vector([0, 0, 1]) * joint.getMatrix(worldSpace=True)
-
-Unfortunately, these classes only work with :term:`static <Static>` values. To perform the same operations
-:term:`dynamically <Dynamic>`, you must hook up Maya's utility nodes:
-
-.. code-block:: python
-
-    joint = p.PyNode('joint1')
-    pmm = p.createNode('pointMatrixMult')
-    pmm.attr('vectorMultiply').set(True)
-    pmm.attr('inPoint').set([0, 0, 1])
-    joint.attr('worldMatrix') >> pmm.attr('inMatrix')
-    jointZAxisVector = pmm.attr('output')
-
-The code here is very different, with the main logic buried under a pile of boilerplate. To overcome this, Paya extends
-operator notation to attributes, creating the requisite node networks automatically. This makes it possible to write
-this instead:
-
-.. code-block:: python
-
-    joint = p.PyNode('joint1')
-    jointZAxisVector = p.datatypes.Vector([0, 0, 1]) * joint.attr('worldMatrix')
-
-Notice that, this time, the second operand (the matrix) is an attribute.
-
 ================
 Valid Statements
 ================

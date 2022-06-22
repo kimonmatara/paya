@@ -4,20 +4,23 @@ paya.config
 
 .. py:module:: paya.config
 
-Defines package-level configuration flags. Currently, these are:
+.. py:class:: Config(*args, **kwargs)
 
-.. list-table::
-   :widths: 25 25 50
-   :header-rows: 1
-
-   * - Flag
-     - Default Value
-     - Description
-   * - ``patchOnLoad``
-     - ``True``
-     - Call :py:meth:`~paya.runtime.Runtime.start` the first time :mod:`paya.runtime` is imported.
-   * - ``autoSuffix``
-     - ``True``
-     - Apply :ref:`node suffixes <Automatic Suffixes>` automatically.
-
-More options may be added in future Paya releases.
+    Dict-like object, inserted into :attr:`sys.modules` as a module. Initial
+    values are read from ``paya/config.json`` on startup. Edits are only
+    valid for the current session. The object can also be used as a context
+    manager, with temporary overrides passed-in as keyword arguments:
+    
+    .. code-block:: python
+    
+        import paya.config as config
+    
+        print(config['suffixNodes'])
+        # True
+    
+        with config(suffixNodes=False):
+            print(config['suffixNodes'])
+        # False
+    
+        print(config['suffixNodes'])
+        # False

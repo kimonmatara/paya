@@ -18,20 +18,49 @@ Node-naming utilities, usually called indirectly.
     Cleans up user name elements, typically specified through ``*args``
     and / or the ``name/n`` keyword argument.
     
-    :config keys: ``padding``
     :param \*elems: one or more name elements, packed or unpacked
     :type \*elems: int, str
     :return: The conformed elements.
     :rtype: list
 
-.. py:class:: Name(*elems)
+.. py:function:: isTypeSuffix(string)
 
-    Context manager. Accumulates name elements hierarchically.
+    Checks if 'string' looks like a type suffix, i.e. it's a group of
+    uppercase letters starting with a non-number, or is a value inside
+    :attr:`paya.lib.suffixes.suffixes`.
+    
+    :param string: The string to inspect
+    :return: ``True`` if 'string' looks like a type suffix, otherwise
+        ``False``.
+    :rtype: bool
+
+.. py:function:: shorten(name, stripNamespace=None, stripDagPath=None, stripTypeSuffix=None)
+
+    Shortens a Maya name to various degrees. The name will be returned as-is
+    unless one or more flags are set to ``True``.
+    
+    :param str name: the name to process
+    :param bool stripNamespace/sns: remove namespace information; defaults to
+        False
+    :param bool stripDagPath/sdp: remove DAG path information; defaults to
+        False
+    :param bool stripTypeSuffix/sts: removes anything that looks like a type
+        suffix; defaults to False
+    :return: the modified name
+    :rtype: str
+
+.. py:class:: Name(*elems, padding=None)
+
+    Context manager. Accumulates name elements hierarchically, and can also
+    be used to override config['padding'].
     
     :param elems: one or more name elements, packed or unpacked
     :type elems: int, str
+    :param padding/pad: if provided, will be used to set padding defaults for
+        the block
+    :type padding/pad: None, int
 
-    .. py:method:: __init__(*elems)
+    .. py:method:: __init__(*elems, padding=None)
     
         Initialize self.  See help(type(self)) for accurate signature.
 

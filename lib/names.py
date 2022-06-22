@@ -36,20 +36,18 @@ def legalise(name):
     else:
         return '_'
 
-@short(padding='pad')
 def conformElems(*elems):
     """
     Cleans up user name elements, typically specified through ``*args``
     and / or the ``name/n`` keyword argument.
 
-    :config keys: ``padding``
     :param \*elems: one or more name elements, packed or unpacked
     :type \*elems: int, str
     :return: The conformed elements.
     :rtype: list
     """
     out = []
-    padding = config.padding
+    padding = config['padding']
 
     for elem in _pu.expandArgs(*elems):
         if isinstance(elem, int):
@@ -62,26 +60,102 @@ def conformElems(*elems):
 
     return out
 
+def isTypeSuffix(string):
+    """
+    Checks if 'string' looks like a type suffix, i.e. it's a group of
+    uppercase letters starting with a non-number, or is a value inside
+    :attr:`paya.lib.suffixes.suffixes`.
+
+    :param string: The string to inspect
+    :return: ``True`` if 'string' looks like a type suffix, otherwise
+        ``False``.
+    :rtype: bool
+    """
+    if re.match(r"^[A-Z][A-Z0-9]*$", string):
+        return True
+
+    return string in _suf.suffixes.values()
+
+@short(
+    stripNamespace='sns',
+    stripDagPath='sdp',
+    stripTypeSuffix='sts'
+)
+def shorten(
+        name,
+        stripNamespace=None,
+        stripDagPath=None,
+        stripTypeSuffix=None
+):
+    """
+    Shortens a Maya name to various degrees. The name will be returned as-is
+    unless one or more flags are set to ``True``.
+
+    :param str name: the name to process
+    :param bool stripNamespace/sns: remove namespace information; defaults to
+        False
+    :param bool stripDagPath/sdp: remove DAG path information; defaults to
+        False
+    :param bool stripTypeSuffix/sts: removes anything that looks like a type
+        suffix; defaults to False
+    :return: the modified name
+    :rtype: str
+    """
+    if stripNamespace:
+        name = re.sub(r'[a-zA-Z_0-9]*:', '', name)
+
+    if stripDagPath:
+        name = re.split(r'\-\>|\|', name)[-1]
+
+    if stripTypeSuffix:
+        dagElems = re.split(r'(\-\>|\|)', name)
+        shortName = dagElems[-1]
+        underElems = shortName.split('_')
+
+        if len(underElems) > 1:
+            lastElem = underElems[-1]
+
+            if isTypeSuffix(lastElem):
+                del(underElems[-1])
+                shortName = '_'.join(underElems)
+
+            dagElems[-1] = shortName
+            name = ''.join(dagElems)
+
+    return name
 
 class Name:
     """
-    Context manager. Accumulates name elements hierarchically.
+    Context manager. Accumulates name elements hierarchically, and can also
+    be used to override config['padding'].
 
     :param elems: one or more name elements, packed or unpacked
     :type elems: int, str
+    :param padding/pad: if provided, will be used to set padding defaults for
+        the block
+    :type padding/pad: None, int
     """
     __elems__ = []
 
-    def __init__(self, *elems):
+    @short(padding='pad')
+    def __init__(self, *elems, padding=None):
         self._elems = _pu.expandArgs(*elems)
+        self._padding = padding
 
     def __enter__(self):
+        if self._padding:
+            self._prev_padding = config['padding']
+            config['padding'] = self._padding
+
         self._prev_elems = Name.__elems__[:]
         Name.__elems__ += conformElems(self._elems)
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._padding:
+            config['padding'] = self._prev_padding
+
         Name.__elems__ = self._prev_elems
 
         return False
@@ -113,11 +187,11 @@ def make(*elems, name=None, node=None, nodeType=None):
 
     elems = conformElems(elems)
 
-    if config.inheritNames:
+    if config['inheritNames']:
         if Name.__elems__:
             elems = Name.__elems__ + elems
 
-    if config.suffixNodes:
+    if config['suffixNodes']:
         if nodeType is None:
             if node:
                 nodeType = _suf.getKeyFromNode(node)

@@ -1,0 +1,31 @@
+==============================
+paya.nodetypes.dagNode.DagNode
+==============================
+
+.. py:module:: paya.nodetypes.dagNode
+
+.. py:class:: DagNode(*args, **kwargs)
+
+    .. py:method:: getWorldPosition(plug=False)
+    
+        Returns the world translation of this DAG node.
+        
+        :shorthand: ``gwp``
+        :param bool plug/p: return an attribute instead of a value; defaults
+            to False
+        :return: The position attribute or value.
+        :rtype: :class:`~paya.datatypes.point.Point` or
+           :class:`~paya.plugtypes.vector.Vector`
+    
+    .. py:method:: basename(stripNamespace=False, stripTypeSuffix=False, stripDagPath=True)
+    
+        Returns shorter versions of this node's name.
+        
+        :param bool stripNamespace/sns: remove namespace information; defaults to
+            False
+        :param bool stripDagPath/sdp: remove DAG path information; defaults to
+            True
+        :param bool stripTypeSuffix/sts: removes anything that looks like a type
+            suffix; defaults to False
+        :return: the modified name
+        :rtype: str

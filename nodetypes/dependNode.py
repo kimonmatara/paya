@@ -14,9 +14,8 @@ class MakeName(object):
             depending on whether this method is called on a class or on a
             node instance.
 
-            Construction is determined by the following keys inside
-                :mod:`paya.config`: ``inheritNames``, ``padding``,
-                ``suffixNodes``
+            Construction is determined by the following keys inside :mod:`paya.config`:
+            ``inheritNames``, ``padding``, ``suffixNodes``.
 
             Settings can be overriden using :class:`~paya.override.Override`.
 
@@ -42,7 +41,25 @@ class MakeName(object):
 
 class DependNode:
 
+    #-----------------------------------------------------------|    Name management
+
     makeName = MakeName()
+
+    @short(stripNamespace='sns', stripTypeSuffix='sts')
+    def basename(self, stripNamespace=False, stripTypeSuffix=False):
+        """
+        Returns shorter versions of this node's name.
+
+        :param bool stripNamespace/sns: remove namespace information; defaults to
+            False
+        :param bool stripTypeSuffix/sts: removes anything that looks like a type
+            suffix; defaults to False
+        :return: the modified name
+        :rtype: str
+        """
+        return _nm.shorten(str(self), sns=stripNamespace, sts=stripTypeSuffix)
+
+    bn = basename
 
     #-----------------------------------------------------------|    Constructors
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paya: PyMEL for Riggers &mdash; paya 0.3 documentation</title>
+  <title>Paya: PyMEL for Riggers &mdash; paya 0.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="#" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,19 +44,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="req_and_inst.html">Requirements &amp; Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functionality</span></p>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_the_runtime_interface.html">Using the Runtime Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths Rigging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Naming Nodes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="discovering_func.html">Discovering Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Object-Oriented Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Your Own Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
 </ul>
@@ -95,24 +93,25 @@
              
   <section id="paya-pymel-for-riggers">
 <h1>Paya: PyMEL for Riggers<a class="headerlink" href="#paya-pymel-for-riggers" title="Permalink to this headline"></a></h1>
-<p>Paya lets you write radically condensed rigging code for Autodesk Maya. Unlike other libraries, it does not re-wrap
-<code class="docutils literal notranslate"><span class="pre">maya.cmds</span></code> or the <a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=Maya_SDK_Maya_Python_API_html">OpenMaya</a>
-API. Instead, it adds functionality to
-<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a> objects at runtime for a fully
-integrated experience.</p>
-<p>Included is a deep, and intuitive, implementation for <a class="reference internal" href="maths_rigging.html"><span class="doc">maths rigging using Python operators</span></a>.
-This eliminates boilerplate for node hookups and lets you freely mix values and attributes in the same expression.</p>
+<p>Paya is an object-oriented toolkit for Maya riggers. Unlike other libraries, it doesn’t re-wrap <code class="docutils literal notranslate"><span class="pre">maya.cmds</span></code> or the
+<a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=Maya_SDK_Maya_Python_API_html">OpenMaya</a> API. Instead, it adds
+functionality to <a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html">PyMEL</a> types at runtime
+for an integrated and familiar experience.</p>
+<p>Included is the most comprehensive, and intuitive, implementation of <a class="reference internal" href="maths_rigging.html"><span class="doc">maths rigging using Python operators</span></a> available anywhere, with over 100 methods for linear algebra, trigonometry and more.</p>
 <p>Customisation is easy, and goes far beyond PyMEL’s
 <a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.</p>
-<div class="admonition-new-in-version-0-3 admonition">
-<p class="admonition-title">New in Version 0.3</p>
+<div class="admonition-new-in-version-0-4 admonition">
+<p class="admonition-title">New in version 0.4</p>
 <ul class="simple">
-<li><p>Over <a class="reference internal" href="whats_new.html"><span class="doc">100 new methods</span></a>, from scalar looping and DG logic gates to vector, quaternion and matrix
-operations.</p></li>
-<li><p>A one-stop method for constructing static and dynamic matrices: <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a></p></li>
-<li><p>Attribute subtypes have been reworked for better handling of angle channels</p></li>
+<li><p>A brand new toolset for skeletal chains and IK handles, spread across <a class="reference internal" href="paya/nodetypes/joint.html#paya.nodetypes.joint.Joint" title="paya.nodetypes.joint.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>,
+<a class="reference internal" href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a> and <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p></li>
+<li><p>Additions to vector and matrix attribute and data types: drive transforms via decomposition, with full
+accounting for <code class="docutils literal notranslate"><span class="pre">jointOrient</span></code>, <code class="docutils literal notranslate"><span class="pre">rotateAxis</span></code>, <code class="docutils literal notranslate"><span class="pre">inverseScale</span></code> and pivots; rotate vectors by axis-angle; and
+more</p></li>
+<li><p>Improvements to name management and plug setting</p></li>
 </ul>
+<p>See <a class="reference internal" href="whats_new.html"><span class="doc">here</span></a> for the full list.</p>
 </div>
 <section id="example-rigging-a-radial-repulsor">
 <h2>Example: Rigging a Radial Repulsor<a class="headerlink" href="#example-rigging-a-radial-repulsor" title="Permalink to this headline"></a></h2>

@@ -5,7 +5,6 @@ plug workflows.
 
 from collections import UserDict
 from functools import wraps, reduce
-import paya.override as override
 
 import maya.OpenMaya as om
 import maya.cmds as m
@@ -456,10 +455,10 @@ def createMatrix(
                 if thirdLengthIsDefined:
                     vec3 = vec3.normal() * thirdLength
 
-                axis3 = [ax for ax in 'xyz' if ax not in (absAxis1, absAxis2)][0]
+                absAxis3 = [ax for ax in 'xyz' if ax not in (absAxis1, absAxis2)][0]
 
                 return createMatrix(
-                    axis1, vec1, axis2, vec2, axis3, vec3,
+                    absAxis1, vec1, absAxis2, vec2, absAxis3, vec3,
                     t=translate, p=False
                 )
 
@@ -835,16 +834,12 @@ def getAimAndUpVectorsFromPoints(points, refVector, tolerance=1e-7):
 
     raise RuntimeError("Need at least two points.")
 
-@short(
-    downAxis='da',
-    upAxis='ua',
-    tolerance='tol'
-)
+@short(tolerance='tol')
 def getAimingMatricesFromPoints(
         points,
+        downAxis,
+        upAxis,
         refVector,
-        downAxis=None,
-        upAxis=None,
         tolerance=1e-7
 ):
     """
@@ -852,37 +847,25 @@ def getAimingMatricesFromPoints(
     which can be used to draw chains and other systems.
 
     :param points: the source points (values)
+    :param str downAxis: the aiming axis
+    :param str upAxis: the axis to bias towards the reference vector
     :param refVector: a reference up vector
     :type refVector: :class:`~paya.datatypes.vector.Vector`, list
-    :param str downAxis/da: the aiming axis; defaults to
-        :attr:`paya.config.downAxis`
-    :param str upAxis/ua: the axis to bias towards the reference vector;
-        defaults to :attr:`paya.config.upAxis`
     :param float tolerance/tol: aim vectors or cross products with lengths
         below this tolerance will be replaced with neighbouring ones;
         defaults to 1e-7
     :return: A list of matrices
     :rtype: :class:`list` of :class:`~paya.datatypes.matrix.Matrix`
     """
-    downAxis = override.resolve('downAxis', downAxis)
-    upAxis = override.resolve('upAxis', upAxis)
-
     aimVectors, upVectors = getAimAndUpVectorsFromPoints(
         points, refVector, tol=tolerance
     )
 
     out = []
 
-    for point, aimVector, upVector in zip(
-        points,
-        aimVectors,
-        upVectors
-    ):
-        matrix = createMatrix(
-            downAxis, aimVector,
-            upAxis, upVector,
-            t=point
-        ).pk(t=True, r=True)
+    for point, aimVector, upVector in zip(points, aimVectors, upVectors):
+        matrix = createMatrix(downAxis, aimVector, upAxis, upVector, t=point
+                              ).pk(t=True, r=True)
 
         out.append(matrix)
 

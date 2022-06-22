@@ -6,14 +6,9 @@ paya.lib.skel
 
 .. py:class:: Chain(*joints)
 
-    .. py:staticmethod:: __new__(*joints)
-    
-        Create and return a new object.  See help(type) for accurate signature.
-    
     .. py:method:: __init__(*joints)
     
-        :param \*joints: the joint content for the
-            :class:`~paya.lib.skel.Chain` instance
+        Initialize self.  See help(type(self)) for accurate signature.
     
     .. py:classmethod:: getFromStartEnd(startJoint, endJoint)
     
@@ -41,57 +36,51 @@ paya.lib.skel
         :param under/u: an optional parent for the chain; defaults to None
         :return: :class:`Chain`
     
-    .. py:classmethod:: createFromPoints(points, upVector, downAxis=None, upAxis=None, under=None, tolerance=1e-07)
+    .. py:classmethod:: createFromPoints(points, downAxis, upAxis, upVector, under=None, tolerance=1e-07)
     
         Builds a chain from points. The side ('up') axis will be calculated
         using cross products, but those will be biased towards the reference
         up vector.
         
         :param points: a world position for each joint
-        :param upVector: the reference up vector
-        :param str downAxis/da: the 'bone' axis; defaults to
+        :param str downAxis: the 'bone' axis; defaults to
             ``paya.config.downAxis``
-        :param str upAxis/ua: the axis to map to the up vector; defaults to
+        :param str upAxis: the axis to map to the up vector; defaults to
             ``paya.config.upAxis``
+        :param upVector: the reference up vector
         :param under/u: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: The constructed chain.
         :rtype: :class:`Chain`
     
-    .. py:classmethod:: createFromCurve(curve, numberOrFractions, upCurve=None, upVector=None, downAxis=None, upAxis=None, tolerance=1e-07)
+    .. py:classmethod:: createFromCurve(curve, numberOrFractions, downAxis, upAxis, upVectorOrCurve, tolerance=1e-07)
     
         Draws a chain (once) along a curve. Either 'upCurve' or 'upVector'
         must be provided.
         
-        :param curve: the curve along which to distribute joints
-        :type curve: str or :class:`~pymel.core.general.PyNode`
         :param numberOrFractions: this can either be a list of length
             fractions, or a number
-        :param upCurve/upc: a curve to aim towards; defaults to None
-        :type upCurve/upc: str or :class:`~pymel.core.general.PyNode`
-        :param upVector/upv: a reference up vector
-        :type upVector/upv: list, tuple or
-            :class:`~paya.datatypes.vector.Vector`
-        :param str downAxis/da: the 'bone' axis; defaults to
-            ``paya.config.downAxis``
-        :param str upAxis/ua: the axis to map to the up vector(s); defaults to
-            ``paya.config.upAxis``
+        :param curve: the curve along which to distribute joints
+        :type curve: str or :class:`~pymel.core.general.PyNode`
+        :param str downAxis: the 'bone' axis
+        :param str upAxis: the axis to map to the up vector(s)
+        :param upVectorOrCurve: either an up vector, or an up curve
+        :type upVectorOrCurve: list, :class:`~paya.datatypes.Vector`, str,
+            :class:`~paya.nodetypes.dagNode.DagNode`
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: The constructed chain.
         :rtype: :class:`Chain`
     
-    .. py:method:: orient(upVector, downAxis=None, upAxis=None, tolerance=1e-07)
+    .. py:method:: orient(downAxis, upAxis, upVector, tolerance=1e-07)
     
         Orients this chain.
         
         :param upVector: a reference up vector
+        :param str downAxis: the aiming (bone) axis
+        :param str upAxis: the axis to map to the up vector
         :type upVector: list, :class:`~paya.datatypes.vector.Vector`
-        :param str downAxis/da: the aiming (bone) axis; defaults to
-            :attr:`paya.config.downAxis`
-        :param str upAxis: the axis to map to the up vector; defaults to
-            :attr:`paya.config.upAxis`
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: ``self``
@@ -99,9 +88,8 @@ paya.lib.skel
     
     .. py:method:: bones()
     
-        :return: A :class:`~paya.lib.skel.Bone` instance for every joint pair
-            in the chain.
-        :rtype: :class:`~paya.lib.skel.Bone`
+        :return: One :class:`Chain` instance per overlapping pair of joints.
+        :rtype: :class:`list` of :class:`Chain`
     
     .. py:method:: vectors(plug=False)
     
@@ -137,38 +125,28 @@ paya.lib.skel
         :return: The length of this chain.
         :rtype: :class:`float` or :class:`~paya.plugtypes.math1D.Math1D`
     
-    .. py:method:: insertJointsAtRatios(ratios, skipNumberingIfSingle=True, startNumber=1, name=None)
-    
-        Inserts joints at the specified ratios, 'subdividing' the chain.
-        This is an in-place operation, and this Chain instance's membership
-        will be modified.
-        
-        :param list ratios: the ratios at which to insert joints
-        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
-            don't add numbering; defaults to True
-        :param int startNumber/sn: for joint names, the starting number;
-            defaults to 1
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, list or tuple
-        :raises AssertionError: not all ratios are in the 0.0 -> 1.0 range
-        :return: The new joints.
-        :rtype: :class:`list`
-    
     .. py:method:: skinClusters()
     
         :return: Any skinClusters associated with any joint in this chain, in
             no particular order.
         :rtype: list
     
-    .. py:method:: ikHandles()
-    
-        :return: IK handles affecting this chain.
-        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
-    
     .. py:method:: downAxis()
     
         :return: The 'bone' axis of this chain (e.g. 'x')
         :rtype: str
+    
+    .. py:method:: insertJoints(*numberOrRatios)
+    
+        Inserts joints along the chain.
+        
+        :param \*numberOrRatios: either a single integer or one or more
+            floats; if floats are passed, they must each be greater than 0.0
+            and less than 1.0, and will be used to cut the chain at those
+            length ratios; if an integer is passed, this number of cuts will
+            be performed at regular intervals
+        :return: Joints created by the operation.
+        :rtype: list
     
     .. py:method:: duplicate(name=None, startNumber=1)
     
@@ -209,7 +187,13 @@ paya.lib.skel
         :return: ``self``
         :rtype: :class:`Chain`
     
-    .. py:method:: getDefaultPolePoint(distance=1.0)
+    .. py:method:: reset()
+    
+        Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
+        
+        :return: ``self``
+    
+    .. py:method:: getPolePoint(distance=1.0)
     
         This method creates a temporary IK handle and samples its default
         ``poleVector`` value. For this reason it will be affected by any
@@ -222,6 +206,19 @@ paya.lib.skel
             constraint or
             :meth:`~paya.nodetypes.ikhandle.IkHandle.setPolePoint`.
         :rtype: :class:`~paya.datatypes.point.Point`
+    
+    .. py:method:: ikHandles()
+    
+        :return: IK handles affecting this chain.
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+    
+    .. py:method:: createIkHandles()
+    
+        Creates One IK handle per bone in this chain. The IK handles will
+        all use a single-chain solver.
+        
+        :return: The IK handles
+        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
     
     .. py:method:: autoPreferredAngle(upAxis, upVector=None)
     
@@ -236,57 +233,3 @@ paya.lib.skel
         :raises AssertionError: the chain is not contiguous
         :return: ``self``
         :rtype: :class:`Chain`
-    
-    .. py:method:: reset()
-    
-        Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
-        
-        :return: ``self``
-    
-    .. py:method:: createIkHandle(solver=None, **createOptions)
-    
-        Creates an IK handle for this chain.
-        
-        :param str solver/sol: the solver to use; defaults to 'ikRPsolver' if
-            this chain has more than two joints, otherwise 'ikSCsolver'
-        :param \*\*createOptions: all overflow arguments are forwarded to
-            :meth:`~paya.nodetypes.ikHandle.IkHandle.create`
-        :return: The IK handle.
-        :rtype: :class:`~paya.nodetypes.ikHandle.IkHandle`
-    
-    .. py:method:: createIkHandles()
-    
-        Creates One IK handle per bone in this chain. The IK handles will
-        all use a single-chain solver.
-        
-        :return: The IK handles
-        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
-    
-    .. py:method:: __repr__()
-    
-        Return repr(self).
-
-.. py:class:: Bone(*joints)
-
-    A specialised subclass of :class:`~paya.lib.skel.Chain` for two-joint
-    chains.
-
-    .. py:method:: insertJoints(number, skipNumberingIfSingle=True, startNumber=1, name=None)
-    
-        Variant of :meth:`~Chain.insertJointsAtRatios`; inserts joints
-        uniformly along the bone.
-        
-        :param int number: the number of joints to insert
-        :param bool skipNumberingIfSingle/sns: if only one ratio is specified,
-            don't add numbering; defaults to True
-        :param int startNumber/sn: for joint names, the starting number;
-            defaults to 1
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, list or tuple
-        :return: The new joints.
-        :rtype: :class:`list`
-
-.. py:class:: Triad(*joints)
-
-    A specialised subclass of :class:`~paya.lib.skel.Chain` for three-joint
-    chains.

@@ -1,0 +1,121 @@
+************
+Joint Chains
+************
+
+Joint chains can be created and edited using Paya's dedicated :class:`~paya.lib.skel.Chain` class. Instances of this
+class are returned by various methods, and the class itself is available on :mod:`paya.runtime`.
+
+=======
+Drawing
+=======
+
+To draw a chain with joints **at specified points**, use :meth:`~paya.lib.skel.Chain.createFromPoints`. Similarly to
+Maya's aim constraints, this requires an *up vector* to resolve the secondary axis orientation. The following example
+uses the vector form of the world X axis:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            points = [xform.getWorldPosition() for xform in r.ls(sl=True)]
+            upVector = [1, 0, 0]
+
+            with r.Name('L_leg'):
+                chain = r.Chain.createFromPoints(points, 'y', 'x', upVector)
+
+    .. tab:: Viewport
+
+        .. figure:: chain_from_points.gif
+            :align: center
+
+To draw a chain **along a curve**, use :meth:`~paya.lib.skel.Chain.createFromCurve`. This can take either an up vector
+or, similar to Maya's ``curveWarp`` deformer, an up *curve*. The following example uses custom axes, with curves
+extracted from a NURBS surface to help visualise twist:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            mainCurve, upCurve = r.ls(sl=True)
+
+            with r.Name('spine'):
+                chain = r.Chain.createFromCurve(
+                    mainCurve, 12, '-x', 'z', upCurve)
+
+    .. tab:: Viewport
+
+        .. figure:: chain_from_curve.gif
+            :align: center
+
+To draw a chain with joints **at specified matrices**, use :meth:`~paya.lib.skel.Chain.createFromMatrices`. There are no
+axis or vector arguments; joint positions and orientations are taken from the matrices, with scaling information
+discarded.
+
+=======
+Editing
+=======
+
+If you're not working on an instance of :class:`~paya.lib.skel.Chain` returned by one of the constructors described
+above, you'll have to get one from existing joints. To load a chain from a root joint, use
+:meth:`~paya.nodetypes.joint.Joint.chainFromHere` on :class:`~paya.nodetypes.joint.Joint`:
+
+.. code-block:: python
+
+    root = r.PyNode('joint1')
+    chain = root.chainFromHere()
+
+Alternatively, you could pass a joint list to :class:`~paya.lib.skel.Chain` itself:
+
+.. code-block:: python
+
+    chain = r.Chain(['joint1', 'joint2','joint3'])
+
+Standard Python slice notation can be used to get sub-ranges:
+
+.. code-block:: python
+
+    lowerBone = chain[1:]
+
+For a full reference of available editing methods, see the documentation for :class:`~paya.lib.skel.Chain`. In the
+following example, a leg chain and a foot chain are spliced together, reoriented, subdivided and renamed:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            legChain = r.PyNode('joint1').chainFromHere()
+            footChain = r.PyNode('joint4').chainFromHere()
+
+            legChain.appendChain(footChain)
+            legChain.orient('y', 'x', [1, 0, 0])
+
+            # Order of operations is important to keep track of
+            # memberships
+
+            thighChain = legChain[:2]
+            shinChain = legChain[1:3]
+
+            thighChain.insertJoints(3)
+            shinChain.insertJoints(3)
+
+            # Recreate the instance with updated membership
+            legChain = thighChain[:-1] + shinChain[:-1] + footChain
+
+            with r.Name(padding=3):
+                legChain.rename('L_leg')
+
+    .. tab:: Before
+
+        .. figure:: leg_before.png
+            :align: center
+
+    .. tab:: After
+
+        .. figure:: leg_after.png
+            :align: center
