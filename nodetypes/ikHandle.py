@@ -7,7 +7,7 @@ import paya.runtime as r
 class IkHandle:
 
     @classmethod
-    @short(name='n', solver='sol')
+    @short(name='n', solver='sol', curve='c')
     def create(cls, name=None, **mayaOptions):
         """
         :param name/n: one or more name elements; defaults to None
@@ -19,10 +19,15 @@ class IkHandle:
         """
         buildKwargs = {
             'name': cls.makeName(name),
-            'solver': 'ikRPsolver'
+            'solver': 'ikRPsolver',
+            'parentCurve': False
         }
 
         buildKwargs.update(mayaOptions)
+
+        if 'curve' in buildKwargs:
+            buildKwargs['solver'] = 'ikSplineSolver'
+            buildKwargs['createCurve'] = False
 
         return r.ikHandle(**buildKwargs)[0]
 

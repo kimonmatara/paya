@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.skel &mdash; paya 0.4 documentation</title>
+  <title>paya.lib.skel &mdash; paya 0.4.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4
+                0.4.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -50,6 +50,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
@@ -519,10 +520,39 @@ constraint or
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.createIkHandle">
+<span class="sig-name descname"><span class="pre">createIkHandle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createIkHandle" title="Permalink to this definition"></a></dt>
+<dd><p>Creates an IK handle for this chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – <p>forwarded to
+<a class="reference internal" href="../nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.create" title="paya.nodetypes.ikHandle.IkHandle.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.nodetypes.ikHandle.IkHandle.create()</span></code></a> with the following
+modifications:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">startJoint</span></code> and <code class="docutils literal notranslate"><span class="pre">endJoint</span></code> are overriden to the start and
+end joints of this chain, respectively</p></li>
+<li><p>Unless specified, the solver defaults to <code class="docutils literal notranslate"><span class="pre">ikSCsolver</span></code> if
+there are only two joints in this chain, and <code class="docutils literal notranslate"><span class="pre">ikRPsolver</span></code>
+otherwise</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The IK handle.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.createIkHandles">
 <span class="sig-name descname"><span class="pre">createIkHandles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createIkHandles" title="Permalink to this definition"></a></dt>
-<dd><p>Creates One IK handle per bone in this chain. The IK handles will
-all use a single-chain solver.</p>
+<dd><p>Creates one IK handle per bone in this chain. The IK handles will
+all use a single-chain solver. The IK handles will be numbered.
+Prefixes and padding can be specified using a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code> block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The IK handles</p>

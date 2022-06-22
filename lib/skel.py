@@ -161,9 +161,6 @@ class Chain(UserList):
         curve = r.PyNode(curve)
         points = curve.distributePoints(numberOrFractions)
 
-        downAxis = override.resolve('downAxis', downAxis)
-        upAxis = override.resolve('upAxis', upAxis)
-
         if isinstance(upVectorOrCurve, (str, r.PyNode)):
             upCurve = r.PyNode(upVectorOrCurve)
             aimVectors = _mo.getAimVectorsFromPoints(points)
@@ -235,6 +232,8 @@ class Chain(UserList):
 
         for joint, parent in zip(self, parents):
             joint.setParent(parent)
+
+        return self
 
     #------------------------------------------------------------|    Inspections
 
@@ -620,8 +619,9 @@ class Chain(UserList):
 
         x1 = chordVec.cross(poleVec)
         poleVec = x1.cross(chordVec).normal()
+        poleVec *= distance
 
-        return anchorPt + (poleVec * distance)
+        return anchorPt + poleVec
 
     def ikHandles(self):
         """
@@ -635,10 +635,45 @@ class Chain(UserList):
 
         return list(set(out))
 
+    @short(
+        solver='sol',
+        startJoint='sj',
+        endEffector='ee'
+    )
+    def createIkHandle(self, **kwargs):
+        """
+        Creates an IK handle for this chain.
+
+        :param \**kwargs: forwarded to
+            :meth:`paya.nodetypes.ikHandle.IkHandle.create` with the following
+            modifications:
+
+            -   ``startJoint`` and ``endJoint`` are overriden to the start and
+                end joints of this chain, respectively
+            -   Unless specified, the solver defaults to ``ikSCsolver`` if
+                there are only two joints in this chain, and ``ikRPsolver``
+                otherwise
+
+        :return: The IK handle.
+        :rtype: :class:`~paya.nodetypes.ikHandle.IkHandle`
+        """
+
+        settings = {
+            'solver': 'ikRPsolver' if len(self) > 2 else 'ikSCsolver'
+        }
+
+        settings.update(kwargs)
+        settings['startJoint'] = self[0]
+        settings['endEffector'] = self[-1]
+
+        return r.nodes.IkHandle.create(**settings)
+
     def createIkHandles(self):
         """
-        Creates One IK handle per bone in this chain. The IK handles will
-        all use a single-chain solver.
+        Creates one IK handle per bone in this chain. The IK handles will
+        all use a single-chain solver. The IK handles will be numbered.
+        Prefixes and padding can be specified using a
+        :class:`~paya.lib.name.Name` block.
 
         :return: The IK handles
         :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
@@ -666,7 +701,7 @@ class Chain(UserList):
         :return: ``self``
         :rtype: :class:`Chain`
         """
-        assert self.isContiguous(), "The chain is not contiguous."
+        assert self.contiguous(), "The chain is not contiguous."
 
         val = _pu.radians(22.5)
 

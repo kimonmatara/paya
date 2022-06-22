@@ -212,10 +212,29 @@ paya.lib.skel
         :return: IK handles affecting this chain.
         :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
     
+    .. py:method:: createIkHandle(**kwargs)
+    
+        Creates an IK handle for this chain.
+        
+        :param \**kwargs: forwarded to
+            :meth:`paya.nodetypes.ikHandle.IkHandle.create` with the following
+            modifications:
+        
+            -   ``startJoint`` and ``endJoint`` are overriden to the start and
+                end joints of this chain, respectively
+            -   Unless specified, the solver defaults to ``ikSCsolver`` if
+                there are only two joints in this chain, and ``ikRPsolver``
+                otherwise
+        
+        :return: The IK handle.
+        :rtype: :class:`~paya.nodetypes.ikHandle.IkHandle`
+    
     .. py:method:: createIkHandles()
     
-        Creates One IK handle per bone in this chain. The IK handles will
-        all use a single-chain solver.
+        Creates one IK handle per bone in this chain. The IK handles will
+        all use a single-chain solver. The IK handles will be numbered.
+        Prefixes and padding can be specified using a
+        :class:`~paya.lib.name.Name` block.
         
         :return: The IK handles
         :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
