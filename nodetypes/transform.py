@@ -240,16 +240,15 @@ class Transform:
         with config(inheritNames=False):
             for suffix in suffixes:
                 name = r.nodes.Transform.makeName(bn, suffix)
+                parent = lastChild.getParent()
+                kwargs = {}
 
-            parent = lastChild.getParent()
-            kwargs = {}
+                if parent is not None:
+                    kwargs['parent'] = parent
 
-            if parent is not None:
-                kwargs['parent'] = parent
-
-            group = r.group(empty=True, n=name, **kwargs)
-            group.setMatrix(mtx, worldSpace=True)
-            lastChild.setParent(group)
-            out.append(group)
+                group = r.group(empty=True, n=name, **kwargs)
+                group.setMatrix(mtx, worldSpace=True)
+                lastChild.setParent(group)
+                out.append(group)
 
         return out
