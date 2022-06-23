@@ -1,4 +1,6 @@
 import maya.cmds as m
+import paya.config as config
+import pymel.util as _pu
 from paya.util import short
 import paya.runtime as r
 
@@ -26,7 +28,11 @@ class Transform:
         """
         Creates transform nodes.
 
-        :param dagPath/dp: an explicit DAG path; defaults to None
+        :param dagPath/dp: an explicit DAG path; if provided, the minimum
+            number of nodes required to match this DAG path will be
+            generated; ``displayLocalAxis``, ``rotateOrder`` and
+            ``worldMatrix`` will only be applied to the last (innermost)
+            group; defaults to None
         :type dagPath/dp: None, str
         :param name/n: one or more name elements; ignored if ``dagPath`` is
             provided; defaults to None
@@ -205,3 +211,45 @@ class Transform:
             return attr
 
         return self.attr('rotateAxis').get().asRotateMatrix()
+
+    #--------------------------------------------------------|    Offset groups
+
+    def createOffsetGroups(self, *suffixes):
+        """
+        :param \*suffixes: one or more offset group suffixes; defaults to
+            'offset'
+        :type \*suffixes: list, tuple, str
+        :return: One or more transformationally-matched offset groups for this
+            transform, in order of innermost to outermost.
+        :type: list of :class:`~paya.nodetypes.transform.Transform`
+        """
+        suffixes = _pu.expandArgs(*suffixes)
+
+        if not suffixes:
+            suffixes = ['offset']
+
+        bn = self.basename(sts=True, sns=True)
+
+        mtx = self.getMatrix(worldSpace=True)
+        ro = self.attr('rotateOrder').get()
+
+        lastChild = self
+
+        out = []
+
+        with config(inheritNames=False):
+            for suffix in suffixes:
+                name = r.nodes.Transform.makeName(bn, suffix)
+
+            parent = lastChild.getParent()
+            kwargs = {}
+
+            if parent is not None:
+                kwargs['parent'] = parent
+
+            group = r.group(empty=True, n=name, **kwargs)
+            group.setMatrix(mtx, worldSpace=True)
+            lastChild.setParent(group)
+            out.append(group)
+
+        return out

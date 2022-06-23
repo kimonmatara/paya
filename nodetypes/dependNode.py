@@ -34,7 +34,7 @@ class MakeName(object):
             else:
                 kwargs['nodeType'] = instype.__melnode__
 
-            return _nm.make(*elems, **kwargs)
+            return _nm.make(name, *elems, **kwargs)
 
         return makeName
 
