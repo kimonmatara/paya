@@ -1,4 +1,4 @@
-from paya.util import short
+from paya.util import short, resolveFlags
 import paya.lib.names as _nm
 import paya.runtime as r
 
