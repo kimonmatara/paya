@@ -183,17 +183,20 @@ class Attribute:
 
         return self
 
-    @short(recursive='r')
-    def release(self, recursive=False):
+    @short(recursive='r', force='f')
+    def release(self, recursive=False, force=False):
         """
         Unlocks this attribute and disconnects any inputs.
 
+        :param bool force/f: if this is the child of a compound, unlock
+            the parent too; defaults to False
         :param bool recursive/r: if this is a compound, release child attributes
             too; defaults to False
         :return:
         """
-        self.unlock()
+        self.unlock(f=force)
         self.disconnect(inputs=True)
+
         return self
 
     #-----------------------------------------------------------------|    Connections
