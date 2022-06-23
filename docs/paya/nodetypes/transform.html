@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.nodetypes.transform.Transform &mdash; paya 0.4.2 documentation</title>
+  <title>paya.nodetypes.transform.Transform &mdash; paya 0.4.3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.2
+                0.4.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -132,7 +132,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dagPath/dp</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an explicit DAG path; defaults to None</p></li>
+<li><p><strong>dagPath/dp</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an explicit DAG path; if provided, the minimum
+number of nodes required to match this DAG path will be
+generated; <code class="docutils literal notranslate"><span class="pre">displayLocalAxis</span></code>, <code class="docutils literal notranslate"><span class="pre">rotateOrder</span></code> and
+<code class="docutils literal notranslate"><span class="pre">worldMatrix</span></code> will only be applied to the last (innermost)
+group; defaults to None</p></li>
 <li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em> or </em><em>None</em>) – one or more name elements; ignored if <code class="docutils literal notranslate"><span class="pre">dagPath</span></code> is
 provided; defaults to None</p></li>
 <li><p><strong>under/u</strong> (None, str, <a class="reference internal" href="#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – an optional parent for the transform; if this is
@@ -229,6 +233,24 @@ be cooked only once, and afterwards retrieved via a
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a> or
 <a class="reference internal" href="../plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.transform.Transform.createOffsetGroups">
+<span class="sig-name descname"><span class="pre">createOffsetGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">suffixes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.transform.Transform.createOffsetGroups" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*suffixes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – one or more offset group suffixes; defaults to
+‘offset’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>One or more transformationally-matched offset groups for this
+transform, in order of innermost to outermost.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of <a class="reference internal" href="#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

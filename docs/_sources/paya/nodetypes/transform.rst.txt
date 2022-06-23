@@ -10,7 +10,11 @@ paya.nodetypes.transform.Transform
     
         Creates transform nodes.
         
-        :param dagPath/dp: an explicit DAG path; defaults to None
+        :param dagPath/dp: an explicit DAG path; if provided, the minimum
+            number of nodes required to match this DAG path will be
+            generated; ``displayLocalAxis``, ``rotateOrder`` and
+            ``worldMatrix`` will only be applied to the last (innermost)
+            group; defaults to None
         :type dagPath/dp: None, str
         :param name/n: one or more name elements; ignored if ``dagPath`` is
             provided; defaults to None
@@ -70,3 +74,12 @@ paya.nodetypes.transform.Transform
         :return: The rotate axis matrix.
         :rtype: :class:`paya.datatypes.matrix.Matrix` or
             :class:`paya.plugtypes.matrix.Matrix`
+    
+    .. py:method:: createOffsetGroups(*suffixes)
+    
+        :param \*suffixes: one or more offset group suffixes; defaults to
+            'offset'
+        :type \*suffixes: list, tuple, str
+        :return: One or more transformationally-matched offset groups for this
+            transform, in order of innermost to outermost.
+        :type: list of :class:`~paya.nodetypes.transform.Transform`
