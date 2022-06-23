@@ -1,3 +1,4 @@
+import pymel.util as _pu
 from paya.util import short, resolveFlags
 import paya.lib.names as _nm
 import paya.runtime as r
@@ -77,3 +78,70 @@ class DependNode:
         """
         name = cls.makeName(name)
         return r.createNode(cls.__melnode__, n=name)
+
+    #-----------------------------------------------------------|    Attr management
+
+    @short(keyable='k', channelBox='cb')
+    def maskAnimAttrs(self, *args, keyable=None, channelBox=None):
+        """
+        Selectively enables attributes of interest to animators. Useful for
+        control configuration.
+
+        :param \*args: names of attributes to set to keyable
+        :param keyable/k: names of attributes to set to keyable; defaults to
+            None
+        :type: keyable/k: None, tuple, list, str
+        :param channelBox/cb: names of attributes to set to settable; defaults
+            to None
+        :type channelBox/cb: None, tuple, list, str
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.dependNode.DependNode`
+        """
+        if keyable:
+            keyable = list(_pu.expandArgs(keyable))
+
+        else:
+            keyable = []
+
+        if args:
+            args = list(_pu.expandArgs(*args))
+            keyable = args + keyable
+
+        if channelBox:
+            channelBox = list(_pu.expandArgs(channelBox))
+
+        else:
+            channelBox = []
+
+        # Disable attributes
+
+        if isinstance(self, r.nodetypes.DagNode):
+            v = self.attr('v')
+            v.hide()
+            v.lock()
+
+            if isinstance(self, r.nodetypes.Transform):
+                for name in ['t','r','s','ro']:
+                    attr = self.attr(name)
+                    attr.hide(r=True)
+                    attr.lock(r=True)
+
+        for attr in filter(
+            lambda x: x.isAnimatableDynamic(),
+            self.listAttr(ud=True)
+        ):
+            attr.hide(r=True)
+
+        # Selectively enable requested attributes
+
+        for name in keyable:
+            attr = self.attr(name)
+            attr.show()
+            attr.unlock(f=True)
+
+        for name in channelBox:
+            attr = self.attr(name)
+            attr.show(cb=True)
+            attr.unlock(f=True)
+
+        return self

@@ -28,11 +28,11 @@ class Attribute:
 
             if re.match(
                 r"^(float|double|long|short)(2|3)$",
-                at
+                typ
             ):
                 return True
 
-            return at in ['bool', 'long', 'short', 'enum', 'time',
+            return typ in ['bool', 'long', 'short', 'enum', 'time',
                  'float', 'double', 'doubleAngle', 'doubleLinear']
 
         return False
@@ -93,6 +93,95 @@ class Attribute:
         return p.general.Attribute.get(self, **kwargs)
 
     #-----------------------------------------------------------------|    State management
+
+    @short(recursive='r')
+    def lock(self, recursive=False, **kwargs):
+        """
+        Overloads :class:`~pymel.core.general.Attribute` to implement the
+        *recursive* option and return ``self``.
+
+        :param bool recursive/r: if this is a compound, lock its children too;
+            defaults to False
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.general.Attribute.lock`
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        p.Attribute.lock(self, **kwargs)
+        return self
+
+    @short(recursive='r')
+    def hide(self, recursive=False):
+        """
+        Turns off *keyable* and *channelBox* for this attribute.
+
+        :param bool recursive/r: if this is a compound, edit the children too;
+            defaults to False
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        if self.get(k=True):
+            self.set(k=False)
+
+        elif self.get(cb=True):
+            self.set(cb=False)
+
+        return self
+
+    @short(recursive='r', force='f')
+    def unlock(self, recursive=False, force=False, **kwargs):
+        """
+        Overloads :class:`~pymel.core.general.Attribute` to implement the
+        *recursive* and *force* options and return ``self``.
+
+        :param bool recursive/r: if this is a compound, unlock the children
+            too; defaults to False
+        :param bool force/f: if this is the child of a compound, unlock the
+            compound parent too; defaults to False
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.general.Attribute.unlock`
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        p.Attribute.unlock(self, **kwargs)
+
+        if force:
+            if self.isChild():
+                parent = self.getParent()
+                parent.unlock()
+
+        return self
+
+    @short(
+        recursive='r',
+        keyable='k',
+        channelBox='cb'
+    )
+    def show(self, recursive=False, **kwargs):
+        keyable = channelBox = None
+
+        keyable = kwargs.get('keyable')
+
+        if keyable is not None:
+            channelBox = not keyable
+
+        if channelBox is None:
+            channelBox = kwargs.get('channelBox')
+
+        if channelBox is not None:
+            keyable = not channelBox
+
+        if keyable is None and channelBox is None:
+            keyable = True
+            channelBox = False
+
+        if keyable:
+            self.set(k=True)
+
+        else:
+            self.set(cb=True)
+
+        return self
 
     @short(recursive='r')
     def release(self, recursive=False):
