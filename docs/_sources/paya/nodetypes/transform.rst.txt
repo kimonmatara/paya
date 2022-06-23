@@ -6,6 +6,30 @@ paya.nodetypes.transform.Transform
 
 .. py:class:: Transform(*args, **kwargs)
 
+    .. py:classmethod:: create(dagPath=None, name=None, under=None, displayLocalAxis=False, rotateOrder='xyz', worldMatrix=None)
+    
+        Creates transform nodes.
+        
+        :param dagPath/dp: an explicit DAG path; defaults to None
+        :type dagPath/dp: None, str
+        :param name/n: one or more name elements; ignored if ``dagPath`` is
+            provided; defaults to None
+        :type name/n: int, str, list, tuple or None
+        :param under/u: an optional parent for the transform; if this is
+            combined with ``dagPath``, then this node's DAG path will be
+            prepended; defaults to None
+        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :param bool displayLocalAxis/dla: display the transform's local axes;
+            defaults to False
+        :param rotateOrder/ro: the transform's rotate order; defaults to 'xyz'
+        :type rotateOrder/ro: int, str or None
+        :param worldMatrix/wm: an optional world matrix for the transform,
+            applied to the SRT channels; defaults to None
+        :type worldMatrix/wm: None, list, tuple or
+            :class:`~paya.datatypes.matrix.Matrix`
+        :return: The transform.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+    
     .. py:method:: releaseSRT()
     
         Unlocks and disconnects every SRT channel, recursively.

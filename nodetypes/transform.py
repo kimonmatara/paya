@@ -5,6 +5,107 @@ import paya.runtime as r
 
 class Transform:
 
+    #--------------------------------------------------------|    Constructor
+
+    @classmethod
+    @short(
+        dagPath='dp',
+        name='n',
+        rotateOrder='ro',
+        worldMatrix='wm'
+    )
+    def create(
+            cls,
+            dagPath=None,
+            name=None,
+            under=None,
+            displayLocalAxis=False,
+            rotateOrder='xyz',
+            worldMatrix=None
+    ):
+        """
+        Creates transform nodes.
+
+        :param dagPath/dp: an explicit DAG path; defaults to None
+        :type dagPath/dp: None, str
+        :param name/n: one or more name elements; ignored if ``dagPath`` is
+            provided; defaults to None
+        :type name/n: int, str, list, tuple or None
+        :param under/u: an optional parent for the transform; if this is
+            combined with ``dagPath``, then this node's DAG path will be
+            prepended; defaults to None
+        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :param bool displayLocalAxis/dla: display the transform's local axes;
+            defaults to False
+        :param rotateOrder/ro: the transform's rotate order; defaults to 'xyz'
+        :type rotateOrder/ro: int, str or None
+        :param worldMatrix/wm: an optional world matrix for the transform,
+            applied to the SRT channels; defaults to None
+        :type worldMatrix/wm: None, list, tuple or
+            :class:`~paya.datatypes.matrix.Matrix`
+        :return: The transform.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        if dagPath:
+            fromRoot = dagPath.startswith('|')
+            dagPath = dagPath.strip('|')
+
+            if under:
+                under = r.PyNode(under)
+                head = under.name(long=True)
+
+                if dagPath.startswith('|'):
+                    dagPath = dagPath[1:]
+
+                dagPath = head + dagPath
+
+            elems = dagPath.split('|')
+            num = len(elems)
+
+            group = None
+            coveredDepth = 0
+
+            for i in reversed(range(num)):
+                theseElems = elems[:i+1]
+                thisDagPath = '|'.join(theseElems)
+
+                if fromRoot:
+                    thisDagPath = '|' + thisDagPath
+
+                matches = r.ls(thisDagPath)
+
+                if matches:
+                    group = matches[0]
+                    coveredDepth = i+1
+                    break
+
+            for i in range(coveredDepth, num):
+                requiredElem = elems[i]
+
+                kwargs = {}
+
+                if group:
+                    kwargs['parent'] = group
+
+                group = r.group(empty=True, name=requiredElem, **kwargs)
+
+        else:
+            name = cls.makeName(n=name)
+            group = r.group(empty=True, n=name)
+
+        if worldMatrix:
+            group.setMatrix(worldMatrix)
+
+        if under:
+            group.setParent(under)
+
+        if displayLocalAxis:
+            group.attr('displayLocalAxis').set(True)
+
+        group.attr('ro').set(rotateOrder)
+
+        return group
+
     #--------------------------------------------------------|    Attr management
 
     def releaseSRT(self):
