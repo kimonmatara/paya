@@ -1,3 +1,4 @@
+import re
 import maya.cmds as m
 import pymel.core as p
 
@@ -13,6 +14,28 @@ class Attribute:
     __math_dimension__ = None
 
     #-----------------------------------------------------------------|    Type management
+
+    def isAnimatableDynamic(self):
+        """
+        :return: True if this is a dynamic attribute that can be exposed for
+            keying.
+        """
+        if self.isDynamic():
+            typ = r.addAttr(self, q=True, at=True)
+
+            if typ == 'typed':
+                return False
+
+            if re.match(
+                r"^(float|double|long|short)(2|3)$",
+                at
+            ):
+                return True
+
+            return at in ['bool', 'long', 'short', 'enum', 'time',
+                 'float', 'double', 'doubleAngle', 'doubleLinear']
+
+        return False
 
     @short(inherited='i')
     def plugType(self, inherited=False):
