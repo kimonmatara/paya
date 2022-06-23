@@ -24,4 +24,4 @@ for attribute (including subtype), component and data types with true inheritanc
 
     *   Improvements to name management and plug setting
 
-Full documentation can be found `here <https://kimonmatara.github.io/paya/>`_.
+See `here <https://kimonmatara.github.io/paya/>`_ for full documentation.
