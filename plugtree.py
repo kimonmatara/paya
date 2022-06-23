@@ -1,8 +1,6 @@
 """
-Manages the inheritance tree used to construct the abstract **paya**
-attribute subtypes. The tree is defined inside ``paya/plugtree.json``.
-
-This module is not intended for direct use.
+Manages the inheritance tree used to construct abstract Paya attribute
+subtypes. This module is not intended for direct use.
 """
 
 import re
@@ -38,7 +36,8 @@ class NoPathError(RuntimeError):
 
 def getPath(typeName):
     """
-    Returns hierarchical type information.
+    Returns hierarchical type information. Used to implement
+    :meth:`~paya.plugtypes.attribute.Attribute.plugType` and other methods.
 
     :param str typeName: The plug type to query
     :return: A list of abstract type names, ordered

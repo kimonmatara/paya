@@ -117,6 +117,13 @@ class Matrix:
             resolveFlags(translate, rotate, scale, shear)
 
         xf = r.PyNode(transform)
+        isJoint = isinstance(xf, _nt.Joint)
+
+        if isJoint:
+            compensatePivots = False
+
+        else:
+            compensateJointScale = compensateJointOrient = False
 
         if fast:
             compensateJointScale \
@@ -155,7 +162,6 @@ class Matrix:
 
         #-------------------------------------|    Main implementation
 
-        isJoint = isinstance(xf, _nt.Joint)
         matrix = self
 
         #-------------------------|    Disassemble

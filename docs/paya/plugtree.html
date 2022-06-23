@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.plugtree &mdash; paya 0.4.1 documentation</title>
+  <title>paya.plugtree &mdash; paya 0.4.2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.1
+                0.4.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -111,13 +111,13 @@
              
   <section id="module-paya.plugtree">
 <span id="paya-plugtree"></span><h1>paya.plugtree<a class="headerlink" href="#module-paya.plugtree" title="Permalink to this headline"></a></h1>
-<p>Manages the inheritance tree used to construct the abstract <strong>paya</strong>
-attribute subtypes. The tree is defined inside <code class="docutils literal notranslate"><span class="pre">paya/plugtree.json</span></code>.</p>
-<p>This module is not intended for direct use.</p>
+<p>Manages the inheritance tree used to construct abstract Paya attribute
+subtypes. This module is not intended for direct use.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.plugtree.getPath">
 <span class="sig-name descname"><span class="pre">getPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typeName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getPath" title="Permalink to this definition"></a></dt>
-<dd><p>Returns hierarchical type information.</p>
+<dd><p>Returns hierarchical type information. Used to implement
+<a class="reference internal" href="plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.plugType" title="paya.plugtypes.attribute.Attribute.plugType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plugType()</span></code></a> and other methods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>typeName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The plug type to query</p>

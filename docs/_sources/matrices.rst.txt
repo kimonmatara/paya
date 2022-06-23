@@ -75,21 +75,12 @@ The most performant way in Maya to apply a matrix to a transform node is to set,
         .. figure:: opm_drive.gif
             :align: center
 
-
-Alternatively, you could decompose the matrix into translate, rotate, scale and shear outputs (or values) for the
-transform's channels. To set every channel at once using a static matrix, use PyMEL's
-:meth:`~pymel.core.nodetypes.Transform.setMatrix` method:
-
-.. code-block:: python
-
-    matrix = loc.getMatrix()
-    cube.setMatrix(matrix)
-
-
 .. _selective_application:
 
-For dynamic matrices, use :func:`decompose`. This is a :term:`universal` method that returns channel values / outputs in
-a dictionary, allowing you to pick what to apply:
+To modify SRT channels selectively via decomposition, use the :term:`universal` method
+:meth:`~paya.plugtypes.matrix.Matrix.decomposeAndApply`. By default this accounts for ``rotateAxis`` and, on joints
+only, ``jointOrient`` and ``inverseScale``. In the following example ``rotateAxis`` compensation is disabled for a
+simpler network:
 
 .. tabs::
 
@@ -97,30 +88,17 @@ a dictionary, allowing you to pick what to apply:
 
         .. code-block:: python
 
-            translate = locator1.attr('worldMatrix').decompose()['translate']
-            rotate = locator2.attr('worldMatrix').decompose(
-                ro=driven.attr('rotateOrder')
-                )['rotate']
-
-            translate >> cube.attr('translate')
-            rotate >> cube.attr('rotate')
+            driver.attr('worldMatrix').decomposeAndApply(
+                driven,
+                translate=True,
+                rotate=True,
+                compensateRotateAxis=False
+                )
 
     .. tab:: Graph
 
-        .. figure:: decomp_graph.png
-            :align: center
-
-    .. tab:: Viewport
-
-        .. figure:: decomp.gif
-            :align: center
-
-.. tip::
-
-    When using :func:`decompose` it's important to specify **rotation order** via a ``rotateOrder / ro`` keyword
-    argument. This can be provided as an enum index, a lowercase string or even, as in the example above, an attribute.
-    If an attribute is passed it is connected into the graph, ensuring that the solution holds when the driven object's
-    rotation order changes.
+            .. figure:: decomp_graph.png
+                :align: center
 
 =========
 Filtering

@@ -3,6 +3,16 @@ What's New
 ##########
 
 *************
+Version 0.4.2
+*************
+
+General Changes
+===============
+
+*   :meth:`paya.plugtypes.matrix.Matrix` and :meth:`paya.datatypes.matrix.Matrix` escape into simpler implementations,
+    with sparser DG graphs, when all compensation keyword arguments evaluate as ``False``
+
+*************
 Version 0.4.1
 *************
 
@@ -11,6 +21,7 @@ General Changes
 
 *   Smarter defaults handling on :meth:`paya.nodetypes.ikHandle.IkHandle.create`
 *   Added :doc:`IK Handles <ik>` section to documentation
+*   Removed :meth:`~paya.lib.skel.Chain` subclasses to simplify
 
 Bugs Fixed
 ==========

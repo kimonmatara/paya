@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quick Start &mdash; paya 0.4.1 documentation</title>
+  <title>Quick Start &mdash; paya 0.4.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.1
+                0.4.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -155,9 +155,9 @@ own until <a class="reference internal" href="paya/runtime.html#paya.runtime.Run
 </section>
 <section id="using-the-runtime-interface">
 <h2>Using the Runtime Interface<a class="headerlink" href="#using-the-runtime-interface" title="Permalink to this headline"></a></h2>
-<p>In previous examples, we used <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> merely to manage patching, with PyMEL imported separately via
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> as is the custom. In fact <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> includes the entire <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace, and
-can therefore be used as a drop-in replacement:</p>
+<p>In previous examples, we used <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> merely to manage patching, with PyMEL imported via the customary
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code>. In fact <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> includes the entire <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> namespace, and can therefore be
+used as a drop-in replacement:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
 <span class="c1"># PyMEL patched successfully.</span>
 
