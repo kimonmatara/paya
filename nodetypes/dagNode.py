@@ -62,3 +62,63 @@ class DagNode:
         )
 
     bn = basename
+
+    #-----------------------------------------------------------|    Controller management
+
+    def isControl(self, *state):
+        """
+        :param bool \*state: if ``True``, make this node a controller; if
+            ``False``, remove any controller tags; if omitted, return whether
+            this node is a controller
+        :return: bool or None
+        """
+        tags = r.controller(self, q=True)
+
+        if state:
+            state = state[0]
+
+            if state and not tags:
+                r.controller(self)
+
+            elif tags and not state:
+                r.delete(tags)
+
+        else:
+            return bool(tags)
+
+    def setPickWalkParent(self, parent):
+        """
+        Sets the pick walk parent for this node. If there's no controller tag,
+        one will be added automatically.
+
+        :param parent: the node to set as the pick walk parent; pass None
+            to unparent this node (any existing controller tag will be
+            preserved)
+        :type parent: str, :class:`~pymel.core.general.PyNode`, None
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.dagNode.DagNode`
+        """
+        if parent is None:
+            if self.isControl():
+                r.controller(self, e=True, unparent=True)
+
+        else:
+            parent = r.PyNode(parent)
+            parent.isControl(True)
+            self.isControl(True)
+
+            r.controller(self, parent, e=True, parent=True)
+
+        return self
+
+    def getPickWalkParent(self):
+        """
+        :return: The pick walk parent for this node, if any.
+        :rtype: None, :class:`~paya.nodetypes.dependNode.DependNode`
+        """
+        result = r.controller(self, q=True, parent=True)
+
+        if result:
+            return r.PyNode(result)
+
+        return None
