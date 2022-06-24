@@ -226,3 +226,12 @@ class Attribute:
         return self
 
     __rrshift__ = put
+
+    #-----------------------------------------------------------------|    Section attributes
+
+    def isSectionAttr(self):
+        """
+        :return: True if this attribute is a 'section' enum.
+        :rtype: bool
+        """
+        return False

@@ -1,4 +1,6 @@
 import pymel.util as _pu
+import paya.lib.names as _nm
+import paya.lib.attrs as _atr
 from paya.util import short, resolveFlags
 import paya.lib.names as _nm
 import paya.runtime as r
@@ -145,3 +147,26 @@ class DependNode:
             attr.unlock(f=True)
 
         return self
+
+    def addSectionAttr(self, sectionName):
+        """
+        Adds a 'section' enum attribute.
+
+        :param str sectionName: the name of the section
+        :return: The 'section' enum attribute.
+        :rtype: :class:`~paya.plugtypes.enum.Enum`
+        """
+        attrName = _nm.legalise(sectionName).upper()
+
+        self.addAttr(
+            attrName,
+            at='enum',
+            k=False,
+            enumName=_atr.__section_enum__
+        )
+
+        plug = self.attr(attrName)
+        plug.set(cb=True)
+        plug.lock()
+
+        return plug

@@ -1,3 +1,4 @@
+import re
 import maya.cmds as m
 import pymel.core as p
 
@@ -154,3 +155,6 @@ def reorder(node,attrNames):
 			)
 
 	return out
+
+__section_enum__ = '       '
+
