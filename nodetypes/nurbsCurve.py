@@ -72,13 +72,14 @@ class NurbsCurve:
 
     def macro(self):
         """
-        :return: A simplified dictionary representation of this curve that can
-            be used to reconstruct it. Point information will be in local
-            (object) space. Name is ignored.
+        :return: A simplified dictionary representation of this curve shape
+            that can be used to reconstruct it. Point information will be in
+            local (object) space. Name is ignored.
 
         :rtype: dict
         """
         return {
+            'nodeType': 'nurbsCurve',
             'knot': self.getKnots(),
             'degree': self.degree(),
             'form': self.attr('f').get(),
