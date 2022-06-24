@@ -6,6 +6,21 @@ import paya.runtime as r
 
 class NurbsCurve:
 
+    #-----------------------------------------------------|    Macro
+
+    def macro(self):
+        """
+        :return: A simplified dictionary representation of this object that
+            can be used to reconstruct it.
+        :rtype: dict
+        """
+        return {
+            'knots': self.getKnots(),
+            'degree': self.degree(),
+            'form': self.form(),
+            'points': map(list, self.getCVs())
+        }
+
     #-----------------------------------------------------|    Sampling
 
     def takeClosestPoint(self, refPoint):
