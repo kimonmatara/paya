@@ -252,3 +252,45 @@ class Transform:
                 out.append(group)
 
         return out
+
+    #--------------------------------------------------------|    Shapes
+
+    def conformShapeNames(self):
+        """
+        Conforms the names of this transform's shape children to the Maya
+        convention. Intermediate shapes are ignored, except where renaming
+        them is needed to enforce logical numbering amongst the non-
+        intermediate ones.
+
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        visibleShapes = []
+        intermShapes = []
+
+        for shape in self.getShapes():
+            if shape.isIntermediate():
+                intermShapes.append(shape)
+            else:
+                visibleShapes.append(shape)
+
+        origIntermShapeNames = [
+            intermShape.basename() for intermShape in intermShapes]
+
+        for shape in visibleShapes + intermShapes:
+            shape.rename('tempName')
+
+        bn = self.basename()
+
+        for i, shape in enumerate(visibleShapes):
+            name = bn + 'Shape'
+
+            if i > 0:
+                name += str(i)
+
+            shape.rename(name)
+
+        for shape, origName in zip(intermShapes, origIntermShapeNames):
+            shape.rename(origName)
+
+        return self
