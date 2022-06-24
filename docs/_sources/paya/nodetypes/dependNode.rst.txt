@@ -44,3 +44,18 @@ paya.nodetypes.dependNode.DependNode
         :type name/n: None, str, int, or list
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`
+    
+    .. py:method:: maskAnimAttrs(*args, keyable=None, channelBox=None)
+    
+        Selectively enables attributes of interest to animators. Useful for
+        control configuration.
+        
+        :param \*args: names of attributes to set to keyable
+        :param keyable/k: names of attributes to set to keyable; defaults to
+            None
+        :type: keyable/k: None, tuple, list, str
+        :param channelBox/cb: names of attributes to set to settable; defaults
+            to None
+        :type channelBox/cb: None, tuple, list, str
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.dependNode.DependNode`

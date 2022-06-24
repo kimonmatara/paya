@@ -6,6 +6,11 @@ paya.plugtypes.attribute.Attribute
 
 .. py:class:: Attribute(*args, **kwargs)
 
+    .. py:method:: isAnimatableDynamic()
+    
+        :return: True if this is a dynamic attribute that can be exposed for
+            keying.
+    
     .. py:method:: plugType(inherited=False)
     
         Returns abstract type information for this plug.
@@ -40,6 +45,41 @@ paya.plugtypes.attribute.Attribute
         :param bool plug/p: if True, return ``self``; defaults to False
         :param \*\*kwargs: forwarded to the base method
         :return: :class:`Attribute` or a value type
+    
+    .. py:method:: lock(recursive=False, **kwargs)
+    
+        Overloads :class:`~pymel.core.general.Attribute` to implement the
+        *recursive* option and return ``self``.
+        
+        :param bool recursive/r: if this is a compound, lock its children too;
+            defaults to False
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.general.Attribute.lock`
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+    
+    .. py:method:: hide(recursive=False)
+    
+        Turns off *keyable* and *channelBox* for this attribute.
+        
+        :param bool recursive/r: if this is a compound, edit the children too;
+            defaults to False
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+    
+    .. py:method:: unlock(recursive=False, force=False, **kwargs)
+    
+        Overloads :class:`~pymel.core.general.Attribute` to implement the
+        *recursive* and *force* options and return ``self``.
+        
+        :param bool recursive/r: if this is a compound, unlock the children
+            too; defaults to False
+        :param bool force/f: if this is the child of a compound, unlock the
+            compound parent too; defaults to False
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.general.Attribute.unlock`
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
     
     .. py:method:: release(recursive=False)
     
