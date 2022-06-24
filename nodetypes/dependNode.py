@@ -83,6 +83,30 @@ class DependNode:
 
     #-----------------------------------------------------------|    Attr management
 
+    @short(edit='e', query='q')
+    def addAttr(self, attrName, **kwargs):
+        """
+        Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to return
+        the new attribute. ``None`` will be returned if compound children are
+        not yet completely specified.
+
+        :param str attrName: the attribute name
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.nodetypes.DependNode.addAttr`
+        :return: Where possible, the newly-created attribute.
+        :rtype: None, :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        result = r.nodetypes.DependNode.addAttr(self, attrName, **kwargs)
+
+        if 'query' in kwargs or 'edit' in kwargs:
+            return result
+
+        try:
+            return self.attr(attrName)
+
+        except r.MayaAttributeError:
+            return None
+
     @short(keyable='k', channelBox='cb')
     def maskAnimAttrs(self, *args, keyable=None, channelBox=None):
         """
