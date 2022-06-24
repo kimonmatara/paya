@@ -18,7 +18,8 @@ class NurbsCurve:
             'knots': self.getKnots(),
             'degree': self.degree(),
             'form': self.form(),
-            'points': map(list, self.getCVs())
+            'points': map(list, self.getCVs()),
+            'knotDomain': self.getKnotDomain()
         }
 
     #-----------------------------------------------------|    Sampling
