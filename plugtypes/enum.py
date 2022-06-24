@@ -34,7 +34,7 @@ class Enum:
         :return: True if this attribute is a 'section' enum.
         :rtype: bool
         """
-        labels = plug.getEnums().keys()
+        labels = self.getEnums().keys()
 
         if len(labels) is 1:
             return labels[0] == _atr.__section_enum__

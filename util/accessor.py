@@ -1,0 +1,36 @@
+import pymel.core as p
+
+
+class Accessor:
+    """
+    Utility class for nested interfaces.
+    """
+
+    #-------------------------------------------------------|    Instantiation
+
+    def __init__(self, owner, name):
+        self.owner = owner
+        self.name = name
+
+    #-------------------------------------------------------|    Repr
+
+    def __repr__(self):
+        return '{}.{}'.format(repr(self.owner), self.name)
+
+
+class AccessorOnNode(Accessor):
+    """
+    Subclass of :class:`Accessor` with a few extra facilitiations for node-
+    level interfaces.
+    """
+
+    def __init__(self, owner, name):
+        self.owner = p.PyNode(owner)
+        self.name = name
+
+    def node(self):
+        """
+        :return: The owner node.
+        :rtype: :class:`~paya.nodetypes.dependNode.DependNode`
+        """
+        return self.owner

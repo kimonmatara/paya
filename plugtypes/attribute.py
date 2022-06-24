@@ -235,3 +235,39 @@ class Attribute:
         :rtype: bool
         """
         return False
+
+    #-----------------------------------------------------------------|    Reordering
+
+    def _sendAboveOrBelow(self, attrName, below=False):
+        thisName = self.attrName()
+
+        if below:
+            order = [attrName, thisName]
+
+        else:
+            order = [thisName, attrName]
+
+        node = self.node()
+        node.reorderAttrs(order)
+
+        return node.attr(thisName)
+
+    def sendAbove(self, attrName):
+        """
+        Sends this attribute above another attribute in the channel box.
+
+        :param str attrName: the name of the 'anchor' attribute
+        :return: This attribute, rebuilt.
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        return self._sendAboveOrBelow(attrName, below=False)
+
+    def sendBelow(self, attrName):
+        """
+        Sends this attribute below another attribute in the channel box.
+
+        :param str attrName: the name of the 'anchor' attribute
+        :return: This attribute, rebuilt.
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        return self._sendAboveOrBelow(attrName, below=True)

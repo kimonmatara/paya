@@ -83,14 +83,20 @@ class DependNode:
 
     #-----------------------------------------------------------|    Attr management
 
-    @short(edit='e', query='q')
-    def addAttr(self, attrName, **kwargs):
+    @property
+    def attrSections(self):
+        return _atr.Sections(self, 'attrSections')
+
+    @short(edit='e', query='q', channelBox='cb')
+    def addAttr(self, attrName, channelBox=None, **kwargs):
         """
-        Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to return
-        the new attribute. ``None`` will be returned if compound children are
-        not yet completely specified.
+        Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to ad the
+        ``channelBox/cb`` option and to return ``self``. ``None`` will be
+        returned if compound children are not yet completely specified.
 
         :param str attrName: the attribute name
+        :param bool channelBox/cb: when in create mode, create the attribute
+            as settable instead of keyable; defaults to None
         :param \*\*kwargs: forwarded to
             :meth:`~pymel.core.nodetypes.DependNode.addAttr`
         :return: Where possible, the newly-created attribute.
@@ -102,7 +108,18 @@ class DependNode:
             return result
 
         try:
-            return self.attr(attrName)
+            plug =  self.attr(attrName)
+
+            if channelBox:
+                plug.set(k=False)
+                plug.set(cb=True)
+
+                if plug.isCompound():
+                    for child in plug.getChildren():
+                        child.set(k=False)
+                        child.set(cb=True)
+
+            return plug
 
         except r.MayaAttributeError:
             return None
@@ -172,6 +189,64 @@ class DependNode:
 
         return self
 
+    def reorderAttrs(self, *attrNames, above=None, below=None):
+        """
+        Reorders attributes on this node. The attributes must be dynamic
+        (not 'factory' Maya attributes like translateX), animatable (i.e. not
+        matrix, string etc) and not compounds or multis. Lock states are
+        dodged and connections are preserved.
+
+        :param attrNames: attribute names in the preferred order
+        :type attrNames: list of str
+        :param above/ab: the name of an attribute above which to insert
+            the attributes; defaults to None
+        :type above/ab: None, str
+        :param below/bl: the name of an attribute below which to insert
+            the attributes; defaults to None
+        :return: list of :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        attrNames = list(_pu.expandArgs(*attrNames))
+
+        if above or below:
+            allAttrNames = self.getReorderableAttrNames()
+
+            for attrName in attrNames:
+                allAttrNames.remove(attrName)
+
+            anchorIndex = allAttrNames.index(above if above else below)
+
+            if above:
+                head = allAttrNames[:anchorIndex]
+                tail = allAttrNames[anchorIndex:]
+
+            else:
+                head = allAttrNames[:anchorIndex+1]
+                tail = allAttrNames[anchorIndex+1:]
+
+            attrNames = head + attrNames + tail
+
+        return _atr.reorder(self, attrNames)
+
+    def getReorderableAttrs(self):
+        """
+        :return: Attributes on this node that can be reordered.
+        :rtype: list of str
+        """
+        return filter(
+            lambda x: x.isAnimatableDynamic() and \
+                    x.get(k=True) or x.get(cb=True),
+            self.listAttr(ud=True)
+        )
+
+    def getReorderableAttrNames(self):
+        """
+        :return: The names of attributes on this node that can be reordered
+            using :meth:`reorderAttrs` and related methods.
+        :rtype: list of str
+        """
+        return [attr.attrName(
+            longName=True) for attr in self.getReorderableAttrs()]
+
     def addSectionAttr(self, sectionName):
         """
         Adds a 'section' enum attribute.
@@ -194,3 +269,27 @@ class DependNode:
         plug.lock()
 
         return plug
+
+    def getSectionAttrs(self):
+        """
+        :return: A list of 'section' attributes on this node.
+        :rtype: list of :class:`~paya.plugtypes.enum.Enum`
+        """
+        return list(filter(
+            lambda x: x.isSectionAttr(), self.listAttr(ud=True)))
+
+    def getAttrSectionMembership(self):
+        """
+        :return: A zipped mapping of *section name: member attributes*.
+        :rtype: list of tuple
+        """
+        out = []
+
+        for attr in self.getReorderableAttrs():
+            if attr.isSectionAttr():
+                out.append((attr.attrName(), []))
+
+            elif out:
+                out[-1][-1].append(attr)
+
+        return out
