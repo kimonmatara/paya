@@ -41,12 +41,14 @@ def getKeyFromNode(node):
     """
     Given a Maya node, returns the appropriate key to use for suffix lookups.
 
-    If the node is a (strict) transform then, if it has a shape, the shape's
-    node type will be returned. If it doesn't have a shape, 'transform' will
-    be returned.
+    If the node is a (strict) transform then:
+    -   If it has a controller tag, then 'payaControl' is returned
+    -   Otherwise, if it has a shape, the shape's node type is returned
+    -   Otherwise, 'transform' is returned
 
-    If the node is not a transform then, if it's a shape, None will be
-    returned. If it's not a shape, the node's type will be returned.
+    Otherwise:
+    -   If the node is a shape, None is returned
+    -   Otherwise, the node's type is returned
 
     :param node: the node to inspect
     :type node: PyNode or str
@@ -59,6 +61,11 @@ def getKeyFromNode(node):
     nt = nts[-1]
 
     if nt == 'transform':
+        tag = m.controller(node, q=True)
+
+        if tag:
+            return 'payaControl'
+
         shapes = m.listRelatives(node, shapes=True)
 
         if shapes:
@@ -92,7 +99,7 @@ def load():
     global suffixes
     suffixes = json.loads(data)
 
-    print("Suffixes successfully read from : {}".format(filepath))
+    print("Suffixes read from: {}".format(filepath))
 
 def dump():
     """
@@ -105,7 +112,7 @@ def dump():
     with open(filepath, 'w') as f:
         f.write(data)
 
-    print("Suffixes successfully dumped to: {}".format(filepath))
+    print("Suffixes saved into: {}".format(filepath))
 
 load()
 
