@@ -9,33 +9,38 @@ import paya.runtime as r
 class MakeName(object):
 
     def __get__(self, inst, instype):
-
-        @short(name='n')
-        def makeName(*elems, name=None):
+        @short(name='n', control='ct')
+        def makeName(*elems, name=None, control=False):
             """
             Generates a context-appropriate Maya name. Results will vary
             depending on whether this method is called on a class or on a
             node instance.
 
-            Construction is determined by the following keys inside :mod:`paya.config`:
-            ``inheritNames``, ``padding``, ``suffixNodes``.
-
-            Settings can be overriden using :class:`~paya.override.Override`.
+            Construction is determined by the following keys inside
+            :mod:`paya.config`: ``inheritNames``, ``padding``,
+            ``suffixNodes``. Use the context manager functionality of
+            :mod:`paya.config` to override for specific blocks.
 
             :param \*elems: one or more name elements
             :param name/n: elements contributed via ``name`` keyword
                 arguments; these will always be prepended; defaults to None
             :type name/n: None, str, int, or list
+            :param bool control/ct: use the Paya suffix for controls;
+                defaults to False
             :return: The node name.
             :rtype: str
             """
             kwargs = {}
 
-            if inst:
-                kwargs['node'] = inst
+            if control:
+                kwargs['control'] = True
 
             else:
-                kwargs['nodeType'] = instype.__melnode__
+                if inst:
+                    kwargs['node'] = inst
+
+                else:
+                    kwargs['nodeType'] = instype.__melnode__
 
             return _nm.make(name, *elems, **kwargs)
 
@@ -193,13 +198,13 @@ class DependNode:
 
         for name in keyable:
             attr = self.attr(name)
-            attr.show()
-            attr.unlock(f=True)
+            attr.show(r=True, f=True)
+            attr.unlock(r=True, f=True)
 
         for name in channelBox:
             attr = self.attr(name)
-            attr.show(cb=True)
-            attr.unlock(f=True)
+            attr.show(cb=True, r=True, f=True)
+            attr.unlock(r=True, f=True)
 
         return self
 
