@@ -81,6 +81,20 @@ class DependNode:
         name = cls.makeName(name)
         return r.createNode(cls.__melnode__, n=name)
 
+    @classmethod
+    def createFromMacro(cls, macro):
+        if cls is r.nodes.DependNode:
+            nt = macro['nodeType']
+            clsname = nt[0].upper()+nt[1:]
+            cls = getattr(r.nodes, clsname)
+            return cls.createFromMacro(macro)
+
+        else:
+            raise NotImplementedError
+
+    def macro(self):
+        raise NotImplementedError
+
     #-----------------------------------------------------------|    Attr management
 
     @property
