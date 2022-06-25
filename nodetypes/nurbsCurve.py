@@ -83,7 +83,7 @@ class NurbsCurve:
             'knot': self.getKnots(),
             'degree': self.degree(),
             'form': self.attr('f').get(),
-            'point': map(list, self.getCVs()),
+            'point': list(map(list, self.getCVs())),
             'knotDomain': self.getKnotDomain()
         }
 
