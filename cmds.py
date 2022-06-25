@@ -22,4 +22,4 @@ from pymel.core import *
 from paya.lib.names import Name
 from paya.lib.mathops import createMatrix, cm
 from paya.lib.skel import Chain
-from paya.override import Override
+from paya.lib.controls import createControl
