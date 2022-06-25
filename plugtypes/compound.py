@@ -46,7 +46,7 @@ class Compound:
 
         if recursive:
             for child in self.getChildren():
-                child.lock(r=True, **kwargs)
+                child.lock(**kwargs)
 
         return self
 
@@ -69,7 +69,7 @@ class Compound:
 
         if recursive:
             for child in self.getChildren():
-                child.unlock(r=True)
+                p.Attribute.unlock(child, **kwargs)
 
         return self
 
@@ -83,15 +83,11 @@ class Compound:
         :return: ``self``
         :rtype: :class:`~paya.plugtypes.attribute.Attribute`
         """
-        if self.get(k=True):
-            self.set(k=False)
-
-        elif self.get(cb=True):
-            self.set(cb=False)
+        r.plugs.Attribute.hide(self)
 
         if recursive:
             for child in self.getChildren():
-                child.hide(r=True)
+                child.hide()
 
         return self
 
@@ -106,12 +102,35 @@ class Compound:
             too; defaults to False
         :return:
         """
-        self.unlock()
-        self.disconnect(inputs=True)
+        r.plugs.Attribute.release(self)
 
         if recursive:
             for child in self.getChildren():
-                child.release(r=True)
+                child.release()
+
+        return self
+
+    @short(recursive='r', force='f')
+    def show(self, recursive=False, force=False, **kwargs):
+        """
+        Unhides this attribute in the channel box.
+
+        :param bool recursive/r: if this is a compound, edit the children
+            as well; defaults to False
+        :param bool force/f: if this is the child of a compound, edit the
+            parent attribute too; defaults to False
+
+        :param bool channelBox/cb: reveal by making the attribute settable
+        :param bool keyable/k: reveal by making the attribute keyable
+            (the default)
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        r.plugs.Attribute.show(self)
+
+        if recursive:
+            for child in self.getChildren():
+                r.plugs.Attribute.show(child, **kwargs)
 
         return self
 
