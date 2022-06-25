@@ -24,9 +24,9 @@ class AccessorOnNode(Accessor):
     level interfaces.
     """
 
-    def __init__(self, owner, name):
+    def __init__(self, owner, attrName):
         self.owner = p.PyNode(owner)
-        self.name = name
+        self.name = attrName
 
     def node(self):
         """
