@@ -1,7 +1,9 @@
 import maya.cmds as m
 import paya.config as config
 import pymel.util as _pu
+
 from paya.util import short
+from paya.lib.controls import ControlShapesManager
 import paya.runtime as r
 
 
@@ -254,6 +256,12 @@ class Transform:
         return out
 
     #--------------------------------------------------------|    Shapes
+
+    @property
+    def controlShapes(self):
+        return ControlShapesManager(self, 'controlShapes')
+
+    cs = controlShapes
 
     def conformShapeNames(self):
         """
