@@ -155,11 +155,25 @@ class Attribute:
     @short(
         recursive='r',
         keyable='k',
-        channelBox='cb'
+        channelBox='cb',
+        force='f'
     )
-    def show(self, recursive=False, **kwargs):
-        keyable = channelBox = None
+    def show(self, recursive=False, force=False, **kwargs):
+        """
+        Unhides this attribute in the channel box.
 
+        :param bool recursive/r: if this is a compound, edit the children
+            as well; defaults to False
+        :param bool force/f: if this is the child of a compound, edit the
+            parent attribute too; defaults to False
+
+        :param bool channelBox/cb: reveal by making the attribute settable
+        :param bool keyable/k: reveal by making the attribute keyable
+            (the default)
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        """
+        keyable = channelBox = None
         keyable = kwargs.get('keyable')
 
         if keyable is not None:
@@ -179,7 +193,19 @@ class Attribute:
             self.set(k=True)
 
         else:
+            self.set(k=False)
             self.set(cb=True)
+
+        if force:
+            if self.isChild():
+                parent = self.getParent()
+
+                if keyable:
+                    parent.set(k=True)
+
+                else:
+                    parent.set(k=False)
+                    parent.set(cb=True)
 
         return self
 
