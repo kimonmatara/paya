@@ -8,7 +8,6 @@ import pymel.util as _pu
 
 from paya.util import short, pad
 import paya.config as config
-import paya.override as override
 import paya.lib.suffixes as _suf
 
 def legalise(name):
@@ -160,8 +159,8 @@ class Name:
 
         return False
 
-@short(name='n', nodeType='nt')
-def make(*elems, name=None, node=None, nodeType=None):
+@short(name='n', nodeType='nt', control='ct')
+def make(*elems, name=None, node=None, nodeType=None, control=False):
     """
     Constructs Maya node names.
 
@@ -171,11 +170,13 @@ def make(*elems, name=None, node=None, nodeType=None):
     :param name/n: elements passed-through via a ``name`` argument;
         these will always be prepended to \*elems; defaults to None
     :type name/n: int, str, list, None
+    :param bool control/ct: ignore the *node* and *nodeType* arguments
+        and apply the Paya suffix for controls; defaults to False
     :param node: ignored if ``nodeType`` has been provided; a node to inspect
         to determine the node type suffix; defaults to None
     :type node: None, str, :class:`~pymel.core.general.PyNode`
-    :param nodeType/nt: a reference node type for the suffix lookups; defaults
-        to None
+    :param nodeType/nt: a reference node type for the suffix lookups, or
+        'payaControl' for controls; defaults to None
     :type nodeType/nt: None, str
     :return: A Maya node name.
     :rtype: str
@@ -192,9 +193,13 @@ def make(*elems, name=None, node=None, nodeType=None):
             elems = Name.__elems__ + elems
 
     if config['suffixNodes']:
-        if nodeType is None:
-            if node:
-                nodeType = _suf.getKeyFromNode(node)
+        if control:
+            nodeType = 'payaControl'
+
+        else:
+            if nodeType is None:
+                if node:
+                    nodeType = _suf.getKeyFromNode(node)
 
         if nodeType:
             suffix = _suf.suffixes.get(nodeType)
