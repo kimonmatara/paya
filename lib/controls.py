@@ -315,7 +315,11 @@ controlShapesLibrary = ControlShapesLibrary()
 
 class ControlShapesManager(AccessorOnNode):
     """
-    Manager object for control shapes.
+    Implements the ``controlShapes`` / ``cs`` interface attribute on
+    :class:`~paya.nodetypes.transform.Transform`.
+
+    'Control shapes' comprise any non-intermediate curve or locator shape
+    under a transform.
 
     -   To copy shapes and / or color, use :meth:`copyTo`.
     -   To transform shapes, use :meth:`rotate` and :meth:`scale`.
@@ -364,9 +368,7 @@ class ControlShapesManager(AccessorOnNode):
     @short(
         replace='rep',
         worldSpace='ws',
-        mirror='mir',
         mirrorAxis='ma',
-        relativeWorldPosition='rwp',
         color='col',
         shape='sh'
     )
@@ -375,9 +377,7 @@ class ControlShapesManager(AccessorOnNode):
             *destControls,
             replace=True,
             worldSpace=False,
-            relativeWorldPosition=False,
-            mirror=False,
-            mirrorAxis='x', # positive only
+            mirrorAxis=None,
             color=None,
             shape=None
     ):
@@ -398,12 +398,10 @@ class ControlShapesManager(AccessorOnNode):
             controls; defaults to True
         :param bool worldSpace/ws: copy shapes in world space; defaults to
             False
-        :param bool mirror/mir: flip shapes; defaults to False
-        :param str mirrorAxis/ma: a positive axis along which to mirror;
-            defaults to 'x'
-        :param bool relativeWorldPosition/rwp: ignored if ``worldSpace`` is
-            False; preserve relative opposite-side shape positions; defaults
-            to False
+        :param mirrorAxis/ma: a positive axis to flip when copying in local
+            space, or along which to mirror when copying in world space, for
+            example 'x';  defaults to ``None``
+        :type mirrorAxis/ma: ``None``, str
         :return: The new control shapes.
         :rtype: list of :class:`~paya.nodetypes.shape.Shape`
         """
@@ -434,20 +432,21 @@ class ControlShapesManager(AccessorOnNode):
         srcGp = _srcGp.duplicate()[0]
         r.delete(_srcGp)
 
-        if mirror:
+        if mirrorAxis:
             mirrorMtx = r.createMatrix()
+
             setattr(mirrorMtx, mirrorAxis,
                     getattr(mirrorMtx, mirrorAxis)*-1.0)
 
         if worldSpace:
             matrix = srcControl.getMatrix(worldSpace=True)
 
-            if mirror:
+            if mirrorAxis:
                 matrix *= mirrorMtx
 
             srcGp.setMatrix(matrix)
 
-        elif mirror:
+        elif mirrorAxis:
             srcGp.setMatrix(mirrorMtx)
             r.makeIdentity(srcGp, apply=True, t=True, r=True, s=True)
 
@@ -791,7 +790,7 @@ def createControl(
             ct.controlShapes.scale([size] * 3)
 
         if color is not None:
-            ct.controlShape.setColor(color)
+            ct.controlShapes.setColor(color)
 
         if pickWalkParent:
             ct.setPickWalkParent(pickWalkParent)
