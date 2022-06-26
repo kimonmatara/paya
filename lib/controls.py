@@ -310,7 +310,7 @@ class ControlShapesLibrary(UserDict):
 
         return self
 
-shapesLib = ControlShapesLibrary()
+controlShapesLibrary = ControlShapesLibrary()
 
 
 class ControlShapesManager(AccessorOnNode):
@@ -619,7 +619,7 @@ class ControlShapesManager(AccessorOnNode):
         :return: The newly-generated control shapes.
         :rtype: list of :class:`~paya.nodetypes.shape.Shape`
         """
-        return shapesLib.applyToControls(name, self.node())
+        return controlShapesLibrary.applyToControls(name, self.node())
 
     def addToLib(self, name, dump=True):
         """
@@ -631,10 +631,10 @@ class ControlShapesManager(AccessorOnNode):
             defaults to True
         :return: ``self``
         """
-        shapesLib.addFromControl(self.node(), name)
+        controlShapesLibrary.addFromControl(self.node(), name)
 
         if dump:
-            shapesLib.dump()
+            controlShapesLibrary.dump()
 
         return self
 
@@ -649,7 +649,7 @@ class ControlShapesManager(AccessorOnNode):
         :return: The newly-generated control shapes.
         :rtype: list of :class:`~paya.nodetypes.shape.Shape`
         """
-        libKeys = list(sorted(shapesLib.keys()))
+        libKeys = list(sorted(controlShapesLibrary.keys()))
         maxIndex = len(libKeys) - 1
         currentKey = None
 
@@ -738,9 +738,8 @@ def createControl(
         control
     :param rotateOrder/ro: the control's rotate order; defaults to 'xyz'
     :type rotateOrder/ro: str, int
-    :param bool asControl/ac: if this is ``False``:
-        -   Create the control as a group with no shapes
-        -   Omit the controller tag
+    :param bool asControl/ac: if this is ``False``, create the control as a
+        group with no shapes and omit the controller tag; defaults to True
     :param offsetGroups: the suffixes of one or more offset groups to create;
         defaults to 'offset'
     :type offsetGroups: list, str
