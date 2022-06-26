@@ -75,14 +75,14 @@ used as a drop-in replacement:
     cameras = r.ls(type='camera') # etc
 
 Using :mod:`paya.runtime` in this way gives you easy access to top-level Paya-only tools such as
-:meth:`paya.lib.mathops.createMatrix`; it also exposes the ``nodes``, ``plugs``, ``comps`` and ``data`` *class pools*,
-which can be used to call special constructors on custom Paya classes:
+:meth:`paya.lib.controls.createControl` and :meth:`paya.lib.mathops.createMatrix`; it also exposes the ``nodes``,
+``plugs``, ``comps`` and ``data`` *class pools*, which can be used to call special constructors on custom Paya classes:
 
 .. code-block:: python
 
     import paya.runtime as r
 
-    joint = r.nodes.Joint.createNode() # Paya only
+    xform = r.nodes.Transform.create(dagPath='|rig_XFRM|controls_XFRM') # Paya only
 
 Importing :mod:`paya.runtime` instead of :mod:`pymel.core` also helps to signal that a code block is designed for
 'patched' PyMEL.

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.nodetypes.dagNode.DagNode &mdash; paya 0.4.3 documentation</title>
+  <title>paya.nodetypes.dagNode.DagNode &mdash; paya 0.5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.3
+                0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -49,6 +49,7 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
@@ -75,12 +76,12 @@
 <li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">paya.nodetypes.fourByFourMatrix.FourByFourMatrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ikHandle.html">paya.nodetypes.ikHandle.IkHandle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="joint.html">paya.nodetypes.joint.Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="locator.html">paya.nodetypes.locator.Locator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">paya.nodetypes.nurbsCurve.NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shape.html">paya.nodetypes.shape.Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="transform.html">paya.nodetypes.transform.Transform</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../override.html">paya.override</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
@@ -167,6 +168,54 @@ suffix; defaults to False</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.dagNode.DagNode.isControl">
+<span class="sig-name descname"><span class="pre">isControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dagNode.DagNode.isControl" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, make this node a controller; if
+<code class="docutils literal notranslate"><span class="pre">False</span></code>, remove any controller tags; if omitted, return whether
+this node is a controller</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bool or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.dagNode.DagNode.setPickWalkParent">
+<span class="sig-name descname"><span class="pre">setPickWalkParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dagNode.DagNode.setPickWalkParent" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the pick walk parent for this node. If there’s no controller tag,
+one will be added automatically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (str, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a>, None) – the node to set as the pick walk parent; pass None
+to unparent this node (any existing controller tag will be
+preserved)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.nodetypes.dagNode.DagNode" title="paya.nodetypes.dagNode.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.dagNode.DagNode.getPickWalkParent">
+<span class="sig-name descname"><span class="pre">getPickWalkParent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.dagNode.DagNode.getPickWalkParent" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The pick walk parent for this node, if any.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None, <a class="reference internal" href="dependNode.html#paya.nodetypes.dependNode.DependNode" title="paya.nodetypes.dependNode.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

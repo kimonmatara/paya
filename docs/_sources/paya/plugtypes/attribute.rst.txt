@@ -46,6 +46,28 @@ paya.plugtypes.attribute.Attribute
         :param \*\*kwargs: forwarded to the base method
         :return: :class:`Attribute` or a value type
     
+    .. py:method:: enable(recursive=False, force=False)
+    
+        Equivalent to:
+        
+        .. code-block:: python
+        
+            self.show()
+            self.unlock()
+        
+        See :meth:`show` and :meth:`unlock` for details.
+    
+    .. py:method:: disable(recursive=False)
+    
+        Equivalent to:
+        
+        .. code-block:: python
+        
+            self.lock()
+            self.hide()
+        
+        See :meth:`lock` and :meth:`hide` for details.
+    
     .. py:method:: lock(recursive=False, **kwargs)
     
         Overloads :class:`~pymel.core.general.Attribute` to implement the
@@ -81,12 +103,28 @@ paya.plugtypes.attribute.Attribute
         :return: ``self``
         :rtype: :class:`~paya.plugtypes.attribute.Attribute`
     
-    .. py:method:: release(recursive=False)
+    .. py:method:: show(recursive=False, force=False, keyable=True)
+    
+        Unhides this attribute in the channel box.
+        
+        :param bool recursive/r: if this is a compound, edit the children
+            as well; defaults to False
+        :param bool force/f: if this is the child of a compound, edit the
+            parent attribute too; defaults to False
+        :param bool keyable/k: reveal by making the attribute keyable; if this
+            is False, the attribute will be made settable instead; defaults
+            to True
+        :return: ``self``
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+    
+    .. py:method:: release(recursive=False, force=False)
     
         Unlocks this attribute and disconnects any inputs.
         
-        :param bool recursive/r: if this is a compound, release child attributes
-            too; defaults to False
+        :param bool force/f: if this is the child of a compound, release
+            the parent too; defaults to False
+        :param bool recursive/r: if this is a compound, release child
+            attributes too; defaults to False
         :return:
     
     .. py:method:: put(source, plug=None)
@@ -100,3 +138,24 @@ paya.plugtypes.attribute.Attribute
             if here; defaults to None
         :type plug/p: bool or None
         :return: self
+    
+    .. py:method:: isSectionAttr()
+    
+        :return: True if this attribute is a 'section' enum.
+        :rtype: bool
+    
+    .. py:method:: sendAbove(attrName)
+    
+        Sends this attribute above another attribute in the channel box.
+        
+        :param str attrName: the name of the 'anchor' attribute
+        :return: This attribute, rebuilt.
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+    
+    .. py:method:: sendBelow(attrName)
+    
+        Sends this attribute below another attribute in the channel box.
+        
+        :param str attrName: the name of the 'anchor' attribute
+        :return: This attribute, rebuilt.
+        :rtype: :class:`~paya.plugtypes.attribute.Attribute`

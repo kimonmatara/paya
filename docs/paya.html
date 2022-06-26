@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya &mdash; paya 0.4.3 documentation</title>
+  <title>paya &mdash; paya 0.5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.3
+                0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,6 +49,7 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
@@ -70,7 +71,6 @@
 <li class="toctree-l2"><a class="reference internal" href="paya/environment.html">paya.environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/lib.html">paya.lib</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/nodetypes.html">paya.nodetypes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="paya/override.html">paya.override</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/plugtypes.html">paya.plugtypes</a></li>
@@ -128,6 +128,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="paya/environment.html">paya.environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya/lib.html">paya.lib</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="paya/lib/attrs.html">paya.lib.attrs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paya/lib/controls.html">paya.lib.controls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/lib/mathops.html">paya.lib.mathops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/lib/names.html">paya.lib.names</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/lib/skel.html">paya.lib.skel</a></li>
@@ -140,12 +142,12 @@
 <li class="toctree-l2"><a class="reference internal" href="paya/nodetypes/fourByFourMatrix.html">paya.nodetypes.fourByFourMatrix.FourByFourMatrix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/nodetypes/ikHandle.html">paya.nodetypes.ikHandle.IkHandle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/nodetypes/joint.html">paya.nodetypes.joint.Joint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paya/nodetypes/locator.html">paya.nodetypes.locator.Locator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/nodetypes/nurbsCurve.html">paya.nodetypes.nurbsCurve.NurbsCurve</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/nodetypes/shape.html">paya.nodetypes.shape.Shape</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/nodetypes/transform.html">paya.nodetypes.transform.Transform</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="paya/override.html">paya.override</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya/patch.html">paya.patch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya/plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya/plugtypes.html">paya.plugtypes</a><ul>
@@ -166,7 +168,9 @@
 <li class="toctree-l1"><a class="reference internal" href="paya/pools.html">paya.pools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya/runtime.html">paya.runtime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paya/util.html">paya.util</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="paya/util/accessor.html">paya.util.accessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/util/functions.html">paya.util.functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paya/util/iterables.html">paya.util.iterables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/util/modules.html">paya.util.modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paya/util/strings.html">paya.util.strings</a></li>
 </ul>

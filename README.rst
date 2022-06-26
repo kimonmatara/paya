@@ -13,18 +13,10 @@ Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-.. admonition:: New in version 0.4
+.. admonition:: New in version 0.5
 
-    *   A brand new toolset for skeletal chains and IK handles, spread across ``Joint``,
-        ``IkHandle`` and ``Chain``
-
-    *   Additions to vector and matrix attribute and data types: drive transforms via decomposition, with full
-        accounting for ``jointOrient``, ``rotateAxis``, ``inverseScale`` and pivots; rotate vectors by axis-angle; and
-        more
-
-    *   Improvements to name management and plug setting
-
-    *   And `more <https://kimonmatara.github.io/paya/whats_new.html>`_!
+    *   Over **60 new methods** to create rig controls and organise user attributes 
+    *   And more !
 
 
 Full documentation can be found `here <https://kimonmatara.github.io/paya/>`_.

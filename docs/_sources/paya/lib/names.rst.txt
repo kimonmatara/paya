@@ -64,7 +64,7 @@ Node-naming utilities, usually called indirectly.
     
         Initialize self.  See help(type(self)) for accurate signature.
 
-.. py:function:: make(*elems, name=None, node=None, nodeType=None)
+.. py:function:: make(*elems, name=None, node=None, nodeType=None, control=False)
 
     Constructs Maya node names.
     
@@ -74,11 +74,13 @@ Node-naming utilities, usually called indirectly.
     :param name/n: elements passed-through via a ``name`` argument;
         these will always be prepended to \*elems; defaults to None
     :type name/n: int, str, list, None
+    :param bool control/ct: ignore the *node* and *nodeType* arguments
+        and apply the Paya suffix for controls; defaults to False
     :param node: ignored if ``nodeType`` has been provided; a node to inspect
         to determine the node type suffix; defaults to None
     :type node: None, str, :class:`~pymel.core.general.PyNode`
-    :param nodeType/nt: a reference node type for the suffix lookups; defaults
-        to None
+    :param nodeType/nt: a reference node type for the suffix lookups, or
+        'payaControl' for controls; defaults to None
     :type nodeType/nt: None, str
     :return: A Maya node name.
     :rtype: str

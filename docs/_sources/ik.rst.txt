@@ -25,7 +25,7 @@ to ``ikSCsolver`` for two-joint chains and ``ikRPsolver`` for longer ones:
     chain = r.PyNode('joint1').chainFromHere()
     chain.createIkHandle()
 
-A 'plural' form, :meth:`~paya.lib.skel.Chain.createIkHandles` can be used to create on SC handle for each bone in a
+A 'plural' form, :meth:`~paya.lib.skel.Chain.createIkHandles` can be used to create one SC handle for each bone in a
 chain. The IK handles will be numbered; prefixes and padding can be specified via :class:`~paya.lib.name.Name` blocks:
 
 .. code-block:: python

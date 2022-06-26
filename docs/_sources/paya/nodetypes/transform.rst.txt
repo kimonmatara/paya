@@ -83,3 +83,13 @@ paya.nodetypes.transform.Transform
         :return: One or more transformationally-matched offset groups for this
             transform, in order of innermost to outermost.
         :type: list of :class:`~paya.nodetypes.transform.Transform`
+    
+    .. py:method:: conformShapeNames()
+    
+        Conforms the names of this transform's shape children to the Maya
+        convention. Intermediate shapes are ignored, except where renaming
+        them is needed to enforce logical numbering amongst the non-
+        intermediate ones.
+        
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.transform.Transform`

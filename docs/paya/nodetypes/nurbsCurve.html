@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.nodetypes.nurbsCurve.NurbsCurve &mdash; paya 0.4.3 documentation</title>
+  <title>paya.nodetypes.nurbsCurve.NurbsCurve &mdash; paya 0.5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.nodetypes.shape.Shape" href="shape.html" />
-    <link rel="prev" title="paya.nodetypes.joint.Joint" href="joint.html" /> 
+    <link rel="prev" title="paya.nodetypes.locator.Locator" href="locator.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.3
+                0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -49,6 +49,7 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
@@ -75,12 +76,12 @@
 <li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">paya.nodetypes.fourByFourMatrix.FourByFourMatrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ikHandle.html">paya.nodetypes.ikHandle.IkHandle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="joint.html">paya.nodetypes.joint.Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="locator.html">paya.nodetypes.locator.Locator</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.nodetypes.nurbsCurve.NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shape.html">paya.nodetypes.shape.Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="transform.html">paya.nodetypes.transform.Transform</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../override.html">paya.override</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
@@ -126,6 +127,47 @@
 <dt class="sig sig-object py" id="paya.nodetypes.nurbsCurve.NurbsCurve">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NurbsCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.nurbsCurve.NurbsCurve" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.nurbsCurve.NurbsCurve.createFromMacro">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromMacro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">macro</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conformShapeNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dispCV</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.nurbsCurve.NurbsCurve.createFromMacro" title="Permalink to this definition"></a></dt>
+<dd><p>Recreates a curve from the type of dictionary returned by
+<a class="reference internal" href="#paya.nodetypes.nurbsCurve.NurbsCurve.macro" title="paya.nodetypes.nurbsCurve.NurbsCurve.macro"><code class="xref py py-meth docutils literal notranslate"><span class="pre">macro()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>macro</strong> – the macro dictionary to use</p></li>
+<li><p><strong>under/u</strong> (None, str, <a class="reference internal" href="transform.html#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – an optional parent for the curve; defaults to None</p></li>
+<li><p><strong>conformShapeNames/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>under</em> is None; clean
+up destination shape names after reparenting to the specified
+transform; defaults to True</p></li>
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – one or more name elements; defaults to None</p></li>
+<li><p><strong>dispCV/dcv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – display curve CVs; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.nodetypes.nurbsCurve.NurbsCurve" title="paya.nodetypes.nurbsCurve.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.nodetypes.nurbsCurve.NurbsCurve.macro">
+<span class="sig-name descname"><span class="pre">macro</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.nurbsCurve.NurbsCurve.macro" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A simplified dictionary representation of this curve shape
+that can be used to reconstruct it. Point information will be in
+local (object) space. Name is ignored.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.nodetypes.nurbsCurve.NurbsCurve.takeClosestPoint">
 <span class="sig-name descname"><span class="pre">takeClosestPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refPoint</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.nodetypes.nurbsCurve.NurbsCurve.takeClosestPoint" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -216,7 +258,7 @@ fractions, or a number</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="joint.html" class="btn btn-neutral float-left" title="paya.nodetypes.joint.Joint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="locator.html" class="btn btn-neutral float-left" title="paya.nodetypes.locator.Locator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="shape.html" class="btn btn-neutral float-right" title="paya.nodetypes.shape.Shape" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -240,7 +240,7 @@ class Transform:
         out = []
 
         with config(inheritNames=False):
-            for suffix in suffixes:
+            for suffix in reversed(suffixes):
                 name = r.nodes.Transform.makeName(bn, suffix)
                 parent = lastChild.getParent()
                 kwargs = {}
@@ -253,7 +253,7 @@ class Transform:
                 lastChild.setParent(group)
                 out.append(group)
 
-        return out
+        return list(reversed(out))
 
     #--------------------------------------------------------|    Shapes
 

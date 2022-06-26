@@ -472,7 +472,7 @@ class ControlShapesManager(AccessorOnNode):
 
             if worldSpace:
                 thisSrcGp.setParent(destControl)
-                r.makeIdentity(thisSrcGp, apply=True, t=False, r=True, s=True)
+                r.makeIdentity(thisSrcGp, apply=True, t=True, r=True, s=True)
                 thisSrcGp.setParent(None)
                 
             theseNewShapes = thisSrcGp.getShapes()
@@ -713,8 +713,7 @@ def createControl(
         pickWalkParent=None
 ):
     """
-    Creates rig controls. Remember to pass some attribute names via
-    ``keyable`` or ``channelBox``.
+    Creates rig controls. Available on :mod:`paya.runtime`.
 
     :param name/n: one or more name elements
     :type name/n: None, str, int, list
@@ -774,7 +773,7 @@ def createControl(
     name = r.nodes.Transform.makeName(name, control=asControl)
     ct = r.group(empty=True, n=name, **kwargs)
 
-    ct.setMatrix(worldMatrix)
+    ct.setMatrix(worldMatrix, worldSpace=True)
     ct.attr('rotateOrder').set(rotateOrder)
 
     ct.createOffsetGroups(offsetGroups)

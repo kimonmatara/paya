@@ -6,21 +6,23 @@ paya.nodetypes.dependNode.DependNode
 
 .. py:class:: DependNode(*args, **kwargs)
 
-    .. py:method:: makeName(*elems, name=None)
+    .. py:method:: makeName(*elems, name=None, control=False)
     
         Generates a context-appropriate Maya name. Results will vary
         depending on whether this method is called on a class or on a
         node instance.
         
-        Construction is determined by the following keys inside :mod:`paya.config`:
-        ``inheritNames``, ``padding``, ``suffixNodes``.
-        
-        Settings can be overriden using :class:`~paya.override.Override`.
+        Construction is determined by the following keys inside
+        :mod:`paya.config`: ``inheritNames``, ``padding``,
+        ``suffixNodes``. Use the context manager functionality of
+        :mod:`paya.config` to override for specific blocks.
         
         :param \*elems: one or more name elements
         :param name/n: elements contributed via ``name`` keyword
             arguments; these will always be prepended; defaults to None
         :type name/n: None, str, int, or list
+        :param bool control/ct: use the Paya suffix for controls;
+            defaults to False
         :return: The node name.
         :rtype: str
     
@@ -45,6 +47,30 @@ paya.nodetypes.dependNode.DependNode
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`
     
+    .. py:classmethod:: createFromMacro(macro)
+    
+        This is the dispatcher implementation on
+        :class:`~paya.nodetypes.dependNode.DependNode`.
+    
+    .. py:method:: macro()
+    
+        This is a stub on :class:`~paya.nodetypes.dependNode.DependNode` that will
+        always raise :class:`NotImplementedError`.
+    
+    .. py:method:: addAttr(attrName, channelBox=None, **kwargs)
+    
+        Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to add the
+        ``channelBox/cb`` option and to return ``self``. ``None`` will be
+        returned if compound children are not yet completely specified.
+        
+        :param str attrName: the attribute name
+        :param bool channelBox/cb: when in create mode, create the attribute
+            as settable instead of keyable; defaults to None
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.nodetypes.DependNode.addAttr`
+        :return: Where possible, the newly-created attribute.
+        :rtype: None, :class:`~paya.plugtypes.attribute.Attribute`
+    
     .. py:method:: maskAnimAttrs(*args, keyable=None, channelBox=None)
     
         Selectively enables attributes of interest to animators. Useful for
@@ -59,3 +85,48 @@ paya.nodetypes.dependNode.DependNode
         :type channelBox/cb: None, tuple, list, str
         :return: ``self``
         :rtype: :class:`~paya.nodetypes.dependNode.DependNode`
+    
+    .. py:method:: reorderAttrs(*attrNames, above=None, below=None)
+    
+        Reorders attributes on this node. The attributes must be dynamic
+        (not 'factory' Maya attributes like translateX), animatable (i.e. not
+        matrix, string etc) and not compounds or multis. Lock states are
+        dodged and connections are preserved.
+        
+        :param attrNames: attribute names in the preferred order
+        :type attrNames: list of str
+        :param above/ab: the name of an attribute above which to insert
+            the attributes; defaults to None
+        :type above/ab: None, str
+        :param below/bl: the name of an attribute below which to insert
+            the attributes; defaults to None
+        :return: list of :class:`~paya.plugtypes.attribute.Attribute`
+    
+    .. py:method:: getReorderableAttrs()
+    
+        :return: Attributes on this node that can be reordered.
+        :rtype: list of str
+    
+    .. py:method:: getReorderableAttrNames()
+    
+        :return: The names of attributes on this node that can be reordered
+            using :meth:`reorderAttrs` and related methods.
+        :rtype: list of str
+    
+    .. py:method:: addSectionAttr(sectionName)
+    
+        Adds a 'section' enum attribute.
+        
+        :param str sectionName: the name of the section
+        :return: The 'section' enum attribute.
+        :rtype: :class:`~paya.plugtypes.enum.Enum`
+    
+    .. py:method:: getSectionAttrs()
+    
+        :return: A list of 'section' attributes on this node.
+        :rtype: list of :class:`~paya.plugtypes.enum.Enum`
+    
+    .. py:method:: getAttrSectionMembership()
+    
+        :return: A zipped mapping of *section name: member attributes*.
+        :rtype: list of tuple

@@ -2,6 +2,108 @@
 What's New
 ##########
 
+***********
+Version 0.5
+***********
+
+Additions to paya.runtime
+=========================
+
+*   ``controlShapesLibrary`` (instance of :class:`~paya.lib.controls.ControlShapesLibrary`)
+*   :func:`~paya.lib.controls.createControl`
+
+Additions to Node Types
+=======================
+
+*   On :class:`~paya.nodetypes.dependNode.DependNode`:
+
+    :meth:`~paya.nodetypes.dependNode.DependNode.basename`
+    :attr:`~paya.nodetypes.dependNode.DependNode.attrSections`
+    :meth:`~paya.nodetypes.dependNode.DependNode.addAttr` (overload)
+    :meth:`~paya.nodetypes.dependNode.DependNode.maskAnimAttrs`
+    :meth:`~paya.nodetypes.dependNode.DependNode.reorderAttrs`
+    :meth:`~paya.nodetypes.dependNode.DependNode.getReorderableAttrs`
+    :meth:`~paya.nodetypes.dependNode.DependNode.getReorderableAttrNames`
+    :meth:`~paya.nodetypes.dependNode.DependNode.addSectionAttr`
+    :meth:`~paya.nodetypes.dependNode.DependNode.getSectionAttrs`
+    :meth:`~paya.nodetypes.dependNode.DependNode.getAttrSectionMembership`
+
+*   On :class:`~paya.nodetypes.dagNode.DagNode`:
+
+    :meth:`~paya.nodetypes.dagNode.DagNode.getWorldMatrix`
+    :meth:`~paya.nodetypes.dagNode.DagNode.getWorldPosition`
+    :meth:`~paya.nodetypes.dagNode.DagNode.basename`
+    :meth:`~paya.nodetypes.dagNode.DagNode.isControl`
+    :meth:`~paya.nodetypes.dagNode.DagNode.setPickWalkParent`
+    :meth:`~paya.nodetypes.dagNode.DagNode.getPickWalkParent`
+
+*   On :class:`~paya.nodetypes.transform.Transform`:
+    :meth:`~paya.nodetypes.transform.Transform.create`
+    :meth:`~paya.nodetypes.transform.Transform.releaseSRT`
+    :meth:`~paya.nodetypes.transform.Transform.createOffsetGroups`
+    ``controlShapes/cs`` (instance of :class:`~paya.lib.controls.ControlShapesManager`)
+    :meth:`~paya.nodetypes.transform.Transform.conformShapeNames`
+
+*   On :class:`~paya.nodetypes.locator.Locator`:
+    :meth:`~paya.nodetypes.locator.Locator.macro`
+    :meth:`~paya.nodetypes.locator.Locator.createFromMacro`
+
+*   On :class:`~paya.nodetypes.nurbsCurve.NurbsCurve`:
+    :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.macro`
+    :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.createFromMacro`
+
+Additions to Plug Types
+=======================
+
+*   On :class:`~paya.plugtypes.attribute.Attribute`:
+    :meth:`~paya.plugtypes.attribute.Attribute.lock` (overload)
+    :meth:`~paya.plugtypes.attribute.Attribute.unlock` (overload)
+    :meth:`~paya.plugtypes.attribute.Attribute.hide`
+    :meth:`~paya.plugtypes.attribute.Attribute.show`
+    :meth:`~paya.plugtypes.attribute.Attribute.disable`
+    :meth:`~paya.plugtypes.attribute.Attribute.enable`
+    :meth:`~paya.plugtypes.attribute.Attribute.sendAbove`
+    :meth:`~paya.plugtypes.attribute.Attribute.sendBelow`
+    :meth:`~paya.plugtypes.attribute.Attribute.isAnimatableDynamic`
+    :meth:`~paya.plugtypes.attribute.Attribute.release`
+
+Additions to General Classes
+============================
+
+*   On :class:`~paya.lib.controls.ControlShapesLibrary`:
+    :meth:`~paya.lib.controls.ControlShapesLibrary.load`
+    :meth:`~paya.lib.controls.ControlShapesLibrary.dump`
+    :meth:`~paya.lib.controls.ControlShapesLibrary.applyToControls`
+    :meth:`~paya.lib.controls.ControlShapesLibrary.addFromControl`
+    (plus magic methods)
+
+*   On :class:`~paya.lib.controls.ControlShapesManager`:
+    :meth:`~paya.lib.controls.ControlShapesManager.copyTo`
+    :meth:`~paya.lib.controls.ControlShapesManager.getColor`
+    :meth:`~paya.lib.controls.ControlShapesManager.setColor`
+    :meth:`~paya.lib.controls.ControlShapesManager.clearColor`
+    :meth:`~paya.lib.controls.ControlShapesManager.clear`
+    :meth:`~paya.lib.controls.ControlShapesManager.scale`
+    :meth:`~paya.lib.controls.ControlShapesManager.rotate`
+    :meth:`~paya.lib.controls.ControlShapesManager.setFromLib`
+    :meth:`~paya.lib.controls.ControlShapesManager.addToLib`
+    :meth:`~paya.lib.controls.ControlShapesManager.cycle`
+    (plus magic methods)
+
+*   On :class:`~paya.lib.attrs.Section`:
+    :meth:`~paya.lib.attrs.Section.sendAbove`
+    :meth:`~paya.lib.attrs.Section.sendBelow`
+    :meth:`~paya.lib.attrs.Section.collect`
+    (plus magic methods)
+
+*   On :class:`~paya.lib.attrs.Sections`:
+    :meth:`~paya.lib.attrs.Sections.names`
+    :meth:`~paya.lib.attrs.Sections.add`
+    :meth:`~paya.lib.attrs.Sections.clear`
+    (plus magic methods)
+
+------
+
 *************
 Version 0.4.3
 *************
@@ -10,6 +112,8 @@ Bugs Fixed
 ==========
 
 *   :meth:`paya.nodetypes.dependNode.DependNode.makeName` ignores ``name/n`` arguments
+
+-----
 
 *************
 Version 0.4.2
@@ -21,6 +125,8 @@ General Changes
 *   :meth:`paya.plugtypes.matrix.Matrix.decomposeAndApply` and :meth:`paya.datatypes.matrix.Matrix.decomposeAndApply`
     escape into simpler / faster implementations when no ``rotateAxis``, ``jointOrient``, ``inverseScale`` or pivot
     compensations are requested or required
+
+-----
 
 *************
 Version 0.4.1
@@ -39,6 +145,8 @@ Bugs Fixed
 *   :meth:`~paya.lib.skel.Chain.createFromCurve` fails with error about missing 'override' object
 *   Missing :meth:`~paya.lib.skel.Chain.createIkHandle`
 *   :meth:`~paya.lib.skel.Chain.orient` does not return ``self``
+
+-----
 
 ***********
 Version 0.4

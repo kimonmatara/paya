@@ -29,3 +29,27 @@ paya.nodetypes.dagNode.DagNode
             suffix; defaults to False
         :return: the modified name
         :rtype: str
+    
+    .. py:method:: isControl(*state)
+    
+        :param bool \*state: if ``True``, make this node a controller; if
+            ``False``, remove any controller tags; if omitted, return whether
+            this node is a controller
+        :return: bool or None
+    
+    .. py:method:: setPickWalkParent(parent)
+    
+        Sets the pick walk parent for this node. If there's no controller tag,
+        one will be added automatically.
+        
+        :param parent: the node to set as the pick walk parent; pass None
+            to unparent this node (any existing controller tag will be
+            preserved)
+        :type parent: str, :class:`~pymel.core.general.PyNode`, None
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.dagNode.DagNode`
+    
+    .. py:method:: getPickWalkParent()
+    
+        :return: The pick walk parent for this node, if any.
+        :rtype: None, :class:`~paya.nodetypes.dependNode.DependNode`

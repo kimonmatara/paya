@@ -94,6 +94,38 @@ class Attribute:
 
     #-----------------------------------------------------------------|    State management
 
+    @short(recursive='r', force='f')
+    def enable(self, recursive=False, force=False):
+        """
+        Equivalent to:
+
+        .. code-block:: python
+
+            self.show()
+            self.unlock()
+
+        See :meth:`show` and :meth:`unlock` for details.
+        """
+        self.show(r=recursive, f=force)
+        self.unlock(r=recursive, f=force)
+        return self
+
+    @short(recursive='r')
+    def disable(self, recursive=False):
+        """
+        Equivalent to:
+
+        .. code-block:: python
+
+            self.lock()
+            self.hide()
+
+        See :meth:`lock` and :meth:`hide` for details.
+        """
+        self.lock()
+        self.hide()
+        return self
+
     @short(recursive='r')
     def lock(self, recursive=False, **kwargs):
         """

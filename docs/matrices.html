@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrices &mdash; paya 0.4.3 documentation</title>
+  <title>Matrices &mdash; paya 0.5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Joint Chains" href="joint_chains.html" />
+    <link rel="next" title="Controls" href="controls.html" />
     <link rel="prev" title="Point-Matrix Multiplication" href="point_matrix_mult.html" /> 
 </head>
 
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.3
+                0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -72,6 +72,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
@@ -165,7 +166,7 @@ Basics</span></a> that at least one of the operands must be an instance of
 </div>
 </section>
 <section id="applying">
-<h2>Applying<a class="headerlink" href="#applying" title="Permalink to this headline"></a></h2>
+<span id="applying-matrices"></span><h2>Applying<a class="headerlink" href="#applying" title="Permalink to this headline"></a></h2>
 <p>The most performant way in Maya to apply a matrix to a transform node is to set, or connect, the node’s
 <code class="docutils literal notranslate"><span class="pre">offsetParentMatrix</span></code> input. This also has the advantage of leaving the SRT channels free for editing:</p>
 <div class="sphinx-tabs docutils container">
@@ -269,7 +270,7 @@ it merely returns an identity (‘null’) matrix.</p></li>
 </div>
 </section>
 <section id="creating">
-<h2>Creating<a class="headerlink" href="#creating" title="Permalink to this headline"></a></h2>
+<span id="creating-matrices"></span><h2>Creating<a class="headerlink" href="#creating" title="Permalink to this headline"></a></h2>
 <p>To create static or dynamic matrices from vectors and points, use the <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a>
 <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> function. Available on <a class="reference internal" href="paya/lib/mathops.html#module-paya.lib.mathops" title="paya.lib.mathops"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.mathops</span></code></a> as well as the top-level
 <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interface, it’s designed to use as few nodes and operations as possible.</p>
@@ -335,7 +336,7 @@ create a locator to represent the matrix:</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="point_matrix_mult.html" class="btn btn-neutral float-left" title="Point-Matrix Multiplication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="joint_chains.html" class="btn btn-neutral float-right" title="Joint Chains" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="controls.html" class="btn btn-neutral float-right" title="Controls" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

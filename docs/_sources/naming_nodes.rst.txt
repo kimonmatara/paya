@@ -10,18 +10,12 @@ Maya node names in production pipelines typically look like this: ``root_GRP``, 
 words, several descriptive **prefixes**, followed by a **type suffix**, joined with underscores. Paya methods generate
 names in this style by default.
 
-Type suffixes are loaded from ``paya/lib/suffixes.json`` on startup. These have been parsed from the four-letter 'tags'
-in Maya's `Node Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_.
+Type suffixes are defined in a dictionary loaded from ``paya/lib/suffixes.json`` on startup. The suffix for rig controls
+is mapped to a special key, ``payaControl``. The rest are mapped to node types, and largely derived from the four-
+letter 'tags' in Maya's `Node Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_.
 
 Prefixes can be specified via ``name/n`` arguments, but it's better to construct them hierarchically using the
-:class:`~paya.lib.names.Name` context manager on :mod:`paya.runtime`. This confers the following advantages:
-
--   Logical name construction
--   Cuts across function scopes, removing the need to pass names around
--   Propagates to utility nodes, making dependency graphs easier to analyse
--   Allows you to specify padding for integer name elements
-
-Here's an example:
+:class:`~paya.lib.names.Name` context manager on :mod:`paya.runtime`:
 
 .. tabs::
 
@@ -54,6 +48,13 @@ Here's an example:
         .. figure:: generated_names.png
             :align: center
 
+The :class:`~paya.lib.names.Name` context manager confers the following advantages:
+
+-   Logical name construction
+-   Cuts across function scopes, removing the need to pass names around
+-   Propagates to utility nodes, making dependency graphs easier to analyse
+-   Allows you to specify padding for integer name elements
+
 .. note::
 
     Type suffixes and the :class:`~paya.lib.names.Name` context manager are ignored by standard Maya commands:
@@ -77,17 +78,22 @@ Here's an example:
             r.createNode('joint', n=name)
             # eye_JOIN
 
+    Pass ``control=True`` to :meth:`~paya.nodetypes.dependNode.DependNode.makeName` to apply the suffix for rig
+    controls.
+
 ====================
 Modify Type Suffixes
 ====================
 
-Type suffixes are defined in a simple *node type: suffix* mapping and can be edited directly inside
-``paya/lib/suffixes.json``. Changes aren't picked up until :meth:`paya.lib.suffixes.load` is called or Maya is
-restarted. You can also edit the file indirectly like this:
+Paya type suffixes can be modified by editing ``paya/lib/suffixes.json`` directly. Changes won't be picked up until
+:meth:`paya.lib.suffixes.load` is called or Maya is restarted. You can also edit the file indirectly like this:
 
-1. Manually rename some nodes in your scene using your preferred suffixes
-2. Call :meth:`paya.lib.suffixes.learnFromScene()`
-3. Call :meth:`paya.lib.suffixes.dump`
+1.  Manually rename some nodes in your scene using your preferred suffixes.
+2.  Make sure that rig controls carry controller tags. (This will be the case by default if the controls were generated
+    using :meth:`~paya.lib.controls.createControl`.)
+
+3.  Call :meth:`paya.lib.suffixes.learnFromScene()`
+4.  Call :meth:`paya.lib.suffixes.dump`
 
 =======================
 Disable Name Management

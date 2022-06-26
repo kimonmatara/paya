@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.suffixes &mdash; paya 0.4.3 documentation</title>
+  <title>paya.lib.suffixes &mdash; paya 0.5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.3
+                0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -49,6 +49,7 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
@@ -69,6 +70,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="controls.html">paya.lib.controls</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
@@ -76,7 +79,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../override.html">paya.override</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
@@ -142,11 +144,13 @@ module.</p>
 <dt class="sig sig-object py" id="paya.lib.suffixes.getKeyFromNode">
 <span class="sig-name descname"><span class="pre">getKeyFromNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.suffixes.getKeyFromNode" title="Permalink to this definition"></a></dt>
 <dd><p>Given a Maya node, returns the appropriate key to use for suffix lookups.</p>
-<p>If the node is a (strict) transform then, if it has a shape, the shape’s
-node type will be returned. If it doesn’t have a shape, ‘transform’ will
-be returned.</p>
-<p>If the node is not a transform then, if it’s a shape, None will be
-returned. If it’s not a shape, the node’s type will be returned.</p>
+<p>If the node is a (strict) transform then:
+-   If it has a controller tag, then ‘payaControl’ is returned
+-   Otherwise, if it has a shape, the shape’s node type is returned
+-   Otherwise, ‘transform’ is returned</p>
+<p>Otherwise:
+-   If the node is a shape, None is returned
+-   Otherwise, the node’s type is returned</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>node</strong> (<em>PyNode</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the node to inspect</p>

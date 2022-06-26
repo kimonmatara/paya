@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quick Start &mdash; paya 0.4.3 documentation</title>
+  <title>Quick Start &mdash; paya 0.5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.4.3
+                0.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -55,6 +55,7 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
@@ -165,11 +166,11 @@ used as a drop-in replacement:</p>
 </pre></div>
 </div>
 <p>Using <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> in this way gives you easy access to top-level Paya-only tools such as
-<a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.lib.mathops.createMatrix()</span></code></a>; it also exposes the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">plugs</span></code>, <code class="docutils literal notranslate"><span class="pre">comps</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> <em>class pools</em>,
-which can be used to call special constructors on custom Paya classes:</p>
+<a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.createControl" title="paya.lib.controls.createControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.lib.controls.createControl()</span></code></a> and <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.lib.mathops.createMatrix()</span></code></a>; it also exposes the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>,
+<code class="docutils literal notranslate"><span class="pre">plugs</span></code>, <code class="docutils literal notranslate"><span class="pre">comps</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> <em>class pools</em>, which can be used to call special constructors on custom Paya classes:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
 
-<span class="n">joint</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span> <span class="c1"># Paya only</span>
+<span class="n">xform</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">dagPath</span><span class="o">=</span><span class="s1">&#39;|rig_XFRM|controls_XFRM&#39;</span><span class="p">)</span> <span class="c1"># Paya only</span>
 </pre></div>
 </div>
 <p>Importing <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> instead of <code class="xref py py-mod docutils literal notranslate"><span class="pre">pymel.core</span></code> also helps to signal that a code block is designed for

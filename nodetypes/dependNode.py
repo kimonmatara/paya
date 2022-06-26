@@ -88,6 +88,10 @@ class DependNode:
 
     @classmethod
     def createFromMacro(cls, macro):
+        """
+        This is the dispatcher implementation on
+        :class:`~paya.nodetypes.dependNode.DependNode`.
+        """
         if cls is r.nodes.DependNode:
             nt = macro['nodeType']
             clsname = nt[0].upper()+nt[1:]
@@ -98,6 +102,10 @@ class DependNode:
             raise NotImplementedError
 
     def macro(self):
+        """
+        This is a stub on :class:`~paya.nodetypes.dependNode.DependNode` that will
+        always raise :class:`NotImplementedError`.
+        """
         raise NotImplementedError
 
     #-----------------------------------------------------------|    Attr management
@@ -109,7 +117,7 @@ class DependNode:
     @short(edit='e', query='q', channelBox='cb')
     def addAttr(self, attrName, channelBox=None, **kwargs):
         """
-        Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to ad the
+        Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to add the
         ``channelBox/cb`` option and to return ``self``. ``None`` will be
         returned if compound children are not yet completely specified.
 
