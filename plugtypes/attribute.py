@@ -108,6 +108,11 @@ class Attribute:
         :rtype: :class:`~paya.plugtypes.attribute.Attribute`
         """
         p.Attribute.lock(self, **kwargs)
+
+        if recursive and self.isCompound():
+            for child in self.getChildren():
+                p.Attribute.lock(child, **kwargs)
+
         return self
 
     @short(recursive='r')
@@ -125,6 +130,14 @@ class Attribute:
 
         elif self.get(cb=True):
             self.set(cb=False)
+
+        if recursive and self.isCompound():
+            for child in self.getChildren():
+                if child.get(k=True):
+                    child.set(k=False)
+
+                elif child.get(cb=True):
+                    child.set(cb=False)
 
         return self
 
@@ -145,20 +158,27 @@ class Attribute:
         """
         p.Attribute.unlock(self, **kwargs)
 
-        if force:
-            if self.isChild():
-                parent = self.getParent()
+        if force and self.isChild():
+            parent = self.getParent()
+
+            if parent.isLocked():
                 parent.unlock()
+
+                for child in parent.getChildren():
+                    if child == self:
+                        continue
+
+                    else:
+                        child.lock()
+
+        elif recursive and self.isCompound():
+            for child in self.getChildren():
+                p.Attribute.unlock(child)
 
         return self
 
-    @short(
-        recursive='r',
-        keyable='k',
-        channelBox='cb',
-        force='f'
-    )
-    def show(self, recursive=False, force=False, **kwargs):
+    @short(recursive='r', keyable='k', force='f')
+    def show(self, recursive=False, force=False, keyable=True):
         """
         Unhides this attribute in the channel box.
 
@@ -166,29 +186,12 @@ class Attribute:
             as well; defaults to False
         :param bool force/f: if this is the child of a compound, edit the
             parent attribute too; defaults to False
-
-        :param bool channelBox/cb: reveal by making the attribute settable
-        :param bool keyable/k: reveal by making the attribute keyable
-            (the default)
+        :param bool keyable/k: reveal by making the attribute keyable; if this
+            is False, the attribute will be made settable instead; defaults
+            to True
         :return: ``self``
         :rtype: :class:`~paya.plugtypes.attribute.Attribute`
         """
-        keyable = channelBox = None
-        keyable = kwargs.get('keyable')
-
-        if keyable is not None:
-            channelBox = not keyable
-
-        if channelBox is None:
-            channelBox = kwargs.get('channelBox')
-
-        if channelBox is not None:
-            keyable = not channelBox
-
-        if keyable is None and channelBox is None:
-            keyable = True
-            channelBox = False
-
         if keyable:
             self.set(k=True)
 
@@ -196,16 +199,21 @@ class Attribute:
             self.set(k=False)
             self.set(cb=True)
 
-        if force:
-            if self.isChild():
-                parent = self.getParent()
+        if recursive and self.isCompound():
+            for child in self.getChildren():
+                child.show(k=keyable)
 
-                if keyable:
-                    parent.set(k=True)
+        elif force and self.isChild():
+            parent = self.getParent()
 
-                else:
-                    parent.set(k=False)
-                    parent.set(cb=True)
+            if not(parent.get(k=True) or parent.get(cb=True)):
+                parent.show(k=keyable)
+
+                for child in parent.getChildren():
+                    if child == self:
+                        continue
+
+                    child.hide()
 
         return self
 
@@ -214,14 +222,27 @@ class Attribute:
         """
         Unlocks this attribute and disconnects any inputs.
 
-        :param bool force/f: if this is the child of a compound, unlock
+        :param bool force/f: if this is the child of a compound, release
             the parent too; defaults to False
-        :param bool recursive/r: if this is a compound, release child attributes
-            too; defaults to False
+        :param bool recursive/r: if this is a compound, release child
+            attributes too; defaults to False
         :return:
         """
-        self.unlock(f=force)
+        self.unlock(f=force, r=recursive)
         self.disconnect(inputs=True)
+
+        if force and self.isChild():
+            parent = self.getParent()
+
+            if parent.inputs():
+                parent.release()
+
+        elif recursive and self.isCompound():
+            for child in self.getChildren():
+                if child == self:
+                    continue
+
+                child.disconnect(inputs=True)
 
         return self
 
