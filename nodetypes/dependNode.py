@@ -203,7 +203,7 @@ class DependNode:
 
         for name in channelBox:
             attr = self.attr(name)
-            attr.show(cb=True, r=True, f=True)
+            attr.show(r=True, f=True, k=False)
             attr.unlock(r=True, f=True)
 
         return self
