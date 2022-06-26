@@ -696,7 +696,8 @@ class ControlShapesManager(AccessorOnNode):
     channelBox='cb',
     rotateOrder='ro',
     asControl='ac',
-    offsetGroups='og'
+    offsetGroups='og',
+    pickWalkParent='pwp'
 )
 def createControl(
         name=None,
@@ -709,7 +710,8 @@ def createControl(
         channelBox=None,
         rotateOrder='xyz',
         asControl=True,
-        offsetGroups='offset'
+        offsetGroups='offset',
+        pickWalkParent=None
 ):
     """
     Creates rig controls. Remember to pass some attribute names via
@@ -742,6 +744,10 @@ def createControl(
     :param offsetGroups: the suffixes of one or more offset groups to create;
         defaults to 'offset'
     :type offsetGroups: list, str
+    :param pickWalkParent/pwp: an optional pick-walk parent for this control;
+        ignored if *asControl* is False; defaults to None
+    :type pickWalkParent/pwp: str,
+        :class:`~paya.nodetypes.dependNode.DependNode`
     :return: The generated control.
     :rtype: :class:`~paya.nodetypes.transform.Transform`
     """
@@ -787,5 +793,8 @@ def createControl(
 
         if color is not None:
             ct.controlShape.setColor(color)
+
+        if pickWalkParent:
+            ct.setPickWalkParent(pickWalkParent)
 
     return ct
