@@ -475,7 +475,7 @@ class DataClassPool(ClassPool):
     :py:meth:`~pymel.core.nodetypes.Transform.getMatrix`.
     """
 
-    __unsupported_lookups__ = ['MatrixN', 'Array']
+    __unsupported_lookups__ = ['VectorN', 'MatrixN', 'Array']
 
     __singular__ = __plural__ = 'data'
     __pm_mod__ = _dt
