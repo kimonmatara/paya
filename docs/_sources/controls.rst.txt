@@ -254,7 +254,8 @@ which contains sub-methods for bulk manipulation of locator and curve shapes. Fo
 Applying and Capturing Library Shapes
 -------------------------------------
 
-To apply a library shape to a control, use :class:`~paya.lib.controls.ControlShapesManager.setFromLib`:
+To apply a library shape to a control, use :meth:`~paya.lib.controls.ControlShapesManager.setFromLib` on
+``controlShapes``/``cs``:
 
 .. code-block:: python
 
@@ -267,15 +268,15 @@ To apply a library shape to a control, use :class:`~paya.lib.controls.ControlSha
 
     *   If you're applying the same library shape to several controls at once, passing those controls to the
         :meth:`~paya.lib.controls.ControlShapesLibrary.applyToControls` method on ``paya.runtime.controlShapesLibrary``
-        will execute faster than calling :class:`~paya.lib.controls.ControlShapesManager.setFromLib` on each control.
+        will execute faster than calling :meth:`~paya.lib.controls.ControlShapesManager.setFromLib` on each control.
 
         See :class:`~paya.lib.controls.ControlShapesLibrary` for a full reference of methods on the library object.
 
-Call :class:`~paya.lib.controls.ControlShapesManager.cycle` on ``.controlShapes`` repeatedly to preview different
+Call :meth:`~paya.lib.controls.ControlShapesManager.cycle` on ``.controlShapes`` repeatedly to preview different
 library shapes. (Recall that you can get a list of available library shapes by calling
 :meth:`~paya.lib.controls.ControlShapesLibrary.keys` on ``paya.runtime.controlShapesLibrary``.)
 
-To capture a control's shape(s) a library entry, use :class:`~paya.lib.controls.ControlShapesManager.addToLib` instead:
+To capture a control's shape(s) a library entry, use :meth:`~paya.lib.controls.ControlShapesManager.addToLib` instead:
 
 .. code-block:: python
 
@@ -284,15 +285,15 @@ To capture a control's shape(s) a library entry, use :class:`~paya.lib.controls.
 Transforming Shapes
 -------------------
 
-Control shapes can be rotated and scaled using :class:`~paya.lib.controls.ControlShapesManager.rotate` and
-:class:`~paya.lib.controls.ControlShapesManager.scale`, respectively. Where the shape is a curve, its control points are
+Control shapes can be rotated and scaled using :meth:`~paya.lib.controls.ControlShapesManager.rotate` and
+:meth:`~paya.lib.controls.ControlShapesManager.scale`, respectively. Where the shape is a curve, its control points are
 moved. On locators the ``localPosition`` and ``localScale`` attributes are edited instead.
 
 Setting Control Colors
 ----------------------
 
-Control colors can be retrieved and set by-index using :class:`~paya.lib.controls.ControlShapesManager.getColor` and
-:class:`~paya.lib.controls.ControlShapesManager.setColor` respectively:
+Control colors can be retrieved and set by-index using :meth:`~paya.lib.controls.ControlShapesManager.getColor` and
+:meth:`~paya.lib.controls.ControlShapesManager.setColor` respectively:
 
 .. code-block:: python
 
@@ -302,7 +303,7 @@ Control colors can be retrieved and set by-index using :class:`~paya.lib.control
     control.cs.setColor(6)
 
 Paya modifies control colors via via synced edits to ``overrideColor`` across the control's shapes. To remove all
-display overrides, use :class:`~paya.lib.controls.ControlShapesManager.clearColor`.
+display overrides, use :meth:`~paya.lib.controls.ControlShapesManager.clearColor`.
 
 Copying Shapes and Colors
 -------------------------
@@ -417,11 +418,11 @@ arguments on :func:`~paya.lib.controls.createControl`, but works with any animat
             :align: center
 
 Several lower-level methods on Paya's base :class:`~paya.plugtypes.attribute.Attribute` class are also of interest:
-:class:`~paya.plugtypes.attribute.Attribute.lock` (with added ``recursive`` option),
-:class:`~paya.plugtypes.attribute.Attribute.unlock` (with added ``recursive`` and ``force`` options),
-:class:`~paya.plugtypes.attribute.Attribute.show`,
-:class:`~paya.plugtypes.attribute.Attribute.hide`,
-:class:`~paya.plugtypes.attribute.Attribute.enable` and :class:`~paya.plugtypes.attribute.Attribute.disable`.
+:meth:`~paya.plugtypes.attribute.Attribute.lock` (with added ``recursive`` option),
+:meth:`~paya.plugtypes.attribute.Attribute.unlock` (with added ``recursive`` and ``force`` options),
+:meth:`~paya.plugtypes.attribute.Attribute.show`,
+:meth:`~paya.plugtypes.attribute.Attribute.hide`,
+:meth:`~paya.plugtypes.attribute.Attribute.enable` and :meth:`~paya.plugtypes.attribute.Attribute.disable`.
 
 Reordering Attributes
 ---------------------

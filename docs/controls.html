@@ -326,7 +326,8 @@ which contains sub-methods for bulk manipulation of locator and curve shapes. Fo
 </section>
 <section id="applying-and-capturing-library-shapes">
 <h3>Applying and Capturing Library Shapes<a class="headerlink" href="#applying-and-capturing-library-shapes" title="Permalink to this headline"></a></h3>
-<p>To apply a library shape to a control, use <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.setFromLib" title="paya.lib.controls.ControlShapesManager.setFromLib"><code class="xref py py-class docutils literal notranslate"><span class="pre">setFromLib</span></code></a>:</p>
+<p>To apply a library shape to a control, use <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.setFromLib" title="paya.lib.controls.ControlShapesManager.setFromLib"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setFromLib()</span></code></a> on
+<code class="docutils literal notranslate"><span class="pre">controlShapes</span></code>/<code class="docutils literal notranslate"><span class="pre">cs</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">control</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;L_eye_CTRL&#39;</span><span class="p">)</span>
 <span class="n">control</span><span class="o">.</span><span class="n">controlShapes</span><span class="o">.</span><span class="n">setFromLib</span><span class="p">(</span><span class="s1">&#39;sphere&#39;</span><span class="p">)</span>
 <span class="c1"># Shorthand:</span>
@@ -338,29 +339,29 @@ which contains sub-methods for bulk manipulation of locator and curve shapes. Fo
 <ul>
 <li><p>If you’re applying the same library shape to several controls at once, passing those controls to the
 <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesLibrary.applyToControls" title="paya.lib.controls.ControlShapesLibrary.applyToControls"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyToControls()</span></code></a> method on <code class="docutils literal notranslate"><span class="pre">paya.runtime.controlShapesLibrary</span></code>
-will execute faster than calling <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.setFromLib" title="paya.lib.controls.ControlShapesManager.setFromLib"><code class="xref py py-class docutils literal notranslate"><span class="pre">setFromLib</span></code></a> on each control.</p>
+will execute faster than calling <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.setFromLib" title="paya.lib.controls.ControlShapesManager.setFromLib"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setFromLib()</span></code></a> on each control.</p>
 <p>See <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesLibrary" title="paya.lib.controls.ControlShapesLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlShapesLibrary</span></code></a> for a full reference of methods on the library object.</p>
 </li>
 </ul>
 </div>
-<p>Call <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.cycle" title="paya.lib.controls.ControlShapesManager.cycle"><code class="xref py py-class docutils literal notranslate"><span class="pre">cycle</span></code></a> on <code class="docutils literal notranslate"><span class="pre">.controlShapes</span></code> repeatedly to preview different
+<p>Call <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.cycle" title="paya.lib.controls.ControlShapesManager.cycle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cycle()</span></code></a> on <code class="docutils literal notranslate"><span class="pre">.controlShapes</span></code> repeatedly to preview different
 library shapes. (Recall that you can get a list of available library shapes by calling
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">keys()</span></code> on <code class="docutils literal notranslate"><span class="pre">paya.runtime.controlShapesLibrary</span></code>.)</p>
-<p>To capture a control’s shape(s) a library entry, use <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.addToLib" title="paya.lib.controls.ControlShapesManager.addToLib"><code class="xref py py-class docutils literal notranslate"><span class="pre">addToLib</span></code></a> instead:</p>
+<p>To capture a control’s shape(s) a library entry, use <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.addToLib" title="paya.lib.controls.ControlShapesManager.addToLib"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addToLib()</span></code></a> instead:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">control</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">addToLib</span><span class="p">(</span><span class="s1">&#39;my_shape_name&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="transforming-shapes">
 <h3>Transforming Shapes<a class="headerlink" href="#transforming-shapes" title="Permalink to this headline"></a></h3>
-<p>Control shapes can be rotated and scaled using <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.rotate" title="paya.lib.controls.ControlShapesManager.rotate"><code class="xref py py-class docutils literal notranslate"><span class="pre">rotate</span></code></a> and
-<a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.scale" title="paya.lib.controls.ControlShapesManager.scale"><code class="xref py py-class docutils literal notranslate"><span class="pre">scale</span></code></a>, respectively. Where the shape is a curve, its control points are
+<p>Control shapes can be rotated and scaled using <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.rotate" title="paya.lib.controls.ControlShapesManager.rotate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rotate()</span></code></a> and
+<a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.scale" title="paya.lib.controls.ControlShapesManager.scale"><code class="xref py py-meth docutils literal notranslate"><span class="pre">scale()</span></code></a>, respectively. Where the shape is a curve, its control points are
 moved. On locators the <code class="docutils literal notranslate"><span class="pre">localPosition</span></code> and <code class="docutils literal notranslate"><span class="pre">localScale</span></code> attributes are edited instead.</p>
 </section>
 <section id="setting-control-colors">
 <h3>Setting Control Colors<a class="headerlink" href="#setting-control-colors" title="Permalink to this headline"></a></h3>
-<p>Control colors can be retrieved and set by-index using <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.getColor" title="paya.lib.controls.ControlShapesManager.getColor"><code class="xref py py-class docutils literal notranslate"><span class="pre">getColor</span></code></a> and
-<a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.setColor" title="paya.lib.controls.ControlShapesManager.setColor"><code class="xref py py-class docutils literal notranslate"><span class="pre">setColor</span></code></a> respectively:</p>
+<p>Control colors can be retrieved and set by-index using <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.getColor" title="paya.lib.controls.ControlShapesManager.getColor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getColor()</span></code></a> and
+<a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.setColor" title="paya.lib.controls.ControlShapesManager.setColor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setColor()</span></code></a> respectively:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">control</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">getColor</span><span class="p">())</span>
 <span class="c1"># 16</span>
 
@@ -368,7 +369,7 @@ moved. On locators the <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 <p>Paya modifies control colors via via synced edits to <code class="docutils literal notranslate"><span class="pre">overrideColor</span></code> across the control’s shapes. To remove all
-display overrides, use <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.clearColor" title="paya.lib.controls.ControlShapesManager.clearColor"><code class="xref py py-class docutils literal notranslate"><span class="pre">clearColor</span></code></a>.</p>
+display overrides, use <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.ControlShapesManager.clearColor" title="paya.lib.controls.ControlShapesManager.clearColor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clearColor()</span></code></a>.</p>
 </section>
 <section id="copying-shapes-and-colors">
 <h3>Copying Shapes and Colors<a class="headerlink" href="#copying-shapes-and-colors" title="Permalink to this headline"></a></h3>
@@ -452,11 +453,11 @@ arguments on <a class="reference internal" href="paya/lib/controls.html#paya.lib
 </figure>
 </div></div>
 <p>Several lower-level methods on Paya’s base <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> class are also of interest:
-<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.lock" title="paya.plugtypes.attribute.Attribute.lock"><code class="xref py py-class docutils literal notranslate"><span class="pre">lock</span></code></a> (with added <code class="docutils literal notranslate"><span class="pre">recursive</span></code> option),
-<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.unlock" title="paya.plugtypes.attribute.Attribute.unlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">unlock</span></code></a> (with added <code class="docutils literal notranslate"><span class="pre">recursive</span></code> and <code class="docutils literal notranslate"><span class="pre">force</span></code> options),
-<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.show" title="paya.plugtypes.attribute.Attribute.show"><code class="xref py py-class docutils literal notranslate"><span class="pre">show</span></code></a>,
-<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.hide" title="paya.plugtypes.attribute.Attribute.hide"><code class="xref py py-class docutils literal notranslate"><span class="pre">hide</span></code></a>,
-<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.enable" title="paya.plugtypes.attribute.Attribute.enable"><code class="xref py py-class docutils literal notranslate"><span class="pre">enable</span></code></a> and <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.disable" title="paya.plugtypes.attribute.Attribute.disable"><code class="xref py py-class docutils literal notranslate"><span class="pre">disable</span></code></a>.</p>
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.lock" title="paya.plugtypes.attribute.Attribute.lock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lock()</span></code></a> (with added <code class="docutils literal notranslate"><span class="pre">recursive</span></code> option),
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.unlock" title="paya.plugtypes.attribute.Attribute.unlock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unlock()</span></code></a> (with added <code class="docutils literal notranslate"><span class="pre">recursive</span></code> and <code class="docutils literal notranslate"><span class="pre">force</span></code> options),
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.show" title="paya.plugtypes.attribute.Attribute.show"><code class="xref py py-meth docutils literal notranslate"><span class="pre">show()</span></code></a>,
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.hide" title="paya.plugtypes.attribute.Attribute.hide"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hide()</span></code></a>,
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.enable" title="paya.plugtypes.attribute.Attribute.enable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">enable()</span></code></a> and <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.disable" title="paya.plugtypes.attribute.Attribute.disable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disable()</span></code></a>.</p>
 </section>
 <section id="reordering-attributes">
 <h3>Reordering Attributes<a class="headerlink" href="#reordering-attributes" title="Permalink to this headline"></a></h3>
