@@ -393,7 +393,7 @@ Enabling / Disabling Attributes
 -------------------------------
 
 To quickly specify which attributes on a control should be available for setting or keying, use
-:class:`~paya.nodetypes.dependNode.DependNode.maskAnimAttrs`. This is similar to the ``keyable`` and ``channelBox``
+:meth:`~paya.nodetypes.dependNode.DependNode.maskAnimAttrs`. This is similar to the ``keyable`` and ``channelBox``
 arguments on :func:`~paya.lib.controls.createControl`, but works with any animatable attribute:
 
 .. tabs::
@@ -428,7 +428,7 @@ Reordering Attributes
 
 Paya can reorder Channel Box attributes which are user-defined (i.e. not 'factory' attributes like ``translateX``),
 animatable (i.e. not string, matrix etc.) and non-compound. To reorder attributes using an explicit list, call
-:class:`~paya.nodetypes.dependNode.DependNode.reorderAttrs` on any node instance:
+:meth:`~paya.nodetypes.dependNode.DependNode.reorderAttrs` on any node instance:
 
 .. tabs::
 
@@ -456,8 +456,8 @@ animatable (i.e. not string, matrix etc.) and non-compound. To reorder attribute
         .. figure:: after_reorder.png
             :align: center
 
-To nudge individual attributes, call :class:`~paya.plugtypes.attribute.Attribute.sendAbove` or
-:class:`~paya.plugtypes.attribute.Attribute.sendBelow` on the attributes themselves. Namesake methods are also available
+To nudge individual attributes, call :meth:`~paya.plugtypes.attribute.Attribute.sendAbove` or
+:meth:`~paya.plugtypes.attribute.Attribute.sendBelow` on the attributes themselves. Namesake methods are also available
 on :class:`~paya.lib.attrs.Section` objects to move entire attribute groups:
 
 .. tabs::
