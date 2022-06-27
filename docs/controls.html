@@ -51,15 +51,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Controls</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#drawing-controls">Drawing Controls</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#drawing">Drawing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-controls">Connecting Controls</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#editing-offset-groups">Editing Offset Groups</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#editing-controller-tags-and-pick-walk-hierarchies">Editing Controller Tags and Pick-Walk Hierarchies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#editing-control-shapes-and-colors">Editing Control Shapes and Colors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#connecting">Connecting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#offset-groups">Offset Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#controller-tags-and-pick-walk-hierarchies">Controller Tags and Pick-Walk Hierarchies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shapes-and-colors">Shapes and Colors</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#the-control-shapes-manager">The Control Shapes Manager</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#applying-and-capturing-library-shapes">Applying and Capturing Library Shapes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#transforming-shapes">Transforming Shapes</a></li>
@@ -67,7 +67,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#copying-shapes-and-colors">Copying Shapes and Colors</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#editing-user-attributes">Editing User Attributes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-attributes">User Attributes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#grouping-attributes-under-sections">Grouping Attributes Under Sections</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enabling-disabling-attributes">Enabling / Disabling Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#reordering-attributes">Reordering Attributes</a></li>
@@ -120,8 +120,8 @@
              
   <section id="controls">
 <h1>Controls<a class="headerlink" href="#controls" title="Permalink to this headline"></a></h1>
-<section id="drawing-controls">
-<h2>Drawing Controls<a class="headerlink" href="#drawing-controls" title="Permalink to this headline"></a></h2>
+<section id="drawing">
+<h2>Drawing<a class="headerlink" href="#drawing" title="Permalink to this headline"></a></h2>
 <p>Paya’s top-level <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.createControl" title="paya.lib.controls.createControl"><code class="xref py py-func docutils literal notranslate"><span class="pre">createControl()</span></code></a> function can be used to draw rig controls with offset groups,
 controller tags and other pipeline-standard features. Here’s a rundown of its arguments:</p>
 <section id="arguments">
@@ -235,8 +235,8 @@ along the foot of a leg chain:</p>
 </div></div>
 </section>
 </section>
-<section id="connecting-controls">
-<h2>Connecting Controls<a class="headerlink" href="#connecting-controls" title="Permalink to this headline"></a></h2>
+<section id="connecting">
+<h2>Connecting<a class="headerlink" href="#connecting" title="Permalink to this headline"></a></h2>
 <p>Controls created using <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.createControl" title="paya.lib.controls.createControl"><code class="xref py py-func docutils literal notranslate"><span class="pre">createControl()</span></code></a> can be used to drive other transforms using constraints,
 direct connections or whichever other method suits you. In the following example, Paya <a class="reference internal" href="matrices.html"><span class="doc">matrix cooking</span></a>
 is used to transform joints in local space even if the initial joint and control orientations don’t match, and even when
@@ -263,8 +263,8 @@ the control group is moved elsewhere (a common approach for face rigging):</p>
 </figure>
 </div></div>
 </section>
-<section id="editing-offset-groups">
-<h2>Editing Offset Groups<a class="headerlink" href="#editing-offset-groups" title="Permalink to this headline"></a></h2>
+<section id="offset-groups">
+<h2>Offset Groups<a class="headerlink" href="#offset-groups" title="Permalink to this headline"></a></h2>
 <p>Aside from via <code class="docutils literal notranslate"><span class="pre">pickWalkParent</span></code> on <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.createControl" title="paya.lib.controls.createControl"><code class="xref py py-func docutils literal notranslate"><span class="pre">createControl()</span></code></a>, you can insert offset groups using
 <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform.createOffsetGroups" title="paya.nodetypes.transform.Transform.createOffsetGroups"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createOffsetGroups()</span></code></a> on <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>:</p>
 <div class="sphinx-tabs docutils container">
@@ -284,8 +284,8 @@ the control group is moved elsewhere (a common approach for face rigging):</p>
 <p>Offset group names are always constructed by appending suffixes to the main control name. <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a>
 blocks are ignored.</p>
 </section>
-<section id="editing-controller-tags-and-pick-walk-hierarchies">
-<h2>Editing Controller Tags and Pick-Walk Hierarchies<a class="headerlink" href="#editing-controller-tags-and-pick-walk-hierarchies" title="Permalink to this headline"></a></h2>
+<section id="controller-tags-and-pick-walk-hierarchies">
+<h2>Controller Tags and Pick-Walk Hierarchies<a class="headerlink" href="#controller-tags-and-pick-walk-hierarchies" title="Permalink to this headline"></a></h2>
 <p>Controls generated with <a class="reference internal" href="paya/lib/controls.html#paya.lib.controls.createControl" title="paya.lib.controls.createControl"><code class="xref py py-func docutils literal notranslate"><span class="pre">createControl()</span></code></a> carry
 <a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=GUID-17AF3B37-8A57-46DD-8808-D4BFF23AD285">controller tags</a> by
 default. To add or remove controller tags yourself, use <a class="reference internal" href="paya/nodetypes/dagNode.html#paya.nodetypes.dagNode.DagNode.isControl" title="paya.nodetypes.dagNode.DagNode.isControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">isControl()</span></code></a> on any DAG
@@ -316,8 +316,8 @@ using <a class="reference internal" href="paya/nodetypes/dagNode.html#paya.nodet
 </figure>
 </div></div>
 </section>
-<section id="editing-control-shapes-and-colors">
-<h2>Editing Control Shapes and Colors<a class="headerlink" href="#editing-control-shapes-and-colors" title="Permalink to this headline"></a></h2>
+<section id="shapes-and-colors">
+<h2>Shapes and Colors<a class="headerlink" href="#shapes-and-colors" title="Permalink to this headline"></a></h2>
 <section id="the-control-shapes-manager">
 <h3>The Control Shapes Manager<a class="headerlink" href="#the-control-shapes-manager" title="Permalink to this headline"></a></h3>
 <p>Every instance of <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a> in Paya carries a <code class="docutils literal notranslate"><span class="pre">controlShapes</span></code> / <code class="docutils literal notranslate"><span class="pre">cs</span></code> attribute
@@ -411,8 +411,8 @@ control shapes and colors in a variety of ways.</p>
 </div></div>
 </section>
 </section>
-<section id="editing-user-attributes">
-<h2>Editing User Attributes<a class="headerlink" href="#editing-user-attributes" title="Permalink to this headline"></a></h2>
+<section id="user-attributes">
+<h2>User Attributes<a class="headerlink" href="#user-attributes" title="Permalink to this headline"></a></h2>
 <section id="grouping-attributes-under-sections">
 <h3>Grouping Attributes Under Sections<a class="headerlink" href="#grouping-attributes-under-sections" title="Permalink to this headline"></a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">attrSections</span></code> interface on any node instance to organise Channel Box attributes into groups (see

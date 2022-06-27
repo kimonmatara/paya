@@ -2,9 +2,9 @@
 Controls
 ********
 
-================
-Drawing Controls
-================
+=======
+Drawing
+=======
 
 Paya's top-level :func:`~paya.lib.controls.createControl` function can be used to draw rig controls with offset groups,
 controller tags and other pipeline-standard features. Here's a rundown of its arguments:
@@ -130,9 +130,9 @@ along the foot of a leg chain:
         .. figure:: ctrl_hierarchy.png
             :align: center
 
-===================
-Connecting Controls
-===================
+==========
+Connecting
+==========
 
 Controls created using :func:`~paya.lib.controls.createControl` can be used to drive other transforms using constraints,
 direct connections or whichever other method suits you. In the following example, Paya :doc:`matrix cooking <matrices>`
@@ -166,9 +166,9 @@ the control group is moved elsewhere (a common approach for face rigging):
         .. figure:: face_rig_mockup.gif
             :align: center
 
-=====================
-Editing Offset Groups
-=====================
+=============
+Offset Groups
+=============
 
 Aside from via ``pickWalkParent`` on :func:`~paya.lib.controls.createControl`, you can insert offset groups using
 :meth:`~paya.nodetypes.transform.Transform.createOffsetGroups` on :class:`~paya.nodetypes.transform.Transform`:
@@ -197,9 +197,9 @@ Aside from via ``pickWalkParent`` on :func:`~paya.lib.controls.createControl`, y
 Offset group names are always constructed by appending suffixes to the main control name. :class:`~paya.lib.names.Name`
 blocks are ignored.
 
-=================================================
-Editing Controller Tags and Pick-Walk Hierarchies
-=================================================
+=========================================
+Controller Tags and Pick-Walk Hierarchies
+=========================================
 
 Controls generated with :func:`~paya.lib.controls.createControl` carry
 `controller tags <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=GUID-17AF3B37-8A57-46DD-8808-D4BFF23AD285>`_ by
@@ -240,9 +240,9 @@ using :meth:`~paya.nodetypes.dagNode.DagNode.getPickWalkParent` and
         .. figure:: pickwalk_after.gif
             :align: center
 
-=================================
-Editing Control Shapes and Colors
-=================================
+=================
+Shapes and Colors
+=================
 
 The Control Shapes Manager
 --------------------------
@@ -356,9 +356,9 @@ Here's an example of interactive copying with world-space mirroring:
         .. figure:: world_space_mirroring.gif
             :align: center
 
-=======================
-Editing User Attributes
-=======================
+===============
+User Attributes
+===============
 
 Grouping Attributes Under Sections
 ----------------------------------
