@@ -1,0 +1,35 @@
+===================
+Connecting Controls
+===================
+
+Controls created using :meth:`~paya.nodetypes.transform.Transform.createControl` can be used to drive other transforms
+using constraints, direct connections or whichever other method suits you. In the following example, Paya
+:doc:`matrix cooking <matrices>` is used to transform joints in local space even if the initial joint and control
+orientations don't match, and even when the control group is moved elsewhere (a common approach for face rigging):
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            for side in 'LR':
+                controls = r.ls('{}_mouth_??_CTRL'.format(side))
+                joints = r.ls('{}_mouth_??_JOIN'.format(side))
+
+                for control, joint in zip(controls, joints):
+                    # Get the control matrix, 'globalised' only once
+                    matrix = control.attr('matrix') * control.attr('parentMatrix')[0].get()
+
+                    # Re-express as an offset from the joint's current matrix
+                    matrix = joint.getMatrix() * matrix.asOffset()
+
+                    # Connect to offset parent matrix, and reset the joint's SRT channels
+                    matrix >> joint.attr('offsetParentMatrix')
+                    joint.setMatrix(r.data.Matrix())
+
+
+    .. tab:: Viewport
+
+        .. figure:: face_rig_mockup.gif
+            :align: center

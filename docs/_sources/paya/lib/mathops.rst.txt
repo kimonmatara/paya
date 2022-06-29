@@ -225,3 +225,12 @@ plug workflows.
         defaults to 1e-7
     :return: A list of matrices
     :rtype: :class:`list` of :class:`~paya.datatypes.matrix.Matrix`
+
+.. py:function:: pointsIntoUnitCube(points)
+
+    Normalizes points so that they fit inside a unit cube.
+    
+    :param points: the points to normalize
+    :type points: list
+    :return: The normalized points.
+    :rtype: list of :class:`~paya.datatypes.point.Point`

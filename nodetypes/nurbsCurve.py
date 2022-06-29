@@ -70,15 +70,17 @@ class NurbsCurve:
 
     #-----------------------------------------------------|    Macro
 
-    def macro(self):
+    @short(normalize='nr')
+    def macro(self, normalize=False):
         """
+        :param bool normalize/nr: normalize curve points (used by the shapes
+            library); defaults to False
         :return: A simplified dictionary representation of this curve shape
             that can be used to reconstruct it. Point information will be in
             local (object) space. Name is ignored.
-
         :rtype: dict
         """
-        return {
+        macro = {
             'nodeType': 'nurbsCurve',
             'knot': self.getKnots(),
             'degree': self.degree(),
@@ -86,6 +88,13 @@ class NurbsCurve:
             'point': list(map(list, self.getCVs())),
             'knotDomain': self.getKnotDomain()
         }
+
+        if normalize:
+            points = _mo.pointsIntoUnitCube(macro['point'])
+            points = list(map(list, points))
+            macro['point'] = points
+
+        return macro
 
     #-----------------------------------------------------|    Sampling
 

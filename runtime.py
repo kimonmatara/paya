@@ -65,6 +65,10 @@ class Runtime:
         """
         self._pt.unpatchPyMEL()
 
+    @property
+    def createControl(self):
+        return self.nodes.Transform.createControl
+
     def __getattr__(self, item):
         return getattr(self.cmds, item)
 

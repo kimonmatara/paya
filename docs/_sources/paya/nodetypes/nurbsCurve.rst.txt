@@ -23,12 +23,13 @@ paya.nodetypes.nurbsCurve.NurbsCurve
         :return: The curve.
         :rtype: :class:`~paya.nodetypes.nurbsCurve.NurbsCurve`
     
-    .. py:method:: macro()
+    .. py:method:: macro(normalize=False)
     
+        :param bool normalize/nr: normalize curve points (used by the shapes
+            library); defaults to False
         :return: A simplified dictionary representation of this curve shape
             that can be used to reconstruct it. Point information will be in
             local (object) space. Name is ignored.
-        
         :rtype: dict
     
     .. py:method:: takeClosestPoint(refPoint)

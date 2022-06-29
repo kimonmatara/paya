@@ -34,6 +34,43 @@ paya.nodetypes.transform.Transform
         :return: The transform.
         :rtype: :class:`~paya.nodetypes.transform.Transform`
     
+    .. py:classmethod:: createControl(name=None, under=None, shape='cube', size=1.0, color=None, worldMatrix=None, keyable=None, channelBox=None, rotateOrder='xyz', asControl=True, offsetGroups='offset', pickWalkParent=None)
+    
+        Creates rig controls. Also available directly on :mod:`paya.runtime`.
+        
+        :param name/n: one or more name elements
+        :type name/n: None, str, int, list
+        :param under/u: an optional parent for the control; defaults to None
+        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :param str shape/sh: the name of a library shape to apply to the control;
+            defaults to 'cube'
+        :param color/col: an optional override color index for the control;
+            defaults to None
+        :type color/col: int, None
+        :param float size: a uniform scaling factor for the control shape;
+            defaults to 1.0
+        :param worldMatrix/wm: the world matrix for the control; if this is
+            omitted then, if ``under`` is provided, the matrix is copied from the
+            destination parent; otherwise, it defaults to the identity matrix
+        :type worldMatrix/wm: list, :class:`~paya.datatypes.matrix.Matrix`, None
+        :param list keyable/k: a list of channels to set to keyable on the
+            control
+        :param list channelBox/cb: a list of channels to set to settable on the
+            control
+        :param rotateOrder/ro: the control's rotate order; defaults to 'xyz'
+        :type rotateOrder/ro: str, int
+        :param bool asControl/ac: if this is ``False``, create the control as a
+            group with no shapes and omit the controller tag; defaults to True
+        :param offsetGroups: the suffixes of one or more offset groups to create;
+            defaults to 'offset'
+        :type offsetGroups: list, str
+        :param pickWalkParent/pwp: an optional pick-walk parent for this control;
+            ignored if *asControl* is False; defaults to None
+        :type pickWalkParent/pwp: str,
+            :class:`~paya.nodetypes.dependNode.DependNode`
+        :return: The generated control.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+    
     .. py:method:: releaseSRT()
     
         Unlocks and disconnects every SRT channel, recursively.
@@ -91,5 +128,103 @@ paya.nodetypes.transform.Transform
         them is needed to enforce logical numbering amongst the non-
         intermediate ones.
         
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+    
+    .. py:method:: getCtShapes()
+    
+        :return: Non-intermediate curve and locator shapes under this transform.
+        :rtype: [:class:`~paya.nodetypes.nurbsCurve.NurbsCurve` or
+            :class:`~paya.nodetypes.locator.Locator`]
+    
+    .. py:method:: rotateCtShapes(rotation)
+    
+        Rotates control shapes in local space. Locator shapes won't be rotated,
+        but their ``localPosition`` will. Note that rotation is expected in
+        degrees.
+        
+        :param rotation: an iterable of three rotation values, in degrees
+        :type rotation: list, tuple, :class:`~pymel.core.datatypes.Array`
+        :return: ``self``
+    
+    .. py:method:: scaleCtShapes(scale)
+    
+        Scales control shapes in local space.
+        
+        :param scale: an iterable of three scale values
+        :type scale: list, tuple, :class:`~pymel.core.datatypes.Array`
+        :return: ``self``
+    
+    .. py:method:: setCtShapesFromLib(libKey)
+    
+        Sets control shapes to the named library entry.
+        
+        :param str name: the name of the library entry, e.g. 'cube'
+        :return: The newly-generated control shapes.
+        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+    
+    .. py:method:: cycleCtShapes(backward=False)
+    
+        Steps through the library alphabetically and applies a different shape
+        on each invocation. Useful for trying out different shapes quickly.
+        
+        :param bool backward/back: cycle backwards instead of forwards;
+            defaults to False
+        :return: The newly-generated control shapes.
+        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+    
+    .. py:method:: clearCtShapes()
+    
+        Removes all non-intermediate curve or locator shapes under this
+        transform.
+        
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+    
+    .. py:method:: colorCtShapes(*colorIndex, clearOverrides=True)
+    
+        :param \*colorIndex: if a color index is provided, it is used to set
+            the override color on all control shapes; if ``None`` is passed,
+            override colors are reset; if the argument is omitted, the first-
+            encountered override color index is returned
+        :type \*colorIndex: int or None
+        :param bool clearOverrides/co: used only if *colorIndex* was set to
+            ``None``; set ``overrideEnabled`` to False as well; defaults to
+            True
+        :return: If *colorIndex* was provided, ``self`` is returned;
+            otherwise, a color index.
+        :rtype: :class:`~paya.nodetypes.transform.Transform` or int
+    
+    .. py:method:: copyCtShapesTo(*destControls, replace=True, worldSpace=False, mirrorAxis=None, color=None, shape=None)
+    
+        Copies control shapes and / or color from this control to one or more
+        destination controls. The 'shape' and 'color' flags can be defined by
+        omission, Maya-style; for example, to copy only color, just pass
+        ``col=True``, and 'shape' will be set to ``False`` automatically
+        unless explicitly set.
+        
+        :param bool shape/sh: copy shapes; if this is ``False``, all other
+            arguments except ``color`` are ignored
+        :param bool color/col: copy color
+        :param \*destControls: one or more controls to copy shapes to
+        :type \*destControls: list, str,
+            :class:`~paya.nodetypes.transform.Transform`
+        :param bool replace/rep: remove existing shapes on the destination
+            controls; defaults to True
+        :param bool worldSpace/ws: copy shapes in world space; defaults to
+            False
+        :param mirrorAxis/ma: a positive axis to flip when copying in local
+            space, or along which to mirror when copying in world space, for
+            example 'x';  defaults to ``None``
+        :type mirrorAxis/ma: ``None``, str
+        :return: The new control shapes.
+        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+    
+    .. py:method:: addCtShapesToLib(entryName)
+    
+        Captures this control's shapes into a new library entry for reuse via
+        :meth:`setCtShapes`.
+        
+        :param str entryName: the name of the new library entry
         :return: ``self``
         :rtype: :class:`~paya.nodetypes.transform.Transform`

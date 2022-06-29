@@ -15,7 +15,8 @@ for attribute (including subtype), component and data types with true inheritanc
 
 .. admonition:: New in version 0.5
 
-    *   Over **60 new methods** to create rig controls and organise user attributes 
+    *   Over **60 new methods** to create rig controls  and :doc:`organise user attributes
+        <user_attrs>`
     *   And more !
 
 

@@ -1,0 +1,31 @@
+*************
+Offset Groups
+*************
+
+Besides through the ``offsetGroups`` argument on :func:`paya.runtime.createControl()
+<paya.nodetypes.transform.Transform.createControl>`, you can insert offset groups using
+:meth:`Transform.createOffsetGroups() <paya.nodetypes.transform.Transform.createOffsetGroups>`:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            ct = r.PyNode('L_ankle_CTRL')
+            offsetGroups = ct.createOffsetGroups('zero', 'spaces'))
+            print(offsetGroups)
+            # [nt.Transform('L_ankle_zero_XFRM'), nt.Transform('L_ankle_spaces_XFRM')]
+
+    .. tab:: Before
+
+        .. figure:: before_offsets.png
+            :align: center
+
+    .. tab:: After
+
+        .. figure:: after_offsets.png
+            :align: center
+
+Offset group names are always constructed by appending suffixes to the main control name. :class:`~paya.lib.names.Name`
+blocks are ignored.

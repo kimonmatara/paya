@@ -1,0 +1,61 @@
+======================
+paya.lib.controlshapes
+======================
+
+.. py:module:: paya.lib.controlshapes
+
+.. py:class:: ControlShapesLibrary(*args, **kwargs)
+
+    Administers Paya control shapes.
+
+    .. py:staticmethod:: __new__(*args, **kwargs)
+    
+        Create and return a new object.  See help(type) for accurate signature.
+    
+    .. py:method:: __init__()
+    
+        Initialize self.  See help(type(self)) for accurate signature.
+    
+    .. py:method:: load()
+    
+        Loads the library content fromn ``paya/lib/controlshapes.json``.
+        
+        :return: ``self``
+    
+    .. py:method:: dump()
+    
+        Dumps the library content into ``paya/lib/controlshapes.json``.
+        
+        :return: ``self``
+    
+    .. py:method:: applyToControls(name, controls, replace=True)
+    
+        Adds shapes to the specified controls from the named library entry.
+        
+        :param name: the name of the library entry to retrieve
+        :param list controls: the controls to add shapes to
+        :param bool replace/rep: replace existing shapes on the controls;
+            defaults to True
+        :return: The newly-generated control shape nodes.
+        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+    
+    .. py:method:: addFromControl(control, name)
+    
+        Captures shape macros from the specified control and adds them under
+        a new entry in the library.
+        
+        .. warning::
+        
+            If the name already exists in the library, it will be overwritten.
+        
+        .. note::
+        
+            Changes are not saved into ``paya/lib/controlshapes.json`` until
+            :meth:`~paya.lib.controls.ControlShapesLibrary.dump` is called.
+        
+        :param control: the control to inspect
+        :type control: str, :class:`~paya.nodetypes.transform.Transform`
+        :param str name: the name for the new entry
+        :raises NoControlShapesError: no control shapes were found under the
+            control
+        :return: ``self``

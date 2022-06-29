@@ -1,3 +1,4 @@
+import paya.lib.mathops as _mo
 from paya.util import short
 import paya.runtime as r
 
@@ -42,16 +43,25 @@ class Locator:
 
     #-----------------------------------------------------|    Macro
 
-    def macro(self):
+    @short(normalize='nr')
+    def macro(self, normalize=False):
         """
+        :param bool normalize/nr: normalize any scale or position information
+            (used by the shapes library); defaults to False
         :return: A simplified dictionary representation of this locator shape
             that can be used to reconstruct it. All information will be in
             local (object) space.
-
         :rtype: dict
         """
-        return {
+        out = {
             'nodeType': 'locator',
             'localPosition': list(self.attr('localPosition').get()),
             'localScale': list(self.attr('localScale').get())
         }
+
+        if normalize:
+            point = out['localPosition']
+            point = _mo.pointsIntoUnitCube([point])[0]
+            out['localPosition'] = list(point)
+
+        return out

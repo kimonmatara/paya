@@ -2,8 +2,8 @@ import maya.cmds as m
 import paya.config as config
 import pymel.util as _pu
 
-from paya.util import short
-from paya.lib.controls import ControlShapesManager
+from paya.util import short, resolveFlags
+from paya.lib.controlshapes import controlShapes
 import paya.runtime as r
 
 
@@ -113,6 +113,119 @@ class Transform:
         group.attr('ro').set(rotateOrder)
 
         return group
+
+    @classmethod
+    @short(
+        name='n',
+        under='u',
+        shape='sh',
+        color='col',
+        worldMatrix='wm',
+        keyable='k',
+        channelBox='cb',
+        rotateOrder='ro',
+        asControl='ac',
+        offsetGroups='og',
+        pickWalkParent='pwp'
+    )
+    def createControl(
+            cls,
+            name=None,
+            under=None,
+            shape='cube',
+            size=1.0,
+            color=None,
+            worldMatrix=None,
+            keyable=None,
+            channelBox=None,
+            rotateOrder='xyz',
+            asControl=True,
+            offsetGroups='offset',
+            pickWalkParent=None
+    ):
+        """
+        Creates rig controls. Also available directly on :mod:`paya.runtime`.
+
+        :param name/n: one or more name elements
+        :type name/n: None, str, int, list
+        :param under/u: an optional parent for the control; defaults to None
+        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :param str shape/sh: the name of a library shape to apply to the control;
+            defaults to 'cube'
+        :param color/col: an optional override color index for the control;
+            defaults to None
+        :type color/col: int, None
+        :param float size: a uniform scaling factor for the control shape;
+            defaults to 1.0
+        :param worldMatrix/wm: the world matrix for the control; if this is
+            omitted then, if ``under`` is provided, the matrix is copied from the
+            destination parent; otherwise, it defaults to the identity matrix
+        :type worldMatrix/wm: list, :class:`~paya.datatypes.matrix.Matrix`, None
+        :param list keyable/k: a list of channels to set to keyable on the
+            control
+        :param list channelBox/cb: a list of channels to set to settable on the
+            control
+        :param rotateOrder/ro: the control's rotate order; defaults to 'xyz'
+        :type rotateOrder/ro: str, int
+        :param bool asControl/ac: if this is ``False``, create the control as a
+            group with no shapes and omit the controller tag; defaults to True
+        :param offsetGroups: the suffixes of one or more offset groups to create;
+            defaults to 'offset'
+        :type offsetGroups: list, str
+        :param pickWalkParent/pwp: an optional pick-walk parent for this control;
+            ignored if *asControl* is False; defaults to None
+        :type pickWalkParent/pwp: str,
+            :class:`~paya.nodetypes.dependNode.DependNode`
+        :return: The generated control.
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        #--------------------------------------------------------|    Prep
+
+        if under:
+            under = r.PyNode(under)
+
+        if worldMatrix:
+            worldMatrix = r.data.Matrix(worldMatrix)
+
+        else:
+            if under:
+                worldMatrix = under.getMatrix(worldSpace=True)
+
+            else:
+                worldMatrix = r.data.Matrix()
+
+        #--------------------------------------------------------|    Build
+
+        kwargs = {}
+
+        if under is not None:
+            kwargs['parent'] = under
+
+        name = cls.makeName(name, control=asControl)
+        ct = r.group(empty=True, n=name, **kwargs)
+
+        ct.setMatrix(worldMatrix, worldSpace=True)
+        ct.attr('rotateOrder').set(rotateOrder)
+
+        ct.createOffsetGroups(offsetGroups)
+        ct.maskAnimAttrs(k=keyable, cb=channelBox)
+
+        if asControl:
+            ct.isControl(True)
+
+            if shape:
+                ct.setCtShapesFromLib(shape)
+
+            if size != 1.0:
+                ct.scaleCtShapes([size]*3)
+
+            if color is not None:
+                ct.colorCtShapes(color)
+
+            if pickWalkParent:
+                ct.setPickWalkParent(pickWalkParent)
+
+        return ct
 
     #--------------------------------------------------------|    Attr management
 
@@ -257,12 +370,6 @@ class Transform:
 
     #--------------------------------------------------------|    Shapes
 
-    @property
-    def controlShapes(self):
-        return ControlShapesManager(self, 'controlShapes')
-
-    cs = controlShapes
-
     def conformShapeNames(self):
         """
         Conforms the names of this transform's shape children to the Maya
@@ -301,4 +408,414 @@ class Transform:
         for shape, origName in zip(intermShapes, origIntermShapeNames):
             shape.rename(origName)
 
+        return self
+
+    #--------------------------------------------------------|    Control Shapes
+
+    def _getCurveComponents(self):
+        curves = self.getShapes(type='nurbsCurve', noIntermediate=True)
+
+        out = []
+
+        for curve in curves:
+            out += list(curve.comp('cv'))
+
+        return out
+
+    def getCtShapes(self):
+        """
+        :return: Non-intermediate curve and locator shapes under this transform.
+        :rtype: [:class:`~paya.nodetypes.nurbsCurve.NurbsCurve` or
+            :class:`~paya.nodetypes.locator.Locator`]
+        """
+        shapes = self.getShapes(type='nurbsCurve', noIntermediate=True)
+        shapes += self.getShapes(type='locator', noIntermediate=True)
+
+        return shapes
+
+    def rotateCtShapes(self, rotation):
+        """
+        Rotates control shapes in local space. Locator shapes won't be rotated,
+        but their ``localPosition`` will. Note that rotation is expected in
+        degrees.
+
+        :param rotation: an iterable of three rotation values, in degrees
+        :type rotation: list, tuple, :class:`~pymel.core.datatypes.Array`
+        :return: ``self``
+        """
+        curveComponents = self._getCurveComponents()
+        locators = self.getShapes(noIntermediate=True, type='locator')
+
+        if curveComponents or locators:
+            if isinstance(rotation, r.data.EulerRotation):
+                unit = rotation.unit
+
+            else:
+                unit = 'degrees'
+
+            rotation = list(rotation)
+
+            if unit == 'radians':
+                rotation = list(map(_pu.degrees, rotation))
+
+            rotationMtx = r.data.EulerRotation(
+                rotation, unit='degrees').asMatrix()
+
+            for curveComponent in curveComponents:
+                point = r.pointPosition(curveComponent, local=True)
+                point ^= rotationMtx
+
+                r.move(curveComponent, point, ls=True, a=True)
+
+            for locator in locators:
+                localPosition = r.data.Point(
+                    locator.attr('localPosition').get())
+
+                localPosition ^= rotationMtx
+                locator.attr('localPosition').set(localPosition)
+
+        return self
+
+    def scaleCtShapes(self, scale):
+        """
+        Scales control shapes in local space.
+
+        :param scale: an iterable of three scale values
+        :type scale: list, tuple, :class:`~pymel.core.datatypes.Array`
+        :return: ``self``
+        """
+        curveComponents = self._getCurveComponents()
+        locators = self.node().getShapes(noIntermediate=True, type='locator')
+
+        if curveComponents:
+            scaleMtx = r.data.Vector(scale).asScaleMatrix()
+
+            for curveComponent in curveComponents:
+                point = r.pointPosition(curveComponent, local=True)
+                point ^= scaleMtx
+
+                r.move(curveComponent, point, ls=True, a=True)
+
+        for locator in locators:
+            scale = p.datatypes.Array(scale)
+            localScale = p.datatypes.Array(locator.attr('localScale').get())
+            newScale = localScale * scale
+            locator.attr('localScale').set(newScale)
+        curveComponents = self._getCurveComponents()
+        locators = self.getShapes(noIntermediate=True, type='locator')
+
+        if curveComponents:
+            scaleMtx = r.data.Vector(scale).asScaleMatrix()
+
+            for curveComponent in curveComponents:
+                point = r.pointPosition(curveComponent, local=True)
+                point ^= scaleMtx
+
+                r.move(curveComponent, point, ls=True, a=True)
+
+        for locator in locators:
+            scale = p.datatypes.Array(scale)
+            localScale = p.datatypes.Array(locator.attr('localScale').get())
+            newScale = localScale * scale
+            locator.attr('localScale').set(newScale)
+
+        return self
+
+    def setCtShapesFromLib(self, libKey):
+        """
+        Sets control shapes to the named library entry.
+
+        :param str name: the name of the library entry, e.g. 'cube'
+        :return: The newly-generated control shapes.
+        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+        """
+        controlShapes.applyToControls(libKey, [self])
+
+    @short(backward='back')
+    def cycleCtShapes(self, backward=False):
+        """
+        Steps through the library alphabetically and applies a different shape
+        on each invocation. Useful for trying out different shapes quickly.
+
+        :param bool backward/back: cycle backwards instead of forwards;
+            defaults to False
+        :return: The newly-generated control shapes.
+        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+        """
+        libKeys = list(sorted(controlShapes.keys()))
+        maxIndex = len(libKeys) - 1
+        currentKey = None
+
+        for shape in self.getCtShapes():
+            try:
+                currentKey = shape.attr('libCtrlShape').get()
+
+            except r.MayaAttributeError:
+                continue
+
+        if currentKey:
+            try:
+                currentKeyIndex = libKeys.index(currentKey)
+
+                if backward:
+                    newKeyIndex = currentKeyIndex - 1
+
+                    if newKeyIndex < 0:
+                        newKeyIndex = maxIndex
+
+                else:
+                    newKeyIndex = currentKeyIndex + 1
+
+                    if newKeyIndex > maxIndex:
+                        newKeyIndex = 0
+
+            except:
+                newKeyIndex = 0
+
+        else:
+            newKeyIndex = 0
+
+        newKey = libKeys[newKeyIndex]
+        print(newKey)
+        return self.setCtShapesFromLib(newKey)
+
+    def clearCtShapes(self):
+        """
+        Removes all non-intermediate curve or locator shapes under this
+        transform.
+
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        for shape in self.getCtShapes():
+            try:
+                r.delete(shape)
+
+            except:
+                pass
+
+        return self
+
+    @short(clearOverrides='co')
+    def colorCtShapes(self, *colorIndex, clearOverrides=True):
+        """
+        :param \*colorIndex: if a color index is provided, it is used to set
+            the override color on all control shapes; if ``None`` is passed,
+            override colors are reset; if the argument is omitted, the first-
+            encountered override color index is returned
+        :type \*colorIndex: int or None
+        :param bool clearOverrides/co: used only if *colorIndex* was set to
+            ``None``; set ``overrideEnabled`` to False as well; defaults to
+            True
+        :return: If *colorIndex* was provided, ``self`` is returned;
+            otherwise, a color index.
+        :rtype: :class:`~paya.nodetypes.transform.Transform` or int
+        """
+        shapes = self.getCtShapes()
+
+        if len(colorIndex):
+            colorIndex = colorIndex[0]
+
+            if colorIndex is None:
+                shape.attr('overrideColor').set(0)
+
+                if clearOverrides:
+                    shape.attr('overrideEnabled').set(False)
+
+            for shape in shapes:
+                shape.attr('overrideEnabled').set(True)
+                shape.attr('overrideColor').set(colorIndex)
+
+            return self
+
+        else:
+            for shape in shapes:
+                if shape.attr('overrideEnabled').get():
+                    return shape.attr('overrideColor').get()
+
+    @staticmethod
+    def _getCtShapesConfig(shapes, tmplock=False):
+        out = {}
+
+        for shape in shapes:
+            if shape.attr('overrideEnabled').get():
+                out['color'] = shape.attr('overrideColor').get()
+                break
+
+        if 'color' not in out:
+            out['color'] = None
+
+        for shape in shapes:
+            inputs = shape.attr('v').inputs(plugs=True)
+
+            if inputs:
+                out['vis'] = inputs[0]
+
+                if tmplock:
+                    inputs[0].node().lock()
+
+                break
+
+        return out
+
+    @staticmethod
+    def _applyCtShapesConfig(config, shapes):
+        if 'vis' in config:
+            for shape in shapes:
+                try: config['vis'] >> shape.attr('v')
+                except: pass
+
+            config['vis'].node().unlock()
+
+        color = config['color']
+
+        if color is None:
+            for shape in shapes:
+                try: shape.attr('overrideEnabled').set(False)
+                except: pass
+
+                try: shape.attr('overrideColor').set(0)
+                except: pass
+
+        else:
+            for shape in shapes:
+                try: shape.attr('overrideEnabled').set(True)
+                except: pass
+
+                try: shape.attr('overrideColor').set(config['color'])
+                except: pass
+
+    @short(
+        replace='rep',
+        worldSpace='ws',
+        mirrorAxis='ma',
+        color='col',
+        shape='sh'
+    )
+    def copyCtShapesTo(
+            self,
+            *destControls,
+            replace=True,
+            worldSpace=False,
+            mirrorAxis=None,
+            color=None,
+            shape=None
+    ):
+        """
+        Copies control shapes and / or color from this control to one or more
+        destination controls. The 'shape' and 'color' flags can be defined by
+        omission, Maya-style; for example, to copy only color, just pass
+        ``col=True``, and 'shape' will be set to ``False`` automatically
+        unless explicitly set.
+
+        :param bool shape/sh: copy shapes; if this is ``False``, all other
+            arguments except ``color`` are ignored
+        :param bool color/col: copy color
+        :param \*destControls: one or more controls to copy shapes to
+        :type \*destControls: list, str,
+            :class:`~paya.nodetypes.transform.Transform`
+        :param bool replace/rep: remove existing shapes on the destination
+            controls; defaults to True
+        :param bool worldSpace/ws: copy shapes in world space; defaults to
+            False
+        :param mirrorAxis/ma: a positive axis to flip when copying in local
+            space, or along which to mirror when copying in world space, for
+            example 'x';  defaults to ``None``
+        :type mirrorAxis/ma: ``None``, str
+        :return: The new control shapes.
+        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+        """
+        destControls = list(map(r.PyNode, _pu.expandArgs(*destControls)))
+
+        if destControls:
+            shape, color = resolveFlags(shape, color)
+
+            if color and not shape: # Quick bail
+                col = self.colorCtShapes()
+
+                if col is not None:
+                    for destControl in destControls:
+                        destControl.colorCtShapes(col)
+
+                return self
+
+            if not shape:
+                return self
+
+            # Prep main source
+
+            _srcGp = r.group(empty=True)
+            srcShapes = self.getCtShapes()
+
+            r.parent(srcShapes, _srcGp, r=True, shape=True, add=True)
+            srcGp = _srcGp.duplicate()[0]
+            r.delete(_srcGp)
+
+            if mirrorAxis:
+                mirrorMtx = r.createMatrix()
+
+                setattr(mirrorMtx, mirrorAxis,
+                        getattr(mirrorMtx, mirrorAxis)*-1.0)
+
+            if worldSpace:
+                matrix = self.getMatrix(worldSpace=True)
+
+                if mirrorAxis:
+                    matrix *= mirrorMtx
+
+                srcGp.setMatrix(matrix)
+
+            elif mirrorAxis:
+                srcGp.setMatrix(mirrorMtx)
+                r.makeIdentity(srcGp, apply=True, t=True, r=True, s=True)
+
+            # Iterate
+
+            newShapes = []
+
+            for destControl in destControls:
+                oldShapes = destControl.getCtShapes()
+                config = self._getCtShapesConfig(oldShapes, tmplock=True)
+
+                if color:
+                    del(config['color'])
+
+                if replace:
+                    r.delete(oldShapes)
+
+                thisSrcGp = srcGp.duplicate()[0]
+
+                if worldSpace:
+                    thisSrcGp.setParent(destControl)
+                    r.makeIdentity(thisSrcGp,
+                                   apply=True, t=True, r=True, s=True)
+
+                    thisSrcGp.setParent(None)
+
+                theseNewShapes = thisSrcGp.getShapes()
+                r.parent(theseNewShapes, destControl, r=True, shape=True)
+                r.delete(thisSrcGp)
+
+                self._applyCtShapesConfig(config, theseNewShapes)
+                newShapes += theseNewShapes
+
+                destControl.conformShapeNames()
+
+            r.delete(srcGp)
+
+            return newShapes
+
+        else:
+            return []
+
+    def addCtShapesToLib(self, entryName):
+        """
+        Captures this control's shapes into a new library entry for reuse via
+        :meth:`setCtShapes`.
+
+        :param str entryName: the name of the new library entry
+        :return: ``self``
+        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        """
+        controlShapes.addFromControl(self, entryName)
         return self

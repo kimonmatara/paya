@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Attributes &mdash; paya 0.5.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Joint Chains" href="joint_chains.html" />
+    <link rel="prev" title="Control Shapes and Colors" href="control_shapes_cols.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Attributes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#grouping-attributes-under-sections">Grouping Attributes Under Sections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enabling-disabling-attributes">Enabling / Disabling Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reordering-attributes">Reordering Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Your Own Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>User Attributes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/user_attrs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="user-attributes">
+<h1>User Attributes<a class="headerlink" href="#user-attributes" title="Permalink to this headline"></a></h1>
+<section id="grouping-attributes-under-sections">
+<h2>Grouping Attributes Under Sections<a class="headerlink" href="#grouping-attributes-under-sections" title="Permalink to this headline"></a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">attrSections</span></code> interface on any node instance to organise Channel Box attributes into groups (see
+<a class="reference internal" href="paya/lib/attrs.html#paya.lib.attrs.Sections" title="paya.lib.attrs.Sections"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sections</span></code></a> for a full reference):</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Before</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">After</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">control</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;settings_CTRL&#39;</span><span class="p">)</span>
+<span class="n">visSection</span> <span class="o">=</span> <span class="n">control</span><span class="o">.</span><span class="n">attrSections</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;VISIBILITY_OPTIONS&#39;</span><span class="p">)</span>
+<span class="n">visSection</span><span class="o">.</span><span class="n">collect</span><span class="p">([</span><span class="s1">&#39;primary_ct_vis&#39;</span><span class="p">,</span> <span class="s1">&#39;secondary_ct_vis&#39;</span><span class="p">])</span>
+
+<span class="n">fxSection</span> <span class="o">=</span> <span class="n">control</span><span class="o">.</span><span class="n">attrSections</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;DEFORM_OPTIONS&#39;</span><span class="p">)</span>
+<span class="n">fxSection</span><span class="o">.</span><span class="n">collect</span><span class="p">([</span><span class="s1">&#39;smoothing_iterations&#39;</span><span class="p">,</span> <span class="s1">&#39;fast_mode&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/before_sections.png" src="_images/before_sections.png" />
+</figure>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/after_sections.png" src="_images/after_sections.png" />
+</figure>
+</div></div>
+</section>
+<section id="enabling-disabling-attributes">
+<h2>Enabling / Disabling Attributes<a class="headerlink" href="#enabling-disabling-attributes" title="Permalink to this headline"></a></h2>
+<p>To quickly specify which attributes on a control should be available for setting or keying, use
+<a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.maskAnimAttrs" title="paya.nodetypes.dependNode.DependNode.maskAnimAttrs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">maskAnimAttrs()</span></code></a>. This is similar to the <code class="docutils literal notranslate"><span class="pre">keyable</span></code> and <code class="docutils literal notranslate"><span class="pre">channelBox</span></code>
+arguments on <code class="xref py py-func docutils literal notranslate"><span class="pre">createControl()</span></code>, but works with any animatable attribute:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Before</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">After</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ct</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;L_leg_IK_CTRL&#39;</span><span class="p">)</span>
+<span class="n">ct</span><span class="o">.</span><span class="n">maskAnimAttrs</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;sy&#39;</span><span class="p">,</span> <span class="s1">&#39;stretchy&#39;</span><span class="p">])</span>
+<span class="n">ct</span><span class="o">.</span><span class="n">attrSections</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;IK_OPTIONS&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">([</span><span class="s1">&#39;stretchy&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/mask_before.png" src="_images/mask_before.png" />
+</figure>
+</div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/mask_after.png" src="_images/mask_after.png" />
+</figure>
+</div></div>
+<p>Several lower-level methods on Paya’s base <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> class are also of interest:
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.lock" title="paya.plugtypes.attribute.Attribute.lock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lock()</span></code></a> (with added <code class="docutils literal notranslate"><span class="pre">recursive</span></code> option),
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.unlock" title="paya.plugtypes.attribute.Attribute.unlock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unlock()</span></code></a> (with added <code class="docutils literal notranslate"><span class="pre">recursive</span></code> and <code class="docutils literal notranslate"><span class="pre">force</span></code> options),
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.show" title="paya.plugtypes.attribute.Attribute.show"><code class="xref py py-meth docutils literal notranslate"><span class="pre">show()</span></code></a>,
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.hide" title="paya.plugtypes.attribute.Attribute.hide"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hide()</span></code></a>,
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.enable" title="paya.plugtypes.attribute.Attribute.enable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">enable()</span></code></a> and <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.disable" title="paya.plugtypes.attribute.Attribute.disable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disable()</span></code></a>.</p>
+</section>
+<section id="reordering-attributes">
+<h2>Reordering Attributes<a class="headerlink" href="#reordering-attributes" title="Permalink to this headline"></a></h2>
+<p>Paya can reorder Channel Box attributes which are user-defined (i.e. not ‘factory’ attributes like <code class="docutils literal notranslate"><span class="pre">translateX</span></code>),
+animatable (i.e. not string, matrix etc.) and non-compound. To reorder attributes using an explicit list, call
+<a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.reorderAttrs" title="paya.nodetypes.dependNode.DependNode.reorderAttrs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reorderAttrs()</span></code></a> on any node instance:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Before</button><button aria-controls="panel-2-2-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-2" name="2-2" role="tab" tabindex="-1">After</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ct</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;settings_CTRL&#39;</span><span class="p">)</span>
+
+<span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">,</span> <span class="s1">&#39;L_frown&#39;</span><span class="p">,</span> <span class="s1">&#39;L_sad&#39;</span><span class="p">,</span> <span class="s1">&#39;L_happy&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;R_smile&#39;</span><span class="p">,</span> <span class="s1">&#39;R_frown&#39;</span><span class="p">,</span> <span class="s1">&#39;R_sad&#39;</span><span class="p">,</span> <span class="s1">&#39;R_happy&#39;</span><span class="p">]</span>
+
+<span class="c1"># Sort alphabetically</span>
+<span class="n">attrs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">attrs</span><span class="p">))</span>
+
+<span class="n">ct</span><span class="o">.</span><span class="n">reorderAttrs</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/before_reorder.png" src="_images/before_reorder.png" />
+</figure>
+</div><div aria-labelledby="tab-2-2-2" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-2" name="2-2" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/after_reorder.png" src="_images/after_reorder.png" />
+</figure>
+</div></div>
+<p>To nudge individual attributes, call <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.sendAbove" title="paya.plugtypes.attribute.Attribute.sendAbove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sendAbove()</span></code></a> or
+<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.sendBelow" title="paya.plugtypes.attribute.Attribute.sendBelow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sendBelow()</span></code></a> on the attributes themselves. Namesake methods are also available
+on <a class="reference internal" href="paya/lib/attrs.html#paya.lib.attrs.Section" title="paya.lib.attrs.Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a> objects to move entire attribute groups:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">Before</button><button aria-controls="panel-3-3-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-2" name="3-2" role="tab" tabindex="-1">After</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ct</span><span class="o">.</span><span class="n">attrSections</span><span class="p">[</span><span class="s1">&#39;L_MOUTH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sendAbove</span><span class="p">(</span><span class="s1">&#39;L_EYE&#39;</span><span class="p">)</span>
+<span class="n">ct</span><span class="o">.</span><span class="n">attrSections</span><span class="p">[</span><span class="s1">&#39;R_MOUTH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sendAbove</span><span class="p">(</span><span class="s1">&#39;L_EYE&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-1" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-1" name="3-1" role="tabpanel" tabindex="0"><figure class="align-default">
+<img alt="_images/reorder_sections_before.png" src="_images/reorder_sections_before.png" />
+</figure>
+</div><div aria-labelledby="tab-3-3-2" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-2" name="3-2" role="tabpanel" tabindex="0"><figure class="align-default">
+<img alt="_images/reorder_sections_after.png" src="_images/reorder_sections_after.png" />
+</figure>
+</div></div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="control_shapes_cols.html" class="btn btn-neutral float-left" title="Control Shapes and Colors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="joint_chains.html" class="btn btn-neutral float-right" title="Joint Chains" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

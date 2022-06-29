@@ -22,10 +22,11 @@ paya.nodetypes.locator.Locator
         :return: The locator.
         :rtype: :class:`~paya.nodetypes.locator.Locator`
     
-    .. py:method:: macro()
+    .. py:method:: macro(normalize=False)
     
+        :param bool normalize/nr: normalize any scale or position information
+            (used by the shapes library); defaults to False
         :return: A simplified dictionary representation of this locator shape
             that can be used to reconstruct it. All information will be in
             local (object) space.
-        
         :rtype: dict

@@ -870,3 +870,35 @@ def getAimingMatricesFromPoints(
         out.append(matrix)
 
     return out
+
+def pointsIntoUnitCube(points):
+    """
+    Normalizes points so that they fit inside a unit cube.
+
+    :param points: the points to normalize
+    :type points: list
+    :return: The normalized points.
+    :rtype: list of :class:`~paya.datatypes.point.Point`
+    """
+    xVals = list(map(abs,[point[0] for point in points]))
+    yVals = list(map(abs, [point[1] for point in points]))
+    zVals = list(map(abs, [point[2] for point in points]))
+
+    maxX = max(xVals)
+    maxY = max(yVals)
+    maxZ = max(zVals)
+
+    maxFactor = max(maxX, maxY, maxZ)
+
+    try:
+        scaleFactor = 0.5 / maxFactor
+
+    except ZeroDivisionError:
+        scaleFactor = 1.0
+
+    scaleMatrix = r.createMatrix()
+    scaleMatrix.x *= scaleFactor
+    scaleMatrix.y *= scaleFactor
+    scaleMatrix.z *= scaleFactor
+
+    return [r.data.Point(point) ^ scaleMatrix for point in points]

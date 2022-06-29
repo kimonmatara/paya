@@ -1,0 +1,480 @@
+********
+Controls
+********
+
+=======
+Drawing
+=======
+
+Paya's top-level :func:`paya.runtime.createControl() <paya.lib.controls.createControl>` function can be used to draw rig
+controls with offset groups, controller tags and other pipeline-standard features. Here's a rundown of its arguments:
+
+Arguments
+---------
+
+:name/n: ``None``, :class:`str`, :class:`int` or :class:`list`
+
+    One or more prefixes for the control's name. Prefixes may also be inherited from :class:`~paya.lib.names.Name`
+    blocks. The Paya suffix for rig controls will be applied automatically. See :doc:`Node Names <naming_nodes>` for
+    more information.
+
+:worldMatrix/wm: ``None``, :class:`list` or :class:`~paya.datatypes.matrix.Matrix`; defaults to ``None``
+
+    The matrix to apply to the offset group. This will define the control's 'zeroed' pose. You can take world matrices
+    from other objects (for example, layout locators) or create them yourself.
+
+    To take a world matrix from another object, use
+    :meth:`Transform.getMatrix(worldSpace=True) <pymel.core.nodetypes.Transform.getMatrix>`. Particular attention
+    should be given to *scale*. Inherited scale can be easy to miss, and will be carried over to the control. If this
+    isn't intentional (for example, to create fully-mirrored controls), it can be hard to correct after the rig has
+    received animation. To discard scale, use :meth:`Matrix.pick() <paya.datatypes.matrix.Matrix.pick>`:
+
+    .. code-block:: python
+
+        layoutLoc = r.PyNode('L_foot_guide_LOCT')
+        controlMatrix = layoutLoc.getMatrix(worldSpace=True).pick(scale=False)
+        # Pass along to createControl() from here
+
+    To create a matrix from scratch, use :func:`paya.runtime.createMatrix() <paya.lib.mathops.createMatrix>`. See
+    :ref:`Creating Matrices <creating_matrices>` for more information.
+
+:keyable/k, channelBox/cb: :class:`list` of :class:`str`; both default to ``[]``
+
+    These arguments define which standard Maya attributes will be made available for keying or setting in the Channel
+    Box. They take lists of short or long names, for example ``['tx', 'rotateOrder']``. Omitting both arguments will
+    lead to an empty Channel Box; this can be useful if you plan to use the control solely for options and sliders that
+    will be added afterwards.
+
+:rotateOrder/k: :class:`int` or :class:`str`; defaults to ``'xyz'``
+
+    The control's rotate order on build.
+
+:shape/sh: :class:`str` or ``None``; defaults to ``'cube'``
+
+    A library shape for the control. To get a list of available shapes, call
+    :meth:`~paya.lib.controls.ControlShapesLibrary.keys` on ``paya.runtime.controlShapesLibrary``:
+
+    .. code-block:: python
+
+        print(sorted(r.controlShapesLibrary.keys()))
+        # ['circle', 'cube', 'locator', 'lollipop', ...
+
+:size/sz: :class:`float`; defaults to ``1.0``
+
+    A scaling factor for the control shape.
+
+:color/col: :class:`int` or :class:`None`; defaults to ``None``
+
+    An override color index for the control shape. If this is omitted, no color will be applied.
+
+:offsetGroups/og: ``None`` or :class:`str` or :class:`list` of :class:`str`; defaults to ``'offset'``
+
+    A string or list of strings specifying the suffixes, and number, of transformationally-matched offset groups. Pass
+    ``None`` to create a control with no offset groups.
+
+:under/u: ``None``, :class:`str` or :class:`~paya.nodetypes.transform.Transform`; defaults to ``None``
+
+    An optional parent for the topmost offset group.
+
+:pickWalkParent/pwp: ``None``, :class:`str` or :class:`~paya.nodetypes.transform.Transform`; defaults to ``None``
+
+    A node to shift to when the 'up' arrow key is pressed with the main control selected. Allows animators
+    to skip offset groups when pick-walking complex hierarchies.
+
+:asControl/ac: :class:`bool`, defaults to ``True``
+
+    Set this to ``False`` to create a regular empty group instead of a control.
+
+Example
+-------
+
+In the following example, a custom matrix is used to create a control that's flat against the ground plane, but angled
+along the foot of a leg chain:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            anklePoint = r.PyNode('joint3').getWorldPosition()
+            toePoint = r.PyNode('joint5').getWorldPosition()
+            ballPoint = r.PyNode('joint4').getWorldPosition()
+
+            aimVec = [0, 1, 0]
+            upVec = toePoint-anklePoint
+
+            ctMatrix = r.createMatrix(
+                'y', aimVec, 'z', upVec,
+                translate=ballPoint
+                )
+
+            # Discard scale information
+            ctMatrix = ctMatrix.pick(translate=True, rotate=True)
+
+            with r.Name('R_foot_roll'):
+                r.createControl(
+                    worldMatrix=ctMatrix,
+                    keyable=['t', 'r', 'ro'],
+                    shape='sphere'
+                    )
+
+    .. tab:: Viewport
+
+        .. figure:: ctrl_matrix.gif
+            :align: center
+
+
+    .. tab:: Outliner
+
+        .. figure:: ctrl_hierarchy.png
+            :align: center
+
+==========
+Connecting
+==========
+
+Controls created using :func:`paya.runtime.createControl() <paya.lib.controls.createControl>` can be used to drive other
+transforms using constraints, direct connections or whichever other method suits you. In the following example, Paya
+:doc:`matrix cooking <matrices>` is used to transform joints in local space even if the initial joint and control
+orientations don't match, and even when the control group is moved elsewhere (a common approach for face rigging):
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            for side in 'LR':
+                controls = r.ls('{}_mouth_??_CTRL'.format(side))
+                joints = r.ls('{}_mouth_??_JOIN'.format(side))
+
+                for control, joint in zip(controls, joints):
+                    # Get the control matrix, 'globalised' only once
+                    matrix = control.attr('matrix') * control.attr('parentMatrix')[0].get()
+
+                    # Re-express as an offset from the joint's current matrix
+                    matrix = joint.getMatrix() * matrix.asOffset()
+
+                    # Connect to offset parent matrix, and reset the joint's SRT channels
+                    matrix >> joint.attr('offsetParentMatrix')
+                    joint.setMatrix(r.data.Matrix())
+
+
+    .. tab:: Viewport
+
+        .. figure:: face_rig_mockup.gif
+            :align: center
+
+=============
+Offset Groups
+=============
+
+Aside from via ``offsetGroups`` on :func:`paya.runtime.createControl() <paya.lib.controls.createControl>`, you can
+insert offset groups using
+:meth:`Transform.createOffsetGroups() <paya.nodetypes.transform.Transform.createOffsetGroups>`:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            ct = r.PyNode('L_ankle_CTRL')
+            offsetGroups = ct.createOffsetGroups('zero', 'spaces'))
+            print(offsetGroups)
+            # [nt.Transform('L_ankle_zero_XFRM'), nt.Transform('L_ankle_spaces_XFRM')]
+
+    .. tab:: Before
+
+        .. figure:: before_offsets.png
+            :align: center
+
+    .. tab:: After
+
+        .. figure:: after_offsets.png
+            :align: center
+
+Offset group names are always constructed by appending suffixes to the main control name. :class:`~paya.lib.names.Name`
+blocks are ignored.
+
+=========================================
+Controller Tags and Pick-Walk Hierarchies
+=========================================
+
+Controls generated with :func:`~paya.lib.controls.createControl` carry
+`controller tags <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=GUID-17AF3B37-8A57-46DD-8808-D4BFF23AD285>`_ by
+default. To add or remove controller tags yourself, use :meth:`~paya.nodetypes.dagNode.DagNode.isControl` on any DAG
+node, for example:
+
+.. code-block:: python
+
+    loc = r.PyNode('locator1')
+    loc.isControl(True) # add a controller tag
+    loc.isControl(False) # remove the controller tag
+    print(loc.isControl()) # query mode
+    # False
+
+Aside from via ``pickWalkParent`` on :func:`paya.runtime.createControl() <paya.lib.controls.createControl>`, you can
+define pick-walk hierarchies using :meth:`DagNode.getPickWalkParent() <paya.nodetypes.dagNode.DagNode.getPickWalkParent>`
+and :meth:`DagNode.setPickWalkParent() <paya.nodetypes.dagNode.DagNode.setPickWalkParent>`, for example:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            controls = r.ls('L_leg_??_CTRL')
+
+            for i, control in enumerate(controls[1:], start=1):
+                previous = controls[i-1]
+                control.setPickWalkParent(previous)
+
+    .. tab:: Before
+
+        .. figure:: pickwalk_before.gif
+            :align: center
+
+    .. tab:: After
+
+        .. figure:: pickwalk_after.gif
+            :align: center
+
+=================
+Shapes and Colors
+=================
+
+The Control Shapes Manager
+--------------------------
+
+Every instance of :class:`~paya.nodetypes.transform.Transform` in Paya carries a ``controlShapes`` / ``cs`` attribute
+which contains sub-methods for bulk manipulation of locator and curve shapes. For a full reference, see
+:class:`~paya.lib.controls.ControlShapesManager`.
+
+Applying and Capturing Library Shapes
+-------------------------------------
+
+To apply a library shape to a control, use :meth:`~paya.lib.controls.ControlShapesManager.setFromLib` on
+``controlShapes``/``cs``:
+
+.. code-block:: python
+
+    control = r.PyNode('L_eye_CTRL')
+    control.controlShapes.setFromLib('sphere')
+    # Shorthand:
+    control.cs.setFromLib('sphere')
+
+.. tip::
+
+    *   If you're applying the same library shape to several controls at once, passing those controls to the
+        :meth:`~paya.lib.controls.ControlShapesLibrary.applyToControls` method on ``paya.runtime.controlShapesLibrary``
+        will execute faster than calling :meth:`~paya.lib.controls.ControlShapesManager.setFromLib` on each control.
+
+        See :class:`~paya.lib.controls.ControlShapesLibrary` for a full reference of methods on the library object.
+
+Call :meth:`~paya.lib.controls.ControlShapesManager.cycle` on ``.controlShapes`` repeatedly to preview different
+library shapes. (Recall that you can get a list of available library shapes by calling
+:meth:`~paya.lib.controls.ControlShapesLibrary.keys` on ``paya.runtime.controlShapesLibrary``.)
+
+To capture a control's shape(s) a library entry, use :meth:`~paya.lib.controls.ControlShapesManager.addToLib` instead:
+
+.. code-block:: python
+
+    control.cs.addToLib('my_shape_name')
+
+Transforming Shapes
+-------------------
+
+Control shapes can be rotated and scaled using :meth:`~paya.lib.controls.ControlShapesManager.rotate` and
+:meth:`~paya.lib.controls.ControlShapesManager.scale`, respectively. Where the shape is a curve, its control points are
+moved. On locators the ``localPosition`` and ``localScale`` attributes are edited instead.
+
+Setting Control Colors
+----------------------
+
+Control colors can be retrieved and set by-index using :meth:`~paya.lib.controls.ControlShapesManager.getColor` and
+:meth:`~paya.lib.controls.ControlShapesManager.setColor` respectively:
+
+.. code-block:: python
+
+    print(control.cs.getColor())
+    # 16
+
+    control.cs.setColor(6)
+
+Paya modifies control colors via via synced edits to ``overrideColor`` across the control's shapes. To remove all
+display overrides, use :meth:`~paya.lib.controls.ControlShapesManager.clearColor`.
+
+Copying Shapes and Colors
+-------------------------
+
+The :meth:`~paya.lib.controls.ControlShapesManager.copyTo` method on ``controlShapes`` / ``cs`` can be used to copy
+control shapes and colors in a variety of ways.
+
+*   To copy shapes and colours in local space, simply specify the destination controls and omit all other arguments.
+*   To copy in world space, pass ``worldSpace=True``.
+*   To copy in local space with a specific axis flipped, specify the axis via ``mirrorAxis``.
+*   To mirror-copy control shapes in world-space, specify the axis via ``mirrorAxis`` (typically 'x') and add
+    ``worldSpace=True``.
+*   To copy shapes but not colours, pass ``shape=True`` or ``color=False``.
+*   To copy colours but not shapes, pass ``color=True`` or ``shape=False``.
+
+Here's an example of simple interactive copying:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            sel = r.ls(sl=1)
+            sel[0].cs.copyTo(sel[1:])
+
+    .. tab:: Viewport
+
+        .. figure:: local_shape_copy.gif
+            :align: center
+
+Here's an example of interactive copying with world-space mirroring:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            # Called several times, e.g. via a shelf button
+
+            control = r.ls(sl=1)[0]
+            oppositeControl = 'R'+str(control)[1:]
+
+            control.cs.copyTo(oppositeControl, worldSpace=True,
+                              mirrorAxis='x', color=False)
+
+    .. tab:: Viewport
+
+        .. figure:: world_space_mirroring.gif
+            :align: center
+
+===============
+User Attributes
+===============
+
+Grouping Attributes Under Sections
+----------------------------------
+
+Use the ``attrSections`` interface on any node instance to organise Channel Box attributes into groups (see
+:class:`~paya.lib.attrs.Sections` for a full reference):
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            control = r.PyNode('settings_CTRL')
+            visSection = control.attrSections.add('VISIBILITY_OPTIONS')
+            visSection.collect(['primary_ct_vis', 'secondary_ct_vis'])
+
+            fxSection = control.attrSections.add('DEFORM_OPTIONS')
+            fxSection.collect(['smoothing_iterations', 'fast_mode'])
+
+    .. tab:: Before
+
+        .. figure:: before_sections.png
+            :align: center
+
+    .. tab:: After
+
+        .. figure:: after_sections.png
+            :align: center
+
+
+Enabling / Disabling Attributes
+-------------------------------
+
+To quickly specify which attributes on a control should be available for setting or keying, use
+:meth:`~paya.nodetypes.dependNode.DependNode.maskAnimAttrs`. This is similar to the ``keyable`` and ``channelBox``
+arguments on :func:`~paya.lib.controls.createControl`, but works with any animatable attribute:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            ct = r.PyNode('L_leg_IK_CTRL')
+            ct.maskAnimAttrs(k=['t', 'r', 'sy', 'stretchy'])
+            ct.attrSections.add('IK_OPTIONS').collect(['stretchy'])
+
+    .. tab:: Before
+
+        .. figure:: mask_before.png
+            :align: center
+
+    .. tab:: After
+
+        .. figure:: mask_after.png
+            :align: center
+
+Several lower-level methods on Paya's base :class:`~paya.plugtypes.attribute.Attribute` class are also of interest:
+:meth:`~paya.plugtypes.attribute.Attribute.lock` (with added ``recursive`` option),
+:meth:`~paya.plugtypes.attribute.Attribute.unlock` (with added ``recursive`` and ``force`` options),
+:meth:`~paya.plugtypes.attribute.Attribute.show`,
+:meth:`~paya.plugtypes.attribute.Attribute.hide`,
+:meth:`~paya.plugtypes.attribute.Attribute.enable` and :meth:`~paya.plugtypes.attribute.Attribute.disable`.
+
+Reordering Attributes
+---------------------
+
+Paya can reorder Channel Box attributes which are user-defined (i.e. not 'factory' attributes like ``translateX``),
+animatable (i.e. not string, matrix etc.) and non-compound. To reorder attributes using an explicit list, call
+:meth:`~paya.nodetypes.dependNode.DependNode.reorderAttrs` on any node instance:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            ct = r.PyNode('settings_CTRL')
+
+            attrs = ['L_smile', 'L_frown', 'L_sad', 'L_happy',
+                    'R_smile', 'R_frown', 'R_sad', 'R_happy']
+
+            # Sort alphabetically
+            attrs = list(sorted(attrs))
+
+            ct.reorderAttrs(attrs)
+
+    .. tab:: Before
+
+        .. figure:: before_reorder.png
+            :align: center
+
+    .. tab:: After
+
+        .. figure:: after_reorder.png
+            :align: center
+
+To nudge individual attributes, call :meth:`~paya.plugtypes.attribute.Attribute.sendAbove` or
+:meth:`~paya.plugtypes.attribute.Attribute.sendBelow` on the attributes themselves. Namesake methods are also available
+on :class:`~paya.lib.attrs.Section` objects to move entire attribute groups:
+
+.. tabs::
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            ct.attrSections['L_MOUTH'].sendAbove('L_EYE')
+            ct.attrSections['R_MOUTH'].sendAbove('L_EYE')
+
+    .. tab:: Before
+
+        .. figure:: reorder_sections_before.png
+
+    .. tab:: After
+
+        .. figure:: reorder_sections_after.png
