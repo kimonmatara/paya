@@ -153,21 +153,20 @@ paya.datatypes.vector.Vector
         :return: The cross product.
         :rtype: :class:`Vector` or :class:`~paya.plugtypes.attributeMath3D.AttributeMath3D`
     
-    .. py:method:: angle(other)
+    .. py:method:: angle(other, clockNormal=None)
     
-        Returns the unsigned, 180-degree-range angle between this vector and
-        ``other``.
-        
-        Extends the base PyMEL method in these ways:
-        
-        -   Works with plugs as well as values (if 'other' is a plug,
-            the output will also be a plug)
-        
         :param other: the other vector
-        :type other: :class:`~paya.plugtypes.attributeMath3D.AttributeMath3D`, :class:`Vector`,
-            :class:`Point`, list, str
-        :return: The angle.
-        :rtype: :class:`~paya.plugtypes.attributeMath1D.AttributeMath1D` or float
+        :type other: :class:`~paya.plugtypes.math3D.Math3D`,
+            :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.datatypes.point.Point`, list, str
+        :param clockNormal/cn: provide this to get a 360 angle; defaults to
+            None
+        :type clockNormal/cn: None, list, tuple,
+            :class:`~paya.plugtypes.vector.Vector`,
+            :class:`~paya.datatypes.vector.Vector`
+        :return: The angle from this vector to ``other``.
+        :rtype: :class:`~paya.plugtypes.angle.Angle` or
+            :class:`~paya.datatypes.angle.Angle`
     
     .. py:method:: asTranslateMatrix()
     

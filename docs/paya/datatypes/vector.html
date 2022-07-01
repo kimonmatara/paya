@@ -338,24 +338,25 @@ the output will also be a plug)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.datatypes.vector.Vector.angle">
-<span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.vector.Vector.angle" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the unsigned, 180-degree-range angle between this vector and
-<code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
-<p>Extends the base PyMEL method in these ways:</p>
-<ul class="simple">
-<li><p>Works with plugs as well as values (if ‘other’ is a plug,
-the output will also be a plug)</p></li>
-</ul>
-<dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clockNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.datatypes.vector.Vector.angle" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath3D</span></code>, <a class="reference internal" href="#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code>, list, str) – the other vector</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<a class="reference internal" href="../plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>,
+<a class="reference internal" href="#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, list, str) – the other vector</p></li>
+<li><p><strong>clockNormal/cn</strong> (None, list, tuple,
+<a class="reference internal" href="../plugtypes/vector.html#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – provide this to get a 360 angle; defaults to
+None</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The angle.</p>
+<dd class="field-even"><p>The angle from this vector to <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath1D</span></code> or float</p>
+<dd class="field-odd"><p><a class="reference internal" href="../plugtypes/angle.html#paya.plugtypes.angle.Angle" title="paya.plugtypes.angle.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a> or
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></p>
 </dd>
 </dl>
 </dd></dl>

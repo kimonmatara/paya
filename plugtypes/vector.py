@@ -1,3 +1,4 @@
+import pymel.util as _pu
 import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
 from paya.util import short
@@ -194,6 +195,41 @@ class Vector:
             return node.attr('axis'), node.attr('angle')
 
         return node.attr('angle')
+
+    @short(clockNormal='cn')
+    def angle(self, other, clockNormal=None):
+        """
+        :param other: the other vector
+        :type other: :class:`~paya.plugtypes.math3D.Math3D`,
+            :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.datatypes.point.Point`, list, str
+        :param clockNormal/cn: provide this to get a 360 angle; defaults to
+            None
+        :type clockNormal/cn: None, list, tuple,
+            :class:`~paya.plugtypes.vector.Vector`,
+            :class:`~paya.datatypes.vector.Vector`
+        :return: The angle from this vector to ``other``.
+        :rtype: :class:`~paya.plugtypes.angle.Angle`
+        """
+        if clockNormal is None:
+            complete = False
+
+        else:
+            complete = True
+            clockNormal, cnDim, cnIsPlug = _mo.info(clockNormal)
+            cross = self.cross(clockNormal)
+
+        ab = r.createNode('angleBetween')
+        self >> ab.attr('vector1')
+        other >> ab.attr('vector2')
+
+        angle = ab.attr('angle')
+
+        if complete:
+            dot = cross.dot(other, normalize=True)
+            angle = dot.gt(0.0).ifElse(_pu.radians(360.0)-angle, angle)
+
+        return angle
 
     #-----------------------------------------------------------|    Conversions
 

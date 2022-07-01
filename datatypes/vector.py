@@ -1,4 +1,5 @@
 import pymel.core.datatypes as _dt
+import pymel.util as _pu
 from paya.util import short, LazyModule
 import paya.lib.mathops as _mo
 
@@ -450,10 +451,11 @@ class Vector:
 
             return node.attr('outputX')
 
-        out = _dt.Vector.dot(self, other)
-
         if normalize:
-            out = out.normal()
+            out = _dt.Vector.dot(self.normal(), other.normal())
+
+        else:
+            out = _dt.Vector.dot(self, other)
 
         return out
 
@@ -495,32 +497,57 @@ class Vector:
 
         return out
 
-    def angle(self, other):
+    @short(clockNormal='cn')
+    def angle(self, other, clockNormal=None):
         """
-        Returns the unsigned, 180-degree-range angle between this vector and
-        ``other``.
-
-        Extends the base PyMEL method in these ways:
-
-        -   Works with plugs as well as values (if 'other' is a plug,
-            the output will also be a plug)
-
         :param other: the other vector
-        :type other: :class:`~paya.plugtypes.attributeMath3D.AttributeMath3D`, :class:`Vector`,
-            :class:`Point`, list, str
-        :return: The angle.
-        :rtype: :class:`~paya.plugtypes.attributeMath1D.AttributeMath1D` or float
+        :type other: :class:`~paya.plugtypes.math3D.Math3D`,
+            :class:`~paya.datatypes.vector.Vector`,
+            :class:`~paya.datatypes.point.Point`, list, str
+        :param clockNormal/cn: provide this to get a 360 angle; defaults to
+            None
+        :type clockNormal/cn: None, list, tuple,
+            :class:`~paya.plugtypes.vector.Vector`,
+            :class:`~paya.datatypes.vector.Vector`
+        :return: The angle from this vector to ``other``.
+        :rtype: :class:`~paya.plugtypes.angle.Angle` or
+            :class:`~paya.datatypes.angle.Angle`
         """
-        other, dim, isplug = _mo.info(other)
+        other, otherDim, otherIsPlug  = _mo.info(other)
 
-        if isplug:
-            node = r.nodes.AngleBetween.createNode()
-            node.attr('vector1').set(self)
-            node.attr('vector2').put(other, p=isplug)
+        if clockNormal is None:
+            complete = False
+            hasPlugs = otherIsPlug
 
-            return node.attr('angle')
+        else:
+            complete = True
+            clockNormal, cnDim, cnIsPlug = _mo.info(clockNormal)
+            hasPlugs = cnIsPlug or otherIsPlug
 
-        return _dt.Vector.angle(self, other)
+        if complete:
+            cross = self.cross(clockNormal)
+
+        if hasPlugs:
+            ab = r.createNode('angleBetween')
+            ab.attr('vector1').set(self)
+            ab.attr('vector2').put(p=otherIsPlug)
+
+            angle = ab.attr('angle')
+
+            if complete:
+                dot = cross.dot(other, normalize=True)
+                angle = dot.gt(0.0).ifElse(_pu.radians(360.0)-angle, angle)
+
+        else:
+            angle = _dt.Vector.angle(self, other)
+
+            if complete:
+                dot = self.dot(other, normalize=True)
+
+                if dot > 0.0:
+                    angle = _pu.radians(360.0)-angle
+
+        return angle
 
     #--------------------------------------------------------------------|    Conversions
 

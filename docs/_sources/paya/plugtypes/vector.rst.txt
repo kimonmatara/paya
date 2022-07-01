@@ -75,22 +75,19 @@ paya.plugtypes.vector.Vector
         :param bool normalize/nr: normalize the output; defaults to False
         :return: :class:`paya.plugtypes.vector.Vector`
     
-    .. py:method:: angle(other, euler=False, axisAngle=False)
+    .. py:method:: angle(other, clockNormal=None)
     
-        Returns the unsigned, 180-degree-range angle between this vector and
-        ``other``.
-        
         :param other: the other vector
         :type other: :class:`~paya.plugtypes.math3D.Math3D`,
             :class:`~paya.datatypes.vector.Vector`,
             :class:`~paya.datatypes.point.Point`, list, str
-        :param bool euler: return an euler angle
-            triple compound, defaults to False
-        :param bool axisAngle: return an axis, angle tuple;
-            defaults to False
-        :return: A single angle output, a triple euler compound,
-            or a tuple of *(axis vector, angle)*, depending on flags
-        :rtype: :class:`~paya.plugtypes.vector.Vector` or :class:`tuple`
+        :param clockNormal/cn: provide this to get a 360 angle; defaults to
+            None
+        :type clockNormal/cn: None, list, tuple,
+            :class:`~paya.plugtypes.vector.Vector`,
+            :class:`~paya.datatypes.vector.Vector`
+        :return: The angle from this vector to ``other``.
+        :rtype: :class:`~paya.plugtypes.angle.Angle`
     
     .. py:method:: asTranslateMatrix()
     

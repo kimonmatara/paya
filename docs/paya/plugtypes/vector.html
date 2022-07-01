@@ -261,27 +261,24 @@ class:<cite>~paya.plugtypes.math3D.Math3D</cite>) – the angle of rotation</p><
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.plugtypes.vector.Vector.angle">
-<span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">euler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisAngle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.vector.Vector.angle" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the unsigned, 180-degree-range angle between this vector and
-<code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
-<dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clockNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtypes.vector.Vector.angle" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>other</strong> (<a class="reference internal" href="math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>,
 <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
 <a class="reference internal" href="../datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, list, str) – the other vector</p></li>
-<li><p><strong>euler</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return an euler angle
-triple compound, defaults to False</p></li>
-<li><p><strong>axisAngle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return an axis, angle tuple;
-defaults to False</p></li>
+<li><p><strong>clockNormal/cn</strong> (None, list, tuple,
+<a class="reference internal" href="#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – provide this to get a 360 angle; defaults to
+None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A single angle output, a triple euler compound,
-or a tuple of <em>(axis vector, angle)</em>, depending on flags</p>
+<dd class="field-even"><p>The angle from this vector to <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="angle.html#paya.plugtypes.angle.Angle" title="paya.plugtypes.angle.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
