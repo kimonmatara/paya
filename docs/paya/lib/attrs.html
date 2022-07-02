@@ -63,12 +63,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../types_index.html">Types</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.attrs</a></li>
@@ -79,16 +77,15 @@
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
@@ -129,9 +126,9 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>attrList</strong> (list of str or
-<a class="reference internal" href="../plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>) – the list of attributes to expand</p></li>
+<a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>) – the list of attributes to expand</p></li>
 <li><p><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return
-<a class="reference internal" href="../plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> instances rather than
+<a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> instances rather than
 strings; defaults to True</p></li>
 </ul>
 </dd>
@@ -139,7 +136,7 @@ strings; defaults to True</p></li>
 <dd class="field-even"><p>The expanded attribute list.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of str or <a class="reference internal" href="../plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+<dd class="field-odd"><p>list of str or <a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -153,7 +150,7 @@ and connections are preserved:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>node</strong> (str, <a class="reference internal" href="../nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode" title="paya.nodetypes.dependNode.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a>) – the node that carries the attributes</p></li>
+<li><p><strong>node</strong> (str, <a class="reference internal" href="../../pools/nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a>) – the node that carries the attributes</p></li>
 <li><p><strong>attrNames</strong> (<em>list of str</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the names of the attributes to reorder, in the preferred
 order</p></li>
 </ul>
@@ -162,7 +159,7 @@ order</p></li>
 <dd class="field-even"><p>The rebuilt attributes.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of <a class="reference internal" href="../plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+<dd class="field-odd"><p>list of <a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -184,7 +181,7 @@ order</p></li>
 <dd class="field-odd"><p>The owner node.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode" title="paya.nodetypes.dependNode.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -197,7 +194,7 @@ order</p></li>
 <dd class="field-odd"><p>The section attribute.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../plugtypes/enum.html#paya.plugtypes.enum.Enum" title="paya.plugtypes.enum.Enum"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/plugs/enum.html#paya.runtime.plugs.Enum" title="paya.runtime.plugs.Enum"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

@@ -10,8 +10,8 @@ class Quaternion:
     @short(plug='p')
     def get(self, plug=False, default=None, **kwargs):
         """
-        Overloads :py:meth:`paya.plugtypes.attribute.Attribute.get` to return
-        :class:`~paya.datatypes.quaternion.Quaternion` instances instead of
+        Overloads :py:meth:`paya.runtime.plugs.Attribute.get` to return
+        :class:`~paya.runtime.data.Quaternion` instances instead of
         tuples.
         """
         if plug:

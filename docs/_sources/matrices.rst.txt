@@ -12,8 +12,8 @@ Relevant Classes
 
     *   - Static
         - Dynamic
-    *   - :class:`paya.datatypes.matrix.Matrix`
-        - :class:`paya.plugtypes.matrix.Matrix`
+    *   - :class:`paya.runtime.data.Matrix`
+        - :class:`paya.runtime.plugs.Matrix`
 
 ===========
 Multiplying
@@ -80,7 +80,7 @@ The most performant way in Maya to apply a matrix to a transform node is to set,
 .. _selective_application:
 
 To modify SRT channels selectively via decomposition, use the :term:`universal` method
-:meth:`~paya.plugtypes.matrix.Matrix.decomposeAndApply`. By default this accounts for ``rotateAxis`` and, on joints
+:meth:`~paya.runtime.plugs.Matrix.decomposeAndApply`. By default this accounts for ``rotateAxis`` and, on joints
 only, ``jointOrient`` and ``inverseScale``. In the following example ``rotateAxis`` compensation is disabled for a
 simpler network:
 
@@ -106,7 +106,7 @@ simpler network:
 Filtering
 =========
 
-To quickly configure and connect a ``pickMatrix`` node, use :meth:`~paya.plugtypes.matrix.Matrix.pick`. This has also
+To quickly configure and connect a ``pickMatrix`` node, use :meth:`~paya.runtime.plugs.Matrix.pick`. This has also
 been implemented on data classes. Here's a variant of the earlier :ref:`selective-application <selective_application>`
 example without matrix decomposition:
 
@@ -136,7 +136,7 @@ example without matrix decomposition:
 Offsetting
 ==========
 
-Use :meth:`~paya.plugtypes.matrix.Matrix.asOffset` to preserve relative pose when applying a dynamic matrix to a
+Use :meth:`~paya.runtime.plugs.Matrix.asOffset` to preserve relative pose when applying a dynamic matrix to a
 transform. This is functionally the same as the ``maintainOffset`` option on Maya's constraints:
 
 .. tabs::
@@ -183,10 +183,10 @@ transform. This is functionally the same as the ``maintainOffset`` option on May
 
             matrix >> cube.attr('offsetParentMatrix')
 
-    *   For polymorphic parity, ``asOffset`` has also been implemented on :class:`paya.datatypes.matrix.Matrix`, where
+    *   For polymorphic parity, ``asOffset`` has also been implemented on :class:`paya.runtime.data.Matrix`, where
         it merely returns an identity ('null') matrix.
 
-    *   On the dynamic class, the expansion of :meth:`~paya.plugtypes.matrix.Matrix.asOffset` is:
+    *   On the dynamic class, the expansion of :meth:`~paya.runtime.plugs.Matrix.asOffset` is:
 
         .. code-block:: python
 

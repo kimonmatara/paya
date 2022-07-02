@@ -7,7 +7,7 @@ Creating IK Handles
 ===================
 
 Paya provides a few different constructors in addition to the standard PyMEL :func:`~pymel.core.animation.ikHandle`
-command. The first is :meth:`paya.nodetypes.ikHandle.IkHandle.create`, which takes the same arguments and supports
+command. The first is :meth:`paya.runtime.nodes.IkHandle.create`, which takes the same arguments and supports
 managed names:
 
 .. code-block:: python
@@ -61,7 +61,7 @@ requires an ``upAxis`` hint:
 Pole Vectors
 ============
 
-The :meth:`~paya.nodetypes.ikHandle.IkHandle.setPolePoint` method on :class:`~paya.nodetypes.ikHandle.IkHandle` is an
+The :meth:`~paya.runtime.nodes.IkHandle.setPolePoint` method on :class:`~paya.runtime.nodes.IkHandle` is an
 alternative to :func:`~pymel.core.animation.poleVectorConstraint` that works with point attributes and implements
 ``maintainOffset``:
 
@@ -105,9 +105,9 @@ To get non-jumping pole vector defaults for complex non-planar chains, use :meth
 Spline Twist
 ============
 
-Use :meth:`~paya.nodetypes.ikHandle.IkHandle.setTwistVectors` on :class:`~paya.nodetypes.ikHandle.IkHandle` to quickly
+Use :meth:`~paya.runtime.nodes.IkHandle.setTwistVectors` on :class:`~paya.runtime.nodes.IkHandle` to quickly
 enable and configure start / end twist on spline handles. This pairs well with axis properties on Paya
-:class:`~paya.plugtypes.matrix.Matrix` attributes:
+:class:`~paya.runtime.plugs.Matrix` attributes:
 
 .. tabs::
 

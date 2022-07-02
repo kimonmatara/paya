@@ -77,9 +77,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -125,7 +126,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p>N/A</p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D" title="paya.plugtypes.math1D.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.math1D.Math1D</span></code></a></p></td>
+<td><p><a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Math1D</span></code></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -133,13 +134,13 @@
 <section id="general">
 <h2>General<a class="headerlink" href="#general" title="Permalink to this headline"></a></h2>
 <p>Paya implements too much functionality on scalars to list here, from <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> operators to methods for range
-management, comparisons, frame sampling and so on. For a full reference, see <a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D" title="paya.plugtypes.math1D.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a> and
+management, comparisons, frame sampling and so on. For a full reference, see <a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a> and
 <a class="reference internal" href="angles_and_rotations.html"><span class="doc">Angles and Rotations</span></a>.</p>
 </section>
 <section id="gating">
 <h2>Gating<a class="headerlink" href="#gating" title="Permalink to this headline"></a></h2>
 <p>The <strong>comparison</strong> modes of Maya’s <code class="docutils literal notranslate"><span class="pre">condition</span></code> node have been implemented as methods, for example
-<a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.gt" title="paya.plugtypes.math1D.Math1D.gt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gt()</span></code></a>. These pair well with <a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.ifElse" title="paya.plugtypes.math1D.Math1D.ifElse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ifElse()</span></code></a> to create
+<a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.gt" title="paya.runtime.plugs.Math1D.gt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gt()</span></code></a>. These pair well with <a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.ifElse" title="paya.runtime.plugs.Math1D.ifElse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ifElse()</span></code></a> to create
 logic gates in the dependency graph:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loc1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;ty&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">ifElse</span><span class="p">(</span>

@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="next" title="Types" href="types_index.html" />
     <link rel="prev" title="Package Configuration" href="package_config.html" /> 
 </head>
 
@@ -63,9 +63,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -114,7 +115,7 @@ shadow any current, or future, implementations of custom methods or properties w
 <p class="rubric">Shorthands</p>
 <p>Many Paya methods and functions are available in shorthand form and they, in turn, can accept shorthand keyword
 arguments. Where available, these will be listed in the documentation. Here are several degrees of reduction for
-<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.pick" title="paya.plugtypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>:</p>
+<a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.pick" title="paya.runtime.plugs.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Long</span>
 <span class="n">tmtx</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;wm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -138,7 +139,7 @@ use in your own scripts. Here’s an example:</p>
 </div>
 <p class="rubric">MEL-Like Arguments</p>
 <p>Another utility, <a class="reference internal" href="paya/util/functions.html#paya.util.functions.resolveFlags" title="paya.util.functions.resolveFlags"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.util.functions.resolveFlags()</span></code></a>, lets you create MEL-like interfaces where arguments are
-defined by omission. For example, in the case of <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.pick" title="paya.plugtypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>, passing
+defined by omission. For example, in the case of <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.pick" title="paya.runtime.plugs.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>, passing
 <code class="docutils literal notranslate"><span class="pre">t=True</span></code> will automatically set the other channels to <code class="docutils literal notranslate"><span class="pre">False</span></code>. This is implemented as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shear</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">translate</span><span class="p">,</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">shear</span> <span class="o">=</span> <span class="n">resolveFlags</span><span class="p">(</span><span class="n">translate</span><span class="p">,</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">shear</span><span class="p">)</span>
@@ -151,7 +152,7 @@ defined by omission. For example, in the case of <a class="reference internal" h
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="package_config.html" class="btn btn-neutral float-left" title="Package Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="types_index.html" class="btn btn-neutral float-right" title="Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

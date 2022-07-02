@@ -2,9 +2,9 @@
 Controller Tags and Pick-Walk Hierarchies
 *****************************************
 
-Controls generated with :meth:`~paya.nodetypes.transform.Transform.createControl` carry
+Controls generated with :meth:`~paya.runtime.nodes.Transform.createControl` carry
 `controller tags <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=GUID-17AF3B37-8A57-46DD-8808-D4BFF23AD285>`_ by
-default. To add or remove controller tags yourself, use :meth:`~paya.nodetypes.dagNode.DagNode.isControl` on any DAG
+default. To add or remove controller tags yourself, use :meth:`~paya.runtime.nodes.DagNode.isControl` on any DAG
 node, for example:
 
 .. code-block:: python
@@ -15,8 +15,8 @@ node, for example:
     print(loc.isControl()) # query mode
     # False
 
-To define pick-walk hierarchies, use :meth:`~paya.nodetypes.dagNode.DagNode.getPickWalkParent`
-and :meth:`~paya.nodetypes.dagNode.DagNode.setPickWalkParent` on any DAG node, for example:
+To define pick-walk hierarchies, use :meth:`~paya.runtime.nodes.DagNode.getPickWalkParent`
+and :meth:`~paya.runtime.nodes.DagNode.setPickWalkParent` on any DAG node, for example:
 
 .. tabs::
 

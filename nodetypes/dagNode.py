@@ -22,8 +22,8 @@ class DagNode:
         :param bool plug/p: return an attribute instead of a value; defaults
             to False
         :return: The position attribute or value.
-        :rtype: :class:`~paya.datatypes.point.Point` or
-           :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.data.Point` or
+           :class:`~paya.runtime.plugs.Vector`
         """
         return self.getWorldMatrix(p=plug).t
 
@@ -96,7 +96,7 @@ class DagNode:
             preserved)
         :type parent: str, :class:`~pymel.core.general.PyNode`, None
         :return: ``self``
-        :rtype: :class:`~paya.nodetypes.dagNode.DagNode`
+        :rtype: :class:`~paya.runtime.nodes.DagNode`
         """
         if parent is None:
             if self.isControl():
@@ -114,7 +114,7 @@ class DagNode:
     def getPickWalkParent(self):
         """
         :return: The pick walk parent for this node, if any.
-        :rtype: None, :class:`~paya.nodetypes.dependNode.DependNode`
+        :rtype: None, :class:`~paya.runtime.nodes.DependNode`
         """
         result = r.controller(self, q=True, parent=True)
 

@@ -76,9 +76,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -180,7 +181,7 @@ every PyMEL class ‘shadowed’ by a Paya namesake:</p>
 <section id="template-classes">
 <span id="id1"></span><h2>Template Classes<a class="headerlink" href="#template-classes" title="Permalink to this headline"></a></h2>
 <p>Each Paya class is defined inside a module under a <em>class pool</em> directory. The name of the module is the uncapitalized
-name of the class. For example, <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix</span></code></a> is defined inside <code class="docutils literal notranslate"><span class="pre">matrix.py</span></code> under the
+name of the class. For example, <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a> is defined inside <code class="docutils literal notranslate"><span class="pre">matrix.py</span></code> under the
 <code class="docutils literal notranslate"><span class="pre">paya/plugtypes</span></code> class pool for attributes.</p>
 <p>These modules should not be imported directly. The ‘template’ classes they contain are rebuilt by Paya to enforce
 correct inheritance and then assigned to PyMEL objects on-the-fly; these ‘final’ classes can be retrieved via the

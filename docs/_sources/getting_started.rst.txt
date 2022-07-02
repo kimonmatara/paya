@@ -37,7 +37,7 @@ you first import :mod:`paya.runtime`:
 
     cam = p.PyNode('persp')
     print(cam.__class__)
-    # <class 'paya.nodetypes.transform.Transform'>
+    # <class 'paya.runtime.nodes.Transform'>
 
 Notice the inspected class of the camera instance; PyMEL will continue to return custom Paya classes instead of its
 own until :meth:`~paya.runtime.Runtime.stop` is called:

@@ -31,6 +31,6 @@ class AccessorOnNode(Accessor):
     def node(self):
         """
         :return: The owner node.
-        :rtype: :class:`~paya.nodetypes.dependNode.DependNode`
+        :rtype: :class:`~paya.runtime.nodes.DependNode`
         """
         return self.owner

@@ -21,10 +21,10 @@ class EulerRotation:
         :param rotateOrder/ro: the rotate order of this euler rotation;
             defaults to 'xyz'
         :type rotateOrder/ro: int, str,
-            :class:`~paya.plugtypes.attribute.Attribute`
+            :class:`~paya.runtime.plugs.Attribute`
         :return: A locator with this euler rotation piped into its
             ``rotate`` channels.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         loc = r.nodes.Locator.createNode(n=name).getParent()
         rotateOrder >> loc.attr('ro')
@@ -39,8 +39,8 @@ class EulerRotation:
     @short(plug='p')
     def get(self, plug=False, **kwargs):
         """
-        Overrides :meth:`~paya.plugtypes.attribute.Attribute.get` to return
-        :class:`~paya.datatypes.eulerRotation.EulerRotation` values.
+        Overrides :meth:`~paya.runtime.plugs.Attribute.get` to return
+        :class:`~paya.runtime.data.EulerRotation` values.
         """
         if plug:
             return self
@@ -54,8 +54,8 @@ class EulerRotation:
 
     def set(self, *args, **kwargs):
         """
-        Overloads :meth:`~paya.plugtypes.attribute.Attribute.get` to ensure
-        that instances of :class:`~paya.datatypes.eulerRotation.EulerRotation`
+        Overloads :meth:`~paya.runtime.plugs.Attribute.get` to ensure
+        that instances of :class:`~paya.runtime.data.EulerRotation`
         with units that don't match the UI setting are set correctly.
         """
         if args:
@@ -94,7 +94,7 @@ class EulerRotation:
         :param rotateOrder/ro: the rotate order, defaults to 'xyz'
         :type rotateOrder/ro: :class:`Math1D`, str, int
         :return: The quaternion.
-        :rtype: :class:`~paya.plugtypes.quaternion.Quaternion`
+        :rtype: :class:`~paya.runtime.plugs.Quaternion`
         """
         node = r.nodes.EulerToQuat.createNode()
         self >> node.attr('inputRotate')
@@ -110,7 +110,7 @@ class EulerRotation:
         :param rotateOrder/ro: the rotate order, defaults to 'xyz'
         :type rotateOrder/ro: :class:`Math1D`, str, int
         :return: A triple euler angle compound.
-        :rtype: :class:`~paya.plugtypes.math3D.Math3D`
+        :rtype: :class:`~paya.runtime.plugs.Math3D`
         """
         node = r.nodes.ComposeMatrix.createNode()
         self >> node.attr('inputRotate')

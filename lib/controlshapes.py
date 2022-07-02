@@ -87,7 +87,7 @@ class ControlShapesLibrary(UserDict):
         :param bool replace/rep: replace existing shapes on the controls;
             defaults to True
         :return: The newly-generated control shape nodes.
-        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+        :rtype: list of :class:`~paya.runtime.nodes.Shape`
         """
         macros = self[name]
         srcShapes = [
@@ -123,7 +123,7 @@ class ControlShapesLibrary(UserDict):
             :meth:`~paya.lib.controls.ControlShapesLibrary.dump` is called.
 
         :param control: the control to inspect
-        :type control: str, :class:`~paya.nodetypes.transform.Transform`
+        :type control: str, :class:`~paya.runtime.nodes.Transform`
         :param str name: the name for the new entry
         :raises NoControlShapesError: no control shapes were found under the
             control

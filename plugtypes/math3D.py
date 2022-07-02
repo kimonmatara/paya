@@ -17,7 +17,7 @@ class Math3D:
         :rtype name/n: None, list, int, str
         :return: A locator with this 3D compound piped into its
             ``translate`` channel.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         loc = r.nodes.Locator.createNode(n=name).getParent()
         self >> loc.attr('t')
@@ -30,8 +30,8 @@ class Math3D:
     @short(plug='p')
     def get(self, plug=False, **kwargs):
         """
-        Overloads :meth:`paya.plugtypes.attribute.Attribute.get` to return
-        :class:`~paya.datatypes.vector.Vector` instead of :class:`tuple`.
+        Overloads :meth:`paya.runtime.plugs.Attribute.get` to return
+        :class:`~paya.runtime.data.Vector` instead of :class:`tuple`.
         """
         if plug:
             return self

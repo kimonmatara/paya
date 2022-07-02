@@ -63,12 +63,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Module Documentation</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../types_index.html">Types</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comptypes.html">paya.comptypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../datatypes.html">paya.datatypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
@@ -79,16 +77,15 @@
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../nodetypes.html">paya.nodetypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../plugtypes.html">paya.plugtypes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
@@ -197,14 +194,14 @@ here.</p></li>
 <dd><p>If x is a <strong>value</strong>, then:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>If its dimension is 3, it’s returned as a <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p></li>
-<li><p>If its dimension is 4, it’s returned as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></p></li>
-<li><p>If its dimension is 16, it’s returned as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></p></li>
+<li><p>If its dimension is 3, it’s returned as a <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p></li>
+<li><p>If its dimension is 4, it’s returned as a <a class="reference internal" href="../../pools/data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p></li>
+<li><p>If its dimension is 16, it’s returned as a <a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p></li>
 <li><p>In all other cases, it’s returned as-is</p></li>
 </ul>
 </div></blockquote>
 <p>If x is a <strong>plug</strong>, then it’s returned as an instance of the appropriate
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></p>
+<a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>x</strong> – the item to conform</p>
@@ -213,9 +210,9 @@ here.</p></li>
 <dd class="field-even"><p>The conformed item.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code>, <a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>
-or <a class="reference internal" href="../plugtypes/attribute.html#paya.plugtypes.attribute.Attribute" title="paya.plugtypes.attribute.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a>, <a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>
+or <a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -230,13 +227,13 @@ into <code class="docutils literal notranslate"><span class="pre">multMatrix</sp
 Otherwise, it will be a value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>*matrices</strong> (<a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>, list or str) – the matrices to multiply (unpacked)</p>
+<dd class="field-odd"><p><strong>*matrices</strong> (<a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>, <a class="reference internal" href="../../pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>, list or str) – the matrices to multiply (unpacked)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The matrix product.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a> or <a class="reference internal" href="../plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a> or <a class="reference internal" href="../../pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -269,14 +266,14 @@ populate the matrix rows. This may result in a non-orthornormal
 <p>If this argument is omitted, an identity matrix will be returned.</p>
 </p></li>
 <li><p><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>,
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code>,
-<a class="reference internal" href="../plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – A <strong>translate</strong> component for the matrix; this can be
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – A <strong>translate</strong> component for the matrix; this can be
 a point value or plug; defaults to None</p></li>
 <li><p><strong>preserveSecondLength/psl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if six arguments were passed;
 preserve the second vector’s length when performing orthogonal
 construction; defaults to True</p></li>
 <li><p><strong>thirdLength/tl</strong> (None, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>,
-<a class="reference internal" href="../plugtypes/math1D.html#paya.plugtypes.math1D.Math1D" title="paya.plugtypes.math1D.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – ignored is six arguments were passed; if provided,
+<a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – ignored is six arguments were passed; if provided,
 defines the third (derived) vector’s length; defaults to None</p></li>
 <li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if you already know whether the passed arguments contain
 plugs, specify it here to avoid extraneous checks; if no arguments
@@ -288,8 +285,8 @@ matrix is a plug or value; defaults to None</p></li>
 <dd class="field-odd"><p>The constructed matrix.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix</span></code></a> or
-<a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a>, depending on inputs.</p>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a> or
+<a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a>, depending on inputs.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -397,7 +394,7 @@ longer than the specified tolerance</p>
 <dd class="field-odd"><p>The list of aim vectors.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -415,7 +412,7 @@ to the previous one.</p>
 <dd class="field-even"><p>The deflipped vectors.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -430,7 +427,7 @@ chains.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> – the source points (values)</p></li>
-<li><p><strong>refVector</strong> (<a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list) – a reference up vector</p></li>
+<li><p><strong>refVector</strong> (<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list) – a reference up vector</p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – aim vectors or cross products with lengths
 below this tolerance will be replaced with neighbouring ones;
 defaults to 1e-7</p></li>
@@ -456,7 +453,7 @@ which can be used to draw chains and other systems.</p>
 <li><p><strong>points</strong> – the source points (values)</p></li>
 <li><p><strong>downAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the aiming axis</p></li>
 <li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to bias towards the reference vector</p></li>
-<li><p><strong>refVector</strong> (<a class="reference internal" href="../datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list) – a reference up vector</p></li>
+<li><p><strong>refVector</strong> (<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list) – a reference up vector</p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – aim vectors or cross products with lengths
 below this tolerance will be replaced with neighbouring ones;
 defaults to 1e-7</p></li>
@@ -466,7 +463,7 @@ defaults to 1e-7</p></li>
 <dd class="field-even"><p>A list of matrices</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -483,7 +480,7 @@ defaults to 1e-7</p></li>
 <dd class="field-even"><p>The normalized points.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of <a class="reference internal" href="../datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p>
+<dd class="field-odd"><p>list of <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

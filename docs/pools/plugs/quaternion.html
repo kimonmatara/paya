@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.runtime.plugs.Quaternion &mdash; paya 0.5.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.runtime.plugs.String" href="string.html" />
+    <link rel="prev" title="paya.runtime.plugs.Matrix" href="matrix.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="attribute.html">Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compound.html">Compound</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum.html">Enum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math1D.html">Math1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math2D.html">Math2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math3D.html">Math3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../types_index.html">Types</a> &raquo;</li>
+          <li><a href="../plugs_index.html">Plug (Attribute) Types</a> &raquo;</li>
+      <li>paya.runtime.plugs.Quaternion</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/pools/plugs/quaternion.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="paya-runtime-plugs-quaternion">
+<h1>paya.runtime.plugs.Quaternion<a class="headerlink" href="#paya-runtime-plugs-quaternion" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Quaternion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.get" title="Permalink to this definition"></a></dt>
+<dd><p>Overloads <a class="reference internal" href="attribute.html#paya.runtime.plugs.Attribute.get" title="paya.runtime.plugs.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Attribute.get()</span></code></a> to return
+<a class="reference internal" href="../data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a> instances instead of
+tuples.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.__add__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>addition</strong> (<code class="docutils literal notranslate"><span class="pre">+</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – a value or plug of dimension 1 or 4</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.__radd__">
+<span class="sig-name descname"><span class="pre">__radd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.__radd__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>reflected addition</strong> (<code class="docutils literal notranslate"><span class="pre">+</span></code>). See <a class="reference internal" href="#paya.runtime.plugs.Quaternion.__add__" title="paya.runtime.plugs.Quaternion.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__add__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.__sub__">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.__sub__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>subtraction</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – a value or plug of dimension 1 or 4</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.__rsub__">
+<span class="sig-name descname"><span class="pre">__rsub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.__rsub__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>reflected subtraction</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>). See <a class="reference internal" href="#paya.runtime.plugs.Quaternion.__sub__" title="paya.runtime.plugs.Quaternion.__sub__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__sub__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.__mul__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> – a value or plug of dimension 1 or 4</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.__rmul__">
+<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.__rmul__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>reflected multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>). See <a class="reference internal" href="#paya.runtime.plugs.Quaternion.__mul__" title="paya.runtime.plugs.Quaternion.__mul__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__mul__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.__neg__">
+<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.__neg__" title="Permalink to this definition"></a></dt>
+<dd><p>Implements unary negation (<code class="docutils literal notranslate"><span class="pre">-</span></code>) via <code class="docutils literal notranslate"><span class="pre">quatNegate</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.inverse">
+<span class="sig-name descname"><span class="pre">inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.inverse" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The inverse of this quaternion.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Quaternion" title="paya.runtime.plugs.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.normal">
+<span class="sig-name descname"><span class="pre">normal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.normal" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The normalized quaternion.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Quaternion" title="paya.runtime.plugs.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.conjugate">
+<span class="sig-name descname"><span class="pre">conjugate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.conjugate" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The conjugated quaternion.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Quaternion" title="paya.runtime.plugs.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.blend">
+<span class="sig-name descname"><span class="pre">blend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angleInterpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Shortest'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.blend" title="Permalink to this definition"></a></dt>
+<dd><p>Blends this quaternion towards <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (list, <a class="reference internal" href="#paya.runtime.plugs.Quaternion" title="paya.runtime.plugs.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a>, <a class="reference internal" href="#paya.runtime.plugs.Quaternion" title="paya.runtime.plugs.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a>) – the quaternion value or plug towards which to blend</p></li>
+<li><p><strong>weight/w</strong> (int, float, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – ‘other’ will be fully active at 1.0; defaults to 0.5</p></li>
+<li><p><strong>swap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – reverse operands, defaults to False</p></li>
+<li><p><strong>angleInterpolation</strong> (str (an enum name from
+<code class="docutils literal notranslate"><span class="pre">QuatSlerp.angleInterpolation</span></code>, int, or <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the type of slerp interpolation to use,
+defaults to ‘Shortest’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The blended output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.Quaternion" title="paya.runtime.plugs.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.asEulerRotation">
+<span class="sig-name descname"><span class="pre">asEulerRotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotateOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xyz'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.asEulerRotation" title="Permalink to this definition"></a></dt>
+<dd><p>Returns this quaternion as an euler compound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rotateOrder/ro</strong> (int, str, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the rotate order, defaults to ‘xyz’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The euler rotation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.asAxisAngle">
+<span class="sig-name descname"><span class="pre">asAxisAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.asAxisAngle" title="Permalink to this definition"></a></dt>
+<dd><p>Returns this quaternion as a tuple of axis, angle outputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The axis (vector) and angle outputs.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Quaternion.asRotateMatrix">
+<span class="sig-name descname"><span class="pre">asRotateMatrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Quaternion.asRotateMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Returns this quaternion as a rotation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The rotation matrix.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath16D</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="matrix.html" class="btn btn-neutral float-left" title="paya.runtime.plugs.Matrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="string.html" class="btn btn-neutral float-right" title="paya.runtime.plugs.String" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -20,7 +20,7 @@ class Matrix:
         :param str name/n: one or more name elements; defaults to None
         :param float scale: the locator display scale; defaults to 1.0
         :return: The locator.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         loc = r.nodes.Locator.createNode(n=name).getParent()
         loc.attr('displayLocalAxis').set(True)
@@ -69,7 +69,7 @@ class Matrix:
 
         :param others: the other matrices (unpacked list)
         :type others: str, Matrix, Matrix, [list]
-        :return: :class:`~paya.attributeMatrix.Matrix`
+        :return: :class:`~paya.runtime.plugs.Matrix`
         """
         items = [self] * list(others)
         return _mo.multMatrices(*items)
@@ -183,10 +183,10 @@ class Matrix:
         :param shear/sh: use shear
         :param default: take omitted fields from this matrix; can be a value
             or plug; defaults to None
-        :type default: list, :class:`~paya.datatypes.matrix.Matrix`, str,
-            :class:`~paya.plugtypes.attributeMatrix.Matrix`
+        :type default: list, :class:`~paya.runtime.data.Matrix`, str,
+            :class:`~paya.runtime.plugs.Matrix`
         :return: The filtered matrix.
-        :rtype: :class:`~paya.plugtypes.attributeMatrix.Matrix`
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         translate, rotate, scale, shear = resolveFlags(
             translate, rotate, scale, shear
@@ -232,7 +232,7 @@ class Matrix:
     def inverse(self):
         """
         :return: The inverse of this matrix.
-        :rtype: :class:`~paya.attributeMatrix.Matrix`
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         node = r.nodes.InverseMatrix.createNode()
         self >> node.attr('inputMatrix')
@@ -249,7 +249,7 @@ class Matrix:
             self.get().inverse() * self
 
         :return: The offset matrix.
-        :rtype: :class:`~paya.attributeMatrix.Matrix`
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         return self.get().inverse() * self
 
@@ -261,7 +261,7 @@ class Matrix:
         Extracts the specified axis from this matrix as a vector output. If
         this is the output attribute of a fourByFourMatrix node, the method
         will defer to methods in
-        :class:`~paya.nodetypes.fourByFourMatrix.FourByFourMatrix`.
+        :class:`~paya.runtime.nodes.FourByFourMatrix`.
 
         Used to implement the following properties: **x**, **y**, **z** and
         **translate**/**t**. The property versions will always return
@@ -313,7 +313,7 @@ class Matrix:
 
         :param bool normalize: normalize the output; defaults to False
         :return: the extracted vector
-        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         return self.getAxis('x', nr=normalize)
 
@@ -323,7 +323,7 @@ class Matrix:
 
         :param bool normalize: normalize the output; defaults to False
         :return: the extracted vector
-        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         return self.getAxis('y', nr=normalize)
 
@@ -333,7 +333,7 @@ class Matrix:
 
         :param bool normalize: normalize the output; defaults to False
         :return: the extracted vector
-        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         return self.getAxis('z', nr=normalize)
 
@@ -344,7 +344,7 @@ class Matrix:
 
         :param bool normalize: normalize the output; defaults to False
         :return: the extracted translation
-        :rtype: :class:`~paya.plugtypes.math3D.Math3D`
+        :rtype: :class:`~paya.runtime.plugs.Math3D`
         """
         return self.getAxis('t', nr=normalize)
 
@@ -358,7 +358,7 @@ class Matrix:
     def transpose(self):
         """
         :return: The transposition of this matrix.
-        :rtype: :class:`~paya.attributeMatrix.Matrix`
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         node = r.nodes.TransposeMatrix.createNode()
         self >> node.attr('inputMatrix')
@@ -414,7 +414,7 @@ class Matrix:
         Decomposes and applies this matrix to a transform.
 
         :param transform: the transform node to drive
-        :type transform: str, :class:`~paya.nodetypes.transform.Transform`
+        :type transform: str, :class:`~paya.runtime.nodes.Transform`
         :param bool translate/t: apply translation
         :param bool rotate/r: apply rotation
         :param bool scale/s: apply scale

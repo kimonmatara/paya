@@ -1,0 +1,19 @@
+************************
+paya.runtime.plugs.Angle
+************************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: Angle(*args, **kwargs)
+
+    .. py:method:: get(plug=False, default=None, **kwargs)
+    
+        Overloads :py:meth:`paya.runtime.plugs.Attribute.get` to return
+        :class:`~paya.runtime.data.Angle` instances instead of
+        :class:`float`.
+    
+    .. py:method:: set(*args, **kwargs)
+    
+        Overloads :meth:`~paya.runtime.plugs.Attribute.get` to ensure
+        that instances of :class:`~paya.runtime.data.Angle`
+        with units that don't match the UI setting are set correctly.

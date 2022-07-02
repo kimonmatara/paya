@@ -6,8 +6,8 @@ Drawing Controls
 Method
 ======
 
-Paya's :class:`~paya.nodetypes.transform.Transform` class provides a special constructor
-for controls, :meth:`~paya.nodetypes.transform.Transform.createControl`. For convenience, this is also available
+Paya's :class:`~paya.runtime.nodes.Transform` class provides a special constructor
+for controls, :meth:`~paya.runtime.nodes.Transform.createControl`. For convenience, this is also available
 directly on :mod:`paya.runtime`:
 
 .. code-block:: python
@@ -30,7 +30,7 @@ Arguments
     blocks. The Paya suffix for rig controls will be applied automatically. See :doc:`Node Names <naming_nodes>` for
     more information.
 
-:worldMatrix/wm: ``None``, :class:`list` or :class:`~paya.datatypes.matrix.Matrix`; defaults to ``None``
+:worldMatrix/wm: ``None``, :class:`list` or :class:`~paya.runtime.data.Matrix`; defaults to ``None``
 
     The matrix to apply to the offset group. This will define the control's 'zeroed' pose. You can take world matrices
     from other objects (for example, layout locators) or create them yourself.
@@ -39,7 +39,7 @@ Arguments
     :meth:`Transform.getMatrix(worldSpace=True) <pymel.core.nodetypes.Transform.getMatrix>`. Particular attention
     should be given to *scale*. Inherited scale can be easy to miss, and will be carried over to the control. If this
     isn't intentional (for example, to create fully-mirrored controls), it can be hard to correct after the rig has
-    received animation. To discard scale, use :meth:`Matrix.pick() <paya.datatypes.matrix.Matrix.pick>`:
+    received animation. To discard scale, use :meth:`Matrix.pick() <paya.runtime.data.Matrix.pick>`:
 
     .. code-block:: python
 
@@ -84,11 +84,11 @@ Arguments
     A string or list of strings specifying the suffixes, and number, of transformationally-matched offset groups. Pass
     ``None`` to create a control with no offset groups.
 
-:under/u: ``None``, :class:`str` or :class:`~paya.nodetypes.transform.Transform`; defaults to ``None``
+:under/u: ``None``, :class:`str` or :class:`~paya.runtime.nodes.Transform`; defaults to ``None``
 
     An optional parent for the topmost offset group.
 
-:pickWalkParent/pwp: ``None``, :class:`str` or :class:`~paya.nodetypes.transform.Transform`; defaults to ``None``
+:pickWalkParent/pwp: ``None``, :class:`str` or :class:`~paya.runtime.nodes.Transform`; defaults to ``None``
 
     A node to shift to when the 'up' arrow key is pressed with the main control selected. Allows animators
     to skip offset groups when pick-walking complex hierarchies.

@@ -86,9 +86,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -133,8 +134,8 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a></p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.matrix.Matrix</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a></p></td>
+<td><p><a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -182,7 +183,7 @@ Basics</span></a> that at least one of the operands must be an instance of
 </figure>
 </div></div>
 <p id="selective-application">To modify SRT channels selectively via decomposition, use the <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> method
-<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.decomposeAndApply" title="paya.plugtypes.matrix.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decomposeAndApply()</span></code></a>. By default this accounts for <code class="docutils literal notranslate"><span class="pre">rotateAxis</span></code> and, on joints
+<a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.decomposeAndApply" title="paya.runtime.plugs.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decomposeAndApply()</span></code></a>. By default this accounts for <code class="docutils literal notranslate"><span class="pre">rotateAxis</span></code> and, on joints
 only, <code class="docutils literal notranslate"><span class="pre">jointOrient</span></code> and <code class="docutils literal notranslate"><span class="pre">inverseScale</span></code>. In the following example <code class="docutils literal notranslate"><span class="pre">rotateAxis</span></code> compensation is disabled for a
 simpler network:</p>
 <div class="sphinx-tabs docutils container">
@@ -201,7 +202,7 @@ simpler network:</p>
 </section>
 <section id="filtering">
 <h2>Filtering<a class="headerlink" href="#filtering" title="Permalink to this headline"></a></h2>
-<p>To quickly configure and connect a <code class="docutils literal notranslate"><span class="pre">pickMatrix</span></code> node, use <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.pick" title="paya.plugtypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>. This has also
+<p>To quickly configure and connect a <code class="docutils literal notranslate"><span class="pre">pickMatrix</span></code> node, use <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.pick" title="paya.runtime.plugs.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pick()</span></code></a>. This has also
 been implemented on data classes. Here’s a variant of the earlier <a class="reference internal" href="#selective-application"><span class="std std-ref">selective-application</span></a>
 example without matrix decomposition:</p>
 <div class="sphinx-tabs docutils container">
@@ -222,7 +223,7 @@ example without matrix decomposition:</p>
 </section>
 <section id="offsetting">
 <h2>Offsetting<a class="headerlink" href="#offsetting" title="Permalink to this headline"></a></h2>
-<p>Use <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asOffset" title="paya.plugtypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a> to preserve relative pose when applying a dynamic matrix to a
+<p>Use <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.asOffset" title="paya.runtime.plugs.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a> to preserve relative pose when applying a dynamic matrix to a
 transform. This is functionally the same as the <code class="docutils literal notranslate"><span class="pre">maintainOffset</span></code> option on Maya’s constraints:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-4-4-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-2" name="4-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">initialPose</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -260,9 +261,9 @@ matrix into the driver matrix:</p>
 </pre></div>
 </div>
 </li>
-<li><p>For polymorphic parity, <code class="docutils literal notranslate"><span class="pre">asOffset</span></code> has also been implemented on <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.matrix.Matrix</span></code></a>, where
+<li><p>For polymorphic parity, <code class="docutils literal notranslate"><span class="pre">asOffset</span></code> has also been implemented on <a class="reference internal" href="pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a>, where
 it merely returns an identity (‘null’) matrix.</p></li>
-<li><p>On the dynamic class, the expansion of <a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix.asOffset" title="paya.plugtypes.matrix.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a> is:</p>
+<li><p>On the dynamic class, the expansion of <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.asOffset" title="paya.runtime.plugs.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a> is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span>
 </pre></div>
 </div>

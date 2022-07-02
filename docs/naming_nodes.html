@@ -69,9 +69,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -157,14 +158,14 @@ letter ‘tags’ in Maya’s <a class="reference external" href="https://help.a
 </pre></div>
 </div>
 <p>To use Paya-style node names with standard Maya commands, call
-<a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.makeName" title="paya.nodetypes.dependNode.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a> on a relevant node type and pass the result along:</p>
+<a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.makeName" title="paya.runtime.nodes.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a> on a relevant node type and pass the result along:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;eye&#39;</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">makeName</span><span class="p">()</span>
     <span class="n">r</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;joint&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
     <span class="c1"># eye_JOIN</span>
 </pre></div>
 </div>
-<p>Pass <code class="docutils literal notranslate"><span class="pre">control=True</span></code> to <a class="reference internal" href="paya/nodetypes/dependNode.html#paya.nodetypes.dependNode.DependNode.makeName" title="paya.nodetypes.dependNode.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a> to apply the suffix for rig
+<p>Pass <code class="docutils literal notranslate"><span class="pre">control=True</span></code> to <a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.makeName" title="paya.runtime.nodes.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a> to apply the suffix for rig
 controls.</p>
 </div>
 </section>

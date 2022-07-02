@@ -18,9 +18,9 @@ class Chain(UserList):
     def getFromStartEnd(cls, startJoint, endJoint):
         """
         :param startJoint: the root joint for the chain
-        :type startJoint: str, :class:`~paya.nodetypes.joint.Joint`
+        :type startJoint: str, :class:`~paya.runtime.nodes.Joint`
         :param endJoint: the end (tip) joint for the chain
-        :type endJoint: str, :class:`~paya.nodetypes.joint.Joint`
+        :type endJoint: str, :class:`~paya.runtime.nodes.Joint`
         :return: A chain from the start joint to the end joint, inclusively.
         :rtype: :class:`Chain`
         """
@@ -44,7 +44,7 @@ class Chain(UserList):
     def getFromRoot(cls, rootJoint):
         """
         :param startJoint: the root joint for the chain
-        :type startJoint: str, :class:`~paya.nodetypes.joint.Joint`
+        :type startJoint: str, :class:`~paya.runtime.nodes.Joint`
         :return: A chain from the specified root joint. The chain will
             terminate before the first branch.
         :rtype: :class:`Chain`
@@ -151,8 +151,8 @@ class Chain(UserList):
         :param str downAxis: the 'bone' axis
         :param str upAxis: the axis to map to the up vector(s)
         :param upVectorOrCurve: either an up vector, or an up curve
-        :type upVectorOrCurve: list, :class:`~paya.datatypes.Vector`, str,
-            :class:`~paya.nodetypes.dagNode.DagNode`
+        :type upVectorOrCurve: list, :class:`~paya.runtime.data.Vector`, str,
+            :class:`~paya.runtime.nodes.DagNode`
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: The constructed chain.
@@ -203,7 +203,7 @@ class Chain(UserList):
         :param upVector: a reference up vector
         :param str downAxis: the aiming (bone) axis
         :param str upAxis: the axis to map to the up vector
-        :type upVector: list, :class:`~paya.datatypes.vector.Vector`
+        :type upVector: list, :class:`~paya.runtime.data.Vector`
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getAimingMatricesFromPoints`
         :return: ``self``
@@ -252,8 +252,8 @@ class Chain(UserList):
         :param bool plug/p: return attributes instead of values; defaults to
             False
         :return: A vector for each bone in this chain.
-        :rtype: :class:`list` of :class:`~paya.plugtypes.vector.Vector`
-            or :class:`~paya.datatypes.vector.Vector`
+        :rtype: :class:`list` of :class:`~paya.runtime.plugs.Vector`
+            or :class:`~paya.runtime.data.Vector`
         """
         points = self.points(p=plug)
         out = []
@@ -270,7 +270,7 @@ class Chain(UserList):
         :param bool plug/p: return attributes instead of values; defaults to
             False
         :return: A world position for each joint in this chain.
-        :rtype: :class:`list` of :class:`~paya.datatypes.point.Point`
+        :rtype: :class:`list` of :class:`~paya.runtime.data.Point`
         """
         return [joint.gwp(p=plug) for joint in self]
 
@@ -313,7 +313,7 @@ class Chain(UserList):
         :param bool plug/p: return an attribute instead of a value; defaults
             to False
         :return: The length of this chain.
-        :rtype: :class:`float` or :class:`~paya.plugtypes.math1D.Math1D`
+        :rtype: :class:`float` or :class:`~paya.runtime.plugs.Math1D`
         """
         lengths = [vector.length() for vector in self.vectors(p=plug)]
 
@@ -603,8 +603,8 @@ class Chain(UserList):
         :type distance/d: float or int
         :return: An inert world-position point target for a pole vector
             constraint or
-            :meth:`~paya.nodetypes.ikhandle.IkHandle.setPolePoint`.
-        :rtype: :class:`~paya.datatypes.point.Point`
+            :meth:`~paya.runtime.nodes.IkHandle.setPolePoint`.
+        :rtype: :class:`~paya.runtime.data.Point`
         """
         dup = self.duplicate().compose()
         ikh = dup.createIkHandle(solver='ikRPsolver')
@@ -626,7 +626,7 @@ class Chain(UserList):
     def ikHandles(self):
         """
         :return: IK handles affecting this chain.
-        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        :rtype: :class:`list` of :class:`~paya.runtime.nodes.IkHandle`
         """
         out = []
 
@@ -645,7 +645,7 @@ class Chain(UserList):
         Creates an IK handle for this chain.
 
         :param \**kwargs: forwarded to
-            :meth:`paya.nodetypes.ikHandle.IkHandle.create` with the following
+            :meth:`paya.runtime.nodes.IkHandle.create` with the following
             modifications:
 
             -   ``startJoint`` and ``endJoint`` are overriden to the start and
@@ -655,7 +655,7 @@ class Chain(UserList):
                 otherwise
 
         :return: The IK handle.
-        :rtype: :class:`~paya.nodetypes.ikHandle.IkHandle`
+        :rtype: :class:`~paya.runtime.nodes.IkHandle`
         """
 
         settings = {
@@ -676,7 +676,7 @@ class Chain(UserList):
         :class:`~paya.lib.name.Name` block.
 
         :return: The IK handles
-        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        :rtype: :class:`list` of :class:`~paya.runtime.nodes.IkHandle`
         """
         out = []
 
@@ -696,7 +696,7 @@ class Chain(UserList):
         :param upVector/upv: an optional 'up' vector; used to override wind
             direction
         :type upVector/upv: list, tuple or
-            :class:`~paya.datatypes.vector.Vector`
+            :class:`~paya.runtime.data.Vector`
         :raises AssertionError: the chain is not contiguous
         :return: ``self``
         :rtype: :class:`Chain`

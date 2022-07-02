@@ -36,7 +36,7 @@ class IkHandle:
     def getEndJoint(self):
         """
         :return: The tip joint for the chain driven by this IK handle.
-        :rtype: :class:`~paya.nodetypes.joint.Joint`
+        :rtype: :class:`~paya.runtime.nodes.Joint`
         """
         eff = self.getEffector()
         joint = None
@@ -84,11 +84,11 @@ class IkHandle:
         configures the start / end vectors.
 
         :param startVector: the start 'up' vector
-        :type startVector: list, :class:`~paya.datatypes.vector.Vector`,
-            :class:`~paya.plugtypes.math3D.Math3D`
+        :type startVector: list, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Math3D`
         :param endVector: the end 'up' vector
-        :type endVector: list, :class:`~paya.datatypes.vector.Vector`,
-            :class:`~paya.plugtypes.math3D.Math3D`
+        :type endVector: list, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Math3D`
         :param str upAxis: the chain axis to map to the 'up' vectors, for
             example 'z'
         :param str downAxis/da: if you know the 'bone' axis of the chain,
@@ -130,8 +130,8 @@ class IkHandle:
         Configures the pole vector by aiming towards ``point`` in world-space.
 
         :param point: the point to aim towards
-        :type point: list, tuple, :class:`~paya.datatypes.point.Point`
-            or :class:`~paya.plugtypes.math3D.Math3D`
+        :type point: list, tuple, :class:`~paya.runtime.data.Point`
+            or :class:`~paya.runtime.plugs.Math3D`
         :param bool maintainOffset/mo: preserve chain state; defaults to False
         :return: ``self``
         """

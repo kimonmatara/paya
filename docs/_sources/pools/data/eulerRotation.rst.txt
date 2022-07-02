@@ -1,0 +1,87 @@
+*******************************
+paya.runtime.data.EulerRotation
+*******************************
+
+.. py:currentmodule:: paya.runtime.data
+
+.. py:class:: EulerRotation(*args, **kwargs)
+
+    .. py:method:: createLocator(name=None)
+    
+        :shorthand: ``cl``
+        
+        :param name/n: one or more optional name elements; defaults to None
+        :rtype name/n: None, list, int, str
+        :return: A locator with this euler rotation piped into its
+            ``rotate`` channels.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+    
+    .. py:method:: __add__(other)
+    
+        Implements **addition** (``+``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__add__` to add
+        support for 1D or 3D plugs.
+    
+    .. py:method:: __radd__(other)
+    
+        Implements **reflected addition** (``+``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__radd__` to add
+        support for 1D or 3D plugs.
+    
+    .. py:method:: __sub__(other)
+    
+        Implements **subtraction** (``-``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__sub__` to add
+        support for 1D or 3D plugs.
+    
+    .. py:method:: __rsub__(other)
+    
+        Implements **reflected subtraction** (``-``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__rsub__` to add
+        support for 1D or 3D plugs.
+    
+    .. py:method:: __mul__(other)
+    
+        Implements **multiplication** (``*``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__mul__` to add
+        support for 1D and 3D plugs.
+    
+    .. py:method:: __rmul__(other)
+    
+        Implements **reflected multiplication** (``*``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__rmul__` to add
+        support for 1D and 3D plugs.
+    
+    .. py:method:: __truediv__(other)
+    
+        Implements **division** (``/``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__truediv__` to add
+        support for 1D and 3D plugs.
+    
+    .. py:method:: __rtruediv__(other)
+    
+        Implements **reflected division** (``/``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__rtruediv__` to add
+        support for 1D and 3D plugs.
+    
+    .. py:method:: __pow__(other)
+    
+        Implements **power** (``**``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__pow__` to add
+        support for 1D and 3D plugs.
+    
+    .. py:method:: __rpow__(other)
+    
+        Implements **reflected power** (``**``).
+        
+        Overloads :meth:`pymel.core.datatypes.EulerRotation.__rpow__` to add
+        support for 1D and 3D plugs.

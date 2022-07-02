@@ -23,11 +23,11 @@ class NurbsCurve:
     ):
         """
         Recreates a curve from the type of dictionary returned by
-        :meth:`~paya.nodetypes.nurbsCurve.NurbsCurve.macro`.
+        :meth:`~paya.runtime.nodes.NurbsCurve.macro`.
 
         :param macro: the macro dictionary to use
         :param under/u: an optional parent for the curve; defaults to None
-        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool conformShapeNames/csn: ignored if *under* is None; clean
             up destination shape names after reparenting to the specified
             transform; defaults to True
@@ -35,7 +35,7 @@ class NurbsCurve:
         :type name/n: list, tuple, str
         :param bool dispCV/dcv: display curve CVs; defaults to False
         :return: The curve.
-        :rtype: :class:`~paya.nodetypes.nurbsCurve.NurbsCurve`
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
         """
         kwargs = {
             'point': macro['point'],
@@ -102,7 +102,7 @@ class NurbsCurve:
         """
         :param refPoint: the reference point
         :return: The closest point along the curve to 'refPoint`.
-        :rtype: :class:`~paya.datatypes.point.Point`
+        :rtype: :class:`~paya.runtime.data.Point`
         """
         return self.closestPoint(refPoint, space='world')
 
@@ -110,9 +110,9 @@ class NurbsCurve:
         """
         :param param: the parameter to sample
         :type param: float, int,
-            :class:`~paya.comptypes.nurbsCurveParameter.NurbsCurveParameter`
+            :class:`~paya.runtime.comps.NurbsCurveParameter`
         :return: A world-space point at the specified parameter.
-        :rtype: :class:`~paya.datatypes.point.Point`
+        :rtype: :class:`~paya.runtime.data.Point`
         """
         param = float(param)
         point = self.getPointAtParam(param, space='world')
@@ -123,7 +123,7 @@ class NurbsCurve:
         :param float fraction: the length fraction to sample
         :return: A parameter at the given length fraction.
         :rtype:
-            :class:`~paya.comptypes.nurbsCurveParameter.NurbsCurveParameter`
+            :class:`~paya.runtime.comps.NurbsCurveParameter`
         """
         length = self.length() * float(fraction)
         param = self.findParamFromLength(length)
@@ -133,7 +133,7 @@ class NurbsCurve:
         """
         :param fraction: the length fraction to sample
         :return: A world-space point at the given length fraction.
-        :rtype: :class:`~paya.datatypes.point.Point`
+        :rtype: :class:`~paya.runtime.data.Point`
         """
         param = self.takeParamAtFraction(fraction)
         return self.takePointAtParam(param)
@@ -146,7 +146,7 @@ class NurbsCurve:
             fractions, or a number
         :type numberOrFractions: tuple, list or int
         :return: The distributed points.
-        :rtype: :class:`list` of :class:`~paya.datatypes.point.Point`
+        :rtype: :class:`list` of :class:`~paya.runtime.data.Point`
         """
         if isinstance(numberOrFractions, int):
             fractions = _mo.floatRange(0, 1, numberOrFractions)

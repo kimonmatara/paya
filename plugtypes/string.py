@@ -10,7 +10,7 @@ class String:
     @short(plug='p')
     def put(self, other, plug=None):
         """
-        Overloads :meth:`paya.plugtypes.Attribute.put` to prevent any type of
+        Overloads :meth:`paya.runtime.plugs.Attribute.put` to prevent any type of
         incoming connection.
         """
         self.set(other)

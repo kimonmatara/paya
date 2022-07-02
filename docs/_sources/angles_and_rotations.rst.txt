@@ -13,13 +13,13 @@ Relevant Classes
     *   - Static
         - Dynamic
     *   - N/A
-        - :class:`paya.plugtypes.math1D.Math1D`
-    *   - :class:`paya.datatypes.vector.Vector`
-        - :class:`paya.plugtypes.vector.Vector`
-    *   - :class:`paya.datatypes.angle.Angle`
-        - :class:`paya.plugtypes.angle.Angle`
-    *   - :class:`paya.datatypes.eulerRotation.EulerRotation`
-        - :class:`paya.plugtypes.eulerRotation.EulerRotation`
+        - :class:`paya.runtime.plugs.Math1D`
+    *   - :class:`paya.runtime.data.Vector`
+        - :class:`paya.runtime.plugs.Vector`
+    *   - :class:`paya.runtime.data.Angle`
+        - :class:`paya.runtime.plugs.Angle`
+    *   - :class:`paya.runtime.data.EulerRotation`
+        - :class:`paya.runtime.plugs.EulerRotation`
 
 ============
 Radians Rule
@@ -77,7 +77,7 @@ Trigonometry
 ============
 
 Paya makes trigonometric functions available as methods on all scalar attributes. These are implemented using expression
-nodes. Here's an example using :meth:`~paya.plugtypes.math1D.Math1D.cos`:
+nodes. Here's an example using :meth:`~paya.runtime.plugs.Math1D.cos`:
 
 .. tabs::
 
@@ -130,7 +130,7 @@ Switching Representations
 =========================
 
 Consider the following example, where two euler rotations can't be usefully interpolated using
-:meth:`paya.plugtypes.eulerRotation.EulerRotation.blend` due to differing rotation orders and gimbal lock:
+:meth:`paya.runtime.plugs.EulerRotation.blend` due to differing rotation orders and gimbal lock:
 
 .. tabs::
 

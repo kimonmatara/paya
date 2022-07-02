@@ -10,8 +10,8 @@ class Angle:
     @short(plug='p')
     def get(self, plug=False, default=None, **kwargs):
         """
-        Overloads :py:meth:`paya.plugtypes.attribute.Attribute.get` to return
-        :class:`~paya.datatypes.angle.Angle` instances instead of
+        Overloads :py:meth:`paya.runtime.plugs.Attribute.get` to return
+        :class:`~paya.runtime.data.Angle` instances instead of
         :class:`float`.
         """
         if plug:
@@ -27,8 +27,8 @@ class Angle:
 
     def set(self, *args, **kwargs):
         """
-        Overloads :meth:`~paya.plugtypes.attribute.Attribute.get` to ensure
-        that instances of :class:`~paya.datatypes.angle.Angle`
+        Overloads :meth:`~paya.runtime.plugs.Attribute.get` to ensure
+        that instances of :class:`~paya.runtime.data.Angle`
         with units that don't match the UI setting are set correctly.
         """
         if args:

@@ -19,7 +19,7 @@ class Vector:
         :rtype name/n: None, list, int, str
         :return: A locator with this vector / point piped into its
             ``translate`` channel.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         loc = r.nodes.Locator.createNode(n=name).getParent()
         loc.attr('t').set(self)
@@ -282,7 +282,7 @@ class Vector:
         **point-matrix multiplication**.
 
         :param other: a matrix plug or value
-        :type other: list, :class:`~paya.datatypes.matrix.Matrix`, :class:`~paya.plugtypes.matrix.Matrix`
+        :type other: list, :class:`~paya.runtime.data.Matrix`, :class:`~paya.runtime.plugs.Matrix`
         """
         other, dim, isplug = _mo.info(other)
 
@@ -369,10 +369,10 @@ class Vector:
         :type other: 3D value or plug
         :param weight/w: the blend weight, where *other* takes over fully
             at 1.0; defaults to 0.5
-        :type weight/w: :class:`~paya.plugtypes.attributeMath1D.AttributeMath1D`, :class:`Vector`, list, str
+        :type weight/w: :class:`~paya.runtime.plugs.Math1D`, :class:`Vector`, list, str
         :param bool swap: swap the operands
         :return: The blended output.
-        :rtype: :class:`~paya.plugtypes.attributeMath3D.AttributeMath3D`
+        :rtype: :class:`~paya.runtime.plugs.Math3D`
         """
         other, dim, isplug = _mo.info(other)
         weight, weightd, weightisplug = _mo.info(weight)
@@ -395,14 +395,14 @@ class Vector:
     def rotateByAxisAngle(self, axisVector, angle):
         """
         :param axisVector: the vector around which to rotate this vector
-        :type axisVector: list, tuple, :class:`~paya.datatypes.vector.Vector`
-            or :class:`~paya.plugtypes.vector.Vector`
+        :type axisVector: list, tuple, :class:`~paya.runtime.data.Vector`
+            or :class:`~paya.runtime.plugs.Vector`
         :param angle: the angle of rotation
-        :type angle: float, :class:`~paya.datatypes.angle.Angle`, str or
-            class:`~paya.plugtypes.math3D.Math3D`
+        :type angle: float, :class:`~paya.runtime.data.Angle`, str or
+            class:`~paya.runtime.plugs.Math3D`
         :return: This vector, rotated around ``axisVector`` by the specified
             ``angle``.
-        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         axisVector, axisVectorDim, axisVectorIsPlug = _mo.info(axisVector)
         angle, angleDim, angleIsPlug = _mo.info(angle)
@@ -433,11 +433,11 @@ class Vector:
             the output will also be a plug)
 
         :param other: the other vector
-        :type other: :class:`~paya.plugtypes.attributeMath3D.AttributeMath3D`, :class:`Vector`,
+        :type other: :class:`~paya.runtime.plugs.Math3D`, :class:`Vector`,
             :class:`Point`, list, str
         :param bool normalize/nr: normalize the output; defaults to False
         :return: The dot product.
-        :rtype: :class:`Vector` or :class:`~paya.plugtypes.attributeMath1D.AttributeMath1D`
+        :rtype: :class:`Vector` or :class:`~paya.runtime.plugs.Math1D`
         """
         other, dim, isplug = _mo.info(other)
 
@@ -471,11 +471,11 @@ class Vector:
             the output will also be a plug)
 
         :param other: the other vector
-        :type other: :class:`~paya.plugtypes.attributeMath3D.AttributeMath3D`, :class:`Vector`,
+        :type other: :class:`~paya.runtime.plugs.Math3D`, :class:`Vector`,
             :class:`Point`, list, str
         :param bool normalize/nr: normalize the output; defaults to False
         :return: The cross product.
-        :rtype: :class:`Vector` or :class:`~paya.plugtypes.attributeMath3D.AttributeMath3D`
+        :rtype: :class:`Vector` or :class:`~paya.runtime.plugs.Math3D`
         """
         other, dim, isplug = _mo.info(other)
 
@@ -501,17 +501,17 @@ class Vector:
     def angle(self, other, clockNormal=None):
         """
         :param other: the other vector
-        :type other: :class:`~paya.plugtypes.math3D.Math3D`,
-            :class:`~paya.datatypes.vector.Vector`,
-            :class:`~paya.datatypes.point.Point`, list, str
+        :type other: :class:`~paya.runtime.plugs.Math3D`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`, list, str
         :param clockNormal/cn: provide this to get a 360 angle; defaults to
             None
         :type clockNormal/cn: None, list, tuple,
-            :class:`~paya.plugtypes.vector.Vector`,
-            :class:`~paya.datatypes.vector.Vector`
+            :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.data.Vector`
         :return: The angle from this vector to ``other``.
-        :rtype: :class:`~paya.plugtypes.angle.Angle` or
-            :class:`~paya.datatypes.angle.Angle`
+        :rtype: :class:`~paya.runtime.plugs.Angle` or
+            :class:`~paya.runtime.data.Angle`
         """
         other, otherDim, otherIsPlug  = _mo.info(other)
 
@@ -555,7 +555,7 @@ class Vector:
         """
         :return: An identity matrix with this vector / point as the translate
             component.
-        :rtype: :class:`~paya.datatypes.matrix.Matrix`
+        :rtype: :class:`~paya.runtime.data.Matrix`
         """
         out = r.data.Matrix()
         out.t = self
@@ -567,7 +567,7 @@ class Vector:
         matrix's base vectors.
 
         :return: The scale matrix.
-        :rtype: :class:`~paya.datatypes.matrix.Matrix`
+        :rtype: :class:`~paya.runtime.data.Matrix`
         """
         matrix = r.data.Matrix()
         matrix.x = r.data.Vector([1, 0, 0]) * self[0]

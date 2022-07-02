@@ -137,7 +137,7 @@ class Attribute:
         :param \*\*kwargs: forwarded to
             :meth:`~pymel.core.general.Attribute.lock`
         :return: ``self``
-        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
         p.Attribute.lock(self, **kwargs)
 
@@ -155,7 +155,7 @@ class Attribute:
         :param bool recursive/r: if this is a compound, edit the children too;
             defaults to False
         :return: ``self``
-        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
         if self.get(k=True):
             self.set(k=False)
@@ -186,7 +186,7 @@ class Attribute:
         :param \*\*kwargs: forwarded to
             :meth:`~pymel.core.general.Attribute.unlock`
         :return: ``self``
-        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
         p.Attribute.unlock(self, **kwargs)
 
@@ -222,7 +222,7 @@ class Attribute:
             is False, the attribute will be made settable instead; defaults
             to True
         :return: ``self``
-        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
         if keyable:
             self.set(k=True)
@@ -337,7 +337,7 @@ class Attribute:
 
         :param str attrName: the name of the 'anchor' attribute
         :return: This attribute, rebuilt.
-        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
         return self._sendAboveOrBelow(attrName, below=False)
 
@@ -347,6 +347,6 @@ class Attribute:
 
         :param str attrName: the name of the 'anchor' attribute
         :return: This attribute, rebuilt.
-        :rtype: :class:`~paya.plugtypes.attribute.Attribute`
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
         return self._sendAboveOrBelow(attrName, below=True)

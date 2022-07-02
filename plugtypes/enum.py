@@ -13,7 +13,7 @@ class Enum:
     @short(plug='p')
     def put(self, other, plug=None):
         """
-        Overloads :meth:`paya.plugtypes.Attribute.put` to account for enum
+        Overloads :meth:`paya.runtime.plugs.Attribute.put` to account for enum
         keys.
         """
         if plug is None:

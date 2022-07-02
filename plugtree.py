@@ -37,7 +37,7 @@ class NoPathError(RuntimeError):
 def getPath(typeName):
     """
     Returns hierarchical type information. Used to implement
-    :meth:`~paya.plugtypes.attribute.Attribute.plugType` and other methods.
+    :meth:`Attribute.plugType() <paya.runtime.plugs.Attribute.plugType>`
 
     :param str typeName: The plug type to query
     :return: A list of abstract type names, ordered

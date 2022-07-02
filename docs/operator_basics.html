@@ -78,9 +78,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -195,7 +196,7 @@ is used instead.</p>
 <h2>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline"></a></h2>
 <p>Paya adds a few enhancements to bootstrap free mixing of attributes and values.</p>
 <ul>
-<li><p>A new method, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.put" title="paya.plugtypes.attribute.Attribute.put"><code class="xref py py-meth docutils literal notranslate"><span class="pre">put()</span></code></a>, can be used to set, or connect to, an attribute
+<li><p>A new method, <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.put" title="paya.runtime.plugs.Attribute.put"><code class="xref py py-meth docutils literal notranslate"><span class="pre">put()</span></code></a>, can be used to set, or connect to, an attribute
 depending on whether the argument is an attribute or value:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">put</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span> <span class="c1"># sets</span>
 <span class="n">loc1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;locator2.translate&#39;</span><span class="p">)</span> <span class="c1"># connects</span>
@@ -216,16 +217,16 @@ work when the left operand is a simple string:</p>
 </li>
 </ul>
 <ul class="simple" id="more-useful-query-types">
-<li><p><a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns more relevant types. Specifically:</p>
+<li><p><a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.get" title="paya.runtime.plugs.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns more relevant types. Specifically:</p>
 <ul>
-<li><p>On <code class="docutils literal notranslate"><span class="pre">translate</span></code> channels, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of
-<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p></li>
+<li><p>On <code class="docutils literal notranslate"><span class="pre">translate</span></code> channels, <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.get" title="paya.runtime.plugs.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of
+<a class="reference internal" href="pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p></li>
 <li><p>On attributes of type <code class="docutils literal notranslate"><span class="pre">doubleAngle</span></code> (for example, <code class="docutils literal notranslate"><span class="pre">rotateX</span></code>),
-<a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></p></li>
-<li><p>On compounds of three angles, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of
-<a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation" title="paya.datatypes.eulerRotation.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a></p></li>
-<li><p>On compounds of four scalars, <a class="reference internal" href="paya/plugtypes/attribute.html#paya.plugtypes.attribute.Attribute.get" title="paya.plugtypes.attribute.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of
-<a class="reference internal" href="paya/datatypes/quaternion.html#paya.datatypes.quaternion.Quaternion" title="paya.datatypes.quaternion.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p></li>
+<a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.get" title="paya.runtime.plugs.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></p></li>
+<li><p>On compounds of three angles, <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.get" title="paya.runtime.plugs.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of
+<a class="reference internal" href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation" title="paya.runtime.data.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a></p></li>
+<li><p>On compounds of four scalars, <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.get" title="paya.runtime.plugs.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> returns an instance of
+<a class="reference internal" href="pools/data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p></li>
 </ul>
 </li>
 </ul>

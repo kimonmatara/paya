@@ -42,7 +42,7 @@ class Transform:
         :param under/u: an optional parent for the transform; if this is
             combined with ``dagPath``, then this node's DAG path will be
             prepended; defaults to None
-        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool displayLocalAxis/dla: display the transform's local axes;
             defaults to False
         :param rotateOrder/ro: the transform's rotate order; defaults to 'xyz'
@@ -50,9 +50,9 @@ class Transform:
         :param worldMatrix/wm: an optional world matrix for the transform,
             applied to the SRT channels; defaults to None
         :type worldMatrix/wm: None, list, tuple or
-            :class:`~paya.datatypes.matrix.Matrix`
+            :class:`~paya.runtime.data.Matrix`
         :return: The transform.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         if dagPath:
             fromRoot = dagPath.startswith('|')
@@ -149,7 +149,7 @@ class Transform:
         :param name/n: one or more name elements
         :type name/n: None, str, int, list
         :param under/u: an optional parent for the control; defaults to None
-        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
         :param str shape/sh: the name of a library shape to apply to the control;
             defaults to 'cube'
         :param color/col: an optional override color index for the control;
@@ -160,7 +160,7 @@ class Transform:
         :param worldMatrix/wm: the world matrix for the control; if this is
             omitted then, if ``under`` is provided, the matrix is copied from the
             destination parent; otherwise, it defaults to the identity matrix
-        :type worldMatrix/wm: list, :class:`~paya.datatypes.matrix.Matrix`, None
+        :type worldMatrix/wm: list, :class:`~paya.runtime.data.Matrix`, None
         :param list keyable/k: a list of channels to set to keyable on the
             control
         :param list channelBox/cb: a list of channels to set to settable on the
@@ -175,9 +175,9 @@ class Transform:
         :param pickWalkParent/pwp: an optional pick-walk parent for this control;
             ignored if *asControl* is False; defaults to None
         :type pickWalkParent/pwp: str,
-            :class:`~paya.nodetypes.dependNode.DependNode`
+            :class:`~paya.runtime.nodes.DependNode`
         :return: The generated control.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         #--------------------------------------------------------|    Prep
 
@@ -256,8 +256,8 @@ class Transform:
             self.pm[0]; defaults to False
         :param bool useLocatorShape/uls: True
         :return: The position attribute or value.
-        :rtype: :class:`~paya.datatypes.point.Point` or
-            :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.data.Point` or
+            :class:`~paya.runtime.plugs.Vector`
         """
         if plug:
             if useLocatorShape:
@@ -290,8 +290,8 @@ class Transform:
         """:param bool plug/p: return a plug instead of a value; defaults to
             False
         :return: The world matrix of this transform, as a value or plug.
-        :rtype: :class:`paya.datatypes.matrix.Matrix` or
-            :class:`paya.plugtypes.matrix.Matrix`
+        :rtype: :class:`paya.runtime.data.Matrix` or
+            :class:`paya.runtime.plugs.Matrix`
         """
         if plug:
             return self.attr('wm')
@@ -309,8 +309,8 @@ class Transform:
             be cooked only once, and afterwards retrieved via a
             'rotateAxisMatrix' attribute on the node; defaults to False
         :return: The rotate axis matrix.
-        :rtype: :class:`paya.datatypes.matrix.Matrix` or
-            :class:`paya.plugtypes.matrix.Matrix`
+        :rtype: :class:`paya.runtime.data.Matrix` or
+            :class:`paya.runtime.plugs.Matrix`
         """
         if plug:
             attrName = 'rotateAxisMatrix'
@@ -336,7 +336,7 @@ class Transform:
         :type \*suffixes: list, tuple, str
         :return: One or more transformationally-matched offset groups for this
             transform, in order of innermost to outermost.
-        :type: list of :class:`~paya.nodetypes.transform.Transform`
+        :type: list of :class:`~paya.runtime.nodes.Transform`
         """
         suffixes = _pu.expandArgs(*suffixes)
 
@@ -378,7 +378,7 @@ class Transform:
         intermediate ones.
 
         :return: ``self``
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         visibleShapes = []
         intermShapes = []
@@ -425,8 +425,8 @@ class Transform:
     def getCtShapes(self):
         """
         :return: Non-intermediate curve and locator shapes under this transform.
-        :rtype: [:class:`~paya.nodetypes.nurbsCurve.NurbsCurve` or
-            :class:`~paya.nodetypes.locator.Locator`]
+        :rtype: [:class:`~paya.runtime.nodes.NurbsCurve` or
+            :class:`~paya.runtime.nodes.Locator`]
         """
         shapes = self.getShapes(type='nurbsCurve', noIntermediate=True)
         shapes += self.getShapes(type='locator', noIntermediate=True)
@@ -527,7 +527,7 @@ class Transform:
 
         :param str name: the name of the library entry, e.g. 'cube'
         :return: The newly-generated control shapes.
-        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+        :rtype: list of :class:`~paya.runtime.nodes.Shape`
         """
         controlShapes.applyToControls(libKey, [self])
 
@@ -540,7 +540,7 @@ class Transform:
         :param bool backward/back: cycle backwards instead of forwards;
             defaults to False
         :return: The newly-generated control shapes.
-        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+        :rtype: list of :class:`~paya.runtime.nodes.Shape`
         """
         libKeys = list(sorted(controlShapes.keys()))
         maxIndex = len(libKeys) - 1
@@ -585,7 +585,7 @@ class Transform:
         transform.
 
         :return: ``self``
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         for shape in self.getCtShapes():
             try:
@@ -609,7 +609,7 @@ class Transform:
             True
         :return: If *colorIndex* was provided, ``self`` is returned;
             otherwise, a color index.
-        :rtype: :class:`~paya.nodetypes.transform.Transform` or int
+        :rtype: :class:`~paya.runtime.nodes.Transform` or int
         """
         shapes = self.getCtShapes()
 
@@ -713,7 +713,7 @@ class Transform:
         :param bool color/col: copy color
         :param \*destControls: one or more controls to copy shapes to
         :type \*destControls: list, str,
-            :class:`~paya.nodetypes.transform.Transform`
+            :class:`~paya.runtime.nodes.Transform`
         :param bool replace/rep: remove existing shapes on the destination
             controls; defaults to True
         :param bool worldSpace/ws: copy shapes in world space; defaults to
@@ -723,7 +723,7 @@ class Transform:
             example 'x';  defaults to ``None``
         :type mirrorAxis/ma: ``None``, str
         :return: The new control shapes.
-        :rtype: list of :class:`~paya.nodetypes.shape.Shape`
+        :rtype: list of :class:`~paya.runtime.nodes.Shape`
         """
         destControls = list(map(r.PyNode, _pu.expandArgs(*destControls)))
 
@@ -815,7 +815,7 @@ class Transform:
 
         :param str entryName: the name of the new library entry
         :return: ``self``
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         controlShapes.addFromControl(self, entryName)
         return self

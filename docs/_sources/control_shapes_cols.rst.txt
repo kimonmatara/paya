@@ -7,7 +7,7 @@ Library Shapes
 ==============
 
 To apply a Paya library shape to a control, use :meth:`Transform.setCtShapesFromLib()
-<paya.nodetypes.transform.Transform.setCtShapesFromLib>`:
+<paya.runtime.nodes.Transform.setCtShapesFromLib>`:
 
 .. code-block:: python
 
@@ -20,11 +20,11 @@ To apply a Paya library shape to a control, use :meth:`Transform.setCtShapesFrom
     *   If you're applying the same library shape to several controls at once, passing those controls to
         :meth:`paya.runtime.controlShapes.applyToControls()
         <paya.lib.controlshapes.ControlShapesLibrary.applyToControls>` will execute faster than calling
-        :meth:`~paya.nodetypes.transform.Transform.setCtShapesFromLib` on each control.
+        :meth:`~paya.runtime.nodes.Transform.setCtShapesFromLib` on each control.
 
         See :class:`~paya.lib.controlshapes.ControlShapesLibrary` for a full reference of methods on the library object.
 
-Call :meth:`~paya.nodetypes.transform.Transform.cycleCtShapes` repeatedly on a control to preview different library
+Call :meth:`~paya.runtime.nodes.Transform.cycleCtShapes` repeatedly on a control to preview different library
 shapes. The current shape name will be printed on each invocation:
 
 .. code-block:: python
@@ -35,7 +35,7 @@ shapes. The current shape name will be printed on each invocation:
     # sphere
 
 To capture a control's shape(s) as a library entry, use :meth:`Transform.addCtShapesToLib()
-<paya.nodetypes.transform.Transform.addCtShapesToLib>`:
+<paya.runtime.nodes.Transform.addCtShapesToLib>`:
 
 .. code-block:: python
 
@@ -47,8 +47,8 @@ Transforming Shapes
 ===================
 
 Control shapes can be rotated and scaled using
-:meth:`Transform.rotateCtShapes() <paya.nodetypes.transform.Transform.rotateCtShapes>` and
-:meth:`Transform.scaleCtShapes() <paya.nodetypes.transform.Transform.scaleCtShapes>`, respectively. Where the shape is a
+:meth:`Transform.rotateCtShapes() <paya.runtime.nodes.Transform.rotateCtShapes>` and
+:meth:`Transform.scaleCtShapes() <paya.runtime.nodes.Transform.scaleCtShapes>`, respectively. Where the shape is a
 curve, its control points are moved. On locators the ``localPosition`` and ``localScale`` attributes are edited instead.
 
 ======================
@@ -56,7 +56,7 @@ Setting Control Colors
 ======================
 
 Control colors can be retrieved and set by-index using
-:meth:`Transform.colorCtShapes() <paya.nodetypes.transform.Transform.colorCtShapes>`:
+:meth:`Transform.colorCtShapes() <paya.runtime.nodes.Transform.colorCtShapes>`:
 
 .. code-block:: python
 
@@ -73,7 +73,7 @@ Copying Shapes and Colors
 =========================
 
 Control shapes and colors can be copied in a variety of ways using :meth:`Transform.copyCtShapesTo()
-<paya.nodetypes.transform.Transform.copyCtShapesTo>`.
+<paya.runtime.nodes.Transform.copyCtShapesTo>`.
 
 *   To copy shapes and colours in local space, simply specify the destination controls and omit all other arguments.
 *   To copy in world space, pass ``worldSpace=True``.

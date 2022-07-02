@@ -71,9 +71,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -105,9 +106,9 @@
              
   <section id="controller-tags-and-pick-walk-hierarchies">
 <h1>Controller Tags and Pick-Walk Hierarchies<a class="headerlink" href="#controller-tags-and-pick-walk-hierarchies" title="Permalink to this headline"></a></h1>
-<p>Controls generated with <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform.createControl" title="paya.nodetypes.transform.Transform.createControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createControl()</span></code></a> carry
+<p>Controls generated with <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform.createControl" title="paya.runtime.nodes.Transform.createControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createControl()</span></code></a> carry
 <a class="reference external" href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=GUID-17AF3B37-8A57-46DD-8808-D4BFF23AD285">controller tags</a> by
-default. To add or remove controller tags yourself, use <a class="reference internal" href="paya/nodetypes/dagNode.html#paya.nodetypes.dagNode.DagNode.isControl" title="paya.nodetypes.dagNode.DagNode.isControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">isControl()</span></code></a> on any DAG
+default. To add or remove controller tags yourself, use <a class="reference internal" href="pools/nodes/dagNode.html#paya.runtime.nodes.DagNode.isControl" title="paya.runtime.nodes.DagNode.isControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">isControl()</span></code></a> on any DAG
 node, for example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loc</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
 <span class="n">loc</span><span class="o">.</span><span class="n">isControl</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># add a controller tag</span>
@@ -116,8 +117,8 @@ node, for example:</p>
 <span class="c1"># False</span>
 </pre></div>
 </div>
-<p>To define pick-walk hierarchies, use <a class="reference internal" href="paya/nodetypes/dagNode.html#paya.nodetypes.dagNode.DagNode.getPickWalkParent" title="paya.nodetypes.dagNode.DagNode.getPickWalkParent"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPickWalkParent()</span></code></a>
-and <a class="reference internal" href="paya/nodetypes/dagNode.html#paya.nodetypes.dagNode.DagNode.setPickWalkParent" title="paya.nodetypes.dagNode.DagNode.setPickWalkParent"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setPickWalkParent()</span></code></a> on any DAG node, for example:</p>
+<p>To define pick-walk hierarchies, use <a class="reference internal" href="pools/nodes/dagNode.html#paya.runtime.nodes.DagNode.getPickWalkParent" title="paya.runtime.nodes.DagNode.getPickWalkParent"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPickWalkParent()</span></code></a>
+and <a class="reference internal" href="pools/nodes/dagNode.html#paya.runtime.nodes.DagNode.setPickWalkParent" title="paya.runtime.nodes.DagNode.setPickWalkParent"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setPickWalkParent()</span></code></a> on any DAG node, for example:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Before</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">After</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">controls</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;L_leg_??_CTRL&#39;</span><span class="p">)</span>
 

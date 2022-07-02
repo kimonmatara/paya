@@ -13,18 +13,18 @@ class Locator:
             under=None, conformShapeNames=True):
         """
         Recreates a locator from the type of dictionary returned by
-        :meth:`~paya.nodetypes.locator.Locator.macro`.
+        :meth:`~paya.runtime.nodes.Locator.macro`.
 
         :param macro: the macro dictionary to use
         :param under/u: an optional parent for the locator; defaults to None
-        :type under/u: None, str, :class:`~paya.nodetypes.transform.Transform`
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool conformShapeNames/csn: ignored if *under* is None; clean
            up destination shape names after reparenting to the specified
            transform; defaults to True
         :param name/n: one or more name elements; defaults to None
         :type name/n: list, tuple, str
         :return: The locator.
-        :rtype: :class:`~paya.nodetypes.locator.Locator`
+        :rtype: :class:`~paya.runtime.nodes.Locator`
         """
         shape = cls.createNode(n=name)
         xf = shape.getParent()

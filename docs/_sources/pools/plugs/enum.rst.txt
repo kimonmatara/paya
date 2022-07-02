@@ -1,0 +1,17 @@
+***********************
+paya.runtime.plugs.Enum
+***********************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: Enum(*args, **kwargs)
+
+    .. py:method:: put(other, plug=None)
+    
+        Overloads :meth:`paya.runtime.plugs.Attribute.put` to account for enum
+        keys.
+    
+    .. py:method:: isSectionAttr()
+    
+        :return: True if this attribute is a 'section' enum.
+        :rtype: bool

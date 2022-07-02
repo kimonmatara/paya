@@ -165,19 +165,19 @@ def conform(x):
     """
     If x is a **value**, then:
 
-        - If its dimension is 3, it's returned as a :class:`~paya.datatypes.vector.Vector`
-        - If its dimension is 4, it's returned as a :class:`~paya.datatypes.Quaternion`
-        - If its dimension is 16, it's returned as a :class:`~paya.datatypes.Matrix`
+        - If its dimension is 3, it's returned as a :class:`~paya.runtime.data.Vector`
+        - If its dimension is 4, it's returned as a :class:`~paya.runtime.data.Quaternion`
+        - If its dimension is 16, it's returned as a :class:`~paya.runtime.data.Matrix`
         - In all other cases, it's returned as-is
 
     If x is a **plug**, then it's returned as an instance of the appropriate
-    :class:`~paya.plugtypes.Attribute`
+    :class:`~paya.runtime.plugs.Attribute`
 
     :param x: the item to conform
     :return: The conformed item.
-    :rtype: :class:`~paya.datatypes.vector.Vector`,
-        :class:`~paya.datatypes.Quaternion`, :class:`~paya.datatypes.matrix.Matrix`
-        or :class:`~paya.plugtypes.attribute.Attribute`
+    :rtype: :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.data.Quaternion`, :class:`~paya.runtime.data.Matrix`
+        or :class:`~paya.runtime.plugs.Attribute`
     """
     return info(x)[0]
 
@@ -191,9 +191,9 @@ def multMatrices(*matrices):
     Otherwise, it will be a value.
 
     :param \*matrices: the matrices to multiply (unpacked)
-    :type \*matrices: :class:`~paya.datatypes.matrix.Matrix`, :class:`~paya.attributeMatrix.Matrix`, list or str
+    :type \*matrices: :class:`~paya.runtime.data.Matrix`, :class:`~paya.runtime.plugs.Matrix`, list or str
     :return: The matrix product.
-    :rtype: :class:`paya.datatypes.matrix.Matrix` or :class:`paya.plugtypes.matrix.Matrix`
+    :rtype: :class:`paya.runtime.data.Matrix` or :class:`paya.runtime.plugs.Matrix`
     """
     outElems = []
     plugStates = []
@@ -270,22 +270,22 @@ def createMatrix(
     :param translate/t: A **translate** component for the matrix; this can be
         a point value or plug; defaults to None
     :type translate/t: :class:`str`, :class:`list`, :class:`tuple`,
-        :class:`~paya.datatypes.Vector`, :class:`~paya.datatypes.Point`,
-        :class:`~paya.plugtypes.math3D.Math3D`
+        :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.plugs.Math3D`
     :param bool preserveSecondLength/psl: ignored if six arguments were passed;
         preserve the second vector's length when performing orthogonal
         construction; defaults to True
     :param thirdLength/tl: ignored is six arguments were passed; if provided,
         defines the third (derived) vector's length; defaults to None
     :type thirdLength/tl: None, :class:`float`, :class:`int`,
-        :class:`~paya.plugtypes.math1D.Math1D`, :class:`str`
+        :class:`~paya.runtime.plugs.Math1D`, :class:`str`
     :param bool plug/p: if you already know whether the passed arguments contain
         plugs, specify it here to avoid extraneous checks; if no arguments
         have been passed, this will specify whether the returned identity
         matrix is a plug or value; defaults to None
     :return: The constructed matrix.
-    :rtype: :class:`paya.plugtypes.matrix.Matrix` or
-        :class:`paya.datatypes.matrix.Matrix`, depending on inputs.
+    :rtype: :class:`paya.runtime.plugs.Matrix` or
+        :class:`paya.runtime.data.Matrix`, depending on inputs.
     """
     #-------------------------------------------------------------|    Gather info
 
@@ -691,7 +691,7 @@ def getAimVectorsFromPoints(points, tolerance=1e-7):
     :raises NoInterpolationKeysError: none of the derived vectors were
         longer than the specified tolerance
     :return: The list of aim vectors.
-    :rtype: :class:`list` of :class:`~paya.datatypes.vector.Vector`
+    :rtype: :class:`list` of :class:`~paya.runtime.data.Vector`
     """
     points = list(map(p.datatypes.Point, points))
 
@@ -717,7 +717,7 @@ def deflipVectors(vectors):
 
     :param vectors: the source vectors (values)
     :return: The deflipped vectors.
-    :rtype: :class:`list` of :class:`~paya.datatypes.vector.Vector`
+    :rtype: :class:`list` of :class:`~paya.runtime.data.Vector`
     """
     vectors = [p.datatypes.Vector(v).normal() for v in vectors]
     ln = len(vectors)
@@ -751,7 +751,7 @@ def getAimAndUpVectorsFromPoints(points, refVector, tolerance=1e-7):
 
     :param points: the source points (values)
     :param refVector: a reference up vector
-    :type refVector: :class:`~paya.datatypes.vector.Vector`, list
+    :type refVector: :class:`~paya.runtime.data.Vector`, list
     :param float tolerance/tol: aim vectors or cross products with lengths
         below this tolerance will be replaced with neighbouring ones;
         defaults to 1e-7
@@ -850,12 +850,12 @@ def getAimingMatricesFromPoints(
     :param str downAxis: the aiming axis
     :param str upAxis: the axis to bias towards the reference vector
     :param refVector: a reference up vector
-    :type refVector: :class:`~paya.datatypes.vector.Vector`, list
+    :type refVector: :class:`~paya.runtime.data.Vector`, list
     :param float tolerance/tol: aim vectors or cross products with lengths
         below this tolerance will be replaced with neighbouring ones;
         defaults to 1e-7
     :return: A list of matrices
-    :rtype: :class:`list` of :class:`~paya.datatypes.matrix.Matrix`
+    :rtype: :class:`list` of :class:`~paya.runtime.data.Matrix`
     """
     aimVectors, upVectors = getAimAndUpVectorsFromPoints(
         points, refVector, tol=tolerance
@@ -878,7 +878,7 @@ def pointsIntoUnitCube(points):
     :param points: the points to normalize
     :type points: list
     :return: The normalized points.
-    :rtype: list of :class:`~paya.datatypes.point.Point`
+    :rtype: list of :class:`~paya.runtime.data.Point`
     """
     xVals = list(map(abs,[point[0] for point in points]))
     yVals = list(map(abs, [point[1] for point in points]))

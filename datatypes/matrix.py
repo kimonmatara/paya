@@ -29,7 +29,7 @@ class Matrix:
         :param str name/n: one or more name elements; defaults to None
         :param float scale: the locator display scale; defaults to 1.0
         :return: The locator.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         loc = r.nodes.Locator.createNode(n=name).getParent()
         loc.attr('displayLocalAxis').set(True)
@@ -50,9 +50,9 @@ class Matrix:
 
         :param rotateOrder/ro: the rotate order to apply; defaults to 'xyz'
         :type rotateOrder/ro: str, int
-        :return: dictionary of {channelName: :class:`~paya.datatypes.point.Point`,
-            :class:`~paya.datatypes.vector.Vector`
-            or :class:`~paya.datatypes.eulerRotation.EulerRotation`}
+        :return: dictionary of {channelName: :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.data.Vector`
+            or :class:`~paya.runtime.data.EulerRotation`}
         :rtype: dict
         """
         this = _dt.TransformationMatrix(self)
@@ -92,7 +92,7 @@ class Matrix:
         Decomposes and applies this matrix to a transform.
 
         :param transform: the transform node to drive
-        :type transform: str, :class:`~paya.nodetypes.transform.Transform`
+        :type transform: str, :class:`~paya.runtime.nodes.Transform`
         :param bool translate/t: apply translation
         :param bool rotate/r: apply rotation
         :param bool scale/s: apply scale
@@ -431,9 +431,9 @@ class Matrix:
         :param shear/sh: use shear
         :param default: take omitted fields from this matrix; can be a value
             or plug; defaults to None
-        :type default: list, :class:`~paya.datatypes.matrix.Matrix`, str, :class:`~paya.plugtypes.matrix.Matrix`
+        :type default: list, :class:`~paya.runtime.data.Matrix`, str, :class:`~paya.runtime.plugs.Matrix`
         :return: The filtered matrix.
-        :rtype: :class:`~paya.datatypes.matrix.Matrix` or :class:`~paya.plugtypes.matrix.Matrix`
+        :rtype: :class:`~paya.runtime.data.Matrix` or :class:`~paya.runtime.plugs.Matrix`
         """
         translate, rotate, scale, shear = resolveFlags(
             translate, rotate, scale, shear
@@ -482,7 +482,7 @@ class Matrix:
     @classmethod
     def asOffset(cls):
         """
-        Implemented for parity with :meth:`paya.plugtypes.matrix.Matrix.asOffset`.
+        Implemented for parity with :meth:`paya.runtime.plugs.Matrix.asOffset`.
         Returns an identity matrix.
         """
         return cls()
@@ -501,7 +501,7 @@ class Matrix:
             '-y', '-z' or 'translate' / 't'
         :param bool normalize: normalize the extracted vector; defaults
             to False
-        :return: :class:`~paya.datatypes.vector.Vector`, :class:`~paya.datatypes.point.Point`
+        :return: :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.data.Point`
         """
         absAxis = axis.strip('-')
         fields = fieldsmap[absAxis]
@@ -527,8 +527,8 @@ class Matrix:
         :param str axis: the axis to extract, one of 'x', 'y', 'z', '-x',
             '-y', '-z' or 'translate' / 't'.
         :param vals: the values to assign to the row
-        :type vals: :class:`~paya.datatypes.vector.Vector`,
-            :class:`~paya.datatypes.point.Point`, list
+        :type vals: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`, list
         """
         fields = fieldsmap[axis]
 

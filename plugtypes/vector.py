@@ -22,8 +22,8 @@ class Vector:
     @short(plug='p')
     def get(self, plug=False, **kwargs):
         """
-        Overrides :meth:`~paya.plugtypes.attribute.Attribute.get` to return
-        :class:`~paya.datatypes.point.Point` values if this is the translate
+        Overrides :meth:`~paya.runtime.plugs.Attribute.get` to return
+        :class:`~paya.runtime.data.Point` values if this is the translate
         channel of a transform node.
         """
         if plug:
@@ -94,14 +94,14 @@ class Vector:
     def rotateByAxisAngle(self, axisVector, angle):
         """
         :param axisVector: the vector around which to rotate this vector
-        :type axisVector: list, tuple, :class:`~paya.datatypes.vector.Vector`
-            or :class:`~paya.plugtypes.vector.Vector`
+        :type axisVector: list, tuple, :class:`~paya.runtime.data.Vector`
+            or :class:`~paya.runtime.plugs.Vector`
         :param angle: the angle of rotation
-        :type angle: float, :class:`~paya.datatypes.angle.Angle`, str or
-            class:`~paya.plugtypes.math3D.Math3D`
+        :type angle: float, :class:`~paya.runtime.data.Angle`, str or
+            class:`~paya.runtime.plugs.Math3D`
         :return: This vector, rotated around ``axisVector`` by the specified
             ``angle``.
-        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         axisAngle = r.nodes.AxisAngleToQuat.createNode()
         axisVector >> axisAngle.attr('inputAxis')
@@ -117,9 +117,9 @@ class Vector:
         Returns the dot product of ``self`` and ``other``.
 
         :param other: the other vector
-        :type other: :class:`list`, :class:`tuple`, :class:`~paya.plugtypes.math3D.Math3D`
+        :type other: :class:`list`, :class:`tuple`, :class:`~paya.runtime.plugs.Math3D`
         :param bool normalize/nr: normalize the output; defaults to False
-        :return: :class:`paya.plugtypes.math1D.Math1D`
+        :return: :class:`paya.runtime.plugs.Math1D`
         """
         node = r.nodes.VectorProduct.createNode()
         self >> node.attr('input1')
@@ -133,7 +133,7 @@ class Vector:
         Returns the length of this vector.
 
         :return: The length of this vector.
-        :rtype: :class:`~paya.plugtypes.math1D.Math1D`
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
         node = r.nodes.DistanceBetween.createNode(n='mag')
         self >> node.attr('point2')
@@ -142,7 +142,7 @@ class Vector:
     def normal(self):
         """
         :return: This vector, normalized.
-        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         with r.Name('normal'):
             return self / self.length()
@@ -153,9 +153,9 @@ class Vector:
         Returns the cross product of ``self`` and ``other``.
 
         :param other: the other vector
-        :type other: :class:`list`, :class:`tuple`, :class:`~paya.plugtypes.math3D.Math3D`
+        :type other: :class:`list`, :class:`tuple`, :class:`~paya.runtime.plugs.Math3D`
         :param bool normalize/nr: normalize the output; defaults to False
-        :return: :class:`paya.plugtypes.vector.Vector`
+        :return: :class:`paya.runtime.plugs.Vector`
         """
         node = r.nodes.VectorProduct.createNode()
         node.attr('operation').set(2)
@@ -173,16 +173,16 @@ class Vector:
         ``other``.
 
         :param other: the other vector
-        :type other: :class:`~paya.plugtypes.math3D.Math3D`,
-            :class:`~paya.datatypes.vector.Vector`,
-            :class:`~paya.datatypes.point.Point`, list, str
+        :type other: :class:`~paya.runtime.plugs.Math3D`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`, list, str
         :param bool euler: return an euler angle
             triple compound, defaults to False
         :param bool axisAngle: return an axis, angle tuple;
             defaults to False
         :return: A single angle output, a triple euler compound,
             or a tuple of *(axis vector, angle)*, depending on flags
-        :rtype: :class:`~paya.plugtypes.vector.Vector` or :class:`tuple`
+        :rtype: :class:`~paya.runtime.plugs.Vector` or :class:`tuple`
         """
         node = r.nodes.AngleBetween.createNode()
         self >> node.attr('vector1')
@@ -200,16 +200,16 @@ class Vector:
     def angle(self, other, clockNormal=None):
         """
         :param other: the other vector
-        :type other: :class:`~paya.plugtypes.math3D.Math3D`,
-            :class:`~paya.datatypes.vector.Vector`,
-            :class:`~paya.datatypes.point.Point`, list, str
+        :type other: :class:`~paya.runtime.plugs.Math3D`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`, list, str
         :param clockNormal/cn: provide this to get a 360 angle; defaults to
             None
         :type clockNormal/cn: None, list, tuple,
-            :class:`~paya.plugtypes.vector.Vector`,
-            :class:`~paya.datatypes.vector.Vector`
+            :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.data.Vector`
         :return: The angle from this vector to ``other``.
-        :rtype: :class:`~paya.plugtypes.angle.Angle`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
         if clockNormal is None:
             complete = False
@@ -239,7 +239,7 @@ class Vector:
         returns the matrix.
 
         :return: The translate matrix.
-        :rtype: :class:`~paya.plugtypes.matrix.Matrix`
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         ffm = r.nodes.FourByFourMatrix.createNode()
 
@@ -256,7 +256,7 @@ class Vector:
         an identity matrix's base vectors.
 
         :return: The scale matrix.
-        :rtype: :class:`~paya.plugtypes.matrix.Matrix`
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         ffm = r.nodes.FourByFourMatrix.createNode()
 
@@ -273,7 +273,7 @@ class Vector:
         Returns XYZ euler rotations for this vector.
 
         :return: A compound of three euler channels.
-        :rtype: :class:`~paya.plugtypes.eulerRotation.EulerRotation`
+        :rtype: :class:`~paya.runtime.plugs.EulerRotation`
         """
         node = r.nodes.AngleBetween.createNode()
         self >> node.attr('vector2')

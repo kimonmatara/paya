@@ -25,7 +25,7 @@ class FourByFourMatrix:
         :param bool normalize/nr: normalize the extracted vector / point;
             defaults to False
         :return: The compound attribute, or its normalization / negation.
-        :rtype: :class:`~paya.plugtypes.vector.Vector`
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         requestedAxis = {'t': 'translate'}.get(requestedAxis, requestedAxis)
         absRequestedAxis = requestedAxis.strip('-')

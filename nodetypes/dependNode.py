@@ -90,7 +90,7 @@ class DependNode:
     def createFromMacro(cls, macro):
         """
         This is the dispatcher implementation on
-        :class:`~paya.nodetypes.dependNode.DependNode`.
+        :class:`~paya.runtime.nodes.DependNode`.
         """
         if cls is r.nodes.DependNode:
             nt = macro['nodeType']
@@ -103,7 +103,7 @@ class DependNode:
 
     def macro(self):
         """
-        This is a stub on :class:`~paya.nodetypes.dependNode.DependNode` that will
+        This is a stub on :class:`~paya.runtime.nodes.DependNode` that will
         always raise :class:`NotImplementedError`.
         """
         raise NotImplementedError
@@ -127,7 +127,7 @@ class DependNode:
         :param \*\*kwargs: forwarded to
             :meth:`~pymel.core.nodetypes.DependNode.addAttr`
         :return: Where possible, the newly-created attribute.
-        :rtype: None, :class:`~paya.plugtypes.attribute.Attribute`
+        :rtype: None, :class:`~paya.runtime.plugs.Attribute`
         """
         result = r.nodetypes.DependNode.addAttr(self, attrName, **kwargs)
 
@@ -165,7 +165,7 @@ class DependNode:
             to None
         :type channelBox/cb: None, tuple, list, str
         :return: ``self``
-        :rtype: :class:`~paya.nodetypes.dependNode.DependNode`
+        :rtype: :class:`~paya.runtime.nodes.DependNode`
         """
         if keyable:
             keyable = list(_pu.expandArgs(keyable))
@@ -230,7 +230,7 @@ class DependNode:
         :type above/ab: None, str
         :param below/bl: the name of an attribute below which to insert
             the attributes; defaults to None
-        :return: list of :class:`~paya.plugtypes.attribute.Attribute`
+        :return: list of :class:`~paya.runtime.plugs.Attribute`
         """
         attrNames = list(_pu.expandArgs(*attrNames))
 
@@ -280,7 +280,7 @@ class DependNode:
 
         :param str sectionName: the name of the section
         :return: The 'section' enum attribute.
-        :rtype: :class:`~paya.plugtypes.enum.Enum`
+        :rtype: :class:`~paya.runtime.plugs.Enum`
         """
         attrName = _nm.legalise(sectionName).upper()
 
@@ -300,7 +300,7 @@ class DependNode:
     def getSectionAttrs(self):
         """
         :return: A list of 'section' attributes on this node.
-        :rtype: list of :class:`~paya.plugtypes.enum.Enum`
+        :rtype: list of :class:`~paya.runtime.plugs.Enum`
         """
         return list(filter(
             lambda x: x.isSectionAttr(), self.listAttr(ud=True)))

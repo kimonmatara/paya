@@ -28,14 +28,14 @@ class Joint:
         :param worldMatrix/wm: an optional world matrix for the joint;
             defaults to None
         :type worldMatrix/wm: None, list,
-            :class:`~paya.datatypes.matrix.Matrix`
+            :class:`~paya.runtime.data.Matrix`
         :param under/u: an optional parent for the joint; defaults to None
         :type under/u: None, str, :class:`~pymel.core.general.PyNode`
         :param name/n: one or more name elements for the joint; defaults to
             None
         :type name/n: None, str, list or tuple
         :return: The joint.
-        :rtype: :class:`~paya.nodetypes.joint.Joint`
+        :rtype: :class:`~paya.runtime.nodes.Joint`
         """
         joint = cls.createNode(n=name)
 
@@ -75,7 +75,7 @@ class Joint:
         :param bool includeAsTip/iat: Include IK systems for which this joint
             is the tip; defaults to True
         :return: Associated IK handles, in no particular order.
-        :rtype: :class:`list` of :class:`~paya.nodetypes.ikHandle.IkHandle`
+        :rtype: :class:`list` of :class:`~paya.runtime.nodes.IkHandle`
         """
         out = []
 
@@ -90,7 +90,7 @@ class Joint:
     def chainFromHere(self, to=None):
         """
         :param to: an optional terminator joint; defaults to None
-        :type to: str or :class:`~paya.nodetypes.joint.Joint`
+        :type to: str or :class:`~paya.runtime.nodes.Joint`
         :return: A chain from this joint up to and including 'to'
             (if provided), or terminating before the first branch.
         :rtype: :class:`~paya.lib.skel.Chain`
@@ -111,8 +111,8 @@ class Joint:
             be cooked only once, and afterwards retrieved via a
             'jointOrientMatrix' attribute on the node; defaults to False
         :return: The joint orient matrix.
-        :rtype: :class:`paya.datatypes.matrix.Matrix` or
-            :class:`paya.plugtypes.matrix.Matrix`
+        :rtype: :class:`paya.runtime.data.Matrix` or
+            :class:`paya.runtime.plugs.Matrix`
         """
         if plug:
             attrName = 'jointOrientMatrix'

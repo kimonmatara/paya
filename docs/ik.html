@@ -70,9 +70,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -106,7 +107,7 @@
 <section id="creating-ik-handles">
 <h2>Creating IK Handles<a class="headerlink" href="#creating-ik-handles" title="Permalink to this headline"></a></h2>
 <p>Paya provides a few different constructors in addition to the standard PyMEL <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.ikHandle.html#pymel.core.animation.ikHandle" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">ikHandle()</span></code></a>
-command. The first is <a class="reference internal" href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.create" title="paya.nodetypes.ikHandle.IkHandle.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.nodetypes.ikHandle.IkHandle.create()</span></code></a>, which takes the same arguments and supports
+command. The first is <a class="reference internal" href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.create" title="paya.runtime.nodes.IkHandle.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.nodes.IkHandle.create()</span></code></a>, which takes the same arguments and supports
 managed names:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;leg&#39;</span><span class="p">):</span>
     <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">IkHandle</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">sj</span><span class="o">=</span><span class="s1">&#39;joint1&#39;</span><span class="p">,</span> <span class="n">ee</span><span class="o">=</span><span class="s1">&#39;joint5&#39;</span><span class="p">)</span>
@@ -146,7 +147,7 @@ requires an <code class="docutils literal notranslate"><span class="pre">upAxis<
 </section>
 <section id="pole-vectors">
 <h2>Pole Vectors<a class="headerlink" href="#pole-vectors" title="Permalink to this headline"></a></h2>
-<p>The <a class="reference internal" href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.setPolePoint" title="paya.nodetypes.ikHandle.IkHandle.setPolePoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setPolePoint()</span></code></a> method on <a class="reference internal" href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a> is an
+<p>The <a class="reference internal" href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.setPolePoint" title="paya.runtime.nodes.IkHandle.setPolePoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setPolePoint()</span></code></a> method on <a class="reference internal" href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle" title="paya.runtime.nodes.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a> is an
 alternative to <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.poleVectorConstraint.html#pymel.core.animation.poleVectorConstraint" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">poleVectorConstraint()</span></code></a> that works with point attributes and implements
 <code class="docutils literal notranslate"><span class="pre">maintainOffset</span></code>:</p>
 <div class="sphinx-tabs docutils container">
@@ -177,9 +178,9 @@ alternative to <a class="reference external" href="https://help.autodesk.com/clo
 </section>
 <section id="spline-twist">
 <h2>Spline Twist<a class="headerlink" href="#spline-twist" title="Permalink to this headline"></a></h2>
-<p>Use <a class="reference internal" href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle.setTwistVectors" title="paya.nodetypes.ikHandle.IkHandle.setTwistVectors"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setTwistVectors()</span></code></a> on <a class="reference internal" href="paya/nodetypes/ikHandle.html#paya.nodetypes.ikHandle.IkHandle" title="paya.nodetypes.ikHandle.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a> to quickly
+<p>Use <a class="reference internal" href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.setTwistVectors" title="paya.runtime.nodes.IkHandle.setTwistVectors"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setTwistVectors()</span></code></a> on <a class="reference internal" href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle" title="paya.runtime.nodes.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a> to quickly
 enable and configure start / end twist on spline handles. This pairs well with axis properties on Paya
-<a class="reference internal" href="paya/plugtypes/matrix.html#paya.plugtypes.matrix.Matrix" title="paya.plugtypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> attributes:</p>
+<a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> attributes:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ikh</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;KHDL&#39;</span><span class="p">)</span>
 

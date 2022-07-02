@@ -76,9 +76,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -112,8 +113,8 @@
 <h1>Drawing Controls<a class="headerlink" href="#drawing-controls" title="Permalink to this headline"></a></h1>
 <section id="method">
 <h2>Method<a class="headerlink" href="#method" title="Permalink to this headline"></a></h2>
-<p>Paya’s <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a> class provides a special constructor
-for controls, <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform.createControl" title="paya.nodetypes.transform.Transform.createControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createControl()</span></code></a>. For convenience, this is also available
+<p>Paya’s <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a> class provides a special constructor
+for controls, <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform.createControl" title="paya.runtime.nodes.Transform.createControl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createControl()</span></code></a>. For convenience, this is also available
 directly on <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
 
@@ -134,14 +135,14 @@ blocks. The Paya suffix for rig controls will be applied automatically. See <a c
 more information.</p>
 </dd>
 <dt class="field-even">worldMatrix/wm</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix" title="paya.datatypes.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference internal" href="pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 <p>The matrix to apply to the offset group. This will define the control’s ‘zeroed’ pose. You can take world matrices
 from other objects (for example, layout locators) or create them yourself.</p>
 <p>To take a world matrix from another object, use
 <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform.getMatrix" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Transform.getMatrix(worldSpace=True)</span></code></a>. Particular attention
 should be given to <em>scale</em>. Inherited scale can be easy to miss, and will be carried over to the control. If this
 isn’t intentional (for example, to create fully-mirrored controls), it can be hard to correct after the rig has
-received animation. To discard scale, use <a class="reference internal" href="paya/datatypes/matrix.html#paya.datatypes.matrix.Matrix.pick" title="paya.datatypes.matrix.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Matrix.pick()</span></code></a>:</p>
+received animation. To discard scale, use <a class="reference internal" href="pools/data/matrix.html#paya.runtime.data.Matrix.pick" title="paya.runtime.data.Matrix.pick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Matrix.pick()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layoutLoc</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;L_foot_guide_LOCT&#39;</span><span class="p">)</span>
 <span class="n">controlMatrix</span> <span class="o">=</span> <span class="n">layoutLoc</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="c1"># Pass along to createControl() from here</span>
@@ -184,11 +185,11 @@ will be added afterwards.</p>
 <code class="docutils literal notranslate"><span class="pre">None</span></code> to create a control with no offset groups.</p>
 </dd>
 <dt class="field-odd">under/u</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 <p>An optional parent for the topmost offset group.</p>
 </dd>
 <dt class="field-even">pickWalkParent/pwp</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference internal" href="paya/nodetypes/transform.html#paya.nodetypes.transform.Transform" title="paya.nodetypes.transform.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 <p>A node to shift to when the ‘up’ arrow key is pressed with the main control selected. Allows animators
 to skip offset groups when pick-walking complex hierarchies.</p>
 </dd>

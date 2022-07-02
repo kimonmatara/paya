@@ -68,9 +68,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -143,7 +144,7 @@ discarded.</p>
 <h2>Editing<a class="headerlink" href="#editing" title="Permalink to this headline"></a></h2>
 <p>If you’re not working on an instance of <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a> returned by one of the constructors described
 above, you’ll have to get one from existing joints. To load a chain from a root joint, use
-<a class="reference internal" href="paya/nodetypes/joint.html#paya.nodetypes.joint.Joint.chainFromHere" title="paya.nodetypes.joint.Joint.chainFromHere"><code class="xref py py-meth docutils literal notranslate"><span class="pre">chainFromHere()</span></code></a> on <a class="reference internal" href="paya/nodetypes/joint.html#paya.nodetypes.joint.Joint" title="paya.nodetypes.joint.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>:</p>
+<a class="reference internal" href="pools/nodes/joint.html#paya.runtime.nodes.Joint.chainFromHere" title="paya.runtime.nodes.Joint.chainFromHere"><code class="xref py py-meth docutils literal notranslate"><span class="pre">chainFromHere()</span></code></a> on <a class="reference internal" href="pools/nodes/joint.html#paya.runtime.nodes.Joint" title="paya.runtime.nodes.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span>
 <span class="n">chain</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
 </pre></div>

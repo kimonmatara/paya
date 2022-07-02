@@ -82,9 +82,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -130,10 +131,10 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p>N/A</p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/math3D.html#paya.plugtypes.math3D.Math3D" title="paya.plugtypes.math3D.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.math3D.Math3D</span></code></a></p></td>
+<td><p><a class="reference internal" href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Math3D</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.vector.Vector</span></code></a></p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.vector.Vector</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a></p></td>
+<td><p><a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -163,7 +164,7 @@ Basics</span></a>):</p>
 </pre></div>
 </div>
 <p>This is because <code class="xref py py-func docutils literal notranslate"><span class="pre">xform()</span></code> returns a simple <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>. To get around this you could subtract each of the list
-members yourself or, more simply, cast either of the returns into <a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>:</p>
+members yourself or, more simply, cast either of the returns into <a class="reference internal" href="pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">startPoint</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">xform</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">,</span> <span class="n">rotatePivot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">endPoint</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">xform</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">,</span> <span class="n">rotatePivot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
@@ -179,7 +180,7 @@ members yourself or, more simply, cast either of the returns into <a class="refe
 </pre></div>
 </div>
 <p>To get the translation component, use <code class="docutils literal notranslate"><span class="pre">.translate</span></code> / <code class="docutils literal notranslate"><span class="pre">.t</span></code>. On data classes this returns an instance of
-<a class="reference internal" href="paya/datatypes/point.html#paya.datatypes.point.Point" title="paya.datatypes.point.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>:</p>
+<a class="reference internal" href="pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">position</span> <span class="o">=</span> <span class="n">locator</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">()</span><span class="o">.</span><span class="n">t</span>
 </pre></div>
 </div>

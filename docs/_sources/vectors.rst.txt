@@ -13,9 +13,9 @@ Relevant Classes
     *   - Static
         - Dynamic
     *   - N/A
-        - :class:`paya.plugtypes.math3D.Math3D`
-    *   - :class:`paya.datatypes.vector.Vector`
-        - :class:`paya.plugtypes.vector.Vector`
+        - :class:`paya.runtime.plugs.Math3D`
+    *   - :class:`paya.runtime.data.Vector`
+        - :class:`paya.runtime.plugs.Vector`
 
 ===========================
 Getting Vectors from Points
@@ -52,7 +52,7 @@ Note that the following version, using :func:`xform`, won't work:
     // TypeError: unsupported operand type(s) for -: 'list' and 'list'
 
 This is because :func:`xform` returns a simple :class:`list`. To get around this you could subtract each of the list
-members yourself or, more simply, cast either of the returns into :class:`~paya.datatypes.point.Point`:
+members yourself or, more simply, cast either of the returns into :class:`~paya.runtime.data.Point`:
 
 .. code-block:: python
 
@@ -73,7 +73,7 @@ The quickest way to extract a matrix axis as a vector is to use Paya's :term:`un
     xVector = locator.attr('matrix').x # dynamic
 
 To get the translation component, use ``.translate`` / ``.t``. On data classes this returns an instance of
-:class:`~paya.datatypes.point.Point`:
+:class:`~paya.runtime.data.Point`:
 
 .. code-block:: python
 

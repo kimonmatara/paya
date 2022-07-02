@@ -12,12 +12,12 @@ def expandAttrListToParentsAndChildren(attrList, instances=True):
     
     :param attrList: the list of attributes to expand
     :type attrList: list of str or
-        :class:`~paya.plugtypes.attribute.Attribute`
+        :class:`~paya.runtime.plugs.Attribute`
     :param bool instances: return
-        :class:`~paya.plugtypes.attribute.Attribute` instances rather than
+        :class:`~paya.runtime.plugs.Attribute` instances rather than
         strings; defaults to True 
     :return: The expanded attribute list.
-    :rtype: list of str or :class:`~paya.plugtypes.attribute.Attribute`
+    :rtype: list of str or :class:`~paya.runtime.plugs.Attribute`
     """
 
     out = []
@@ -113,12 +113,12 @@ def reorder(node, *attrNames):
     and connections are preserved:
 
     :param node: the node that carries the attributes
-    :type node: str, :class:`~paya.nodetypes.dependNode.DependNode`
+    :type node: str, :class:`~paya.runtime.nodes.DependNode`
     :param attrNames: the names of the attributes to reorder, in the preferred
         order
     :type attrNames: list of str, str
     :return: The rebuilt attributes.
-    :rtype: list of :class:`~paya.plugtypes.attribute.Attribute`
+    :rtype: list of :class:`~paya.runtime.plugs.Attribute`
     """
     attrNames = list(_pu.expandArgs(*attrNames))
 
@@ -175,14 +175,14 @@ class Section:
     def node(self):
         """
         :return: The owner node.
-        :rtype: :class:`~paya.nodetypes.dependNode.DependNode`
+        :rtype: :class:`~paya.runtime.nodes.DependNode`
         """
         return self.owner.owner
 
     def attr(self):
         """
         :return: The section attribute.
-        :rtype: :class:`~paya.plugtypes.enum.Enum`
+        :rtype: :class:`~paya.runtime.plugs.Enum`
         """
         return self._attr
 

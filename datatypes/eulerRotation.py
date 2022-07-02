@@ -17,7 +17,7 @@ class EulerRotation:
         :rtype name/n: None, list, int, str
         :return: A locator with this euler rotation piped into its
             ``rotate`` channels.
-        :rtype: :class:`~paya.nodetypes.transform.Transform`
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         loc = r.nodes.Locator.createNode(n=name).getParent()
         loc.attr('ro').set(self.order.lower())

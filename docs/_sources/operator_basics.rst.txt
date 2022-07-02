@@ -108,7 +108,7 @@ Helpers
 
 Paya adds a few enhancements to bootstrap free mixing of attributes and values.
 
-*   A new method, :meth:`~paya.plugtypes.attribute.Attribute.put`, can be used to set, or connect to, an attribute
+*   A new method, :meth:`~paya.runtime.plugs.Attribute.put`, can be used to set, or connect to, an attribute
     depending on whether the argument is an attribute or value:
 
     .. code-block:: python
@@ -133,16 +133,16 @@ Paya adds a few enhancements to bootstrap free mixing of attributes and values.
 
 .. _More Useful Query Types:
 
-*   :meth:`~paya.plugtypes.attribute.Attribute.get` returns more relevant types. Specifically:
+*   :meth:`~paya.runtime.plugs.Attribute.get` returns more relevant types. Specifically:
 
-    *   On ``translate`` channels, :meth:`~paya.plugtypes.attribute.Attribute.get` returns an instance of
-        :class:`~paya.datatypes.point.Point`
+    *   On ``translate`` channels, :meth:`~paya.runtime.plugs.Attribute.get` returns an instance of
+        :class:`~paya.runtime.data.Point`
 
     *   On attributes of type ``doubleAngle`` (for example, ``rotateX``),
-        :meth:`~paya.plugtypes.attribute.Attribute.get` returns an instance of :class:`~paya.datatypes.angle.Angle`
+        :meth:`~paya.runtime.plugs.Attribute.get` returns an instance of :class:`~paya.runtime.data.Angle`
 
-    *   On compounds of three angles, :meth:`~paya.plugtypes.attribute.Attribute.get` returns an instance of
-        :class:`~paya.datatypes.eulerRotation.EulerRotation`
+    *   On compounds of three angles, :meth:`~paya.runtime.plugs.Attribute.get` returns an instance of
+        :class:`~paya.runtime.data.EulerRotation`
 
-    *   On compounds of four scalars, :meth:`~paya.plugtypes.attribute.Attribute.get` returns an instance of
-        :class:`~paya.datatypes.quaternion.Quaternion`
+    *   On compounds of four scalars, :meth:`~paya.runtime.plugs.Attribute.get` returns an instance of
+        :class:`~paya.runtime.data.Quaternion`

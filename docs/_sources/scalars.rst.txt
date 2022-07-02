@@ -13,14 +13,14 @@ Relevant Classes
     *   - Static
         - Dynamic
     *   - N/A
-        - :class:`paya.plugtypes.math1D.Math1D`
+        - :class:`paya.runtime.plugs.Math1D`
 
 =======
 General
 =======
 
 Paya implements too much functionality on scalars to list here, from :term:`universal` operators to methods for range
-management, comparisons, frame sampling and so on. For a full reference, see :class:`~paya.plugtypes.math1D.Math1D` and
+management, comparisons, frame sampling and so on. For a full reference, see :class:`~paya.runtime.plugs.Math1D` and
 :doc:`Angles and Rotations <angles_and_rotations>`.
 
 ======
@@ -28,7 +28,7 @@ Gating
 ======
 
 The **comparison** modes of Maya's ``condition`` node have been implemented as methods, for example
-:meth:`~paya.plugtypes.math1D.Math1D.gt`. These pair well with :meth:`~paya.plugtypes.math1D.Math1D.ifElse` to create
+:meth:`~paya.runtime.plugs.Math1D.gt`. These pair well with :meth:`~paya.runtime.plugs.Math1D.ifElse` to create
 logic gates in the dependency graph:
 
 .. tabs::

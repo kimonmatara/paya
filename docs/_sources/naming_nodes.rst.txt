@@ -69,7 +69,7 @@ The :class:`~paya.lib.names.Name` context manager confers the following advantag
             # joint1
 
     To use Paya-style node names with standard Maya commands, call
-    :meth:`~paya.nodetypes.dependNode.DependNode.makeName` on a relevant node type and pass the result along:
+    :meth:`~paya.runtime.nodes.DependNode.makeName` on a relevant node type and pass the result along:
 
     .. code-block:: python
 
@@ -78,7 +78,7 @@ The :class:`~paya.lib.names.Name` context manager confers the following advantag
             r.createNode('joint', n=name)
             # eye_JOIN
 
-    Pass ``control=True`` to :meth:`~paya.nodetypes.dependNode.DependNode.makeName` to apply the suffix for rig
+    Pass ``control=True`` to :meth:`~paya.runtime.nodes.DependNode.makeName` to apply the suffix for rig
     controls.
 
 ====================

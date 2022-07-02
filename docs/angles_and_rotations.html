@@ -78,9 +78,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="paya.html">Module Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
@@ -126,16 +127,16 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p>N/A</p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D" title="paya.plugtypes.math1D.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.math1D.Math1D</span></code></a></p></td>
+<td><p><a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Math1D</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="paya/datatypes/vector.html#paya.datatypes.vector.Vector" title="paya.datatypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.vector.Vector</span></code></a></p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/vector.html#paya.plugtypes.vector.Vector" title="paya.plugtypes.vector.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.vector.Vector</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a></p></td>
+<td><p><a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.angle.Angle</span></code></p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/angle.html#paya.plugtypes.angle.Angle" title="paya.plugtypes.angle.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.angle.Angle</span></code></a></p></td>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Angle</span></code></p></td>
+<td><p><a class="reference internal" href="pools/plugs/angle.html#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Angle</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="paya/datatypes/eulerRotation.html#paya.datatypes.eulerRotation.EulerRotation" title="paya.datatypes.eulerRotation.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.datatypes.eulerRotation.EulerRotation</span></code></a></p></td>
-<td><p><a class="reference internal" href="paya/plugtypes/eulerRotation.html#paya.plugtypes.eulerRotation.EulerRotation" title="paya.plugtypes.eulerRotation.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.plugtypes.eulerRotation.EulerRotation</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation" title="paya.runtime.data.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.EulerRotation</span></code></a></p></td>
+<td><p><a class="reference internal" href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation" title="paya.runtime.plugs.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.EulerRotation</span></code></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -181,7 +182,7 @@ not affect rig behaviour; it only changes how rotation channels are displayed.</
 <section id="trigonometry">
 <span id="id1"></span><h2>Trigonometry<a class="headerlink" href="#trigonometry" title="Permalink to this headline"></a></h2>
 <p>Paya makes trigonometric functions available as methods on all scalar attributes. These are implemented using expression
-nodes. Here’s an example using <a class="reference internal" href="paya/plugtypes/math1D.html#paya.plugtypes.math1D.Math1D.cos" title="paya.plugtypes.math1D.Math1D.cos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cos()</span></code></a>:</p>
+nodes. Here’s an example using <a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.cos" title="paya.runtime.plugs.Math1D.cos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cos()</span></code></a>:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Paya</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">Graph</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><figure class="align-center">
 <img alt="_images/trig.gif" src="_images/trig.gif" />
@@ -226,7 +227,7 @@ be found under <a class="reference external" href="https://docs.python.org/3/lib
 <section id="switching-representations">
 <h2>Switching Representations<a class="headerlink" href="#switching-representations" title="Permalink to this headline"></a></h2>
 <p>Consider the following example, where two euler rotations can’t be usefully interpolated using
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.plugtypes.eulerRotation.EulerRotation.blend()</span></code> due to differing rotation orders and gimbal lock:</p>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.EulerRotation.blend()</span></code> due to differing rotation orders and gimbal lock:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Paya</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">Graph</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><figure class="align-center">
 <img alt="_images/linear_blend.gif" src="_images/linear_blend.gif" />
