@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>What’s New &mdash; paya 0.5.1 documentation</title>
+  <title>What’s New &mdash; paya 0.5.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,6 +44,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-5-2">Version 0.5.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-5-1">Version 0.5.1</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#general-changes">General Changes</a></li>
 </ul>
@@ -149,6 +150,18 @@
              
   <section id="what-s-new">
 <h1>What’s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline"></a></h1>
+<section id="version-0-5-2">
+<h2>Version 0.5.2<a class="headerlink" href="#version-0-5-2" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">clockNormal</span></code> option to <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.angle" title="paya.runtime.data.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">data.Vector.angle()</span></code></a> and
+<a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.angle" title="paya.runtime.plugs.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plugs.Vector.angle()</span></code></a> for 360 angle calcs</p></li>
+<li><p><em>Removed</em> <code class="docutils literal notranslate"><span class="pre">axisAngle</span></code> / <code class="docutils literal notranslate"><span class="pre">euler</span></code> options from <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.angle" title="paya.runtime.plugs.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plugs.Vector.angle()</span></code></a> for
+simplicity and parity with the data version</p></li>
+<li><p>Fixed a bug on <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.dot" title="paya.runtime.plugs.Vector.dot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plugs.Vector.dot()</span></code></a> when called with <code class="docutils literal notranslate"><span class="pre">normalize=True</span></code></p></li>
+<li><p>Documentation refactored to rationalise class links; many broken links fixed</p></li>
+</ul>
+</section>
+<hr class="docutils" />
 <section id="version-0-5-1">
 <h2>Version 0.5.1<a class="headerlink" href="#version-0-5-1" title="Permalink to this headline"></a></h2>
 <section id="general-changes">
