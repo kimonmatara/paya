@@ -101,8 +101,8 @@ following example, a leg chain and a foot chain are spliced together, reoriented
             thighChain = legChain[:2]
             shinChain = legChain[1:3]
 
-            thighChain.insertJoints(3)
-            shinChain.insertJoints(3)
+            thighChain.subdivide(3)
+            shinChain.subdivide(3)
 
             # Recreate the instance with updated membership
             legChain = thighChain[:-1] + shinChain[:-1] + footChain

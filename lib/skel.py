@@ -362,7 +362,7 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Hierarchy editing
 
-    def _insertJointsAtRatios(self, userRatios):
+    def _subdivideAtRatios(self, userRatios):
         newJoints = []
 
         if userRatios:
@@ -433,7 +433,7 @@ class Chain(UserList):
 
         return newJoints
 
-    def insertJoints(self, *numberOrRatios):
+    def subdivide(self, *numberOrRatios):
         """
         Inserts joints along the chain.
 
@@ -462,12 +462,12 @@ class Chain(UserList):
             raise RuntimeError("Mixed integers / floats.")
 
         if floatNums:
-            return self._insertJointsAtRatios(floatNums)
+            return self._subdivideAtRatios(floatNums)
 
         elif intNums:
             assert len(intNums) is 1, "Multiple integers."
             ratios = _mo.floatRange(0, 1, intNums[0]+2)[1:-1]
-            return self._insertJointsAtRatios(ratios)
+            return self._subdivideAtRatios(ratios)
 
         return []
 
