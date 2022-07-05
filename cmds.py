@@ -20,6 +20,6 @@ via :py:mod:`paya.runtime`.
 
 from pymel.core import *
 from paya.lib.names import Name
-from paya.lib.mathops import createMatrix, cm
+from paya.lib.mathops import createMatrix, cm, NativeUnits
 from paya.lib.skel import Chain
 from paya.lib.controlshapes import controlShapes

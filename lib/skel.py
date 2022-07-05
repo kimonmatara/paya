@@ -360,116 +360,181 @@ class Chain(UserList):
         axes.sort(key=lambda x: axes.count(x))
         return axes[-1]
 
+    def ratios(self):
+        """
+        :return: A length ratio for reach joint in this chain.
+        :rtype: list of float
+        """
+        vectors = self.vectors()
+        cumulativeLengths = [0.0]
+
+        for vector in vectors:
+            cumulativeLength = cumulativeLengths[-1]+vector.length()
+            cumulativeLengths.append(cumulativeLength)
+
+        fullLength = cumulativeLengths[-1]
+
+        return [cumulativeLength / fullLength for \
+                cumulativeLength in cumulativeLengths]
+
     #------------------------------------------------------------|    Hierarchy editing
 
-    def _subdivideAtRatios(self, userRatios):
+    @short(perBone='pb')
+    def insertJoints(self, *numberOrRatios, perBone=False):
+        """
+        Inserts joints into this chain. This is an in-place operation.
+
+        :param \*numberOrRatios: this can be passed either as a single
+            integer or one or more floats; if an integer is passed, this
+            number of joints will be uniformly distributed along the length
+            of this chain; if floats are passed, then joints will be inserted
+            at those length ratios
+        :type \*numberOrRatios: int, float, list, tuple
+        :param bool perBone/pb: perform the operation per bone in the chain;
+            defaults to False
+        :return: The newly-generated joints.
+        :rtype: list of :class:`~paya.runtime.nodes.Joint`
+        """
+        numberOrRatios = _pu.expandArgs(*numberOrRatios)
+        ln = len(numberOrRatios)
+
+        if ln > 0:
+
+            if len(numberOrRatios) is 1:
+                numberOrRatios = numberOrRatios[0]
+
+                if isinstance(numberOrRatios, int):
+                    userRatios = _mo.floatRange(0, 1, numberOrRatios+2)[1:-1]
+
+                else:
+                    userRatios = [numberOrRatios]
+
+            else:
+                userRatios = numberOrRatios
+
+        else:
+            raise RuntimeError("No ratios or number specified.")
+
+        # Gather info
+
+        points = self.points()
+        vectors = []
+        cumulativeLengths = [0.0]
+
+        for i, thisPoint in enumerate(points[:-1]):
+            nextPoint = points[i+1]
+            vector = nextPoint-thisPoint
+            vectors.append(vector)
+            cumulativeLength = vector.length() + cumulativeLengths[-1]
+            cumulativeLengths.append(cumulativeLength)
+
+        fullLength = cumulativeLengths[-1]
+
+        jointRatios = [0.0] + [cumulativeLength / fullLength \
+                for cumulativeLength in cumulativeLengths[1:]]
+
+        if perBone:
+            _userRatios = []
+
+            for i, thisJointRatio in enumerate(jointRatios[:-1]):
+                nextJointRatio = jointRatios[i+1]
+                newRatios = [_pu.blend(
+                    thisJointRatio,
+                    nextJointRatio,
+                    weight=userRatio
+                    ) for userRatio in userRatios
+                ]
+
+                _userRatios += newRatios
+
+            _userRatios.append(jointRatios[-1])
+            userRatios = _userRatios
+
+        # Perform the insertions
+
+        ln = len(self)
+        insertions = {}
         newJoints = []
 
-        if userRatios:
-            assert all([userRatio >= 0.0 and \
-                userRatio <= 1.0 for userRatio in userRatios]), \
-                "Each cut ratio must be greater than 0.0 and less than 1.0."
+        for i, userRatio in enumerate(userRatios):
+            for x in range(ln-1):
+                thisRatio = jointRatios[x]
+                nextRatio = jointRatios[x+1]
 
-            points = self.points()
-            vectors = []
-            cumulativeLengths = [0.0]
+                if userRatio >= thisRatio and userRatio <= nextRatio:
+                    thisJoint = self[x]
+                    nextJoint = self[x+1]
 
-            for i, thisPoint in enumerate(points[1:], start=1):
-                prevPoint = points[i-1]
-                vector = thisPoint-prevPoint
-                vectors.append(vector)
-                cumulativeLengths.append(cumulativeLengths[-1]+vector.length())
+                    localRatio = (userRatio-thisRatio)/(nextRatio-thisRatio)
 
-            fullLength = cumulativeLengths[-1]
+                    startPoint = points[x]
+                    vector = vectors[x]
 
-            jointRatios = [0.0] + [cumulativeLength / fullLength for \
-                cumulativeLength in cumulativeLengths[1:-1]] + [1.0]
+                    position = startPoint + vector * localRatio
+                    matrix = thisJoint.getMatrix(worldSpace=True)
+                    matrix.t = position
 
-            ln = len(self)
+                    dup = thisJoint.duplicate(
+                        name=r.nodes.Joint.makeName(i+1), po=True)[0]
 
-            insertions = {}
+                    dup.setMatrix(matrix, worldSpace=True)
+                    pool = insertions.setdefault(thisJoint, [])
+                    pool.append(dup)
+                    break
 
-            for i, userRatio in enumerate(userRatios):
-                for x in range(ln-1):
-                    thisRatio = jointRatios[x]
-                    nextRatio = jointRatios[x+1]
+        membership = []
 
-                    if userRatio >= thisRatio and userRatio <= nextRatio:
-                        thisJoint = self[x]
-                        nextJoint = self[x+1]
+        for joint in self:
+            membership.append(joint)
 
-                        localRatio = (userRatio-thisRatio)/(nextRatio-thisRatio)
+            try:
+                theseInsertions = insertions[joint]
+                membership += theseInsertions
+                newJoints += theseInsertions
 
-                        startPoint = points[x]
-                        vector = vectors[x]
+            except KeyError:
+                continue
 
-                        position = startPoint + vector * localRatio
-                        matrix = thisJoint.getMatrix(worldSpace=True)
-                        matrix.t = position
-
-                        dup = thisJoint.duplicate(
-                            name=r.nodes.Joint.makeName(i+1), po=True)[0]
-
-                        dup.setMatrix(matrix, worldSpace=True)
-                        pool = insertions.setdefault(thisJoint, [])
-                        pool.append(dup)
-                        break
-
-            membership = []
-
-            for joint in self:
-                membership.append(joint)
-
-                try:
-                    theseInsertions = insertions[joint]
-                    membership += theseInsertions
-                    newJoints += theseInsertions
-
-                except KeyError:
-                    continue
-
-            self.data[:] = membership
-            self.compose()
+        self.data[:] = membership
+        self.compose()
 
         return newJoints
 
-    def subdivide(self, *numberOrRatios):
+    def subdivide(self, *iterations):
         """
-        Inserts joints along the chain.
+        Recursively inserts joints to 'subdivide' this chain. This is an in
+        place operation. The chain will be edited and its membership updated.
 
-        :param \*numberOrRatios: either a single integer or one or more
-            floats; if floats are passed, they must each be greater than 0.0
-            and less than 1.0, and will be used to cut the chain at those
-            length ratios; if an integer is passed, this number of cuts will
-            be performed at regular intervals
-        :return: Joints created by the operation.
-        :rtype: list
+        :param int \*iterations: the number of times to subdivide; defaults to
+            1 if omitted
+        :return: The newly-generated joints.
+        :rtype: list of :class:`~paya.runtime.nodes.Joint`
         """
-        floatNums = []
-        intNums = []
+        if iterations:
+            iterations = iterations[0]
 
-        for arg in _pu.expandArgs(*numberOrRatios):
-            if isinstance(arg, int):
-                intNums.append(arg)
+        else:
+            iterations = 1
 
-            elif isinstance(arg, float):
-                floatNums.append(arg)
+        ratios = self.ratios()
+        origIndices = range(len(self))
 
-            else:
-                raise TypeError("Not an int or float: {}".format(arg))
+        for x in range(iterations):
+            _ratios = []
 
-        if floatNums and intNums:
-            raise RuntimeError("Mixed integers / floats.")
+            for i, thisRatio in enumerate(ratios[:-1]):
+                nextRatio = ratios[i+1]
+                midRatio = _pu.blend(thisRatio, nextRatio)
+                _ratios += [thisRatio, midRatio]
 
-        if floatNums:
-            return self._subdivideAtRatios(floatNums)
+            _ratios.append(ratios[-1])
+            ratios = _ratios
+            origIndices = [origIndex * 2 for origIndex in origIndices]
 
-        elif intNums:
-            assert len(intNums) is 1, "Multiple integers."
-            ratios = _mo.floatRange(0, 1, intNums[0]+2)[1:-1]
-            return self._subdivideAtRatios(ratios)
+        ratios = [ratios[x] for x in range(
+            len(ratios)) if x not in origIndices]
 
-        return []
+        return self.insertJoints(ratios)
 
     @short(name='n', start='sn')
     def duplicate(self, name=None, startNumber=1):
@@ -737,15 +802,78 @@ class Chain(UserList):
 
         return self
 
-    # #------------------------------------------------------------|    Repr
+    #------------------------------------------------------------|    Higher-level rigging
+
+    def _getSubdivisionMapping(self, subdividedChain):
+        """
+        Returns a list where each member is:
+        [jointOnThisChain, [closestJointOnSubidividedChain,
+            childJoint1, childJoint2... terminating before next matched joint]
+        """
+        sourcePoints = self.points()
+        destPoints = subdividedChain.points()
+        destAnchorIndices = []
+
+        for sourcePoint in sourcePoints:
+            bestDistance = None
+            bestPointIndex = None
+
+            for i, destPoint in enumerate(destPoints):
+                vec = destPoint-sourcePoint
+                ln = vec.length()
+
+                if bestDistance is None or (ln < bestDistance):
+                    bestDistance = ln
+                    bestPointIndex = i
+
+            destAnchorIndices.append(bestPointIndex)
+
+        out = []
+        destLen = len(subdividedChain)
+
+        for i, srcJoint, destAnchorIndex in zip(
+            range(len(self)),
+            self,
+            destAnchorIndices
+        ):
+            destAnchorJoint = subdividedChain[destAnchorIndex]
+            entry = [srcJoint, [destAnchorJoint]]
+
+            for x, destJoint in enumerate(
+                    subdividedChain[destAnchorIndex+1:], start=destAnchorIndex+1):
+                if x is destAnchorIndices[i+1]:
+                    break
+
+                entry[1].append(destJoint)
+
+            out.append(entry)
+
+        return out
+
+    # WIP
+    # @short(
+    #     downAxis='da',
+    #     upVectorOverrides='uvo'
+    # )
+    # def driveSubdivided(
+    #         self,
+    #         destChain,
+    #         upAxis,
+    #         downAxis=None,
+    #         upVectorOverrides=None,
+    #         stretch=True,
+    #         stretchByTranslate=False
+    # ):
+    #     driverMapping = self._getSubdivisionMapping(destChain)
     #
-    # def __repr__(self):
-    #     ln = len(self)
+    #     if stretch:
+    #         points = self.points(p=True)
     #
-    #     if ln > 2:
-    #         content = '[{} -> {}]'.format(repr(self[0]), repr(self[-1]))
+    #     for i, thisJoint, targets in zip(
+    #             range(len(self)-1), driverMapping[:-1]):
     #
-    #     else:
-    #         content = repr(self.data)
+    #         nextJoint = self[i+1]
     #
-    #     return "{}({})".format(self.__class__.__name__, content)
+    #
+    #
+    #

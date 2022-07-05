@@ -136,17 +136,35 @@ paya.lib.skel
         :return: The 'bone' axis of this chain (e.g. 'x')
         :rtype: str
     
-    .. py:method:: subdivide(*numberOrRatios)
+    .. py:method:: ratios()
     
-        Inserts joints along the chain.
+        :return: A length ratio for reach joint in this chain.
+        :rtype: list of float
+    
+    .. py:method:: insertJoints(*numberOrRatios, perBone=False)
+    
+        Inserts joints into this chain. This is an in-place operation.
         
-        :param \*numberOrRatios: either a single integer or one or more
-            floats; if floats are passed, they must each be greater than 0.0
-            and less than 1.0, and will be used to cut the chain at those
-            length ratios; if an integer is passed, this number of cuts will
-            be performed at regular intervals
-        :return: Joints created by the operation.
-        :rtype: list
+        :param \*numberOrRatios: this can be passed either as a single
+            integer or one or more floats; if an integer is passed, this
+            number of joints will be uniformly distributed along the length
+            of this chain; if floats are passed, then joints will be inserted
+            at those length ratios
+        :type \*numberOrRatios: int, float, list, tuple
+        :param bool perBone/pb: perform the operation per bone in the chain;
+            defaults to False
+        :return: The newly-generated joints.
+        :rtype: list of :class:`~paya.runtime.nodes.Joint`
+    
+    .. py:method:: subdivide(*iterations)
+    
+        Recursively inserts joints to 'subdivide' this chain. This is an in
+        place operation. The chain will be edited and its membership updated.
+        
+        :param int \*iterations: the number of times to subdivide; defaults to
+            1 if omitted
+        :return: The newly-generated joints.
+        :rtype: list of :class:`~paya.runtime.nodes.Joint`
     
     .. py:method:: duplicate(name=None, startNumber=1)
     
@@ -252,3 +270,9 @@ paya.lib.skel
         :raises AssertionError: the chain is not contiguous
         :return: ``self``
         :rtype: :class:`Chain`
+    
+    .. py:method:: _getSubdivisionMapping(subdividedChain)
+    
+        Returns a list where each member is:
+        [jointOnThisChain, [closestJointOnSubidividedChain,
+            childJoint1, childJoint2... terminating before next matched joint]

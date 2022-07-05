@@ -360,35 +360,90 @@ class Vector:
     
     #--------------------------------------------------------------------|    Blending
 
-    @short(weight='w')
-    def blend(self, other, weight=0.5, swap=False):
+    @short(
+        weight='w',
+        swap='sw',
+        includeLength='ilg',
+        byVectorAngle='bva'
+    )
+    def blend(
+            self,
+            other,
+            weight=0.5,
+            swap=False,
+            includeLength=False,
+            byVectorAngle=False
+    ):
         """
-        Blends this output towards ``other``.
+        If 'other' or 'weight' is a plug, then the return will also be a
+        plug.
 
-        :param other: the scalar value or plug towards which to blend
-        :type other: 3D value or plug
-        :param weight/w: the blend weight, where *other* takes over fully
-            at 1.0; defaults to 0.5
-        :type weight/w: :class:`~paya.runtime.plugs.Math1D`, :class:`Vector`, list, str
-        :param bool swap: swap the operands
-        :return: The blended output.
-        :rtype: :class:`~paya.runtime.plugs.Math3D`
+        :param other: the vector that will be fully active when 'weight'
+            is 1.0 (or 0.0, if 'swap' is True)
+        :type other: list, tuple, :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`
+        :param weight/w: the blending weight; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool swap/sw: swap operands around; defaults to False
+        :param bool byVectorAngle/bva: blend by rotating one vector towards
+            the other, rather than via linear value interpolation; defaults
+            to False
+        :param bool includeLength/ilg: ignored if 'byVectorAngle' is False;
+            blend vector lengths (magnitudes) as well; defaults to False
+        :return: The blended vector.
+        :rtype: :class:`paya.runtime.data.Vector` or
+            :class:`paya.runtime.plugs.Vector`
         """
-        other, dim, isplug = _mo.info(other)
-        weight, weightd, weightisplug = _mo.info(weight)
-
-        if isplug or weightisplug:
-            node = r.nodes.BlendColors.createNode()
-            node.attr('color{}'.format(1 if swap else 2)).set(self)
-            node.attr('color{}'.format(2 if swap else 1)).put(other, p=isplug)
-            node.attr('blender').put(weight, p=weightisplug)
-
-            return node.attr('output')
+        other, otherDim, otherIsPlug = _mo.info(other)
+        weight, weightDim, weightIsPlug = _mo.info(weight)
 
         if swap:
-            return other.blend(self, weight=weight)
+            first, second = other, self
+            firstIsPlug = otherIsPlug
+            secondIsPlug = False
 
-        return _dt.Vector.blend(self, other, weight=weight)
+        else:
+            first, second = self, other
+            firstIsPlug = False
+            secondIsPlug = otherIsPlug
+
+        if byVectorAngle:
+            cross = first.cross(second)
+            baseAngle = first.angle(second)
+            targetAngle = baseAngle * weight
+            outVector = first.rotateByAxisAngle(cross, targetAngle)
+
+            if includeLength:
+                firstLength = first.length()
+                secondLength = second.length()
+
+                if firstIsPlug:
+                    targetLength = firstLength.blend(secondLength, w=weight)
+
+                elif secondIsPlug:
+                    targetLength = secondLength.blend(
+                        firstLength, w=weight, swap=True)
+
+                else:
+                    targetLength = _pu.blend(
+                        firstLength, secondLength, weight=weight
+                    )
+
+                outVector = outVector.normal() * targetLength
+
+        else:
+            if any([firstIsPlug, secondIsPlug, weightIsPlug]):
+                node = r.nodes.BlendColors.createNode()
+                node.attr('color2').put(first, p=firstIsPlug)
+                node.attr('color1').put(second, p=secondIsPlug)
+                node.attr('blender').put(weight, weightIsPlug)
+
+                outVector = node.attr('output')
+
+            else:
+                outVector = _pu.blend(first, second, weight=weight)
+
+        return outVector
         
     #--------------------------------------------------------------------|    Vector operations
 

@@ -91,6 +91,99 @@ class Vector:
 
     #-----------------------------------------------------------|    Vector operations
 
+    @short(
+        weight='w',
+        blendLength='blg'
+    )
+    def _blendByVectorAngle(
+            self,
+            other,
+            weight=0.5,
+            swap=False,
+            blendLength=False
+    ):
+        other, dim, isplug = _mo.info(other)
+
+        if swap:
+            first, second = other, self
+
+        else:
+            first, second = self, other
+
+        cross = first.cross(second)
+        angle = first.angle(second)
+        targetAngle = angle * weight
+
+        out = self.rotateByAxisAngle(cross, targetAngle)
+
+        if blendLength:
+            mag = first.length().blend(other.length(), weight=weight)
+            out = out.normal() * mag
+
+        return out
+
+    @short(
+        weight='w',
+        swap='sw',
+        includeLength='ilg',
+        byVectorAngle='bva'
+    )
+    def blend(
+            self,
+            other,
+            weight=0.5,
+            swap=False,
+            includeLength=False,
+            byVectorAngle=False
+    ):
+        """
+        :param other: the vector that will be fully active when 'weight'
+            is 1.0 (or 0.0, if 'swap' is True)
+        :type other: list, tuple, :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`
+        :param weight/w: the blending weight; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool swap/sw: swap operands around; defaults to False
+        :param bool byVectorAngle/bva: blend by rotating one vector towards
+            the other, rather than via linear value interpolation; defaults
+            to False
+        :param bool includeLength/ilg: ignored if 'byVectorAngle' is False;
+            blend vector lengths (magnitudes) as well; defaults to False
+        :return: The blended vector.
+        :rtype: :class:`paya.runtime.plugs.Vector`
+        """
+        other, otherDim, otherIsPlug = _mo.info(other)
+
+        if swap:
+            first, second = other, self
+            firstIsPlug = otherIsPlug
+            secondIsPlug = True
+
+        else:
+            first, second = self, other
+            firstIsPlug = True
+            secondIsPlug = otherIsPlug
+
+        if byVectorAngle:
+            cross = first.cross(second)
+            baseAngle = first.angle(second)
+            targetAngle = baseAngle * weight
+            outVector = first.rotateByAxisAngle(cross, targetAngle)
+
+            if includeLength:
+                targetLength = first.length().blend(second.length(), w=weight)
+                outVector = outVector.normal() * targetLength
+
+        else:
+            node = r.nodes.BlendColors.createNode()
+            node.attr('color2').put(first, p=firstIsPlug)
+            node.attr('color1').put(second, p=secondIsPlug)
+            weight >> node.attr('blender')
+
+            outVector = node.attr('output')
+
+        return outVector
+
     def rotateByAxisAngle(self, axisVector, angle):
         """
         :param axisVector: the vector around which to rotate this vector

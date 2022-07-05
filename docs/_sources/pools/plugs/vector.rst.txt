@@ -33,6 +33,23 @@ paya.runtime.plugs.Vector
         
         :param other: a matrix value or plug
     
+    .. py:method:: blend(other, weight=0.5, swap=False, includeLength=False, byVectorAngle=False)
+    
+        :param other: the vector that will be fully active when 'weight'
+            is 1.0 (or 0.0, if 'swap' is True)
+        :type other: list, tuple, :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`
+        :param weight/w: the blending weight; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool swap/sw: swap operands around; defaults to False
+        :param bool byVectorAngle/bva: blend by rotating one vector towards
+            the other, rather than via linear value interpolation; defaults
+            to False
+        :param bool includeLength/ilg: ignored if 'byVectorAngle' is False;
+            blend vector lengths (magnitudes) as well; defaults to False
+        :return: The blended vector.
+        :rtype: :class:`paya.runtime.plugs.Vector`
+    
     .. py:method:: rotateByAxisAngle(axisVector, angle)
     
         :param axisVector: the vector around which to rotate this vector
