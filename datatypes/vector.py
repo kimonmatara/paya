@@ -585,7 +585,7 @@ class Vector:
         if hasPlugs:
             ab = r.createNode('angleBetween')
             ab.attr('vector1').set(self)
-            ab.attr('vector2').put(p=otherIsPlug)
+            ab.attr('vector2').put(other, p=otherIsPlug)
 
             angle = ab.attr('angle')
 
@@ -603,6 +603,22 @@ class Vector:
                     angle = _pu.radians(360.0)-angle
 
         return angle
+
+    def makePerpendicularTo(self, other):
+        """
+        Orthogonises this vector against 'other'.
+
+        :param other: the other vector
+        :type other: :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`,
+        :return: The modified vector.
+        :rtype: :class:`Vector`
+        """
+        other = _mo.info(other)[0]
+        cross1 = self.cross(other)
+        out = other.cross(cross1)
+        out = out.normal() * self.length()
+        return out
 
     #--------------------------------------------------------------------|    Conversions
 

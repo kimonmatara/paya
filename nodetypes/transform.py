@@ -242,6 +242,33 @@ class Transform:
 
     #--------------------------------------------------------|    Sampling
 
+    def closestOf(self, elems):
+        """
+        Returns the closest amongst 'elems' to this transform.
+
+        :param elems: a list of Python objects that, when instantiated into
+            PyNodes, implement ``getWorldPosition()``
+        :return: The closest amongst 'elems'.
+        """
+        thisPosition = self.getWorldPosition()
+
+        bestDistance = None
+        bestIndex = None
+
+        for i, elem in enumerate(elems):
+            if not isinstance(elem, r.PyNode):
+                elem = r.PyNode(elem)
+
+            targetPosition = elem.getWorldPosition()
+            vec = targetPosition - thisPosition
+            distance = vec.length()
+
+            if bestDistance is None or distance < bestDistance:
+                bestDistance = distance
+                bestIndex = i
+
+        return list(elems)[bestIndex]
+
     @short(plug='p', useLocatorShape='uls')
     def getWorldPosition(self, plug=False, useLocatorShape=True):
         """

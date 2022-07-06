@@ -5,14 +5,35 @@ import pymel.util as _pu
 
 r = LazyModule('paya.runtime')
 
+def _getJointSettings(joint):
+    return {attrName: joint.attr(attrName
+        ).get() for attrName in [
+            'rotateOrder', 'rotateAxis', 'jointOrient',
+            'radius', 'displayLocalAxis']}
 
-class Chain(UserList):
+def _applyJointSettings(settings, joint):
+    for attrName, value in settings.items():
+        joint.attr(attrName).set(value)
+
+
+class Chain(object):
+
+    #------------------------------------------------------------|    Type management
+
+    def __new__(cls, *joints):
+        joints = _pu.expandArgs(*joints)
+        cls = getClassFromNumJoints(len(joints))
+
+        return object.__new__(cls)
+
+    def _updateClass(self):
+        self.__class__ = getClassFromNumJoints(len(self))
 
     #------------------------------------------------------------|    Instantiation
 
     def __init__(self, *joints):
         joints = map(r.PyNode, _pu.expandArgs(*joints))
-        super(Chain, self).__init__(joints)
+        self.data = list(joints)
 
     @classmethod
     def getFromStartEnd(cls, startJoint, endJoint):
@@ -235,16 +256,25 @@ class Chain(UserList):
 
         return self
 
-    #------------------------------------------------------------|    Inspections
+    #------------------------------------------------------------|    Standard inspections
 
     def bones(self):
         """
-        :return: One :class:`Chain` instance per overlapping pair of joints.
-        :rtype: :class:`list` of :class:`Chain`
+        :return: One :class:`Bone` instance per overlapping pair of joints.
+        :rtype: :class:`list` of :class:`Bone`
         """
         pairs = zip(self, self[1:])
-        bones = map(Chain, pairs)
-        return list(bones)
+        return [Chain(pair) for pair in pairs]
+
+    @short(plug='p')
+    def points(self, plug=False):
+        """
+        :param bool plug/p: return attributes instead of values; defaults to
+            False
+        :return: A world position for each joint in this chain.
+        :rtype: :class:`list` of :class:`~paya.runtime.data.Point`
+        """
+        return [joint.getWorldPosition(p=plug) for joint in self]
 
     @short(plug='p')
     def vectors(self, plug=False):
@@ -263,16 +293,6 @@ class Chain(UserList):
             out.append(thisPoint-prevPoint)
 
         return out
-
-    @short(plug='p')
-    def points(self, plug=False):
-        """
-        :param bool plug/p: return attributes instead of values; defaults to
-            False
-        :return: A world position for each joint in this chain.
-        :rtype: :class:`list` of :class:`~paya.runtime.data.Point`
-        """
-        return [joint.gwp(p=plug) for joint in self]
 
     def contiguous(self):
         """
@@ -379,6 +399,32 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Hierarchy editing
 
+    @staticmethod
+    def _resolveRatios(*numberOrRatios):
+        numberOrRatios = _pu.expandArgs(*numberOrRatios)
+        ln = len(numberOrRatios)
+
+        if ln > 0:
+            if len(numberOrRatios) is 1:
+                numberOrRatios = numberOrRatios[0]
+
+                if isinstance(numberOrRatios, int):
+                    userRatios = _mo.floatRange(0, 1, numberOrRatios+2)[1:-1]
+
+                else:
+                    userRatios = [numberOrRatios]
+
+            else:
+                userRatios = [min(1, max(0,
+                    userRatio)) for userRatio in numberOrRatios]
+
+                userRatios = list(sorted(numberOrRatios))
+
+            return userRatios
+
+        raise RuntimeError("No ratios or number specified.")
+
+
     @short(perBone='pb')
     def insertJoints(self, *numberOrRatios, perBone=False):
         """
@@ -395,109 +441,81 @@ class Chain(UserList):
         :return: The newly-generated joints.
         :rtype: list of :class:`~paya.runtime.nodes.Joint`
         """
-        numberOrRatios = _pu.expandArgs(*numberOrRatios)
-        ln = len(numberOrRatios)
+        # Resolve user ratios
 
-        if ln > 0:
-
-            if len(numberOrRatios) is 1:
-                numberOrRatios = numberOrRatios[0]
-
-                if isinstance(numberOrRatios, int):
-                    userRatios = _mo.floatRange(0, 1, numberOrRatios+2)[1:-1]
-
-                else:
-                    userRatios = [numberOrRatios]
-
-            else:
-                userRatios = numberOrRatios
-
-        else:
-            raise RuntimeError("No ratios or number specified.")
-
-        # Gather info
-
-        points = self.points()
-        vectors = []
-        cumulativeLengths = [0.0]
-
-        for i, thisPoint in enumerate(points[:-1]):
-            nextPoint = points[i+1]
-            vector = nextPoint-thisPoint
-            vectors.append(vector)
-            cumulativeLength = vector.length() + cumulativeLengths[-1]
-            cumulativeLengths.append(cumulativeLength)
-
-        fullLength = cumulativeLengths[-1]
-
-        jointRatios = [0.0] + [cumulativeLength / fullLength \
-                for cumulativeLength in cumulativeLengths[1:]]
+        userRatios = self._resolveRatios(*numberOrRatios)
+        jointRatios = self.ratios()
+        lenSelf = len(self)
 
         if perBone:
             _userRatios = []
 
-            for i, thisJointRatio in enumerate(jointRatios[:-1]):
-                nextJointRatio = jointRatios[i+1]
-                newRatios = [_pu.blend(
-                    thisJointRatio,
-                    nextJointRatio,
-                    weight=userRatio
-                    ) for userRatio in userRatios
-                ]
+            for i in range(lenSelf-1):
+                thisRatio = jointRatios[i]
+                nextRatio = jointRatios[i+1]
 
-                _userRatios += newRatios
+                _userRatios += [_pu.blend(thisRatio,
+                    nextRatio, weight=userRatio) for userRatio in userRatios]
 
-            _userRatios.append(jointRatios[-1])
             userRatios = _userRatios
 
-        # Perform the insertions
+        # Perform insertions
 
-        ln = len(self)
-        insertions = {}
+        count = 0
+        newMembership = []
+        points = self.points()
         newJoints = []
 
-        for i, userRatio in enumerate(userRatios):
-            for x in range(ln-1):
-                thisRatio = jointRatios[x]
-                nextRatio = jointRatios[x+1]
+        for i in range(lenSelf-1):
+            startRatio = jointRatios[i]
+            endRatio = jointRatios[i+1]
 
-                if userRatio >= thisRatio and userRatio <= nextRatio:
-                    thisJoint = self[x]
-                    nextJoint = self[x+1]
+            cuts = []
 
-                    localRatio = (userRatio-thisRatio)/(nextRatio-thisRatio)
+            for userRatio in userRatios:
+                if i is lenSelf-2:
+                    include = userRatio >= \
+                        startRatio and userRatio <= endRatio
 
-                    startPoint = points[x]
-                    vector = vectors[x]
+                else:
+                    include = userRatio >= startRatio and userRatio < endRatio
 
-                    position = startPoint + vector * localRatio
-                    matrix = thisJoint.getMatrix(worldSpace=True)
-                    matrix.t = position
+                if include:
+                    localisedRatio = (userRatio
+                        -startRatio) / (endRatio-startRatio)
 
-                    dup = thisJoint.duplicate(
-                        name=r.nodes.Joint.makeName(i+1), po=True)[0]
+                    cuts.append(localisedRatio)
 
-                    dup.setMatrix(matrix, worldSpace=True)
-                    pool = insertions.setdefault(thisJoint, [])
-                    pool.append(dup)
-                    break
+            theseNewJoints = []
 
-        membership = []
+            if cuts:
+                startPoint = points[i]
+                endPoint = points[i+1]
 
-        for joint in self:
-            membership.append(joint)
+                settings = _getJointSettings(self[i])
+                baseMtx = self[i].getMatrix(worldSpace=True)
 
-            try:
-                theseInsertions = insertions[joint]
-                membership += theseInsertions
-                newJoints += theseInsertions
+                for cut in cuts:
+                    joint = r.nodes.Joint.create(
+                        under=self[i], n=('insertion', count+1))
+                    _applyJointSettings(settings, joint)
+                    mtx = baseMtx.copy()
+                    mtx.t = _pu.blend(startPoint, endPoint, weight=cut)
+                    joint.setMatrix(mtx, worldSpace=True)
+                    theseNewJoints.append(joint)
+                    count += 1
 
-            except KeyError:
-                continue
+            newMembership.append(self[i])
+            newMembership += theseNewJoints
 
-        self.data[:] = membership
+            if i is lenSelf-2:
+                newMembership.append(self[-1])
+
+            newJoints += theseNewJoints
+
+        self[:] = newMembership
+
         self.compose()
-
         return newJoints
 
     def subdivide(self, *iterations):
@@ -597,7 +615,12 @@ class Chain(UserList):
         Ensures that every member of this chain is a child of its predecessor.
         """
         for i, joint in enumerate(self[1:], start=1):
-            joint.setParent(self[i-1])
+            newParent = self[i-1]
+
+            currentParent = joint.getParent()
+
+            if currentParent is None or currentParent != newParent:
+                joint.setParent(newParent)
 
         return self
 
@@ -804,76 +827,311 @@ class Chain(UserList):
 
     #------------------------------------------------------------|    Higher-level rigging
 
-    def _getSubdivisionMapping(self, subdividedChain):
-        """
-        Returns a list where each member is:
-        [jointOnThisChain, [closestJointOnSubidividedChain,
-            childJoint1, childJoint2... terminating before next matched joint]
-        """
-        sourcePoints = self.points()
-        destPoints = subdividedChain.points()
-        destAnchorIndices = []
-
-        for sourcePoint in sourcePoints:
-            bestDistance = None
-            bestPointIndex = None
-
-            for i, destPoint in enumerate(destPoints):
-                vec = destPoint-sourcePoint
-                ln = vec.length()
-
-                if bestDistance is None or (ln < bestDistance):
-                    bestDistance = ln
-                    bestPointIndex = i
-
-            destAnchorIndices.append(bestPointIndex)
+    def _getTwistMap(self, twistChain):
+        slaveAnchors = [joint.closestOf(twistChain) for joint in self]
+        slaveIndices = [twistChain.index(joint) for joint in slaveAnchors]
 
         out = []
-        destLen = len(subdividedChain)
 
-        for i, srcJoint, destAnchorIndex in zip(
-            range(len(self)),
-            self,
-            destAnchorIndices
-        ):
-            destAnchorJoint = subdividedChain[destAnchorIndex]
-            entry = [srcJoint, [destAnchorJoint]]
-
-            for x, destJoint in enumerate(
-                    subdividedChain[destAnchorIndex+1:], start=destAnchorIndex+1):
-                if x is destAnchorIndices[i+1]:
-                    break
-
-                entry[1].append(destJoint)
-
-            out.append(entry)
+        for i in range(len(self)-1):
+            masterBone = self[i:i+2]
+            slaveChain = twistChain[slaveIndices[i]:slaveIndices[i+1]+1]
+            out.append([masterBone, slaveChain])
 
         return out
 
-    # WIP
-    # @short(
-    #     downAxis='da',
-    #     upVectorOverrides='uvo'
-    # )
-    # def driveSubdivided(
-    #         self,
-    #         destChain,
-    #         upAxis,
-    #         downAxis=None,
-    #         upVectorOverrides=None,
-    #         stretch=True,
-    #         stretchByTranslate=False
-    # ):
-    #     driverMapping = self._getSubdivisionMapping(destChain)
-    #
-    #     if stretch:
-    #         points = self.points(p=True)
-    #
-    #     for i, thisJoint, targets in zip(
-    #             range(len(self)-1), driverMapping[:-1]):
-    #
-    #         nextJoint = self[i+1]
-    #
-    #
-    #
-    #
+    @short(
+        downAxis='da',
+        startUpMatrix='sum',
+        endUpMatrix='eum',
+        maintainOffset='mo',
+        decompose='dec',
+        skipEnd='ske'
+    )
+    def driveTwistChain(
+            self,
+            twistChain,
+            upAxis,
+            globalScale,
+            downAxis=None,
+            startUpMatrix=None,
+            endUpMatrix=None,
+            maintainOffset=False,
+            decompose=False,
+            skipEnd=False
+    ):
+        """
+        Drives a twist chain that was generated by duplicating this chain
+        and calling :meth:`subdivide` or :meth:`insertJoints` on the
+        duplicate. This method has no return value.
+
+        :param twistChain: the chain to drive
+        :type twistChain: :class:`Chain`
+        :param str upAxis: the dominant 'curl' axis on this chain, e.g. 'x'
+        :param globalScale: a global scaling factor to normalize stretch
+        :type globalScale: int, float, :class:`~paya.runtime.plugs.Math1D`
+        :param downAxis/da: if you already know this chain's 'down' axis,
+            specify it here; defaults to None
+        :type downAxis/da: str, None
+        :param startUpMatrix/sum: an optional alternative matrix to govern
+            the start up vector (useful for effects like 'fixing' upper
+            shoulder twist); defaults to None
+        :type startUpMatrix/sum: None, list, tuple,
+            :class:`paya.runtime.plugs.Matrix`,
+            :class:`paya.runtime.data.Matrix`
+        :param endUpMatrix/eum: an optional alternative matrix to govern
+            the end up vector; defaults to None
+        :type endUpMatrix/eum: None, list, tuple,
+            :class:`paya.runtime.plugs.Matrix`,
+            :class:`paya.runtime.data.Matrix`
+        :param bool maintainOffset/mo: preserve offsets when applying
+            matrix connections; defaults to False
+        :param bool decompose/dec: drive by connecting into SRT channels
+            instead of offsetParentMatrix; defaults to False
+        :param bool skipEnd/ske: don't drive the end joint; defaults to False
+        """
+        twistMap = self._getTwistMap(twistChain)
+        num = len(twistMap)
+
+        for i, pair in enumerate(twistMap):
+            masterBone, slaveChain = pair
+
+            if i is 0:
+                _startUpMatrix = startUpMatrix
+                _endUpMatrix = None
+                _skipEnd = False
+
+            elif i is num-1:
+                _startUpMatrix = None
+                _endUpMatrix = endUpMatrix
+                _skipEnd = skipEnd
+
+            else:
+                _startUpMatrix = _endUpMatrix = None
+                _skipEnd = False
+
+            masterBone._driveTwistChain(
+                slaveChain,
+                upAxis,
+                globalScale,
+                da=downAxis,
+                sum=_startUpMatrix,
+                eum=_endUpMatrix,
+                mo=maintainOffset,
+                dec=decompose,
+                ske=_skipEnd
+            )
+
+    #------------------------------------------------------------|    List interface
+
+    @property
+    def index(self):
+        return self.data.index
+
+    @property
+    def __len__(self):
+        return self.data.__len__
+
+    def __getitem__(self, item):
+        result = self.data.__getitem__(item)
+
+        if isinstance(item, slice):
+            result = Chain(result)
+
+        return result
+
+    def __add__(self, other):
+        result = list(self) + list(other)
+        return Chain(result)
+
+    def __setitem__(self, key, value):
+        if isinstance(key, slice):
+            value = list(value)
+
+        self.data.__setitem__(key, value)
+        self._updateClass()
+
+    def __delitem__(self, key):
+        self.data.__delitem__(key)
+        self._updateClass()
+
+    def __iter__(self):
+        return iter(self.data)
+
+    def __repr__(self):
+        return repr(self.data)
+
+
+class Bone(Chain):
+
+    #------------------------------------------------------------|    Standard inspections
+
+    def bones(self):
+        """
+        :return: One :class:`Bone` instance per overlapping pair of joints.
+        :rtype: :class:`list` of :class:`Bone`
+        """
+        return [self]
+
+    def ratios(self):
+        """
+        :return: A length ratio for reach joint in this chain.
+        :rtype: list of float
+        """
+        return [0.0, 1.0]
+
+    @short(plug='p')
+    def vector(self, plug=False):
+        """
+        :param bool plug/p: return an attribute instead of a value;
+            defaults to False
+        :return: The vector for this bone.
+        :rtype: :class:`paya.runtime.data.Vector` or
+            :class:`paya.runtime.plugs.Vector`
+        """
+        points = self.points(p=plug)
+        return points[-1]-points[0]
+
+    #------------------------------------------------------------|    Higher-level rigging
+
+    @short(
+        skipEnd='ske',
+        downAxis='da',
+        startUpMatrix='sum',
+        endUpMatrix='eum',
+        maintainOffset='mo',
+        decompose='dec'
+    )
+    def _driveTwistChain(
+            self,
+            twistChain,
+            upAxis,
+            globalScale,
+            downAxis=None,
+            startUpMatrix=None,
+            endUpMatrix=None,
+            maintainOffset=False,
+            decompose=False,
+            skipEnd=False
+    ):
+        numSlaves = len(twistChain)
+
+        if numSlaves < 2:
+            raise RuntimeError("Need two or more joints on the twist chain.")
+
+        globalScale = _mo.info(globalScale)[0]
+
+        if downAxis is None:
+            downAxis = self.downAxis()
+
+        if startUpMatrix is None:
+            startUpMatrix = self[0].attr('wm')
+
+        points = self.points(p=True)
+        downVector = points[1]-points[0]
+
+        if startUpMatrix is None:
+            startUpVector = self[0].attr('wm').getAxis(upAxis)
+
+        else:
+            startUpMatrix = _mo.info(startUpMatrix)[0]
+            startUpVector = self[0].getMatrix(worldSpace=True).getAxis(upAxis)
+            startUpVector *= startUpMatrix.asOffset()
+            startUpVector.makePerpendicularTo(downVector)
+
+        _downAxis = downAxis.strip('-')
+        _upAxis = upAxis.strip('-')
+        thirdAxis = [ax for ax in 'xyz' if ax not in (_downAxis, _upAxis)][0]
+
+        liveLen = downVector.length()
+        nativeLen = liveLen.get() * globalScale
+        boneScale = liveLen / nativeLen
+
+        smtx = r.createScaleMatrix(
+            _downAxis, boneScale,
+            _upAxis, globalScale,
+            thirdAxis, globalScale
+        )
+
+        matrices = []
+
+        if numSlaves is 2:
+            matrix = smtx * r.createMatrix(
+                downAxis, downVector,
+                upAxis, startUpMatrix,
+                t=points[0]
+            ).pk(t=True, r=True)
+
+            matrices.append(matrix)
+
+            if not skipEnd:
+                matrices.append(self[1].attr('wm'))
+
+        else:
+            # Resolve end up vector
+
+            if endUpMatrix is None:
+                endUpMatrix = self[1].attr('wm')
+
+            else:
+                endUpMatrix = _mo.info(endUpMatrix)[0]
+
+            endUpVector = startUpVector.get() * endUpMatrix.asOffset()
+            endUpVector = endUpVector.makePerpendicularTo(downVector)
+
+            # Get slave ratios
+
+            slaveRatios = twistChain.ratios()
+
+            # Iterate
+
+            for i, slave in enumerate(twistChain):
+                if i is 0:
+                    upVector = startUpVector
+                    point = points[0]
+
+                elif i is numSlaves-1:
+                    if not skipEnd:
+                        matrices.append(self[1].attr('wm'))
+
+                    break
+
+                else:
+                    upVector = startUpVector.blend(
+                        endUpVector,
+                        bva=True,
+                        w=slaveRatios[i]
+                    )
+
+                    point = points[0].blend(points[1], w=slaveRatios[i])
+
+                matrix = smtx * r.createMatrix(
+                    downAxis, downVector,
+                    upAxis, upVector,
+                    t=points[0]
+                ).pk(t=True, r=True)
+
+                matrices.append(matrix)
+
+            for i, matrix in enumerate(matrices):
+                slaveJoint = twistChain[i]
+
+                if decompose:
+                    matrix *= slaveJoint.attr('pim')[0]
+
+                    if maintainOffset:
+                        matrix = slaveJoint.getMatrix() * matrix.asOffset()
+
+                    matrix.decomposeAndApply(slaveJoint)
+
+                else:
+                    matrix = slaveJoint.getMatrix(
+                        worldSpace=True) * matrix.asOffset()
+
+                    matrix = slaveJoint.getMatrix().inverse() * matrix
+                    matrix >> slaveJoint.attr('opm')
+                    slaveJoint.attr('it').set(False)
+
+
+def getClassFromNumJoints(numJoints):
+    return {2: Bone}.get(numJoints, Chain)

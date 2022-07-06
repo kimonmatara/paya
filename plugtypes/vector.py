@@ -324,6 +324,22 @@ class Vector:
 
         return angle
 
+    def makePerpendicularTo(self, other):
+        """
+        Orthogonises this vector against 'other'.
+
+        :param other: the other vector
+        :type other: :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`,
+        :return: The modified vector.
+        :rtype: :class:`Vector`
+        """
+        other = _mo.info(other)[0]
+        cross1 = self.cross(other)
+        out = other.cross(cross1)
+        out = out.normal() * self.length()
+        return out
+
     #-----------------------------------------------------------|    Conversions
 
     def asTranslateMatrix(self):

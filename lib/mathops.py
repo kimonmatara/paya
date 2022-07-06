@@ -226,6 +226,50 @@ def multMatrices(*matrices):
 
 mm = multMatrices
 
+def createScaleMatrix(*args):
+    """
+    Quick method to create static or dynamic scale matrices. Takes one, three
+    or six arguments.
+
+    :shorthand: ``csm``
+    :param \*args:
+        If one argument is passed, the same scaling factor will be applied to
+        the XYZ base vectors.
+
+        If three arguments are passed, they will each be applied to the XYZ
+        base vectors.
+
+        If six arguments are passed then they will be interpreted as
+        *axis: scalar* pairs.
+
+    :return: The scale matrix.
+    :rtype: :class:`paya.runtime.data.Matrix` or
+        :class:`paya.runtime.plugs.Matrix`.
+    """
+    ln = len(args)
+
+    if ln is 1:
+        axes = ['x', 'y', 'z']
+        scalars = [args[0]] * 3
+
+    elif ln is 3:
+        axes = ['x', 'y', 'z']
+        scalars = args
+
+    elif ln is 6:
+        axes = list(map(lambda x: x.strip('-'), args[::2]))
+        scalars = args[1::2]
+
+    else:
+        raise RuntimeError("Number of arguments must be 1, 3 or 6.")
+
+    return r.createMatrix(
+        axes[0], axisVecs[axes[0]] * scalars[0],
+        axes[1], axisVecs[axes[1]] * scalars[1],
+        axes[2], axisVecs[axes[2]] * scalars[2]
+    )
+
+csm = createScaleMatrix
 
 @short(
     preserveSecondLength='psl',
