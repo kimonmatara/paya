@@ -176,6 +176,16 @@ paya.runtime.data.Vector
         :rtype: :class:`~paya.runtime.plugs.Angle` or
             :class:`~paya.runtime.data.Angle`
     
+    .. py:method:: makePerpendicularTo(other)
+    
+        Orthogonises this vector against 'other'.
+        
+        :param other: the other vector
+        :type other: :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`,
+        :return: The modified vector.
+        :rtype: :class:`Vector`
+    
     .. py:method:: asTranslateMatrix()
     
         :return: An identity matrix with this vector / point as the translate

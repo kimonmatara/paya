@@ -206,6 +206,21 @@ ignored if <em>asControl</em> is False; defaults to None</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.closestOf">
+<span class="sig-name descname"><span class="pre">closestOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.closestOf" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the closest amongst ‘elems’ to this transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>elems</strong> – a list of Python objects that, when instantiated into
+PyNodes, implement <code class="docutils literal notranslate"><span class="pre">getWorldPosition()</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The closest amongst ‘elems’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getWorldPosition">
 <span class="sig-name descname"><span class="pre">getWorldPosition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useLocatorShape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getWorldPosition" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the world translation of this transform. Pivots are ignored.</p>

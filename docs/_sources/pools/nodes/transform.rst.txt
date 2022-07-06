@@ -77,6 +77,14 @@ paya.runtime.nodes.Transform
         
         :return: ``self``
     
+    .. py:method:: closestOf(elems)
+    
+        Returns the closest amongst 'elems' to this transform.
+        
+        :param elems: a list of Python objects that, when instantiated into
+            PyNodes, implement ``getWorldPosition()``
+        :return: The closest amongst 'elems'.
+    
     .. py:method:: getWorldPosition(plug=False, useLocatorShape=True)
     
         Returns the world translation of this transform. Pivots are ignored.

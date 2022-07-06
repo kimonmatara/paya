@@ -77,6 +77,26 @@ plug workflows.
     :return: The matrix product.
     :rtype: :class:`paya.runtime.data.Matrix` or :class:`paya.runtime.plugs.Matrix`
 
+.. py:function:: createScaleMatrix(*args)
+
+    Quick method to create static or dynamic scale matrices. Takes one, three
+    or six arguments.
+    
+    :shorthand: ``csm``
+    :param \*args:
+        If one argument is passed, the same scaling factor will be applied to
+        the XYZ base vectors.
+    
+        If three arguments are passed, they will each be applied to the XYZ
+        base vectors.
+    
+        If six arguments are passed then they will be interpreted as
+        *axis: scalar* pairs.
+    
+    :return: The scale matrix.
+    :rtype: :class:`paya.runtime.data.Matrix` or
+        :class:`paya.runtime.plugs.Matrix`.
+
 .. py:function:: createMatrix(*rowHints, preserveSecondLength=False, thirdLength=None, translate=None, plug=None)
 
     Constructs static or dynamic transformation matrices.

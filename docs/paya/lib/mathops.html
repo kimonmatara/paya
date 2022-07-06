@@ -239,6 +239,34 @@ Otherwise, it will be a value.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.createScaleMatrix">
+<span class="sig-name descname"><span class="pre">createScaleMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.createScaleMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Quick method to create static or dynamic scale matrices. Takes one, three
+or six arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Shorthand</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">csm</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>*args</strong> – <p>If one argument is passed, the same scaling factor will be applied to
+the XYZ base vectors.</p>
+<p>If three arguments are passed, they will each be applied to the XYZ
+base vectors.</p>
+<p>If six arguments are passed then they will be interpreted as
+<em>axis: scalar</em> pairs.</p>
+</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The scale matrix.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a> or
+<a class="reference internal" href="../../pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.mathops.createMatrix">
 <span class="sig-name descname"><span class="pre">createMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">rowHints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserveSecondLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thirdLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.createMatrix" title="Permalink to this definition"></a></dt>
 <dd><p>Constructs static or dynamic transformation matrices.</p>
