@@ -5,6 +5,17 @@ import paya.runtime as r
 
 class SkinCluster:
 
+    __config_attrs__ = [
+            'bindMethod',
+            'deformUserNormals',
+            'dropoffRate',
+            'maxInfluences',
+            'normalizeWeights',
+            'skinningMethod',
+            'useComponents',
+            'weightDistribution'
+        ]
+
     #------------------------------------------------------------|    Constructor
 
     @classmethod
@@ -211,3 +222,6 @@ class SkinCluster:
             infls += list(map(r.PyNode, _pu.expandArgs(influence)))
 
         return infls, geos
+
+    #----------------------------------------------------|    Macros etc.
+

@@ -4,6 +4,9 @@ import paya.runtime as r
 
 class GeometryFilter:
 
+    __config_attrs__ = None # used by getSettings(); if None,
+                            # NotImplementedError will be raised
+
     #----------------------------------------------------|    Loader
 
     @classmethod
@@ -44,3 +47,31 @@ class GeometryFilter:
                 _out.append(item)
 
         return _out
+
+    #----------------------------------------------------|    Macros etc.
+
+    def getSettings(self):
+        """
+        :raises NotImplementedError: the deformer class does not define
+            ``__config_attrs__``
+        :return: configuration values for this deformer, as a mapping of
+            *attribute name: attribute value*
+        :rtype: dict
+        """
+        attrNames = self.__config_attrs__
+
+        if attrNames is None:
+            raise NotImplementedError("Not implemented for this deformer.")
+
+        return {attrName: self.attr(attrName).get() for attrName in attrNames}
+
+    def applySettings(self, settings):
+        """
+        :param dict settings: a dictionary returned by :meth:`getSettings`
+        :return: ``self``
+        :rtype: :class:`GeometryFilter`
+        """
+        for attrName, attrValue in settings.items():
+            self.attr(attrName).set(attrValue)
+
+        return self
