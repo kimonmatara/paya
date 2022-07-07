@@ -828,6 +828,8 @@ class Chain(object):
     #------------------------------------------------------------|    Higher-level rigging
 
     def _getTwistMap(self, twistChain):
+        # Maps bones on this chain to sub-chains on 'twistChain' by proximity.
+
         slaveAnchors = [joint.closestOf(twistChain) for joint in self]
         slaveIndices = [twistChain.index(joint) for joint in slaveAnchors]
 

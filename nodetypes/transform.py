@@ -227,6 +227,26 @@ class Transform:
 
         return ct
 
+    #--------------------------------------------------------|    Shape / transform management
+
+    def toShape(self):
+        """
+        :return: If this node is a transform, its first shape child;
+            otherwise, the node itself.
+        :rtype: :class:`~paya.runtime.nodes.Shape` or
+            :class:`~paya.runtime.nodes.Transform`
+        """
+        return self.getShape()
+
+    def toTransform(self):
+        """
+        :return: If this node is a shape, its parent; otherwise, the node
+            itself.
+        :rtype: :class:`~paya.runtime.nodes.Shape` or
+            :class:`~paya.runtime.nodes.Transform`
+        """
+        return self
+
     #--------------------------------------------------------|    Attr management
 
     def releaseSRT(self):

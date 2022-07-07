@@ -1,0 +1,46 @@
+******************************
+paya.runtime.nodes.SkinCluster
+******************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: SkinCluster(*args, **kwargs)
+
+    .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, nameAfterGeo=False, geometry=None, influence=None, multi=False, **kwargs)
+    
+        Lightweight convenience wrapper / constructor for skinClusters, with the
+        following differences from the standard
+        :func:`~pymel.core.animation.skinCluster` command:
+        
+        -   Positional arguments can be omitted, and the 'geometry' and
+            'influence' keyword arguments used instead on creation
+        -   A select subset of flags are pre-loaded with common defaults (see
+            below)
+        -   Added 'nameAfterGeo / nag' option
+        -   Added 'multi' option
+        
+        :param \*args: forwarded to :func:`~pymel.core.animation.skinCluster`
+        :param int bindMethod/bm: see Maya help; defaults to 0 (closest)
+        :param float dropoffRate/dr: see Maya help; defaults to 4.5
+        :param maximumInfluences/mi: see Maya help; defaults to None
+        :type maximumInfluences/mi: None, int
+        :param name/n: one or more name elements for the deformer; ignored if
+            'nameAfterGeo' is True; defaults to None
+        :type name/n: list, tuple, None, str, int
+        :param int normalizeWeights/nw: see Maya help; defaults to 1
+            (interactive)
+        :param bool obeyMaximumInfluences/omi: see Maya help; defaults to
+            False
+        :param int skinMethod/sm: see Maya help; defaults to 0 (linear)
+        :param bool toSelectedBones/tsb: see Maya help; defaults to True
+        :param int weightDistribution/wd: see Maya help; defaults to 0
+            (distance)
+        :param bool nameAfterGeo/nag: derive deformer names from geometry
+            names; defaults to False
+        :param geometry/g:
+        :param influence/inf: one or more influences; defaults to None
+        :param bool multi: set this to True to create multiple skinClusters
+            across all passed geometries; defaults to False
+        :param \*\*kwargs: forwarded to
+            :func:`~pymel.core.animation.skinCluster`
+        :return: :class:`SkinCluster` or [:class:`SkinCluster`]
