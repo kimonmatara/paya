@@ -15,3 +15,60 @@ paya.runtime.nodes.GeometryFilter
         :return: Deformers of this type detected across the specified
             geometries.
         :rtype: [:class:`~paya.runtime.nodes.GeometryFilter`]
+    
+    .. py:method:: getSettings()
+    
+        :raises NotImplementedError: the deformer class does not define
+            ``__config_attrs__``
+        :return: configuration values for this deformer, as a mapping of
+            *attribute name: attribute value*
+        :rtype: dict
+    
+    .. py:method:: applySettings(settings)
+    
+        :param dict settings: a dictionary returned by :meth:`getSettings`
+        :return: ``self``
+        :rtype: :class:`GeometryFilter`
+    
+    .. py:method:: dumpWeights(filepath, shape=None, remap=None, vertexConnections=False, weightPrecision=None, weightTolerance=None)
+    
+        Dumps this deformer's weights on a single shape to an XML file.
+        
+        :param shape: the shape with the weights; if omitted, the first shape
+            associated with this deformer is used; defaults to None
+        :type shape: str, :class:`~paya.runtime.nodes.DeformableShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param str filepath: the path to the XML file; must be POSIX per
+            Maya's preference
+        :param str remap/r: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param bool vertexConnections/vc: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to False
+        :param int weightPrecision/wp: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param float weightTolerance/wt: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.GeometryFilter`
+    
+    .. py:method:: loadWeights(filepath, ignoreName=False, method='index', positionTolerance=None, remap=None, shape=None, worldSpace=None)
+    
+        Imports deformer weights for a specific shape from an XML file.
+        
+        :param str filepath: the path to the file (POSIX)
+        :param bool ignoreName/ig: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param str method/m:  see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to 'index'
+        :param float positionTolerance/pt: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param str remap/r: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; note that this may
+            be auto-populated to force a shape registration; defaults to None
+        :param shape: the shape that carries the weights; if omitted, a best-
+            match shape is sought amongst the deformer members and the XML
+            shapes; defaults to None
+        :param bool worldSpace/ws: see Maya help for
+            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :return: ``self``
+        :rtype: :class:`GeometryFilter`

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.util.accessor &mdash; paya 0.5.2 documentation</title>
+  <title>paya.util.path &mdash; paya 0.5.2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.util.functions" href="functions.html" />
-    <link rel="prev" title="paya.util" href="../util.html" /> 
+    <link rel="next" title="paya.util.strings" href="strings.html" />
+    <link rel="prev" title="paya.util.modules" href="modules.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -74,11 +74,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../util.html">paya.util</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.util.accessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="accessor.html">paya.util.accessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions.html">paya.util.functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="iterables.html">paya.util.iterables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules.html">paya.util.modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="path.html">paya.util.path</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.util.path</a></li>
 <li class="toctree-l3"><a class="reference internal" href="strings.html">paya.util.strings</a></li>
 </ul>
 </li>
@@ -106,9 +106,9 @@
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../paya.html">paya</a> &raquo;</li>
           <li><a href="../util.html">paya.util</a> &raquo;</li>
-      <li>paya.util.accessor</li>
+      <li>paya.util.path</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/paya/util/accessor.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/paya/util/path.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -116,50 +116,56 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-paya.util.accessor">
-<span id="paya-util-accessor"></span><h1>paya.util.accessor<a class="headerlink" href="#module-paya.util.accessor" title="Permalink to this headline"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="paya.util.accessor.Accessor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Accessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.accessor.Accessor" title="Permalink to this definition"></a></dt>
-<dd><p>Utility class for nested interfaces.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.util.accessor.Accessor.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.accessor.Accessor.__init__" title="Permalink to this definition"></a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.util.accessor.Accessor.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.accessor.Accessor.__repr__" title="Permalink to this definition"></a></dt>
-<dd><p>Return repr(self).</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="paya.util.accessor.AccessorOnNode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AccessorOnNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.accessor.AccessorOnNode" title="Permalink to this definition"></a></dt>
-<dd><p>Subclass of <a class="reference internal" href="#paya.util.accessor.Accessor" title="paya.util.accessor.Accessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Accessor</span></code></a> with a few extra facilitiations for node-
-level interfaces.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.util.accessor.AccessorOnNode.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.accessor.AccessorOnNode.__init__" title="Permalink to this definition"></a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.util.accessor.AccessorOnNode.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.accessor.AccessorOnNode.node" title="Permalink to this definition"></a></dt>
+  <section id="module-paya.util.path">
+<span id="paya-util-path"></span><h1>paya.util.path<a class="headerlink" href="#module-paya.util.path" title="Permalink to this headline"></a></h1>
+<p>Miscellaneous path utilities.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.util.path.toPosix">
+<span class="sig-name descname"><span class="pre">toPosix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.path.toPosix" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The owner node.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – the path to process</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../../pools/nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The path, conformed to POSIX format.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.util.path.toWin">
+<span class="sig-name descname"><span class="pre">toWin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.path.toWin" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – the path to process</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The path, conformed to Windows format.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.util.path.toOs">
+<span class="sig-name descname"><span class="pre">toOs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.path.toOs" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – the path to process</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The path, conformed to Windows or POSIX format, depending on
+detected platform.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -168,8 +174,8 @@ level interfaces.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../util.html" class="btn btn-neutral float-left" title="paya.util" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="functions.html" class="btn btn-neutral float-right" title="paya.util.functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="modules.html" class="btn btn-neutral float-left" title="paya.util.modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="strings.html" class="btn btn-neutral float-right" title="paya.util.strings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
