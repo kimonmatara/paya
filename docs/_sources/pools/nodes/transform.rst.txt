@@ -71,6 +71,20 @@ paya.runtime.nodes.Transform
         :return: The generated control.
         :rtype: :class:`~paya.runtime.nodes.Transform`
     
+    .. py:method:: toShape()
+    
+        :return: If this node is a transform, its first shape child;
+            otherwise, the node itself.
+        :rtype: :class:`~paya.runtime.nodes.Shape` or
+            :class:`~paya.runtime.nodes.Transform`
+    
+    .. py:method:: toTransform()
+    
+        :return: If this node is a shape, its parent; otherwise, the node
+            itself.
+        :rtype: :class:`~paya.runtime.nodes.Shape` or
+            :class:`~paya.runtime.nodes.Transform`
+    
     .. py:method:: releaseSRT()
     
         Unlocks and disconnects every SRT channel, recursively.

@@ -1,0 +1,17 @@
+*********************************
+paya.runtime.nodes.GeometryFilter
+*********************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: GeometryFilter(*args, **kwargs)
+
+    .. py:classmethod:: getFromGeo(*geometry)
+    
+        :param \*geometry: the geometries to inspect
+        :type \*geometry: list, tuple,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.DeformableShape`,
+        :return: Deformers of this type detected across the specified
+            geometries.
+        :rtype: [:class:`~paya.runtime.nodes.GeometryFilter`]

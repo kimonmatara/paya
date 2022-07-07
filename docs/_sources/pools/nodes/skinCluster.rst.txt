@@ -6,7 +6,7 @@ paya.runtime.nodes.SkinCluster
 
 .. py:class:: SkinCluster(*args, **kwargs)
 
-    .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, nameAfterGeo=False, geometry=None, influence=None, multi=False, **kwargs)
+    .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, nameAfterGeo=False, geometry=None, influence=None, multi=False, force=False, **kwargs)
     
         Lightweight convenience wrapper / constructor for skinClusters, with the
         following differences from the standard
@@ -18,6 +18,7 @@ paya.runtime.nodes.SkinCluster
             below)
         -   Added 'nameAfterGeo / nag' option
         -   Added 'multi' option
+        -   Added 'force' option
         
         :param \*args: forwarded to :func:`~pymel.core.animation.skinCluster`
         :param int bindMethod/bm: see Maya help; defaults to 0 (closest)
@@ -37,10 +38,17 @@ paya.runtime.nodes.SkinCluster
             (distance)
         :param bool nameAfterGeo/nag: derive deformer names from geometry
             names; defaults to False
-        :param geometry/g:
+        :param geometry/g: the geometry to bind to; defaults to None
+        :type geometry/g: list, tuple,
+            :class:`~paya.runtime.nodes.DeformableShape`,
+            :class:`~paya.runtime.nodes.Transform`
         :param influence/inf: one or more influences; defaults to None
+        :type influence/inf: list, tuple,
+            :class:`~paya.runtime.nodes.Transform`
         :param bool multi: set this to True to create multiple skinClusters
             across all passed geometries; defaults to False
+        :param bool force/f: remove any existing skinClusters from the passed
+            geometries; defaults to False
         :param \*\*kwargs: forwarded to
             :func:`~pymel.core.animation.skinCluster`
         :return: :class:`SkinCluster` or [:class:`SkinCluster`]
