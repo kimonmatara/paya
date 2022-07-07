@@ -1,5 +1,3 @@
-#----------------------------------------------------------------|    Atomic
-
 def clampindex(index, numelems, absolute=False):
     """
     Clamps an index, whether negative or positive, so that it
@@ -220,3 +218,19 @@ def nudge_indices(indices, lst, offset):
             flattened.append(item)
 
     lst[:] = [lst[x] for x in flattened]
+
+
+def without_duplicates(iterable):
+    """
+    :param iterable: the iterable to inspect
+    :return: an ordered list of members in 'iterable', with duplicates
+        omitted.
+    :rtype: list
+    """
+    out = []
+
+    for item in iterable:
+        if item not in out:
+            out.append(item)
+
+    return out

@@ -3,3 +3,4 @@ from .functions import *
 from .modules import *
 from .iterables import *
 from .accessor import *
+from .path import *
