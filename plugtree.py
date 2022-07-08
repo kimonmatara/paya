@@ -1,6 +1,6 @@
 """
-Manages the inheritance tree used to construct abstract Paya attribute
-subtypes. This module is not intended for direct use.
+For internal use. Manages the inheritance tree used to construct abstract
+Paya attribute subtypes.
 """
 
 import re
@@ -9,30 +9,64 @@ from pprint import pprint
 
 import maya.OpenMaya as om
 
-#------------------------------------------------------|    Tree construction
-
-def printTree():
-    pprint(tree)
-
-global tree
-tree = {}
-
-def insert(typeName, parent=None):
-    if parent:
-        path = getPath(parent)
-
-    else:
-        path = ['Attribute']
-
-    container = tree[path[0]]
-
-    for key in path[1:]:
-        container = container[key]
-
-    container[typeName] = {}
+#------------------------------------------------------|    Tree init and editing
 
 class NoPathError(RuntimeError):
-    pass
+    """
+    The requested class name could not be found in the tree.
+    """
+
+global tree
+
+tree = {
+    'Attribute':{
+        'Compound': {
+            'Math2D': {},
+            'Math3D':{
+                'EulerRotation': {},
+                'Vector': {}
+            },
+            'Quaternion': {}
+        },
+        'Math1D':{
+            'Unit':{
+                'Distance': {},
+                'Time': {},
+                'Angle': {}
+            },
+            'Boolean': {},
+            'Enum': {}
+        },
+        'Matrix': {},
+        'Data':{
+            'Geometry':{
+                'PluginGeometry': {},
+                'Mesh': {},
+                'Lattice': {},
+                'NurbsCurve': {
+                    'BezierCurve': {}
+                },
+                'NurbsSurface': {},
+                'Sphere': {},
+                'SubdSurface': {},
+                'DynSweptGeometry': {}
+            },
+            'DynArrayAttrs': {},
+            'ComponentList': {},
+            'DataNumeric': {},  # Expanded by expandTree()
+            'DataArray': {},    # Expanded by expandTree()
+            # Include all the rest here, except for Matrix data, which
+            # should be piped to Matrix
+        },
+    }
+}
+
+def printTree():
+    """
+    Pretty-prints the Paya attribute inheritance tree.
+    """
+    global tree
+    pprint(tree)
 
 def getPath(typeName):
     """
@@ -68,54 +102,71 @@ def getPath(typeName):
         "Couldn't find class '{}' in the abstract plug tree".format(typeName)
     )
 
-
-def initTree():
+def getTerminatingKeys():
+    """
+    :return: All class names in the tree that have no descendants.
+    :rtype: [str]
+    """
     global tree
 
-    tree = {
-        'Attribute':{
-            'Compound': {
-                'Math2D': {},
-                'Math3D':{
-                    'EulerRotation': {},
-                    'Vector': {}
-                },
-                'Quaternion': {}
-            },
-            'Math1D':{
-                'Unit':{
-                    'Distance': {},
-                    'Time': {},
-                    'Angle': {}
-                },
-                'Boolean': {},
-                'Enum': {}
-            },
-            'Matrix': {},
-            'Data':{
-                'Geometry':{
-                    'PluginGeometry': {},
-                    'Mesh': {},
-                    'Lattice': {},
-                    'NurbsCurve': {
-                        'BezierCurve': {}
-                    },
-                    'NurbsSurface': {},
-                    'Sphere': {},
-                    'SubdSurface': {},
-                    'DynSweptGeometry': {}
-                },
-                'DynArrayAttrs': {},
-                'ComponentList': {},
-                'DataNumeric': {}, # Dump non-DG-manipulatable plugs here
-                'DataArray': {}, # Expand dynamically via MFnData
-                # Include all the rest here, except for Matrix data, which should be piped to Matrix
-            },
-        }
-    }
+    terminatingKeys = []
+
+    def _getTerminatingKeys(dct):
+        for k, v in dct.items():
+            if v:
+                _getTerminatingKeys(v)
+
+            else:
+                terminatingKeys.append(k)
+
+    _getTerminatingKeys(tree)
+
+    return terminatingKeys
+
+def insert(typeName, parent=None):
+    """
+    Inserts an abstract type into the tree.
+
+    :param str typeName: the name of the type to insert
+    :param parent: an optional (existing) parent for the new type
+    :type parent: None, str
+    """
+    global tree
+
+    if parent:
+        path = getPath(parent)
+
+    else:
+        path = ['Attribute']
+
+    container = tree[path[0]]
+
+    for key in path[1:]:
+        container = container[key]
+
+    container[typeName] = {}
+
+def createPath(path):
+    """
+    Ensures that the specified path exists in the tree.
+
+    :param path: the path to enforce
+    :type path: [str]
+    """
+    global tree
+
+    current = tree
+
+    for key in path:
+        current = current.setdefault(key, {})
+
+def expandTree():
+    """
+    Call on import to expand the explicit ``tree`` dictionary procedurally.
+    """
+    global tree
 
     # Expand data types
-
     ignore = ('kMatrix', 'kInvalid', 'kLast', 'kNumeric')
 
     dataTypes = filter(
@@ -124,9 +175,7 @@ def initTree():
     )
 
     for dataType in dataTypes:
-
         mt = re.match(r"^k(.*?)(Array)?$", dataType)
-
         basename, array = mt.groups()
 
         if array:
@@ -156,7 +205,21 @@ def initTree():
             clsname = "Data{}".format(mt.groups()[0])
             insert(clsname, parent='DataNumeric')
 
-initTree()
+    # Consider restoring the below once we have a solution for
+    # dunder method fallbacks (e.g. using * on a non-indexed
+    # .worldMatrix)
+
+    # # Add array subtypes
+    #
+    # endKeys = getTerminatingKeys()
+    #
+    # for endKey in endKeys:
+    #     fullPath = getPath(endKey)[1:]
+    #     fullPath = ['ArrayOf{}'.format(elem) for elem in fullPath]
+    #     fullPath = ['Attribute', 'Array'] + fullPath
+    #     createPath(fullPath)
+
+expandTree()
 
 #------------------------------------------------------|    Type analysis
 
@@ -195,50 +258,6 @@ def getTypeFromDataBlock(mplug, asString=False):
     return data.apiTypeStr() if asString else data.apiType()
 
 def _getTypeFromMPlug(mplug):
-    """
-    Pseudo
-        If compound:
-            If num children in (2, 3, 4):
-                If number is 3:
-                    For each child:
-                        If it's a numeric attribute:
-                            If it's a 1D type, record a type of '1D'
-                            Otherwise: return general compound key
-
-                        elif it's a unit attribute:
-                            If it's an angle, record a type of 'angle'
-                            Otherwise, record a type of '1D'
-
-                        else:
-                            return general compound type
-
-                If number is 4:
-                    If all children are numbers (regardless), return as Quaternion
-                    Otherwise, return compound
-
-                if number is 2:
-                    if all children are numbers, return Math2D
-
-            else:
-                return compound
-
-        else:
-            if numeric:
-                we know it's not a compound type.
-                return an appropriate key
-
-            elif it's unit:
-                if it's angle, return angle
-                otherwise return a subclass of Math1D, i.e. distance or time
-
-            elif it's matrix: return matrix
-
-            elif is typed or generic:
-                get the type from the data block
-
-            else:
-                return attribute
-    """
     if mplug.isCompound():
         compoundMfn = om.MFnCompoundAttribute(mplug.attribute())
         numChildren = compoundMfn.numChildren()
@@ -372,9 +391,16 @@ def _getTypeFromMPlug(mplug):
     return 'Attribute'
 
 def getTypeFromMPlug(mplug, inherited=False):
-    typ = _getTypeFromMPlug(mplug)
+    out = _getTypeFromMPlug(mplug)
+
+    # Consider restoring the below once we have a solution for
+    # dunder method fallbacks (e.g. using * on a non-indexed
+    # .worldMatrix):
+
+    # if mplug.isArray():
+    #     out = 'ArrayOf{}'.format(out)
 
     if inherited:
-        return getPath(typ)
+        out = getPath(out)
 
-    return typ
+    return out

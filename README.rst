@@ -13,10 +13,13 @@ Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-.. admonition:: New in version 0.5
+.. admonition:: New in version 0.6
 
-    *   Over **60 new methods** to create rig controls  and :doc:`organise user attributes
-        <user_attrs>`
+    *   Maya's ``copyDeformerWeights()``, ``copySkinWeights()`` and ``deformerWeights()`` commands have been
+        unified into simple-to-use methods for dumping, loading and copying deformer weights
+    *   Smart new construction and copy methods for skinClusters
+    *   ``Vector.blend()`` now supports angle-based blending (for both attributes and values, naturally)
+    *   Easily create and drive twist chains
     *   And more !
 
 

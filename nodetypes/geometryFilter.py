@@ -1,21 +1,13 @@
 import os
 
 import maya.cmds as m
-
 import paya.lib.xmlweights as _xw
-from paya.lib.names import shorten
 from paya.util import short
 import pymel.util as _pu
 import paya.runtime as r
 
-def shortName(x):
-    return str(x).split('|')[-1]
-
 
 class GeometryFilter:
-
-    __config_attrs__ = None # used by getSettings(); if None,
-                            # NotImplementedError will be raised
 
     #----------------------------------------------------|    Loader
 

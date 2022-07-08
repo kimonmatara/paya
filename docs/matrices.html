@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrices &mdash; paya 0.5.2 documentation</title>
+  <title>Matrices &mdash; paya 0.6 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Controls" href="controls.html" />
+    <link rel="next" title="Joint Chains" href="joint_chains.html" />
     <link rel="prev" title="Point-Matrix Multiplication" href="point_matrix_mult.html" /> 
 </head>
 
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.5.2
+                0.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -72,10 +72,11 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
@@ -321,6 +322,11 @@ matrix:</p>
 <img alt="_images/shear_matrix.gif" src="_images/shear_matrix.gif" />
 </figure>
 </div></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To quickly create scale-only matrices with simpler arguments, use the convenience function
+<a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createScaleMatrix" title="paya.lib.mathops.createScaleMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createScaleMatrix()</span></code></a>, also available on <a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
+</div>
 </section>
 </section>
 <section id="quick-testing">
@@ -338,7 +344,7 @@ create a locator to represent the matrix:</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="point_matrix_mult.html" class="btn btn-neutral float-left" title="Point-Matrix Multiplication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="controls.html" class="btn btn-neutral float-right" title="Controls" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="joint_chains.html" class="btn btn-neutral float-right" title="Joint Chains" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

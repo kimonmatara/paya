@@ -4,8 +4,12 @@ paya.plugtree
 
 .. py:module:: paya.plugtree
 
-Manages the inheritance tree used to construct abstract Paya attribute
-subtypes. This module is not intended for direct use.
+For internal use. Manages the inheritance tree used to construct abstract
+Paya attribute subtypes.
+
+.. py:function:: printTree()
+
+    Pretty-prints the Paya attribute inheritance tree.
 
 .. py:function:: getPath(typeName)
 
@@ -16,3 +20,27 @@ subtypes. This module is not intended for direct use.
     :return: A list of abstract type names, ordered
         similarly to ``nodeType(inherited=True)``.
     :rtype: :class:`list`
+
+.. py:function:: getTerminatingKeys()
+
+    :return: All class names in the tree that have no descendants.
+    :rtype: [str]
+
+.. py:function:: insert(typeName, parent=None)
+
+    Inserts an abstract type into the tree.
+    
+    :param str typeName: the name of the type to insert
+    :param parent: an optional (existing) parent for the new type
+    :type parent: None, str
+
+.. py:function:: createPath(path)
+
+    Ensures that the specified path exists in the tree.
+    
+    :param path: the path to enforce
+    :type path: [str]
+
+.. py:function:: expandTree()
+
+    Call on import to expand the explicit ``tree`` dictionary procedurally.

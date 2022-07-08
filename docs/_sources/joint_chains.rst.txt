@@ -56,7 +56,7 @@ axis or vector arguments; joint positions and orientations are taken from the ma
 discarded.
 
 =======
-Editing
+Loading
 =======
 
 If you're not working on an instance of :class:`~paya.lib.skel.Chain` returned by one of the constructors described
@@ -80,8 +80,15 @@ Standard Python slice notation can be used to get sub-ranges:
 
     lowerBone = chain[1:]
 
-For a full reference of available editing methods, see the documentation for :class:`~paya.lib.skel.Chain`. In the
-following example, a leg chain and a foot chain are spliced together, reoriented, subdivided and renamed:
+=======
+Editing
+=======
+
+.. _twist chains:
+
+The :class:`~paya.lib.skel.Chain` class offers too many editing methods to enumerate here. See the class documentation
+for a full reference. In the following example, a leg chain and a foot chain are spliced together, reoriented and
+subdivided to create a twist chain which is then driven with full support for stretch and translation:
 
 .. tabs::
 
@@ -91,31 +98,39 @@ following example, a leg chain and a foot chain are spliced together, reoriented
 
             legChain = r.PyNode('joint1').chainFromHere()
             footChain = r.PyNode('joint4').chainFromHere()
-
             legChain.appendChain(footChain)
+
             legChain.orient('y', 'x', [1, 0, 0])
 
-            # Order of operations is important to keep track of
-            # memberships
-
-            thighChain = legChain[:2]
-            shinChain = legChain[1:3]
-
-            thighChain.insertJoints(3)
-            shinChain.insertJoints(3)
-
-            # Recreate the instance with updated membership
-            legChain = thighChain[:-1] + shinChain[:-1] + footChain
-
             with r.Name(padding=3):
-                legChain.rename('L_leg')
+                legChain.rename('driver')
+                twistChain = legChain.duplicate(n='twist')
 
-    .. tab:: Before
+            triad = twistChain[:3]
+            triad.subdivide(2)
 
-        .. figure:: leg_before.png
-            :align: center
+            # The initial twistChain now has outdated membership;
+            # reload it
+            twistChain = twistChain[0].chainFromHere()
 
-    .. tab:: After
+            # Set the start 'up' matrix to an identity matrix to 'anchor'
+            # the hip-level up vector
 
-        .. figure:: leg_after.png
+            legChain.driveTwistChain(
+                twistChain, 'x', 1.0, startUpMatrix=r.data.Matrix()
+                )
+
+            # Display tweaks
+
+            for joint in legChain:
+                joint.attr('radius').set(1.5)
+                joint.attr('displayLocalAxis').set(False)
+
+            for joint in twistChain:
+                joint.attr('radius').set(0.5)
+                joint.attr('displayLocalAxis').set(True)
+
+    .. tab:: Viewport
+
+        .. figure:: leg_skel_edit.gif
             :align: center

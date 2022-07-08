@@ -64,7 +64,7 @@ def iscustomcls(cls):
 #------------------------------------------------------------|    paya metaclass
 #------------------------------------------------------------|
 
-class payaMeta(type):
+class PayaMeta(type):
     """
     Base Paya metaclass. This is never used directly, but rather subclassed as
     a mix-in for PyMEL's standard metaclasses.
@@ -186,13 +186,13 @@ class ClassPool:
         pmbase = self._getPmBase(clsname)
         pmmeta = type(pmbase)
 
-        metaname = pmmeta.__name__+'payaMeta'
+        metaname = pmmeta.__name__+'PayaMeta'
 
         try:
             return self._metacache[metaname]
 
         except KeyError:
-            metacls = type(metaname, (payaMeta, pmmeta), {})
+            metacls = type(metaname, (PayaMeta, pmmeta), {})
             self._metacache[metaname] = metacls
 
             return metacls

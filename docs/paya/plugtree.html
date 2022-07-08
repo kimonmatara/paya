@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.plugtree &mdash; paya 0.5.2 documentation</title>
+  <title>paya.plugtree &mdash; paya 0.6 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.5.2
+                0.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -49,10 +49,11 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
@@ -109,8 +110,14 @@
              
   <section id="module-paya.plugtree">
 <span id="paya-plugtree"></span><h1>paya.plugtree<a class="headerlink" href="#module-paya.plugtree" title="Permalink to this headline"></a></h1>
-<p>Manages the inheritance tree used to construct abstract Paya attribute
-subtypes. This module is not intended for direct use.</p>
+<p>For internal use. Manages the inheritance tree used to construct abstract
+Paya attribute subtypes.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.printTree">
+<span class="sig-name descname"><span class="pre">printTree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.printTree" title="Permalink to this definition"></a></dt>
+<dd><p>Pretty-prints the Paya attribute inheritance tree.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.plugtree.getPath">
 <span class="sig-name descname"><span class="pre">getPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typeName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getPath" title="Permalink to this definition"></a></dt>
@@ -128,6 +135,50 @@ similarly to <code class="docutils literal notranslate"><span class="pre">nodeTy
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.getTerminatingKeys">
+<span class="sig-name descname"><span class="pre">getTerminatingKeys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getTerminatingKeys" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All class names in the tree that have no descendants.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typeName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.insert" title="Permalink to this definition"></a></dt>
+<dd><p>Inserts an abstract type into the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>typeName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the type to insert</p></li>
+<li><p><strong>parent</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an optional (existing) parent for the new type</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.createPath">
+<span class="sig-name descname"><span class="pre">createPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.createPath" title="Permalink to this definition"></a></dt>
+<dd><p>Ensures that the specified path exists in the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>]</em>) – the path to enforce</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.expandTree">
+<span class="sig-name descname"><span class="pre">expandTree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.expandTree" title="Permalink to this definition"></a></dt>
+<dd><p>Call on import to expand the explicit <code class="docutils literal notranslate"><span class="pre">tree</span></code> dictionary procedurally.</p>
 </dd></dl>
 
 </section>

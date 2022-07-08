@@ -13,10 +13,15 @@ Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-.. admonition:: New in version 0.5
+.. admonition:: New in version 0.6
 
-    *   Over **60 new methods** to :doc:`create rig controls <controls>` and :doc:`organise user attributes
-        <user_attrs>`
+    *   Maya's :func:`copyDeformerWeights`, :func:`copySkinWeights` and :func:`deformerWeights` commands have been
+        unified into :ref:`simple-to-use methods for dumping, loading and copying deformer weights
+        <deformer weight management>`
+    *   Smart new :ref:`construction and copy methods for skinClusters <skinCluster constructor>`
+    *   :meth:`Vector.blend() <paya.runtime.plugs.Vector.blend>` now supports angle-based blending (for both attributes
+        and values, naturally)
+    *   Easily :ref:`create and drive twist chains <twist chains>`
     *   And :doc:`more <whats_new>`!
 
 
@@ -154,10 +159,11 @@ Example: Rigging a Radial Repulsor
     :hidden:
 
     Maths <maths_rigging>
-    Controls <controls>
-    User Attributes <user_attrs>
     Joint Chains <joint_chains>
     IK Handles <ik>
+    deformers
+    Controls <controls>
+    User Attributes <user_attrs>
     Node Names <naming_nodes>
 
 .. toctree::

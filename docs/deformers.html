@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deformers &mdash; paya 0.6 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Controls" href="controls.html" />
+    <link rel="prev" title="IK Handles" href="ik.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.6
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deformers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general">General</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#constructors">Constructors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-deformers">Retrieving Deformers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#loading-dumping-weights">Loading / Dumping Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#copying-weights">Copying Weights</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#skinclusters">SkinClusters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#constructor">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#copying">Copying</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Your Own Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Deformers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/deformers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deformers">
+<h1>Deformers<a class="headerlink" href="#deformers" title="Permalink to this headline"></a></h1>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline"></a></h2>
+<section id="constructors">
+<h3>Constructors<a class="headerlink" href="#constructors" title="Permalink to this headline"></a></h3>
+<p>Maya doesn’t provide a consistent API to create deformers. Some, like <code class="docutils literal notranslate"><span class="pre">skinCluster</span></code>, have their own commands; others,
+like the non-linear variants, use <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.deformer.html#pymel.core.animation.deformer" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">deformer()</span></code></a>; still others, like <code class="docutils literal notranslate"><span class="pre">proximityWrap</span></code>, use
+special classes.</p>
+<p>To get around this, <strong>version 0.6</strong> of Paya kicks off a project to implement a <code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code> method on every deformer
+class, starting with skinClusters. Stay tuned for more deformer constructors in upcoming versions.</p>
+</section>
+<section id="retrieving-deformers">
+<h3>Retrieving Deformers<a class="headerlink" href="#retrieving-deformers" title="Permalink to this headline"></a></h3>
+<p>Use <a class="reference internal" href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.getFromGeo" title="paya.runtime.nodes.GeometryFilter.getFromGeo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getFromGeo()</span></code></a> to find all deformers of a particular type on a shape. This
+is more reliable than <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.listHistory.html#pymel.core.general.listHistory" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">listHistory()</span></code></a> (or the <code class="xref py py-meth docutils literal notranslate"><span class="pre">history()</span></code> method) as it excludes deformers
+in the dependency graph that don’t directly affect the shape:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skins</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">SkinCluster</span><span class="o">.</span><span class="n">getFromGeo</span><span class="p">(</span><span class="s1">&#39;bodyShape1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">skins</span><span class="p">)</span>
+<span class="c1"># [nt.SkinCluster(&#39;skinCluster1&#39;)]</span>
+</pre></div>
+</div>
+</section>
+<section id="loading-dumping-weights">
+<span id="deformer-weight-management"></span><h3>Loading / Dumping Weights<a class="headerlink" href="#loading-dumping-weights" title="Permalink to this headline"></a></h3>
+<p>The standard way in Maya to dump and load per-component deformer weights is the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code> command. Although this is fast, its flag interface is quirky and often
+leads to unwanted deformers and shapes being processed.</p>
+<p>To get around this, Paya’s <a class="reference internal" href="paya/lib/xmlweights.html#module-paya.lib.xmlweights" title="paya.lib.xmlweights"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.xmlweights</span></code></a> module offers two functional wrappers,
+<a class="reference internal" href="paya/lib/xmlweights.html#paya.lib.xmlweights.load" title="paya.lib.xmlweights.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a> and <a class="reference internal" href="paya/lib/xmlweights.html#paya.lib.xmlweights.dump" title="paya.lib.xmlweights.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">dump()</span></code></a>. These take simpler path arguments, and ensure
+that only requested deformers and shapes are processed.</p>
+<p>Paya deformer instances carry matched <a class="reference internal" href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.loadWeights" title="paya.runtime.nodes.GeometryFilter.loadWeights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">loadWeights()</span></code></a> and
+<a class="reference internal" href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.dumpWeights" title="paya.runtime.nodes.GeometryFilter.dumpWeights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dumpWeights()</span></code></a> methods with additional perks, such as reliable inclusion
+of DQ blend weights.</p>
+<p>Here’s an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filePath</span> <span class="o">=</span> <span class="s1">&#39;C:/Users/user/Desktop/skin.xml&#39;</span>
+
+<span class="n">skin1</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">SkinCluster</span><span class="o">.</span><span class="n">getFromGeo</span><span class="p">(</span><span class="s1">&#39;body1&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">skin1</span><span class="o">.</span><span class="n">dumpWeights</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span>
+
+<span class="n">skin2</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">SkinCluster</span><span class="o">.</span><span class="n">getFromGeo</span><span class="p">(</span><span class="s1">&#39;body2&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">skin2</span><span class="o">.</span><span class="n">loadWeights</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Paya’s methods only support XML files. This is because calling <code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code> in
+JSON mode sometimes leads to crashes.</p>
+</div>
+</section>
+<section id="copying-weights">
+<h3>Copying Weights<a class="headerlink" href="#copying-weights" title="Permalink to this headline"></a></h3>
+<p>Paya’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">copyWeightsFrom()</span></code> method unifies various options from
+Maya’s <code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">copyDeformerWeights()</span></code> and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">copySkinWeights()</span></code> commands into a single interface, automatically using the correct
+implementation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skin2</span><span class="o">.</span><span class="n">copyWeightsFrom</span><span class="p">(</span><span class="n">skin1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span> <span class="c1"># uses XML, includes DQ blend weights</span>
+<span class="n">skin2</span><span class="o">.</span><span class="n">copyWeightsFrom</span><span class="p">(</span><span class="n">skin1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;closestPoint&#39;</span><span class="p">)</span> <span class="c1"># uses copySkinWeights()</span>
+<span class="n">blendShape2</span><span class="o">.</span><span class="n">copyWeightsFrom</span><span class="p">(</span><span class="n">blendShape1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;uv&#39;</span><span class="p">)</span> <span class="c1"># uses copyDeformerWeights()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="skinclusters">
+<h2>SkinClusters<a class="headerlink" href="#skinclusters" title="Permalink to this headline"></a></h2>
+<section id="constructor">
+<span id="skincluster-constructor"></span><h3>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline"></a></h3>
+<p>The skinCluster constructor confers several advantages over <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.skinCluster.html#pymel.core.animation.skinCluster" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">skinCluster()</span></code></a>:</p>
+<ul class="simple">
+<li><p>Influences and geometry can be passed via positional arguments, in any order and level of listing; alternatively
+they can be passed via the <code class="docutils literal notranslate"><span class="pre">influence</span></code> and <code class="docutils literal notranslate"><span class="pre">geometry</span></code> keyword arguments</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">multi</span></code> option to generate skinClusters across several passed geometries with the same arguments</p></li>
+<li><p>More useful defaults (for example, <code class="docutils literal notranslate"><span class="pre">toSelectedBones=True</span></code>)</p></li>
+<li><p>Managed naming, including a <code class="docutils literal notranslate"><span class="pre">nameFromGeo</span></code> option</p></li>
+</ul>
+<p>Here’s an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">influences</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;joint&#39;</span><span class="p">)</span>
+<span class="n">meshes</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;mesh)</span>
+
+<span class="n">skins</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">SkinCluster</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">influences</span><span class="p">,</span> <span class="n">meshes</span><span class="p">,</span> <span class="n">maximumInfluences</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="copying">
+<h3>Copying<a class="headerlink" href="#copying" title="Permalink to this headline"></a></h3>
+<p>Use <a class="reference internal" href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.copyTo" title="paya.runtime.nodes.SkinCluster.copyTo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">copyTo()</span></code></a> to copy skinClusters between geometries. This replicates all relevant
+node configuration, including inputs for <code class="docutils literal notranslate"><span class="pre">dqsScale</span></code>, and gives you the same options for weight copying as
+<a class="reference internal" href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.copyWeightsFrom" title="paya.runtime.nodes.GeometryFilter.copyWeightsFrom"><code class="xref py py-meth docutils literal notranslate"><span class="pre">copyWeightsFrom()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skin1</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">SkinCluster</span><span class="o">.</span><span class="n">getFromGeo</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">skin2</span> <span class="o">=</span> <span class="n">skin1</span><span class="o">.</span><span class="n">copyTo</span><span class="p">(</span><span class="s1">&#39;jacket&#39;</span><span class="p">,</span> <span class="n">destUVSet</span><span class="o">=</span><span class="s1">&#39;rigUVs&#39;</span><span class="p">)</span>  <span class="c1"># uv mode with an explicit destination map</span>
+<span class="n">skin3</span> <span class="o">=</span> <span class="n">skin1</span><span class="o">.</span><span class="n">copyTo</span><span class="p">(</span><span class="s1">&#39;body_thin&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+<span class="n">skin4</span> <span class="o">=</span> <span class="n">skin1</span><span class="o">.</span><span class="n">copyTo</span><span class="p">(</span><span class="s1">&#39;hair&#39;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># omit weights, but copy configuration</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ik.html" class="btn btn-neutral float-left" title="IK Handles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="controls.html" class="btn btn-neutral float-right" title="Controls" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

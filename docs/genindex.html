@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; paya 0.5.2 documentation</title>
+  <title>Index &mdash; paya 0.6 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -30,7 +30,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.5.2
+                0.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -47,10 +47,11 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
@@ -522,10 +523,10 @@
 </li>
       <li><a href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.copyTo">copyTo() (SkinCluster method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.copyWeightsFrom">copyWeightsFrom() (GeometryFilter method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.cos">cos() (Math1D method)</a>
 </li>
       <li><a href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.create">create() (IkHandle class method)</a>
@@ -579,6 +580,8 @@
 </li>
       </ul></li>
       <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.createOffsetGroups">createOffsetGroups() (Transform method)</a>
+</li>
+      <li><a href="paya/plugtree.html#paya.plugtree.createPath">createPath() (in module paya.plugtree)</a>
 </li>
       <li><a href="paya/lib/mathops.html#paya.lib.mathops.createScaleMatrix">createScaleMatrix() (in module paya.lib.mathops)</a>
 </li>
@@ -650,15 +653,17 @@
 </li>
       <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.eq">eq() (Math1D method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation">EulerRotation (class in paya.runtime.data)</a>
 
       <ul>
         <li><a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation">(class in paya.runtime.plugs)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/lib/attrs.html#paya.lib.attrs.expandAttrListToParentsAndChildren">expandAttrListToParentsAndChildren() (in module paya.lib.attrs)</a>
+</li>
+      <li><a href="paya/plugtree.html#paya.plugtree.expandTree">expandTree() (in module paya.plugtree)</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.explode">explode() (Chain method)</a>
 </li>
@@ -762,6 +767,8 @@
 </li>
       <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.getShapes">getShapes() (GeometryFilter method)</a>
 </li>
+      <li><a href="paya/plugtree.html#paya.plugtree.getTerminatingKeys">getTerminatingKeys() (in module paya.plugtree)</a>
+</li>
       <li><a href="pools/nodes/fourByFourMatrix.html#paya.runtime.nodes.FourByFourMatrix.getTranslate">getTranslate() (FourByFourMatrix method)</a>
 
       <ul>
@@ -827,6 +834,8 @@
       <li><a href="paya/util/iterables.html#paya.util.iterables.index_in_range">index_in_range() (in module paya.util.iterables)</a>
 </li>
       <li><a href="paya/lib/mathops.html#paya.lib.mathops.info">info() (in module paya.lib.mathops)</a>
+</li>
+      <li><a href="paya/plugtree.html#paya.plugtree.insert">insert() (in module paya.plugtree)</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.insertJoints">insertJoints() (Chain method)</a>
 </li>
@@ -1224,6 +1233,8 @@
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.points">points() (Chain method)</a>
 </li>
       <li><a href="paya/lib/mathops.html#paya.lib.mathops.pointsIntoUnitCube">pointsIntoUnitCube() (in module paya.lib.mathops)</a>
+</li>
+      <li><a href="paya/plugtree.html#paya.plugtree.printTree">printTree() (in module paya.plugtree)</a>
 </li>
       <li><a href="paya/pools.html#paya.pools.ClassPool.purge">purge() (ClassPool method)</a>
 </li>

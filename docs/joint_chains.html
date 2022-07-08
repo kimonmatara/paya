@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Joint Chains &mdash; paya 0.5.2 documentation</title>
+  <title>Joint Chains &mdash; paya 0.6 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="IK Handles" href="ik.html" />
-    <link rel="prev" title="User Attributes" href="user_attrs.html" /> 
+    <link rel="prev" title="Matrices" href="matrices.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.5.2
+                0.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -50,14 +50,16 @@
 <p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Joint Chains</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#drawing">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading">Loading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#editing">Editing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
@@ -140,8 +142,8 @@ extracted from a NURBS surface to help visualise twist:</p>
 axis or vector arguments; joint positions and orientations are taken from the matrices, with scaling information
 discarded.</p>
 </section>
-<section id="editing">
-<h2>Editing<a class="headerlink" href="#editing" title="Permalink to this headline"></a></h2>
+<section id="loading">
+<h2>Loading<a class="headerlink" href="#loading" title="Permalink to this headline"></a></h2>
 <p>If you’re not working on an instance of <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a> returned by one of the constructors described
 above, you’ll have to get one from existing joints. To load a chain from a root joint, use
 <a class="reference internal" href="pools/nodes/joint.html#paya.runtime.nodes.Joint.chainFromHere" title="paya.runtime.nodes.Joint.chainFromHere"><code class="xref py py-meth docutils literal notranslate"><span class="pre">chainFromHere()</span></code></a> on <a class="reference internal" href="pools/nodes/joint.html#paya.runtime.nodes.Joint" title="paya.runtime.nodes.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>:</p>
@@ -157,36 +159,50 @@ above, you’ll have to get one from existing joints. To load a chain from a roo
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lowerBone</span> <span class="o">=</span> <span class="n">chain</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 </pre></div>
 </div>
-<p>For a full reference of available editing methods, see the documentation for <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a>. In the
-following example, a leg chain and a foot chain are spliced together, reoriented, subdivided and renamed:</p>
+</section>
+<section id="editing">
+<h2>Editing<a class="headerlink" href="#editing" title="Permalink to this headline"></a></h2>
+<p id="twist-chains">The <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a> class offers too many editing methods to enumerate here. See the class documentation
+for a full reference. In the following example, a leg chain and a foot chain are spliced together, reoriented and
+subdivided to create a twist chain which is then driven with full support for stretch and translation:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Before</button><button aria-controls="panel-2-2-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-2" name="2-2" role="tab" tabindex="-1">After</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">legChain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">legChain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
 <span class="n">footChain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
-
 <span class="n">legChain</span><span class="o">.</span><span class="n">appendChain</span><span class="p">(</span><span class="n">footChain</span><span class="p">)</span>
+
 <span class="n">legChain</span><span class="o">.</span><span class="n">orient</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 
-<span class="c1"># Order of operations is important to keep track of</span>
-<span class="c1"># memberships</span>
-
-<span class="n">thighChain</span> <span class="o">=</span> <span class="n">legChain</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">shinChain</span> <span class="o">=</span> <span class="n">legChain</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-
-<span class="n">thighChain</span><span class="o">.</span><span class="n">insertJoints</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">shinChain</span><span class="o">.</span><span class="n">insertJoints</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="c1"># Recreate the instance with updated membership</span>
-<span class="n">legChain</span> <span class="o">=</span> <span class="n">thighChain</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">shinChain</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">footChain</span>
-
 <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">legChain</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;L_leg&#39;</span><span class="p">)</span>
+    <span class="n">legChain</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;driver&#39;</span><span class="p">)</span>
+    <span class="n">twistChain</span> <span class="o">=</span> <span class="n">legChain</span><span class="o">.</span><span class="n">duplicate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="s1">&#39;twist&#39;</span><span class="p">)</span>
+
+<span class="n">triad</span> <span class="o">=</span> <span class="n">twistChain</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">triad</span><span class="o">.</span><span class="n">subdivide</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># The initial twistChain now has outdated membership;</span>
+<span class="c1"># reload it</span>
+<span class="n">twistChain</span> <span class="o">=</span> <span class="n">twistChain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
+
+<span class="c1"># Set the start &#39;up&#39; matrix to an identity matrix to &#39;anchor&#39;</span>
+<span class="c1"># the hip-level up vector</span>
+
+<span class="n">legChain</span><span class="o">.</span><span class="n">driveTwistChain</span><span class="p">(</span>
+    <span class="n">twistChain</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">startUpMatrix</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Matrix</span><span class="p">()</span>
+    <span class="p">)</span>
+
+<span class="c1"># Display tweaks</span>
+
+<span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">legChain</span><span class="p">:</span>
+    <span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;displayLocalAxis&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">twistChain</span><span class="p">:</span>
+    <span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;displayLocalAxis&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/leg_before.png" src="_images/leg_before.png" />
-</figure>
-</div><div aria-labelledby="tab-2-2-2" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-2" name="2-2" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/leg_after.png" src="_images/leg_after.png" />
+<img alt="_images/leg_skel_edit.gif" src="_images/leg_skel_edit.gif" />
 </figure>
 </div></div>
 </section>
@@ -196,7 +212,7 @@ following example, a leg chain and a foot chain are spliced together, reoriented
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="user_attrs.html" class="btn btn-neutral float-left" title="User Attributes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="matrices.html" class="btn btn-neutral float-left" title="Matrices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="ik.html" class="btn btn-neutral float-right" title="IK Handles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

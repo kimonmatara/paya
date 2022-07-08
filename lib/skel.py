@@ -946,6 +946,10 @@ class Chain(object):
         result = list(self) + list(other)
         return Chain(result)
 
+    def __iadd__(self, other):
+        result = list(self) + list(other)
+        self.data = result
+
     def __setitem__(self, key, value):
         if isinstance(key, slice):
             value = list(value)
@@ -962,6 +966,10 @@ class Chain(object):
 
     def __repr__(self):
         return repr(self.data)
+
+    @property
+    def pop(self):
+        return self.data.pop
 
 
 class Bone(Chain):
@@ -1060,7 +1068,7 @@ class Bone(Chain):
         if numSlaves is 2:
             matrix = smtx * r.createMatrix(
                 downAxis, downVector,
-                upAxis, startUpMatrix,
+                upAxis, startUpVector,
                 t=points[0]
             ).pk(t=True, r=True)
 
@@ -1133,7 +1141,6 @@ class Bone(Chain):
                     matrix = slaveJoint.getMatrix().inverse() * matrix
                     matrix >> slaveJoint.attr('opm')
                     slaveJoint.attr('it').set(False)
-
 
 def getClassFromNumJoints(numJoints):
     return {2: Bone}.get(numJoints, Chain)

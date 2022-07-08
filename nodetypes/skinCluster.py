@@ -6,17 +6,6 @@ import paya.runtime as r
 
 class SkinCluster:
 
-    __config_attrs__ = [
-            'bindMethod',
-            'deformUserNormals',
-            'dropoffRate',
-            'maxInfluences',
-            'normalizeWeights',
-            'skinningMethod',
-            'useComponents',
-            'weightDistribution'
-        ]
-
     #------------------------------------------------------------|    Constructor
 
     @classmethod
@@ -147,6 +136,8 @@ class SkinCluster:
 
                     out.append(result)
 
+                return out
+
             else:
                 raise RuntimeError(
                     "Set 'multi' to True to bind more than one geometry."
@@ -155,7 +146,7 @@ class SkinCluster:
         if replace:
             existing = []
 
-            for geo in geometry:
+            for geo in geos:
                 existing += cls.getFromGeo(geo)
 
             if existing:
@@ -175,9 +166,7 @@ class SkinCluster:
         buildKwargs['n'] = name
 
         # Exec
-
         buildArgs = infls + geos
-
         return r.skinCluster(*buildArgs, **buildKwargs)
 
     @staticmethod

@@ -49,30 +49,6 @@ class NurbsCurve:
 
     #-----------------------------------------------------|    Macro
 
-    # @short(normalize='nr')
-    # def macro(self, normalize=False):
-    #     """
-    #     :param bool normalize/nr: normalize curve points (used by the shapes
-    #         library); defaults to False
-    #     :return: A simplified dictionary representation of this curve shape
-    #         that can be used to reconstruct it. Point information will be in
-    #         local (object) space. Name is ignored.
-    #     :rtype: dict
-    #     """
-    #     macro = r.nodes.DependNode.macro(self)
-    #
-    #     macro['knot'] = self.getKnots()
-    #     macro['degree'] = self.degree()
-    #     macro['form'] = self.attr('f').get()
-    #     macro['point'] = list(map(list, self.getCVs()))
-    #     macro['knotDomain'] = self.getKnotDomain()
-    #
-    #     if normalize:
-    #         macro['point'] = [list(p) for p in \
-    #             _mo.pointsIntoUnitCube(macro['point'])]
-    #
-    #     return macro
-
     def macro(self):
         """
         :return: A simplified representation of this curve that can be used

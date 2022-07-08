@@ -1,0 +1,119 @@
+*********
+Deformers
+*********
+
+=======
+General
+=======
+
+Constructors
+------------
+
+Maya doesn't provide a consistent API to create deformers. Some, like ``skinCluster``, have their own commands; others,
+like the non-linear variants, use :func:`~pymel.core.animation.deformer`; still others, like ``proximityWrap``, use
+special classes.
+
+To get around this, **version 0.6** of Paya kicks off a project to implement a :meth:`create` method on every deformer
+class, starting with skinClusters. Stay tuned for more deformer constructors in upcoming versions.
+
+Retrieving Deformers
+--------------------
+
+Use :meth:`~paya.runtime.nodes.GeometryFilter.getFromGeo` to find all deformers of a particular type on a shape. This
+is more reliable than :func:`~pymel.core.general.listHistory` (or the :meth:`history` method) as it excludes deformers
+in the dependency graph that don't directly affect the shape:
+
+.. code-block:: python
+
+    skins = r.nodes.SkinCluster.getFromGeo('bodyShape1')
+    print(skins)
+    # [nt.SkinCluster('skinCluster1')]
+
+.. _deformer weight management:
+
+Loading / Dumping Weights
+-------------------------
+
+The standard way in Maya to dump and load per-component deformer weights is the
+:func:`~pymel.internal.pmcmds.deformerWeights` command. Although this is fast, its flag interface is quirky and often
+leads to unwanted deformers and shapes being processed.
+
+To get around this, Paya's :mod:`paya.lib.xmlweights` module offers two functional wrappers,
+:func:`~paya.lib.xmlweights.load` and :func:`~paya.lib.xmlweights.dump`. These take simpler path arguments, and ensure
+that only requested deformers and shapes are processed.
+
+Paya deformer instances carry matched :meth:`~paya.runtime.nodes.GeometryFilter.loadWeights` and
+:meth:`~paya.runtime.nodes.GeometryFilter.dumpWeights` methods with additional perks, such as reliable inclusion
+of DQ blend weights.
+
+Here's an example:
+
+.. code-block:: python
+
+    filePath = 'C:/Users/user/Desktop/skin.xml'
+
+    skin1 = r.nodes.SkinCluster.getFromGeo('body1')[0]
+    skin1.dumpWeights(filePath)
+
+    skin2 = r.nodes.SkinCluster.getFromGeo('body2')[0]
+    skin2.loadWeights(filePath)
+
+.. note::
+
+    Paya's methods only support XML files. This is because calling :func:`~pymel.internal.pmcmds.deformerWeights` in
+    JSON mode sometimes leads to crashes.
+
+Copying Weights
+---------------
+
+Paya's :meth:`~paya.runtime.nodes.GeoemtryFilter.copyWeightsFrom` method unifies various options from
+Maya's :func:`~pymel.internal.pmcmds.deformerWeights`, :func:`~pymel.internal.pmcmds.copyDeformerWeights` and
+:func:`~pymel.internal.pmcmds.copySkinWeights` commands into a single interface, automatically using the correct
+implementation:
+
+.. code-block:: python
+
+    skin2.copyWeightsFrom(skin1, method='index') # uses XML, includes DQ blend weights
+    skin2.copyWeightsFrom(skin1, method='closestPoint') # uses copySkinWeights()
+    blendShape2.copyWeightsFrom(blendShape1, method='uv') # uses copyDeformerWeights()
+
+============
+SkinClusters
+============
+
+.. _skinCluster constructor:
+
+Constructor
+-----------
+
+The skinCluster constructor confers several advantages over :func:`~pymel.core.animation.skinCluster`:
+
+-   Influences and geometry can be passed via positional arguments, in any order and level of listing; alternatively
+    they can be passed via the ``influence`` and ``geometry`` keyword arguments
+-   A ``multi`` option to generate skinClusters across several passed geometries with the same arguments
+-   More useful defaults (for example, ``toSelectedBones=True``)
+-   Managed naming, including a ``nameFromGeo`` option
+
+Here's an example:
+
+.. code-block:: python
+
+    influences = r.ls(type='joint')
+    meshes = r.ls(type='mesh)
+
+    skins = r.nodes.SkinCluster.create(
+        influences, meshes, maximumInfluences=2, multi=True)
+
+Copying
+-------
+
+Use :meth:`~paya.runtime.nodes.SkinCluster.copyTo` to copy skinClusters between geometries. This replicates all relevant
+node configuration, including inputs for ``dqsScale``, and gives you the same options for weight copying as
+:meth:`~paya.runtime.nodes.GeometryFilter.copyWeightsFrom`:
+
+.. code-block:: python
+
+    skin1 = r.nodes.SkinCluster.getFromGeo('body')[0]
+    skin2 = skin1.copyTo('jacket', destUVSet='rigUVs')  # uv mode with an explicit destination map
+    skin3 = skin1.copyTo('body_thin', method='index')
+    skin4 = skin1.copyTo('hair', weights=False) # omit weights, but copy configuration

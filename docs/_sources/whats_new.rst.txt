@@ -2,6 +2,81 @@
 What's New
 ##########
 
+***********
+Version 0.6
+***********
+
+Additions to paya.runtime
+=========================
+
+*   :func:`~paya.lib.mathops.createScaleMatrix`
+
+Additions to Modules
+====================
+
+*   On :mod:`paya.lib.xmlweights`:
+    :meth:`~paya.lib.xmlweights.dump`
+    :meth:`~paya.lib.xmlweights.load`
+
+Additions to General Classes
+============================
+
+*   On :class:`~paya.lib.skel.Chain`:
+    :meth:`~paya.lib.skel.Chain.bones`
+    :meth:`~paya.lib.skel.Chain.ratios`
+    :meth:`~paya.lib.skel.Chain.insertJoints`
+    :meth:`~paya.lib.skel.Chain.subdivide`
+    :meth:`~paya.lib.skel.Chain.driveTwistChain`
+
+Additions to Node Types
+=======================
+
+*   On :class:`~paya.runtime.nodes.GeometryFilter`:
+    :meth:`~paya.runtime.nodes.GeometryFilter.getFromGeo`
+    :meth:`~paya.runtime.nodes.GeometryFilter.getShapes`
+    :meth:`~paya.runtime.nodes.GeometryFilter.dumpWeights`
+    :meth:`~paya.runtime.nodes.GeometryFilter.loadWeights`
+    :meth:`~paya.runtime.nodes.GeometryFilter.copyWeightsFrom`
+
+*   On :class:`~paya.runtime.nodes.SkinCluster`:
+    :meth:`~paya.runtime.nodes.SkinCluster.create`
+    :meth:`~paya.runtime.nodes.SkinCluster.macro`
+    :meth:`~paya.runtime.nodes.SkinCluster.createFromMacro`
+    :meth:`~paya.runtime.nodes.SkinCluster.dumpWeights`
+
+*   On :class:`~paya.runtime.nodes.DependNode`:
+    :meth:`~paya.runtime.nodes.DependNode.macro`
+    :meth:`~paya.runtime.nodes.DependNode.createFromMacro`
+
+*   On :class:`~paya.runtime.nodes.Shape`:
+    :meth:`~paya.runtime.nodes.Shape.toShape`
+    :meth:`~paya.runtime.nodes.Shape.toTransform`
+
+*   On :class:`~paya.runtime.nodes.Transform`:
+    :meth:`~paya.runtime.nodes.Transform.toShape`
+    :meth:`~paya.runtime.nodes.Transform.toTransform`
+    :meth:`~paya.runtime.nodes.Transform.closestOf`
+
+Additions to Data Types
+=======================
+
+*   On :class:`paya.runtime.data.Vector`:
+    :meth:`~paya.runtime.data.Vector.angle` (new 'clockNormal' option)
+    :meth:`~paya.runtime.data.Vector.makePerpendicularTo`
+    :meth:`~paya.runtime.data.Vector.blend` (new options)
+    :meth:`~paya.runtime.data.Vector.rotateByAxisAngle`
+
+Additions to Plug Types
+=======================
+
+*   On :class:`paya.runtime.plugs.Vector`:
+    :meth:`~paya.runtime.plugs.Vector.angle` (new 'clockNormal' option)
+    :meth:`~paya.runtime.plugs.Vector.makePerpendicularTo`
+    :meth:`~paya.runtime.plugs.Vector.blend` (new options)
+    :meth:`~paya.runtime.plugs.Vector.rotateByAxisAngle`
+
+--------
+
 *************
 Version 0.5.2
 *************
