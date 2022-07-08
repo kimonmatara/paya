@@ -82,20 +82,36 @@ paya.runtime.nodes.SkinCluster
         :param bool replace/rep: if the destination geometry already has a
             skinCluster, remove it; defaults to True
         :param bool weights/w: copy weights too; defaults to True
-        :param str method/m:
-        :param sourceUVSet:
-        :param destUVSet:
-        :return:
+        :param str method/m: the weight-copying method; one of:
+        
+            - ``index`` (via XML)
+            - ``bilinear`` (via XML)
+            - ``barycentric`` (via XML)
+            - ``nearest`` (via XML)
+            - ``over`` (via XML)
+        
+            - ``closestPoint`` (in-scene)
+            - ``closestComponent`` (in-scene)
+            - ``uv`` (in-scene)
+            - ``rayCast`` (in-scene)
+        
+        :param sourceUVSet/suv: if specified, 'method' will be overriden to
+            'uv'; if omitted, and 'method' is 'uv', the current UV set will
+            be used; defaults to None
+        :type sourceUVSet/suv: str, None
+        :param destUVSet/duv: if specified, 'method' will be overriden to
+            'uv'; if omitted, and 'method' is 'uv', the current UV set will
+            be used; defaults to None
+        :type destUVSet/duv: str, None
+        :return: The new skinCluster.
+        :rtype: :class:`SkinCluster`
     
     .. py:method:: dumpWeights(filepath, shape=None, remap=None, vertexConnections=None, weightPrecision=None, weightTolerance=None, attribute=None, defaultValue=None)
     
         Overloads :meth:`paya.runtime.nodes.GeometryFilter.dumpWeights` to
         include DQ blend weights by default, and to work around this bug:
         
-            When the ``.blendWeights`` array on a skinCluster is sparsely
-            populated (as is typically the case), dumping and reloading it
-            via ``deformerWeights(at='blendWeights')`` results in a wrong
-            index mapping.
-        
-        See :meth:`paya.runtime.nodes.GeometryFilter.dumpWeights` for argument
-        info.
+        When the ``.blendWeights`` array on a skinCluster is sparsely
+        populated (as is typically the case), dumping and reloading it
+        via ``deformerWeights(at='blendWeights')`` results in a wrong
+        index mapping.

@@ -223,13 +223,32 @@ defaults to None</p></li>
 <li><p><strong>replace/rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if the destination geometry already has a
 skinCluster, remove it; defaults to True</p></li>
 <li><p><strong>weights/w</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – copy weights too; defaults to True</p></li>
-<li><p><strong>method/m</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – </p></li>
-<li><p><strong>sourceUVSet</strong> – </p></li>
-<li><p><strong>destUVSet</strong> – </p></li>
+<li><p><strong>method/m</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>the weight-copying method; one of:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bilinear</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">barycentric</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nearest</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">over</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">closestPoint</span></code> (in-scene)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">closestComponent</span></code> (in-scene)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uv</span></code> (in-scene)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rayCast</span></code> (in-scene)</p></li>
+</ul>
+</p></li>
+<li><p><strong>sourceUVSet/suv</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>None</em>) – if specified, ‘method’ will be overriden to
+‘uv’; if omitted, and ‘method’ is ‘uv’, the current UV set will
+be used; defaults to None</p></li>
+<li><p><strong>destUVSet/duv</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>None</em>) – if specified, ‘method’ will be overriden to
+‘uv’; if omitted, and ‘method’ is ‘uv’, the current UV set will
+be used; defaults to None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>The new skinCluster.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.SkinCluster" title="paya.runtime.nodes.SkinCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkinCluster</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -239,14 +258,10 @@ skinCluster, remove it; defaults to True</p></li>
 <span class="sig-name descname"><span class="pre">dumpWeights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertexConnections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weightPrecision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weightTolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.SkinCluster.dumpWeights" title="Permalink to this definition"></a></dt>
 <dd><p>Overloads <a class="reference internal" href="geometryFilter.html#paya.runtime.nodes.GeometryFilter.dumpWeights" title="paya.runtime.nodes.GeometryFilter.dumpWeights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.nodes.GeometryFilter.dumpWeights()</span></code></a> to
 include DQ blend weights by default, and to work around this bug:</p>
-<blockquote>
-<div><p>When the <code class="docutils literal notranslate"><span class="pre">.blendWeights</span></code> array on a skinCluster is sparsely
+<p>When the <code class="docutils literal notranslate"><span class="pre">.blendWeights</span></code> array on a skinCluster is sparsely
 populated (as is typically the case), dumping and reloading it
 via <code class="docutils literal notranslate"><span class="pre">deformerWeights(at='blendWeights')</span></code> results in a wrong
 index mapping.</p>
-</div></blockquote>
-<p>See <a class="reference internal" href="geometryFilter.html#paya.runtime.nodes.GeometryFilter.dumpWeights" title="paya.runtime.nodes.GeometryFilter.dumpWeights"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.nodes.GeometryFilter.dumpWeights()</span></code></a> for argument
-info.</p>
 </dd></dl>
 
 </dd></dl>
