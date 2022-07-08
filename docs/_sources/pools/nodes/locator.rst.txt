@@ -6,27 +6,23 @@ paya.runtime.nodes.Locator
 
 .. py:class:: Locator(*args, **kwargs)
 
-    .. py:classmethod:: createFromMacro(macro, name=None, under=None, conformShapeNames=True)
+    .. py:classmethod:: createFromMacro(macro, **overrides)
     
-        Recreates a locator from the type of dictionary returned by
-        :meth:`~paya.runtime.nodes.Locator.macro`.
-        
-        :param macro: the macro dictionary to use
-        :param under/u: an optional parent for the locator; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool conformShapeNames/csn: ignored if *under* is None; clean
-           up destination shape names after reparenting to the specified
-           transform; defaults to True
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: list, tuple, str
-        :return: The locator.
-        :rtype: :class:`~paya.runtime.nodes.Locator`
+        :param dict macro: the type of macro returned by :meth:`macro`
+        :param \*\*overrides: overrides to the macro, passed in as keyword
+            arguments
+        :return: The reconstructed locator shape.
+        :rtype: :class:`Locator`
     
-    .. py:method:: macro(normalize=False)
+    .. py:method:: macro()
     
-        :param bool normalize/nr: normalize any scale or position information
-            (used by the shapes library); defaults to False
-        :return: A simplified dictionary representation of this locator shape
-            that can be used to reconstruct it. All information will be in
-            local (object) space.
+        :return: A simplified representation of this locator shape,
+            used by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict
+    
+    .. py:classmethod:: normalizeMacro(macro)
+    
+        Used by the shapes library to fit control points inside a unit cube.
+        This is an in-place operation; the method has no return value.
+        
+        :param dict macro: the macro to edit

@@ -5,63 +5,49 @@ import paya.runtime as r
 
 class Locator:
 
-    #-----------------------------------------------------|    Constructors
+    #-----------------------------------------------------|    Macros
 
     @classmethod
-    @short(name='n', under='u', conformShapeNames='csn')
-    def createFromMacro(cls, macro, name=None,
-            under=None, conformShapeNames=True):
+    def createFromMacro(cls, macro, **overrides):
         """
-        Recreates a locator from the type of dictionary returned by
-        :meth:`~paya.runtime.nodes.Locator.macro`.
+        :param dict macro: the type of macro returned by :meth:`macro`
+        :param \*\*overrides: overrides to the macro, passed in as keyword
+            arguments
+        :return: The reconstructed locator shape.
+        :rtype: :class:`Locator`
+        """
+        macro = macro.copy()
+        macro.update(overrides)
 
-        :param macro: the macro dictionary to use
-        :param under/u: an optional parent for the locator; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool conformShapeNames/csn: ignored if *under* is None; clean
-           up destination shape names after reparenting to the specified
-           transform; defaults to True
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: list, tuple, str
-        :return: The locator.
-        :rtype: :class:`~paya.runtime.nodes.Locator`
-        """
-        shape = cls.createNode(n=name)
+        shape = r.createNode('locator', n=macro['name'])
         xf = shape.getParent()
 
         shape.attr('localPosition').set(macro['localPosition'])
         shape.attr('localScale').set(macro['localScale'])
 
-        if under:
-            r.parent(shape, under, r=True, shape=True)
-            r.delete(xf)
-
-            if conformShapeNames:
-                r.PyNode(under).conformShapeNames()
-
         return shape
 
-    #-----------------------------------------------------|    Macro
-
-    @short(normalize='nr')
-    def macro(self, normalize=False):
+    def macro(self):
         """
-        :param bool normalize/nr: normalize any scale or position information
-            (used by the shapes library); defaults to False
-        :return: A simplified dictionary representation of this locator shape
-            that can be used to reconstruct it. All information will be in
-            local (object) space.
+        :return: A simplified representation of this locator shape,
+            used by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict
         """
-        out = {
-            'nodeType': 'locator',
-            'localPosition': list(self.attr('localPosition').get()),
-            'localScale': list(self.attr('localScale').get())
-        }
+        macro = r.nodes.DependNode.macro(self)
 
-        if normalize:
-            point = out['localPosition']
-            point = _mo.pointsIntoUnitCube([point])[0]
-            out['localPosition'] = list(point)
+        macro['localPosition'] = list(self.attr('localPosition').get())
+        macro['localScale'] = list(self.attr('localScale').get())
 
-        return out
+        return macro
+
+    @classmethod
+    def normalizeMacro(cls, macro):
+        """
+        Used by the shapes library to fit control points inside a unit cube.
+        This is an in-place operation; the method has no return value.
+
+        :param dict macro: the macro to edit
+        """
+        point = macro['localPosition']
+        point = _mo.pointsIntoUnitCube([point])[0]
+        macro['localPosition'] = list(point)

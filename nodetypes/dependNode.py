@@ -87,26 +87,37 @@ class DependNode:
         return r.createNode(cls.__melnode__, n=name)
 
     @classmethod
-    def createFromMacro(cls, macro):
+    def createFromMacro(cls, macro, **overrides):
         """
-        This is the dispatcher implementation on
-        :class:`~paya.runtime.nodes.DependNode`.
-        """
-        if cls is r.nodes.DependNode:
-            nt = macro['nodeType']
-            clsname = nt[0].upper()+nt[1:]
-            cls = getattr(r.nodes, clsname)
-            return cls.createFromMacro(macro)
+        Basic :class:`DependNode` implementation; uses :meth:`createNode`.
 
-        else:
-            raise NotImplementedError
+        :param dict macro: the macro to use
+        :param \*\*overrides: one or more overrides to the macro dict,
+            passed-in as keyword arguments
+        :return: The constructed node.
+        :rtype: :class:`DependNode`
+        """
+        nodeType = macro['nodeType']
+
+        if nodeType != cls.__melnode__:
+            cls = getattr(r.nodes, nodeType[0].upper()+nodeType[1:])
+            return cls.createFromMacro(macro, **overrides)
+
+        macro = macro.copy()
+        macro.update(overrides)
+        nodeType = macro['nodeType']
+        name = macro['name']
+        return r.createNode(nodeType, n=name)
 
     def macro(self):
         """
-        This is a stub on :class:`~paya.runtime.nodes.DependNode` that will
-        always raise :class:`NotImplementedError`.
+        Basic :class:`DependNode` implementation; includes merely the node
+        name and node type.
+
+        :return: This node's name and type in a dictionary.
+        :rtype: dict
         """
-        raise NotImplementedError
+        return {'name': str(self), 'nodeType': self.__melnode__}
 
     #-----------------------------------------------------------|    Attr management
 

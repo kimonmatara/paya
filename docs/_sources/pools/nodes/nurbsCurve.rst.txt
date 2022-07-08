@@ -6,31 +6,25 @@ paya.runtime.nodes.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
-    .. py:classmethod:: createFromMacro(macro, under=None, conformShapeNames=True, name=None, dispCV=False)
+    .. py:classmethod:: createFromMacro(macro, **overrides)
     
-        Recreates a curve from the type of dictionary returned by
-        :meth:`~paya.runtime.nodes.NurbsCurve.macro`.
-        
-        :param macro: the macro dictionary to use
-        :param under/u: an optional parent for the curve; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool conformShapeNames/csn: ignored if *under* is None; clean
-            up destination shape names after reparenting to the specified
-            transform; defaults to True
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: list, tuple, str
-        :param bool dispCV/dcv: display curve CVs; defaults to False
-        :return: The curve.
-        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
+        :param dict macro: the type of macro returned by :meth:`macro`
+        :param \*\*overrides: overrides passed-in as keyword arguments
+        :return: A curve constructed using the macro.
+        :rtype: :class:`NurbsCurve`.
     
-    .. py:method:: macro(normalize=False)
+    .. py:method:: macro()
     
-        :param bool normalize/nr: normalize curve points (used by the shapes
-            library); defaults to False
-        :return: A simplified dictionary representation of this curve shape
-            that can be used to reconstruct it. Point information will be in
-            local (object) space. Name is ignored.
+        :return: A simplified representation of this curve that can be used
+            by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict
+    
+    .. py:classmethod:: normalizeMacro(macro)
+    
+        Used by the shapes library to fit control points inside a unit cube.
+        This is an in-place operation; the method has no return value.
+        
+        :param dict macro: the macro to edit
     
     .. py:method:: takeClosestPoint(refPoint)
     

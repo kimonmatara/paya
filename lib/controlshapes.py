@@ -133,7 +133,13 @@ class ControlShapesLibrary(UserDict):
         shapes = control.getCtShapes()
 
         if shapes:
-            macros = [shape.macro(nr=True) for shape in shapes]
+            macros = []
+
+            for shape in shapes:
+                macro = shape.macro()
+                shape.normalizeMacro(macro)
+                macros.append(macro)
+
             self[name] = macros
 
         else:

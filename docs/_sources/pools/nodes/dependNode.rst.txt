@@ -47,15 +47,23 @@ paya.runtime.nodes.DependNode
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`
     
-    .. py:classmethod:: createFromMacro(macro)
+    .. py:classmethod:: createFromMacro(macro, **overrides)
     
-        This is the dispatcher implementation on
-        :class:`~paya.runtime.nodes.DependNode`.
+        Basic :class:`DependNode` implementation; uses :meth:`createNode`.
+        
+        :param dict macro: the macro to use
+        :param \*\*overrides: one or more overrides to the macro dict,
+            passed-in as keyword arguments
+        :return: The constructed node.
+        :rtype: :class:`DependNode`
     
     .. py:method:: macro()
     
-        This is a stub on :class:`~paya.runtime.nodes.DependNode` that will
-        always raise :class:`NotImplementedError`.
+        Basic :class:`DependNode` implementation; includes merely the node
+        name and node type.
+        
+        :return: This node's name and type in a dictionary.
+        :rtype: dict
     
     .. py:method:: addAttr(attrName, channelBox=None, **kwargs)
     

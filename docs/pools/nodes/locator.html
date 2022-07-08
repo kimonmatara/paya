@@ -123,22 +123,17 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Locator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Locator" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Locator.createFromMacro">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromMacro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">macro</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conformShapeNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Locator.createFromMacro" title="Permalink to this definition"></a></dt>
-<dd><p>Recreates a locator from the type of dictionary returned by
-<a class="reference internal" href="#paya.runtime.nodes.Locator.macro" title="paya.runtime.nodes.Locator.macro"><code class="xref py py-meth docutils literal notranslate"><span class="pre">macro()</span></code></a>.</p>
-<dl class="field-list simple">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromMacro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">macro</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Locator.createFromMacro" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>macro</strong> – the macro dictionary to use</p></li>
-<li><p><strong>under/u</strong> (None, str, <a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – an optional parent for the locator; defaults to None</p></li>
-<li><p><strong>conformShapeNames/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>under</em> is None; clean
-up destination shape names after reparenting to the specified
-transform; defaults to True</p></li>
-<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – one or more name elements; defaults to None</p></li>
+<li><p><strong>macro</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – the type of macro returned by <a class="reference internal" href="#paya.runtime.nodes.Locator.macro" title="paya.runtime.nodes.Locator.macro"><code class="xref py py-meth docutils literal notranslate"><span class="pre">macro()</span></code></a></p></li>
+<li><p><strong>**overrides</strong> – overrides to the macro, passed in as keyword
+arguments</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The locator.</p>
+<dd class="field-even"><p>The reconstructed locator shape.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Locator" title="paya.runtime.nodes.Locator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Locator</span></code></a></p>
@@ -148,19 +143,26 @@ transform; defaults to True</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Locator.macro">
-<span class="sig-name descname"><span class="pre">macro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Locator.macro" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">macro</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Locator.macro" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A simplified representation of this locator shape,
+used by <a class="reference internal" href="#paya.runtime.nodes.Locator.createFromMacro" title="paya.runtime.nodes.Locator.createFromMacro"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createFromMacro()</span></code></a> to reconstruct it.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Locator.normalizeMacro">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normalizeMacro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">macro</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Locator.normalizeMacro" title="Permalink to this definition"></a></dt>
+<dd><p>Used by the shapes library to fit control points inside a unit cube.
+This is an in-place operation; the method has no return value.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>normalize/nr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – normalize any scale or position information
-(used by the shapes library); defaults to False</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A simplified dictionary representation of this locator shape
-that can be used to reconstruct it. All information will be in
-local (object) space.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+<dd class="field-odd"><p><strong>macro</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – the macro to edit</p>
 </dd>
 </dl>
 </dd></dl>

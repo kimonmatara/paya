@@ -1,9 +1,10 @@
-import xml.etree.ElementTree as ET
-import os.path
+import os
 
 import maya.cmds as m
-import posixpath
-from paya.util import short, toOs, toPosix, without_duplicates
+
+import paya.lib.xmlweights as _xw
+from paya.lib.names import shorten
+from paya.util import short
 import pymel.util as _pu
 import paya.runtime as r
 
@@ -57,242 +58,278 @@ class GeometryFilter:
 
         return _out
 
-    #----------------------------------------------------|    Macros etc.
+    #----------------------------------------------------|    DG inspections
 
-    def getSettings(self):
+    def getShapes(self):
         """
-        :raises NotImplementedError: the deformer class does not define
-            ``__config_attrs__``
-        :return: configuration values for this deformer, as a mapping of
-            *attribute name: attribute value*
-        :rtype: dict
+        Convenience wrapper for
+        :func:`deformer(q=True, g=True)<pymel.core.animation.deformer>`.
+
+        :rtype: The shapes affected by this deformer.
+        :return: [:class:`~paya.runtime.nodes.DeformableShape`]
         """
-        attrNames = self.__config_attrs__
+        out = r.deformer(self, q=True, g=True)
 
-        if attrNames is None:
-            raise NotImplementedError("Not implemented for this deformer.")
+        if not out:
+            out = []
 
-        return {attrName: self.attr(attrName).get() for attrName in attrNames}
+        return out
 
-    def applySettings(self, settings):
-        """
-        :param dict settings: a dictionary returned by :meth:`getSettings`
-        :return: ``self``
-        :rtype: :class:`GeometryFilter`
-        """
-        for attrName, attrValue in settings.items():
-            self.attr(attrName).set(attrValue)
-
-        return self
-
-    #----------------------------------------------------|    XML weight dumping
+    #----------------------------------------------------|    XML weight I/O
 
     @short(
         remap='r',
         vertexConnections='vc',
         weightTolerance='wt',
         weightPrecision='wp',
-        shape='sh'
+        shape='sh',
+        attribute='at',
+        defaultValue='dv'
     )
     def dumpWeights(
             self,
             filepath,
             shape=None,
             remap=None,
-            vertexConnections=False,
+            vertexConnections=None,
             weightPrecision=None,
-            weightTolerance=None
+            weightTolerance=None,
+            attribute=None,
+            defaultValue=None
     ):
         """
-        Dumps this deformer's weights on a single shape to an XML file.
+        Wrapper for :func:`~pymel.internal.pmcmds.deformerWeights` in 'export'
+        mode. Arguments are post-processed to ensure that only relevant
+        deformers and shapes are included. See Maya help for
+        :func:`deformerWeights` for complete flag information.
 
-        :param shape: the shape with the weights; if omitted, the first shape
-            associated with this deformer is used; defaults to None
-        :type shape: str, :class:`~paya.runtime.nodes.DeformableShape`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param str filepath: the path to the XML file; must be POSIX per
-            Maya's preference
-        :param str remap/r: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param bool vertexConnections/vc: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to False
-        :param int weightPrecision/wp: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param float weightTolerance/wt: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param str filepath: the path to the XML file.
+        :param shape/sh: the shape to export weights for; if omitted, all
+            associated shapes are included
+        :type shape/sh: list, tuple, str, :class:`~pymel.core.general.PyNode`
         :return: ``self``
-        :rtype: :class:`~paya.runtime.nodes.GeometryFilter`
+        :rtype: :class:`GeometryFilter`
         """
-        # deformerWeights() is buggy. For a reliable export:
-        # - Don't specify deformers to include; instead, specify deformers on
-        #   on the geometry to *skip* (via -sk)
-        # - Specify the shape via -sh
-
-        #--------------|    Prep args
-
-        if shape is None:
-            shapes = r.deformer(self, q=True, g=True)
-
-            if shapes:
-                shape = shapes[0]
-
-            else:
-                raise RuntimeError("Could not resolve shape.")
-
-        else:
-            shape = r.PyNode(shape).toShape()
-
-        allDeformers = shape.history(type='geometryFilter')
-        skip = list(map(str, filter(lambda x: x != self, allDeformers)))
-
-        parentdir, filename = posixpath.split(filepath)
-
-        execArgs = [filename]
-
-        execKwargs = {
-            'path': parentdir,
-            'vertexConnections': vertexConnections,
-            'shape': str(shape),
-            'skip': skip,
-            'format': 'XML',
-            'export': True
-        }
-
-        if remap is not None:
-            execKwargs['remap'] = remap
-            
-        if weightPrecision is not None:
-            execKwargs['weightPrecision'] = weightPrecision
-
-        if weightTolerance is not None:
-            execKwargs['weightTolerance'] = weightTolerance
-
-        m.deformerWeights(*execArgs, **execKwargs)
+        _xw.dump(
+            filepath,
+            df=self,
+            sh=shape,
+            r=remap,
+            vc=vertexConnections,
+            wp=weightPrecision,
+            wt=weightTolerance,
+            at=attribute,
+            dv=defaultValue
+        )
 
         return self
 
     @short(
-        ignoreName='ig',
-        method='m',
-        positionTolerance='pt',
-        remap='r',
         shape='sh',
-        worldSpace='ws'
+        method='m',
+        worldSpace='ws',
+        attribute='at',
+        ignoreName='ig',
+        positionTolerance='pt',
+        remap='r'
     )
     def loadWeights(
             self,
             filepath,
-            ignoreName=False,
-            method='index',
-            positionTolerance=None,
-            remap=None,
             shape=None,
-            worldSpace=None
+            method='index',
+            worldSpace=None,
+            attribute=None,
+            ignoreName=None,
+            positionTolerance=None,
+            remap=None
     ):
         """
-        Imports deformer weights for a specific shape from an XML file.
+        Wrapper for :func:`~pymel.internal.pmcmds.deformerWeights` in 'import'
+        mode. Arguments are post-processed to ensure that only relevant
+        deformers and shapes are included. See Maya help for
+        :func:`deformerWeights` for complete flag information.
 
-        :param str filepath: the path to the file (POSIX)
-        :param bool ignoreName/ig: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param str method/m:  see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to 'index'
-        :param float positionTolerance/pt: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param str remap/r: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; note that this may
-            be auto-populated to force a shape registration; defaults to None
-        :param shape: the shape that carries the weights; if omitted, a best-
-            match shape is sought amongst the deformer members and the XML
-            shapes; defaults to None
-        :param bool worldSpace/ws: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param str filepath: the path to the XML file.
+        :param shape/sh: the shape to export weights for; if omitted, all
+            associated shapes are included
+        :type shape/sh: list, tuple, str, :class:`~pymel.core.general.PyNode`
         :return: ``self``
         :rtype: :class:`GeometryFilter`
         """
-        userRemap = remap
-        remap = None
-
-        #------------------------------------------------|    Resolve shape
-
-        _self = str(self)
-        dshapes = m.deformer(_self, q=True, g=True)
-
-        if not dshapes:
-            raise RuntimeError("Deformer has no shape connections.")
-
-        _dshapes = list(map(shortName, dshapes))
-
-        tree = ET.parse(toOs(filepath))
-        root = tree.getroot()
-
-        weightEntries = root.findall('weights')
-
-        _xshapes = without_duplicates(
-            [weightEntry.attrib['shape'] for weightEntry in weightEntries]
+        _xw.load(
+            filepath,
+            df=self,
+            sh=shape,
+            r=remap,
+            m=method,
+            ws=worldSpace,
+            at=attribute,
+            ig=ignoreName,
+            pt=positionTolerance
         )
 
-        if shape is None:
-            for _xshape in _xshapes:
-                for dshape, _dshape in zip(dshapes, _dshapes):
-                    if _dshapes == _xshape:
-                        shape = dshape
-                        _shape = shortName(shape)
-                        break
+        return self
 
-            if shape is None:
-                shape = dshapes[0]
-                _shape = shortName(shape)
+    @short(
+        sourceShape='ssh',
+        destShape='dsh',
+        sourceUVSet='suv',
+        destUVSet='duv',
+        method='m'
+    )
+    def copyWeightsFrom(
+            self,
+            sourceDeformer,
+            sourceShape=None,
+            destShape=None,
+            sourceUVSet=None,
+            destUVSet=None,
+            method='index'
+    ):
+        """
+        Copies weights from another deformer to this one.
 
-                remap = '{};{}'.format(_xshapes[0], _shape)
-                skip = _xshapes[1:]
+        :param sourceDeformer: the deformer to copy weights from
+        :type sourceDeformer: str, :class:`~paya.runtime.nodes.GeometryFilter`
+        :param sourceShape/ssh: the shape to copy weights from; if omitted,
+            defaults to the first detected shape
+        :type sourceShape/ssh: str, :class:`~paya.runtime.nodes.DagNode`
+        :param destShape/dsh: the shape to copy weights to; if omitted,
+            defaults to the first detected shape
+        :type destShape/dsh: str, :class:`~paya.runtime.nodes.DagNode`
+        :param sourceUVSet/suv: if specified, 'method' will be overriden to
+            'uv'; if omitted, and 'method' is 'uv', the current UV set will
+            be used; defaults to None
+        :type sourceUVSet/suv: str, None
+        :param destUVSet/duv: if specified, 'method' will be overriden to
+            'uv'; if omitted, and 'method' is 'uv', the current UV set will
+            be used; defaults to None
+        :type destUVSet/duv: str, None
+        :param str method/m: one of:
 
-            else:
-                skip = [_xshape for _xshape in _xshapes if _xshape != _shape]
+            - ``index`` (via XML)
+            - ``bilinear`` (via XML)
+            - ``barycentric`` (via XML)
+            - ``nearest`` (via XML)
+            - ``over`` (via XML)
+
+            - ``closestPoint`` (in-scene)
+            - ``closestComponent`` (in-scene)
+            - ``uv`` (in-scene)
+            - ``rayCast`` (in-scene)
+
+        :return: ``self``
+        :rtype: :class:`GeometryFilter`
+        """
+        sourceDeformer = r.PyNode(sourceDeformer)
+
+        if sourceShape:
+            sourceShape = r.PyNode(sourceShape).toShape()
 
         else:
-            shape = str(shape)
-            _shape = shortName(shape)
+            sourceShape = sourceDeformer.getShapes()[0]
 
-            if _shape in _xshapes:
-                skip = [_xshape for _xshape in _xshapes if _xshape != _shape]
+        if destShape:
+            destShape = r.PyNode(destShape).toShape()
 
-            else:
-                remap = '{};{}'.format(_xshapes[0], _shape)
-                skip = _xshapes[1:]
+        else:
+            destShape = self.getShapes()[0]
 
-        #------------------------------------------------|    Complete signature
+        if sourceUVSet or destUVSet:
+            method = 'uv'
 
-        if remap is None:
-            remap = userRemap
+        if method in ('over', 'index', 'nearest', 'bilinear', 'barycentric'):
+            self._copyWeightsViaXMLFrom(
+                sourceDeformer, sourceShape, destShape, method
+            )
 
-        elif userRemap is not None:
-            raise ValueError("'remap' already in use")
+        else:
+            self._copyWeightsViaCmdFrom(
+                sourceDeformer,
+                sourceShape,
+                destShape,
+                method,
+                sourceUVSet=sourceUVSet,
+                destUVSet=destUVSet
+            )
 
-        pdir, filename = os.path.split(filepath)
+    def _copyWeightsViaXMLFrom(
+            self,
+            sourceDeformer,
+            sourceShape,
+            destShape,
+            method
+    ):
+        kwargs = {}
 
-        kwargs = {
-            'path': pdir,
-            'skip': skip,
-            'im': True,
-            'format': 'XML',
-            'method': method,
-            'shape': shape,
-            'deformer': _self
-        }
+        bothSkins = sourceDeformer.__melnode__ == \
+                    'skinCluster' and self.__melnode__ == 'skinCluster'
 
-        if positionTolerance is not None:
-            kwargs['positionTolerance'] = positionTolerance
+        if bothSkins:
+            kwargs['attribute'] = 'blendWeights'
 
-        if worldSpace is not None:
-            kwargs['worldSpace'] = worldSpace
+        tmpPath = _xw.getTempFilePath()
 
-        if ignoreName is not None:
-            kwargs['ignoreName'] = ignoreName
+        vertexConnections = method in ('bilinear', 'barycentric')
+        sourceDeformer.dumpWeights(tmpPath, vc=vertexConnections, **kwargs)
 
-        if remap is not None:
-            kwargs['remap'] = remap
+        remap = [
+            '{};{}'.format(str(sourceDeformer), str(self)),
+            '{};{}'.format(sourceShape.basename(), destShape.basename())
+        ]
 
-        m.deformerWeights(filename, **kwargs)
+        try:
+            self.loadWeights(tmpPath, m=method, r=remap, **kwargs)
 
-        return self
+        finally:
+            os.remove(tmpPath)
+
+    def _copyWeightsViaCmdFrom(
+            self,
+            sourceDeformer,
+            sourceShape,
+            destShape,
+            method,
+            sourceUVSet=None,
+            destUVSet=None
+    ):
+        if sourceUVSet or destUVSet:
+            method = 'uv'
+
+        if method == 'uv':
+            if not sourceUVSet:
+                sourceUVSet = sourceShape.getCurrentUVSetName()
+
+            if not destUVSet:
+                destUVSet = destShape.getCurrentUVSetName()
+
+        kwargs = {'nm': True}
+
+        uv = method == 'uv'
+
+        if method == 'uv':
+            kwargs['uvSpace'] = [sourceUVSet, destUVSet]
+
+        else:
+            kwargs['sa'] = method
+
+        _sourceDeformer = str(sourceDeformer)
+        _destDeformer = str(self)
+
+        if sourceDeformer.__melnode__ == 'skinCluster' \
+            and self.__melnode__ == 'skinCluster':
+
+            cmd = m.copySkinWeights
+            kwargs['ss'] = _sourceDeformer
+            kwargs['ds'] = _destDeformer
+            kwargs['ia'] = 'oneToOne'
+
+        else:
+            cmd = m.copyDeformerWeights
+            kwargs['sd'] = _sourceDeformer
+            kwargs['ds'] = _destDeformer
+            kwargs['ss'] = str(sourceShape)
+            kwargs['ds'] = str(destShape)
+
+        cmd(**kwargs)

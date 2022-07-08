@@ -82,9 +82,9 @@ def isTypeSuffix(string):
 )
 def shorten(
         name,
-        stripNamespace=None,
-        stripDagPath=None,
-        stripTypeSuffix=None
+        stripNamespace=False,
+        stripDagPath=False,
+        stripTypeSuffix=False
 ):
     """
     Shortens a Maya name to various degrees. The name will be returned as-is

@@ -1,0 +1,19 @@
+===================
+paya.lib.xmlweights
+===================
+
+.. py:module:: paya.lib.xmlweights
+
+.. py:function:: dump(filepath, shape=None, deformer=None, vertexConnections=None, weightPrecision=None, weightTolerance=None, remap=None, attribute=None, skip=None, defaultValue=None)
+
+    Wrapper for :func:`~pymel.internal.pmcmds.deformerWeights` in 'export'
+    mode. Arguments are post-processed to ensure that only requested deformers
+    and shapes are included. See Maya help for :func:`deformerWeights` for
+    flag information.
+
+.. py:function:: load(filepath, deformer=None, shape=None, method='index', worldSpace=None, attribute=None, ignoreName=None, positionTolerance=None, remap=None, skip=None)
+
+    Wrapper for :func:`~pymel.internal.pmcmds.deformerWeights` in 'import'
+    mode. Arguments are post-processed to ensure that only requested deformers
+    and shapes are included.  See Maya help for :func:`deformerWeights` for
+    flag information.

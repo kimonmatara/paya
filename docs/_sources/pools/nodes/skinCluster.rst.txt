@@ -6,7 +6,7 @@ paya.runtime.nodes.SkinCluster
 
 .. py:class:: SkinCluster(*args, **kwargs)
 
-    .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, nameAfterGeo=False, geometry=None, influence=None, multi=False, force=False, **kwargs)
+    .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, nameFromGeo=False, geometry=None, influence=None, multi=False, replace=False, **kwargs)
     
         Lightweight convenience wrapper / constructor for skinClusters, with the
         following differences from the standard
@@ -16,9 +16,9 @@ paya.runtime.nodes.SkinCluster
             'influence' keyword arguments used instead on creation
         -   A select subset of flags are pre-loaded with common defaults (see
             below)
-        -   Added 'nameAfterGeo / nag' option
+        -   Added 'nameFromGeo / nag' option
         -   Added 'multi' option
-        -   Added 'force' option
+        -   Added 'replace' option
         
         :param \*args: forwarded to :func:`~pymel.core.animation.skinCluster`
         :param int bindMethod/bm: see Maya help; defaults to 0 (closest)
@@ -26,7 +26,7 @@ paya.runtime.nodes.SkinCluster
         :param maximumInfluences/mi: see Maya help; defaults to None
         :type maximumInfluences/mi: None, int
         :param name/n: one or more name elements for the deformer; ignored if
-            'nameAfterGeo' is True; defaults to None
+            'nameFromGeo' is True; defaults to None
         :type name/n: list, tuple, None, str, int
         :param int normalizeWeights/nw: see Maya help; defaults to 1
             (interactive)
@@ -36,7 +36,7 @@ paya.runtime.nodes.SkinCluster
         :param bool toSelectedBones/tsb: see Maya help; defaults to True
         :param int weightDistribution/wd: see Maya help; defaults to 0
             (distance)
-        :param bool nameAfterGeo/nag: derive deformer names from geometry
+        :param bool nameFromGeo/nfg: derive deformer names from geometry
             names; defaults to False
         :param geometry/g: the geometry to bind to; defaults to None
         :type geometry/g: list, tuple,
@@ -47,8 +47,55 @@ paya.runtime.nodes.SkinCluster
             :class:`~paya.runtime.nodes.Transform`
         :param bool multi: set this to True to create multiple skinClusters
             across all passed geometries; defaults to False
-        :param bool force/f: remove any existing skinClusters from the passed
+        :param bool replace/rep: remove any existing skinClusters from the passed
             geometries; defaults to False
         :param \*\*kwargs: forwarded to
             :func:`~pymel.core.animation.skinCluster`
         :return: :class:`SkinCluster` or [:class:`SkinCluster`]
+    
+    .. py:method:: macro()
+    
+        :return: A simplified representation of this deformer that can
+            be used by :meth:`createFromMacro` to recreate it.
+        :rtype: dict
+    
+    .. py:classmethod:: createFromMacro(macro, **overrides)
+    
+        Recreates this skinCluster using the type of macro returned by
+        :meth:`macro`.
+        
+        :param dict macro: the type of macro returned by :meth:`macro`.
+        :param \*\*overrides: overrides to the macro, passed-in as keyword
+            arguments
+        :return: The reconstructed skinCluster.
+        :rtype: :class:`SkinCluster`
+    
+    .. py:method:: copyTo(geo, name=None, replace=True, weights=True, method='index', sourceUVSet=None, destUVSet=None)
+    
+        Copies this skinCluster to the specified geometry.
+        
+        :param geo: the geometry to copy to
+        :type geo: str, :class:`~paya.runtime.nodes.DagNode`
+        :param name/n: one or more name elements for the new skinCluster;
+            defaults to None
+        :type name/n: None, str, int, list, tuple
+        :param bool replace/rep: if the destination geometry already has a
+            skinCluster, remove it; defaults to True
+        :param bool weights/w: copy weights too; defaults to True
+        :param str method/m:
+        :param sourceUVSet:
+        :param destUVSet:
+        :return:
+    
+    .. py:method:: dumpWeights(filepath, shape=None, remap=None, vertexConnections=None, weightPrecision=None, weightTolerance=None, attribute=None, defaultValue=None)
+    
+        Overloads :meth:`paya.runtime.nodes.GeometryFilter.dumpWeights` to
+        include DQ blend weights by default, and to work around this bug:
+        
+            When the ``.blendWeights`` array on a skinCluster is sparsely
+            populated (as is typically the case), dumping and reloading it
+            via ``deformerWeights(at='blendWeights')`` results in a wrong
+            index mapping.
+        
+        See :meth:`paya.runtime.nodes.GeometryFilter.dumpWeights` for argument
+        info.

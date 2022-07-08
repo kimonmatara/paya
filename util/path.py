@@ -10,7 +10,7 @@ def toPosix(path):
     :return: The path, conformed to POSIX format.
     :rtype: str
     """
-    return str(_pl.path(path).as_posix())
+    return str(_pl.Path(path).as_posix())
 
 def toWin(path):
     """

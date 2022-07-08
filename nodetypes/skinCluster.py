@@ -1,3 +1,4 @@
+import maya.cmds as m
 from paya.util import short
 import pymel.util as _pu
 import paya.runtime as r
@@ -29,10 +30,10 @@ class SkinCluster:
         skinMethod='sm',
         toSelectedBones='tsb',
         weightDistribution='wd',
-        nameAfterGeo='nag',
+        nameFromGeo='nfg',
         geometry='g',
         influence='inf',
-        force='f'
+        replace='rep'
     )
     def create(
             cls,
@@ -46,11 +47,11 @@ class SkinCluster:
             skinMethod=0, # linear
             toSelectedBones=True,
             weightDistribution=0, # distance
-            nameAfterGeo=False,
+            nameFromGeo=False,
             geometry=None,
             influence=None,
             multi=False,
-            force=False,
+            replace=False,
             **kwargs
     ):
         """
@@ -62,9 +63,9 @@ class SkinCluster:
             'influence' keyword arguments used instead on creation
         -   A select subset of flags are pre-loaded with common defaults (see
             below)
-        -   Added 'nameAfterGeo / nag' option
+        -   Added 'nameFromGeo / nag' option
         -   Added 'multi' option
-        -   Added 'force' option
+        -   Added 'replace' option
 
         :param \*args: forwarded to :func:`~pymel.core.animation.skinCluster`
         :param int bindMethod/bm: see Maya help; defaults to 0 (closest)
@@ -72,7 +73,7 @@ class SkinCluster:
         :param maximumInfluences/mi: see Maya help; defaults to None
         :type maximumInfluences/mi: None, int
         :param name/n: one or more name elements for the deformer; ignored if
-            'nameAfterGeo' is True; defaults to None
+            'nameFromGeo' is True; defaults to None
         :type name/n: list, tuple, None, str, int
         :param int normalizeWeights/nw: see Maya help; defaults to 1
             (interactive)
@@ -82,7 +83,7 @@ class SkinCluster:
         :param bool toSelectedBones/tsb: see Maya help; defaults to True
         :param int weightDistribution/wd: see Maya help; defaults to 0
             (distance)
-        :param bool nameAfterGeo/nag: derive deformer names from geometry
+        :param bool nameFromGeo/nfg: derive deformer names from geometry
             names; defaults to False
         :param geometry/g: the geometry to bind to; defaults to None
         :type geometry/g: list, tuple,
@@ -93,7 +94,7 @@ class SkinCluster:
             :class:`~paya.runtime.nodes.Transform`
         :param bool multi: set this to True to create multiple skinClusters
             across all passed geometries; defaults to False
-        :param bool force/f: remove any existing skinClusters from the passed
+        :param bool replace/rep: remove any existing skinClusters from the passed
             geometries; defaults to False
         :param \*\*kwargs: forwarded to
             :func:`~pymel.core.animation.skinCluster`
@@ -138,8 +139,9 @@ class SkinCluster:
                     result = cls.create(
                         inf=infls,
                         g=geo,
-                        nag=nameAfterGeo,
-                        n=name, f=force,
+                        nfg=nameFromGeo,
+                        n=name,
+                        rep=replace,
                         **buildKwargs
                     )
 
@@ -150,7 +152,7 @@ class SkinCluster:
                     "Set 'multi' to True to bind more than one geometry."
                 )
 
-        if force:
+        if replace:
             existing = []
 
             for geo in geometry:
@@ -161,7 +163,7 @@ class SkinCluster:
 
         # Resolve name
 
-        if nameAfterGeo:
+        if nameFromGeo:
             geoBasename = geos[0
                 ].toTransform().basename(sts=True, sns=True)
 
@@ -223,5 +225,247 @@ class SkinCluster:
 
         return infls, geos
 
-    #----------------------------------------------------|    Macros etc.
+    #------------------------------------------------------------|    Macros
 
+    def macro(self):
+        """
+        :return: A simplified representation of this deformer that can
+            be used by :meth:`createFromMacro` to recreate it.
+        :rtype: dict
+        """
+        macro = r.nodes.DependNode.macro(self)
+
+        macro['influence'] = [str(inf) for inf in self.getInfluence()]
+
+        _self = macro['name']
+
+        for flag in ['bindMethod', 'maximumInfluences', 'obeyMaxInfluences',
+                     'skinMethod', 'weightDistribution']:
+            macro[flag] = m.skinCluster(_self, q=True, **{flag:True})
+
+        macro['geometry'] = [str(shape) for shape in self.getShapes()]
+
+        for attrName in ['deformUserNormals', 'useComponents',
+                         'envelope', 'dqsSupportNonRigid']:
+            macro[attrName] = self.attr(attrName).get()
+
+        macro['dqsScale'] = dqs = {}
+
+        wlist = [self.attr('dqsScale')]
+        wlist += wlist[0].getChildren()
+
+        for plug in wlist:
+            val = plug.get()
+            inputs = plug.inputs(plugs=True)
+
+            if inputs:
+                input = str(inputs[0])
+
+            else:
+                input = None
+
+            dqs[plug.attrName()] = {'value': val, 'input': input}
+
+        return macro
+
+    @classmethod
+    def createFromMacro(cls, macro, **overrides):
+        """
+        Recreates this skinCluster using the type of macro returned by
+        :meth:`macro`.
+
+        :param dict macro: the type of macro returned by :meth:`macro`.
+        :param \*\*overrides: overrides to the macro, passed-in as keyword
+            arguments
+        :return: The reconstructed skinCluster.
+        :rtype: :class:`SkinCluster`
+        """
+        macro = macro.copy()
+        macro.update(overrides)
+
+        shape = macro['geometry'][0]
+        influences = macro['influence']
+
+        buildArgs = influences + [shape]
+        buildKwargs = {k: macro[k] for k in [
+            'bindMethod', 'maximumInfluences', 'obeyMaxInfluences',
+            'skinMethod', 'weightDistribution', 'name']}
+
+        buildKwargs['toSelectedBones'] = True
+
+        skin = r.skinCluster(*buildArgs, **buildKwargs)
+
+        config = {k: macro[k] for k in
+            ['deformUserNormals', 'useComponents',
+             'envelope', 'dqsSupportNonRigid']}
+
+        for k, v in config.items():
+            skin.attr(k).set(v)
+
+        for attrName, attrInfo in macro['dqsScale'].items():
+            input = attrInfo['input']
+            value = attrInfo['value']
+            plug = skin.attr(attrName)
+
+            if input:
+                try:
+                    r.connectAttr(input, plug)
+
+                except RuntimeError:
+                    r.warning(
+                        ("Couldn't connect {} into {}; "+
+                         "setting the value instead.").format(input, plug)
+                    )
+
+                    plug.set(value)
+
+            else:
+                plug.set(value)
+
+        return skin
+
+    #----------------------------------------------------|    Copying
+
+    @short(
+        name='n',
+        replace='rep',
+        sourceUVSet='suv',
+        destUVSet='duv',
+        method='m',
+        weights='w'
+    )
+    def copyTo(
+            self,
+            geo,
+            name=None,
+            replace=True,
+            weights=True,
+            method='index',
+            sourceUVSet=None,
+            destUVSet=None
+    ):
+        """
+        Copies this skinCluster to the specified geometry.
+
+        :param geo: the geometry to copy to
+        :type geo: str, :class:`~paya.runtime.nodes.DagNode`
+        :param name/n: one or more name elements for the new skinCluster;
+            defaults to None
+        :type name/n: None, str, int, list, tuple
+        :param bool replace/rep: if the destination geometry already has a
+            skinCluster, remove it; defaults to True
+        :param bool weights/w: copy weights too; defaults to True
+        :param str method/m:
+        :param sourceUVSet:
+        :param destUVSet:
+        :return:
+        """
+        geoShape = r.PyNode(geo).toShape()
+
+        if replace:
+            for existing in self.getFromGeo(geoShape):
+                r.delete(existing)
+
+        macro = self.macro()
+        macro['geometry'] = [geoShape]
+
+        if not name:
+            geoXf = geoShape.getParent()
+            name = geoXf.basename(sns=True)
+
+        macro['name'] = self.makeName(name)
+
+        newSkin = self.createFromMacro(macro)
+
+        if weights:
+            newSkin.copyWeightsFrom(
+                self,
+                dsh=geoShape,
+                suv=sourceUVSet,
+                duv=destUVSet,
+                m=method
+            )
+
+        return newSkin
+
+    def _padBlendWeights(self):
+        # Set any missing array indices on ``.blendWeights`` to 0.0. This is a
+        # workaround for the following bug:
+        #
+        # When the ``.blendWeights`` array is sparsely populated, dumping and
+        # reloading the attribute via :func:`deformerWeights` results in wrong
+        # index mapping.
+
+        plug = self.attr('blendWeights')
+        indices = plug.getArrayIndices()
+        shape = self.getShapes()[0]
+        numVerts = shape.numVertices()
+
+        missingIndices = list(sorted(set(range(numVerts))-set(indices)))
+
+        _plug = str(plug)
+
+        for index in missingIndices:
+            m.setAttr('{}[{}]'.format(_plug, index), 0.0)
+
+        return missingIndices
+
+    @short(
+        remap='r',
+        vertexConnections='vc',
+        weightTolerance='wt',
+        weightPrecision='wp',
+        shape='sh',
+        attribute='at',
+        defaultValue='dv'
+    )
+    def dumpWeights(
+            self,
+            filepath,
+            shape=None,
+            remap=None,
+            vertexConnections=None,
+            weightPrecision=None,
+            weightTolerance=None,
+            attribute=None,
+            defaultValue=None
+    ):
+        """
+        Overloads :meth:`paya.runtime.nodes.GeometryFilter.dumpWeights` to
+        include DQ blend weights by default, and to work around this bug:
+
+            When the ``.blendWeights`` array on a skinCluster is sparsely
+            populated (as is typically the case), dumping and reloading it
+            via ``deformerWeights(at='blendWeights')`` results in a wrong
+            index mapping.
+
+        See :meth:`paya.runtime.nodes.GeometryFilter.dumpWeights` for argument
+        info.
+        """
+        if attribute is None:
+            attribute = []
+
+        else:
+            attribute = list(_pu.expandArgs(attribute))
+
+        attribute.append('blendWeights')
+        indicesToRemove = self._padBlendWeights()
+
+        r.nodes.GeometryFilter.dumpWeights(
+            self,
+            filepath,
+            sh=shape,
+            at=attribute,
+            r=remap,
+            vc=vertexConnections,
+            wp=weightPrecision,
+            wt=weightTolerance,
+            dv=defaultValue
+        )
+
+        _plug = '{}.blendWeights'.format(str(self))
+
+        for index in indicesToRemove:
+            m.removeMultiInstance('{}[{}]'.format(_plug, index))
+
+        return self

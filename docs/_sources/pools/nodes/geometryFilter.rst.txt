@@ -16,59 +16,74 @@ paya.runtime.nodes.GeometryFilter
             geometries.
         :rtype: [:class:`~paya.runtime.nodes.GeometryFilter`]
     
-    .. py:method:: getSettings()
+    .. py:method:: getShapes()
     
-        :raises NotImplementedError: the deformer class does not define
-            ``__config_attrs__``
-        :return: configuration values for this deformer, as a mapping of
-            *attribute name: attribute value*
-        :rtype: dict
+        Convenience wrapper for
+        :func:`deformer(q=True, g=True)<pymel.core.animation.deformer>`.
+        
+        :rtype: The shapes affected by this deformer.
+        :return: [:class:`~paya.runtime.nodes.DeformableShape`]
     
-    .. py:method:: applySettings(settings)
+    .. py:method:: dumpWeights(filepath, shape=None, remap=None, vertexConnections=None, weightPrecision=None, weightTolerance=None, attribute=None, defaultValue=None)
     
-        :param dict settings: a dictionary returned by :meth:`getSettings`
+        Wrapper for :func:`~pymel.internal.pmcmds.deformerWeights` in 'export'
+        mode. Arguments are post-processed to ensure that only relevant
+        deformers and shapes are included. See Maya help for
+        :func:`deformerWeights` for complete flag information.
+        
+        :param str filepath: the path to the XML file.
+        :param shape/sh: the shape to export weights for; if omitted, all
+            associated shapes are included
+        :type shape/sh: list, tuple, str, :class:`~pymel.core.general.PyNode`
         :return: ``self``
         :rtype: :class:`GeometryFilter`
     
-    .. py:method:: dumpWeights(filepath, shape=None, remap=None, vertexConnections=False, weightPrecision=None, weightTolerance=None)
+    .. py:method:: loadWeights(filepath, shape=None, method='index', worldSpace=None, attribute=None, ignoreName=None, positionTolerance=None, remap=None)
     
-        Dumps this deformer's weights on a single shape to an XML file.
+        Wrapper for :func:`~pymel.internal.pmcmds.deformerWeights` in 'import'
+        mode. Arguments are post-processed to ensure that only relevant
+        deformers and shapes are included. See Maya help for
+        :func:`deformerWeights` for complete flag information.
         
-        :param shape: the shape with the weights; if omitted, the first shape
-            associated with this deformer is used; defaults to None
-        :type shape: str, :class:`~paya.runtime.nodes.DeformableShape`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param str filepath: the path to the XML file; must be POSIX per
-            Maya's preference
-        :param str remap/r: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param bool vertexConnections/vc: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to False
-        :param int weightPrecision/wp: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param float weightTolerance/wt: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param str filepath: the path to the XML file.
+        :param shape/sh: the shape to export weights for; if omitted, all
+            associated shapes are included
+        :type shape/sh: list, tuple, str, :class:`~pymel.core.general.PyNode`
         :return: ``self``
-        :rtype: :class:`~paya.runtime.nodes.GeometryFilter`
+        :rtype: :class:`GeometryFilter`
     
-    .. py:method:: loadWeights(filepath, ignoreName=False, method='index', positionTolerance=None, remap=None, shape=None, worldSpace=None)
+    .. py:method:: copyWeightsFrom(sourceDeformer, sourceShape=None, destShape=None, sourceUVSet=None, destUVSet=None, method='index')
     
-        Imports deformer weights for a specific shape from an XML file.
+        Copies weights from another deformer to this one.
         
-        :param str filepath: the path to the file (POSIX)
-        :param bool ignoreName/ig: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param str method/m:  see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to 'index'
-        :param float positionTolerance/pt: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
-        :param str remap/r: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; note that this may
-            be auto-populated to force a shape registration; defaults to None
-        :param shape: the shape that carries the weights; if omitted, a best-
-            match shape is sought amongst the deformer members and the XML
-            shapes; defaults to None
-        :param bool worldSpace/ws: see Maya help for
-            :func:`~pymel.internal.pmcmds.deformerWeights`; defaults to None
+        :param sourceDeformer: the deformer to copy weights from
+        :type sourceDeformer: str, :class:`~paya.runtime.nodes.GeometryFilter`
+        :param sourceShape/ssh: the shape to copy weights from; if omitted,
+            defaults to the first detected shape
+        :type sourceShape/ssh: str, :class:`~paya.runtime.nodes.DagNode`
+        :param destShape/dsh: the shape to copy weights to; if omitted,
+            defaults to the first detected shape
+        :type destShape/dsh: str, :class:`~paya.runtime.nodes.DagNode`
+        :param sourceUVSet/suv: if specified, 'method' will be overriden to
+            'uv'; if omitted, and 'method' is 'uv', the current UV set will
+            be used; defaults to None
+        :type sourceUVSet/suv: str, None
+        :param destUVSet/duv: if specified, 'method' will be overriden to
+            'uv'; if omitted, and 'method' is 'uv', the current UV set will
+            be used; defaults to None
+        :type destUVSet/duv: str, None
+        :param str method/m: one of:
+        
+            - ``index`` (via XML)
+            - ``bilinear`` (via XML)
+            - ``barycentric`` (via XML)
+            - ``nearest`` (via XML)
+            - ``over`` (via XML)
+        
+            - ``closestPoint`` (in-scene)
+            - ``closestComponent`` (in-scene)
+            - ``uv`` (in-scene)
+            - ``rayCast`` (in-scene)
+        
         :return: ``self``
         :rtype: :class:`GeometryFilter`

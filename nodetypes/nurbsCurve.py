@@ -7,94 +7,99 @@ import paya.runtime as r
 class NurbsCurve:
 
     @classmethod
-    @short(
-        name='n',
-        under='u',
-        conformShapeNames='csn',
-        dispCV='dcv'
-    )
-    def createFromMacro(
-            cls,
-            macro,
-            under=None,
-            conformShapeNames=True,
-            name=None,
-            dispCV=False
-    ):
+    def createFromMacro(cls, macro, **overrides):
         """
-        Recreates a curve from the type of dictionary returned by
-        :meth:`~paya.runtime.nodes.NurbsCurve.macro`.
+        :param dict macro: the type of macro returned by :meth:`macro`
+        :param \*\*overrides: overrides passed-in as keyword arguments
+        :return: A curve constructed using the macro.
+        :rtype: :class:`NurbsCurve`.
+        """
+        macro = macro.copy()
+        macro.update(overrides)
 
-        :param macro: the macro dictionary to use
-        :param under/u: an optional parent for the curve; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool conformShapeNames/csn: ignored if *under* is None; clean
-            up destination shape names after reparenting to the specified
-            transform; defaults to True
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: list, tuple, str
-        :param bool dispCV/dcv: display curve CVs; defaults to False
-        :return: The curve.
-        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
-        """
         kwargs = {
             'point': macro['point'],
             'knot': macro['knot'],
             'periodic': macro['form'] is 2,
-            'degree': macro['degree'],
-            'name': cls.makeName(n=name)
+            'degree': macro['degree']
         }
 
-        curve = r.curve(**kwargs)
+        xf = r.curve(**kwargs)
 
         if macro['knotDomain'][1] == 1.0 and curve.getKnotDomain()[1] != 1.0:
-            curve = r.rebuildCurve(curve, ch=False, d=macro['degree'],
-                kcp=True, kep=True, kt=True, rt=0, rpo=True, kr=0)[0]
+            xf = r.rebuildCurve(
+                xf,
+                ch=False,
+                d=macro['degree'],
+                kcp=True,
+                kep=True,
+                kt=True,
+                rt=0,
+                rpo=True,
+                kr=0
+            )[0]
+
+        shape = xf.getShape()
+        shape.rename(macro['name'])
 
         if macro['form'] is 1:
-            curve.attr('f').set(1)
-
-        shape = curve.getShape()
-
-        if under:
-            r.parent(shape, under, r=True, shape=True)
-            r.delete(curve)
-
-            if conformShapeNames:
-                r.PyNode(under).conformShapeNames()
-
-        if dispCV:
-            shape.attr('dcv').set(True)
+            shape.attr('f').set(1)
 
         return shape
 
     #-----------------------------------------------------|    Macro
 
-    @short(normalize='nr')
-    def macro(self, normalize=False):
+    # @short(normalize='nr')
+    # def macro(self, normalize=False):
+    #     """
+    #     :param bool normalize/nr: normalize curve points (used by the shapes
+    #         library); defaults to False
+    #     :return: A simplified dictionary representation of this curve shape
+    #         that can be used to reconstruct it. Point information will be in
+    #         local (object) space. Name is ignored.
+    #     :rtype: dict
+    #     """
+    #     macro = r.nodes.DependNode.macro(self)
+    #
+    #     macro['knot'] = self.getKnots()
+    #     macro['degree'] = self.degree()
+    #     macro['form'] = self.attr('f').get()
+    #     macro['point'] = list(map(list, self.getCVs()))
+    #     macro['knotDomain'] = self.getKnotDomain()
+    #
+    #     if normalize:
+    #         macro['point'] = [list(p) for p in \
+    #             _mo.pointsIntoUnitCube(macro['point'])]
+    #
+    #     return macro
+
+    def macro(self):
         """
-        :param bool normalize/nr: normalize curve points (used by the shapes
-            library); defaults to False
-        :return: A simplified dictionary representation of this curve shape
-            that can be used to reconstruct it. Point information will be in
-            local (object) space. Name is ignored.
+        :return: A simplified representation of this curve that can be used
+            by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict
         """
-        macro = {
-            'nodeType': 'nurbsCurve',
-            'knot': self.getKnots(),
-            'degree': self.degree(),
-            'form': self.attr('f').get(),
-            'point': list(map(list, self.getCVs())),
-            'knotDomain': self.getKnotDomain()
-        }
+        macro = r.nodes.DependNode.macro(self)
 
-        if normalize:
-            points = _mo.pointsIntoUnitCube(macro['point'])
-            points = list(map(list, points))
-            macro['point'] = points
+        macro['knot'] = self.getKnots()
+        macro['degree'] = self.degree()
+        macro['form'] = self.attr('f').get()
+        macro['point'] = list(map(list, self.getCVs()))
+        macro['knotDomain'] = self.getKnotDomain()
 
         return macro
+
+    @classmethod
+    def normalizeMacro(cls, macro):
+        """
+        Used by the shapes library to fit control points inside a unit cube.
+        This is an in-place operation; the method has no return value.
+
+        :param dict macro: the macro to edit
+        """
+        points = macro['point']
+        points = _mo.pointsIntoUnitCube(points)
+        macro['point'] = [list(point) for point in points]
 
     #-----------------------------------------------------|    Sampling
 

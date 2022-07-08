@@ -378,8 +378,6 @@
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.appendChain">appendChain() (Chain method)</a>
 </li>
-      <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.applySettings">applySettings() (GeometryFilter method)</a>
-</li>
       <li><a href="paya/lib/controlshapes.html#paya.lib.controlshapes.ControlShapesLibrary.applyToControls">applyToControls() (ControlShapesLibrary method)</a>
 </li>
       <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.asAxisAngle">asAxisAngle() (Quaternion method)</a>
@@ -522,8 +520,12 @@
 </li>
       <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.copyCtShapesTo">copyCtShapesTo() (Transform method)</a>
 </li>
+      <li><a href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.copyTo">copyTo() (SkinCluster method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.copyWeightsFrom">copyWeightsFrom() (GeometryFilter method)</a>
+</li>
       <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.cos">cos() (Math1D method)</a>
 </li>
       <li><a href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.create">create() (IkHandle class method)</a>
@@ -546,6 +548,8 @@
         <li><a href="pools/nodes/locator.html#paya.runtime.nodes.Locator.createFromMacro">(Locator class method)</a>
 </li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.createFromMacro">(NurbsCurve class method)</a>
+</li>
+        <li><a href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.createFromMacro">(SkinCluster class method)</a>
 </li>
       </ul></li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromMatrices">createFromMatrices() (Chain class method)</a>
@@ -606,10 +610,10 @@
 </li>
       <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.disable">disable() (Attribute method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributePoints">distributePoints() (NurbsCurve method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/data/vector.html#paya.runtime.data.Vector.dot">dot() (Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.dot">[1]</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.downAxis">downAxis() (Chain method)</a>
@@ -621,9 +625,15 @@
       <ul>
         <li><a href="paya/lib/suffixes.html#paya.lib.suffixes.dump">(in module paya.lib.suffixes)</a>
 </li>
+        <li><a href="paya/lib/xmlweights.html#paya.lib.xmlweights.dump">(in module paya.lib.xmlweights)</a>
+</li>
       </ul></li>
       <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.dumpWeights">dumpWeights() (GeometryFilter method)</a>
+
+      <ul>
+        <li><a href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.dumpWeights">(SkinCluster method)</a>
 </li>
+      </ul></li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.duplicate">duplicate() (Chain method)</a>
 </li>
       <li><a href="glossary.html#term-Dynamic"><strong>Dynamic</strong></a>
@@ -750,7 +760,7 @@
 </li>
       <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.getSectionAttrs">getSectionAttrs() (DependNode method)</a>
 </li>
-      <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.getSettings">getSettings() (GeometryFilter method)</a>
+      <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.getShapes">getShapes() (GeometryFilter method)</a>
 </li>
       <li><a href="pools/nodes/fourByFourMatrix.html#paya.runtime.nodes.FourByFourMatrix.getTranslate">getTranslate() (FourByFourMatrix method)</a>
 
@@ -889,6 +899,8 @@
       <ul>
         <li><a href="paya/lib/suffixes.html#paya.lib.suffixes.load">(in module paya.lib.suffixes)</a>
 </li>
+        <li><a href="paya/lib/xmlweights.html#paya.lib.xmlweights.load">(in module paya.lib.xmlweights)</a>
+</li>
       </ul></li>
       <li><a href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.loadWeights">loadWeights() (GeometryFilter method)</a>
 </li>
@@ -910,6 +922,8 @@
         <li><a href="pools/nodes/locator.html#paya.runtime.nodes.Locator.macro">(Locator method)</a>
 </li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.macro">(NurbsCurve method)</a>
+</li>
+        <li><a href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.macro">(SkinCluster method)</a>
 </li>
       </ul></li>
       <li><a href="paya/lib/names.html#paya.lib.names.make">make() (in module paya.lib.names)</a>
@@ -962,6 +976,8 @@
 </li>
         <li><a href="paya/lib/suffixes.html#module-paya.lib.suffixes">paya.lib.suffixes</a>
 </li>
+        <li><a href="paya/lib/xmlweights.html#module-paya.lib.xmlweights">paya.lib.xmlweights</a>
+</li>
         <li><a href="paya/patch.html#module-paya.patch">paya.patch</a>
 </li>
         <li><a href="paya/plugtree.html#module-paya.plugtree">paya.plugtree</a>
@@ -1011,14 +1027,20 @@
         <li><a href="paya/lib/attrs.html#paya.lib.attrs.Section.node">(Section method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/pools.html#paya.pools.NodeClassPool">NodeClassPool (class in paya.pools)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.normal">normal() (Quaternion method)</a>
 
       <ul>
         <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.normal">(Vector method)</a>
+</li>
+      </ul></li>
+      <li><a href="pools/nodes/locator.html#paya.runtime.nodes.Locator.normalizeMacro">normalizeMacro() (Locator class method)</a>
+
+      <ul>
+        <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.normalizeMacro">(NurbsCurve class method)</a>
 </li>
       </ul></li>
       <li><a href="paya/util/iterables.html#paya.util.iterables.nudge_index">nudge_index() (in module paya.util.iterables)</a>
@@ -1110,6 +1132,13 @@
 
       <ul>
         <li><a href="paya/lib/suffixes.html#module-paya.lib.suffixes">module</a>
+</li>
+      </ul></li>
+      <li>
+    paya.lib.xmlweights
+
+      <ul>
+        <li><a href="paya/lib/xmlweights.html#module-paya.lib.xmlweights">module</a>
 </li>
       </ul></li>
       <li>

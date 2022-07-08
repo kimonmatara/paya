@@ -141,59 +141,33 @@ geometries.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.GeometryFilter.getSettings">
-<span class="sig-name descname"><span class="pre">getSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.getSettings" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.10)"><strong>NotImplementedError</strong></a> – the deformer class does not define
-<code class="docutils literal notranslate"><span class="pre">__config_attrs__</span></code></p>
+<dt class="sig sig-object py" id="paya.runtime.nodes.GeometryFilter.getShapes">
+<span class="sig-name descname"><span class="pre">getShapes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.getShapes" title="Permalink to this definition"></a></dt>
+<dd><p>Convenience wrapper for
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.deformer.html#pymel.core.animation.deformer" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">deformer(q=True,</span> <span class="pre">g=True)</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The shapes affected by this deformer.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>configuration values for this deformer, as a mapping of
-<em>attribute name: attribute value</em></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.GeometryFilter.applySettings">
-<span class="sig-name descname"><span class="pre">applySettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.applySettings" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – a dictionary returned by <a class="reference internal" href="#paya.runtime.nodes.GeometryFilter.getSettings" title="paya.runtime.nodes.GeometryFilter.getSettings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getSettings()</span></code></a></p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.GeometryFilter" title="paya.runtime.nodes.GeometryFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryFilter</span></code></a></p>
+<dd class="field-even"><p>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.GeometryFilter.dumpWeights">
-<span class="sig-name descname"><span class="pre">dumpWeights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertexConnections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weightPrecision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weightTolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.dumpWeights" title="Permalink to this definition"></a></dt>
-<dd><p>Dumps this deformer’s weights on a single shape to an XML file.</p>
+<span class="sig-name descname"><span class="pre">dumpWeights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertexConnections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weightPrecision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weightTolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.dumpWeights" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper for <code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code> in ‘export’
+mode. Arguments are post-processed to ensure that only relevant
+deformers and shapes are included. See Maya help for
+<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code> for complete flag information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>shape</strong> (str, <code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code>,
-<a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the shape with the weights; if omitted, the first shape
-associated with this deformer is used; defaults to None</p></li>
-<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the path to the XML file; must be POSIX per
-Maya’s preference</p></li>
-<li><p><strong>remap/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to None</p></li>
-<li><p><strong>vertexConnections/vc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to False</p></li>
-<li><p><strong>weightPrecision/wp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to None</p></li>
-<li><p><strong>weightTolerance/wt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to None</p></li>
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the path to the XML file.</p></li>
+<li><p><strong>shape/sh</strong> (list, tuple, str, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a>) – the shape to export weights for; if omitted, all
+associated shapes are included</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -207,26 +181,59 @@ Maya’s preference</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.GeometryFilter.loadWeights">
-<span class="sig-name descname"><span class="pre">loadWeights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positionTolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.loadWeights" title="Permalink to this definition"></a></dt>
-<dd><p>Imports deformer weights for a specific shape from an XML file.</p>
+<span class="sig-name descname"><span class="pre">loadWeights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positionTolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.loadWeights" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper for <code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code> in ‘import’
+mode. Arguments are post-processed to ensure that only relevant
+deformers and shapes are included. See Maya help for
+<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code> for complete flag information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the path to the file (POSIX)</p></li>
-<li><p><strong>ignoreName/ig</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to None</p></li>
-<li><p><strong>method/m</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to ‘index’</p></li>
-<li><p><strong>positionTolerance/pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to None</p></li>
-<li><p><strong>remap/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; note that this may
-be auto-populated to force a shape registration; defaults to None</p></li>
-<li><p><strong>shape</strong> – the shape that carries the weights; if omitted, a best-
-match shape is sought amongst the deformer members and the XML
-shapes; defaults to None</p></li>
-<li><p><strong>worldSpace/ws</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – see Maya help for
-<code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code>; defaults to None</p></li>
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the path to the XML file.</p></li>
+<li><p><strong>shape/sh</strong> (list, tuple, str, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a>) – the shape to export weights for; if omitted, all
+associated shapes are included</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.GeometryFilter" title="paya.runtime.nodes.GeometryFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryFilter</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.GeometryFilter.copyWeightsFrom">
+<span class="sig-name descname"><span class="pre">copyWeightsFrom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sourceDeformer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sourceShape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destShape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sourceUVSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destUVSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.GeometryFilter.copyWeightsFrom" title="Permalink to this definition"></a></dt>
+<dd><p>Copies weights from another deformer to this one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sourceDeformer</strong> (str, <a class="reference internal" href="#paya.runtime.nodes.GeometryFilter" title="paya.runtime.nodes.GeometryFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryFilter</span></code></a>) – the deformer to copy weights from</p></li>
+<li><p><strong>sourceShape/ssh</strong> (str, <a class="reference internal" href="dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a>) – the shape to copy weights from; if omitted,
+defaults to the first detected shape</p></li>
+<li><p><strong>destShape/dsh</strong> (str, <a class="reference internal" href="dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a>) – the shape to copy weights to; if omitted,
+defaults to the first detected shape</p></li>
+<li><p><strong>sourceUVSet/suv</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>None</em>) – if specified, ‘method’ will be overriden to
+‘uv’; if omitted, and ‘method’ is ‘uv’, the current UV set will
+be used; defaults to None</p></li>
+<li><p><strong>destUVSet/duv</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>None</em>) – if specified, ‘method’ will be overriden to
+‘uv’; if omitted, and ‘method’ is ‘uv’, the current UV set will
+be used; defaults to None</p></li>
+<li><p><strong>method/m</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>one of:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bilinear</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">barycentric</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nearest</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">over</span></code> (via XML)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">closestPoint</span></code> (in-scene)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">closestComponent</span></code> (in-scene)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uv</span></code> (in-scene)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rayCast</span></code> (in-scene)</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
