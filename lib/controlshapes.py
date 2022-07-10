@@ -22,7 +22,8 @@ class NoControlShapesError(RuntimeError):
 
 class ControlShapesLibrary(UserDict):
     """
-    Administers Paya control shapes.
+    Administers Paya control shapes. An instance of this class is available
+    on :mod:`paya.runtime` as ``.controlShapes``.
     """
 
     #------------------------------------------------------|    Init
