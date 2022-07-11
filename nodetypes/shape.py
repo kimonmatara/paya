@@ -4,6 +4,20 @@ import paya.runtime as r
 
 class Shape:
 
+    #-----------------------------------------------------------|    Abstract I/O
+
+    @property
+    def geoInput(self):
+        raise NotImplementedError
+
+    @property
+    def worldGeoOutput(self):
+        raise NotImplementedError
+
+    @property
+    def localGeoOutput(self):
+        raise NotImplementedError
+
     #-----------------------------------------------------------|    Constructors
 
     @classmethod

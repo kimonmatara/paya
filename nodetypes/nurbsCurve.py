@@ -77,6 +77,20 @@ class NurbsCurve:
         points = _mo.pointsIntoUnitCube(points)
         macro['point'] = [list(point) for point in points]
 
+    #-----------------------------------------------------|    Abstract I/O
+
+    @property
+    def geoInput(self):
+        return self.attr('create')
+
+    @property
+    def worldGeoOutput(self):
+        return self.attr('worldSpace')[0]
+
+    @property
+    def localGeoOutput(self):
+        return self.attr('local')
+
     #-----------------------------------------------------|    Sampling
 
     def takeClosestPoint(self, refPoint):
