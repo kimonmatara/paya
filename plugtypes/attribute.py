@@ -350,3 +350,27 @@ class Attribute:
         :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
         return self._sendAboveOrBelow(attrName, below=True)
+
+    #-----------------------------------------------------------------|    Array (multi) attributes
+
+    @short(fillGaps='fg')
+    def getNextArrayIndex(self, fillGaps=False):
+        """
+        Returns the next available logical array index.
+
+        :param bool fillGaps/fg: return the first available gap in the
+            logical array indices; defaults to False
+        :return: The index.
+        :rtype: int
+        """
+        indices = self.getArrayIndices()
+
+        if indices:
+            if fillGaps:
+                for i, index in enumerate(indices):
+                    if index > i:
+                        return i
+
+            return indices[-1]+1
+
+        return 0
