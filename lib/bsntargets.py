@@ -6,7 +6,20 @@ import maya.mel as mel
 from paya.util import short
 import paya.runtime as r
 
-#---------------------------------------------------------------------------|    Helpers
+#---------------------------------------------------------------------|    Exceptions
+
+class NonTransformSpaceTargetError(RuntimeError):
+    """
+    The target being manipulated is not transform-space.
+    """
+
+class TargetMatrixNotATransformError(RuntimeError):
+    """
+    A transform-space target has a matrix input from a non-transform node
+    (e.g. a maths utility node).
+    """
+
+#----------------------------------------------------------------|    Helpers
 
 def subtargetIndexToValue(index):
     """
@@ -33,9 +46,18 @@ def subtargetValueToIndex(value):
     value = int(value)
     return 5000 + value
 
-#---------------------------------------------------------------------------|    Subtarget
+#----------------------------------------------------------------|    Classes
 
 class Subtarget:
+    """
+    Interface for editing subtargets (tweens).
+
+    .. rubric:: Updating geometry
+
+    target = bsn.targets['L_smile']
+    subtarget = target[1.0]
+    subtarget.shape = 'new_geo'
+    """
 
     #--------------------------------------------------------|    Init
 
@@ -49,7 +71,6 @@ class Subtarget:
 
     #--------------------------------------------------------|    Basic inspections
 
-    @property
     def index(self): # logical (in-use / sparse), 5000 -> 6000
         return self._index
 
@@ -61,13 +82,12 @@ class Subtarget:
     def node(self):
         return self.owner.node
 
-    @property
     def value(self):
-        return subtargetIndexToValue(self.index)
+        return subtargetIndexToValue(self.index())
 
     @property
     def inputTargetItem(self):
-        return self.owner.inputTargetItem[self.index]
+        return self.owner.inputTargetItem[self.index()]
 
     iti = inputTargetItem
 
@@ -121,11 +141,84 @@ class Subtarget:
     #--------------------------------------------------------|    Repr
 
     def __repr__(self):
-        return '{}[{}]'.format(self.owner, self.value)
+        return '{}[{}]'.format(self.owner, self.value())
 
-#---------------------------------------------------------------------------|    Target
+    #--------------------------------------------------------|    Conversions
+
+    def __int__(self):
+        """
+        :return: The logical (sparse) 5000 - > 6000 index for this subtarget
+            (``self.index``)
+        :rtype: int
+        """
+        return self.index()
+
+    def __float__(self):
+        """
+        :return: The 0.0 -> 1.0 weight (value) for this subtarget
+            (``self.value``)
+        :rtype: float
+        """
+        return self.value()
 
 class Target:
+    """
+    .. rubric:: Retrieving Subtargets (Tweens)
+
+    .. code-block:: python
+
+        # Start
+        target = bsn.targets['L_smile']
+
+        # Iterate subtargets
+        for subtarget in target:
+            # do something
+
+        # List subtargets
+        list(target)
+
+        # By logical (sparse, 5000 -> 6000) index
+        subtarget = target.getByLogicalIndex(logicalIndex)
+
+        # By physical (contiguous) index
+        subtarget = target.getByPhysicalIndex(physicalIndex)
+        # or
+        subtarget = list(taret)[physicalIndex]
+
+        # By value (ratio)
+        subtarget = target.getByValue(value)
+        # or
+        subtarget = target[value]
+
+    .. rubric:: Adding Subtargets (Tweens)
+
+    .. code-block:: python
+
+        subtarget = target.add(0.5, tweenShape)
+        # or
+        target[0.5] = tweenShape # by value
+        # or
+        target[5500] = tweenShape # by logical index
+
+    See :meth:`add` for more options.
+
+    .. rubric:: Removing Subtargets (Tweens)
+
+    .. code-block:: python
+
+        target.removeByPhysicalIndex(physicalIndex)
+        target.removeByLogicalIndex(logicalIndex)
+        target.removeByValue(value)
+
+        # or
+        del(target[physicalIndex])
+        del(target[value])
+
+        # Clear all inbetweens (but not at 1.0)
+        target.clearInbetweens()
+
+    See :class:`Subtarget` for more.
+    """
 
     #--------------------------------------------------------|    Init
 
@@ -139,7 +232,6 @@ class Target:
 
     #--------------------------------------------------------|    Basic inspections
 
-    @property
     def index(self): # logical (sparse / in-use)
         return self._index
 
@@ -153,12 +245,12 @@ class Target:
 
     @property
     def weight(self):
-        return self.node().attr('weight')[self.index]
+        return self.node().attr('weight')[self.index()]
 
     @property
     def inputTargetGroup(self):
         return self.node().attr('inputTarget'
-            )[0].attr('inputTargetGroup')[self.index]
+            )[0].attr('inputTargetGroup')[self.index()]
 
     itg = inputTargetGroup
 
@@ -194,6 +286,89 @@ class Target:
         """
         plug = self.inputTargetGroup.attr('postDeformersMode')
         return plug.get() in (1, 2)
+
+    #--------------------------------------------------------|    Transform management
+
+    @property
+    def targetMatrix(self):
+        return self.inputTargetGroup.attr('targetMatrix')
+
+    def getTransform(self):
+        """
+        Setter for the ``transform`` / ``xf`` property.
+
+        :raises NonTransformSpaceTargetError: this is not a transform-space
+            target
+        :raises TargetMatrixNotATransformError: there's an input into
+            .targetMatrix, but it's from a utility node
+        :return: if this is a transform-space target, the transform
+            connected to it
+        :rtype: None, :class:`~paya.runtime.nodes.Transform`
+        """
+        if self.isTransformSpace():
+            inputs = self.targetMatrix.inputs(plugs=True)
+
+            if inputs:
+                input = inputs[0]
+                node = input.node()
+
+                if isinstance(node, r.nodes.Transform):
+                    return node
+
+                else:
+                    raise TargetMatrixNotATransformError(
+                        "The input to .targetMatrix is not a transform."
+                    )
+
+        else:
+            raise NonTransformSpaceTargetError(
+                "Target is not in transform space."
+            )
+
+    def setTransform(self, transform):
+        """
+        If this is a transform-space target, connects the ``.worldMatrix``
+        of the specified transform into its ``.targetMatrix`` attribute.
+
+        Setter for the ``transform`` / ``xf`` property.
+
+        :param transform: the transform to connect
+        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :raises NonTransformSpaceTargetError: this is not a transform-space
+            target
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        if self.isTransformSpace():
+            r.PyNode(transform).attr('worldMatrix') >> self.targetMatrix
+            return self
+
+        raise NonTransformSpaceTargetError(
+                "Target is not in transform space."
+            )
+
+    def clearTransform(self):
+        """"
+        If this is a transform-space target, clears any inputs on its
+        ``.targetMatrix`` attribute.
+
+        Deleter for the ``transform`` / ``xf`` property.
+
+        :raises NonTransformSpaceTargetError: this is not a transform-space
+            target
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        if self.isTransformSpace():
+            self.targetMatrix.disconnect(inputs=True)
+            return self
+
+        raise NonTransformSpaceTargetError(
+                "Target is not in transform space."
+            )
+
+    transform = xf = property(
+        fget=getTransform, fset=setTransform, fdel=clearTransform)
 
     #--------------------------------------------------------|    Alias
 
@@ -246,65 +421,333 @@ class Target:
 
     alias = property(fget=getAlias, fset=setAlias, fdel=clearAlias)
 
-    #--------------------------------------------------------|    Member retrieval
+    #--------------------------------------------------------|    Member retrievals
 
-    def indices(self):
+    def getLogicalFromPhysicalIndex(self, physicalIndex):
         """
-        :return: The 5000 -> 6000 logical (sparse) indices of 'tweens'
-            (subtargets) for this target.
-        :rtype: [int]
+        :param int physicalIndex: the physical (contiguous) subtarget index
+        :return: The logical (sparse, 5000 -> 6000) index.
+        :rtype: int
         """
-        return self.inputTargetItem.getArrayIndices()
+        return self.indices()[physicalIndex]
+
+    def getPhysicalFromLogicalIndex(self, logicalIndex):
+        """
+        :param int logicalIndex: the logical (sparse, 5000 -> 6000) subtarget
+            index
+        :return: The physical (contiguous) index.
+        :rtype: int
+        """
+        return self.indices().index(logicalIndex)
+
+    def getLogicalIndexFromValue(self, value):
+        """
+        :param float value: the 0.0 -> 1.0 subtarget value (ratio)
+        :return: The matching logical (sparse, 5000 -> 6000) index.
+        :rtype: int
+        """
+        value = round(value, 3)
+        value *= 1000
+        value = int(value)
+        logicalIndex = 5000 + value
+
+        if logicalIndex in self.indices():
+            return logicalIndex
+
+        raise ValueError("No matching logical index found.")
+
+    def getValueFromLogicalIndex(self, logicalIndex):
+        """
+        :param int logicalIndex: the sparse, 5000 -> 6000 subtarget index
+        :return: The matching tween value (ratio).
+        :rtype: float
+        """
+        if logicalIndex in self.indices():
+            return round((logicalIndex-5000) / 1000, 3)
+
+        raise IndexError(
+            "Couldn't find logical index {}.".format(logicalIndex))
 
     def values(self):
         """
-        :return: The values (ratios) of the 'tweens' (subtargets) for this
-            target.
+        :return: The subtarget (tween) values (ratios).
         :rtype: [float]
         """
         return [subtargetIndexToValue(index) for index in self.indices()]
 
-    def __iter__(self):
-        for index in self.indices():
-            yield Subtarget(index, self)
-
-    def __len__(self):
-        return self.inputTargetItem.numElements()
-
-    def __getitem__(self, item):
+    def indices(self):
         """
-        :param item: the subtarget to retrieve, specified either as a
-            5000 -> 6000 logical (sparse / in-use) index *or* a float value
-            (weight)
-        :type item: float, int
+        :return: The logical (sparse, 5000 -> 6000) target indices.
+        :rtype: [int]
+        """
+        return self.inputTargetItem.getArrayIndices()
+
+    def getByLogicalIndex(self, logicalIndex):
+        """
+        Retrieves a subtarget (tween) by logical (sparse, 5000 -> 6000) index.
+
+        :param int logicalIndex: the logical subtarget index
         :return: The subtarget.
         :rtype: :class:`Subtarget`
         """
-        if isinstance(item, int):
-            index = item
-            weight = None
+        return Subtarget(logicalIndex, self)
 
-        elif isinstance(item, float):
-            weight = item
-            index = subtargetValueToIndex(item)
+    def getByPhysicalIndex(self, physicalIndex):
+        """
+        Retrieves a subtarget (tween) by logical (contiguous) index.
+
+        :param physicalIndex: the physical subtarget index
+        :return: The subtarget.
+        :rtype: :class:`Subtarget`
+        """
+        logicalIndex = self.getLogicalFromPhysicalIndex(physicalIndex)
+        return Subtarget(logicalIndex, self)
+
+    def getByValue(self, value):
+        """
+        Retrieves a subtarget (tween) by value (ratio).
+
+        :param float value: the value (ratio)
+        :return: The subtarget.
+        :rtype: :class:`Subtarget`
+        """
+        logicalIndex = self.getLogicalIndexFromValue(value)
+        return Subtarget(logicalIndex, self)
+
+    def __len__(self):
+        """
+        :return: The number of subtargets (number of inbetweens + 1)
+        :rtype: int
+        """
+        raise NotImplementedError
+
+    def __iter__(self):
+        """
+        Yields :class:`Subtarget` instances.
+        """
+        for logicalIndex in self.indices():
+            yield Subtarget(logicalIndex, self)
+
+    def __getitem__(self, logicalIndexOrValue):
+        """
+        Retrieves subtargets by logical (5000 -> 6000) index or value (ratio).
+
+        :param logicalIndexOrValue: the value or logical index
+        :type logicalIndexOrValue: float, int
+        :return: The subtarget.
+        :rtype: :class:`Subtarget`
+        """
+        if isinstance(logicalIndexOrValue, float):
+            logicalIndex = self.getLogicalIndexFromValue(logicalIndexOrValue)
+
+        elif isinstance(logicalIndexOrValue, int):
+            logicalIndex = logicalIndexOrValue
 
         else:
             raise TypeError(
-                "Not a weight (float) or logical index (int): {}".format(item)
+                "Not an integer or float: {}".format(logicalIndexOrValue)
             )
 
-        if index in self.indices():
-            return Subtarget(index, self)
+        if logicalIndex in self.indices():
+            return Subtarget(logicalIndex, self)
 
-        if weight is None:
-            raise IndexError("Couldn't find logical index {}.".format(index))
+        raise IndexError(
+            "Logical index doesn't exist: {}".format(logicalIndex))
 
-        raise ValueError("Subtarget weight {} doesn't exist.".format(weight))
+    #--------------------------------------------------------|    Member additions
 
-    #--------------------------------------------------------|    Repr
+    @short(relative='rel', topologyCheck='tc')
+    def add(self, value, geometry, relative=False, topologyCheck=False):
+        """
+        Adds a subtarget (tween) at the specified value (ratio).
+
+        :param float value: the value at which to add the subtarget
+        :param geometry: the geometry shape to assign
+        :param bool topologyCheck/tc: check topology before applying; defaults
+            to False
+        :param bool relative/rel: create a 'relative' inbetween target;
+            defaults to False
+        :raises RuntimeError: the requested value (ratio) is already in use
+        :return: The new Subtarget instance.
+        :rtype: :class:`Subtarget`
+        """
+        value = round(float(value), 3)
+
+        if value in self.values():
+            raise RuntimeError("Value already in use: {}".format(value))
+
+        bsn = self.node()
+        base = bsn.getBaseObjects()[0]
+
+        kwargs = {}
+
+        dm = self.inputTargetGroup.attr('postDeformersMode').get()
+
+        if dm is 1:
+            kwargs['tangentSpace'] = True
+
+        elif dm is 2:
+            kwargs['transform'] = self.getTransform()
+
+        r.blendShape(
+            bsn,
+            e=True,
+            ib=True,
+            tc=topologyCheck,
+            ibt='relative' if relative else 'absolute',
+            t=[base, self.index(), geometry, value],
+            **kwargs
+        )
+
+        if dm in (1, 2):
+            # Disconnect shape
+            plug = self.inputTargetItem[
+                self.getLogicalIndexFromValue(value)].attr('inputGeomTarget')
+
+            plug.disconnect(inputs=True)
+
+        return self[value]
+
+    #--------------------------------------------------------|    Member setting / updating
+
+    def __setitem__(self, valueOrLogicalIndex, shape):
+        if isinstance(valueOrLogicalIndex, int):
+            value = subtargetIndexToValue(valueOrLogicalIndex)
+
+        elif isinstance(valueOrLogicalIndex, float):
+            value = round(valueOrLogicalIndex, 3)
+
+        else:
+            raise TypeError(
+                "Not an integer or float: {}".format(valueOrLogicalIndex)
+            )
+
+        if value in self.values():
+            subtarget = self.getByValue(value)
+            subtarget.setShape(shape)
+
+        else:
+            self.add(value, shape)
+
+    #--------------------------------------------------------|    Member removals
+
+    def remove(self, subtarget):
+        """
+        Removes a subtarget.
+
+        :param subtarget: The subtarget to remove.
+        :type subtarget: :class:`Subtarget`
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        return self.removeByLogicalIndex(subtarget.index())
+
+    def removeByLogicalIndex(self, logicalIndex):
+        """
+        Removes the subtarget (tween) at the specified logical index. The
+        main subtarget (at 6000 / 1.0) can't be removed; use remove() on
+        :class:`Targets` instead.
+
+        :param int logicalIndex: the logical (sparse / occupied, 5000 -> 6000)
+            subtarget index
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        if logicalIndex == 6000:
+            raise RuntimeError("The full-value index can't be removed.")
+
+        heroIndex = self.index()
+
+        if logicalIndex in self.indices():
+            bsn = self.node()
+            plug = bsn.attr('inputTarget')[0].attr(
+                'inputTargetGroup')[heroIndex].attr(
+                'inputTargetItem')[logicalIndex]
+
+            r.removeMultiInstance(plug, b=True)
+
+            try:
+                infoPlug = bsn.attr('inbetweenInfoGroup'
+                    )[heroIndex].attr('inbetweenInfo')[logicalIndex]
+
+                r.removeMultiInstance(infoPlug, b=True)
+
+            except r.MayaAttributeError:
+                pass
+
+            return self
+
+        raise IndexError("Logical index not found: {}".format(logicalIndex))
+
+    def removeByPhysicalIndex(self, physicalIndex):
+        """
+        Removes the subtarget (tween) at the specified physical index. The
+        main subtarget can't be removed; use remove() on :class:`Targets`
+        instead.
+
+        :param int physicalIndex: the physical (contiguous) subtarget index
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        logicalIndex = self.getLogicalFromPhysicalIndex(physicalIndex)
+        return self.removeByLogicalIndex(logicalIndex)
+
+    def removeByValue(self, value):
+        """
+        Removes the subtarget (tween) at the specified value (ratio). The
+        main subtarget (at 1.0) can't be removed; use remove() on
+        :class:`Targets` instead.
+
+        :param float value: the subtarget (tween) value (ratio)
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        logicalIndex = self.getLogicalIndexFromValue(value)
+        return self.removeByLogicalIndex(logicalIndex)
+
+    def clearInbetweens(self):
+        """
+        Removes all inbetweens.
+
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        indices = self.indices()
+
+        if len(indices) > 1:
+            for index in indices[:-1]:
+                self.removeByLogicalIndex(index)
+
+        return self
+
+    def __delitem__(self, valueOrLogicalIndex):
+        """
+        Removes a subtarget by logical (sparse / occupied, 5000 -> 6000) index
+        or value (ratio).
+
+        :param valueOrLogicalIndex: The value or logical index.
+        :type valueOrLogicalIndex: float, int
+        """
+        if isinstance(valueOrLogicalIndex, int):
+            return self.removeByLogicalIndex(valueOrLogicalIndex)
+
+        elif isinstance(valueOrLogicalIndex, float):
+            return self.removeByValue(valueOrLogicalIndex)
+
+        else:
+            raise TypeError(
+                "Not an integer or float: {}".format(valueOrLogicalIndex)
+            )
+
+    #--------------------------------------------------------|    Conversions
 
     def __int__(self):
-        return self.index
+        """
+        :return: The logical (sparse) index for this target group.
+        """
+        return self.index()
+
+    #--------------------------------------------------------|    Repr
 
     def __repr__(self):
         alias = self.alias
@@ -313,18 +756,81 @@ class Target:
             content = repr(alias)
 
         else:
-            content = self.index
+            content = self.index()
 
         return '{}[{}]'.format(self.owner, content)
 
 
-#---------------------------------------------------------------------------|    Targets
-
 class Targets:
-
     """
-    Interface for editing blend shape targets; available on
-    :class:`~paya.runtime.nodes.BlendShape` as ``targets`` or ``t``.
+    Interface for editing blend shape targets, available on
+    :class:`~paya.runtime.nodes.BlendShape` instances as ``.targets`` /
+    ``.t``.
+
+    .. rubric:: Retrieving Targets
+
+    .. code-block:: python
+
+        # Iteration
+        for target in bsn.targets:
+            # do something
+
+        # Listing
+        list(bsn.targets)
+
+        # By logical (sparse / occupied) index:
+        target = bsn.targets.getByLogicalIndex(logicalIndex)
+        # or:
+        target = bsn.targets[logicalIndex]
+
+        # By physical (contiguous) index:
+        target = bsn.targets.getByPhysicalIndex(physicalIndex)
+        # or:
+        target = list(bsn.targets)[physicalIndex]
+
+        # By alias:
+        target = bsn.targets.getByAlias(alias)
+        # or:
+        target = bsn.targets[alias]
+
+    .. rubric:: Adding Targets
+
+    .. code-block:: python
+
+        target = bsn.targets.add(geometry)
+        # or
+        target[alias] = geometry
+
+    See :meth:`add` for more options.
+
+    .. rubric:: Removing Targets
+
+    Use :meth:`removeByPhysicalIndex`, :meth:`removeByLogicalIndex`,
+    :meth:`removeByAlias`, :meth:`__delitem__` or :meth:`clear`:
+
+    .. code-block:: python
+
+        # By logical index:
+        bsn.targets.removeByLogicalIndex(logicalIndex)
+        # or
+        del(bsn.targets[logicalIndex])
+
+        # By physical index
+        bsn.targets.removeByPhysicalIndex(physicalIndex)
+
+        # By instance
+        target = bsn.targets.add(geometry)
+        bsn.targets.remove(target)
+
+        # By alias
+        bsn.targets.removeByAlias('L_smile')
+        # or
+        del(bsn.targets['L_smile'])
+
+        # Clear all targets
+        bsn.clear()
+
+    See :class:`Target` for additional methods for subtargets (tweens) etc.
     """
 
     #--------------------------------------------------------|    Init
@@ -345,7 +851,9 @@ class Targets:
         """
         return self.owner
 
-    def getIndexFromAlias(self, alias):
+    #-------------------------------------------------------|    Member retrievals
+
+    def getLogicalIndexFromAlias(self, alias):
         """
         Given an alias, returns the associated logical (sparse / in-use)
         target index.
@@ -356,7 +864,23 @@ class Targets:
         """
         return dict(self.node().listAliases())[alias].index()
 
-    def getAliasFromIndex(self, index):
+    def getLogicalFromPhysicalIndex(self, physicalIndex):
+        """
+        :param physicalIndex: the physical (contiguous) target index
+        :return: The logical (sparse / occupied) index.
+        :rtype: int
+        """
+        return self.indices()[physicalIndex]
+
+    def getPhysicalFromLogicalIndex(self, logicalIndex):
+        """
+        :param logicalIndex: the logical (sparse / occupied) target index
+        :return: the physical (contiguous) index
+        :rtype: int
+        """
+        return self.indices().index(logicalIndex)
+
+    def getAliasFromLogicalIndex(self, index):
         """
         Given a logical (sparse / in-use) target index, returns the alias.
 
@@ -366,65 +890,108 @@ class Targets:
         """
         return self.node().attr('weight')[index].getAlias()
 
-    #--------------------------------------------------------|    Member retrieval
+    def getByAlias(self, alias):
+        """
+        :param alias: the alias for the target
+        :return: The target.
+        :rtype: :class:`Target`
+        """
+        logicalIndex = self.getLogicalIndexFromAlias(alias)
+        return Target(logicalIndex, self)
 
-    def indices(self):
+    def getByLogicalIndex(self, logicalIndex):
         """
-        :return: The **logical** (in-use / sparse) target indices.
-        :rtype: [int]
+        :param logicalIndex: the logical (sparse / occupied) index for
+            the target
+        :raises IndexError: the index doesn't exist
+        :return: The target.
+        :rtype: :class:`Target`
         """
-        return self.owner.attr('weight').getArrayIndices()
+        if logicalIndex in self.indices():
+            return Target(logicalIndex, self)
+
+        raise IndexError(
+            "Logical index not found: {}".format(logicalIndex)
+        )
+
+    def getByPhysicalIndex(self, physicalIndex):
+        """
+        :param logicalIndex: the physical (listed) index for the target
+        :raises IndexError: the index doesn't exist
+        :return: The target.
+        :rtype: :class:`Target`
+        """
+        logicalIndex = self.getLogicalFromPhysicalIndex(physicalIndex)
+        return Target(logicalIndex, self)
 
     def aliases(self):
         """
-        :return: The target aliases.
-        :rtype: [str] or [None]
+        :return: All available target aliases. ``None`` aliases are skipped.
+        :rtype: [str]
         """
-        plug = self.owner.attr('weight')
-        indices = plug.getArrayIndices()
+        bsn = self.node()
+        weight = bsn.attr('weight')
+        out = []
 
-        return [plug[i].getAlias() for i in indices]
+        for index in weight.getArrayIndices():
+            plug = weight[index]
+            alias = plug.getAlias()
 
-    def __getitem__(self, item):
+            if alias is None:
+                continue
+
+            out.append(alias)
+
+        return out
+
+    def indices(self):
         """
-        :param item: this can be an **alias** or a **logical** (sparse) index; to
-            access targets by **physical** index, list this object first.
-        :type item: str, int
-        :raises KeyError: the passed alias couldn't be found
-        :raises IndexError: the passed logical index doesn't exist
-        :raises TypeError: *item* is neither a string nor an integer
-        :return: An instance of :class:`Target`
+        :return: Logical (sparse) indices for the targets.
+        :rtype: [int]
         """
-        if isinstance(item, int):
-            index = item
+        return self.node().attr('weight').getArrayIndices()
 
-            if index not in self.indices():
-                raise IndexError(
-                    "Couldn't find logical index {}".format(index))
+    def __getitem__(self, aliasOrLogicalIndex):
+        """
+        Retrieves a target by alias or logical (sparse / occupied) index.
 
-        elif isinstance(item, str):
-            index = self.getIndexFromAlias(item)
+        :param aliasOrLogicalIndex: the alias or logical (sparse /
+            occupied) index
+        :type aliasOrLogicalIndex: str, int
+        :return: The target.
+        :rtype: :class:`Target`
+        """
+        if isinstance(aliasOrLogicalIndex, str):
+            logicalIndex = self.getLogicalIndexFromAlias(aliasOrLogicalIndex)
 
         else:
-            raise TypeError("Not an index or alias: {}".format(item))
+            logicalIndex = aliasOrLogicalIndex
 
-        return Target(index, self)
+        return Target(logicalIndex, self)
 
     def __len__(self):
-        return self.owner.attr('weight').numElements()
+        """
+        :return: The number of targets.
+        :rtype: int
+        """
+        return self.node().attr('weight').numElements()
 
     def __iter__(self):
+        """
+        Yields :class:`Target` instances.
+        """
         for index in self.indices():
             yield Target(index, self)
 
-    #--------------------------------------------------------|    Member editing
+    #-------------------------------------------------------|    Member additions
 
     @short(
         alias='a',
         topologyCheck='tc',
         transform='tr',
         tangentSpace='ts',
-        initWeight='iw'
+        initWeight='iw',
+        index='i'
     )
     def add(
             self,
@@ -432,17 +999,19 @@ class Targets:
             alias=None,
             topologyCheck=False,
             transform=None,
-            tangentSpace=False,
+            tangentSpace=None,
             initWeight=0.0,
             index=None
     ):
         """
-        Adds a target.
+        Adds a blend shape target.
 
         :param targetGeo: the target geometry
-        :type targetGeo: str, :class:`~paya.runtime.nodes.DagNode`
-        :param str alias/a: the target alias; if omitted, the geo basename is
-            used
+        :type targetGeo: str, :class:`~paya.runtime.nodes.GeometryShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param alias: an optional alias for the target; if omitted, defaults
+            to the geometry's base name
+        :type alias: None, str
         :param bool topologyCheck/tc: check topology when applying; defaults
             to False
         :param transform/tr: if this is provided, and the blend shape node is
@@ -466,10 +1035,12 @@ class Targets:
         :return: The target instance.
         :rtype: :class:`Target`
         """
-        #---------------------------------------------|    Prep / early erroring
+        #----------------------------------------|    Prep / early erroring
 
         bsn = self.node()
+        post = bsn.inPostMode()
 
+        # Resolve index
         if index is None:
             index = bsn.attr('weight').getNextArrayIndex()
 
@@ -478,92 +1049,141 @@ class Targets:
                 "Logical index already in use: {}".format(index)
             )
 
-        postMode = bsn.inPostMode()
-
-        kwargs = {}
-
-        if postMode:
-            if not (transform or tangentSpace):
-                tangentSpace = True
-
-            if tangentSpace:
-                kwargs['tangentSpace'] = True
-
-                if transform:
-                    raise RuntimeError(
-                        "Tangent-space was requested, but a transform "+
-                        "was passed."
-                    )
-
-            else:
-                kwargs['transform'] = transform
-
-        shape = r.PyNode(targetGeo).toShape()
-        xf = shape.getParent()
-
+        # Resolve alias
         if alias is None:
-            alias = xf.basename()
+            geoShape = r.PyNode(targetGeo).toShape()
+            geoXf = geoShape.getParent()
+            alias = geoXf.basename(sns=True)
 
-        if alias in self.aliases():
+        existingAliases = [pair[0] for pair in bsn.listAliases()]
+
+        if alias in existingAliases:
             raise ValueError(
-                "Alias already in use: '{}'.".format(alias)
+                "Alias in use: '{}'".format(alias)
             )
 
+        # Resolve space
+        kwargs = {}
+
+        if post:
+            if transform:
+                if tangentSpace:
+                    raise ValueError(
+                        "Transforms can't be assigned in tangent space."
+                    )
+
+                kwargs['transform'] = transform
+
+            else:
+                if tangentSpace is not None:
+                    if not tangentSpace:
+                        raise ValueError(
+                            "The blend shape node is in post-deformation "+
+                            "mode, and no transform was specified. "+
+                            "Therefore tangentSpace must be allowed "+
+                            "to default to True."
+                        )
+
+                kwargs['tangentSpace'] = True
+
+        elif transform or tangentSpace:
+            raise ValueError(
+                "The blend shape node is not in post-deformation mode."
+            )
+
+        # Run the command
         r.blendShape(
             bsn,
             e=True,
-            t=[bsn.getBaseObjects()[0], index, shape, 1.0],
+            t=[bsn.getBaseObjects()[0], index, targetGeo, 1.0],
             w=[index, initWeight],
             **kwargs
         )
 
-        target = self[index]
+        # Post-config
+        if post:
+           bsn.attr('inputTarget')[0].attr('inputTargetGroup'
+                )[index].attr('inputTargetItem')[6000].attr(
+                'inputGeomTarget').disconnect()
 
-        if postMode:
-            target[1.0].geoInput.disconnect(inputs=True)
+        currentAlias = bsn.attr('weight')[index].getAlias()
 
-        target.setAlias(alias)
+        if currentAlias is None or currentAlias != alias:
+            bsn.attr('weight')[index].setAlias(alias)
 
-        return target
+        return Target(index, self)
 
-    def remove(self, target):
+    #-------------------------------------------------------|    Member setting / replacement
+
+    def __setitem__(self, aliasOrLogicalIndex, shape):
         """
-        Removes a target.
+        Performs quick target editing via direct geometry assignments. Note
+        that, if a matching item is found, any existing inbetween shapes will
+        be removed. To preserve them, perform the same operation on a
+        subtarget via :class:`Target` instead.
 
-        :param target: the target to remove; this can be specified as a
-            **logical** (sparse / in-use) index (int), alias (str) or
-            :class:`Target` instance
-        :type target: int, str, :class:`Target`
-        :return: ``self``
-        :rtype: :class:`Targets`
+        :param aliasOrLogicalIndex: the target alias or logical
+            (sparse / occupied) index
+        :type aliasOrLogicalIndex: str, int
+        :param shape: the shape to assign
+        :type shape: str, :class:`~paya.runtime.nodes.GeometryShape`,
+            :class:`~paya.runtime.nodes.Transform`,
         """
-        # Wrangle arg
+        if isinstance(aliasOrLogicalIndex, int):
+            logicalIndex = aliasOrLogicalIndex
+            alias = None
 
-        if isinstance(target, str):
-            index = self.getIndexFromAlias(target)
-
-        elif isinstance(target, int):
-            index = target
-
-        elif isinstance(target, Target):
-            index = int(target)
+        elif isinstance(aliasOrLogicalIndex, str):
+            logicalIndex = self.getLogicalIndexFromAlias(aliasOrLogicalIndex)
+            alias = aliasOrLogicalIndex
 
         else:
             raise TypeError(
-                "Not an index, alias or Target: {}".format(target)
+                "Not a string or integer: {}".format(aliasOrLogicalIndex)
             )
 
-        self._remove(index)
+        if logicalIndex in self.indices():
+            target = self.getByPhysicalIndex(logicalIndex)
+            target.clearInbetweens()
+            target[1.0].setShape(shape)
 
-        return self
+        else:
+            self.add(shape, alias=alias, index=logicalIndex)
 
-    def _remove(self, index):
+    #-------------------------------------------------------|    Member removal
 
-        # Transcription of blendShapeDeleteTargetGroup.mel, but doesn't
-        # account for 'edit mode' sculpt shapes
+    def removeByAlias(self, alias):
+        """
+        Removes a target by alias.
 
+        :param str alias: the target alias
+        :return: ``self``
+        :rtype: :class:`Targets`
+        """
+        logicalIndex = self.getLogicalIndexFromAlias(alias)
+        return self.removeByLogicalIndex(logicalIndex)
+
+    def removeByPhysicalIndex(self, physicalIndex):
+        """
+        Removes a target by physical (contiguous) index.
+
+        :param int logicalIndex: the physical (contiguous) index
+        :return: ``self``
+        :rtype: :class:`Targets`
+        """
+        logicalIndex = self.getLogicalFromPhysicalIndex(physicalIndex)
+        return self.removeByLogicalIndex(logicalIndex)
+
+    def removeByLogicalIndex(self, logicalIndex):
+        """
+        Removes a target by logical (sparse / occupied) index.
+
+        :param int logicalIndex: the logical (sparse / occupied) index
+        :return: ``self``
+        :rtype: :class:`Targets`
+        """
         bsn = self.node()
-        weightAttr = bsn.attr('weight')[index]
+        weightAttr = bsn.attr('weight')[logicalIndex]
 
         if weightAttr.isLocked():
             raise RuntimeError("The weight attribute is locked.")
@@ -581,16 +1201,16 @@ class Targets:
         # This must be done before removing the weight, since it will
         # cause itself removed from the midLayer
 
-        pdAttr = bsn.attr('parentDirectory')[index]
+        pdAttr = bsn.attr('parentDirectory')[logicalIndex]
         parentDirectory = pdAttr.get()
 
         if parentDirectory > 0:
             ciAttr = pdAttr.attr('childIndices')
             childIndices = ciAttr.get()
-            location = childIndices.index(index)
+            location = childIndices.index(logicalIndex)
 
             if location != -1 and location + 1 < len(childIndices):
-                ntAttr = bsn.attr('nextTarget')[index]
+                ntAttr = bsn.attr('nextTarget')[logicalIndex]
                 ntAttr.set(childIndices[location+1])
 
         # Remove array elements
@@ -598,9 +1218,9 @@ class Targets:
         for attr in [
             weightAttr,
             pdAttr,
-            bsn.attr('nextTarget')[index],
-            bsn.attr('targetVisibility')[index],
-            bsn.attr('targetParentVisibility')[index],
+            bsn.attr('nextTarget')[logicalIndex],
+            bsn.attr('targetVisibility')[logicalIndex],
+            bsn.attr('targetParentVisibility')[logicalIndex],
         ]:
             r.removeMultiInstance(attr, b=True)
 
@@ -611,55 +1231,45 @@ class Targets:
         if alias:
             r.aliasAttr(weightAttr, rm=True)
 
-    def __setitem__(self, item, geo):
+    def remove(self, target):
         """
-        Implements quick target editing via direct geometry assignments. Note
-        that, if a matching item is found, any existing inbetween shapes will
-        be removed. To preserve them, perform the same operation on a specific
-        :class:`Subtarget` instance.
+        Removes a target.
 
-        :param item: a alias or logical index
-        :type item: str, int
-        :param geo: the geometry to assign
-        :type geo: str, :class:`~paya.runtime.nodes.DagNode`
+        :param target: the target to remove
+        :type target: :class:`Target`
+        :return: ``self``
+        :rtype: :class:`Targets`
         """
-        try:
-            self[item].setGeometry(geo)
+        logicalIndex = target.index()
+        return self.removeByLogicalIndex(logicalIndex)
 
-        except (KeyError, IndexError):
-            kwargs = {}
-
-            if isinstance(item, str):
-                kwargs['alias'] = item
-
-            elif isinstance(item, int):
-                kwargs['index'] = item
-
-            else:
-                raise TypeError("Not an index or alias: {}".format(item))
-
-            self.add(geo, **kwargs)
-
-    def __delitem__(self, item):
+    def __delitem__(self, aliasOrLogicalIndex):
         """
-        :param item: an alias or logical index
-        :type item: str, int
+        Removes a target by alias or logical (sparse / occupied) index.
+
+        :param aliasOrLogicalIndex: the alias or logical index
+        :type aliasOrLogicalIndex: str, int
         """
-        self.remove(item)
+        if isinstance(aliasOrLogicalIndex, str):
+            logicalIndex = self.getLogicalIndexFromAlias(aliasOrLogicalIndex)
+
+        else:
+            logicalIndex = aliasOrLogicalIndex
+
+        self.removeByLogicalIndex(logicalIndex)
 
     def clear(self):
         """
         Removes all targets.
-
-        :return: self
+        :return: ``self``
         :rtype: :class:`Targets`
         """
         for index in self.indices():
-            del(self[index])
+            self.removeByLogicalIndex(index)
 
         return self
 
-    #--------------------------------------------------------|    Repr
+    #-------------------------------------------------------|    Repr
 
     def __repr__(self):
         return "{}.targets".format(repr(self.owner))
