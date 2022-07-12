@@ -6,8 +6,8 @@ from paya.util import short, resolveFlags
 
 class BlendShape:
     """
-    Use the :class:`.targets <paya.lib.bsntargets.Targets>` / ``.t`` attribute
-    to edit targets.
+    Use the :class:`.targets <paya.lib.bsntargets.Targets>` / ``.t`` interface
+    to edit targets. See :class:`~paya.lib.bsntargets.Targets`.
 
     Instead of passing complete Maya arguments to :meth:`create`, it may be
     easier to reserve the constructor for base initialisation and use
@@ -29,6 +29,37 @@ class BlendShape:
 
     #-----------------------------------------------------------------------|    Constructor
 
+    @staticmethod
+    def _resolveOrderFlags(
+            post=None,
+            pre=None,
+            after=None,
+            automatic=None,
+            parallel=None,
+            before=None,
+            split=None,
+            frontOfChain=None
+    ):
+        out = {}
+
+        if post:
+            out['before'] = True
+
+        elif pre:
+            out['frontOfChain'] = True
+
+        elif not any([
+            after,
+            automatic,
+            parallel,
+            before,
+            split,
+            frontOfChain
+        ]):
+            out['automatic'] = True
+
+        return out
+
     @classmethod
     @short(
         name='n',
@@ -38,7 +69,20 @@ class BlendShape:
         before='bf',
         after='af'
     )
-    def create(cls, *args, name=None, post=None, pre=None, **kwargs):
+    def create(
+            cls,
+            *args,
+            name=None,
+            post=None,
+            pre=None,
+            after=None,
+            automatic=None,
+            parallel=None,
+            before=None,
+            split=None,
+            frontOfChain=None,
+            **kwargs
+    ):
         """
         Wrapper for :func:`~pymel.core.animation.blendShape`. Adds managed
         naming and simpler deformation order management via 'post' and 'pre'.
@@ -83,36 +127,21 @@ class BlendShape:
                 - -parallel
                 - Deforms origShape, adds-in with second blend
         """
-        post, pre = resolveFlags(post, pre)
+        orderFlags = cls._resolveOrderFlags(
+            pre=pre,
+            post=post,
+            automatic=automatic,
+            frontOfChain=frontOfChain,
+            before=before,
+            after=after,
+            split=split,
+            parallel=parallel
+        )
 
-        if post and pre:
-            post = pre = None
-
-        def clearOrder():
-            for key in [
-                'automatic',
-                'frontOfChain',
-                'after',
-                'split',
-                'parallel',
-                'before'
-            ]:
-                try:
-                    del(kwargs[key])
-
-                except KeyError:
-                    pass
-
-        if post:
-            clearOrder()
-            kwargs['before'] = True
-
-        elif pre:
-            clearOrder()
-            kwargs['frontOfChain'] = True
-
+        kwargs.update(orderFlags)
         name = cls.makeName(name)
         kwargs['name'] = name
+
         return r.blendShape(*args, **kwargs)[0]
 
     #-----------------------------------------------------------------------|    Misc
