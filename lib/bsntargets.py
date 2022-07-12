@@ -97,8 +97,14 @@ class Subtarget:
 
     #--------------------------------------------------------|    Geometry management
 
-    def getShape(self):
+    @short(create='c', connect='con')
+    def getShape(self, create=False, connect=None):
         """
+        :param bool create/cr: recreate the target where possible; defaults to
+            False
+        :param bool connect/con: after recreating the target, connect it back
+            to the target; defaults to False if this is a 'post' target,
+            otherwise False
         :return: The shape connected into this target. This may be None if
             this is a 'post' mode target, or if targets were disconnected or
             deleted by the rigger.
@@ -108,6 +114,35 @@ class Subtarget:
 
         if inputs:
             return inputs[0].node()
+
+        if create:
+            bsn = self.node()
+            post = bsn.inPostMode()
+
+            if connect is None:
+                connect = False if post else True
+
+            elif connect and post:
+                raise RuntimeError(
+                    "Can't reconnect a regenerated shape when the blend "+
+                    "shape node is in 'post-deformation' mode."
+                )
+
+            xf = r.PyNode(r.sculptTarget(
+                bsn,
+                e=True,
+                t=self.owner.index(),
+                ibw=self.value(),
+                r=True
+            )[0])
+
+            xf.conformShapeNames()
+            shape = xf.getShape()
+
+            if not connect:
+                self.geoInput.disconnect(inputs=True)
+
+            return shape
 
     @short(connect='con')
     def setShape(self, shape, connect=None):
@@ -1261,6 +1296,7 @@ class Targets:
     def clear(self):
         """
         Removes all targets.
+
         :return: ``self``
         :rtype: :class:`Targets`
         """
