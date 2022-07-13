@@ -707,7 +707,7 @@ class Math1D:
         :return: the sampled output
         :rtype: :class:`Math1D`
         """
-        time, dim, isplug = _mo.getInfo(time)
+        time, dim, isplug = _mo.info(time)
 
         node = r.nodes.FrameCache.createNode()
         self >> node.attr('stream')
