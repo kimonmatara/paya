@@ -3,9 +3,11 @@ This module is not for direct import / use. It defines the ``.targets``
 interface on :class:`~paya.runtime.nodes.BlendShape`.
 """
 import maya.mel as mel
+mel.eval('source blendShapeDeleteInBetweenTarget')
+mel.eval('source blendShapeDeleteTargetGroup')
+
 from paya.util import short
 import paya.runtime as r
-
 
 #-------------------------------------------------------------------------------|
 #-------------------------------------------------------------------------------|    NORMALIZATION GROUPS
@@ -32,7 +34,8 @@ class NormalizationGroups:
         return self._owner
 
     #--------------------------------------------------------|    Member access
-    
+
+
 
     #--------------------------------------------------------|    Repr
 
@@ -727,31 +730,15 @@ class Target:
         :return: ``self``
         :rtype: :class:`Target`
         """
-        if logicalIndex == 6000:
-            raise RuntimeError("The full-value index can't be removed.")
+        cmd = 'blendShapeDeleteInBetweenTarget "{}" {} {}'.format(
+            self.node(),
+            self.index(),
+            logicalIndex
+        )
 
-        heroIndex = self.index()
+        mel.eval(cmd)
 
-        if logicalIndex in self.indices():
-            bsn = self.node()
-            plug = bsn.attr('inputTarget')[0].attr(
-                'inputTargetGroup')[heroIndex].attr(
-                'inputTargetItem')[logicalIndex]
-
-            r.removeMultiInstance(plug, b=True)
-
-            try:
-                infoPlug = bsn.attr('inbetweenInfoGroup'
-                    )[heroIndex].attr('inbetweenInfo')[logicalIndex]
-
-                r.removeMultiInstance(infoPlug, b=True)
-
-            except r.MayaAttributeError:
-                pass
-
-            return self
-
-        raise IndexError("Logical index not found: {}".format(logicalIndex))
+        return self
 
     def removeByPhysicalIndex(self, physicalIndex):
         """
@@ -1041,7 +1028,12 @@ class Targets:
         else:
             logicalIndex = aliasOrLogicalIndex
 
-        return Target(logicalIndex, self)
+        if logicalIndex in self.indices():
+            return Target(logicalIndex, self)
+
+        raise IndexError(
+            "Logical index couldn't be found: {}".format(logicalIndex)
+        )
 
     def __len__(self):
         """
@@ -1256,54 +1248,9 @@ class Targets:
         :return: ``self``
         :rtype: :class:`Targets`
         """
-        bsn = self.node()
-        weightAttr = bsn.attr('weight')[logicalIndex]
-
-        if weightAttr.isLocked():
-            raise RuntimeError("The weight attribute is locked.")
-
-        # Remove combination shape
-
-        try:
-            r.delete(weightAttr.inputs(type='combinationShape'))
-
-        except:
-            # May have locked them ourselves
-            pass
-
-        # Remember the next target of this target
-        # This must be done before removing the weight, since it will
-        # cause itself removed from the midLayer
-
-        pdAttr = bsn.attr('parentDirectory')[logicalIndex]
-        parentDirectory = pdAttr.get()
-
-        if parentDirectory > 0:
-            ciAttr = pdAttr.attr('childIndices')
-            childIndices = ciAttr.get()
-            location = childIndices.index(logicalIndex)
-
-            if location != -1 and location + 1 < len(childIndices):
-                ntAttr = bsn.attr('nextTarget')[logicalIndex]
-                ntAttr.set(childIndices[location+1])
-
-        # Remove array elements
-
-        for attr in [
-            weightAttr,
-            pdAttr,
-            bsn.attr('nextTarget')[logicalIndex],
-            bsn.attr('targetVisibility')[logicalIndex],
-            bsn.attr('targetParentVisibility')[logicalIndex],
-        ]:
-            r.removeMultiInstance(attr, b=True)
-
-        # Remove alias if there is one
-
-        alias = weightAttr.getAlias()
-
-        if alias:
-            r.aliasAttr(weightAttr, rm=True)
+        cmd = 'blendShapeDeleteTargetGroup "{}" {}'.format(self.node(), logicalIndex)
+        mel.eval(cmd)
+        return self
 
     def remove(self, target):
         """
