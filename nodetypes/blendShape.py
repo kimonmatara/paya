@@ -1,8 +1,7 @@
 import paya.runtime as r
-from paya.lib.bsnboltons import Targets, NormalizationGroups
+from paya.lib.bsnboltons import Targets
 from paya.util import short, resolveFlags
 
-#---------------------------------------------------------------------------|    Class
 
 class BlendShape:
     """
@@ -26,12 +25,6 @@ class BlendShape:
         return Targets(self)
 
     t = targets
-
-    @property
-    def normalizationGroups(self):
-        return NormalizationGroups(self)
-
-    ng = normalizationGroups
 
     #-----------------------------------------------------------------------|    Constructor
 
