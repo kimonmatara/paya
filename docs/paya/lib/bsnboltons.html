@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.lib.bsnboltons &mdash; paya 0.6 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.lib.controlshapes" href="controlshapes.html" />
+    <link rel="prev" title="paya.lib.attrs" href="attrs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.6
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../types_index.html">Types</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.bsnboltons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xmlweights.html">paya.lib.xmlweights</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../paya.html">paya</a> &raquo;</li>
+          <li><a href="../lib.html">paya.lib</a> &raquo;</li>
+      <li>paya.lib.bsnboltons</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/paya/lib/bsnboltons.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-paya.lib.bsnboltons">
+<span id="paya-lib-bsnboltons"></span><h1>paya.lib.bsnboltons<a class="headerlink" href="#module-paya.lib.bsnboltons" title="Permalink to this headline"></a></h1>
+<p>This module is not for direct import / use. It defines the <code class="docutils literal notranslate"><span class="pre">.targets</span></code>
+interface on <a class="reference internal" href="../../pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.NormalizationGroups">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NormalizationGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.NormalizationGroups" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.NormalizationGroups.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.NormalizationGroups.node" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The owner blend shape node.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.subtargetIndexToValue">
+<span class="sig-name descname"><span class="pre">subtargetIndexToValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.subtargetIndexToValue" title="Permalink to this definition"></a></dt>
+<dd><p>Given a logical subtarget (tween) index in the 5000 -&gt; 6000 range, returns
+a float weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> – the logical subtarget index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The weight.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.subtargetValueToIndex">
+<span class="sig-name descname"><span class="pre">subtargetValueToIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.subtargetValueToIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Given a subtarget (tween) value, returns a logical index in the
+5000 -&gt; 6000 range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – the subtarget value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Subtarget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Subtarget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Subtarget" title="Permalink to this definition"></a></dt>
+<dd><p>Interface for editing subtargets (tweens).</p>
+<p class="rubric">Updating geometry</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span>
+<span class="n">subtarget</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">subtarget</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="s1">&#39;new_geo&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Subtarget.getShape">
+<span class="sig-name descname"><span class="pre">getShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Subtarget.getShape" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>create/cr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – recreate the target where possible; defaults to
+False</p></li>
+<li><p><strong>connect/con</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – after recreating the target, connect it back
+to the target; defaults to False if this is a ‘post’ target,
+otherwise False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The shape connected into this target. This may be None if
+this is a ‘post’ mode target, or if targets were disconnected or
+deleted by the rigger.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryShape</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Subtarget.setShape">
+<span class="sig-name descname"><span class="pre">setShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Subtarget.setShape" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (str, <a class="reference internal" href="../../pools/nodes/dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a>) – the geometry shape to use to drive this subtarget</p></li>
+<li><p><strong>connect/con</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep a live connection to the shape;
+this defaults to False if this is a post-mode target, otherwise
+True; passing True on a post-mode target will throw an error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Subtarget.__int__">
+<span class="sig-name descname"><span class="pre">__int__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Subtarget.__int__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The logical (sparse) 5000 - &gt; 6000 index for this subtarget
+(<code class="docutils literal notranslate"><span class="pre">self.index</span></code>)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Subtarget.__float__">
+<span class="sig-name descname"><span class="pre">__float__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Subtarget.__float__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The 0.0 -&gt; 1.0 weight (value) for this subtarget
+(<code class="docutils literal notranslate"><span class="pre">self.value</span></code>)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Retrieving Subtargets (Tweens)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span>
+
+<span class="c1"># Iterate subtargets</span>
+<span class="k">for</span> <span class="n">subtarget</span> <span class="ow">in</span> <span class="n">target</span><span class="p">:</span>
+    <span class="c1"># do something</span>
+
+<span class="c1"># List subtargets</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+<span class="c1"># By logical (sparse, 5000 -&gt; 6000) index</span>
+<span class="n">subtarget</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">getByLogicalIndex</span><span class="p">(</span><span class="n">logicalIndex</span><span class="p">)</span>
+
+<span class="c1"># By physical (contiguous) index</span>
+<span class="n">subtarget</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">getByPhysicalIndex</span><span class="p">(</span><span class="n">physicalIndex</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">subtarget</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">taret</span><span class="p">)[</span><span class="n">physicalIndex</span><span class="p">]</span>
+
+<span class="c1"># By value (ratio)</span>
+<span class="n">subtarget</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">getByValue</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">subtarget</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+</pre></div>
+</div>
+<p class="rubric">Adding Subtargets (Tweens)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">subtarget</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">tweenShape</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">target</span><span class="p">[</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="n">tweenShape</span> <span class="c1"># by value</span>
+<span class="c1"># or</span>
+<span class="n">target</span><span class="p">[</span><span class="mi">5500</span><span class="p">]</span> <span class="o">=</span> <span class="n">tweenShape</span> <span class="c1"># by logical index</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#paya.lib.bsnboltons.Target.add" title="paya.lib.bsnboltons.Target.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> for more options.</p>
+<p class="rubric">Removing Subtargets (Tweens)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span><span class="o">.</span><span class="n">removeByPhysicalIndex</span><span class="p">(</span><span class="n">physicalIndex</span><span class="p">)</span>
+<span class="n">target</span><span class="o">.</span><span class="n">removeByLogicalIndex</span><span class="p">(</span><span class="n">logicalIndex</span><span class="p">)</span>
+<span class="n">target</span><span class="o">.</span><span class="n">removeByValue</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># or</span>
+<span class="k">del</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">physicalIndex</span><span class="p">])</span>
+<span class="k">del</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">value</span><span class="p">])</span>
+
+<span class="c1"># Clear all inbetweens (but not at 1.0)</span>
+<span class="n">target</span><span class="o">.</span><span class="n">clearInbetweens</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a> for more.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.isTransformSpace">
+<span class="sig-name descname"><span class="pre">isTransformSpace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.isTransformSpace" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if this is a transform-space target, else False.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.isTangentSpace">
+<span class="sig-name descname"><span class="pre">isTangentSpace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.isTangentSpace" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if this is a tangent-space target, else False.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.inPostMode">
+<span class="sig-name descname"><span class="pre">inPostMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.inPostMode" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if this is a tangent- or transform-space target,
+otherwise False.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getTransform">
+<span class="sig-name descname"><span class="pre">getTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getTransform" title="Permalink to this definition"></a></dt>
+<dd><p>Setter for the <code class="docutils literal notranslate"><span class="pre">transform</span></code> / <code class="docutils literal notranslate"><span class="pre">xf</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NonTransformSpaceTargetError</strong> – this is not a transform-space
+target</p></li>
+<li><p><strong>TargetMatrixNotATransformError</strong> – there’s an input into
+.targetMatrix, but it’s from a utility node</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if this is a transform-space target, the transform
+connected to it</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None, <a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.setTransform">
+<span class="sig-name descname"><span class="pre">setTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.setTransform" title="Permalink to this definition"></a></dt>
+<dd><p>If this is a transform-space target, connects the <code class="docutils literal notranslate"><span class="pre">.worldMatrix</span></code>
+of the specified transform into its <code class="docutils literal notranslate"><span class="pre">.targetMatrix</span></code> attribute.</p>
+<p>Setter for the <code class="docutils literal notranslate"><span class="pre">transform</span></code> / <code class="docutils literal notranslate"><span class="pre">xf</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>transform</strong> (str, <a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the transform to connect</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NonTransformSpaceTargetError</strong> – this is not a transform-space
+target</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.clearTransform">
+<span class="sig-name descname"><span class="pre">clearTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.clearTransform" title="Permalink to this definition"></a></dt>
+<dd><p>”
+If this is a transform-space target, clears any inputs on its
+<code class="docutils literal notranslate"><span class="pre">.targetMatrix</span></code> attribute.</p>
+<p>Deleter for the <code class="docutils literal notranslate"><span class="pre">transform</span></code> / <code class="docutils literal notranslate"><span class="pre">xf</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NonTransformSpaceTargetError</strong> – this is not a transform-space
+target</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getAlias">
+<span class="sig-name descname"><span class="pre">getAlias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getAlias" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the alias for this blend shape target. Getter for the
+<code class="docutils literal notranslate"><span class="pre">alias</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The alias for this target, if any.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.setAlias">
+<span class="sig-name descname"><span class="pre">setAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.setAlias" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the alias for this blend shape target. Setter for the <code class="docutils literal notranslate"><span class="pre">alias</span></code>
+property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alias</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the alias to set</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.clearAlias">
+<span class="sig-name descname"><span class="pre">clearAlias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.clearAlias" title="Permalink to this definition"></a></dt>
+<dd><p>Removes the alias for this blend shape target (not usually advisable).
+Equivalent to <code class="docutils literal notranslate"><span class="pre">setAlias(None)</span></code>. Deleter for the <code class="docutils literal notranslate"><span class="pre">alias</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getLogicalFromPhysicalIndex">
+<span class="sig-name descname"><span class="pre">getLogicalFromPhysicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getLogicalFromPhysicalIndex" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>physicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the physical (contiguous) subtarget index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logical (sparse, 5000 -&gt; 6000) index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getPhysicalFromLogicalIndex">
+<span class="sig-name descname"><span class="pre">getPhysicalFromLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getPhysicalFromLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the logical (sparse, 5000 -&gt; 6000) subtarget
+index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The physical (contiguous) index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getLogicalIndexFromValue">
+<span class="sig-name descname"><span class="pre">getLogicalIndexFromValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getLogicalIndexFromValue" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the 0.0 -&gt; 1.0 subtarget value (ratio)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The matching logical (sparse, 5000 -&gt; 6000) index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getValueFromLogicalIndex">
+<span class="sig-name descname"><span class="pre">getValueFromLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getValueFromLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the sparse, 5000 -&gt; 6000 subtarget index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The matching tween value (ratio).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.values" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The subtarget (tween) values (ratios).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.indices">
+<span class="sig-name descname"><span class="pre">indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.indices" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The logical (sparse, 5000 -&gt; 6000) target indices.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getByLogicalIndex">
+<span class="sig-name descname"><span class="pre">getByLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getByLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a subtarget (tween) by logical (sparse, 5000 -&gt; 6000) index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the logical subtarget index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The subtarget.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getByPhysicalIndex">
+<span class="sig-name descname"><span class="pre">getByPhysicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getByPhysicalIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a subtarget (tween) by logical (contiguous) index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>physicalIndex</strong> – the physical subtarget index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The subtarget.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getByValue">
+<span class="sig-name descname"><span class="pre">getByValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getByValue" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a subtarget (tween) by value (ratio).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the value (ratio)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The subtarget.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.__len__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of subtargets (number of inbetweens + 1)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.__iter__" title="Permalink to this definition"></a></dt>
+<dd><p>Yields <a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndexOrValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.__getitem__" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves subtargets by logical (5000 -&gt; 6000) index or value (ratio).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndexOrValue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the value or logical index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The subtarget.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topologyCheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.add" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a subtarget (tween) at the specified value (ratio).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the value at which to add the subtarget</p></li>
+<li><p><strong>geometry</strong> – the geometry shape to assign</p></li>
+<li><p><strong>topologyCheck/tc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – check topology before applying; defaults
+to False</p></li>
+<li><p><strong>relative/rel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – create a ‘relative’ inbetween target;
+defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – the requested value (ratio) is already in use</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The new Subtarget instance.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subtarget</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.remove" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a subtarget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subtarget</strong> (<a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a>) – The subtarget to remove.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.removeByLogicalIndex">
+<span class="sig-name descname"><span class="pre">removeByLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.removeByLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Removes the subtarget (tween) at the specified logical index. The
+main subtarget (at 6000 / 1.0) can’t be removed; use remove() on
+<a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the logical (sparse / occupied, 5000 -&gt; 6000)
+subtarget index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.removeByPhysicalIndex">
+<span class="sig-name descname"><span class="pre">removeByPhysicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.removeByPhysicalIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Removes the subtarget (tween) at the specified physical index. The
+main subtarget can’t be removed; use remove() on <a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a>
+instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>physicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the physical (contiguous) subtarget index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.removeByValue">
+<span class="sig-name descname"><span class="pre">removeByValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.removeByValue" title="Permalink to this definition"></a></dt>
+<dd><p>Removes the subtarget (tween) at the specified value (ratio). The
+main subtarget (at 1.0) can’t be removed; use remove() on
+<a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the subtarget (tween) value (ratio)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.clearInbetweens">
+<span class="sig-name descname"><span class="pre">clearInbetweens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.clearInbetweens" title="Permalink to this definition"></a></dt>
+<dd><p>Removes all inbetweens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.__delitem__">
+<span class="sig-name descname"><span class="pre">__delitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valueOrLogicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.__delitem__" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a subtarget by logical (sparse / occupied, 5000 -&gt; 6000) index
+or value (ratio).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>valueOrLogicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The value or logical index.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.__int__">
+<span class="sig-name descname"><span class="pre">__int__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.__int__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The logical (sparse) index for this target group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets" title="Permalink to this definition"></a></dt>
+<dd><p>Interface for editing blend shape targets, available on
+<a class="reference internal" href="../../pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a> instances as <code class="docutils literal notranslate"><span class="pre">.targets</span></code> /
+<code class="docutils literal notranslate"><span class="pre">.t</span></code>.</p>
+<p class="rubric">Retrieving Targets</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Iteration</span>
+<span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
+    <span class="c1"># do something</span>
+
+<span class="c1"># Listing</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
+
+<span class="c1"># By logical (sparse / occupied) index:</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">getByLogicalIndex</span><span class="p">(</span><span class="n">logicalIndex</span><span class="p">)</span>
+<span class="c1"># or:</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="n">logicalIndex</span><span class="p">]</span>
+
+<span class="c1"># By physical (contiguous) index:</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">getByPhysicalIndex</span><span class="p">(</span><span class="n">physicalIndex</span><span class="p">)</span>
+<span class="c1"># or:</span>
+<span class="n">target</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">)[</span><span class="n">physicalIndex</span><span class="p">]</span>
+
+<span class="c1"># By alias:</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">getByAlias</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+<span class="c1"># or:</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="n">alias</span><span class="p">]</span>
+</pre></div>
+</div>
+<p class="rubric">Adding Targets</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">target</span><span class="p">[</span><span class="n">alias</span><span class="p">]</span> <span class="o">=</span> <span class="n">geometry</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#paya.lib.bsnboltons.Targets.add" title="paya.lib.bsnboltons.Targets.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> for more options.</p>
+<p class="rubric">Removing Targets</p>
+<p>Use <a class="reference internal" href="#paya.lib.bsnboltons.Targets.removeByPhysicalIndex" title="paya.lib.bsnboltons.Targets.removeByPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByPhysicalIndex()</span></code></a>, <a class="reference internal" href="#paya.lib.bsnboltons.Targets.removeByLogicalIndex" title="paya.lib.bsnboltons.Targets.removeByLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByLogicalIndex()</span></code></a>,
+<a class="reference internal" href="#paya.lib.bsnboltons.Targets.removeByAlias" title="paya.lib.bsnboltons.Targets.removeByAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByAlias()</span></code></a>, <a class="reference internal" href="#paya.lib.bsnboltons.Targets.__delitem__" title="paya.lib.bsnboltons.Targets.__delitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__delitem__()</span></code></a> or <a class="reference internal" href="#paya.lib.bsnboltons.Targets.clear" title="paya.lib.bsnboltons.Targets.clear"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clear()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># By logical index:</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">removeByLogicalIndex</span><span class="p">(</span><span class="n">logicalIndex</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="k">del</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="n">logicalIndex</span><span class="p">])</span>
+
+<span class="c1"># By physical index</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">removeByPhysicalIndex</span><span class="p">(</span><span class="n">physicalIndex</span><span class="p">)</span>
+
+<span class="c1"># By instance</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+<span class="c1"># By alias</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">removeByAlias</span><span class="p">(</span><span class="s1">&#39;L_smile&#39;</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="k">del</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">])</span>
+
+<span class="c1"># Clear all targets</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> for additional methods for subtargets (tweens) etc.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.node">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.node" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The owner blend shape node.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.getLogicalIndexFromAlias">
+<span class="sig-name descname"><span class="pre">getLogicalIndexFromAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.getLogicalIndexFromAlias" title="Permalink to this definition"></a></dt>
+<dd><p>Given an alias, returns the associated logical (sparse / in-use)
+target index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alias</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the target alias</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logical (sparse / in-use) target index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.getLogicalFromPhysicalIndex">
+<span class="sig-name descname"><span class="pre">getLogicalFromPhysicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.getLogicalFromPhysicalIndex" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>physicalIndex</strong> – the physical (contiguous) target index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The logical (sparse / occupied) index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.getPhysicalFromLogicalIndex">
+<span class="sig-name descname"><span class="pre">getPhysicalFromLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.getPhysicalFromLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> – the logical (sparse / occupied) target index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the physical (contiguous) index</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.getAliasFromLogicalIndex">
+<span class="sig-name descname"><span class="pre">getAliasFromLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.getAliasFromLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Given a logical (sparse / in-use) target index, returns the alias.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the logical (sparse / in-use) target index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The target alias.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.getByAlias">
+<span class="sig-name descname"><span class="pre">getByAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.getByAlias" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alias</strong> – the alias for the target</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The target.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.getByLogicalIndex">
+<span class="sig-name descname"><span class="pre">getByLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.getByLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> – the logical (sparse / occupied) index for
+the target</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – the index doesn’t exist</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The target.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.getByPhysicalIndex">
+<span class="sig-name descname"><span class="pre">getByPhysicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.getByPhysicalIndex" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> – the physical (listed) index for the target</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – the index doesn’t exist</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The target.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.aliases">
+<span class="sig-name descname"><span class="pre">aliases</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.aliases" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All available target aliases. <code class="docutils literal notranslate"><span class="pre">None</span></code> aliases are skipped.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.indices">
+<span class="sig-name descname"><span class="pre">indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.indices" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Logical (sparse) indices for the targets.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aliasOrLogicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.__getitem__" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a target by alias or logical (sparse / occupied) index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>aliasOrLogicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the alias or logical (sparse /
+occupied) index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The target.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.__len__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of targets.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.__iter__" title="Permalink to this definition"></a></dt>
+<dd><p>Yields <a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targetGeo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topologyCheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangentSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initWeight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.add" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a blend shape target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>targetGeo</strong> (str, <code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryShape</span></code>,
+<a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the target geometry</p></li>
+<li><p><strong>alias</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an optional alias for the target; if omitted, defaults
+to the geometry’s base name</p></li>
+<li><p><strong>topologyCheck/tc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – check topology when applying; defaults
+to False</p></li>
+<li><p><strong>transform/tr</strong> (None, str, <a class="reference internal" href="../../pools/nodes/dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a>) – if this is provided, and the blend shape node is
+in ‘post-deformation’ mode, a transform-space target will be
+configured; defaults to None</p></li>
+<li><p><strong>tangentSpace/ts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if the blend shape node is in
+‘post-deformation’ mode, configure a tangent-space target;
+defaults to False</p></li>
+<li><p><strong>initWeight/iw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the blend shape weight value on
+creation; defaults to 0.0</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>param int index/i: a preferred logical (sparse) index for the target;</dt><dd><p>this mustn’t already exist; if omitted, defaults to the next non-
+contiguous index.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – <ul class="simple">
+<li><p>both <em>transform</em> and <em>tangent</em> were specified</p></li>
+<li><p>either <em>transform</em> or <em>tangent</em> were specified and the blend
+shape node is not in ‘post-deformation’ mode</p></li>
+<li><p>the requested or derived alias is already in use</p></li>
+<li><p>the requested logical index is already in use</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The target instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aliasOrLogicalIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.__setitem__" title="Permalink to this definition"></a></dt>
+<dd><p>Performs quick target editing via direct geometry assignments. Note
+that, if a matching item is found, any existing inbetween shapes will
+be removed. To preserve them, perform the same operation on a
+subtarget via <a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>aliasOrLogicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the target alias or logical
+(sparse / occupied) index</p></li>
+<li><p><strong>shape</strong> (str, <code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryShape</span></code>,
+<a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,) – the shape to assign</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.removeByAlias">
+<span class="sig-name descname"><span class="pre">removeByAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.removeByAlias" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a target by alias.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alias</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the target alias</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.removeByPhysicalIndex">
+<span class="sig-name descname"><span class="pre">removeByPhysicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.removeByPhysicalIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a target by physical (contiguous) index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the physical (contiguous) index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.removeByLogicalIndex">
+<span class="sig-name descname"><span class="pre">removeByLogicalIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.removeByLogicalIndex" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a target by logical (sparse / occupied) index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the logical (sparse / occupied) index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.remove" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a>) – the target to remove</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.__delitem__">
+<span class="sig-name descname"><span class="pre">__delitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aliasOrLogicalIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.__delitem__" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a target by alias or logical (sparse / occupied) index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>aliasOrLogicalIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the alias or logical index</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.clear" title="Permalink to this definition"></a></dt>
+<dd><p>Removes all targets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="attrs.html" class="btn btn-neutral float-left" title="paya.lib.attrs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="controlshapes.html" class="btn btn-neutral float-right" title="paya.lib.controlshapes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

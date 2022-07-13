@@ -166,7 +166,6 @@ def dump(
             kwargs[name] = val
 
     fixKwargs(kwargs)
-
     m.deformerWeights(filename, **kwargs)
 
 @short(
