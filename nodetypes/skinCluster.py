@@ -474,3 +474,32 @@ class SkinCluster:
             m.removeMultiInstance('{}[{}]'.format(_plug, index))
 
         return self
+
+    #----------------------------------------------------|    Shape inversion
+
+    @short(name='n')
+    def invertShape(self, correctiveShape, name=None):
+        """
+        Given a corrective geometry for the current skinCluster pose, returns
+        a reversed geometry suitable for use as a pre-deformation blend shape
+        target.
+
+        :param correctiveShape: the corrective shape
+        :type correctiveShape: str,
+            :class:`~paya.runtime.nodes.GeometryShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param name/n: one or more name elements for the new geometry;
+            these will be applied to its transform; defaults to None
+        :type name/n: None, str, int, tuple, list
+        :return: The pre-deformation target.
+        :rtype: :class:`~paya.runtime.nodes.GeometryShape`
+        """
+        corShape = r.PyNode(correctiveShape).toShape()
+        corXf = corShape.getParent()
+        posedGeo = self.getGeometry()[0].getParent()
+
+        outShape = r.PyNode(r.invertShape(posedGeo, corXf)).getShape()
+        name = outShape.__class__.makeName(n=name)
+        outShape.getParent().rename(name)
+
+        return outShape
