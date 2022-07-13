@@ -1,5 +1,6 @@
 from functools import reduce
 
+import pymel.util as _pu
 from paya.util import short
 import paya.lib.mathops as _mo
 import paya.runtime as r
@@ -261,6 +262,37 @@ class Math1D:
         return self.ge(0).ifElse(self,-self).setClass(type(self))
 
    #-----------------------------------------------------------------|    Loops and ranges
+
+    @short(method='m')
+    def combine(self, *others, method='multiplication'):
+        """
+        Uses a `combinationShape
+        <https://help.autodesk.com/cloudhelp/2023/ENU/Maya-Tech-Docs/Nodes/combinationShape.html>`_
+        node to combine this scalar with *\*others*.
+
+        :param \*others: unpacked scalars
+        :type \*others: int, float, :class:`~paya.runtime.plugs.Math1D`
+        :param method/m: an enum for the 'combinationMethod' attribute of the
+            node; can be specified as an index or label; one of:
+
+            -   0: 'multiplication' (the default)
+            -   1: 'lowest weighting'
+            -   2: 'smooth'
+        :return: The combined output.
+        :rtype: :class:`~paya.runtime.plugtypes.Math1D`
+        """
+        node = r.nodes.CombinationShape.createNode()
+        node.attr('combinationMethod').set(method)
+
+        elems = [self] + [_mo.info(item
+            )[0] for item in _pu.expandArgs(*others)]
+
+        for i, elem in enumerate(elems):
+            elem >> node.attr('inputWeight')[i]
+
+        out = node.attr('outputWeight')
+        out.__class__ = type(self)
+        return out
 
     def cycle(self,min,max):
         """
