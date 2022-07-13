@@ -1,0 +1,84 @@
+*****************************
+paya.runtime.nodes.BlendShape
+*****************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: BlendShape(*args, **kwargs)
+
+    Use the :class:`.targets <paya.lib.bsnboltons.Targets>` / ``.t`` interface
+    to edit targets. See :class:`~paya.lib.bsnboltons.Targets`.
+    
+    Instead of passing complete Maya arguments to :meth:`create`, it may be
+    easier to reserve the constructor for base initialisation and use
+    :class:`.targets <paya.lib.bsnboltons.Targets>` for everything else:
+    
+    .. code-block:: python
+    
+        bsn = r.nodes.BlendShape.create(baseGeo, pre=True)
+        bsn.targets.add(sadGeo)
+        bsn.targets.add(happyGeo)
+        # etc.
+
+    .. py:classmethod:: create(*args, name=None, post=False, pre=False, after=False, automatic=False, parallel=False, before=False, split=False, frontOfChain=False, afterReference=False, **kwargs)
+    
+        Wrapper for :func:`~pymel.core.animation.blendShape`. Two new flags,
+        ``pre`` and ``post``, can be used for easier / clearer configuration of
+        the two mos common configurations (pre-deformation and post-
+        deformation). When provided, they will override all the standard Maya
+        deformation options.
+        
+        :param \*args: forwarded to :func:`~pymel.core.animation.blendShape`
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: int, str, None, list, tuple
+        :param bool post: if True, set all deformation flags for post-
+            deformation; defaults to False
+        :param bool pre: if True, set all deformation flags for pre-
+            deformation; defaults to False
+        :param \*\*kwargs: forwarded to
+            :func:`~pymel.core.animation.blendShape`
+        :return: The blend shape node.
+        :rtype: :class:`~BlendShape`
+        
+        If you'd rather skip 'post' / 'pre' and use the standard Maya flags,
+        here's a reference:
+        
+        .. list-table::
+            :header-rows: 1
+        
+            *   - UI Option
+                - Command Flag
+                - Description
+            *   - 'Automatic'
+                - -automatic
+                - Maya makes a guess.
+            *   - 'Pre-deformation'
+                - -frontOfChain
+                - Pre-skin (typical use)
+            *   - 'Post-deformation'
+                - -before
+                - Post-skin, same end shape
+            *   - 'After'
+                - -after
+                - Post-skin, new end shape
+            *   - 'Split'
+                - -split
+                - Deforms origShape into new end shape
+            *   - 'Parallel'
+                - -parallel
+                - Deforms origShape, adds-in with second blend
+            *   - 'After Reference'
+                - afterReference
+                - For ref-friendly boundary
+    
+    .. py:method:: getIndexFromAlias(alias)
+    
+        :param str alias: the target alias
+        :return: The matching index.
+        :rtype: int
+    
+    .. py:method:: inPostMode()
+    
+        :return: True if the blend shape node is configured for
+            'post-deformation', otherwise False.
+        :rtype: bool

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.runtime.nodes.BlendShape &mdash; paya 0.7 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.runtime.nodes.DagNode" href="dagNode.html" />
+    <link rel="prev" title="Node Types" href="../nodes_index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> paya
+          </a>
+              <div class="version">
+                0.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">FourByFourMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geometryFilter.html">GeometryFilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ikHandle.html">IkHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="joint.html">Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lattice.html">Lattice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="locator.html">Locator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../types_index.html">Types</a> &raquo;</li>
+          <li><a href="../nodes_index.html">Node Types</a> &raquo;</li>
+      <li>paya.runtime.nodes.BlendShape</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/pools/nodes/blendShape.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="paya-runtime-nodes-blendshape">
+<h1>paya.runtime.nodes.BlendShape<a class="headerlink" href="#paya-runtime-nodes-blendshape" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BlendShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape" title="Permalink to this definition"></a></dt>
+<dd><p>Use the <a class="reference internal" href="../../paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">.targets</span></code></a> / <code class="docutils literal notranslate"><span class="pre">.t</span></code> interface
+to edit targets. See <a class="reference internal" href="../../paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a>.</p>
+<p>Instead of passing complete Maya arguments to <a class="reference internal" href="#paya.runtime.nodes.BlendShape.create" title="paya.runtime.nodes.BlendShape.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a>, it may be
+easier to reserve the constructor for base initialisation and use
+<a class="reference internal" href="../../paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">.targets</span></code></a> for everything else:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bsn</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">BlendShape</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">baseGeo</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sadGeo</span><span class="p">)</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">happyGeo</span><span class="p">)</span>
+<span class="c1"># etc.</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frontOfChain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afterReference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.create" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper for <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a>. Two new flags,
+<code class="docutils literal notranslate"><span class="pre">pre</span></code> and <code class="docutils literal notranslate"><span class="pre">post</span></code>, can be used for easier / clearer configuration of
+the two mos common configurations (pre-deformation and post-
+deformation). When provided, they will override all the standard Maya
+deformation options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – forwarded to <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a></p></li>
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – one or more name elements; defaults to None</p></li>
+<li><p><strong>post</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, set all deformation flags for post-
+deformation; defaults to False</p></li>
+<li><p><strong>pre</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, set all deformation flags for pre-
+deformation; defaults to False</p></li>
+<li><p><strong>**kwargs</strong> – forwarded to
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The blend shape node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a></p>
+</dd>
+</dl>
+<p>If you’d rather skip ‘post’ / ‘pre’ and use the standard Maya flags,
+here’s a reference:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>UI Option</p></th>
+<th class="head"><p>Command Flag</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘Automatic’</p></td>
+<td><p>-automatic</p></td>
+<td><p>Maya makes a guess.</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘Pre-deformation’</p></td>
+<td><p>-frontOfChain</p></td>
+<td><p>Pre-skin (typical use)</p></td>
+</tr>
+<tr class="row-even"><td><p>‘Post-deformation’</p></td>
+<td><p>-before</p></td>
+<td><p>Post-skin, same end shape</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘After’</p></td>
+<td><p>-after</p></td>
+<td><p>Post-skin, new end shape</p></td>
+</tr>
+<tr class="row-even"><td><p>‘Split’</p></td>
+<td><p>-split</p></td>
+<td><p>Deforms origShape into new end shape</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘Parallel’</p></td>
+<td><p>-parallel</p></td>
+<td><p>Deforms origShape, adds-in with second blend</p></td>
+</tr>
+<tr class="row-even"><td><p>‘After Reference’</p></td>
+<td><p>afterReference</p></td>
+<td><p>For ref-friendly boundary</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.getIndexFromAlias">
+<span class="sig-name descname"><span class="pre">getIndexFromAlias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.getIndexFromAlias" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alias</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the target alias</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The matching index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.inPostMode">
+<span class="sig-name descname"><span class="pre">inPostMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.inPostMode" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the blend shape node is configured for
+‘post-deformation’, otherwise False.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../nodes_index.html" class="btn btn-neutral float-left" title="Node Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dagNode.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.DagNode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -10,39 +10,6 @@ from paya.util import short
 import paya.runtime as r
 
 #-------------------------------------------------------------------------------|
-#-------------------------------------------------------------------------------|    NORMALIZATION GROUPS
-#-------------------------------------------------------------------------------|
-
-class NormalizationGroups:
-
-    #--------------------------------------------------------|    Init
-
-    def __init__(self, owner):
-        self._owner = owner
-
-    #--------------------------------------------------------|    Basic inspections
-
-    @property
-    def owner(self):
-        return self._owner
-
-    def node(self):
-        """
-        :return: The owner blend shape node.
-        :rtype: :class:`~paya.runtime.nodes.BlendShape`
-        """
-        return self._owner
-
-    #--------------------------------------------------------|    Member access
-
-
-
-    #--------------------------------------------------------|    Repr
-
-    def __repr__(self):
-        return "{}.normalizationGroups".format(repr(self.owner))
-
-#-------------------------------------------------------------------------------|
 #-------------------------------------------------------------------------------|    TARGETS
 #-------------------------------------------------------------------------------|
 
@@ -446,6 +413,49 @@ class Target:
 
     transform = xf = property(
         fget=getTransform, fset=setTransform, fdel=clearTransform)
+
+    #--------------------------------------------------------|    Normalization group
+
+    def getNormalizationId(self):
+        """
+        Getter for the ``normalizationId`` / ``nid`` property.
+
+        :return: The normalization ID of this target. An ID of 0 means
+            that the target doesn't belong to any normalization groups.
+        :rtype: int or None
+        """
+        return self.node().attr('inputTarget')[0].attr(
+            'inputTargetGroup')[self.index()].attr('nid').get()
+
+    def setNormalizationId(self, nid):
+        """
+        Sets the normalization ID of this target. An ID of 0 means
+        that the target doesn't belong to any normalization groups.
+
+        Setter for the ``normalizationId`` / ``nid`` property.
+
+        :param int nid: the normalization ID
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        self.node().attr('inputTarget')[0].attr(
+            'inputTargetGroup')[self.index()].attr('nid').set(nid)
+
+        return self
+
+    def clearNormalizationId(self):
+        """
+        Deleter for the ``normalizationId`` / ``nid`` property. Equivalent
+        to ``setNormalizationId(0)``.
+
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        return self.setNormalizationId(0)
+
+    normalizationId = nid = property(
+        fget=getNormalizationId, fset=setNormalizationId,
+        fdel=clearNormalizationId)
 
     #--------------------------------------------------------|    Alias
 
