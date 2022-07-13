@@ -1,17 +1,17 @@
 import paya.runtime as r
-from paya.lib.bsntargets import Targets
+from paya.lib.bsnboltons import Targets, NormalizationGroups
 from paya.util import short, resolveFlags
 
 #---------------------------------------------------------------------------|    Class
 
 class BlendShape:
     """
-    Use the :class:`.targets <paya.lib.bsntargets.Targets>` / ``.t`` interface
-    to edit targets. See :class:`~paya.lib.bsntargets.Targets`.
+    Use the :class:`.targets <paya.lib.bsnboltons.Targets>` / ``.t`` interface
+    to edit targets. See :class:`~paya.lib.bsnboltons.Targets`.
 
     Instead of passing complete Maya arguments to :meth:`create`, it may be
     easier to reserve the constructor for base initialisation and use
-    :class:`.targets <paya.lib.bsntargets.Targets>` for everything else:
+    :class:`.targets <paya.lib.bsnboltons.Targets>` for everything else:
 
     .. code-block:: python
 
@@ -27,38 +27,13 @@ class BlendShape:
 
     t = targets
 
+    @property
+    def normalizationGroups(self):
+        return NormalizationGroups(self)
+
+    ng = normalizationGroups
+
     #-----------------------------------------------------------------------|    Constructor
-
-    @staticmethod
-    def _resolveOrderFlags(
-            post=None,
-            pre=None,
-            after=None,
-            automatic=None,
-            parallel=None,
-            before=None,
-            split=None,
-            frontOfChain=None
-    ):
-        out = {}
-
-        if post:
-            out['before'] = True
-
-        elif pre:
-            out['frontOfChain'] = True
-
-        elif not any([
-            after,
-            automatic,
-            parallel,
-            before,
-            split,
-            frontOfChain
-        ]):
-            out['automatic'] = True
-
-        return out
 
     @classmethod
     @short(
@@ -67,25 +42,30 @@ class BlendShape:
         parallel='par',
         split='sp',
         before='bf',
-        after='af'
+        after='af',
+        afterReference='ar'
     )
     def create(
             cls,
             *args,
             name=None,
-            post=None,
-            pre=None,
-            after=None,
-            automatic=None,
-            parallel=None,
-            before=None,
-            split=None,
-            frontOfChain=None,
+            post=False,
+            pre=False,
+            after=False,
+            automatic=False,
+            parallel=False,
+            before=False,
+            split=False,
+            frontOfChain=False,
+            afterReference=False,
             **kwargs
     ):
         """
-        Wrapper for :func:`~pymel.core.animation.blendShape`. Adds managed
-        naming and simpler deformation order management via 'post' and 'pre'.
+        Wrapper for :func:`~pymel.core.animation.blendShape`. Two new flags,
+        ``pre`` and ``post``, can be used for easier / clearer configuration of
+        the two mos common configurations (pre-deformation and post-
+        deformation). When provided, they will override all the standard Maya
+        deformation options.
 
         :param \*args: forwarded to :func:`~pymel.core.animation.blendShape`
         :param name/n: one or more name elements; defaults to None
@@ -126,23 +106,59 @@ class BlendShape:
             *   - 'Parallel'
                 - -parallel
                 - Deforms origShape, adds-in with second blend
+            *   - 'After Reference'
+                - afterReference
+                - For ref-friendly boundary
         """
-        orderFlags = cls._resolveOrderFlags(
-            pre=pre,
-            post=post,
-            automatic=automatic,
-            frontOfChain=frontOfChain,
-            before=before,
-            after=after,
-            split=split,
-            parallel=parallel
+        deformOrderFlags = cls._resolveDeformOrderFlags(
+            post=post, pre=pre, automatic=automatic,
+            frontOfChain=frontOfChain, before=before,
+            split=split, parallel=parallel,
+            afterReference=afterReference
         )
 
-        kwargs.update(orderFlags)
+        kwargs.update(deformOrderFlags)
         name = cls.makeName(name)
         kwargs['name'] = name
 
         return r.blendShape(*args, **kwargs)[0]
+
+    @staticmethod
+    def _resolveDeformOrderFlags(
+            post=False,
+            pre=False,
+            automatic=False,
+            frontOfChain=False,
+            before=False,
+            after=False,
+            split=False,
+            parallel=False,
+            afterReference=False
+    ):
+        out = {}
+
+        if post:
+            out['before'] = True
+
+        elif pre:
+            out['frontOfChain'] = True
+
+        else:
+            if not any([automatic, frontOfChain, before,
+                        after, split, parallel, afterReference]):
+                out['automatic'] = True
+
+            else:
+                for name, value in zip(
+                    ['automatic', 'frontOfChain', 'before',
+                        'after', 'split', 'parallel', 'afterReference'],
+                    [automatic, frontOfChain, before, after,
+                            split, parallel, afterReference]
+                ):
+                    if value:
+                        out[name] = value
+
+        return out
 
     #-----------------------------------------------------------------------|    Misc
 

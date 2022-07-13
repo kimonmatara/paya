@@ -6,6 +6,43 @@ import maya.mel as mel
 from paya.util import short
 import paya.runtime as r
 
+
+#-------------------------------------------------------------------------------|
+#-------------------------------------------------------------------------------|    NORMALIZATION GROUPS
+#-------------------------------------------------------------------------------|
+
+class NormalizationGroups:
+
+    #--------------------------------------------------------|    Init
+
+    def __init__(self, owner):
+        self._owner = owner
+
+    #--------------------------------------------------------|    Basic inspections
+
+    @property
+    def owner(self):
+        return self._owner
+
+    def node(self):
+        """
+        :return: The owner blend shape node.
+        :rtype: :class:`~paya.runtime.nodes.BlendShape`
+        """
+        return self._owner
+
+    #--------------------------------------------------------|    Member access
+    
+
+    #--------------------------------------------------------|    Repr
+
+    def __repr__(self):
+        return "{}.normalizationGroups".format(repr(self.owner))
+
+#-------------------------------------------------------------------------------|
+#-------------------------------------------------------------------------------|    TARGETS
+#-------------------------------------------------------------------------------|
+
 #---------------------------------------------------------------------|    Exceptions
 
 class NonTransformSpaceTargetError(RuntimeError):
