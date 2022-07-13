@@ -54,9 +54,11 @@ class Subtarget:
 
     .. rubric:: Updating geometry
 
-    target = bsn.targets['L_smile']
-    subtarget = target[1.0]
-    subtarget.shape = 'new_geo'
+    .. code-block:: python
+
+        target = bsn.targets['L_smile']
+        subtarget = target[1.0]
+        subtarget.shape = 'new_geo'
     """
 
     #--------------------------------------------------------|    Init
