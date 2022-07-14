@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>What’s New &mdash; paya 0.6 documentation</title>
+  <title>What’s New &mdash; paya 0.7 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.6
+                0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,11 +44,19 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#version-0-6">Version 0.6</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-7">Version 0.7</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#additions-to-paya-runtime">Additions to paya.runtime</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additions-to-modules">Additions to Modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#additions-to-general-classes">Additions to General Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additions-to-node-types">Additions to Node Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additions-to-attribute-plug-types">Additions to Attribute (Plug) Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-6">Version 0.6</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Additions to paya.runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Additions to Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additions-to-general-classes">Additions to General Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Additions to Node Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additions-to-data-types">Additions to Data Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additions-to-plug-types">Additions to Plug Types</a></li>
 </ul>
@@ -59,10 +67,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-5">Version 0.5</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Additions to paya.runtime</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Additions to Node Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Additions to Plug Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Additions to General Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Additions to paya.runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Additions to Node Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Additions to Plug Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Additions to General Classes</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-4-3">Version 0.4.3</a><ul>
@@ -70,30 +78,30 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-4-2">Version 0.4.2</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">General Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">General Changes</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-4-1">Version 0.4.1</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">General Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">Bugs Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">General Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Bugs Fixed</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-4">Version 0.4</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id8">General Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id9">Additions to Modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id10">Additions to Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">General Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Additions to Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Additions to Data Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additions-changes-to-plug-types">Additions / Changes to Plug Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11">Additions to Node Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id12">Additions to General Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Additions to Node Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Additions to General Classes</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-3">Version 0.3</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id13">General Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id14">Bugs Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id15">Additions to Modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id16">Additions to Node Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id17">Additions to Plug Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id18">Additions to Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">General Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Bugs Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Additions to Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Additions to Node Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Additions to Plug Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Additions to Data Types</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-2">Version 0.2</a><ul>
@@ -101,7 +109,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-1">Version 0.1</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id19">Additions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Additions</a></li>
 </ul>
 </li>
 </ul>
@@ -160,16 +168,164 @@
              
   <section id="what-s-new">
 <h1>What’s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline"></a></h1>
-<section id="version-0-6">
-<h2>Version 0.6<a class="headerlink" href="#version-0-6" title="Permalink to this headline"></a></h2>
+<section id="version-0-7">
+<h2>Version 0.7<a class="headerlink" href="#version-0-7" title="Permalink to this headline"></a></h2>
 <section id="additions-to-paya-runtime">
 <h3>Additions to paya.runtime<a class="headerlink" href="#additions-to-paya-runtime" title="Permalink to this headline"></a></h3>
 <ul class="simple">
-<li><p><a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createScaleMatrix" title="paya.lib.mathops.createScaleMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createScaleMatrix()</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">findMelProc()</span></code></p></li>
 </ul>
 </section>
 <section id="additions-to-modules">
 <h3>Additions to Modules<a class="headerlink" href="#additions-to-modules" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>On <a class="reference internal" href="paya/lib/symmetry.html#module-paya.lib.symmetry" title="paya.lib.symmetry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.symmetry</span></code></a>:
+<a class="reference internal" href="paya/lib/symmetry.html#paya.lib.symmetry.SymmetricModelling" title="paya.lib.symmetry.SymmetricModelling"><code class="xref py py-class docutils literal notranslate"><span class="pre">SymmetricModelling</span></code></a></p></li>
+</ul>
+</section>
+<section id="additions-to-node-types">
+<h3>Additions to Node Types<a class="headerlink" href="#additions-to-node-types" title="Permalink to this headline"></a></h3>
+<ul>
+<li><p>On <a class="reference internal" href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a>:</p>
+<p><a class="reference internal" href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.create" title="paya.runtime.nodes.BlendShape.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a>
+<a class="reference internal" href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.getIndexFromAlias" title="paya.runtime.nodes.BlendShape.getIndexFromAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getIndexFromAlias()</span></code></a>
+<a class="reference internal" href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.inPostMode" title="paya.runtime.nodes.BlendShape.inPostMode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inPostMode()</span></code></a></p>
+<p><a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">.targets</span></code></a> / <code class="docutils literal notranslate"><span class="pre">.t</span></code>, comprising:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a></dt><dd><p><a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.node" title="paya.lib.bsnboltons.Targets.node"><code class="xref py py-meth docutils literal notranslate"><span class="pre">node()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getLogicalIndexFromAlias" title="paya.lib.bsnboltons.Targets.getLogicalIndexFromAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getLogicalIndexFromAlias()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getLogicalFromPhysicalIndex" title="paya.lib.bsnboltons.Targets.getLogicalFromPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getLogicalFromPhysicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getPhysicalFromLogicalIndex" title="paya.lib.bsnboltons.Targets.getPhysicalFromLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPhysicalFromLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getAliasFromLogicalIndex" title="paya.lib.bsnboltons.Targets.getAliasFromLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAliasFromLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getByAlias" title="paya.lib.bsnboltons.Targets.getByAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getByAlias()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getByLogicalIndex" title="paya.lib.bsnboltons.Targets.getByLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getByLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getByPhysicalIndex" title="paya.lib.bsnboltons.Targets.getByPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getByPhysicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.aliases" title="paya.lib.bsnboltons.Targets.aliases"><code class="xref py py-meth docutils literal notranslate"><span class="pre">aliases()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.indices" title="paya.lib.bsnboltons.Targets.indices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">indices()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.__getitem__" title="paya.lib.bsnboltons.Targets.__getitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.__len__" title="paya.lib.bsnboltons.Targets.__len__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__len__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.__iter__" title="paya.lib.bsnboltons.Targets.__iter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.add" title="paya.lib.bsnboltons.Targets.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.__setitem__" title="paya.lib.bsnboltons.Targets.__setitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.removeByAlias" title="paya.lib.bsnboltons.Targets.removeByAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByAlias()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.removeByPhysicalIndex" title="paya.lib.bsnboltons.Targets.removeByPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByPhysicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.removeByLogicalIndex" title="paya.lib.bsnboltons.Targets.removeByLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.remove" title="paya.lib.bsnboltons.Targets.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.__delitem__" title="paya.lib.bsnboltons.Targets.__delitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__delitem__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.clear" title="paya.lib.bsnboltons.Targets.clear"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clear()</span></code></a>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">__repr__()</span></code></p>
+</dd>
+<dt><a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></dt><dd><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">index()</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">owner</span></code>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">node()</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">weight</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">inputTargetGroup</span></code> / <code class="docutils literal notranslate"><span class="pre">itg</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">inputTargetItem</span></code> / <code class="docutils literal notranslate"><span class="pre">iti</span></code>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.isTransformSpace" title="paya.lib.bsnboltons.Target.isTransformSpace"><code class="xref py py-meth docutils literal notranslate"><span class="pre">isTransformSpace()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.isTangentSpace" title="paya.lib.bsnboltons.Target.isTangentSpace"><code class="xref py py-meth docutils literal notranslate"><span class="pre">isTangentSpace()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.inPostMode" title="paya.lib.bsnboltons.Target.inPostMode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inPostMode()</span></code></a>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">targetMatrix</span></code>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getTransform" title="paya.lib.bsnboltons.Target.getTransform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getTransform()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.setTransform" title="paya.lib.bsnboltons.Target.setTransform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setTransform()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.clearTransform" title="paya.lib.bsnboltons.Target.clearTransform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clearTransform()</span></code></a>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getNormalizationId" title="paya.lib.bsnboltons.Target.getNormalizationId"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getNormalizationId()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.setNormalizationId" title="paya.lib.bsnboltons.Target.setNormalizationId"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setNormalizationId()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.clearNormalizationId" title="paya.lib.bsnboltons.Target.clearNormalizationId"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clearNormalizationId()</span></code></a>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">normalizationId</span></code> / <code class="docutils literal notranslate"><span class="pre">nid</span></code>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getAlias" title="paya.lib.bsnboltons.Target.getAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAlias()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.setAlias" title="paya.lib.bsnboltons.Target.setAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setAlias()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.clearAlias" title="paya.lib.bsnboltons.Target.clearAlias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clearAlias()</span></code></a>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">alias</span></code>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getLogicalFromPhysicalIndex" title="paya.lib.bsnboltons.Target.getLogicalFromPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getLogicalFromPhysicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getPhysicalFromLogicalIndex" title="paya.lib.bsnboltons.Target.getPhysicalFromLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPhysicalFromLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getLogicalIndexFromValue" title="paya.lib.bsnboltons.Target.getLogicalIndexFromValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getLogicalIndexFromValue()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getValueFromLogicalIndex" title="paya.lib.bsnboltons.Target.getValueFromLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getValueFromLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.values" title="paya.lib.bsnboltons.Target.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">values()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.indices" title="paya.lib.bsnboltons.Target.indices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">indices()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getByLogicalIndex" title="paya.lib.bsnboltons.Target.getByLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getByLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getByPhysicalIndex" title="paya.lib.bsnboltons.Target.getByPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getByPhysicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getByValue" title="paya.lib.bsnboltons.Target.getByValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getByValue()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.__len__" title="paya.lib.bsnboltons.Target.__len__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__len__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.__iter__" title="paya.lib.bsnboltons.Target.__iter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.__getitem__" title="paya.lib.bsnboltons.Target.__getitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__()</span></code></a>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.remove" title="paya.lib.bsnboltons.Target.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.removeByLogicalIndex" title="paya.lib.bsnboltons.Target.removeByLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByLogicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.removeByPhysicalIndex" title="paya.lib.bsnboltons.Target.removeByPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByPhysicalIndex()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.removeByValue" title="paya.lib.bsnboltons.Target.removeByValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByValue()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.clearInbetweens" title="paya.lib.bsnboltons.Target.clearInbetweens"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clearInbetweens()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.__delitem__" title="paya.lib.bsnboltons.Target.__delitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__delitem__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.__int__" title="paya.lib.bsnboltons.Target.__int__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__int__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.flip" title="paya.lib.bsnboltons.Target.flip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flip()</span></code></a></p>
+</dd>
+<dt><a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></dt><dd><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">index()</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">owner</span></code>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">node()</span></code>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">values()</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">inputTargetItem</span></code> / <code class="docutils literal notranslate"><span class="pre">iti</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">geoInput</span></code>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.getShape" title="paya.lib.bsnboltons.Subtarget.getShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getShape()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.setShape" title="paya.lib.bsnboltons.Subtarget.setShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setShape()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.__int__" title="paya.lib.bsnboltons.Subtarget.__int__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__int__()</span></code></a>
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.__float__" title="paya.lib.bsnboltons.Subtarget.__float__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__float__()</span></code></a></p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>On <a class="reference internal" href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster" title="paya.runtime.nodes.SkinCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkinCluster</span></code></a>:
+<a class="reference internal" href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.invertShape" title="paya.runtime.nodes.SkinCluster.invertShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">invertShape()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="pools/nodes/lattice.html#paya.runtime.nodes.Lattice" title="paya.runtime.nodes.Lattice"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lattice</span></code></a>:
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">geoInput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">worldGeoOutput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">localGeoOutput</span></code></p></li>
+<li><p>On <a class="reference internal" href="pools/nodes/mesh.html#paya.runtime.nodes.Mesh" title="paya.runtime.nodes.Mesh"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code></a>:
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">geoInput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">worldGeoOutput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">localGeoOutput</span></code></p></li>
+<li><p>On <a class="reference internal" href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>:
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">geoInput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">worldGeoOutput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">localGeoOutput</span></code></p></li>
+<li><p>On <a class="reference internal" href="pools/nodes/nurbsSurface.html#paya.runtime.nodes.NurbsSurface" title="paya.runtime.nodes.NurbsSurface"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsSurface</span></code></a>:
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">geoInput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">worldGeoOutput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">localGeoOutput</span></code></p></li>
+<li><p>On <a class="reference internal" href="pools/nodes/subdiv.html#paya.runtime.nodes.Subdiv" title="paya.runtime.nodes.Subdiv"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subdiv</span></code></a>:
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">geoInput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">worldGeoOutput</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">localGeoOutput</span></code></p></li>
+</ul>
+</section>
+<section id="additions-to-attribute-plug-types">
+<h3>Additions to Attribute (Plug) Types<a class="headerlink" href="#additions-to-attribute-plug-types" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>On <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>:
+<a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.getNextArrayIndex" title="paya.runtime.plugs.Attribute.getNextArrayIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getNextArrayIndex()</span></code></a></p></li>
+<li><p>On <a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>:
+<a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.combine" title="paya.runtime.plugs.Math1D.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">combine()</span></code></a></p></li>
+</ul>
+</section>
+<section id="bug-fixes">
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.atTime" title="paya.runtime.plugs.Math1D.atTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Math1D.atTime()</span></code></a> calls <code class="docutils literal notranslate"><span class="pre">getInfo()</span></code>
+instead of <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.info" title="paya.lib.mathops.info"><code class="xref py py-func docutils literal notranslate"><span class="pre">info()</span></code></a></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="version-0-6">
+<h2>Version 0.6<a class="headerlink" href="#version-0-6" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3>Additions to paya.runtime<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createScaleMatrix" title="paya.lib.mathops.createScaleMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createScaleMatrix()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id2">
+<h3>Additions to Modules<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="paya/lib/xmlweights.html#module-paya.lib.xmlweights" title="paya.lib.xmlweights"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.xmlweights</span></code></a>:
 <a class="reference internal" href="paya/lib/xmlweights.html#paya.lib.xmlweights.dump" title="paya.lib.xmlweights.dump"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code></a>
@@ -187,8 +343,8 @@
 <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain.driveTwistChain" title="paya.lib.skel.Chain.driveTwistChain"><code class="xref py py-meth docutils literal notranslate"><span class="pre">driveTwistChain()</span></code></a></p></li>
 </ul>
 </section>
-<section id="additions-to-node-types">
-<h3>Additions to Node Types<a class="headerlink" href="#additions-to-node-types" title="Permalink to this headline"></a></h3>
+<section id="id3">
+<h3>Additions to Node Types<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter" title="paya.runtime.nodes.GeometryFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryFilter</span></code></a>:
 <a class="reference internal" href="pools/nodes/geometryFilter.html#paya.runtime.nodes.GeometryFilter.getFromGeo" title="paya.runtime.nodes.GeometryFilter.getFromGeo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getFromGeo()</span></code></a>
@@ -261,15 +417,15 @@ updated information.</p>
 <hr class="docutils" />
 <section id="version-0-5">
 <h2>Version 0.5<a class="headerlink" href="#version-0-5" title="Permalink to this headline"></a></h2>
-<section id="id1">
-<h3>Additions to paya.runtime<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<section id="id4">
+<h3>Additions to paya.runtime<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">controlShapesLibrary</span></code> (instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">ControlShapesLibrary</span></code>)</p></li>
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">createControl()</span></code></p></li>
 </ul>
 </section>
-<section id="id2">
-<h3>Additions to Node Types<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<section id="id5">
+<h3>Additions to Node Types<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
 <ul>
 <li><p>On <a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a>:</p>
 <p><a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.basename" title="paya.runtime.nodes.DependNode.basename"><code class="xref py py-meth docutils literal notranslate"><span class="pre">basename()</span></code></a>
@@ -305,8 +461,8 @@ updated information.</p>
 <a class="reference internal" href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.createFromMacro" title="paya.runtime.nodes.NurbsCurve.createFromMacro"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createFromMacro()</span></code></a></p></li>
 </ul>
 </section>
-<section id="id3">
-<h3>Additions to Plug Types<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<section id="id6">
+<h3>Additions to Plug Types<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>:
 <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.lock" title="paya.runtime.plugs.Attribute.lock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lock()</span></code></a> (overload)
@@ -321,8 +477,8 @@ updated information.</p>
 <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.release" title="paya.runtime.plugs.Attribute.release"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release()</span></code></a></p></li>
 </ul>
 </section>
-<section id="id4">
-<h3>Additions to General Classes<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<section id="id7">
+<h3>Additions to General Classes<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <code class="xref py py-class docutils literal notranslate"><span class="pre">ControlShapesLibrary</span></code>:
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">load()</span></code>
@@ -368,8 +524,8 @@ updated information.</p>
 <hr class="docutils" />
 <section id="version-0-4-2">
 <h2>Version 0.4.2<a class="headerlink" href="#version-0-4-2" title="Permalink to this headline"></a></h2>
-<section id="id5">
-<h3>General Changes<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<section id="id8">
+<h3>General Changes<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.decomposeAndApply" title="paya.runtime.plugs.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix.decomposeAndApply()</span></code></a> and <a class="reference internal" href="pools/data/matrix.html#paya.runtime.data.Matrix.decomposeAndApply" title="paya.runtime.data.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix.decomposeAndApply()</span></code></a>
 escape into simpler / faster implementations when no <code class="docutils literal notranslate"><span class="pre">rotateAxis</span></code>, <code class="docutils literal notranslate"><span class="pre">jointOrient</span></code>, <code class="docutils literal notranslate"><span class="pre">inverseScale</span></code> or pivot
@@ -380,16 +536,16 @@ compensations are requested or required</p></li>
 <hr class="docutils" />
 <section id="version-0-4-1">
 <h2>Version 0.4.1<a class="headerlink" href="#version-0-4-1" title="Permalink to this headline"></a></h2>
-<section id="id6">
-<h3>General Changes<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<section id="id9">
+<h3>General Changes<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>Smarter defaults handling on <a class="reference internal" href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.create" title="paya.runtime.nodes.IkHandle.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.nodes.IkHandle.create()</span></code></a></p></li>
 <li><p>Added <a class="reference internal" href="ik.html"><span class="doc">IK Handles</span></a> section to documentation</p></li>
 <li><p>Removed <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Chain()</span></code></a> subclasses to simplify</p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>Bugs Fixed<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<section id="id10">
+<h3>Bugs Fixed<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain.createFromCurve" title="paya.lib.skel.Chain.createFromCurve"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createFromCurve()</span></code></a> fails with error about missing ‘override’ object</p></li>
 <li><p>Missing <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain.createIkHandle" title="paya.lib.skel.Chain.createIkHandle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createIkHandle()</span></code></a></p></li>
@@ -400,22 +556,22 @@ compensations are requested or required</p></li>
 <hr class="docutils" />
 <section id="version-0-4">
 <h2>Version 0.4<a class="headerlink" href="#version-0-4" title="Permalink to this headline"></a></h2>
-<section id="id8">
-<h3>General Changes<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
+<section id="id11">
+<h3>General Changes<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>Naming arguments on <a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.createNode" title="paya.runtime.nodes.DependNode.createNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createNode()</span></code></a> and elsewhere have been simplified,
 with many moved into <a class="reference internal" href="paya/config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a> instead.</p></li>
 </ul>
 </section>
-<section id="id9">
-<h3>Additions to Modules<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
+<section id="id12">
+<h3>Additions to Modules<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>Added <a class="reference internal" href="paya/config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a></p></li>
 <li><p>Added <a class="reference internal" href="paya/lib/skel.html#module-paya.lib.skel" title="paya.lib.skel"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.skel</span></code></a>, including <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a> and subclasses</p></li>
 </ul>
 </section>
-<section id="id10">
-<h3>Additions to Data Types<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
+<section id="id13">
+<h3>Additions to Data Types<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>:
 <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.rotateByAxisAngle" title="paya.runtime.data.Vector.rotateByAxisAngle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rotateByAxisAngle()</span></code></a>
@@ -444,8 +600,8 @@ with many moved into <a class="reference internal" href="paya/config.html#module
 <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.decomposeAndApply" title="paya.runtime.plugs.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decomposeAndApply()</span></code></a></p></li>
 </ul>
 </section>
-<section id="id11">
-<h3>Additions to Node Types<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h3>
+<section id="id14">
+<h3>Additions to Node Types<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>:
 <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform.releaseSRT" title="paya.runtime.nodes.Transform.releaseSRT"><code class="xref py py-meth docutils literal notranslate"><span class="pre">releaseSRT()</span></code></a>
@@ -472,8 +628,8 @@ with many moved into <a class="reference internal" href="paya/config.html#module
 <a class="reference internal" href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributePoints" title="paya.runtime.nodes.NurbsCurve.distributePoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">distributePoints()</span></code></a></p></li>
 </ul>
 </section>
-<section id="id12">
-<h3>Additions to General Classes<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
+<section id="id15">
+<h3>Additions to General Classes<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a>:
 <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain.getFromStartEnd" title="paya.lib.skel.Chain.getFromStartEnd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getFromStartEnd()</span></code></a>
@@ -511,13 +667,13 @@ with many moved into <a class="reference internal" href="paya/config.html#module
 <hr class="docutils" />
 <section id="version-0-3">
 <h2>Version 0.3<a class="headerlink" href="#version-0-3" title="Permalink to this headline"></a></h2>
-<section id="id13">
-<h3>General Changes<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h3>
+<section id="id16">
+<h3>General Changes<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
 <p>The abstract plug tree has been reworked to make names more intuitive and to better support angles
 and euler rotations.</p>
 </section>
-<section id="id14">
-<h3>Bugs Fixed<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h3>
+<section id="id17">
+<h3>Bugs Fixed<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>Contextual naming misapplied when
 <a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.createNode" title="paya.runtime.nodes.DependNode.createNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createNode()</span></code></a> is used for shapes</p></li>
@@ -525,14 +681,14 @@ and euler rotations.</p>
 <a class="reference internal" href="pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Point</span></code></a> rather than <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a></p></li>
 </ul>
 </section>
-<section id="id15">
-<h3>Additions to Modules<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h3>
+<section id="id18">
+<h3>Additions to Modules<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="paya/lib/mathops.html#module-paya.lib.mathops" title="paya.lib.mathops"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.lib.mathops</span></code></a>: <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.asValue" title="paya.lib.mathops.asValue"><code class="xref py py-func docutils literal notranslate"><span class="pre">asValue()</span></code></a></p></li>
 </ul>
 </section>
-<section id="id16">
-<h3>Additions to Node Types<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h3>
+<section id="id19">
+<h3>Additions to Node Types<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/nodes/fourByFourMatrix.html#paya.runtime.nodes.FourByFourMatrix" title="paya.runtime.nodes.FourByFourMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">FourByFourMatrix</span></code></a>:
 <a class="reference internal" href="pools/nodes/fourByFourMatrix.html#paya.runtime.nodes.FourByFourMatrix.getAxis" title="paya.runtime.nodes.FourByFourMatrix.getAxis"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getAxis()</span></code></a>
@@ -545,8 +701,8 @@ and euler rotations.</p>
 <li><p>On <a class="reference internal" href="pools/nodes/shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>: <a class="reference internal" href="pools/nodes/shape.html#paya.runtime.nodes.Shape.createNode" title="paya.runtime.nodes.Shape.createNode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createNode()</span></code></a></p></li>
 </ul>
 </section>
-<section id="id17">
-<h3>Additions to Plug Types<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
+<section id="id20">
+<h3>Additions to Plug Types<a class="headerlink" href="#id20" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>:
 <a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.plugType" title="paya.runtime.plugs.Attribute.plugType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plugType()</span></code></a></p></li>
@@ -628,8 +784,8 @@ and euler rotations.</p>
 <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.asEulerRotation" title="paya.runtime.plugs.Vector.asEulerRotation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asEulerRotation()</span></code></a></p></li>
 </ul>
 </section>
-<section id="id18">
-<h3>Additions to Data Types<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h3>
+<section id="id21">
+<h3>Additions to Data Types<a class="headerlink" href="#id21" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation" title="paya.runtime.data.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>:
 <a class="reference internal" href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.__add__" title="paya.runtime.data.EulerRotation.__add__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__add__()</span></code></a>
@@ -703,8 +859,8 @@ to <a class="reference internal" href="pools/data/matrix.html#paya.runtime.data.
 <hr class="docutils" />
 <section id="version-0-1">
 <h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Permalink to this headline"></a></h2>
-<section id="id19">
-<h3>Additions<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h3>
+<section id="id22">
+<h3>Additions<a class="headerlink" href="#id22" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p>Patching engine</p></li>
 <li><p><a class="reference internal" href="paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> interface</p></li>

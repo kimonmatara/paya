@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.plugs.Math1D &mdash; paya 0.6 documentation</title>
+  <title>paya.runtime.plugs.Math1D &mdash; paya 0.7 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.6
+                0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -238,6 +238,34 @@ ignored.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Math1D.combine">
+<span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multiplication'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math1D.combine" title="Permalink to this definition"></a></dt>
+<dd><p>Uses a <a class="reference external" href="https://help.autodesk.com/cloudhelp/2023/ENU/Maya-Tech-Docs/Nodes/combinationShape.html">combinationShape</a>
+node to combine this scalar with <em>*others</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*others</strong> (int, float, <a class="reference internal" href="#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – unpacked scalars</p></li>
+<li><p><strong>method/m</strong> – <p>an enum for the ‘combinationMethod’ attribute of the
+node; can be specified as an index or label; one of:</p>
+<ul>
+<li><p>0: ‘multiplication’ (the default)</p></li>
+<li><p>1: ‘lowest weighting’</p></li>
+<li><p>2: ‘smooth’</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The combined output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></p>
 </dd>
 </dl>
 </dd></dl>

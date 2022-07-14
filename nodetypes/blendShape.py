@@ -19,12 +19,26 @@ class BlendShape:
         bsn.targets.add(happyGeo)
         # etc.
     """
+    def getTargets(self):
+        """
+        Getter for the ``.targets`` / ``.t`` property.
 
-    @property
-    def targets(self):
+        :return: A :class:`~paya.lib.bsnboltons.Targets` instance.
+        :rtype: :class:`~paya.lib.bsnboltons.Targets`
+        """
         return Targets(self)
 
-    t = targets
+    def clearTargets(self):
+        """
+        Deleter for the ``.targets`` / ``.t`` property. Equivalent to
+        ``self.targets.clear()``.
+
+        :return: ``self``
+        :rtype: :class:`BlendShape`
+        """
+        self.getTargets().clear()
+
+    targets = t = property(fget=getTargets, fdel=clearTargets)
 
     #-----------------------------------------------------------------------|    Constructor
 

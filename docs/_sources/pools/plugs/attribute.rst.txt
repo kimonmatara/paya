@@ -159,3 +159,12 @@ paya.runtime.plugs.Attribute
         :param str attrName: the name of the 'anchor' attribute
         :return: This attribute, rebuilt.
         :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: getNextArrayIndex(fillGaps=False)
+    
+        Returns the next available logical array index.
+        
+        :param bool fillGaps/fg: return the first available gap in the
+            logical array indices; defaults to False
+        :return: The index.
+        :rtype: int

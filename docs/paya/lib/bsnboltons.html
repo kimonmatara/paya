@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.bsnboltons &mdash; paya 0.6 documentation</title>
+  <title>paya.lib.bsnboltons &mdash; paya 0.7 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="../../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.6
+                0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -77,6 +77,7 @@
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xmlweights.html">paya.lib.xmlweights</a></li>
 </ul>
 </li>
@@ -123,24 +124,6 @@
 <span id="paya-lib-bsnboltons"></span><h1>paya.lib.bsnboltons<a class="headerlink" href="#module-paya.lib.bsnboltons" title="Permalink to this headline"></a></h1>
 <p>This module is not for direct import / use. It defines the <code class="docutils literal notranslate"><span class="pre">.targets</span></code>
 interface on <a class="reference internal" href="../../pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a>.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="paya.lib.bsnboltons.NormalizationGroups">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NormalizationGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.NormalizationGroups" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.bsnboltons.NormalizationGroups.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.NormalizationGroups.node" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The owner blend shape node.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../../pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.bsnboltons.subtargetIndexToValue">
 <span class="sig-name descname"><span class="pre">subtargetIndexToValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.subtargetIndexToValue" title="Permalink to this definition"></a></dt>
@@ -421,6 +404,55 @@ target</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getNormalizationId">
+<span class="sig-name descname"><span class="pre">getNormalizationId</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getNormalizationId" title="Permalink to this definition"></a></dt>
+<dd><p>Getter for the <code class="docutils literal notranslate"><span class="pre">normalizationId</span></code> / <code class="docutils literal notranslate"><span class="pre">nid</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The normalization ID of this target. An ID of 0 means
+that the target doesn’t belong to any normalization groups.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.setNormalizationId">
+<span class="sig-name descname"><span class="pre">setNormalizationId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.setNormalizationId" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the normalization ID of this target. An ID of 0 means
+that the target doesn’t belong to any normalization groups.</p>
+<p>Setter for the <code class="docutils literal notranslate"><span class="pre">normalizationId</span></code> / <code class="docutils literal notranslate"><span class="pre">nid</span></code> property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nid</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the normalization ID</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.clearNormalizationId">
+<span class="sig-name descname"><span class="pre">clearNormalizationId</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.clearNormalizationId" title="Permalink to this definition"></a></dt>
+<dd><p>Deleter for the <code class="docutils literal notranslate"><span class="pre">normalizationId</span></code> / <code class="docutils literal notranslate"><span class="pre">nid</span></code> property. Equivalent
+to <code class="docutils literal notranslate"><span class="pre">setNormalizationId(0)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.getAlias">
 <span class="sig-name descname"><span class="pre">getAlias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.getAlias" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the alias for this blend shape target. Getter for the
@@ -464,6 +496,32 @@ Equivalent to <code class="docutils literal notranslate"><span class="pre">setAl
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.flip">
+<span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mirrorDirection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symmetryAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symmetryEdge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.flip" title="Permalink to this definition"></a></dt>
+<dd><p>Flips this blend shape target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mirrorDirection</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – 1 for positive along, -1 for negative;
+defaults to 1</p></li>
+<li><p><strong>symmetryAxis/sa</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – one of ‘X’, ‘Y’, or ‘Z’</p></li>
+<li><p><strong>symmetryEdge/se</strong> (str, int, <code class="xref py py-class docutils literal notranslate"><span class="pre">MeshEdge</span></code>,
+list) – this can be a single edge, or a list of two; the
+edges can be specified as simple integers, or fully-specified
+components on the base object; defaults to None</p></li>
+<li><p><strong>uv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – flip in UV space; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">Target</span></code></p>
 </dd>
 </dl>
 </dd></dl>

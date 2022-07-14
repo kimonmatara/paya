@@ -3,6 +3,158 @@ What's New
 ##########
 
 ***********
+Version 0.7
+***********
+
+Additions to paya.runtime
+=========================
+
+*   :func:`~paya.runtime.findMelProc`
+
+Additions to Modules
+====================
+
+*   On :mod:`paya.lib.symmetry`:
+    :class:`~paya.lib.symmetry.SymmetricModelling`
+
+Additions to Node Types
+=======================
+
+*   On :class:`~paya.runtime.nodes.BlendShape`:
+
+    :meth:`~paya.runtime.nodes.BlendShape.create`
+    :meth:`~paya.runtime.nodes.BlendShape.getIndexFromAlias`
+    :meth:`~paya.runtime.nodes.BlendShape.inPostMode`
+
+    :class:`.targets <paya.lib.bsnboltons.Targets>` / ``.t``, comprising:
+
+        :class:`~paya.lib.bsnboltons.Targets`
+            :meth:`~paya.lib.bsnboltons.Targets.node`
+            :meth:`~paya.lib.bsnboltons.Targets.getLogicalIndexFromAlias`
+            :meth:`~paya.lib.bsnboltons.Targets.getLogicalFromPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getPhysicalFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getAliasFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getByAlias`
+            :meth:`~paya.lib.bsnboltons.Targets.getByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.aliases`
+            :meth:`~paya.lib.bsnboltons.Targets.indices`
+            :meth:`~paya.lib.bsnboltons.Targets.__getitem__`
+            :meth:`~paya.lib.bsnboltons.Targets.__len__`
+            :meth:`~paya.lib.bsnboltons.Targets.__iter__`
+            :meth:`~paya.lib.bsnboltons.Targets.add`
+            :meth:`~paya.lib.bsnboltons.Targets.__setitem__`
+            :meth:`~paya.lib.bsnboltons.Targets.removeByAlias`
+            :meth:`~paya.lib.bsnboltons.Targets.removeByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.removeByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.remove`
+            :meth:`~paya.lib.bsnboltons.Targets.__delitem__`
+            :meth:`~paya.lib.bsnboltons.Targets.clear`
+            :meth:`~paya.lib.bsnboltons.Targets.__repr__`
+
+        :class:`~paya.lib.bsnboltons.Target`
+            :meth:`~paya.lib.bsnboltons.Target.index`
+            :obj:`~paya.lib.bsnboltons.Target.owner`
+            :meth:`~paya.lib.bsnboltons.Target.node`
+            :obj:`~paya.lib.bsnboltons.Target.weight`
+            :obj:`~paya.lib.bsnboltons.Target.inputTargetGroup` / ``itg``
+            :obj:`~paya.lib.bsnboltons.Target.inputTargetItem` / ``iti``
+            :meth:`~paya.lib.bsnboltons.Target.isTransformSpace`
+            :meth:`~paya.lib.bsnboltons.Target.isTangentSpace`
+            :meth:`~paya.lib.bsnboltons.Target.inPostMode`
+            :obj:`~paya.lib.bsnboltons.Target.targetMatrix`
+            :meth:`~paya.lib.bsnboltons.Target.getTransform`
+            :meth:`~paya.lib.bsnboltons.Target.setTransform`
+            :meth:`~paya.lib.bsnboltons.Target.clearTransform`
+            :obj:`~paya.lib.bsnboltons.Target.transform`
+            :meth:`~paya.lib.bsnboltons.Target.getNormalizationId`
+            :meth:`~paya.lib.bsnboltons.Target.setNormalizationId`
+            :meth:`~paya.lib.bsnboltons.Target.clearNormalizationId`
+            :obj:`~paya.lib.bsnboltons.Target.normalizationId` / ``nid``
+            :meth:`~paya.lib.bsnboltons.Target.getAlias`
+            :meth:`~paya.lib.bsnboltons.Target.setAlias`
+            :meth:`~paya.lib.bsnboltons.Target.clearAlias`
+            :obj:`~paya.lib.bsnboltons.Target.alias`
+            :meth:`~paya.lib.bsnboltons.Target.getLogicalFromPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getPhysicalFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getLogicalIndexFromValue`
+            :meth:`~paya.lib.bsnboltons.Target.getValueFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.values`
+            :meth:`~paya.lib.bsnboltons.Target.indices`
+            :meth:`~paya.lib.bsnboltons.Target.getByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getByValue`
+            :meth:`~paya.lib.bsnboltons.Target.__len__`
+            :meth:`~paya.lib.bsnboltons.Target.__iter__`
+            :meth:`~paya.lib.bsnboltons.Target.__getitem__`
+            :meth:`~paya.lib.bsnboltons.Target.__setitem__`
+            :meth:`~paya.lib.bsnboltons.Target.remove`
+            :meth:`~paya.lib.bsnboltons.Target.removeByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.removeByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.removeByValue`
+            :meth:`~paya.lib.bsnboltons.Target.clearInbetweens`
+            :meth:`~paya.lib.bsnboltons.Target.__delitem__`
+            :meth:`~paya.lib.bsnboltons.Target.__int__`
+            :meth:`~paya.lib.bsnboltons.Target.flip`
+
+        :class:`~paya.lib.bsnboltons.Subtarget`
+            :meth:`~paya.lib.bsnboltons.Subtarget.index`
+            :obj:`~paya.lib.bsnboltons.Subtarget.owner`
+            :meth:`~paya.lib.bsnboltons.Subtarget.node`
+            :meth:`~paya.lib.bsnboltons.Subtarget.values`
+            :obj:`~paya.lib.bsnboltons.Subtarget.inputTargetItem` / ``iti``
+            :obj:`~paya.lib.bsnboltons.Subtarget.geoInput`
+            :meth:`~paya.lib.bsnboltons.Subtarget.getShape`
+            :meth:`~paya.lib.bsnboltons.Subtarget.setShape`
+            :meth:`~paya.lib.bsnboltons.Subtarget.__int__`
+            :meth:`~paya.lib.bsnboltons.Subtarget.__float__`
+
+*   On :class:`~paya.runtime.nodes.SkinCluster`:
+    :meth:`~paya.runtime.nodes.SkinCluster.invertShape`
+
+*   On :class:`~paya.runtime.nodes.Lattice`:
+    :obj:`~paya.runtime.nodes.Lattice.geoInput`
+    :obj:`~paya.runtime.nodes.Lattice.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.Lattice.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.Mesh`:
+    :obj:`~paya.runtime.nodes.Mesh.geoInput`
+    :obj:`~paya.runtime.nodes.Mesh.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.Mesh.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.NurbsCurve`:
+    :obj:`~paya.runtime.nodes.NurbsCurve.geoInput`
+    :obj:`~paya.runtime.nodes.NurbsCurve.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.NurbsCurve.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.NurbsSurface`:
+    :obj:`~paya.runtime.nodes.NurbsSurface.geoInput`
+    :obj:`~paya.runtime.nodes.NurbsSurface.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.NurbsSurface.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.Subdiv`:
+    :obj:`~paya.runtime.nodes.Subdiv.geoInput`
+    :obj:`~paya.runtime.nodes.Subdiv.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.Subdiv.localGeoOutput`
+
+Additions to Attribute (Plug) Types
+===================================
+
+*   On :class:`~paya.runtime.plugs.Attribute`:
+    :meth:`~paya.runtime.plugs.Attribute.getNextArrayIndex`
+
+*   On :class:`~paya.runtime.plugs.Math1D`:
+    :meth:`~paya.runtime.plugs.Math1D.combine`
+
+Bug Fixes
+=========
+
+*   :meth:`paya.runtime.plugs.Math1D.atTime` calls ``getInfo()``
+    instead of :func:`~paya.lib.mathops.info`
+
+------
+
+***********
 Version 0.6
 ***********
 

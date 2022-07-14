@@ -7,13 +7,6 @@ paya.lib.bsnboltons
 This module is not for direct import / use. It defines the ``.targets``
 interface on :class:`~paya.runtime.nodes.BlendShape`.
 
-.. py:class:: NormalizationGroups(owner)
-
-    .. py:method:: node()
-    
-        :return: The owner blend shape node.
-        :rtype: :class:`~paya.runtime.nodes.BlendShape`
-
 .. py:function:: subtargetIndexToValue(index)
 
     Given a logical subtarget (tween) index in the 5000 -> 6000 range, returns
@@ -191,6 +184,33 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
         :return: ``self``
         :rtype: :class:`Target`
     
+    .. py:method:: getNormalizationId()
+    
+        Getter for the ``normalizationId`` / ``nid`` property.
+        
+        :return: The normalization ID of this target. An ID of 0 means
+            that the target doesn't belong to any normalization groups.
+        :rtype: int or None
+    
+    .. py:method:: setNormalizationId(nid)
+    
+        Sets the normalization ID of this target. An ID of 0 means
+        that the target doesn't belong to any normalization groups.
+        
+        Setter for the ``normalizationId`` / ``nid`` property.
+        
+        :param int nid: the normalization ID
+        :return: ``self``
+        :rtype: :class:`Target`
+    
+    .. py:method:: clearNormalizationId()
+    
+        Deleter for the ``normalizationId`` / ``nid`` property. Equivalent
+        to ``setNormalizationId(0)``.
+        
+        :return: ``self``
+        :rtype: :class:`Target`
+    
     .. py:method:: getAlias()
     
         Returns the alias for this blend shape target. Getter for the
@@ -215,6 +235,22 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
         
         :return: ``self``
         :rtype: :class:`Target`
+    
+    .. py:method:: flip(mirrorDirection=1, symmetryAxis='x', symmetryEdge=None, uv=False)
+    
+        Flips this blend shape target.
+        
+        :param int mirrorDirection: 1 for positive along, -1 for negative;
+            defaults to 1
+        :param str symmetryAxis/sa: one of 'X', 'Y', or 'Z'
+        :param symmetryEdge/se: this can be a single edge, or a list of two; the
+            edges can be specified as simple integers, or fully-specified
+            components on the base object; defaults to None
+        :type symmetryEdge/se: str, int, :class:`~paya.runtime.comps.MeshEdge`,
+            list
+        :param bool uv: flip in UV space; defaults to False
+        :return: ``self``
+        :rtype: ``Target``
     
     .. py:method:: getLogicalFromPhysicalIndex(physicalIndex)
     

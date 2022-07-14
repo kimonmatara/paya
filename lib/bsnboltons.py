@@ -6,7 +6,9 @@ import maya.mel as mel
 mel.eval('source blendShapeDeleteInBetweenTarget')
 mel.eval('source blendShapeDeleteTargetGroup')
 
+import pymel.util as _pu
 from paya.util import short
+from paya.lib.symmetry import SymmetricModelling
 import paya.runtime as r
 
 #-------------------------------------------------------------------------------|
@@ -507,6 +509,70 @@ class Target:
         self.setAlias(None)
 
     alias = property(fget=getAlias, fset=setAlias, fdel=clearAlias)
+
+    #--------------------------------------------------------|    Actions
+
+    @staticmethod
+    def _resolveSymmetryEdgeArg(bsn, arg):
+        if isinstance(arg, (tuple, list)):
+            return [self._resolveSymmetryEdgeArg(x) for x in arg]
+
+        if isinstance(arg, r.Component):
+            return str(arg)
+
+        elif isinstance(arg, int):
+            geo = bsn.getBaseObjects()[0]
+            return str(geo.comp('e')[arg])
+
+        return str(arg)
+
+    @short(
+        mirrorDirection='md',
+        symmetryAxis='sa',
+        symmetryEdge='se'
+    )
+    def flip(
+            self,
+            mirrorDirection=1,
+            symmetryAxis='x',
+            symmetryEdge=None,
+            uv=False
+    ):
+        """
+        Flips this blend shape target.
+
+        :param int mirrorDirection: 1 for positive along, -1 for negative;
+            defaults to 1
+        :param str symmetryAxis/sa: one of 'X', 'Y', or 'Z'
+        :param symmetryEdge/se: this can be a single edge, or a list of two; the
+            edges can be specified as simple integers, or fully-specified
+            components on the base object; defaults to None
+        :type symmetryEdge/se: str, int, :class:`~paya.runtime.comps.MeshEdge`,
+            list
+        :param bool uv: flip in UV space; defaults to False
+        :return: ``self``
+        :rtype: ``Target``
+        """
+        bsn = self.node()
+
+        kwargs = {'e': True, 'ft': [0, self.index()]}
+
+        if symmetryEdge:
+            kwargs['ss'] = 0
+            kwargs['se'] = self._resolveSymmetryEdgeArg(bsn, symmetryEdge)
+
+        elif uv:
+            kwargs['ss'] = 2
+
+        else:
+            kwargs['ss'] = 1
+
+        kwargs['sa'] = symmetryAxis
+
+        with SymmetricModelling():
+            r.blendShape(self.node(), **kwargs)
+
+        return self
 
     #--------------------------------------------------------|    Member retrievals
 

@@ -20,6 +20,21 @@ paya.runtime.nodes.BlendShape
         bsn.targets.add(happyGeo)
         # etc.
 
+    .. py:method:: getTargets()
+    
+        Getter for the ``.targets`` / ``.t`` property.
+        
+        :return: A :class:`~paya.lib.bsnboltons.Targets` instance.
+        :rtype: :class:`~paya.lib.bsnboltons.Targets`
+    
+    .. py:method:: clearTargets()
+    
+        Deleter for the ``.targets`` / ``.t`` property. Equivalent to
+        ``self.targets.clear()``.
+        
+        :return: ``self``
+        :rtype: :class:`BlendShape`
+    
     .. py:classmethod:: create(*args, name=None, post=False, pre=False, after=False, automatic=False, parallel=False, before=False, split=False, frontOfChain=False, afterReference=False, **kwargs)
     
         Wrapper for :func:`~pymel.core.animation.blendShape`. Two new flags,

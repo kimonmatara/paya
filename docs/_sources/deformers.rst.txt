@@ -13,8 +13,8 @@ Maya doesn't provide a consistent API to create deformers. Some, like ``skinClus
 like the non-linear variants, use :func:`~pymel.core.animation.deformer`; still others, like ``proximityWrap``, use
 special classes.
 
-To get around this, **version 0.6** of Paya kicks off a project to implement a :meth:`create` method on every deformer
-class, starting with skinClusters. Stay tuned for more deformer constructors in upcoming versions.
+To get around this, consistent ``create()`` constructors are being rolled out across all deformers in Paya. As at
+**version 0.7**, these are available on skinClusters and blendShapes. Stay tuned for more.
 
 Retrieving Deformers
 --------------------
@@ -77,9 +77,9 @@ implementation:
     skin2.copyWeightsFrom(skin1, method='closestPoint') # uses copySkinWeights()
     blendShape2.copyWeightsFrom(blendShape1, method='uv') # uses copyDeformerWeights()
 
-============
-SkinClusters
-============
+===========
+SkinCluster
+===========
 
 .. _skinCluster constructor:
 
@@ -117,3 +117,262 @@ node configuration, including inputs for ``dqsScale``, and gives you the same op
     skin2 = skin1.copyTo('jacket', destUVSet='rigUVs')  # uv mode with an explicit destination map
     skin3 = skin1.copyTo('body_thin', method='index')
     skin4 = skin1.copyTo('hair', weights=False) # omit weights, but copy configuration
+
+==========
+BlendShape
+==========
+
+Constructor
+-----------
+
+The :meth:`~paya.runtime.nodes.BlendShape.create` constructor on :class:`~paya.runtime.nodes.BlendShape` is a wrapper
+for the :func:`~pymel.core.animation.blendShape` command with the following added perks:
+
+    - Managed naming
+    - Two added keyword arguments, ``pre`` and ``post``, for quicker configuration of common deformation orders.
+
+Although you can use the usual positional and keyword arguments to add targets immediately, it might be easier to add
+them afterwards using the methods and interfaces described further down. Here's how to initialise a blend shape node
+around a base mesh:
+
+.. code-block:: python
+
+    base = 'head_DMSH'
+    bsn = r.nodes.BlendShape.create(base, pre=True) # for pre-skin shapes
+    bsn = r.nodes.BlendShape.create(base, post=True) # for tangent- or transform- space shapes
+
+
+Adding Targets
+--------------
+
+A comprehensive, Pythonic interface for editing blend shape targets is available through the
+:class:`.targets <paya.lib.bsnboltons.Targets>` / ``.t`` attribute.
+
+Here are a few ways to add targets:
+
+.. code-block:: python
+
+    target = bsn.targets.add('L_smile_DMSH')
+    target = bsn.targets.add('L_smile_DMSH', alias='L_smile')
+    bsn.targets['L_smile'] = 'L_smile_DMSH' # same thing as above
+
+See :meth:`~paya.lib.bsnboltons.Targets.add` for additional options.
+
+Retrieving Targets
+------------------
+
+Target-specific functionality is available on :class:`~paya.lib.bsnboltons.Target` instances. These are returned by
+the :meth:`~paya.lib.bsnboltons.Targets.add` method, and can also be retrieved in the following ways:
+
+.. code-block:: python
+
+    target = bsn.targets['L_smile'] # by alias
+    target = bsn.targets[0] # by logical index (tallies with the .weight attribute)
+    target = list(bsn.targets)[0] # by physical index
+
+    # Iterate
+    for target in bsn.targets:
+        # do something
+
+    # List
+    targets = list(bsn.targets)
+
+Removing Targets
+----------------
+
+Here are a few ways to remove targets:
+
+.. code-block:: python
+
+    bsn.targets.removeByLogicalIndex(0)
+    del(bsn.targets[0]) # same thing
+
+    bsn.targets.removeByPhysicalIndex(0)
+
+    bsn.targets.removeByLabel('L_smile')
+    del(bsn.targets['L_smile']) # same thing
+
+    # Remove all
+    bsn.targets.clear()
+    del(bsn.targets) # same thing
+
+See :meth:`~paya.lib.bsnboltons.Targets.removeByLogicalIndex`, :meth:`~paya.lib.bsnboltons.Targets.removeByPhysicalIndex`,
+:meth:`~paya.lib.bsnboltons.Targets.removeByLabel` and :meth:`~paya.lib.bsnboltons.Targets.clear` for more
+information.
+
+Editing Aliases
+---------------
+
+Target aliases can be edited using simple assignment:
+
+.. code-block:: python
+
+    target = bsn.targets['L_smile']
+    target.alias = 'L_grin'
+
+You may have to re-invoke tool panes to update the Maya UI afterwards.
+
+Inverting Pre-Deformation Correctives
+-------------------------------------
+
+Pre-deformation corrective shapes that were sculpted at-pose (for example, on a duplicate of bound geometry) can be
+inverted into bind pose using the :meth:`~paya.runtime.nodes.SkinCluster.invertShape` method. Note that the skinCluster
+must be in a posed state when this is run:
+
+.. code-block:: python
+
+    skinnedGeo = 'L_leg_DMSH'
+    skin = r.nodes.SkinCluster.getFromGeo(skinnedGeo)[0]
+
+    # Create a pre-deformation blendShape node
+    bsn = r.nodes.BlendShape.create(skinnedGeo, pre=True)
+
+    # Invert the sculpt against the skinCluster, add the inversion as
+    # a target
+    sculpt = 'L_knee_sculpt_DMSH'
+    inverted = skin.invertShape(sculpt).getParent()
+
+    bsn.targets.add(inverted, initWeight=1.0)
+    r.delete(inverted)
+
+Post-Deformation Targets
+------------------------
+
+Post-deformation targets can only be configured if the blend shape node was constructed using ``pre=True`` or the
+(counterintuitively named) Maya flag ``before=True``. When this is the case, then:
+
+    -   If a transform node was specified via the ``transform`` keyword argument, the target will be configured as a
+        *transform-space* target
+    -   Otherwise, the target will default to *tangent-space*
+
+For example:
+
+.. code-block:: python
+
+    print(bsn.inPostMode())
+    # True
+
+    target = bsn.targets.add('L_smile_DMSH') # tangent-space
+    target = bsn.targets.add('L_smile_DMSH', transform='L_mouth_JOIN') # transform-space
+
+Transforms can be reassigned afterwards:
+
+.. code-block:: python
+
+    target.transform = 'L_mouth_002_JOIN'
+
+Flipping Targets
+----------------
+
+Use the :meth:`~paya.lib.bsnboltons.Target.flip` method to flip targets:
+
+.. code-block:: python
+
+    target = bsn.targets['L_smile']
+
+    # By topology
+    target.flip(symmetryEdge=455)
+
+    # Object-space
+    target.flip() # defaults to object X
+
+See :meth:`~paya.lib.bsnboltons.Target.flip` for more options.
+
+Adding Inbetweens
+-----------------
+
+Inbetweens can be added using the :meth:`~paya.lib.bsnboltons.Target.add` on :class:`~paya.lib.bsnboltons.Target`, or
+by assigning to values:
+
+.. code-block:: python
+
+    target = bsn.targets['L_smile']
+
+    tween = target.add(0.5, 'L_half_smile_DMSH')
+    target[0.5] = 'L_half_smile_DMSH' # same thing
+
+See :meth:`~paya.lib.bsnboltons.Target.add` for more options and information.
+
+Retrieving Inbetweens
+---------------------
+
+Inbetweens are represented by instances of :class:`~paya.lib.bsnboltons.Subtarget`, and can be retrieved thus:
+
+.. code-block:: python
+
+    # By value
+    print(target.values()))
+    # [0.5, 1.0]
+
+    tween = target[0.5]
+
+    # By logical index (if you know what you're doing)
+    tween = target[5500]
+
+    # By physical index
+    tween = list(target)[0]
+
+Removing Inbetweens
+-------------------
+
+Here's how to remove inbetweens:
+
+.. code-block:: python
+
+    # By value
+    target.removeByValue(0.5)
+    del(target[0.5])
+
+    # By logical index (if you know what you're doing)
+    target.removeByLogicalIndex(5500)
+    del(target[5500])
+
+    # By physical index
+    target.removeByPhysicalIndex(0)
+
+    # Clear all
+    target.clearInbetweens()
+
+Retrieving Target Geometry
+--------------------------
+
+Target geometry can be retrieved using the :meth:`~paya.lib.bsnboltons.Subtarget.getShape` method, or via the ``.shape``
+property, on :class:`~paya.lib.bsnboltons.Subtarget` instances. To get the main geometry for a target, you'll have to
+access the 'inbetween' at value 1.0:
+
+.. code-block:: python
+
+    target = bsn.targets['L_smile']
+
+    # Via property
+    shape = target[1.0].shape
+
+    # Via explicit getter
+    shape = target[1.0].getShape()
+
+    print(shape)
+    # L_smile_DMSHShape
+
+.. note::
+
+    The return value will be ``None`` if the geometry was deleted, or if the blend shape node is in *post-deformation*
+    mode.
+
+To force-regenerate missing geometry, pass ``create=True`` to :meth:`~paya.lib.bsnboltons.Subtarget.getShape`.
+
+Assigning Target Geometry
+-------------------------
+
+To swap out target geometry use :meth:`~paya.lib.bsnboltons.Subtarget.setShape`, or simply assign to the property:
+
+.. code-block:: python
+
+    target[1.0].setShape('L_smile_variant_DMSHShape')
+    target[1.0].shape = 'L_smile_variant_DMSHShape'
+
+    # Assigning the transform-level of a geometry also works:
+    target[1.0].shape = 'L_smile_variant_DMSH'
+
+.. note::
+
+    Geometry assignments are not live (connected) when the blend shape node is in *post-deformation* mode.

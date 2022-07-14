@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deformers &mdash; paya 0.6 documentation</title>
+  <title>Deformers &mdash; paya 0.7 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.6
+                0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -59,9 +59,25 @@
 <li class="toctree-l3"><a class="reference internal" href="#copying-weights">Copying Weights</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#skinclusters">SkinClusters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#skincluster">SkinCluster</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#constructor">Constructor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#copying">Copying</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#blendshape">BlendShape</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-targets">Adding Targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-targets">Retrieving Targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removing-targets">Removing Targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#editing-aliases">Editing Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inverting-pre-deformation-correctives">Inverting Pre-Deformation Correctives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-deformation-targets">Post-Deformation Targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flipping-targets">Flipping Targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-inbetweens">Adding Inbetweens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-inbetweens">Retrieving Inbetweens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removing-inbetweens">Removing Inbetweens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-target-geometry">Retrieving Target Geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assigning-target-geometry">Assigning Target Geometry</a></li>
 </ul>
 </li>
 </ul>
@@ -119,8 +135,8 @@
 <p>Maya doesn’t provide a consistent API to create deformers. Some, like <code class="docutils literal notranslate"><span class="pre">skinCluster</span></code>, have their own commands; others,
 like the non-linear variants, use <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.deformer.html#pymel.core.animation.deformer" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">deformer()</span></code></a>; still others, like <code class="docutils literal notranslate"><span class="pre">proximityWrap</span></code>, use
 special classes.</p>
-<p>To get around this, <strong>version 0.6</strong> of Paya kicks off a project to implement a <code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code> method on every deformer
-class, starting with skinClusters. Stay tuned for more deformer constructors in upcoming versions.</p>
+<p>To get around this, consistent <code class="docutils literal notranslate"><span class="pre">create()</span></code> constructors are being rolled out across all deformers in Paya. As at
+<strong>version 0.7</strong>, these are available on skinClusters and blendShapes. Stay tuned for more.</p>
 </section>
 <section id="retrieving-deformers">
 <h3>Retrieving Deformers<a class="headerlink" href="#retrieving-deformers" title="Permalink to this headline"></a></h3>
@@ -173,8 +189,8 @@ implementation:</p>
 </div>
 </section>
 </section>
-<section id="skinclusters">
-<h2>SkinClusters<a class="headerlink" href="#skinclusters" title="Permalink to this headline"></a></h2>
+<section id="skincluster">
+<h2>SkinCluster<a class="headerlink" href="#skincluster" title="Permalink to this headline"></a></h2>
 <section id="constructor">
 <span id="skincluster-constructor"></span><h3>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline"></a></h3>
 <p>The skinCluster constructor confers several advantages over <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.skinCluster.html#pymel.core.animation.skinCluster" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">skinCluster()</span></code></a>:</p>
@@ -204,6 +220,232 @@ node configuration, including inputs for <code class="docutils literal notransla
 <span class="n">skin3</span> <span class="o">=</span> <span class="n">skin1</span><span class="o">.</span><span class="n">copyTo</span><span class="p">(</span><span class="s1">&#39;body_thin&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
 <span class="n">skin4</span> <span class="o">=</span> <span class="n">skin1</span><span class="o">.</span><span class="n">copyTo</span><span class="p">(</span><span class="s1">&#39;hair&#39;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># omit weights, but copy configuration</span>
 </pre></div>
+</div>
+</section>
+</section>
+<section id="blendshape">
+<h2>BlendShape<a class="headerlink" href="#blendshape" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3>Constructor<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p>The <a class="reference internal" href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.create" title="paya.runtime.nodes.BlendShape.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> constructor on <a class="reference internal" href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a> is a wrapper
+for the <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a> command with the following added perks:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Managed naming</p></li>
+<li><p>Two added keyword arguments, <code class="docutils literal notranslate"><span class="pre">pre</span></code> and <code class="docutils literal notranslate"><span class="pre">post</span></code>, for quicker configuration of common deformation orders.</p></li>
+</ul>
+</div></blockquote>
+<p>Although you can use the usual positional and keyword arguments to add targets immediately, it might be easier to add
+them afterwards using the methods and interfaces described further down. Here’s how to initialise a blend shape node
+around a base mesh:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;head_DMSH&#39;</span>
+<span class="n">bsn</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">BlendShape</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># for pre-skin shapes</span>
+<span class="n">bsn</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">BlendShape</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># for tangent- or transform- space shapes</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-targets">
+<h3>Adding Targets<a class="headerlink" href="#adding-targets" title="Permalink to this headline"></a></h3>
+<p>A comprehensive, Pythonic interface for editing blend shape targets is available through the
+<a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">.targets</span></code></a> / <code class="docutils literal notranslate"><span class="pre">.t</span></code> attribute.</p>
+<p>Here are a few ways to add targets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;L_smile_DMSH&#39;</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;L_smile_DMSH&#39;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;L_smile&#39;</span><span class="p">)</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;L_smile_DMSH&#39;</span> <span class="c1"># same thing as above</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.add" title="paya.lib.bsnboltons.Targets.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> for additional options.</p>
+</section>
+<section id="retrieving-targets">
+<h3>Retrieving Targets<a class="headerlink" href="#retrieving-targets" title="Permalink to this headline"></a></h3>
+<p>Target-specific functionality is available on <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> instances. These are returned by
+the <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.add" title="paya.lib.bsnboltons.Targets.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> method, and can also be retrieved in the following ways:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span> <span class="c1"># by alias</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># by logical index (tallies with the .weight attribute)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># by physical index</span>
+
+<span class="c1"># Iterate</span>
+<span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
+    <span class="c1"># do something</span>
+
+<span class="c1"># List</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="removing-targets">
+<h3>Removing Targets<a class="headerlink" href="#removing-targets" title="Permalink to this headline"></a></h3>
+<p>Here are a few ways to remove targets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">removeByLogicalIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">del</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># same thing</span>
+
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">removeByPhysicalIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">removeByLabel</span><span class="p">(</span><span class="s1">&#39;L_smile&#39;</span><span class="p">)</span>
+<span class="k">del</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">])</span> <span class="c1"># same thing</span>
+
+<span class="c1"># Remove all</span>
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="k">del</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="c1"># same thing</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.removeByLogicalIndex" title="paya.lib.bsnboltons.Targets.removeByLogicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByLogicalIndex()</span></code></a>, <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.removeByPhysicalIndex" title="paya.lib.bsnboltons.Targets.removeByPhysicalIndex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByPhysicalIndex()</span></code></a>,
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">removeByLabel()</span></code> and <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.clear" title="paya.lib.bsnboltons.Targets.clear"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clear()</span></code></a> for more
+information.</p>
+</section>
+<section id="editing-aliases">
+<h3>Editing Aliases<a class="headerlink" href="#editing-aliases" title="Permalink to this headline"></a></h3>
+<p>Target aliases can be edited using simple assignment:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span>
+<span class="n">target</span><span class="o">.</span><span class="n">alias</span> <span class="o">=</span> <span class="s1">&#39;L_grin&#39;</span>
+</pre></div>
+</div>
+<p>You may have to re-invoke tool panes to update the Maya UI afterwards.</p>
+</section>
+<section id="inverting-pre-deformation-correctives">
+<h3>Inverting Pre-Deformation Correctives<a class="headerlink" href="#inverting-pre-deformation-correctives" title="Permalink to this headline"></a></h3>
+<p>Pre-deformation corrective shapes that were sculpted at-pose (for example, on a duplicate of bound geometry) can be
+inverted into bind pose using the <a class="reference internal" href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster.invertShape" title="paya.runtime.nodes.SkinCluster.invertShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">invertShape()</span></code></a> method. Note that the skinCluster
+must be in a posed state when this is run:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skinnedGeo</span> <span class="o">=</span> <span class="s1">&#39;L_leg_DMSH&#39;</span>
+<span class="n">skin</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">SkinCluster</span><span class="o">.</span><span class="n">getFromGeo</span><span class="p">(</span><span class="n">skinnedGeo</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Create a pre-deformation blendShape node</span>
+<span class="n">bsn</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">BlendShape</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">skinnedGeo</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Invert the sculpt against the skinCluster, add the inversion as</span>
+<span class="c1"># a target</span>
+<span class="n">sculpt</span> <span class="o">=</span> <span class="s1">&#39;L_knee_sculpt_DMSH&#39;</span>
+<span class="n">inverted</span> <span class="o">=</span> <span class="n">skin</span><span class="o">.</span><span class="n">invertShape</span><span class="p">(</span><span class="n">sculpt</span><span class="p">)</span><span class="o">.</span><span class="n">getParent</span><span class="p">()</span>
+
+<span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">inverted</span><span class="p">,</span> <span class="n">initWeight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">inverted</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="post-deformation-targets">
+<h3>Post-Deformation Targets<a class="headerlink" href="#post-deformation-targets" title="Permalink to this headline"></a></h3>
+<p>Post-deformation targets can only be configured if the blend shape node was constructed using <code class="docutils literal notranslate"><span class="pre">pre=True</span></code> or the
+(counterintuitively named) Maya flag <code class="docutils literal notranslate"><span class="pre">before=True</span></code>. When this is the case, then:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If a transform node was specified via the <code class="docutils literal notranslate"><span class="pre">transform</span></code> keyword argument, the target will be configured as a
+<em>transform-space</em> target</p></li>
+<li><p>Otherwise, the target will default to <em>tangent-space</em></p></li>
+</ul>
+</div></blockquote>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">bsn</span><span class="o">.</span><span class="n">inPostMode</span><span class="p">())</span>
+<span class="c1"># True</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;L_smile_DMSH&#39;</span><span class="p">)</span> <span class="c1"># tangent-space</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;L_smile_DMSH&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;L_mouth_JOIN&#39;</span><span class="p">)</span> <span class="c1"># transform-space</span>
+</pre></div>
+</div>
+<p>Transforms can be reassigned afterwards:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="s1">&#39;L_mouth_002_JOIN&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="flipping-targets">
+<h3>Flipping Targets<a class="headerlink" href="#flipping-targets" title="Permalink to this headline"></a></h3>
+<p>Use the <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.flip" title="paya.lib.bsnboltons.Target.flip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flip()</span></code></a> method to flip targets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span>
+
+<span class="c1"># By topology</span>
+<span class="n">target</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">symmetryEdge</span><span class="o">=</span><span class="mi">455</span><span class="p">)</span>
+
+<span class="c1"># Object-space</span>
+<span class="n">target</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span> <span class="c1"># defaults to object X</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.flip" title="paya.lib.bsnboltons.Target.flip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flip()</span></code></a> for more options.</p>
+</section>
+<section id="adding-inbetweens">
+<h3>Adding Inbetweens<a class="headerlink" href="#adding-inbetweens" title="Permalink to this headline"></a></h3>
+<p>Inbetweens can be added using the <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.add" title="paya.lib.bsnboltons.Target.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> on <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a>, or
+by assigning to values:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span>
+
+<span class="n">tween</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;L_half_smile_DMSH&#39;</span><span class="p">)</span>
+<span class="n">target</span><span class="p">[</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;L_half_smile_DMSH&#39;</span> <span class="c1"># same thing</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.add" title="paya.lib.bsnboltons.Target.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> for more options and information.</p>
+</section>
+<section id="retrieving-inbetweens">
+<h3>Retrieving Inbetweens<a class="headerlink" href="#retrieving-inbetweens" title="Permalink to this headline"></a></h3>
+<p>Inbetweens are represented by instances of <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a>, and can be retrieved thus:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># By value</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+<span class="c1"># [0.5, 1.0]</span>
+
+<span class="n">tween</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="mf">0.5</span><span class="p">]</span>
+
+<span class="c1"># By logical index (if you know what you&#39;re doing)</span>
+<span class="n">tween</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="mi">5500</span><span class="p">]</span>
+
+<span class="c1"># By physical index</span>
+<span class="n">tween</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="removing-inbetweens">
+<h3>Removing Inbetweens<a class="headerlink" href="#removing-inbetweens" title="Permalink to this headline"></a></h3>
+<p>Here’s how to remove inbetweens:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># By value</span>
+<span class="n">target</span><span class="o">.</span><span class="n">removeByValue</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="k">del</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="mf">0.5</span><span class="p">])</span>
+
+<span class="c1"># By logical index (if you know what you&#39;re doing)</span>
+<span class="n">target</span><span class="o">.</span><span class="n">removeByLogicalIndex</span><span class="p">(</span><span class="mi">5500</span><span class="p">)</span>
+<span class="k">del</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="mi">5500</span><span class="p">])</span>
+
+<span class="c1"># By physical index</span>
+<span class="n">target</span><span class="o">.</span><span class="n">removeByPhysicalIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Clear all</span>
+<span class="n">target</span><span class="o">.</span><span class="n">clearInbetweens</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieving-target-geometry">
+<h3>Retrieving Target Geometry<a class="headerlink" href="#retrieving-target-geometry" title="Permalink to this headline"></a></h3>
+<p>Target geometry can be retrieved using the <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.getShape" title="paya.lib.bsnboltons.Subtarget.getShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getShape()</span></code></a> method, or via the <code class="docutils literal notranslate"><span class="pre">.shape</span></code>
+property, on <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a> instances. To get the main geometry for a target, you’ll have to
+access the ‘inbetween’ at value 1.0:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">bsn</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="s1">&#39;L_smile&#39;</span><span class="p">]</span>
+
+<span class="c1"># Via property</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="c1"># Via explicit getter</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span><span class="o">.</span><span class="n">getShape</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1"># L_smile_DMSHShape</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The return value will be <code class="docutils literal notranslate"><span class="pre">None</span></code> if the geometry was deleted, or if the blend shape node is in <em>post-deformation</em>
+mode.</p>
+</div>
+<p>To force-regenerate missing geometry, pass <code class="docutils literal notranslate"><span class="pre">create=True</span></code> to <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.getShape" title="paya.lib.bsnboltons.Subtarget.getShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getShape()</span></code></a>.</p>
+</section>
+<section id="assigning-target-geometry">
+<h3>Assigning Target Geometry<a class="headerlink" href="#assigning-target-geometry" title="Permalink to this headline"></a></h3>
+<p>To swap out target geometry use <a class="reference internal" href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.setShape" title="paya.lib.bsnboltons.Subtarget.setShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setShape()</span></code></a>, or simply assign to the property:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span><span class="o">.</span><span class="n">setShape</span><span class="p">(</span><span class="s1">&#39;L_smile_variant_DMSHShape&#39;</span><span class="p">)</span>
+<span class="n">target</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="s1">&#39;L_smile_variant_DMSHShape&#39;</span>
+
+<span class="c1"># Assigning the transform-level of a geometry also works:</span>
+<span class="n">target</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="s1">&#39;L_smile_variant_DMSH&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Geometry assignments are not live (connected) when the blend shape node is in <em>post-deformation</em> mode.</p>
 </div>
 </section>
 </section>

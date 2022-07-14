@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paya: PyMEL for Riggers &mdash; paya 0.6 documentation</title>
+  <title>Paya: PyMEL for Riggers &mdash; paya 0.7 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -32,7 +32,7 @@
             <a href="#" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.6
+                0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -106,16 +106,14 @@ for an integrated and familiar experience.</p>
 <p>Customisation is easy, and goes far beyond PyMEL’s
 <a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.</p>
-<div class="admonition-new-in-version-0-6 admonition">
-<p class="admonition-title">New in version 0.6</p>
+<div class="admonition-new-in-version-0-7 admonition">
+<p class="admonition-title">New in version 0.7</p>
 <ul class="simple">
-<li><p>Maya’s <code class="xref py py-func docutils literal notranslate"><span class="pre">copyDeformerWeights()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">copySkinWeights()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">deformerWeights()</span></code> commands have been
-unified into <a class="reference internal" href="deformers.html#deformer-weight-management"><span class="std std-ref">simple-to-use methods for dumping, loading and copying deformer weights</span></a></p></li>
-<li><p>Smart new <a class="reference internal" href="deformers.html#skincluster-constructor"><span class="std std-ref">construction and copy methods for skinClusters</span></a></p></li>
-<li><p><a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.blend" title="paya.runtime.plugs.Vector.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vector.blend()</span></code></a> now supports angle-based blending (for both attributes
-and values, naturally)</p></li>
-<li><p>Easily <a class="reference internal" href="joint_chains.html#twist-chains"><span class="std std-ref">create and drive twist chains</span></a></p></li>
-<li><p>And <a class="reference internal" href="whats_new.html"><span class="doc">more</span></a>!</p></li>
+<li><p>A concise, Pythonic interface for managing blend shape targets, including tangent- and transform- space,
+inverted correctives and more. Never use <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a> again!</p></li>
+<li><p>A new <a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.combine" title="paya.runtime.plugs.Math1D.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">combine()</span></code></a> method on scalar attributes leverages <code class="docutils literal notranslate"><span class="pre">combinationShape</span></code>
+nodes</p></li>
+<li><p><a class="reference internal" href="whats_new.html"><span class="doc">And more</span></a>!</p></li>
 </ul>
 </div>
 <section id="example-rigging-a-radial-repulsor">

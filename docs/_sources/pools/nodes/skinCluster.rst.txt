@@ -115,3 +115,19 @@ paya.runtime.nodes.SkinCluster
         populated (as is typically the case), dumping and reloading it
         via ``deformerWeights(at='blendWeights')`` results in a wrong
         index mapping.
+    
+    .. py:method:: invertShape(correctiveShape, name=None)
+    
+        Given a corrective geometry for the current skinCluster pose, returns
+        a reversed geometry suitable for use as a pre-deformation blend shape
+        target.
+        
+        :param correctiveShape: the corrective shape
+        :type correctiveShape: str,
+            :class:`~paya.runtime.nodes.GeometryShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param name/n: one or more name elements for the new geometry;
+            these will be applied to its transform; defaults to None
+        :type name/n: None, str, int, tuple, list
+        :return: The pre-deformation target.
+        :rtype: :class:`~paya.runtime.nodes.GeometryShape`

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Node Types &mdash; paya 0.6 documentation</title>
+  <title>Node Types &mdash; paya 0.7 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -20,7 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="paya.runtime.nodes.DagNode" href="nodes/dagNode.html" />
+    <link rel="next" title="paya.runtime.nodes.BlendShape" href="nodes/blendShape.html" />
     <link rel="prev" title="Types" href="../types_index.html" /> 
 </head>
 
@@ -32,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> paya
           </a>
               <div class="version">
-                0.6
+                0.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -66,16 +66,21 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../types_index.html">Types</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nodes/blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/dagNode.html">DagNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/dependNode.html">DependNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/fourByFourMatrix.html">FourByFourMatrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/geometryFilter.html">GeometryFilter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/ikHandle.html">IkHandle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/joint.html">Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nodes/lattice.html">Lattice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/locator.html">Locator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nodes/mesh.html">Mesh</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nodes/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/skinCluster.html">SkinCluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nodes/subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nodes/transform.html">Transform</a></li>
 </ul>
 </li>
@@ -120,16 +125,21 @@
 <h1>Node Types<a class="headerlink" href="#node-types" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="nodes/blendShape.html">BlendShape</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/dagNode.html">DagNode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/dependNode.html">DependNode</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/fourByFourMatrix.html">FourByFourMatrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/geometryFilter.html">GeometryFilter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/ikHandle.html">IkHandle</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/joint.html">Joint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/lattice.html">Lattice</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/locator.html">Locator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/mesh.html">Mesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/shape.html">Shape</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/skinCluster.html">SkinCluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/subdiv.html">Subdiv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes/transform.html">Transform</a></li>
 </ul>
 </div>
@@ -140,7 +150,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../types_index.html" class="btn btn-neutral float-left" title="Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="nodes/dagNode.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.DagNode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="nodes/blendShape.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.BlendShape" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
