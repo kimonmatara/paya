@@ -21,4 +21,5 @@ for attribute (including subtype), component and data types with true inheritanc
         nodes
     *   And more!
 
+
 Full documentation can be found `here <https://kimonmatara.github.io/paya/>`_.
