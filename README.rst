@@ -15,9 +15,9 @@ for attribute (including subtype), component and data types with true inheritanc
 
 .. admonition:: New in version 0.7
 
-    *   :ref:`A concise, Pythonic interface for managing blend shape targets <blend_shapes>`, including tangent- and
-        transform- space, inverted correctives and more. Never use ``blendShape`` again!
-    *   A new ``combine`` method on scalar attributes leverages ``combinationShape``
+    *   A concise, Pythonic interface for managing blend shape targets, including tangent- and
+        transform- space, inverted correctives and more. Never use ``blendShape()`` again!
+    *   A new ``combine()`` method on scalar attributes leverages ``combinationShape``
         nodes
     *   And more !
 
