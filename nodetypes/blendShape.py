@@ -1,3 +1,4 @@
+import pymel.util as _pu
 import paya.runtime as r
 from paya.lib.bsnboltons import Targets
 from paya.util import short, resolveFlags
@@ -19,7 +20,8 @@ class BlendShape:
         bsn.targets.add(happyGeo)
         # etc.
     """
-    def getTargets(self):
+    @property
+    def targets(self):
         """
         Getter for the ``.targets`` / ``.t`` property.
 
@@ -27,18 +29,6 @@ class BlendShape:
         :rtype: :class:`~paya.lib.bsnboltons.Targets`
         """
         return Targets(self)
-
-    def clearTargets(self):
-        """
-        Deleter for the ``.targets`` / ``.t`` property. Equivalent to
-        ``self.targets.clear()``.
-
-        :return: ``self``
-        :rtype: :class:`BlendShape`
-        """
-        self.getTargets().clear()
-
-    targets = t = property(fget=getTargets, fdel=clearTargets)
 
     #-----------------------------------------------------------------------|    Constructor
 
@@ -192,3 +182,47 @@ class BlendShape:
         :rtype: bool
         """
         return self.attr('deformationOrder').get() is 1
+
+    def exportTargets(self, *targets, filepath):
+        """
+        Exports target data.
+
+        .. note::
+
+            Data for inbetweens is not included. This is a Maya limitation.
+
+        :param \*targets: the targets to export; these must be
+            :class:`~paya.lib.bsnboltons.Target` instances or
+            logical indices; if omitted, defaults to all targets
+        :type \*targets: :class:`~paya.lib.bsnboltons.Target`, int
+        :param str filepath: the destination file path
+        :return: ``self``
+        :rtype: :class:`BlendShape`
+        """
+        targets = _pu.expandArgs(*targets)
+
+        if targets:
+            targets = [int(target) for target in targets]
+
+        else:
+            targets = self.attr('weight').getArrayIndices()
+
+        r.blendShape(
+            self,
+            e=True,
+            export=filepath,
+            exportTarget=[(0, target) for target in targets]
+        )
+
+        return self
+
+    def importTargets(self, filepath):
+        """
+        Imports targets exported using :meth:`exportTargets`.
+
+        :param str filepath: the source file path
+        :return: ``self``
+        :rtype: :class:`BlendShape`
+        """
+        r.blendShape(self, e=True, ip=filepath)
+        return self

@@ -30,7 +30,11 @@ from paya.lib.mathops import createMatrix, \
 from paya.lib.skel import Chain
 from paya.lib.controlshapes import controlShapes
 
-
+def saveScriptEditor():
+    """
+    Convenience wrapper for MEL's ``syncExecuterBackupFiles()``.
+    """
+    mel.eval('syncExecuterBackupFiles')
 
 def findMelProc(procName):
     """

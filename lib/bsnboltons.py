@@ -2,12 +2,16 @@
 This module is not for direct import / use. It defines the ``.targets``
 interface on :class:`~paya.runtime.nodes.BlendShape`.
 """
+import os
+from tempfile import gettempdir
+
+import maya.cmds as m
 import maya.mel as mel
 mel.eval('source blendShapeDeleteInBetweenTarget')
 mel.eval('source blendShapeDeleteTargetGroup')
 
 import pymel.util as _pu
-from paya.util import short
+from paya.util import short, toPosix
 from paya.lib.symmetry import SymmetricModelling
 import paya.runtime as r
 
@@ -184,6 +188,17 @@ class Subtarget:
 
     shape = property(fget=getShape, fset=setShape)
 
+    def disconnectShape(self):
+        """
+        Disconnects the shape input, if any. Equivalent to
+        ``self.geoInput.disconnect(inputs=True)``.
+
+        :return: self
+        :rtype: :class:`Subtarget`
+        """
+        self.geoInput.disconnect(inputs=True)
+        return self
+
     #--------------------------------------------------------|    Repr
 
     def __repr__(self):
@@ -305,6 +320,68 @@ class Target:
         return self.inputTargetGroup.attr('inputTargetItem')
 
     iti = inputTargetItem
+
+    #--------------------------------------------------------|    Delta management
+
+    def resetDelta(self):
+        """
+        Clear delta values for all subtargets on this target. This will only
+        have an effect if there is no live shape input.
+
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        bsn = self.node()
+        r.blendShape(bsn, e=True, rtd=[0, self.index()])
+        return self
+
+    @short(replace='rep')
+    def copyDeltaFrom(self, otherTarget, replace=False):
+        """
+        Copies delta information from 'otherTarget'. This will only have an
+        effect if there is no live shape input.
+
+        .. note::
+
+            Deltas for inbetweens are not included.
+
+        :param otherTarget: the target to copy deltas from; this must
+            either be an index or a :class:`Target` instance
+        :type otherTarget: int, :class:`Target`
+        :param bool replace/rep: clear deltas on this target before adding-in
+            the copied ones; defaults to False
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        otherIndex = int(otherTarget)
+
+        if replace:
+            self.resetDelta()
+
+        thisIndex = self.index()
+
+        bsn = self.node()
+        r.blendShape(bsn, e=True, copyDelta=[0, otherIndex, thisIndex])
+        return self
+
+    def export(self, filepath):
+        """
+        Exports data for this target into the specified filepath.
+
+        .. note::
+
+            Data for inbetweens is not included. This is a Maya limitation.
+
+        :param str filepath: the file path
+        :return: ``self``
+        :rtype: :class:`Target`
+        """
+        r.blendShape(
+            self.node(), e=True, export=filepath,
+            exportTarget=[0, int(self)]
+        )
+
+        return self
 
     #--------------------------------------------------------|    Space management
 
@@ -709,8 +786,19 @@ class Target:
 
     #--------------------------------------------------------|    Member additions
 
-    @short(relative='rel', topologyCheck='tc')
-    def add(self, value, geometry, relative=False, topologyCheck=False):
+    @short(
+        relative='rel',
+        topologyCheck='tc',
+        connect='con'
+    )
+    def add(
+            self,
+            value,
+            geometry,
+            relative=False,
+            topologyCheck=False,
+            connect=None
+    ):
         """
         Adds a subtarget (tween) at the specified value (ratio).
 
@@ -720,6 +808,8 @@ class Target:
             to False
         :param bool relative/rel: create a 'relative' inbetween target;
             defaults to False
+        :param bool connect/con: connect the target; defauls to True if this
+            is a pre-deformation blend shape, otherwise False
         :raises RuntimeError: the requested value (ratio) is already in use
         :return: The new Subtarget instance.
         :rtype: :class:`Subtarget`
@@ -729,12 +819,23 @@ class Target:
         if value in self.values():
             raise RuntimeError("Value already in use: {}".format(value))
 
+        dm = self.inputTargetGroup.attr('postDeformersMode').get()
+        isPost = dm in (1, 2)
+
+        if connect is None:
+            connect = not isPost
+
+        elif isPost and connect:
+            raise RuntimeError(
+                "The shape can't be connected because the "+
+                "blend shape node is in 'post-deformation' "+
+                "mode."
+            )
+
         bsn = self.node()
         base = bsn.getBaseObjects()[0]
 
         kwargs = {}
-
-        dm = self.inputTargetGroup.attr('postDeformersMode').get()
 
         if dm is 1:
             kwargs['tangentSpace'] = True
@@ -752,8 +853,7 @@ class Target:
             **kwargs
         )
 
-        if dm in (1, 2):
-            # Disconnect shape
+        if not connect:
             plug = self.inputTargetItem[
                 self.getLogicalIndexFromValue(value)].attr('inputGeomTarget')
 
@@ -1133,7 +1233,8 @@ class Targets:
         transform='tr',
         tangentSpace='ts',
         initWeight='iw',
-        index='i'
+        index='i',
+        connect='con'
     )
     def add(
             self,
@@ -1143,7 +1244,8 @@ class Targets:
             transform=None,
             tangentSpace=None,
             initWeight=0.0,
-            index=None
+            index=None,
+            connect=None
     ):
         """
         Adds a blend shape target.
@@ -1165,6 +1267,9 @@ class Targets:
             defaults to False
         :param float initWeight/iw: the blend shape weight value on
             creation; defaults to 0.0
+        :param bool connect/con: connect the source shape; defaults to True
+            if the blend shape node is in 'pre-deformation' mode, otherwise
+            False
         param int index/i: a preferred logical (sparse) index for the target;
             this mustn't already exist; if omitted, defaults to the next non-
             contiguous index.
@@ -1181,6 +1286,16 @@ class Targets:
 
         bsn = self.node()
         post = bsn.inPostMode()
+
+        if connect is None:
+            connect = not post
+
+        elif post and connect:
+            raise RuntimeError(
+                "The shape can't be connected because the "+
+                "blend shape node is in 'post-deformation' "+
+                "mode."
+            )
 
         # Resolve index
         if index is None:
@@ -1243,7 +1358,7 @@ class Targets:
         )
 
         # Post-config
-        if post:
+        if not connect:
            bsn.attr('inputTarget')[0].attr('inputTargetGroup'
                 )[index].attr('inputTargetItem')[6000].attr(
                 'inputGeomTarget').disconnect()

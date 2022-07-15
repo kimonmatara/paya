@@ -496,8 +496,7 @@ class SkinCluster:
         """
         corShape = r.PyNode(correctiveShape).toShape()
         corXf = corShape.getParent()
-        posedGeo = self.getGeometry()[0].getParent()
-
+        posedGeo = r.deformer(self, q=True, g=True)[0].getParent()
         outShape = r.PyNode(r.invertShape(posedGeo, corXf)).getShape()
         name = outShape.__class__.makeName(n=name)
         outShape.getParent().rename(name)
