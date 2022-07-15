@@ -20,21 +20,6 @@ paya.runtime.nodes.BlendShape
         bsn.targets.add(happyGeo)
         # etc.
 
-    .. py:method:: getTargets()
-    
-        Getter for the ``.targets`` / ``.t`` property.
-        
-        :return: A :class:`~paya.lib.bsnboltons.Targets` instance.
-        :rtype: :class:`~paya.lib.bsnboltons.Targets`
-    
-    .. py:method:: clearTargets()
-    
-        Deleter for the ``.targets`` / ``.t`` property. Equivalent to
-        ``self.targets.clear()``.
-        
-        :return: ``self``
-        :rtype: :class:`BlendShape`
-    
     .. py:classmethod:: create(*args, name=None, post=False, pre=False, after=False, automatic=False, parallel=False, before=False, split=False, frontOfChain=False, afterReference=False, **kwargs)
     
         Wrapper for :func:`~pymel.core.animation.blendShape`. Two new flags,
@@ -97,3 +82,27 @@ paya.runtime.nodes.BlendShape
         :return: True if the blend shape node is configured for
             'post-deformation', otherwise False.
         :rtype: bool
+    
+    .. py:method:: exportTargets(*targets, filepath)
+    
+        Exports target data.
+        
+        .. note::
+        
+            Data for inbetweens is not included. This is a Maya limitation.
+        
+        :param \*targets: the targets to export; these must be
+            :class:`~paya.lib.bsnboltons.Target` instances or
+            logical indices; if omitted, defaults to all targets
+        :type \*targets: :class:`~paya.lib.bsnboltons.Target`, int
+        :param str filepath: the destination file path
+        :return: ``self``
+        :rtype: :class:`BlendShape`
+    
+    .. py:method:: importTargets(filepath)
+    
+        Imports targets exported using :meth:`exportTargets`.
+        
+        :param str filepath: the source file path
+        :return: ``self``
+        :rtype: :class:`BlendShape`

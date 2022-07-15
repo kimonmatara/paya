@@ -139,35 +139,6 @@ easier to reserve the constructor for base initialisation and use
 </pre></div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.getTargets">
-<span class="sig-name descname"><span class="pre">getTargets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.getTargets" title="Permalink to this definition"></a></dt>
-<dd><p>Getter for the <code class="docutils literal notranslate"><span class="pre">.targets</span></code> / <code class="docutils literal notranslate"><span class="pre">.t</span></code> property.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A <a class="reference internal" href="../../paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a> instance.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../../paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets" title="paya.lib.bsnboltons.Targets"><code class="xref py py-class docutils literal notranslate"><span class="pre">Targets</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.clearTargets">
-<span class="sig-name descname"><span class="pre">clearTargets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.clearTargets" title="Permalink to this definition"></a></dt>
-<dd><p>Deleter for the <code class="docutils literal notranslate"><span class="pre">.targets</span></code> / <code class="docutils literal notranslate"><span class="pre">.t</span></code> property. Equivalent to
-<code class="docutils literal notranslate"><span class="pre">self.targets.clear()</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.create">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frontOfChain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afterReference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.create" title="Permalink to this definition"></a></dt>
 <dd><p>Wrapper for <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a>. Two new flags,
@@ -268,6 +239,49 @@ here’s a reference:</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.exportTargets">
+<span class="sig-name descname"><span class="pre">exportTargets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.exportTargets" title="Permalink to this definition"></a></dt>
+<dd><p>Exports target data.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data for inbetweens is not included. This is a Maya limitation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*targets</strong> (<a class="reference internal" href="../../paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a>, int) – the targets to export; these must be
+<a class="reference internal" href="../../paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> instances or
+logical indices; if omitted, defaults to all targets</p></li>
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the destination file path</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.BlendShape.importTargets">
+<span class="sig-name descname"><span class="pre">importTargets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.BlendShape.importTargets" title="Permalink to this definition"></a></dt>
+<dd><p>Imports targets exported using <a class="reference internal" href="#paya.runtime.nodes.BlendShape.exportTargets" title="paya.runtime.nodes.BlendShape.exportTargets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">exportTargets()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the source file path</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">BlendShape</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

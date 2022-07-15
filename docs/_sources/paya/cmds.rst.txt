@@ -22,6 +22,10 @@ via :py:mod:`paya.runtime`.
     :mod:`pymel.core`. Doing so may break code that accesses such commands via
     :mod:`paya.runtime`.
 
+.. py:function:: saveScriptEditor()
+
+    Convenience wrapper for MEL's ``syncExecuterBackupFiles()``.
+
 .. py:function:: findMelProc(procName)
 
     Convenience wrapper for MEL's `whatIs`. Returns just a path to

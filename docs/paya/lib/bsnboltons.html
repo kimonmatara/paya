@@ -216,6 +216,21 @@ True; passing True on a post-mode target will throw an error</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Subtarget.disconnectShape">
+<span class="sig-name descname"><span class="pre">disconnectShape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Subtarget.disconnectShape" title="Permalink to this definition"></a></dt>
+<dd><p>Disconnects the shape input, if any. Equivalent to
+<code class="docutils literal notranslate"><span class="pre">self.geoInput.disconnect(inputs=True)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.bsnboltons.Subtarget.__int__">
 <span class="sig-name descname"><span class="pre">__int__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Subtarget.__int__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -296,6 +311,69 @@ True; passing True on a post-mode target will throw an error</p></li>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="#paya.lib.bsnboltons.Subtarget" title="paya.lib.bsnboltons.Subtarget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subtarget</span></code></a> for more.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.resetDelta">
+<span class="sig-name descname"><span class="pre">resetDelta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.resetDelta" title="Permalink to this definition"></a></dt>
+<dd><p>Clear delta values for all subtargets on this target. This will only
+have an effect if there is no live shape input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.copyDeltaFrom">
+<span class="sig-name descname"><span class="pre">copyDeltaFrom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">otherTarget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.copyDeltaFrom" title="Permalink to this definition"></a></dt>
+<dd><p>Copies delta information from ‘otherTarget’. This will only have an
+effect if there is no live shape input.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Deltas for inbetweens are not included.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>otherTarget</strong> (int, <a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a>) – the target to copy deltas from; this must
+either be an index or a <a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a> instance</p></li>
+<li><p><strong>replace/rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – clear deltas on this target before adding-in
+the copied ones; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.export" title="Permalink to this definition"></a></dt>
+<dd><p>Exports data for this target into the specified filepath.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data for inbetweens is not included. This is a Maya limitation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the file path</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.isTransformSpace">
 <span class="sig-name descname"><span class="pre">isTransformSpace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.isTransformSpace" title="Permalink to this definition"></a></dt>
@@ -706,7 +784,7 @@ index</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.bsnboltons.Target.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topologyCheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.add" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topologyCheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Target.add" title="Permalink to this definition"></a></dt>
 <dd><p>Adds a subtarget (tween) at the specified value (ratio).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -717,6 +795,8 @@ index</p>
 to False</p></li>
 <li><p><strong>relative/rel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – create a ‘relative’ inbetween target;
 defaults to False</p></li>
+<li><p><strong>connect/con</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – connect the target; defauls to True if this
+is a pre-deformation blend shape, otherwise False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -1106,7 +1186,7 @@ occupied) index</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.bsnboltons.Targets.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targetGeo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topologyCheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangentSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initWeight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.add" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targetGeo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topologyCheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangentSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initWeight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.bsnboltons.Targets.add" title="Permalink to this definition"></a></dt>
 <dd><p>Adds a blend shape target.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1125,6 +1205,9 @@ configured; defaults to None</p></li>
 defaults to False</p></li>
 <li><p><strong>initWeight/iw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the blend shape weight value on
 creation; defaults to 0.0</p></li>
+<li><p><strong>connect/con</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – connect the source shape; defaults to True
+if the blend shape node is in ‘pre-deformation’ mode, otherwise
+False</p></li>
 </ul>
 </dd>
 </dl>

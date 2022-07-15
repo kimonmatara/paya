@@ -59,6 +59,14 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
         :return: ``self``
         :rtype: :class:`Subtarget`
     
+    .. py:method:: disconnectShape()
+    
+        Disconnects the shape input, if any. Equivalent to
+        ``self.geoInput.disconnect(inputs=True)``.
+        
+        :return: self
+        :rtype: :class:`Subtarget`
+    
     .. py:method:: __int__()
     
         :return: The logical (sparse) 5000 - > 6000 index for this subtarget
@@ -129,6 +137,43 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
     
     See :class:`Subtarget` for more.
 
+    .. py:method:: resetDelta()
+    
+        Clear delta values for all subtargets on this target. This will only
+        have an effect if there is no live shape input.
+        
+        :return: ``self``
+        :rtype: :class:`Target`
+    
+    .. py:method:: copyDeltaFrom(otherTarget, replace=False)
+    
+        Copies delta information from 'otherTarget'. This will only have an
+        effect if there is no live shape input.
+        
+        .. note::
+        
+            Deltas for inbetweens are not included.
+        
+        :param otherTarget: the target to copy deltas from; this must
+            either be an index or a :class:`Target` instance
+        :type otherTarget: int, :class:`Target`
+        :param bool replace/rep: clear deltas on this target before adding-in
+            the copied ones; defaults to False
+        :return: ``self``
+        :rtype: :class:`Target`
+    
+    .. py:method:: export(filepath)
+    
+        Exports data for this target into the specified filepath.
+        
+        .. note::
+        
+            Data for inbetweens is not included. This is a Maya limitation.
+        
+        :param str filepath: the file path
+        :return: ``self``
+        :rtype: :class:`Target`
+    
     .. py:method:: isTransformSpace()
     
         :return: True if this is a transform-space target, else False.
@@ -329,7 +374,7 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
         :return: The subtarget.
         :rtype: :class:`Subtarget`
     
-    .. py:method:: add(value, geometry, relative=False, topologyCheck=False)
+    .. py:method:: add(value, geometry, relative=False, topologyCheck=False, connect=None)
     
         Adds a subtarget (tween) at the specified value (ratio).
         
@@ -339,6 +384,8 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
             to False
         :param bool relative/rel: create a 'relative' inbetween target;
             defaults to False
+        :param bool connect/con: connect the target; defauls to True if this
+            is a pre-deformation blend shape, otherwise False
         :raises RuntimeError: the requested value (ratio) is already in use
         :return: The new Subtarget instance.
         :rtype: :class:`Subtarget`
@@ -557,7 +604,7 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
     
         Yields :class:`Target` instances.
     
-    .. py:method:: add(targetGeo, alias=None, topologyCheck=False, transform=None, tangentSpace=None, initWeight=0.0, index=None)
+    .. py:method:: add(targetGeo, alias=None, topologyCheck=False, transform=None, tangentSpace=None, initWeight=0.0, index=None, connect=None)
     
         Adds a blend shape target.
         
@@ -578,6 +625,9 @@ interface on :class:`~paya.runtime.nodes.BlendShape`.
             defaults to False
         :param float initWeight/iw: the blend shape weight value on
             creation; defaults to 0.0
+        :param bool connect/con: connect the source shape; defaults to True
+            if the blend shape node is in 'pre-deformation' mode, otherwise
+            False
         param int index/i: a preferred logical (sparse) index for the target;
             this mustn't already exist; if omitted, defaults to the next non-
             contiguous index.
