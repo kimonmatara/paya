@@ -6,7 +6,7 @@ Paya is an object-oriented toolkit for Maya riggers. Unlike other libraries, it 
 functionality to `PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_ types at runtime
 for an integrated and familiar experience.
 
-Included is the most comprehensive, and intuitive, implementation of maths rigging using Python operators available
+Included is the most comprehensive, and intuitive, implementation of **maths rigging using Python operators ** available
 anywhere, with over 100 methods for linear algebra, trigonometry and more.
 
 Customisation is easy, and goes far beyond PyMEL's
@@ -19,7 +19,6 @@ for attribute (including subtype), component and data types with true inheritanc
         transform- space, inverted correctives and more. Never use ``blendShape()`` again!
     *   A new ``combine()`` method on scalar attributes leverages ``combinationShape``
         nodes
-    *   And more !
-
+    *   And more!
 
 Full documentation can be found `here <https://kimonmatara.github.io/paya/>`_.

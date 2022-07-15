@@ -2,6 +2,37 @@
 What's New
 ##########
 
+*************
+Version 0.7.1
+*************
+
+Additions to paya.runtime
+=========================
+
+*   :func:`~paya.runtime.saveScriptEditor`
+
+
+Additions & Changes to Node Types
+=================================
+
+*   On :class:`~paya.runtime.nodes.BlendShape`:
+    :meth:`~paya.runtime.nodes.BlendShape.exportTargets`
+    :meth:`~paya.runtime.nodes.BlendShape.importTargets`
+
+    *   On :class:`~paya.lib.bsnboltons.Targets`:
+        :meth:`~paya.lib.bsnboltons.Targets.add` (new ``connect`` option)
+
+    *   On :class:`~paya.lib.bsnboltons.Target`:
+        :meth:`~paya.lib.bsnboltons.Target.resetDelta`
+        :meth:`~paya.lib.bsnboltons.Target.copyDeltaFrom`
+        :meth:`~paya.lib.bsnboltons.Target.export`
+        :meth:`~paya.lib.bsnboltons.Target.add` (new ``connect`` option)
+
+    *   On :class:`~paya.lib.bsnboltons.Subtarget`:
+        :meth:`~paya.lib.bsnboltons.Subtarget.disconnectShape`
+
+------
+
 ***********
 Version 0.7
 ***********
