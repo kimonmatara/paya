@@ -5,7 +5,7 @@ import paya.runtime as r
 
 class NurbsCurve:
 
-    #---------------------------------------------------|    Sampling
+    #---------------------------------------------------|    Curve-level info
 
     @short(reuse='re')
     def info(self, reuse=True):
@@ -39,6 +39,83 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         return self.info().attr('controlPoints')
+
+    #---------------------------------------------------|    Granular sampling
+
+    @short(uValue='u')
+    def initMotionPath(self, *uValue, **attrConfig):
+        """
+        Connects and configures a ``motionPath`` node.
+
+        :param uValue: an optional value or input for the ``uValue`` attribute
+        :type uValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param \*\*attrConfig: if provided, these should be an unpacked
+            mapping of *attrName: attrSource* to configure the node's
+            attributes; sources can be values or plugs
+        :return: The ``motionPath`` node.
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+        """
+        if uValue:
+            if 'uValue' in attrConfig:
+                raise RuntimeError(
+                    "'uValue' must either be passed as a "+
+                    "positional or keyword argument, not both."
+                )
+
+            uValue = uValue[0]
+
+        elif 'uValue' in attrConfig:
+            uValue = attrConfig.pop('uValue')
+
+        else:
+            uValue = 0.0
+
+        mp = r.nodes.MotionPath.createNode()
+        self >> mp.attr('geometryPath')
+        uValue >> mp.attr('uValue')
+
+        for attrName, attrSource in attrConfig.items():
+            attrSource >> mp.attr(attrName)
+
+        return mp
+
+    @short(turnOnPercentage='top')
+    def infoAtParam(self, param, turnOnPercentage=False):
+        """
+        :param param: the parameter input for a ``pointOnCurveInfo`` node
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool turnOnPercentage/top: sets the ``turnOnPercentage`` flag
+            of the ``pointOnCurveInfo`` node (note that this is just a
+            normalization of parametric space; it is not equivalent to
+            ``fractionMode`` on a ``motionPath``; defaults to False
+        :return: A ``pointOnCurveInfo`` node configured for the specified
+            parameter.
+        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
+        """
+        node = r.nodes.PointOnCurveInfo.createNode()
+        node.attr('turnOnPercentage').set(turnOnPercentage)
+        self >> node.attr('inputCurve')
+        param >> node.attr('parameter')
+
+        return node
+
+    def pointAtParam(self, param):
+        """
+        :param param: the parameter to sample
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: A point at the given parameter.
+        """
+        return self.infoAtParam(param).attr('position')
+
+    def pointAtFraction(self, fraction):
+        """
+        :param fraction: the length fraction at which to sample a point
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: A point at the specified length fraction.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+        """
+        mp = self.initMotionPath(fraction, fractionMode=True)
+        return mp.attr('allCoordinates')
 
     #---------------------------------------------------|    Edits
 
