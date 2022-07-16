@@ -108,6 +108,14 @@ paya.runtime.plugs.NurbsCurve
         :return: A point at the specified length fraction.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
+    .. py:method:: paramAtLength(length)
+    
+        Returns the parameter at the given length along the curve.
+        
+        :param length: the length at which to sample a parameter
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: :class:`~paya.runtime.plugs.Math1D`
+    
     .. py:method:: attach(otherCurve, blend=False, blendBias=0.5, parameter=0.1, blendKnotInsertion=False, reverse1=False, reverse2=False, keepMultipleKnots=True)
     
         Attaches a curve to this one.
@@ -197,6 +205,11 @@ paya.runtime.plugs.NurbsCurve
     
         Extends this curve by distance.
         
+        .. note::
+        
+            Unlike Maya's ``extendCurve`` node, if *atBothEnds* is requested,
+            the extension distance at each end will be halved.
+        
         :param distance: the distance (length) to extend by
         :type distance: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool linear/lin: use the 'Linear' mode of the
@@ -243,4 +256,17 @@ paya.runtime.plugs.NurbsCurve
         :param bool atBothEnds/abe: if extending by distance, extend from
             both ends of the curve; defaults to False
         :return: The extended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: retract(length, atStart=None, atBothEnds=None)
+    
+        Retracts this curve.
+        
+        :param length: the retraction length
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool atStart/ats: retract at the start of the curve instead
+            of the end; defaults to False
+        :param atBothEnds: retract at both ends of the curve; defaults to
+            False
+        :return: The modified curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
