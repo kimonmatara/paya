@@ -67,12 +67,11 @@ class NurbsCurve:
         node = r.nodes.MakeNurbsSquare.createNode()
         node.attr('spansPerSide').set(numSpans)
         node.attr('normal').set([0.0, 0.0, 1.0])
-        node.attr('center').set([-0.5, 0.5, 0.0])
+        node.attr('center').set([0.5, 0.5, 0.0])
         node.attr('sideLength1').set(1.0)
         node.attr('sideLength2').set(1.0)
         node.attr('degree').set(degree)
-
-        output = node.attr('outputCurve1')
+        output = node.attr('outputCurve3')
 
         #---------------------|    Transform
 
@@ -121,7 +120,9 @@ class NurbsCurve:
             ``curveInfo`` node.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        return self.info().attr('controlPoints')
+        plug = self.info().attr('controlPoints')
+        plug.evaluate()
+        return plug
 
     #---------------------------------------------------|    Granular sampling
 
@@ -377,13 +378,15 @@ class NurbsCurve:
 
     @short(
         removeMultipleKnots='rmk',
-        atStart='ats'
+        atStart='ats',
+        useSegment='seg'
     )
     def extendToPoint(
             self,
             point,
             atStart=False,
-            removeMultipleKnots=False
+            removeMultipleKnots=False,
+            useSegment=False
     ):
         """
         Extends this curve to the specified point.
@@ -396,9 +399,19 @@ class NurbsCurve:
             of the end; defaults to False
         :param bool removeMultipleKnots/rmk: remove multiple knots; defaults
             to False
+        :param bool useSegment/seg: extend by attaching a straight-line
+            segment
         :return: The modified curve output.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
+        if useSegment:
+            points = list(self.controlPoints())
+            startPoint = points[0 if atStart else -1]
+            startPoint.cl(n='start')
+            segment = self.createLine(startPoint, point)
+
+            return self.attach(segment, kmk=not removeMultipleKnots)
+
         return self.initExtendCurve(
             extendMethod='Point',
             inputPoint=point,
@@ -414,7 +427,8 @@ class NurbsCurve:
             self,
             vector,
             atStart=False,
-            removeMultipleKnots=False
+            removeMultipleKnots=False,
+            useSegment=False
     ):
         """
         Extends this curve along the specified vector.
@@ -433,6 +447,10 @@ class NurbsCurve:
         controlPoints = list(self.controlPoints())
         startPoint = controlPoints[0 if atStart else -1]
         endPoint = startPoint + vector
+
+        if useSegment:
+            segment = self.createLine(startPoint, endPoint)
+            return self.attach(segment, kmk=not removeMultipleKnots)
 
         return self.extendToPoint(
             endPoint,
@@ -503,3 +521,113 @@ class NurbsCurve:
             removeMultipleKnots=removeMultipleKnots,
             start=start
         ).attr('outputCurve').setClass(type(self))
+
+    @short(
+        atStart='ats',
+        atBothEnds='abe',
+        point='pt',
+        linear='lin',
+        circular='cir',
+        extrapolate='ext',
+        useSegment='seg',
+        removeMultipleKnots='rmk'
+    )
+    def extend(
+            self,
+            distPointOrVec,
+            point=None,
+            linear=None,
+            circular=None,
+            extrapolate=None,
+            useSegment=False,
+            removeMultipleKnots=False,
+            atStart=None,
+            atBothEnds=None
+    ):
+        """
+        Extends this curve.
+
+        :param distPointOrVec: a distance, point or vector for the extension
+        :type distPointOrVec: float, tuple, list, str,
+            :class:`~paya.runtime.data.Point`
+            :class:`~paya.runtime.data.Vector`
+            :class:`~paya.runtime.plugs.Math1D`
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool point: if *distPointOrVec* is a 3D value or plug,
+            interpret it as a point rather than a vector; defaults to True
+            if *distPointOrVec* is an instance of
+            :class:`~paya.runtime.data.Point`, otherwise False
+        :param bool linear/lin: if extending by distance, use the 'linear'
+            mode of the ``extendCurve`` node; defaults to True
+        :param bool circular/cir: if extending by distance, use the 'circular'
+            mode of the ``extendCurve`` node; defaults to False
+        :param bool extrapolate/ext: if extending by distance, use the
+            'extrapolate' mode of the ``extendCurve`` node; defaults to False
+        :param bool useSegment/seg: if extending by vector or point, don't use
+            an ``extendCurve`` node; instead, attach a line segment; defaults
+            to False
+        :param bool removeMultipleKnots/rmk: remove multiple knots; defaults to False
+        :param bool atStart/ats: extend from the start of the curve rather than the end;
+            defaults to False
+        :param bool atBothEnds/abe: if extending by distance, extend from
+            both ends of the curve; defaults to False
+        :return: The extended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        distPointOrVec, \
+        distPointOrVecDim, \
+        distPointOrVecIsPlug = _mo.info(distPointOrVec)
+
+        if distPointOrVecDim is 1:
+            if useSegment:
+                raise RuntimeError(
+                    "Extension by segment is not available for distance."
+                )
+
+            return self.extendByDistance(
+                distPointOrVec,
+                lin=linear,
+                cir=circular,
+                ext=extrapolate,
+                rmk=removeMultipleKnots,
+                ats=atStart,
+                abe=atBothEnds
+            )
+
+        if distPointOrVecDim is 3:
+            if any([linear, circular, extrapolate]):
+                raise RuntimeError(
+                    "The linear / circular / extrapolate "+
+                    "modes are not available for "+
+                    "point / vector."
+                )
+
+            if atBothEnds:
+                raise RuntimeError(
+                    "Extension at both ends is not "+
+                    "available for point / vector."
+                )
+
+            if point is None:
+                if isinstance(distPointOrVec, r.data.Point):
+                    point = True
+
+                else:
+                    point = False
+
+            if point:
+                meth = self.extendToPoint
+
+            else:
+                meth = self.extendByVector
+
+            return meth(
+                distPointOrVec,
+                ats=atStart,
+                rmk=removeMultipleKnots,
+                seg=useSegment
+            )
+
+        raise TypeError(
+            "Not a 1D or 3D numerical type: {}".format(distPointOrVec)
+        )
