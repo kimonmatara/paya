@@ -6,6 +6,16 @@ class DeformableShape:
 
     #--------------------------------------------------------|    History management
 
+    def deleteHistory(self):
+        """
+        Deletes history on this node.
+
+        :return: ``self``
+        :rtype: :class:`DeformableShape`
+        """
+        r.delete(self, constructionHistory=True)
+        return self
+
     def hasHistory(self):
         """
         :return: True if this shape has history, otherwise False.
@@ -19,8 +29,8 @@ class DeformableShape:
         :param bool create/c: create the original geometry if it doesn't
             already exist
         :return: The output of the best candidate for an 'original geometry'
-            in this shape's history.
-        :rtype: :class:`~paya.runtime.plugs.Geometry`
+            in this shape's history, or None
+        :rtype: :class:`~paya.runtime.plugs.Geometry`, None
         """
         result = r.deformableShape(self, og=True)[0]
 
@@ -30,3 +40,18 @@ class DeformableShape:
         if create:
             result = r.deformableShape(self, cog=True)
             return r.Attribute(result[0])
+
+    @short(create='c')
+    def getHistoricalGeometry(self, create=False):
+        """
+        :param create/c: create a historical input if it doesn't already exist
+        :return: The input into this shape, or None
+        :rtype: :class:`~paya.runtime.plugs.Geometry`, None
+        """
+        inputs = self.geoInput.inputs(plugs=True)
+
+        if inputs:
+            return inputs[0]
+
+        if create:
+            return self.getOriginalGeometry(create=True)
