@@ -107,6 +107,40 @@ class NurbsCurve:
         """
         return self.infoAtParam(param).attr('position')
 
+    def _initNearestPointOnCurve(self, point):
+        node = r.nodes.NearestPointOnCurve.createNode()
+        self >> node.attr('inputCurve')
+        point >> node.attr('inPosition')
+        return node
+
+    def closestParam(self, point):
+        """
+        Returns the closest parameter to the given point.
+
+        :param point: the reference point
+        :type point: list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The sampled parameter.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        return self._initNearestPointOnCurve().attr('parameter')
+
+    paramAtPoint = closestParam
+
+    def closestPoint(self, point):
+        """
+        Returns the closest point to the given point.
+
+        :param point: the reference point
+        :type point: list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The sampled point.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+        """
+        return self._initNearestPointOnCurve().attr('position')
+
     def pointAtFraction(self, fraction):
         """
         :param fraction: the length fraction at which to sample a point
