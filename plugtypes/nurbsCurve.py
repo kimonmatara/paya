@@ -6,6 +6,88 @@ import paya.runtime as r
 
 class NurbsCurve:
 
+    #---------------------------------------------------|    Constructors
+
+    @classmethod
+    @short(
+        degree='d',
+        numCVs='cvs'
+    )
+    def createLine(
+            cls,
+            startPoint,
+            endPoint,
+            degree=None,
+            numCVs=None
+    ):
+        """
+        Configures a ``makeNurbsSquare`` node to generate a single NURBS
+        curve output for a line and returns the output.
+
+        :param startPoint: the start point of the line
+        :type startPoint: tuple, list, str, :class:`~paya.runtime.plugs.Math1D`
+        :param startPoint: the end point of the line
+        :type endPoint: tuple, list, str, :class:`~paya.runtime.plugs.Math1D`
+        :param degree/d: the curve degree; if omitted, it is automatically
+            derived from 'numCVs'; if 'numCVs' is also omitted, defaults to 1
+        :param int numCVs/cvs: the number of CVs; if omitted, it is
+            automatically derived from 'degree'; if 'degree' is also omitted,
+            defaults to 2
+        :return: The curve output.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        #---------------------|    Gather info
+
+        if numCVs is None and degree is None:
+            degree = 1
+            numCVs = 2
+
+        elif numCVs is None:
+            numCVs = degree + 1
+
+        elif degree is None:
+            if numCVs is 2:
+                degree = 1
+
+            elif numCVs is 3:
+                degree = 2
+
+            else:
+                degree = 3
+
+        numSpans = numCVs - degree
+
+        startPoint = _mo.info(startPoint)[0]
+        endPoint = _mo.info(endPoint)[0]
+        vector = endPoint - startPoint
+        mag = vector.length()
+
+        #---------------------|    Configure node to create a line of magnitude 1.0
+
+        node = r.nodes.MakeNurbsSquare.createNode()
+        node.attr('spansPerSide').set(numSpans)
+        node.attr('normal').set([0.0, 0.0, 1.0])
+        node.attr('center').set([-0.5, 0.5, 0.0])
+        node.attr('sideLength1').set(1.0)
+        node.attr('sideLength2').set(1.0)
+        node.attr('degree').set(degree)
+
+        output = node.attr('outputCurve1')
+
+        #---------------------|    Transform
+
+        scaleMatrix = r.createScaleMatrix(1.0, mag, 1.0)
+
+        matrix = r.createMatrix(
+            'y', vector,
+            'x', [1, 0, 0],
+            t=startPoint
+        ).pk(t=True, r=True)
+
+        matrix = scaleMatrix * matrix
+
+        return output.transform(matrix)
+
     #---------------------------------------------------|    Curve-level info
 
     @short(reuse='re')
@@ -44,20 +126,20 @@ class NurbsCurve:
     #---------------------------------------------------|    Granular sampling
 
     @short(uValue='u')
-    def initMotionPath(self, *uValue, **attrConfig):
+    def initMotionPath(self, *uValue, **config):
         """
         Connects and configures a ``motionPath`` node.
 
         :param uValue: an optional value or input for the ``uValue`` attribute
         :type uValue: float, :class:`~paya.runtime.plugs.Math1D`
-        :param \*\*attrConfig: if provided, these should be an unpacked
+        :param \*\*config: if provided, these should be an unpacked
             mapping of *attrName: attrSource* to configure the node's
             attributes; sources can be values or plugs
         :return: The ``motionPath`` node.
         :rtype: :class:`~paya.runtime.nodes.MotionPath`
         """
         if uValue:
-            if 'uValue' in attrConfig:
+            if 'uValue' in config:
                 raise RuntimeError(
                     "'uValue' must either be passed as a "+
                     "positional or keyword argument, not both."
@@ -65,8 +147,8 @@ class NurbsCurve:
 
             uValue = uValue[0]
 
-        elif 'uValue' in attrConfig:
-            uValue = attrConfig.pop('uValue')
+        elif 'uValue' in config:
+            uValue = config.pop('uValue')
 
         else:
             uValue = 0.0
@@ -75,7 +157,7 @@ class NurbsCurve:
         self >> mp.attr('geometryPath')
         uValue >> mp.attr('uValue')
 
-        for attrName, attrSource in attrConfig.items():
+        for attrName, attrSource in config.items():
             attrSource >> mp.attr(attrName)
 
         return mp
@@ -160,6 +242,60 @@ class NurbsCurve:
         return mp.attr('allCoordinates')
 
     #---------------------------------------------------|    Edits
+
+    @short(
+        blend='bl',
+        blendBias='bb',
+        parameter='p',
+        blendKnotInsertion='bki',
+        reverse1='rv1',
+        reverse2='rv2',
+        keepMultipleKnots='kmk'
+    )
+    def attach(
+            self,
+            otherCurve,
+            blend=False,
+            blendBias=0.5,
+            parameter=0.1,
+            blendKnotInsertion=False,
+            reverse1=False,
+            reverse2=False,
+            keepMultipleKnots=True
+    ):
+        """
+        Attaches a curve to this one.
+
+        :param otherCurve: the curve to attach
+        :typ otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool blend/bl: perform a blended attachment; defaults to False
+        :param blendBias/bb: the blend bias; defaults to 0.5
+        :type blendBias/bb: float, :class:`~paya.runtime.plugs.Math1D`
+        :param parameter/p: a parameter for the blend knot insertion;
+            defaults to 0.1
+        :type parameter/p: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool blendKnotInsertion/bki: insert a blend not; defaults to
+            False
+        :param bool reverse1: reverse this curve; defaults to False
+        :param bool reverse2: reverse the other curve; defaults to False
+        :param bool keepMultipleKnots/kmk: keep multiple knots; defaults to
+            True
+        :return: The combined curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        node = r.nodes.AttachCurve.createNode()
+        self >> node.attr('inputCurve1')
+        otherCurve >> node.attr('inputCurve2')
+
+        node.attr('method').set(1 if blend else 0)
+        blendBias >> node.attr('blendBias')
+        parameter >> node.attr('parameter')
+        node.attr('blendKnotInsertion').set(blendKnotInsertion)
+        node.attr('reverse1').set(reverse1)
+        node.attr('reverse2').set(reverse2)
+        node.attr('keepMultipleKnots').set(keepMultipleKnots)
+
+        return node.attr('outputCurve')
 
     @short(select='sel')
     def detach(self, *parameters, select=None):
