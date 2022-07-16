@@ -6,6 +6,23 @@ paya.runtime.plugs.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
+    .. py:classmethod:: createLine(startPoint, endPoint, degree=None, numCVs=None)
+    
+        Configures a ``makeNurbsSquare`` node to generate a single NURBS
+        curve output for a line and returns the output.
+        
+        :param startPoint: the start point of the line
+        :type startPoint: tuple, list, str, :class:`~paya.runtime.plugs.Math1D`
+        :param startPoint: the end point of the line
+        :type endPoint: tuple, list, str, :class:`~paya.runtime.plugs.Math1D`
+        :param degree/d: the curve degree; if omitted, it is automatically
+            derived from 'numCVs'; if 'numCVs' is also omitted, defaults to 1
+        :param int numCVs/cvs: the number of CVs; if omitted, it is
+            automatically derived from 'degree'; if 'degree' is also omitted,
+            defaults to 2
+        :return: The curve output.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
     .. py:method:: info(reuse=True)
     
         :param bool reuse/re: Reuse any previously-connected ``curveInfo``
@@ -24,13 +41,13 @@ paya.runtime.plugs.NurbsCurve
             ``curveInfo`` node.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: initMotionPath(*uValue, **attrConfig)
+    .. py:method:: initMotionPath(*uValue, **config)
     
         Connects and configures a ``motionPath`` node.
         
         :param uValue: an optional value or input for the ``uValue`` attribute
         :type uValue: float, :class:`~paya.runtime.plugs.Math1D`
-        :param \*\*attrConfig: if provided, these should be an unpacked
+        :param \*\*config: if provided, these should be an unpacked
             mapping of *attrName: attrSource* to configure the node's
             attributes; sources can be values or plugs
         :return: The ``motionPath`` node.
@@ -53,6 +70,14 @@ paya.runtime.plugs.NurbsCurve
         :param param: the parameter to sample
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :return: A point at the given parameter.
+    
+    .. py:method:: initNearestPointOnCurve(point)
+    
+        Connects and configures a ``nearestPointOnCurve`` node.
+        
+        :param point: the reference point
+        :return: The ``nearestPointOnCurve`` node.
+        :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
     
     .. py:method:: closestParam(point)
     
@@ -83,6 +108,27 @@ paya.runtime.plugs.NurbsCurve
         :return: A point at the specified length fraction.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
+    .. py:method:: attach(otherCurve, blend=False, blendBias=0.5, parameter=0.1, blendKnotInsertion=False, reverse1=False, reverse2=False, keepMultipleKnots=True)
+    
+        Attaches a curve to this one.
+        
+        :param otherCurve: the curve to attach
+        :typ otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool blend/bl: perform a blended attachment; defaults to False
+        :param blendBias/bb: the blend bias; defaults to 0.5
+        :type blendBias/bb: float, :class:`~paya.runtime.plugs.Math1D`
+        :param parameter/p: a parameter for the blend knot insertion;
+            defaults to 0.1
+        :type parameter/p: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool blendKnotInsertion/bki: insert a blend not; defaults to
+            False
+        :param bool reverse1: reverse this curve; defaults to False
+        :param bool reverse2: reverse the other curve; defaults to False
+        :param bool keepMultipleKnots/kmk: keep multiple knots; defaults to
+            True
+        :return: The combined curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
     .. py:method:: detach(*parameters, select=None)
     
         Detaches this curve at the specified parameter(s).
@@ -92,3 +138,109 @@ paya.runtime.plugs.NurbsCurve
         :param select/sel: a subset of output indices to include in the
             return; ``keep`` attributes will configured accordingly
         :return: [:class:`~paya.runtime.plugs.NurbsCurve`]
+    
+    .. py:method:: subCurve(minValue, maxValue, relative=False)
+    
+        Connects and configures a ``subCurve`` node and returns its output.
+        
+        :param minValue: a source for the ``minValue`` attribute
+        :type minValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param maxValue: a source for the ``maxValue`` attribute
+        :type maxValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool relative/r: set the node to 'relative'; defaults to False
+        :return: The sub-curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: initExtendCurve(**config)
+    
+        Connects and configures an ``extendCurve`` node.
+        
+        :param \*\*config: if provided, this should be an unpacked mapping
+            of *attrName: attrSource* to configure the node attributes.
+            Attribute sources can be values or plugs.
+        :return: The ``extendCurve`` node.
+        :rtype: :class:`~paya.runtime.nodes.ExtendCurve`
+    
+    .. py:method:: extendToPoint(point, atStart=False, removeMultipleKnots=False, useSegment=False)
+    
+        Extends this curve to the specified point.
+        
+        :param point: the vector along which to extend
+        :type point: list, tuple, str,
+            :class:`paya.runtime.data.Point`,
+            :class:`paya.runtime.plugs.Vector`
+        :param bool atStart/ats: extend from the start of the curve instead
+            of the end; defaults to False
+        :param bool removeMultipleKnots/rmk: remove multiple knots; defaults
+            to False
+        :param bool useSegment/seg: extend by attaching a straight-line
+            segment
+        :return: The modified curve output.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: extendByVector(vector, atStart=False, removeMultipleKnots=False, useSegment=False)
+    
+        Extends this curve along the specified vector.
+        
+        :param vector: the vector along which to extend
+        :type vector: list, tuple, str,
+            :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`
+        :param bool atStart/ats: extend from the start of the curve instead
+            of the end; defaults to False
+        :param bool removeMultipleKnots/rmk: remove multiple knots; defaults
+            to False
+        :return: The modified curve output.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: extendByDistance(distance, linear=False, circular=False, extrapolate=False, atStart=None, atBothEnds=None, removeMultipleKnots=False)
+    
+        Extends this curve by distance.
+        
+        :param distance: the distance (length) to extend by
+        :type distance: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool linear/lin: use the 'Linear' mode of the
+            ``extendCurve`` node; defaults to True
+        :param bool circular/cir: use the 'Linear' mode of the
+            ``extendCurve`` node; defaults to False
+        :param bool extrapolate/ext: use the 'extrpolate' mode of the
+            ``extendCurve`` node; defaults to False
+        :param bool atStart/ats: extend from the start of the curve instead
+            of the end; defaults to False
+        :param bool atBothEnds/abe: extend from both ends of the curve;
+            defauls to False
+        :param bool removeMultipleKnots: remove multiple knots; defaults to
+            False
+        :return: The modified curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: extend(distPointOrVec, point=None, linear=None, circular=None, extrapolate=None, useSegment=False, removeMultipleKnots=False, atStart=None, atBothEnds=None)
+    
+        Extends this curve.
+        
+        :param distPointOrVec: a distance, point or vector for the extension
+        :type distPointOrVec: float, tuple, list, str,
+            :class:`~paya.runtime.data.Point`
+            :class:`~paya.runtime.data.Vector`
+            :class:`~paya.runtime.plugs.Math1D`
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool point: if *distPointOrVec* is a 3D value or plug,
+            interpret it as a point rather than a vector; defaults to True
+            if *distPointOrVec* is an instance of
+            :class:`~paya.runtime.data.Point`, otherwise False
+        :param bool linear/lin: if extending by distance, use the 'linear'
+            mode of the ``extendCurve`` node; defaults to True
+        :param bool circular/cir: if extending by distance, use the 'circular'
+            mode of the ``extendCurve`` node; defaults to False
+        :param bool extrapolate/ext: if extending by distance, use the
+            'extrapolate' mode of the ``extendCurve`` node; defaults to False
+        :param bool useSegment/seg: if extending by vector or point, don't use
+            an ``extendCurve`` node; instead, attach a line segment; defaults
+            to False
+        :param bool removeMultipleKnots/rmk: remove multiple knots; defaults to False
+        :param bool atStart/ats: extend from the start of the curve rather than the end;
+            defaults to False
+        :param bool atBothEnds/abe: if extending by distance, extend from
+            both ends of the curve; defaults to False
+        :return: The extended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`

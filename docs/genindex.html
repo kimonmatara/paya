@@ -431,6 +431,8 @@
 </li>
       <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.atan">atan() (Math1D method)</a>
 </li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.attach">attach() (NurbsCurve method)</a>
+</li>
       <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.atTime">atTime() (Math1D method)</a>
 </li>
       <li><a href="paya/lib/attrs.html#paya.lib.attrs.Section.attr">attr() (Section method)</a>
@@ -597,6 +599,8 @@
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createIkHandles">createIkHandles() (Chain method)</a>
 </li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.createLine">createLine() (NurbsCurve class method)</a>
+</li>
       <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.createLocator">createLocator() (EulerRotation method)</a>, <a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation.createLocator">[1]</a>
 
       <ul>
@@ -705,17 +709,25 @@
         <li><a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation">(class in paya.runtime.plugs)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/lib/attrs.html#paya.lib.attrs.expandAttrListToParentsAndChildren">expandAttrListToParentsAndChildren() (in module paya.lib.attrs)</a>
 </li>
       <li><a href="paya/plugtree.html#paya.plugtree.expandTree">expandTree() (in module paya.plugtree)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.explode">explode() (Chain method)</a>
 </li>
       <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.export">export() (Target method)</a>
 </li>
       <li><a href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.exportTargets">exportTargets() (BlendShape method)</a>
+</li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.extend">extend() (NurbsCurve method)</a>
+</li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.extendByDistance">extendByDistance() (NurbsCurve method)</a>
+</li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.extendByVector">extendByVector() (NurbsCurve method)</a>
+</li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.extendToPoint">extendToPoint() (NurbsCurve method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -961,7 +973,11 @@
       </ul></li>
       <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.infoAtParam">infoAtParam() (NurbsCurve method)</a>
 </li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.initExtendCurve">initExtendCurve() (NurbsCurve method)</a>
+</li>
       <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.initMotionPath">initMotionPath() (NurbsCurve method)</a>
+</li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.initNearestPointOnCurve">initNearestPointOnCurve() (NurbsCurve method)</a>
 </li>
       <li><a href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.inPostMode">inPostMode() (BlendShape method)</a>
 
@@ -969,10 +985,10 @@
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.inPostMode">(Target method)</a>
 </li>
       </ul></li>
-      <li><a href="paya/plugtree.html#paya.plugtree.insert">insert() (in module paya.plugtree)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="paya/plugtree.html#paya.plugtree.insert">insert() (in module paya.plugtree)</a>
+</li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.insertJoints">insertJoints() (Chain method)</a>
 </li>
       <li><a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.inverse">inverse() (Matrix method)</a>
@@ -1558,10 +1574,10 @@
 </li>
       <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.setTranslate">setTranslate() (Matrix method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.setTwistVectors">setTwistVectors() (IkHandle method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.setX">setX() (Matrix method)</a>
 </li>
       <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.setY">setY() (Matrix method)</a>
@@ -1597,6 +1613,8 @@
       <li><a href="paya/runtime.html#paya.runtime.Runtime.stop">stop() (Runtime method)</a>
 </li>
       <li><a href="pools/plugs/string.html#paya.runtime.plugs.String">String (class in paya.runtime.plugs)</a>
+</li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.subCurve">subCurve() (NurbsCurve method)</a>
 </li>
       <li><a href="pools/nodes/subdiv.html#paya.runtime.nodes.Subdiv">Subdiv (class in paya.runtime.nodes)</a>
 </li>
