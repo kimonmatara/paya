@@ -215,7 +215,7 @@ class NurbsCurve:
         :return: The sampled parameter.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        return self.initNearestPointOnCurve().attr('parameter')
+        return self.initNearestPointOnCurve(point).attr('parameter')
 
     paramAtPoint = closestParam
 
@@ -241,6 +241,19 @@ class NurbsCurve:
         """
         mp = self.initMotionPath(fraction, fractionMode=True)
         return mp.attr('allCoordinates')
+
+    def paramAtLength(self, length):
+        """
+        Returns the parameter at the given length along the curve.
+
+        :param length: the length at which to sample a parameter
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: :class:`~paya.runtime.plugs.Math1D`
+        """
+        fullLength = self.length()
+        fraction = length / fullLength
+        point = self.pointAtFraction(fraction)
+        return self.paramAtPoint(point)
 
     #---------------------------------------------------|    Edits
 
@@ -479,6 +492,11 @@ class NurbsCurve:
         """
         Extends this curve by distance.
 
+        .. note::
+
+            Unlike Maya's ``extendCurve`` node, if *atBothEnds* is requested,
+            the extension distance at each end will be halved.
+
         :param distance: the distance (length) to extend by
         :type distance: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool linear/lin: use the 'Linear' mode of the
@@ -496,6 +514,11 @@ class NurbsCurve:
         :return: The modified curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
+        distance, distanceDim, distanceIsPlug = _mo.info(distance)
+
+        if atBothEnds:
+            distance *= 0.5
+
         if circular:
             extensionType = 'Circular'
 
@@ -631,3 +654,36 @@ class NurbsCurve:
         raise TypeError(
             "Not a 1D or 3D numerical type: {}".format(distPointOrVec)
         )
+
+    @short(atStart='ats', atBothEnds='abe')
+    def retract(self, length, atStart=None, atBothEnds=None):
+        """
+        Retracts this curve.
+
+        :param length: the retraction length
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool atStart/ats: retract at the start of the curve instead
+            of the end; defaults to False
+        :param atBothEnds: retract at both ends of the curve; defaults to
+            False
+        :return: The modified curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        cutLength, cutLengthDim, cutLengthIsPlug = _mo.info(length)
+
+        if atStart:
+            cutLengths = [cutLength]
+            select = 1
+
+        elif atBothEnds:
+            cutLength *= 0.5
+            cutLengths = [cutLength, self.length()-cutLength]
+            select = 1
+
+        else:
+            cutLengths = [self.length()-cutLength]
+            select = 0
+
+        params = [self.paramAtLength(cutLength) for cutLength in cutLengths]
+
+        return self.detach(*params, select=select)[0]
