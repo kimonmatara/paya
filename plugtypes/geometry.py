@@ -10,7 +10,7 @@ class Geometry:
     @short(
         under='u',
         intermediate='i',
-        name=None,
+        name='n',
         conformShapeNames='csn'
     )
     def createShape(
