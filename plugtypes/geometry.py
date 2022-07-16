@@ -78,3 +78,35 @@ class Geometry:
 
         mfnClass = getattr(om, 'MFn'+self.__class__.__name__)
         return mfnClass(mobj)
+
+    #---------------------------------------------------------|    Geometry filtering
+
+    @short(invertTransform='itf', freezeNormals='fn')
+    def transform(self, matrix, invertTransform=False, freezeNormals=0):
+        """
+        Transforms this geometry by the specified matrix and returns the result.
+
+        :param matrix: the matrix to use
+        :param bool invertTransform/itf: invert the transform; defaults to
+            False
+        :param freezeNormals/fn: a setting for the 'freezeNormals'
+            attribute on ``transformGeometry``. This should be an integer
+            index or an enum label. The available settings are:
+
+            0: 'Never'
+            1: 'Always'
+            2: 'Non-rigid Transformations Only'
+
+            Defaults to 0 ('Never').
+        :type freezeNormals/fn: str, int
+        :return: The transformed geometry.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+        """
+        node = r.nodes.TransformGeometry.createNode()
+        self >> node.attr('inputGeometry')
+
+        node.attr('freezeNormals').set(freezeNormals)
+        node.attr('invertTransform').set(invertTransform)
+        matrix >> node.attr('transform')
+
+        return node.attr('outputGeometry').setClass(self.__class__)
