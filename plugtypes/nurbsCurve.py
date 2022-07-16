@@ -191,3 +191,24 @@ class NurbsCurve:
 
         return [node.attr('outputCurve'
             )[selectedIndex] for selectedIndex in selectedIndices]
+
+    @short(relative='r')
+    def subCurve(self, minValue, maxValue, relative=False):
+        """
+        Connects and configures a ``subCurve`` node and returns its output.
+
+        :param minValue: a source for the ``minValue`` attribute
+        :type minValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param maxValue: a source for the ``maxValue`` attribute
+        :type maxValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool relative/r: set the node to 'relative'; defaults to False
+        :return: The sub-curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        node = r.nodes.SubCurve.createNode()
+        self >> node.attr('inputCurve')
+        minValue >> node.attr('minValue')
+        maxValue >> node.attr('maxValue')
+        node.attr('relative').set(relative)
+
+        return node.attr('outputCurve').setClass(type(self))
