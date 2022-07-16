@@ -1,3 +1,4 @@
+import maya.OpenMaya as om
 from paya.util import short
 import paya.runtime as r
 
@@ -60,3 +61,20 @@ class Geometry:
                 r.PyNode(under).conformShapeNames()
 
         return shape
+
+    def getShapeMFn(self):
+        """
+        Returns an API function set for the shape type associated with this
+        plug, initialised around the MObject of the data block. Useful for
+        performing spot inspections (like ``numCVs()`` on a curve output)
+        without creating a shape.
+
+        :return: The function set.
+        :rtype: :class:`~maya.OpenMaya.MFnDagNode`
+        """
+        mplug = self.__apimplug__()
+        handle = mplug.asMDataHandle()
+        mobj = handle.data()
+
+        mfnClass = getattr(om, 'MFn'+self.__class__.__name__)
+        return mfnClass(mobj)
