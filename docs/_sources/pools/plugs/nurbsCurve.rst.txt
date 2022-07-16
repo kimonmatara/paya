@@ -1,0 +1,94 @@
+*****************************
+paya.runtime.plugs.NurbsCurve
+*****************************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: NurbsCurve(*args, **kwargs)
+
+    .. py:method:: info(reuse=True)
+    
+        :param bool reuse/re: Reuse any previously-connected ``curveInfo``
+            node; defaults to True
+        :return: A ``curveInfo`` node connected to this curve output.
+        :rtype: :class:`~paya.runtime.nodes.CurveInfo`
+    
+    .. py:method:: length()
+    
+        :return: The arc length of this curve output.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: controlPoints()
+    
+        :return: The ``.controlPoints`` multi-attribute of a connected
+            ``curveInfo`` node.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: initMotionPath(*uValue, **attrConfig)
+    
+        Connects and configures a ``motionPath`` node.
+        
+        :param uValue: an optional value or input for the ``uValue`` attribute
+        :type uValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param \*\*attrConfig: if provided, these should be an unpacked
+            mapping of *attrName: attrSource* to configure the node's
+            attributes; sources can be values or plugs
+        :return: The ``motionPath`` node.
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+    
+    .. py:method:: infoAtParam(param, turnOnPercentage=False)
+    
+        :param param: the parameter input for a ``pointOnCurveInfo`` node
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool turnOnPercentage/top: sets the ``turnOnPercentage`` flag
+            of the ``pointOnCurveInfo`` node (note that this is just a
+            normalization of parametric space; it is not equivalent to
+            ``fractionMode`` on a ``motionPath``; defaults to False
+        :return: A ``pointOnCurveInfo`` node configured for the specified
+            parameter.
+        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
+    
+    .. py:method:: pointAtParam(param)
+    
+        :param param: the parameter to sample
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: A point at the given parameter.
+    
+    .. py:method:: closestParam(point)
+    
+        Returns the closest parameter to the given point.
+        
+        :param point: the reference point
+        :type point: list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The sampled parameter.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: closestPoint(point)
+    
+        Returns the closest point to the given point.
+        
+        :param point: the reference point
+        :type point: list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The sampled point.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: pointAtFraction(fraction)
+    
+        :param fraction: the length fraction at which to sample a point
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: A point at the specified length fraction.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: detach(*parameters, select=None)
+    
+        Detaches this curve at the specified parameter(s).
+        
+        :param \*parameters: the parameter(s) at which to 'cut' the curve
+        :type \*parameters: float, :class:`~paya.runtime.plugs.Math1D`
+        :param select/sel: a subset of output indices to include in the
+            return; ``keep`` attributes will configured accordingly
+        :return: [:class:`~paya.runtime.plugs.NurbsCurve`]

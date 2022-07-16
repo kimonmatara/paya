@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.nodes.NurbsSurface &mdash; paya 0.7.1 documentation</title>
+  <title>paya.runtime.nodes.DeformableShape &mdash; paya 0.7.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.runtime.nodes.Shape" href="shape.html" />
-    <link rel="prev" title="paya.runtime.nodes.NurbsCurve" href="nurbsCurve.html" /> 
+    <link rel="next" title="paya.runtime.nodes.DependNode" href="dependNode.html" />
+    <link rel="prev" title="paya.runtime.nodes.DagNode" href="dagNode.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -68,7 +68,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="deformableShape.html">DeformableShape</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DeformableShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">FourByFourMatrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geometryFilter.html">GeometryFilter</a></li>
@@ -78,7 +78,7 @@
 <li class="toctree-l3"><a class="reference internal" href="locator.html">Locator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesh.html">Mesh</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
@@ -113,9 +113,9 @@
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../types_index.html">Types</a> &raquo;</li>
           <li><a href="../nodes_index.html">Node Types</a> &raquo;</li>
-      <li>paya.runtime.nodes.NurbsSurface</li>
+      <li>paya.runtime.nodes.DeformableShape</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/pools/nodes/nurbsSurface.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/pools/nodes/deformableShape.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -123,12 +123,73 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="paya-runtime-nodes-nurbssurface">
-<h1>paya.runtime.nodes.NurbsSurface<a class="headerlink" href="#paya-runtime-nodes-nurbssurface" title="Permalink to this headline"></a></h1>
+  <section id="paya-runtime-nodes-deformableshape">
+<h1>paya.runtime.nodes.DeformableShape<a class="headerlink" href="#paya-runtime-nodes-deformableshape" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsSurface">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NurbsSurface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsSurface" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeformableShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.deleteHistory">
+<span class="sig-name descname"><span class="pre">deleteHistory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.deleteHistory" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes history on this node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.nodes.DeformableShape" title="paya.runtime.nodes.DeformableShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.hasHistory">
+<span class="sig-name descname"><span class="pre">hasHistory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.hasHistory" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if this shape has history, otherwise False.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.getOriginalGeometry">
+<span class="sig-name descname"><span class="pre">getOriginalGeometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.getOriginalGeometry" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>create/c</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – create the original geometry if it doesn’t
+already exist</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The output of the best candidate for an ‘original geometry’
+in this shape’s history, or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/geometry.html#paya.runtime.plugs.Geometry" title="paya.runtime.plugs.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a>, None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.getHistoricalGeometry">
+<span class="sig-name descname"><span class="pre">getHistoricalGeometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.getHistoricalGeometry" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>create/c</strong> – create a historical input if it doesn’t already exist</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The input into this shape, or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/geometry.html#paya.runtime.plugs.Geometry" title="paya.runtime.plugs.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a>, None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 
@@ -136,8 +197,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="nurbsCurve.html" class="btn btn-neutral float-left" title="paya.runtime.nodes.NurbsCurve" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="shape.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.Shape" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dagNode.html" class="btn btn-neutral float-left" title="paya.runtime.nodes.DagNode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dependNode.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.DependNode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

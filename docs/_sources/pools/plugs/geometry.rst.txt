@@ -1,0 +1,54 @@
+***************************
+paya.runtime.plugs.Geometry
+***************************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: Geometry(*args, **kwargs)
+
+    .. py:method:: createShape(name=None, under=None, intermediate=False, conformShapeNames=True)
+    
+        Creates a shape node and connects this geometry output into its input.
+        
+        :param name/n: one or more name elements
+        :type name/n: None, str, int, list, tuple
+        :param under/u: a transform parent for the new shape; a new transform
+            will be generated if this is omitted
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool intermediate/i: make the shape an intermediate objects;
+            defaults to False
+        :param bool conformShapeNames/csn: ignored if 'under' is None; run a
+            conform on the destination transform's shapes after reparenting;
+            defaults to True
+        :return: The new shape.
+        :rtype: :class:`~paya.runtime.nodes.Shape`
+    
+    .. py:method:: getShapeMFn()
+    
+        Returns an API function set for the shape type associated with this
+        plug, initialised around the MObject of the data block. Useful for
+        performing spot inspections (like ``numCVs()`` on a curve output)
+        without creating a shape.
+        
+        :return: The function set.
+        :rtype: :class:`~maya.OpenMaya.MFnDagNode`
+    
+    .. py:method:: transform(matrix, invertTransform=False, freezeNormals=0)
+    
+        Transforms this geometry by the specified matrix and returns the result.
+        
+        :param matrix: the matrix to use
+        :param bool invertTransform/itf: invert the transform; defaults to
+            False
+        :param freezeNormals/fn: a setting for the 'freezeNormals'
+            attribute on ``transformGeometry``. This should be an integer
+            index or an enum label. The available settings are:
+        
+            0: 'Never'
+            1: 'Always'
+            2: 'Non-rigid Transformations Only'
+        
+            Defaults to 0 ('Never').
+        :type freezeNormals/fn: str, int
+        :return: The transformed geometry.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
