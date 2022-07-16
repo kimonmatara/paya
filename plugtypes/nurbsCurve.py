@@ -1,3 +1,4 @@
+import paya.lib.mathops as _mo
 import pymel.util as _pu
 from paya.util import short
 import paya.runtime as r
@@ -107,7 +108,14 @@ class NurbsCurve:
         """
         return self.infoAtParam(param).attr('position')
 
-    def _initNearestPointOnCurve(self, point):
+    def initNearestPointOnCurve(self, point):
+        """
+        Connects and configures a ``nearestPointOnCurve`` node.
+
+        :param point: the reference point
+        :return: The ``nearestPointOnCurve`` node.
+        :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
+        """
         node = r.nodes.NearestPointOnCurve.createNode()
         self >> node.attr('inputCurve')
         point >> node.attr('inPosition')
@@ -124,7 +132,7 @@ class NurbsCurve:
         :return: The sampled parameter.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        return self._initNearestPointOnCurve().attr('parameter')
+        return self.initNearestPointOnCurve().attr('parameter')
 
     paramAtPoint = closestParam
 
@@ -139,7 +147,7 @@ class NurbsCurve:
         :return: The sampled point.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        return self._initNearestPointOnCurve().attr('position')
+        return self.initNearestPointOnCurve().attr('position')
 
     def pointAtFraction(self, fraction):
         """
@@ -212,3 +220,150 @@ class NurbsCurve:
         node.attr('relative').set(relative)
 
         return node.attr('outputCurve').setClass(type(self))
+
+    def initExtendCurve(self, **config):
+        """
+        Connects and configures an ``extendCurve`` node.
+
+        :param \*\*config: if provided, this should be an unpacked mapping
+            of *attrName: attrSource* to configure the node attributes.
+            Attribute sources can be values or plugs.
+        :return: The ``extendCurve`` node.
+        :rtype: :class:`~paya.runtime.nodes.ExtendCurve`
+        """
+        node = r.nodes.ExtendCurve.createNode()
+        self >> node.attr('inputCurve1')
+
+        for attrName, attrSource in config.items():
+            attrSource >> node.attr(attrName)
+
+        return node
+
+    @short(
+        removeMultipleKnots='rmk',
+        atStart='ats'
+    )
+    def extendToPoint(
+            self,
+            point,
+            atStart=False,
+            removeMultipleKnots=False
+    ):
+        """
+        Extends this curve to the specified point.
+
+        :param point: the vector along which to extend
+        :type point: list, tuple, str,
+            :class:`paya.runtime.data.Point`,
+            :class:`paya.runtime.plugs.Vector`
+        :param bool atStart/ats: extend from the start of the curve instead
+            of the end; defaults to False
+        :param bool removeMultipleKnots/rmk: remove multiple knots; defaults
+            to False
+        :return: The modified curve output.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        return self.initExtendCurve(
+            extendMethod='Point',
+            inputPoint=point,
+            start=1 if atStart else 0,
+            removeMultipleKnots=removeMultipleKnots
+        ).attr('outputCurve').setClass(type(self))
+
+    @short(
+        removeMultipleKnots='rmk',
+        atStart='ats'
+    )
+    def extendByVector(
+            self,
+            vector,
+            atStart=False,
+            removeMultipleKnots=False
+    ):
+        """
+        Extends this curve along the specified vector.
+
+        :param vector: the vector along which to extend
+        :type vector: list, tuple, str,
+            :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`
+        :param bool atStart/ats: extend from the start of the curve instead
+            of the end; defaults to False
+        :param bool removeMultipleKnots/rmk: remove multiple knots; defaults
+            to False
+        :return: The modified curve output.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        controlPoints = list(self.controlPoints())
+        startPoint = controlPoints[0 if atStart else -1]
+        endPoint = startPoint + vector
+
+        return self.extendToPoint(
+            endPoint,
+            ats=atStart,
+            rmk=removeMultipleKnots
+        )
+
+    @short(
+        linear='lin',
+        circular='cir',
+        extrapolate='ext',
+        atStart='ats',
+        atBothEnds='abe',
+        removeMultipleKnots='rmk'
+    )
+    def extendByDistance(
+            self,
+            distance,
+            linear=False,
+            circular=False,
+            extrapolate=False,
+            atStart=None,
+            atBothEnds=None,
+            removeMultipleKnots=False
+    ):
+        """
+        Extends this curve by distance.
+
+        :param distance: the distance (length) to extend by
+        :type distance: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool linear/lin: use the 'Linear' mode of the
+            ``extendCurve`` node; defaults to True
+        :param bool circular/cir: use the 'Linear' mode of the
+            ``extendCurve`` node; defaults to False
+        :param bool extrapolate/ext: use the 'extrpolate' mode of the
+            ``extendCurve`` node; defaults to False
+        :param bool atStart/ats: extend from the start of the curve instead
+            of the end; defaults to False
+        :param bool atBothEnds/abe: extend from both ends of the curve;
+            defauls to False
+        :param bool removeMultipleKnots: remove multiple knots; defaults to
+            False
+        :return: The modified curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        if circular:
+            extensionType = 'Circular'
+
+        elif extrapolate:
+            extensionType = 'Extrapolate'
+
+        else:
+            extensionType = 'Linear'
+
+        if atStart:
+            start = 'Start'
+
+        elif atBothEnds:
+            start = 'Both'
+
+        else:
+            start = 'End'
+
+        return self.initExtendCurve(
+            extendMethod='Distance',
+            extensionType=extensionType,
+            distance=distance,
+            removeMultipleKnots=removeMultipleKnots,
+            start=start
+        ).attr('outputCurve').setClass(type(self))
