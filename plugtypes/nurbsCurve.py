@@ -10,9 +10,6 @@ class NurbsCurve:
     #---------------------------------------------------------------|    Constructors
     #---------------------------------------------------------------|
 
-    # WIP: The below needs
-    # nodes.MakeThreePointCircularArc.dodgeCollinear() to be implemented
-
     @classmethod
     @short(
         radius='r',
