@@ -1016,7 +1016,7 @@ class NurbsCurve:
         General configuration method for a ``rebuildCurve``.
 
         :param rebuildType/rt: An enum index or label:
-        
+
             - 0: 'Uniform' (the default)
             - 1: 'Reduce Spans'
             - 2: 'Match Knots'
