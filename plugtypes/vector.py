@@ -351,8 +351,8 @@ class Vector:
         :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         ffm = r.nodes.FourByFourMatrix.createNode()
-
-        fields = ['in30','in31','in32']
+        fields = ['in30', 'in31', 'in32']
+        children = self.getChildren()
 
         for src, field in zip(self.getChildren(), fields):
             src >> ffm.attr(field)

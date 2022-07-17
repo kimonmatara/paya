@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.symmetry &mdash; paya 0.7.1 documentation</title>
+  <title>paya.lib.nurbsutil &mdash; paya 0.7.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.lib.xmlweights" href="xmlweights.html" />
-    <link rel="prev" title="paya.lib.suffixes" href="suffixes.html" /> 
+    <link rel="next" title="paya.lib.skel" href="skel.html" />
+    <link rel="prev" title="paya.lib.names" href="names.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -75,10 +75,10 @@
 <li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.nurbsutil</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.symmetry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xmlweights.html">paya.lib.xmlweights</a></li>
 </ul>
 </li>
@@ -111,9 +111,9 @@
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../paya.html">paya</a> &raquo;</li>
           <li><a href="../lib.html">paya.lib</a> &raquo;</li>
-      <li>paya.lib.symmetry</li>
+      <li>paya.lib.nurbsutil</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/paya/lib/symmetry.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/paya/lib/nurbsutil.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -121,16 +121,39 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-paya.lib.symmetry">
-<span id="paya-lib-symmetry"></span><h1>paya.lib.symmetry<a class="headerlink" href="#module-paya.lib.symmetry" title="Permalink to this headline"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="paya.lib.symmetry.SymmetricModelling">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SymmetricModelling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.symmetry.SymmetricModelling" title="Permalink to this definition"></a></dt>
-<dd><p>Context manager. Applies overrides via
-<code class="xref py py-func docutils literal notranslate"><span class="pre">symmetricModelling()</span></code> and reverts them on
-block exit. Can also be used to bracket settings around routines that
-might affect them, for example the symmetry-flipping modes of
-<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a>.</p>
+  <section id="module-paya.lib.nurbsutil">
+<span id="paya-lib-nurbsutil"></span><h1>paya.lib.nurbsutil<a class="headerlink" href="#module-paya.lib.nurbsutil" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.nurbsutil.minCVsForDegree">
+<span class="sig-name descname"><span class="pre">minCVsForDegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.nurbsutil.minCVsForDegree" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>degree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the degree</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the minimum number of CVs possible for the specified degree</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.nurbsutil.numSpansFromNumCVsAndDegree">
+<span class="sig-name descname"><span class="pre">numSpansFromNumCVsAndDegree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numCVs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.nurbsutil.numSpansFromNumCVsAndDegree" title="Permalink to this definition"></a></dt>
+<dd><p>Given a number of CVs and a degree, returns the number of spans.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numCVs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of CVs</p></li>
+<li><p><strong>degree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the degree</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The number of spans.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -139,8 +162,8 @@ might affect them, for example the symmetry-flipping modes of
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="suffixes.html" class="btn btn-neutral float-left" title="paya.lib.suffixes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="xmlweights.html" class="btn btn-neutral float-right" title="paya.lib.xmlweights" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="names.html" class="btn btn-neutral float-left" title="paya.lib.names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skel.html" class="btn btn-neutral float-right" title="paya.lib.skel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

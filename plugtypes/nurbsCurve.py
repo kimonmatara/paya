@@ -1,3 +1,4 @@
+import paya.lib.nurbsutil as _nu
 import paya.lib.mathops as _mo
 import pymel.util as _pu
 from paya.util import short
@@ -10,22 +11,93 @@ class NurbsCurve:
     #---------------------------------------------------------------|    Constructors
     #---------------------------------------------------------------|
 
-    @short(upVector='up', radius='rad')
-    def createArc(self, points, upVector=None, radius=None):
-        raise NotImplementedError
+    # WIP: The below needs
+    # nodes.MakeThreePointCircularArc.dodgeCollinear() to be implemented
+
+    # @classmethod
+    # @short(
+    #     radius='r',
+    #     directionVector='dv',
+    #     toggleArc='tac',
+    #     sections='s',
+    #     degree='d',
+    #     collinear='col'
+    # )
+    # def createArc(
+    #         cls,
+    #         *points,
+    #         directionVector=None,
+    #         radius=1.0,
+    #         toggleArc=False,
+    #         sections=8,
+    #         degree=3,
+    #         collinear=True
+    # ):
+    #     """
+    #     :param points: two or three points, packed or unpacked
+    #     :type points: tuple, list, :class:`~paya.runtime.data.Point`,
+    #         :class:`~paya.runtime.data.Vector`
+    #     :param directionVector/dv: for two-point arcs only: the arc
+    #         direction (normal) vector, defaults to [0, 0, 1] (Z)
+    #     :type directionVector/dv: tuple, list,
+    #         :class:`~paya.runtime.data.Vector`,
+    #     :param radius/r: for two-point arcs only: the arc radius; defaults to
+    #         1.0
+    #     :type radius/r: float, :class:`~paya.runtime.plugs.Math1D`
+    #     :param bool toggleArc/tac: for two-point arcs only: draw the arc
+    #         on the outside; defaults to False
+    #     :param sections/s: the number of arc sections; defaults to 8
+    #     :type sections/s: int, :class:`~paya.runtime.plugs.Math1D`
+    #     :param degree/d: the arc degree; defaults to 3
+    #     :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
+    #     :param bool collinear/col: for three-point arcs only: prevent the arc
+    #         from disappearing with an error when the input points are
+    #         collinear; defaults to True
+    #     :return: An output for a circular arc.
+    #     :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    #     """
+    #     num = len(points)
+    #
+    #     if num is 1:
+    #         points = points[0]
+    #         num = len(points)
+    #
+    #     if num is 2:
+    #         node = r.nodes.MakeTwoPointCircularArc.createNode()
+    #         points[0] >> node.attr('point1')
+    #         points[1] >> node.attr('point2')
+    #
+    #         if directionVector:
+    #             directionVector >> node.attr('directionVector')
+    #
+    #         toggleArc >> node.attr('toggleArc')
+    #         degree >> node.attr('degree')
+    #         sections >> node.attr('sections')
+    #         radius >> node.attr('radius')
+    #
+    #         return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
+    #
+    #     elif num is 3:
+    #         node = r.nodes.MakeThreePointCircularArc.createNode()
+    #         points[0] >> node.attr('point1')
+    #         points[1] >> node.attr('point2')
+    #         points[2] >> node.attr('point3')
+    #         degree >> node.attr('degree')
+    #         sections >> node.attr('sections')
+    #
+    #         if collinear:
+    #             node.dodgeCollinear()
+    #
+    #         return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
+    #
+    #     else:
+    #         raise ValueError(
+    #             "Please pass two or three points, packed or unpacked."
+    #         )
 
     @classmethod
-    @short(
-        degree='d',
-        numCVs='cvs'
-    )
-    def createLine(
-            cls,
-            startPoint,
-            endPoint,
-            degree=None,
-            numCVs=None
-    ):
+    @short(degree='d', numCVs='cvs')
+    def createLine(cls, startPoint, endPoint, degree=None, numCVs=None):
         """
         Configures a ``makeNurbsSquare`` node to generate a single NURBS
         curve output for a line and returns the output.
@@ -136,36 +208,19 @@ class NurbsCurve:
 
     #--------------------------------------|    Info (bundled) sampling
 
-    def initMotionPath(self, *uValue, **config):
+    def initMotionPath(self, **config):
         """
         Connects and configures a ``motionPath`` node.
 
         :param uValue: an optional value or input for the ``uValue`` attribute
         :type uValue: float, :class:`~paya.runtime.plugs.Math1D`
-        :param \*\*config: if provided, these should be an unpacked
-            mapping of *attrName: attrSource* to configure the node's
-            attributes; sources can be values or plugs
+        :param \*\*config: an unpacked mapping of *attrName: attrSource*;
+            sources can be values or plugs
         :return: The ``motionPath`` node.
         :rtype: :class:`~paya.runtime.nodes.MotionPath`
         """
-        if uValue:
-            if 'uValue' in config:
-                raise RuntimeError(
-                    "'uValue' must either be passed as a "+
-                    "positional or keyword argument, not both."
-                )
-
-            uValue = uValue[0]
-
-        elif 'uValue' in config:
-            uValue = config.pop('uValue')
-
-        else:
-            uValue = 0.0
-
         mp = r.nodes.MotionPath.createNode()
         self >> mp.attr('geometryPath')
-        uValue >> mp.attr('uValue')
 
         for attrName, attrSource in config.items():
             attrSource >> mp.attr(attrName)
@@ -241,7 +296,7 @@ class NurbsCurve:
         :return: A point at the specified length fraction.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        mp = self.initMotionPath(fraction, fractionMode=True)
+        mp = self.initMotionPath(uValue=fraction, fractionMode=True)
         return mp.attr('allCoordinates')
 
     def pointAtLength(self, length):
@@ -383,50 +438,66 @@ class NurbsCurve:
         blendKnotInsertion='bki',
         reverse1='rv1',
         reverse2='rv2',
-        keepMultipleKnots='kmk'
+        multipleKnots='mul'
     )
     def attach(
             self,
-            otherCurve,
+            *curves,
             blend=False,
             blendBias=0.5,
             parameter=0.1,
             blendKnotInsertion=False,
             reverse1=False,
             reverse2=False,
-            keepMultipleKnots=True
+            multipleKnots=True
     ):
         """
-        Attaches a curve to this one.
+        Attaches one or more curves to this one.
 
-        :param otherCurve: the curve to attach
-        :typ otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool blend/bl: perform a blended attachment; defaults to False
-        :param blendBias/bb: the blend bias; defaults to 0.5
+        :param \*curves: one or more curves to attach to this one
+        :type \*curves: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool blend: use blended attachments; defaults to False
+        :param blendBias/bb: ignored if more than two curves are
+            involved; the bias for blended attachments; defaults to 0.5
         :type blendBias/bb: float, :class:`~paya.runtime.plugs.Math1D`
-        :param parameter/p: a parameter for the blend knot insertion;
-            defaults to 0.1
-        :type parameter/p: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool blendKnotInsertion/bki: insert a blend not; defaults to
-            False
-        :param bool reverse1: reverse this curve; defaults to False
-        :param bool reverse2: reverse the other curve; defaults to False
-        :param bool keepMultipleKnots/kmk: keep multiple knots; defaults to
-            True
+        :param bool blendKnotInsertion: ignored if more than two curves
+            are involved; add a blend knot; defaults to False
+        :param float parameter/p: ignored if more than two curves are
+            involved or *blendKnotInsertion* is False; the parameter for
+            the blend knot; defaults to 0.1
+        :param bool reverse1/rv1: ignored if more than two curves are
+            involved; reverse the first curve; defaults to False
+        :param bool reverse2/rv2: ignored if more than two curves are
+            involved; reverse the second curve; defaults to False
+        :param bool multipleKnots: keep multiple knots; defaults to True
         :return: The combined curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
+        curves = list(_pu.expandArgs(*curves))
+        num = len(curves)
+
+        if not num:
+            raise ValueError("No curves were specified to attach to.")
+
         node = r.nodes.AttachCurve.createNode()
-        self >> node.attr('inputCurve1')
-        otherCurve >> node.attr('inputCurve2')
+
+        if num > 1:
+            allCurves = [self] + curves
+
+            for i, curve in enumerate(allCurves):
+                curve >> node.attr('inputCurves')[i]
+
+        else:
+            self >> node.attr('inputCurve1')
+            curves[0] >> node.attr('inputCurve2')
 
         node.attr('method').set(1 if blend else 0)
+        node.attr('blendKnotInsertion').set(blendKnotInsertion)
         blendBias >> node.attr('blendBias')
         parameter >> node.attr('parameter')
-        node.attr('blendKnotInsertion').set(blendKnotInsertion)
         node.attr('reverse1').set(reverse1)
         node.attr('reverse2').set(reverse2)
-        node.attr('keepMultipleKnots').set(keepMultipleKnots)
+        node.attr('keepMultipleKnots').set(multipleKnots)
 
         return node.attr('outputCurve')
 
@@ -434,9 +505,8 @@ class NurbsCurve:
         """
         Connects and configures an ``extendCurve`` node.
 
-        :param \*\*config: if provided, this should be an unpacked mapping
-            of *attrName: attrSource* to configure the node attributes.
-            Attribute sources can be values or plugs.
+        :param \*\*config: an unpacked mapping of *attrName: attrSource*
+            for attribute configuration; sources can be values or plugs
         :return: The ``extendCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.ExtendCurve`
         """
@@ -449,7 +519,7 @@ class NurbsCurve:
         return node
 
     @short(
-        keepMultipleKnots='kmk',
+        multipleKnots='mul',
         atStart='ats',
         useSegment='seg'
     )
@@ -457,7 +527,7 @@ class NurbsCurve:
             self,
             vector,
             atStart=False,
-            keepMultipleKnots=True,
+            multipleKnots=True,
             useSegment=False
     ):
         """
@@ -466,7 +536,7 @@ class NurbsCurve:
             :class:`~paya.runtime.plugs.Vector`
         :param bool atStart/ats: extend from the start instead of the end;
             defaults to False
-        :param bool keepMultipleKnots/kmk: keep multiple knots; defaults to
+        :param bool multipleKnots/mul: keep multiple knots; defaults to
             True
         :param bool useSegment/seg: extend using an attached segment instead
             of an ``extendCurve`` node; defaults to False
@@ -482,21 +552,21 @@ class NurbsCurve:
 
             if atStart:
                 inp = self.reverse()
-                out = inp.attach(segment, kmk=keepMultipleKnots)
+                out = inp.attach(segment, mul=multipleKnots)
                 return out.reverse()
 
             else:
-                return self.attach(segment, kmk=keepMultipleKnots)
+                return self.attach(segment, mul=multipleKnots)
 
         return self.initExtendCurve(
             extendMethod='Point',
             inputPoint=endPoint,
             start=1 if atStart else 0,
-            removeMultipleKnots=not keepMultipleKnots
-        ).attr('outputCurve').setClass(type(self))
-
+            removeMultipleKnots=not multipleKnots
+        ).attr('outputCurve')
+    
     @short(
-        keepMultipleKnots='kmk',
+        multipleKnots='mul',
         atStart='ats',
         useSegment='seg'
     )
@@ -504,7 +574,7 @@ class NurbsCurve:
             self,
             point,
             atStart=False,
-            keepMultipleKnots=True,
+            multipleKnots=True,
             useSegment=False
     ):
         """
@@ -513,7 +583,7 @@ class NurbsCurve:
             :class:`~paya.runtime.plugs.Vector`
         :param bool atStart/ats: extend from the start instead of the end;
             defaults to False
-        :param bool keepMultipleKnots/kmk: keep multiple knots; defaults to
+        :param bool multipleKnots/mul: keep multiple knots; defaults to
             True
         :param bool useSegment/seg: extend using an attached segment instead
             of an ``extendCurve`` node; defaults to False
@@ -527,23 +597,23 @@ class NurbsCurve:
 
             if atStart:
                 inp = self.reverse()
-                out = inp.attach(segment, kmk=keepMultipleKnots)
+                out = inp.attach(segment, kmk=multipleKnots)
                 return out.reverse()
 
             else:
-                return self.attach(segment, kmk=keepMultipleKnots)
+                return self.attach(segment, kmk=multipleKnots)
 
         return self.initExtendCurve(
             extendMethod='Point',
             inputPoint=point,
             start=1 if atStart else 0,
-            removeMultipleKnots=not keepMultipleKnots
-        ).attr('outputCurve').setClass(type(self))
-
+            removeMultipleKnots=not multipleKnots
+        ).attr('outputCurve')
+    
     @short(
         atStart='ats',
         atBothEnds='abe',
-        keepMultipleKnots='kmk',
+        multipleKnots='mul',
         circular='cir',
         linear='lin',
         extrapolate='ext'
@@ -553,7 +623,7 @@ class NurbsCurve:
             length,
             atStart=False,
             atBothEnds=False,
-            keepMultipleKnots=True,
+            multipleKnots=True,
             circular=False,
             linear=False,
             extrapolate=False
@@ -565,7 +635,7 @@ class NurbsCurve:
             defaults to False
         :param bool atBothEnds/abe: extend from both ends; note that, in this
             case, the length at either end will be halved; defaults to False
-        :param bool keepMultipleKnots/kmk: keep multiple knots; defaults to
+        :param bool multipleKnots/mul: keep multiple knots; defaults to
             True
         :param bool circular/cir: use the 'circular' mode of the
             ``extendCurve`` node; defaults to False
@@ -602,10 +672,10 @@ class NurbsCurve:
             extendMethod='Distance',
             extensionType=extensionType,
             distance=length,
-            removeMultipleKnots=not keepMultipleKnots,
+            removeMultipleKnots=not multipleKnots,
             start=start
         ).attr('outputCurve')
-
+    
     @short(
         atStart='ats',
         atBothEnds='abe',
@@ -614,7 +684,7 @@ class NurbsCurve:
         circular='cir',
         extrapolate='ext',
         useSegment='seg',
-        keepMultipleKnots='kmk'
+        multipleKnots='mul'
     )
     def extend(
             self,
@@ -624,7 +694,7 @@ class NurbsCurve:
             circular=None,
             extrapolate=None,
             useSegment=False,
-            keepMultipleKnots=False,
+            multipleKnots=True,
             atStart=None,
             atBothEnds=None
     ):
@@ -650,7 +720,7 @@ class NurbsCurve:
         :param bool useSegment/seg: if extending by vector or point, don't use
             an ``extendCurve`` node; instead, attach a line segment; defaults
             to False
-        :param bool keepMultipleKnots/kmk: keep multiple knots; defaults to
+        :param bool multipleKnots/mul: keep multiple knots; defaults to
             True
         :param bool atStart/ats: extend from the start of the curve rather than the end;
             defaults to False
@@ -675,7 +745,7 @@ class NurbsCurve:
                 lin=linear,
                 cir=circular,
                 ext=extrapolate,
-                kmk=keepMultipleKnots,
+                mul=multipleKnots,
                 ats=atStart,
                 abe=atBothEnds
             )
@@ -710,7 +780,7 @@ class NurbsCurve:
             return meth(
                 lenPointOrVec,
                 ats=atStart,
-                rmk=removeMultipleKnots,
+                mul=multipleKnots,
                 seg=useSegment
             )
 
@@ -719,7 +789,7 @@ class NurbsCurve:
         )
 
     #---------------------------------------------------------------|
-    #---------------------------------------------------------------|    Retraction
+    #---------------------------------------------------------------|    Retractions
     #---------------------------------------------------------------|
 
     @short(relative='r')
@@ -816,7 +886,7 @@ class NurbsCurve:
         return self.detach(*params, select=select)[0]
 
     #---------------------------------------------------------------|
-    #---------------------------------------------------------------|    Domain
+    #---------------------------------------------------------------|    Rebuilds
     #---------------------------------------------------------------|
 
     def reverse(self):
@@ -827,10 +897,6 @@ class NurbsCurve:
         node = r.nodes.ReverseCurve.createNode()
         self >> node.attr('inputCurve')
         return node.attr('outputCurve')
-
-    #---------------------------------------------------------------|
-    #---------------------------------------------------------------|    Conversions
-    #---------------------------------------------------------------|
 
     @short(economy='eco')
     def toBezier(self, economy=True):
@@ -891,113 +957,19 @@ class NurbsCurve:
 
         return node.attr('outputCurve')
 
-    #---------------------------------------------------------------|
-    #---------------------------------------------------------------|    Rebuild
-    #---------------------------------------------------------------|
-
-    def initRebuildCurve(self, **config):
+    def initRebuild(self, **config):
         """
         Connects and configures a ``rebuildCurve`` node.
 
-        :param \*\*config: if provided, should be an unpacked mapping of
-            *attrName: attrSource* to configure attributes on the node.
-            Attribute sources can be plugs or values.
+        :param \*\*config: an unpacked mapping of *attrName: attrSource*;
+            sources can be values or plugs
         :return: The ``rebuildCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.RebuildCurve`
         """
         node = r.nodes.RebuildCurve.createNode()
         self >> node.attr('inputCurve')
 
-        for attrName, attrSource in config.items():
-            attrSource >> node.attr(attrName)
+        for k, v in config.items():
+            v >> node.attr(k)
 
         return node
-
-    def degreeRebuild(self, degree):
-        raise NotImplementedError
-
-    def cvRebuild(self, numCVs):
-        raise NotImplementedError
-
-    def spanRebuild(self, numSpans):
-        raise NotImplementedError
-
-    def cleanRebuild(self):
-        raise NotImplementedError
-
-    def linearRebuild(self, numCVs):
-        raise NotImplementedError
-
-    def cageRebuild(self):
-        raise NotImplementedError
-
-    def matchRebuild(self, other):
-        raise NotImplementedError
-
-    def normalizeRange(self):
-        raise NotImplementedError
-
-    # @short(
-    #     tolerance='tol',
-    #     keepRange='kr',
-    #     multipleEndKnots='mek'
-    # )
-    # def rebuildForCVs(
-    #         self,
-    #         numCVs,
-    #         tolerance=0.1,
-    #         keepRange=1,
-    #         multipleEndKnots=False
-    # ):
-    #     """
-    #     RebuildCurve can't rebuild to match some combinations of numCVs/degree.
-    #     In those cases throw an error, otherwise would have to create a shape.
-    #
-    #     Also implement a createArc() constructor.
-    #     """
-    #
-    #
-    #     """
-    #     Rebuilds this curve to hit the requested number of CVs. Degree will be
-    #     preserved wherever possible.
-    #
-    #     :param tolerance/tol: the fit tolerance; defaults to 0.1
-    #     :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
-    #     :param keepRange/kr: An index or enum key for the ``.keepRange``
-    #         mode:
-    #
-    #         - 0: '0 to 1'
-    #         - 1: 'Original' (the default)
-    #         - 2: '0 to #spans'
-    #
-    #     :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
-    #     :return: The rebuilt curve.
-    #     :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    #     """
-    #     # Resolve the degree
-    #     currentDegree = self.getShapeMFn().degree()
-    #
-    #     if numCVs is 2:
-    #         maxDegree = 1
-    #
-    #     elif numCVs is 3:
-    #         maxDegree = 2
-    #
-    #     elif numCVs > 3:
-    #         maxDegree = currentDegree
-    #
-    #     else:
-    #         raise ValueError("Invalid number of CVs: {}".format(numCVs))
-    #
-    #     degree = min(currentDegree, maxDegree)
-    #     spans = numCVs-degree
-    #
-    #     return self.initRebuildCurve(
-    #         rebuildType='Uniform',
-    #         spans=spans,
-    #         tolerance=tolerance,
-    #         endKnots=1 if multipleEndKnots else 0,
-    #         keepEndPoints=True,
-    #         keepTangents=1,
-    #         degree=degree
-    #     ).attr('outputCurve')
