@@ -687,3 +687,62 @@ class NurbsCurve:
         params = [self.paramAtLength(cutLength) for cutLength in cutLengths]
 
         return self.detach(*params, select=select)[0]
+
+    @short(economy='eco')
+    def toBezier(self, economy=True):
+        """
+        Converts this NURBS curve to a Bezier curve.
+
+        :param bool economy/eco: just return ``self`` if this is already
+            a Bezier curve; defaults to True
+        :return: The bezier curve.
+        :rtype: :class:`~paya.runtime.plugs.BezierCurve`
+        """
+        if economy:
+            if isinstance(self, r.plugs.BezierCurve):
+                return self
+
+        node = r.nodes.NurbsCurveToBezier.createNode()
+        self >> node.attr('inputCurve')
+        return node.attr('outputCurve')
+
+    @short(economy='eco')
+    def toNurbs(self, economy=True):
+        """
+        Converts this Bezier curve to a NURBS curve.
+
+        :param bool economy/eco: just return ``self`` if this is already
+            a NURBS curve; defaults to True
+        :return: The NURBS curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        if economy:
+            if type(self) is r.plugs.NurbsCurve:
+                return self
+
+        node = r.nodes.BezierCurveToNurbs.createNode()
+        self >> node.attr('inputCurve')
+        return node.attr('outputCurve')
+
+    @short(tolerance='tol', keepRange='kr')
+    def bSpline(self, tolerance=0.1, keepRange=1):
+        """
+        :param keepRange/kr: An index or enum key for the ``.keepRange``
+            mode:
+
+            0: '0 to 1'
+            1: 'Original' (the default)
+            2: '0 to #spans'
+
+        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param tolerance/tol: the fit tolerance; defaults to 0.1
+        :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The B-spline.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        node = r.nodes.FitBspline.createNode()
+        self >> node.attr('inputCurve')
+        tolerance >> node.attr('tolerance')
+        node.attr('keepRange').set(keepRange)
+
+        return node.attr('outputCurve')
