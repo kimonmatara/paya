@@ -39,24 +39,11 @@ tree = {
         },
         'Matrix': {},
         'Data':{
-            'Geometry':{
-                'PluginGeometry': {},
-                'Mesh': {},
-                'Lattice': {},
-                'NurbsCurve': {
-                    'BezierCurve': {}
-                },
-                'NurbsSurface': {},
-                'Sphere': {},
-                'SubdSurface': {},
-                'DynSweptGeometry': {}
-            },
-            'DynArrayAttrs': {},
-            'ComponentList': {},
-            'DataNumeric': {},  # Expanded by expandTree()
-            'DataArray': {},    # Expanded by expandTree()
-            # Include all the rest here, except for Matrix data, which
-            # should be piped to Matrix
+            'Invalid': {},
+            'Blind': {},
+            'DataArray': {},
+            'Geometry': {},
+            'DataArray': {}
         },
     }
 }
@@ -144,7 +131,7 @@ def insert(typeName, parent=None):
     for key in path[1:]:
         container = container[key]
 
-    container[typeName] = {}
+    container.setdefault(typeName, {})
 
 def createPath(path):
     """
@@ -160,50 +147,84 @@ def createPath(path):
     for key in path:
         current = current.setdefault(key, {})
 
+
+def routeDataType(dataType):
+    # Where 'dataType' must be either a data enumerator from om.MFn
+    # of a data enumerator from om.MFnData
+
+    mt = re.match(r"kData(.*)$", dataType)
+
+    if mt:
+        basename = mt.groups()[0]
+
+    else:
+        mt = re.match(r"k(.*?)Data$", dataType)
+
+        if mt:
+            basename = mt.groups()[0]
+
+        else:
+            mt = re.match(r"k(.*)$", dataType)
+
+            if mt:
+                basename = mt.groups()[0]
+
+            else:
+                raise ValueError(
+                    "Not a recognisable enum key: {}".format(dataType)
+                )
+
+    if not basename:
+        return 'Data', 'Attribute'
+
+    if basename[0].isdigit():
+        basename = 'Data'+basename
+
+        return basename, 'Numeric'
+
+    if basename == 'Geometry':
+        return 'Geometry', 'Data'
+
+    if basename == 'Blind':
+        return 'Blind', 'Data'
+
+    if basename.endswith('Blind'):
+        return basename, 'Blind'
+
+    if basename in ('Matrix', 'MatrixFloat'):
+        return 'Matrix', 'Attribute'
+
+    if basename.endswith('Array'):
+        return basename, 'DataArray'
+
+    if basename in [
+        'Lattice',
+        'Mesh',
+        'NurbsSurface',
+        'NurbsCurve',
+        'Sphere',
+        'DynSweptGeometry',
+        'PluginGeometry',
+        'Subdiv',
+        'BezierCurve'
+    ]:
+        return basename, 'Geometry'
+
+    return basename, 'Data'
+
+
 def expandTree():
     """
-    Call on import to expand the explicit ``tree`` dictionary procedurally.
+    Called on import to expand the explicit ``tree`` dictionary procedurally.
     """
     global tree
 
-    # Expand data types
-    ignore = ('kMatrix', 'kInvalid', 'kLast', 'kNumeric')
+    # Get the data types from om.MFn rather than om.MFnData
 
-    dataTypes = filter(
-        lambda x: re.match(r"^k[A-Z].*$", x) and x not in ignore,
-        om.MFnData.__dict__.keys()
-    )
-
-    for dataType in dataTypes:
-        mt = re.match(r"^k(.*?)(Array)?$", dataType)
-        basename, array = mt.groups()
-
-        if array:
-            clsname = '{}Array'.format(basename)
-            insert(clsname, parent='DataArray')
-
-        else:
-            clsname = '{}'.format(basename)
-
-            try:
-                getPath(clsname)
-
-            except NoPathError: # not already added manually
-                insert(clsname, parent='Data')
-
-    ignore = ('kInvalid', 'kLast')
-
-    numericDataTypes = filter(
-        lambda x: re.match(r"^k.*$", x) and x not in ignore,
-        om.MFnNumericData.__dict__.keys()
-    )
-
-    for numericDataType in numericDataTypes:
-        mt = re.match("^k([2-4].*)$", numericDataType)
-
-        if mt:
-            clsname = "Data{}".format(mt.groups()[0])
-            insert(clsname, parent='DataNumeric')
+    for key in om.MFn.__dict__.keys():
+        if key.startswith('kData') or key.endswith('Data'):
+            key, parent = routeDataType(key)
+            insert(key, parent)
 
     # Consider restoring the below once we have a solution for
     # dunder method fallbacks (e.g. using * on a non-indexed
@@ -256,6 +277,59 @@ def getTypeFromDataBlock(mplug, asString=False):
     data = hnd.data()
 
     return data.apiTypeStr() if asString else data.apiType()
+#
+# def getKeyAndParentForDataType(dataType):
+#     # Where 'dataType' is an apiTypeStr for a MFn.kType data type
+#
+#     if dataType == 'kInvalid':
+#         return 'Data', 'Attribute'
+#
+#     # Styles
+#     # kStringData / kMatrixData etc.
+#     # kStringArrayData
+#     # kData3Double, kData3Short
+#
+#     # e.g. kStringArrayData
+#     pat = r"^k(.*?Array)Data$"
+#     mt = re.match(pat, dataType)
+#
+#     if mt:
+#         key = mt.groups()[0]
+#         parent = 'DataArray'
+#         return key, parent
+#
+#     # e.g. kStringData
+#     pat = r"^k(.*?)Data$"
+#     mt = re.match(pat, dataType)
+#
+#     if mt:
+#         basename = mt.groups()[0]
+#
+#         if basename in [
+#             'PluginGeometry',
+#             'Mesh',
+#             'Lattice',
+#             'NurbsCurve',
+#             'BezierCurve',
+#             'NurbsSurface',
+#             'Sphere',
+#             'SubdSurface',
+#             'DynSweptGeometry'
+#         ]:
+#             return basename, 'Geometry'
+#
+#         return basename, 'Data'
+#
+#     # e.g. kData3Double
+#
+#     pat = r"^k(Data.*)$"
+#     mt = re.match(pat, dataType)
+#
+#     if mt:
+#         basename = mt.groups()[0]
+#         return basename, 'Data'
+#
+#     raise ValueError("Can't route data type {}".format(dataType))
 
 def _getTypeFromMPlug(mplug):
     if mplug.isCompound():
@@ -367,26 +441,7 @@ def _getTypeFromMPlug(mplug):
 
     if isTyped or isGeneric:
         dataType = getTypeFromDataBlock(mplug, asString=True)
-
-        if dataType == 'kInvalid':
-            return 'Data'
-
-        if dataType == 'kNumericData':
-            return 'DataNumeric'
-
-        if dataType == 'kMatrixData':
-            return 'Matrix'
-
-        mt = re.match(r"^k(.*?)(Array)?Data$", dataType)
-
-        basename, array = mt.groups()
-
-        if array:
-            return '{}Array'.format(basename)
-            insert(clsname, parent='DataArray')
-
-        else:
-            return '{}'.format(basename)
+        return routeDataType(dataType)[0]
 
     return 'Attribute'
 
