@@ -72,7 +72,15 @@ class Geometry:
         :return: The function set.
         :rtype: :class:`~maya.OpenMaya.MFnDagNode`
         """
-        mplug = self.__apimplug__()
+        # This will crash if called on a root array mplug, so force an index
+
+        if self.isArray():
+            plug = self[0]
+
+        else:
+            plug = self
+
+        mplug = plug.__apimplug__()
         handle = mplug.asMDataHandle()
         mobj = handle.data()
 
