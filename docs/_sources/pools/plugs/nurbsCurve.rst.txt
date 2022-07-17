@@ -270,3 +270,64 @@ paya.runtime.plugs.NurbsCurve
             False
         :return: The modified curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: toBezier(economy=True)
+    
+        Converts this NURBS curve to a Bezier curve.
+        
+        :param bool economy/eco: just return ``self`` if this is already
+            a Bezier curve; defaults to True
+        :return: The bezier curve.
+        :rtype: :class:`~paya.runtime.plugs.BezierCurve`
+    
+    .. py:method:: toNurbs(economy=True)
+    
+        Converts this Bezier curve to a NURBS curve.
+        
+        :param bool economy/eco: just return ``self`` if this is already
+            a NURBS curve; defaults to True
+        :return: The NURBS curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: bSpline(tolerance=0.1, keepRange=1)
+    
+        :param keepRange/kr: An index or enum key for the ``.keepRange``
+            mode:
+        
+            0: '0 to 1'
+            1: 'Original' (the default)
+            2: '0 to #spans'
+        
+        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param tolerance/tol: the fit tolerance; defaults to 0.1
+        :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The B-spline.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: initRebuildCurve(**config)
+    
+        Connects and configures a ``rebuildCurve`` node.
+        
+        :param \*\*config: if provided, should be an unpacked mapping of
+            *attrName: attrSource* to configure attributes on the node.
+            Attribute sources can be plugs or values.
+        :return: The ``rebuildCurve`` node.
+        :rtype: :class:`~paya.runtime.nodes.RebuildCurve`
+    
+    .. py:method:: rebuildForCVs(numCVs, tolerance=0.1, keepRange=1)
+    
+        Rebuilds this curve to hit the requested number of CVs. Degree will be
+        preserved wherever possible.
+        
+        :param tolerance/tol: the fit tolerance; defaults to 0.1
+        :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
+        :param keepRange/kr: An index or enum key for the ``.keepRange``
+            mode:
+            
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        
+        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`

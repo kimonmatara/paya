@@ -580,6 +580,113 @@ False</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.toBezier">
+<span class="sig-name descname"><span class="pre">toBezier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">economy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.toBezier" title="Permalink to this definition"></a></dt>
+<dd><p>Converts this NURBS curve to a Bezier curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>economy/eco</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – just return <code class="docutils literal notranslate"><span class="pre">self</span></code> if this is already
+a Bezier curve; defaults to True</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The bezier curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.toNurbs">
+<span class="sig-name descname"><span class="pre">toNurbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">economy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.toNurbs" title="Permalink to this definition"></a></dt>
+<dd><p>Converts this Bezier curve to a NURBS curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>economy/eco</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – just return <code class="docutils literal notranslate"><span class="pre">self</span></code> if this is already
+a NURBS curve; defaults to True</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The NURBS curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.bSpline">
+<span class="sig-name descname"><span class="pre">bSpline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.bSpline" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keepRange/kr</strong> (int, str, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – <p>An index or enum key for the <code class="docutils literal notranslate"><span class="pre">.keepRange</span></code>
+mode:</p>
+<p>0: ‘0 to 1’
+1: ‘Original’ (the default)
+2: ‘0 to #spans’</p>
+</p></li>
+<li><p><strong>tolerance/tol</strong> (float, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the fit tolerance; defaults to 0.1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The B-spline.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.initRebuildCurve">
+<span class="sig-name descname"><span class="pre">initRebuildCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.initRebuildCurve" title="Permalink to this definition"></a></dt>
+<dd><p>Connects and configures a <code class="docutils literal notranslate"><span class="pre">rebuildCurve</span></code> node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**config</strong> – if provided, should be an unpacked mapping of
+<em>attrName: attrSource</em> to configure attributes on the node.
+Attribute sources can be plugs or values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The <code class="docutils literal notranslate"><span class="pre">rebuildCurve</span></code> node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuildCurve</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.rebuildForCVs">
+<span class="sig-name descname"><span class="pre">rebuildForCVs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numCVs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.rebuildForCVs" title="Permalink to this definition"></a></dt>
+<dd><p>Rebuilds this curve to hit the requested number of CVs. Degree will be
+preserved wherever possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tolerance/tol</strong> (float, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the fit tolerance; defaults to 0.1</p></li>
+<li><p><strong>keepRange/kr</strong> (int, str, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – <p>An index or enum key for the <code class="docutils literal notranslate"><span class="pre">.keepRange</span></code>
+mode:</p>
+<ul>
+<li><p>0: ‘0 to 1’</p></li>
+<li><p>1: ‘Original’ (the default)</p></li>
+<li><p>2: ‘0 to #spans’</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rebuilt curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
