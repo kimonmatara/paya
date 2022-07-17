@@ -1,4 +1,3 @@
-import paya.lib.nurbsutil as _nu
 import paya.lib.mathops as _mo
 import pymel.util as _pu
 from paya.util import short
@@ -14,86 +13,96 @@ class NurbsCurve:
     # WIP: The below needs
     # nodes.MakeThreePointCircularArc.dodgeCollinear() to be implemented
 
-    # @classmethod
-    # @short(
-    #     radius='r',
-    #     directionVector='dv',
-    #     toggleArc='tac',
-    #     sections='s',
-    #     degree='d',
-    #     collinear='col'
-    # )
-    # def createArc(
-    #         cls,
-    #         *points,
-    #         directionVector=None,
-    #         radius=1.0,
-    #         toggleArc=False,
-    #         sections=8,
-    #         degree=3,
-    #         collinear=True
-    # ):
-    #     """
-    #     :param points: two or three points, packed or unpacked
-    #     :type points: tuple, list, :class:`~paya.runtime.data.Point`,
-    #         :class:`~paya.runtime.data.Vector`
-    #     :param directionVector/dv: for two-point arcs only: the arc
-    #         direction (normal) vector, defaults to [0, 0, 1] (Z)
-    #     :type directionVector/dv: tuple, list,
-    #         :class:`~paya.runtime.data.Vector`,
-    #     :param radius/r: for two-point arcs only: the arc radius; defaults to
-    #         1.0
-    #     :type radius/r: float, :class:`~paya.runtime.plugs.Math1D`
-    #     :param bool toggleArc/tac: for two-point arcs only: draw the arc
-    #         on the outside; defaults to False
-    #     :param sections/s: the number of arc sections; defaults to 8
-    #     :type sections/s: int, :class:`~paya.runtime.plugs.Math1D`
-    #     :param degree/d: the arc degree; defaults to 3
-    #     :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
-    #     :param bool collinear/col: for three-point arcs only: prevent the arc
-    #         from disappearing with an error when the input points are
-    #         collinear; defaults to True
-    #     :return: An output for a circular arc.
-    #     :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    #     """
-    #     num = len(points)
-    #
-    #     if num is 1:
-    #         points = points[0]
-    #         num = len(points)
-    #
-    #     if num is 2:
-    #         node = r.nodes.MakeTwoPointCircularArc.createNode()
-    #         points[0] >> node.attr('point1')
-    #         points[1] >> node.attr('point2')
-    #
-    #         if directionVector:
-    #             directionVector >> node.attr('directionVector')
-    #
-    #         toggleArc >> node.attr('toggleArc')
-    #         degree >> node.attr('degree')
-    #         sections >> node.attr('sections')
-    #         radius >> node.attr('radius')
-    #
-    #         return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
-    #
-    #     elif num is 3:
-    #         node = r.nodes.MakeThreePointCircularArc.createNode()
-    #         points[0] >> node.attr('point1')
-    #         points[1] >> node.attr('point2')
-    #         points[2] >> node.attr('point3')
-    #         degree >> node.attr('degree')
-    #         sections >> node.attr('sections')
-    #
-    #         if collinear:
-    #             node.dodgeCollinear()
-    #
-    #         return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
-    #
-    #     else:
-    #         raise ValueError(
-    #             "Please pass two or three points, packed or unpacked."
-    #         )
+    @classmethod
+    @short(
+        radius='r',
+        directionVector='dv',
+        toggleArc='tac',
+        sections='s',
+        degree='d',
+        collinear='col'
+    )
+    def createArc(
+            cls,
+            *points,
+            directionVector=None,
+            radius=1.0,
+            toggleArc=False,
+            sections=8,
+            degree=3,
+            collinear=True
+    ):
+        """
+        :param points: two or three points, packed or unpacked
+        :type points: tuple, list, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.data.Vector`
+        :param directionVector/dv:
+            on two-point arcs this defaults to [0, 0, 1] (Z) and defines
+            the arc's 'normal';
+            on three point arcs it must be provided explicitly if 'collinear'
+            is requested, and it is used to jitter the input points to avoid
+            Maya errors
+        :type directionVector/dv: None, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param radius/r: for two-point arcs only: the arc radius; defaults to
+            1.0
+        :type radius/r: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool toggleArc/tac: for two-point arcs only: draw the arc
+            on the outside; defaults to False
+        :param sections/s: the number of arc sections; defaults to 8
+        :type sections/s: int, :class:`~paya.runtime.plugs.Math1D`
+        :param degree/d: the arc degree; defaults to 3
+        :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
+        :param bool collinear/col: for three-point arcs only: prevent the arc
+            from disappearing with an error when the input points are
+            collinear; defaults to True
+        :return: An output for a circular arc.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        num = len(points)
+
+        if num is 1:
+            points = points[0]
+            num = len(points)
+
+        if num is 2:
+            node = r.nodes.MakeTwoPointCircularArc.createNode()
+            points[0] >> node.attr('point1')
+            points[1] >> node.attr('point2')
+
+            if directionVector:
+                directionVector >> node.attr('directionVector')
+
+            toggleArc >> node.attr('toggleArc')
+            degree >> node.attr('degree')
+            sections >> node.attr('sections')
+            radius >> node.attr('radius')
+
+            return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
+
+        elif num is 3:
+            if collinear and directionVector is None:
+                raise ValueError(
+                    "The direction vector is required for three"+
+                    "-point arcs if 'collinear' has been "+
+                    "requested."
+                )
+
+            node = r.nodes.MakeThreePointCircularArc.createNode()
+            points[0] >> node.attr('point1')
+            points[1] >> node.attr('point2')
+            points[2] >> node.attr('point3')
+            sections >> node.attr('sections')
+            degree >> node.attr('degree')
+
+            if collinear:
+                return node.getCompensatedOutputCurve(directionVector)
+
+            else:
+                return node.attr('outputCurve')
+
+        raise ValueError("Need two or three points.")
 
     @classmethod
     @short(degree='d', numCVs='cvs')
@@ -115,6 +124,12 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
         #---------------------|    Gather info
+
+        if degree is not None:
+            degree = _mo.info(degree)[0]
+
+        if numCVs is not None:
+            numCVs = _mo.info(numCVs)[0]
 
         if numCVs is None and degree is None:
             degree = 1
@@ -143,12 +158,12 @@ class NurbsCurve:
         #---------------------|    Configure node to create a line of magnitude 1.0
 
         node = r.nodes.MakeNurbsSquare.createNode()
-        node.attr('spansPerSide').set(numSpans)
+        numSpans >> node.attr('spansPerSide')
         node.attr('normal').set([0.0, 0.0, 1.0])
         node.attr('center').set([0.5, 0.5, 0.0])
         node.attr('sideLength1').set(1.0)
         node.attr('sideLength2').set(1.0)
-        node.attr('degree').set(degree)
+        degree >> node.attr('degree')
         output = node.attr('outputCurve3')
 
         #---------------------|    Transform
@@ -973,3 +988,95 @@ class NurbsCurve:
             v >> node.attr(k)
 
         return node
+
+    @short(
+        matchCurve='mc',
+        rebuildType='rt',
+        degree='d',
+        tolerance='tol',
+        smooth='sm',
+        endKnots='end',
+        keepRange='kr',
+        keepControlPoints='kcp',
+        keepEndPoints='kep',
+        keepTangents='kt'
+    )
+    def rebuild(
+            self,
+            rebuildType='Uniform',
+            spans=None,
+            degree=None,
+            tolerance=0.01,
+            smooth=-3,
+            endKnots='Multiple end knots',
+            keepRange='Original',
+            keepControlPoints=False,
+            keepEndPoints=True,
+            keepTangents=False,
+            matchCurve=None
+    ):
+        """
+        General configuration method for a ``rebuildCurve``.
+
+        :param rebuildType/rt:
+        :param spans/s: the number of spans to build to; defaults to this
+            curve's (current) number of spans if omitted
+        :type spans/s: int, :class:`~paya.runtime.plugs.Math1D`
+        :param int degree/d: the degree to build to; defaults to this curve's
+            (current) degree if omitted
+        :param float tolerance/tol: the fit tolerance; defaults to 0.01
+        :param float smooth/sm: the 'smoothing' factor; defaults to -3.0
+        :param endKnots/end: An enum index or label:
+
+            - 0: 'Non Multiple end knots'
+            - 1: 'Multiple end knots' (the default)
+        :type endKnots: int, str
+        :param keepRange/kr: An enum index or label:
+
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        :type keepRange/kr: int, str
+        :param bool keepControlPoints/kcp: keep control points; defaults to
+            False
+        :param bool keepEndPoints/kep: keep end points; defaults to True
+        :param bool keepTangents/kt: keep tangents; defaults to False
+        :param matchCurve/mc: ignored if *rebuildType* is not 2 or 'Match Knots`;
+            a NURBS curve attribute whose knots to match; defaults to None
+        :type matchCurve/mc: None, str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        fn = self.getShapeMFn()
+
+        if degree is None:
+            degree = fn.degree()
+
+        if spans is None:
+            spans = fn.numSpans()
+
+        node = r.nodes.RebuildCurve.createNode()
+        self >> node.attr('inputCurve')
+
+        node.attr('rt').set(rebuildType)
+        node.attr('d').set(degree)
+        spans >> node.attr('s')
+        node.attr('tol').set(tolerance)
+        node.attr('sm').set(smooth)
+        node.attr('end').set(endKnots)
+        node.attr('kr').set(keepRange)
+        node.attr('kcp').set(keepControlPoints)
+        node.attr('kep').set(keepEndPoints)
+        node.attr('kt').set(keepTangents)
+
+        if matchCurve:
+            matchCurve >> node.attr('mc')
+
+        return node.attr('outputCurve')
+
+    def cageRebuild(self):
+        """
+        :return: A linear curve with the same CVs as this one.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        return self.rebuild(degree=1, keepControlPoints=True)
