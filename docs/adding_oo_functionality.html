@@ -140,7 +140,7 @@ inherits from. This is why the method can be called on lots of different objects
 </section>
 <section id="inspecting-inheritance">
 <h3>Inspecting Inheritance<a class="headerlink" href="#inspecting-inheritance" title="Permalink to this headline"></a></h3>
-<p>When you to call a method on an object, Python determines which classes that object inherits from and traverses them to
+<p>When you call a method on an object, Python determines which classes that object inherits from and traverses them to
 find an implementation. One way to inspect this inheritance is to pass <code class="docutils literal notranslate"><span class="pre">inherited</span> <span class="pre">=</span> <span class="pre">True</span></code> to the standard Maya
 <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.nodeType.html#pymel.core.general.nodeType" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">nodeType()</span></code></a> command:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">joint1</span><span class="o">.</span><span class="n">nodeType</span><span class="p">(</span><span class="n">inherited</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
