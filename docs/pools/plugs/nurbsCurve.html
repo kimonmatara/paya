@@ -878,7 +878,17 @@ sources can be values or plugs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rebuildType/rt</strong> – </p></li>
+<li><p><strong>rebuildType/rt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘Uniform’ (the default)</p></li>
+<li><p>1: ‘Reduce Spans’</p></li>
+<li><p>2: ‘Match Knots’</p></li>
+<li><p>3: ‘No Mults’</p></li>
+<li><p>4: ‘Curvature’</p></li>
+<li><p>5: ‘End Conditions’</p></li>
+<li><p>6: ‘Clean’</p></li>
+</ul>
+</p></li>
 <li><p><strong>spans/s</strong> (int, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the number of spans to build to; defaults to this
 curve’s (current) number of spans if omitted</p></li>
 <li><p><strong>degree/d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the degree to build to; defaults to this curve’s

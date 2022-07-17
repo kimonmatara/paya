@@ -409,7 +409,16 @@ paya.runtime.plugs.NurbsCurve
     
         General configuration method for a ``rebuildCurve``.
         
-        :param rebuildType/rt:
+        :param rebuildType/rt: An enum index or label:
+        
+            - 0: 'Uniform' (the default)
+            - 1: 'Reduce Spans'
+            - 2: 'Match Knots'
+            - 3: 'No Mults'
+            - 4: 'Curvature'
+            - 5: 'End Conditions'
+            - 6: 'Clean'
+        :type rebuildType/rt: int, str
         :param spans/s: the number of spans to build to; defaults to this
             curve's (current) number of spans if omitted
         :type spans/s: int, :class:`~paya.runtime.plugs.Math1D`
