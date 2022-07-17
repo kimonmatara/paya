@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.nodes.Subdiv &mdash; paya 0.7.1 documentation</title>
+  <title>paya.runtime.nodes.MakeThreePointCircularArc &mdash; paya 0.7.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.runtime.nodes.Transform" href="transform.html" />
-    <link rel="prev" title="paya.runtime.nodes.SkinCluster" href="skinCluster.html" /> 
+    <link rel="next" title="paya.runtime.nodes.Mesh" href="mesh.html" />
+    <link rel="prev" title="paya.runtime.nodes.Locator" href="locator.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -76,13 +76,13 @@
 <li class="toctree-l3"><a class="reference internal" href="joint.html">Joint</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lattice.html">Lattice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="locator.html">Locator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="makeThreePointCircularArc.html">MakeThreePointCircularArc</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">MakeThreePointCircularArc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesh.html">Mesh</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Subdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
 </ul>
 </li>
@@ -114,9 +114,9 @@
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../types_index.html">Types</a> &raquo;</li>
           <li><a href="../nodes_index.html">Node Types</a> &raquo;</li>
-      <li>paya.runtime.nodes.Subdiv</li>
+      <li>paya.runtime.nodes.MakeThreePointCircularArc</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/pools/nodes/subdiv.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/pools/nodes/makeThreePointCircularArc.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -124,12 +124,53 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="paya-runtime-nodes-subdiv">
-<h1>paya.runtime.nodes.Subdiv<a class="headerlink" href="#paya-runtime-nodes-subdiv" title="Permalink to this headline"></a></h1>
+  <section id="paya-runtime-nodes-makethreepointcirculararc">
+<h1>paya.runtime.nodes.MakeThreePointCircularArc<a class="headerlink" href="#paya-runtime-nodes-makethreepointcirculararc" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.runtime.nodes.Subdiv">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Subdiv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Subdiv" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="paya.runtime.nodes.MakeThreePointCircularArc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MakeThreePointCircularArc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.MakeThreePointCircularArc" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.MakeThreePointCircularArc.getCompensatedOutputCurve">
+<span class="sig-name descname"><span class="pre">getCompensatedOutputCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jitterVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replaceOutputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.MakeThreePointCircularArc.getCompensatedOutputCurve" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a curve output that will work even when the tree arc points
+are collinear. The curve output will be exposed on the node itself
+as <code class="docutils literal notranslate"><span class="pre">.compensatedOutputCurve</span></code>.</p>
+<p>This is implemented by swapping-in a straight NURBS curve with matched
+spans and degree where appropriate.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method will move the point inputs (point1, point2 and point3)
+of the node into ‘proxy’ inputs (point1Proxy, point2Proxy and
+point3Proxy). To preserve the compensation, any subsequent edits
+should be performed on those proxies instead of the main inputs.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method can only be run once per node. An error will be raised
+if the compensation attributes are already present.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jitterVector</strong> (list, tuple, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – equivalent to <em>directionVector</em> on a two-point
+circular arc; when the arc is collinear, the middle point will
+be moved along this vector to prevent Maya Script Editor errors;
+this will never be seen, since the ‘line’ curve will take over
+in those cases</p></li>
+<li><p><strong>replaceOutputs/ro</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – replace any existing outgoing curve
+connections; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The compensated curve output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 
@@ -137,8 +178,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="skinCluster.html" class="btn btn-neutral float-left" title="paya.runtime.nodes.SkinCluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="transform.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.Transform" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="locator.html" class="btn btn-neutral float-left" title="paya.runtime.nodes.Locator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mesh.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.Mesh" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

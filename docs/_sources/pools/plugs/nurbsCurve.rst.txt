@@ -6,6 +6,35 @@ paya.runtime.plugs.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
+    .. py:classmethod:: createArc(*points, directionVector=None, radius=1.0, toggleArc=False, sections=8, degree=3, collinear=True)
+    
+        :param points: two or three points, packed or unpacked
+        :type points: tuple, list, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.data.Vector`
+        :param directionVector/dv:
+            on two-point arcs this defaults to [0, 0, 1] (Z) and defines
+            the arc's 'normal';
+            on three point arcs it must be provided explicitly if 'collinear'
+            is requested, and it is used to jitter the input points to avoid
+            Maya errors
+        :type directionVector/dv: None, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param radius/r: for two-point arcs only: the arc radius; defaults to
+            1.0
+        :type radius/r: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool toggleArc/tac: for two-point arcs only: draw the arc
+            on the outside; defaults to False
+        :param sections/s: the number of arc sections; defaults to 8
+        :type sections/s: int, :class:`~paya.runtime.plugs.Math1D`
+        :param degree/d: the arc degree; defaults to 3
+        :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
+        :param bool collinear/col: for three-point arcs only: prevent the arc
+            from disappearing with an error when the input points are
+            collinear; defaults to True
+        :return: An output for a circular arc.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
     .. py:classmethod:: createLine(startPoint, endPoint, degree=None, numCVs=None)
     
         Configures a ``makeNurbsSquare`` node to generate a single NURBS
@@ -375,3 +404,41 @@ paya.runtime.plugs.NurbsCurve
             sources can be values or plugs
         :return: The ``rebuildCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.RebuildCurve`
+    
+    .. py:method:: rebuild(rebuildType='Uniform', spans=None, degree=None, tolerance=0.01, smooth=-3, endKnots='Multiple end knots', keepRange='Original', keepControlPoints=False, keepEndPoints=True, keepTangents=False, matchCurve=None)
+    
+        General configuration method for a ``rebuildCurve``.
+        
+        :param rebuildType/rt:
+        :param spans/s: the number of spans to build to; defaults to this
+            curve's (current) number of spans if omitted
+        :type spans/s: int, :class:`~paya.runtime.plugs.Math1D`
+        :param int degree/d: the degree to build to; defaults to this curve's
+            (current) degree if omitted
+        :param float tolerance/tol: the fit tolerance; defaults to 0.01
+        :param float smooth/sm: the 'smoothing' factor; defaults to -3.0
+        :param endKnots/end: An enum index or label:
+        
+            - 0: 'Non Multiple end knots'
+            - 1: 'Multiple end knots' (the default)
+        :type endKnots: int, str
+        :param keepRange/kr: An enum index or label:
+        
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        :type keepRange/kr: int, str
+        :param bool keepControlPoints/kcp: keep control points; defaults to
+            False
+        :param bool keepEndPoints/kep: keep end points; defaults to True
+        :param bool keepTangents/kt: keep tangents; defaults to False
+        :param matchCurve/mc: ignored if *rebuildType* is not 2 or 'Match Knots`;
+            a NURBS curve attribute whose knots to match; defaults to None
+        :type matchCurve/mc: None, str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: cageRebuild()
+    
+        :return: A linear curve with the same CVs as this one.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`

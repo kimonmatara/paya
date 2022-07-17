@@ -485,6 +485,8 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.cageRebuild">cageRebuild() (NurbsCurve method)</a>
+</li>
       <li><a href="paya/util/strings.html#paya.util.strings.capitalize">capitalize() (in module paya.util.strings)</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain">Chain (class in paya.lib.skel)</a>
@@ -577,6 +579,8 @@
         <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.create">(Transform class method)</a>
 </li>
       </ul></li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.createArc">createArc() (NurbsCurve class method)</a>
+</li>
       <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.createControl">createControl() (Transform class method)</a>
 </li>
       <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromCurve">createFromCurve() (Chain class method)</a>
@@ -816,6 +820,8 @@
 </li>
       </ul></li>
       <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getByValue">getByValue() (Target method)</a>
+</li>
+      <li><a href="pools/nodes/makeThreePointCircularArc.html#paya.runtime.nodes.MakeThreePointCircularArc.getCompensatedOutputCurve">getCompensatedOutputCurve() (MakeThreePointCircularArc method)</a>
 </li>
       <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.getCtShapes">getCtShapes() (Transform method)</a>
 </li>
@@ -1121,6 +1127,8 @@
 </li>
       <li><a href="pools/data/vector.html#paya.runtime.data.Vector.makePerpendicularTo">makePerpendicularTo() (Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.makePerpendicularTo">[1]</a>
 </li>
+      <li><a href="pools/nodes/makeThreePointCircularArc.html#paya.runtime.nodes.MakeThreePointCircularArc">MakeThreePointCircularArc (class in paya.runtime.nodes)</a>
+</li>
       <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.maskAnimAttrs">maskAnimAttrs() (DependNode method)</a>
 </li>
       <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D">Math1D (class in paya.runtime.plugs)</a>
@@ -1145,8 +1153,6 @@
 </li>
       <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.minClamp">minClamp() (Math1D method)</a>
 </li>
-      <li><a href="paya/lib/nurbsutil.html#paya.lib.nurbsutil.minCVsForDegree">minCVsForDegree() (in module paya.lib.nurbsutil)</a>
-</li>
       <li>
     module
 
@@ -1166,8 +1172,6 @@
         <li><a href="paya/lib/mathops.html#module-paya.lib.mathops">paya.lib.mathops</a>
 </li>
         <li><a href="paya/lib/names.html#module-paya.lib.names">paya.lib.names</a>
-</li>
-        <li><a href="paya/lib/nurbsutil.html#module-paya.lib.nurbsutil">paya.lib.nurbsutil</a>
 </li>
         <li><a href="paya/lib/skel.html#module-paya.lib.skel">paya.lib.skel</a>
 </li>
@@ -1230,14 +1234,14 @@
       </ul></li>
       <li><a href="paya/pools.html#paya.pools.NodeClassPool">NodeClassPool (class in paya.pools)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.normal">normal() (Quaternion method)</a>
 
       <ul>
         <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.normal">(Vector method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pools/nodes/locator.html#paya.runtime.nodes.Locator.normalizeMacro">normalizeMacro() (Locator class method)</a>
 
       <ul>
@@ -1247,8 +1251,6 @@
       <li><a href="paya/util/iterables.html#paya.util.iterables.nudge_index">nudge_index() (in module paya.util.iterables)</a>
 </li>
       <li><a href="paya/util/iterables.html#paya.util.iterables.nudge_indices">nudge_indices() (in module paya.util.iterables)</a>
-</li>
-      <li><a href="paya/lib/nurbsutil.html#paya.lib.nurbsutil.numSpansFromNumCVsAndDegree">numSpansFromNumCVsAndDegree() (in module paya.lib.nurbsutil)</a>
 </li>
       <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve">NurbsCurve (class in paya.runtime.nodes)</a>
 
@@ -1340,13 +1342,6 @@
 
       <ul>
         <li><a href="paya/lib/names.html#module-paya.lib.names">module</a>
-</li>
-      </ul></li>
-      <li>
-    paya.lib.nurbsutil
-
-      <ul>
-        <li><a href="paya/lib/nurbsutil.html#module-paya.lib.nurbsutil">module</a>
 </li>
       </ul></li>
       <li>
@@ -1505,6 +1500,8 @@
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.ratios">(Chain method)</a>
 </li>
       </ul></li>
+      <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.rebuild">rebuild() (NurbsCurve method)</a>
+</li>
       <li><a href="paya/runtime.html#paya.runtime.Runtime.rehash">rehash() (Runtime method)</a>
 </li>
       <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.release">release() (Attribute method)</a>
