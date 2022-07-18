@@ -946,3 +946,31 @@ def pointsIntoUnitCube(points):
     scaleMatrix.z *= scaleFactor
 
     return [r.data.Point(point) ^ scaleMatrix for point in points]
+
+def expandVectorArgs(*args):
+    """
+    Similar to :func:`~pymel.util.arguments.expandArgs`, except it won't
+    expand lists or tuples of three scalars.
+
+    :param *args: the arguments to expand
+    :return: A flattened list.
+    :rtype: list
+    """
+    buffer = []
+
+    def expand(elem):
+        if isinstance(elem, (tuple, list)):
+            elem = list(elem)
+
+            if len(elem) is 3 and all([isScalarValue(x) for x in elem]):
+                buffer.append(elem)
+
+            else:
+                for x in elem:
+                    expand(x)
+        else:
+            buffer.append(elem)
+
+    expand(args)
+
+    return buffer
