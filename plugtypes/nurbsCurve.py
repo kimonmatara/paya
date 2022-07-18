@@ -998,6 +998,67 @@ class NurbsCurve:
         return node
 
     @short(
+        degree='d',
+        endKnots='end',
+        keepRange='kr',
+        keepEndPoints='kep',
+        keepTangents='kt'
+    )
+    def cvRebuild(
+            self,
+            numCVs,
+            degree=None,
+            endKnots='Multiple end knots',
+            keepRange='Original',
+            keepControlPoints=False,
+            keepEndPoints=True,
+            keepTangents=False
+    ):
+        """
+        Rebuilds this curve to the specified number of CVs.
+
+        :param int degree/d: the degree to build to; defaults to this curve's
+            (current) degree if omitted
+        :param endKnots/end: An enum index or label:
+
+            - 0: 'Non Multiple end knots'
+            - 1: 'Multiple end knots' (the default)
+        :type endKnots: int, str
+        :param keepRange/kr: An enum index or label:
+
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        :type keepRange/kr: int, str
+        :param bool keepEndPoints/kep: keep end points; defaults to True
+        :param bool keepTangents/kt: keep tangents; defaults to False
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        if degree is None:
+            degree = self.getShapeMFn().degree()
+
+        minNumCVs = degree+1
+
+        if numCVs < minNumCVs:
+            raise RuntimeError(
+                "At least {} CVs required for degree {}.".format(
+                    minNumCVs,
+                    degree
+                )
+            )
+
+        return self.rebuild(
+            s=numCVs-degree,
+            d=degree,
+            end=endKnots,
+            kr=keepRange,
+            kep=keepEndPoints,
+            kt=keepTangents
+        )
+
+
+    @short(
         matchCurve='mc',
         rebuildType='rt',
         degree='d',
@@ -1007,7 +1068,8 @@ class NurbsCurve:
         keepRange='kr',
         keepControlPoints='kcp',
         keepEndPoints='kep',
-        keepTangents='kt'
+        keepTangents='kt',
+        spans='s'
     )
     def rebuild(
             self,
