@@ -59,39 +59,35 @@ paya.runtime.nodes.NurbsCurve
         
         :param dict macro: the macro to edit
     
-    .. py:method:: takeClosestPoint(refPoint)
+    .. py:method:: closestPoint_(refPoint)
     
-        :param refPoint: the reference point
-        :return: The closest point along the curve to 'refPoint`.
-        :rtype: :class:`~paya.runtime.data.Point`
-    
-    .. py:method:: takePointAtParam(param)
-    
-        :param param: the parameter to sample
-        :type param: float, int,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`
-        :return: A world-space point at the specified parameter.
-        :rtype: :class:`~paya.runtime.data.Point`
-    
-    .. py:method:: takeParamAtFraction(fraction)
-    
-        :param float fraction: the length fraction to sample
-        :return: A parameter at the given length fraction.
-        :rtype:
-            :class:`~paya.runtime.comps.NurbsCurveParameter`
-    
-    .. py:method:: takePointAtFraction(fraction)
-    
-        :param fraction: the length fraction to sample
-        :return: A world-space point at the given length fraction.
-        :rtype: :class:`~paya.runtime.data.Point`
-    
-    .. py:method:: distributePoints(numberOrFractions)
-    
-        Return world-space points distributed along the length of the curve.
+        Returns the closest world-space point along this curve to the given
+        reference point. If the reference point is a plug, the return will
+        also be a plug.
         
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :return: The distributed points.
-        :rtype: :class:`list` of :class:`~paya.runtime.data.Point`
+        For persistent sampling against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.closestPoint` on
+        ``.worldSpace[0]``.
+        
+        :param refPoint: the reference point
+        :type refPoint: list, tuple, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The closest point along the curve to *refPoint*.
+        :rtype: :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: pointAtParam(param)
+    
+        Returns a world-space point at the specified parameter. If the
+        parameter is a plug, the return will also be a plug.
+        
+        For persistent sampling against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.pointAtParam` on
+        ``.worldSpace[0]``.
+        
+        :param param: the parameter at which to sample
+        :type param: int, :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The sampled parameter.
+        :type: :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
