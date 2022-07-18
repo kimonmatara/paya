@@ -193,3 +193,93 @@ paya.runtime.nodes.NurbsCurve
         :return: The sampled parameter.
         :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: lengthAtFraction(fraction)
+    
+        Returns the curve length at the given fraction. If the fraction
+        is a plug, the return will also be a plug.
+        
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtFraction` on
+        ``.worldSpace[0]``.
+        
+        :param fraction: the length fraction
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The curve length.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: lengthAtParam(param)
+    
+        Returns the curve length at the given parameter. If the parameter
+        if a plug, the return will also be a plug.
+        
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtParam` on
+        ``.worldSpace[0]``.
+        
+        :param param: the parameter
+        :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The curve length.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: lengthAtPoint(point)
+    
+        Returns the curve length at the given point. If the point
+        if a plug, the return will also be a plug.
+        
+        This is a 'forgiving' implementation; a closest point will be used
+        if *point* is not on the curve.
+        
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtPoint` on
+        ``.worldSpace[0]``.
+        
+        :param point: the point
+        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The curve length.
+        :rtype: :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: fractionAtLength(length)
+    
+        Returns the length fraction at the given length. If *length* is a
+        plug, the return will also be a plug.
+        
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtLength` on
+        ``.worldSpace[0]``.
+        
+        :param length: the length at which to sample a fraction
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The fraction.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: fractionAtParam(param)
+    
+        Returns the length fraction at the given parameter. If *param* is a
+        plug, the return will also be a plug.
+        
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtParam` on
+        ``.worldSpace[0]``.
+        
+        :param param: the parameter at which to sample a fraction
+        :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The fraction.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: fractionAtPoint(point)
+    
+        Returns the length fraction at the given point. If *point* is a
+        plug, the return will also be a plug.
+        
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtPoint` on
+        ``.worldSpace[0]``.
+        
+        :param point: the point at which to sample a fraction
+        :return: The fraction.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
