@@ -652,9 +652,9 @@ class NurbsCurve:
         :param bool circular/cir: use the 'circular' mode of the
             ``extendCurve`` node; defaults to False
         :param bool linear/lin: use the 'linear' mode of the
-            ``extendCurve`` node; defaults to True
-        :param bool extrapolate/ext: use the 'extrapolate' mode of the
             ``extendCurve`` node; defaults to False
+        :param bool extrapolate/ext: use the 'extrapolate' mode of the
+            ``extendCurve`` node; defaults to True
         :return: This curve, extended by the specified length.
         """
         length = _mo.info(length)[0]
@@ -665,11 +665,11 @@ class NurbsCurve:
         if circular:
             extensionType = 'Circular'
 
-        elif extrapolate:
-            extensionType = 'Extrapolate'
+        elif linear:
+            extensionType = 'Linear'
 
         else:
-            extensionType = 'Linear'
+            extensionType = 'Extrapolate'
 
         if atStart:
             start = 'Start'
@@ -1013,8 +1013,6 @@ class NurbsCurve:
             matchCurve=None
     ):
         """
-        General configuration method for a ``rebuildCurve``.
-
         :param rebuildType/rt: An enum index or label:
 
             - 0: 'Uniform' (the default)
@@ -1080,9 +1078,129 @@ class NurbsCurve:
 
         return node.attr('outputCurve')
 
+    def normalizeRange(self):
+        """
+        :return: This curve, with the U range normalized to 0.0 -> 1.0.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        return self
+        mfn = self.getShapeMFn()
+
+        return self.rebuild(
+            rt=0,
+            kcp=True,
+            kep=True,
+            kt=True,
+            d=mfn.degree(),
+            kr=0
+        )
+
     def cageRebuild(self):
         """
         :return: A linear curve with the same CVs as this one.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
         return self.rebuild(degree=1, keepControlPoints=True)
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    Misc
+    #---------------------------------------------------------------|
+
+    @short(weight='w')
+    def blend(self, otherCurve, weight=0.5):
+        """
+        Blends this curve output towards *otherCurve* via an ``avgCurves``
+        node. You may get unexpected results if the curves don't match
+        in terms of spans, degree etc.
+
+        :param otherCurve: the curve to blend towards
+        :type otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param weight/w: the blend weight; the other curve will take over
+            fully at 1.0; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The blended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        node = r.nodes.AvgCurves.createNode()
+        node.attr('automaticWeight').set(False)
+        node.attr('normalizeWeights').set(False)
+        self >> node.attr('inputCurve1')
+        otherCurve >> node.attr('inputCurve2')
+        weight >> node.attr('weight2')
+        (1-node.attr('weight2')) >> node.attr('weight1')
+
+        return node.attr('outputCurve')
+
+    @short(
+        atStart='ats',
+        vector='v',
+        linear='lin',
+        extrapolate='ext',
+        circular='cir',
+        multipleKnots='mul'
+    )
+    def setLength(
+            self,
+            targetLength,
+            atStart=False,
+            vector=None,
+            linear=None,
+            circular=None,
+            extrapolate=None,
+            multipleKnots=True
+    ):
+        """
+        Uses gated retractions and extensions to force the length of this
+        curve.
+
+        :param targetLength: the target length
+        :type targetLength: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool atStart/ats: anchor the curve at the end rather than the
+            start; defaults to False
+        :param vector: a vector along which to extend; this is recommended for
+            spine setups where tangency should be more tightly controlled; if
+            this is omitted, the *linear / circular / extrapolate* modes will
+            be used instead
+        :type vector: None, tuple, list, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool circular/cir: ignored if *vector* was provided; use the
+            'circular' mode of the ``extendCurve`` node; defaults to False
+        :param bool linear/lin: ignored if *vector* was provided;
+            use the 'linear' mode of the ``extendCurve`` node; defaults to
+            False
+        :param bool extrapolate/ext: ignored if *vector* was provided;
+            use the 'extrapolate' mode of the ``extendCurve`` node; defaults
+            to True
+        :param bool multipleKnots: keep multiple knots; defaults to True
+        :return:
+        """
+        baseLength = self.length()
+
+        retractLength = baseLength-targetLength
+        retractLength = retractLength.minClamp(0.0)
+
+        extendLength = targetLength-baseLength
+        extendLength = extendLength.minClamp(0.0)
+
+        if vector is None:
+            extension = self.extendByLength(
+                extendLength,
+                cir=circular, lin=linear, ext=extrapolate,
+                mul=multipleKnots,
+                ats=atStart
+            )
+
+        else:
+            vector = _mo.info(vector)[0]
+            vector = vector.normal() * extendLength
+
+            extension = self.extendByVector(
+                vector,
+                ats=atStart,
+                mul=multipleKnots,
+                seg=True
+            )
+
+        retraction = self.retract(retractLength, ats=atStart)
+
+        return baseLength.ge(targetLength).ifElse(retraction, extension)
