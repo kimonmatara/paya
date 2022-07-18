@@ -364,6 +364,9 @@ class NurbsCurve:
 
     def paramAtPoint(self, point):
         """
+        This is a 'forgiving' implementation; a closest param will still be
+        returned if the point is not on the curve.
+
         :alias: ``closestParam``
         :param point: the reference point
         :type point: list, tuple, :class:`~paya.runtime.data.Vector`,

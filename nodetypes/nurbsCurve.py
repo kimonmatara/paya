@@ -343,6 +343,109 @@ class NurbsCurve:
 
         return [self.pointAtFraction(fraction) for fraction in fractions]
 
+    #-----------------------------------------------------|    Param sampling
+
+    @short(asComponent='ac')
+    def paramAtPoint(self, point, asComponent=True):
+        """
+        Returns the parameter at the given point. If the point is
+        a plug, the return will also be a plug. This is a 'forgiving'
+        implementation; a closest param will still be returned if the
+        point is not on the curve.
+
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.paramAtPoint` on
+        ``.worldSpace[0]``.
+
+        :alias: ``closestParam``
+        :param point: the reference point
+        :type point: list, tuple, :class:`~paya.runtime.data.Point`
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool asComponent/ac: return an instance of
+            :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
+            a float; defaults to True
+        :return: The sampled parameter.
+        :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+        """
+        point, dim, isplug = _mo.info(point)
+
+        if isplug:
+            return self.attr('worldSpace')[0].paramAtPoint(point)
+
+        point = self.closestPoint_(point)
+        param = self.getParamAtPoint(point, space='world')
+
+        if asComponent:
+            return self.comp('u')[param]
+
+        return param
+
+    closestParam = paramAtPoint
+
+    @short(asComponent='ac')
+    def paramAtFraction(self, fraction, asComponent=True):
+        """
+        Returns the parameter at the given length fraction. If the fraction
+        is a plug, the return will also be a plug.
+
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.paramAtFraction` on
+        ``.worldSpace[0]``.
+
+        :param fraction: the length fraction at which to sample
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool asComponent/ac: return an instance of
+            :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
+            a float; defaults to True
+        :return: The sampled parameter.
+        :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+        """
+        fraction, dim, isplug = _mo.info(fraction)
+
+        if isplug:
+            return self.attr('worldSpace')[0].paramAtFraction(fraction)
+
+        length = self.length() * fraction
+        param = self.findParamFromLength(length)
+
+        if asComponent:
+            return self.comp('u')[param]
+
+        return param
+
+    @short(asComponent='ac')
+    def paramAtLength(self, length, asComponent=True):
+        """
+        Returns the parameter at the given length. If the length
+        is a plug, the return will also be a plug.
+
+        To sample dynamically against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.paramAtLength` on
+        ``.worldSpace[0]``.
+
+        :param length: the length at which to sample
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool asComponent/ac: return an instance of
+            :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
+            a float; defaults to True
+        :return: The sampled parameter.
+        :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+        """
+        length, dim, isplug = _mo.info(length)
+
+        if isplug:
+            return self.attr('worldSpace')[0].paramAtLength(length)
+
+        param = self.findParamFromLength(length)
+
+        if asComponent:
+            return self.comp('u')[param]
+
+        return param
+
     #
     # def pointAtLength(self, length):
     #     """
