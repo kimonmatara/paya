@@ -1078,23 +1078,6 @@ class NurbsCurve:
 
         return node.attr('outputCurve')
 
-    def normalizeRange(self):
-        """
-        :return: This curve, with the U range normalized to 0.0 -> 1.0.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        return self
-        mfn = self.getShapeMFn()
-
-        return self.rebuild(
-            rt=0,
-            kcp=True,
-            kep=True,
-            kt=True,
-            d=mfn.degree(),
-            kr=0
-        )
-
     def cageRebuild(self):
         """
         :return: A linear curve with the same CVs as this one.
