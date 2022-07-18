@@ -118,6 +118,16 @@ paya.runtime.plugs.NurbsCurve
         :return: The ``nearestPointOnCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
     
+    .. py:method:: distributePoints(numberOrFractions)
+    
+        Returns world-space points distributed along the length of the curve.
+        
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: The distributed points.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`]
+    
     .. py:method:: pointAtParam(param)
     
         :param param: the parameter to sample
@@ -148,6 +158,9 @@ paya.runtime.plugs.NurbsCurve
     
     .. py:method:: paramAtPoint(point)
     
+        This is a 'forgiving' implementation; a closest param will still be
+        returned if the point is not on the curve.
+        
         :alias: ``closestParam``
         :param point: the reference point
         :type point: list, tuple, :class:`~paya.runtime.data.Vector`,

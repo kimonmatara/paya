@@ -248,15 +248,167 @@ parameter is a plug, the return will also be a plug.</p>
 <code class="docutils literal notranslate"><span class="pre">.worldSpace[0]</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>param</strong> (int, <a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a>,
+<dd class="field-odd"><p><strong>param</strong> (float, <a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a>,
 <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the parameter at which to sample</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The sampled parameter.</p>
+<dd class="field-even"><p>The sampled point.</p>
 </dd>
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
 <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.pointAtLength">
+<span class="sig-name descname"><span class="pre">pointAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.pointAtLength" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a world-space point at the specified length. If the
+length is a plug, the return will also be a plug.</p>
+<p>For persistent sampling against a reference value, call
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtLength" title="paya.runtime.plugs.NurbsCurve.pointAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointAtLength()</span></code></a> on
+<code class="docutils literal notranslate"><span class="pre">.worldSpace[0]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>length</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the length at which to sample</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sampled point.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
+<a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.pointAtFraction">
+<span class="sig-name descname"><span class="pre">pointAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.pointAtFraction" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a world-space point at the specified length fraction.
+If the fraction is a plug, the return will also be a plug.</p>
+<p>For persistent sampling against a reference value, call
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtFraction" title="paya.runtime.plugs.NurbsCurve.pointAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointAtFraction()</span></code></a> on
+<code class="docutils literal notranslate"><span class="pre">.worldSpace[0]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fraction</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the length fraction at which to sample</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sampled point.</p>
+</dd>
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
+<a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.distributePoints">
+<span class="sig-name descname"><span class="pre">distributePoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributePoints" title="Permalink to this definition"></a></dt>
+<dd><p>Returns world-space points distributed along the length of the curve.</p>
+<p>For a dynamic version, call
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributePoints" title="paya.runtime.plugs.NurbsCurve.distributePoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">distributePoints()</span></code></a> on
+<code class="docutils literal notranslate"><span class="pre">.worldSpace[0]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>numberOrFractions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – this can either be a list of length
+fractions, or a number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The distributed points.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.paramAtPoint">
+<span class="sig-name descname"><span class="pre">paramAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asComponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtPoint" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the parameter at the given point. If the point is
+a plug, the return will also be a plug. This is a ‘forgiving’
+implementation; a closest param will still be returned if the
+point is not on the curve.</p>
+<p>To sample dynamically against a reference value, call
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtPoint" title="paya.runtime.plugs.NurbsCurve.paramAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtPoint()</span></code></a> on
+<code class="docutils literal notranslate"><span class="pre">.worldSpace[0]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Alias</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">closestParam</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>point</strong> (list, tuple, <a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>
+<a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the reference point</p></li>
+<li><p><strong>asComponent/ac</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return an instance of
+<a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a> rather than
+a float; defaults to True</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The sampled parameter.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float, <a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a>,
+<a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.paramAtFraction">
+<span class="sig-name descname"><span class="pre">paramAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asComponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtFraction" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the parameter at the given length fraction. If the fraction
+is a plug, the return will also be a plug.</p>
+<p>To sample dynamically against a reference value, call
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtFraction" title="paya.runtime.plugs.NurbsCurve.paramAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtFraction()</span></code></a> on
+<code class="docutils literal notranslate"><span class="pre">.worldSpace[0]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fraction</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the length fraction at which to sample</p></li>
+<li><p><strong>asComponent/ac</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return an instance of
+<a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a> rather than
+a float; defaults to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sampled parameter.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, <a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a>,
+<a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.paramAtLength">
+<span class="sig-name descname"><span class="pre">paramAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asComponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtLength" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the parameter at the given length. If the length
+is a plug, the return will also be a plug.</p>
+<p>To sample dynamically against a reference value, call
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtLength" title="paya.runtime.plugs.NurbsCurve.paramAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtLength()</span></code></a> on
+<code class="docutils literal notranslate"><span class="pre">.worldSpace[0]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the length at which to sample</p></li>
+<li><p><strong>asComponent/ac</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return an instance of
+<a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a> rather than
+a float; defaults to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sampled parameter.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, <a class="reference internal" href="../comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a>,
+<a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

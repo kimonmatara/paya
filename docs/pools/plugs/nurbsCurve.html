@@ -338,6 +338,24 @@ length.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.distributePoints">
+<span class="sig-name descname"><span class="pre">distributePoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.distributePoints" title="Permalink to this definition"></a></dt>
+<dd><p>Returns world-space points distributed along the length of the curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>numberOrFractions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – this can either be a list of length
+fractions, or a number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The distributed points.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.pointAtParam">
 <span class="sig-name descname"><span class="pre">pointAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.pointAtParam" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -400,7 +418,9 @@ length.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.paramAtPoint">
 <span class="sig-name descname"><span class="pre">paramAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.paramAtPoint" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>This is a ‘forgiving’ implementation; a closest param will still be
+returned if the point is not on the curve.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Alias</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">closestParam</span></code></p>
 </dd>
