@@ -219,7 +219,7 @@ class NurbsCurve:
         """
         return self.info().attr('arcLength')
 
-    def controlPoints(self):
+    def getCVs(self):
         """
         :return: The ``.controlPoints`` multi-attribute of a connected
             ``curveInfo`` node.
@@ -340,7 +340,7 @@ class NurbsCurve:
         :return: The closest point to the given reference point.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        return self.initNearestPointOnCurve().attr('position')
+        return self.initNearestPointOnCurve(point).attr('position')
 
     #--------------------------------------|    Param sampling
 
@@ -566,7 +566,7 @@ class NurbsCurve:
         :return: This curve, extended along the specified vector.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        points = list(self.controlPoints())
+        points = list(self.getCVs())
         startPoint = points[0 if atStart else -1]
         endPoint = startPoint + vector
 
@@ -614,7 +614,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
         if useSegment:
-            allPoints = list(self.controlPoints())
+            allPoints = list(self.getCVs())
             startPoint = allPoints[0 if atStart else -1]
             segment = self.createLine(startPoint, point)
 
