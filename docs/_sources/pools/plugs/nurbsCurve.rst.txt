@@ -286,9 +286,9 @@ paya.runtime.plugs.NurbsCurve
         :param bool circular/cir: use the 'circular' mode of the
             ``extendCurve`` node; defaults to False
         :param bool linear/lin: use the 'linear' mode of the
-            ``extendCurve`` node; defaults to True
-        :param bool extrapolate/ext: use the 'extrapolate' mode of the
             ``extendCurve`` node; defaults to False
+        :param bool extrapolate/ext: use the 'extrapolate' mode of the
+            ``extendCurve`` node; defaults to True
         :return: This curve, extended by the specified length.
     
     .. py:method:: extend(lenPointOrVec, point=None, linear=None, circular=None, extrapolate=None, useSegment=False, multipleKnots=True, atStart=None, atBothEnds=None)
@@ -407,8 +407,6 @@ paya.runtime.plugs.NurbsCurve
     
     .. py:method:: rebuild(rebuildType='Uniform', spans=None, degree=None, tolerance=0.01, smooth=-3, endKnots='Multiple end knots', keepRange='Original', keepControlPoints=False, keepEndPoints=True, keepTangents=False, matchCurve=None)
     
-        General configuration method for a ``rebuildCurve``.
-        
         :param rebuildType/rt: An enum index or label:
         
             - 0: 'Uniform' (the default)
@@ -447,7 +445,52 @@ paya.runtime.plugs.NurbsCurve
         :return: The rebuilt curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
     
+    .. py:method:: normalizeRange()
+    
+        :return: This curve, with the U range normalized to 0.0 -> 1.0.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
     .. py:method:: cageRebuild()
     
         :return: A linear curve with the same CVs as this one.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: blend(otherCurve, weight=0.5)
+    
+        Blends this curve output towards *otherCurve* via an ``avgCurves``
+        node. You may get unexpected results if the curves don't match
+        in terms of spans, degree etc.
+        
+        :param otherCurve: the curve to blend towards
+        :type otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param weight/w: the blend weight; the other curve will take over
+            fully at 1.0; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The blended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: setLength(targetLength, atStart=False, vector=None, linear=None, circular=None, extrapolate=None, multipleKnots=True)
+    
+        Uses gated retractions and extensions to force the length of this
+        curve.
+        
+        :param targetLength: the target length
+        :type targetLength: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool atStart/ats: anchor the curve at the end rather than the
+            start; defaults to False
+        :param vector: a vector along which to extend; this is recommended for
+            spine setups where tangency should be more tightly controlled; if
+            this is omitted, the *linear / circular / extrapolate* modes will
+            be used instead
+        :type vector: None, tuple, list, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool circular/cir: ignored if *vector* was provided; use the
+            'circular' mode of the ``extendCurve`` node; defaults to False
+        :param bool linear/lin: ignored if *vector* was provided;
+            use the 'linear' mode of the ``extendCurve`` node; defaults to
+            False
+        :param bool extrapolate/ext: ignored if *vector* was provided;
+            use the 'extrapolate' mode of the ``extendCurve`` node; defaults
+            to True
+        :param bool multipleKnots: keep multiple knots; defaults to True
+        :return:
