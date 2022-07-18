@@ -304,6 +304,24 @@ class NurbsCurve:
 
     #--------------------------------------|    Point sampling
 
+    def distributePoints(self, numberOrFractions):
+        """
+        Returns world-space points distributed along the length of the curve.
+
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: The distributed points.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`]
+        """
+        if isinstance(numberOrFractions, int):
+            fractions = _mo.floatRange(0, 1, numberOrFractions)
+
+        else:
+            fractions = numberOrFractions
+
+        return [self.pointAtFraction(fraction) for fraction in fractions]
+
     def pointAtParam(self, param):
         """
         :param param: the parameter to sample
