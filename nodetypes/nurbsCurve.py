@@ -262,9 +262,9 @@ class NurbsCurve:
         ``.worldSpace[0]``.
 
         :param param: the parameter at which to sample
-        :type param: int, :class:`~paya.runtime.comps.NurbsCurveParameter`,
+        :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
-        :return: The sampled parameter.
+        :return: The sampled point.
         :type: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
         """
@@ -274,6 +274,74 @@ class NurbsCurve:
             return self.attr('worldSpace')[0].pointAtParam(param)
 
         return self.getPointAtParam(float(param), space='world')
+
+    def pointAtLength(self, length):
+        """
+        Returns a world-space point at the specified length. If the
+        length is a plug, the return will also be a plug.
+
+        For persistent sampling against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.pointAtLength` on
+        ``.worldSpace[0]``.
+
+        :param length: the length at which to sample
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The sampled point.
+        :type: :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        """
+        length, dim, isplug = _mo.info(length)
+
+        if isplug:
+            return self.attr('worldSpace')[0].pointAtLength(length)
+
+        param = self.findParamFromLength(length)
+        return self.pointAtParam(param)
+
+    def pointAtFraction(self, fraction):
+        """
+        Returns a world-space point at the specified length fraction.
+        If the fraction is a plug, the return will also be a plug.
+
+        For persistent sampling against a reference value, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.pointAtFraction` on
+        ``.worldSpace[0]``.
+
+        :param fraction: the length fraction at which to sample
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The sampled point.
+        :type: :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        """
+        fraction, dim, isplug = _mo.info(fraction)
+
+        if isplug:
+            return self.attr('worldSpace')[0].pointAtFraction(fraction)
+
+        length = self.length() * fraction
+        return self.pointAtLength(length)
+
+    def distributePoints(self, numberOrFractions):
+        """
+        Returns world-space points distributed along the length of the curve.
+
+        For a dynamic version, call
+        :meth:`~paya.runtime.plugs.NurbsCurve.distributePoints` on
+        ``.worldSpace[0]``.
+
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: The distributed points.
+        :rtype: [:class:`~paya.runtime.data.Point`]
+        """
+        if isinstance(numberOrFractions, int):
+            fractions = _mo.floatRange(0, 1, numberOrFractions)
+
+        else:
+            fractions = numberOrFractions
+
+        return [self.pointAtFraction(fraction) for fraction in fractions]
 
     #
     # def pointAtLength(self, length):
