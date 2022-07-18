@@ -27,7 +27,7 @@ class NurbsCurve:
             toggleArc=False,
             sections=8,
             degree=3,
-            collinear=True
+            collinear=None
     ):
         """
         :param points: two or three points, packed or unpacked
@@ -53,7 +53,8 @@ class NurbsCurve:
         :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
         :param bool collinear/col: for three-point arcs only: prevent the arc
             from disappearing with an error when the input points are
-            collinear; defaults to True
+            collinear; defaults to True if *directionVector* was provided,
+            otherwise False.
         :return: An output for a circular arc.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
@@ -79,7 +80,17 @@ class NurbsCurve:
             return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
 
         elif num is 3:
-            if collinear and directionVector is None:
+            if collinear is None:
+                if directionVector is None:
+                    collinear = False
+
+                else:
+                    collinear = True
+
+                print('The direction vector is ', directionVector)
+                print('Collinear has been resolved to ', collinear)
+
+            elif collinear and directionVector is None:
                 raise ValueError(
                     "The direction vector is required for three"+
                     "-point arcs if 'collinear' has been "+
