@@ -873,6 +873,41 @@ sources can be values or plugs</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.cvRebuild">
+<span class="sig-name descname"><span class="pre">cvRebuild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numCVs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endKnots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Multiple</span> <span class="pre">end</span> <span class="pre">knots'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Original'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepControlPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepEndPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepTangents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.cvRebuild" title="Permalink to this definition"></a></dt>
+<dd><p>Rebuilds this curve to the specified number of CVs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>degree/d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the degree to build to; defaults to this curve’s
+(current) degree if omitted</p></li>
+<li><p><strong>endKnots/end</strong> – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘Non Multiple end knots’</p></li>
+<li><p>1: ‘Multiple end knots’ (the default)</p></li>
+</ul>
+</p></li>
+<li><p><strong>keepRange/kr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘0 to 1’</p></li>
+<li><p>1: ‘Original’ (the default)</p></li>
+<li><p>2: ‘0 to #spans’</p></li>
+</ul>
+</p></li>
+<li><p><strong>keepEndPoints/kep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep end points; defaults to True</p></li>
+<li><p><strong>keepTangents/kt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep tangents; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rebuilt curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.rebuild">
 <span class="sig-name descname"><span class="pre">rebuild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rebuildType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Uniform'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endKnots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Multiple</span> <span class="pre">end</span> <span class="pre">knots'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Original'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepControlPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepEndPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepTangents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.rebuild" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
