@@ -6,6 +6,39 @@ paya.runtime.nodes.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
+    .. py:classmethod:: create(*points, degree=3, name=None, bSpline=False, under=None, displayType=None, conformShapeNames=True, intermediate=False)
+    
+        Draws static or dynamic curves.
+        
+        :param \*points: the input points; can be values or attributes
+        :type \*points: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`, :class:`~paya.runtime.plugs.Vector`
+        :param bool bSpline/bsp: only available if *degree* is 3; draw as a
+            bSpline (similar to drawing by EP); defaults to False
+        :param int degree/d: the curve degree; defaults to 3
+        :param under/u: an optional destination parent; no space conversion
+            will take place; if the parent has transforms, the curve shape
+            will be transformed as well; defaults to None
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: str, int, None, tuple, list
+        :param bool conformShapeNames/csn: ignored if *under* is ``None``;
+            conform destination parent shapes after reparenting; defaults to
+            True
+        :param bool intermediate: set the shape to intermediate; defaults to
+            False
+        :param displayType/dt: if provided, an index or enum label:
+        
+            - 0: 'Normal'
+            - 1: 'Template'
+            - 2: 'Reference'
+        
+            If omitted, display overrides won't be activated at all.
+        :type displayType/dt: None, int, str
+        :type displayType/dt:
+        :return: The curve shape.
+        :rtype: :class:`NurbsCurve`
+    
     .. py:classmethod:: createFromMacro(macro, **overrides)
     
         :param dict macro: the type of macro returned by :meth:`macro`

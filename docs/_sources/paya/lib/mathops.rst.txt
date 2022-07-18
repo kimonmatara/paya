@@ -254,3 +254,12 @@ plug workflows.
     :type points: list
     :return: The normalized points.
     :rtype: list of :class:`~paya.runtime.data.Point`
+
+.. py:function:: expandVectorArgs(*args)
+
+    Similar to :func:`~pymel.util.arguments.expandArgs`, except won't flatten
+    lists or tuples of three scalars where encountered.
+    
+    :param *args: the arguments to expand
+    :return: A flattened list.
+    :rtype: list

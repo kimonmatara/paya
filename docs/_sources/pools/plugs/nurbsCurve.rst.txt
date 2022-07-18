@@ -6,7 +6,7 @@ paya.runtime.plugs.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
-    .. py:classmethod:: createArc(*points, directionVector=None, radius=1.0, toggleArc=False, sections=8, degree=3, collinear=True)
+    .. py:classmethod:: createArc(*points, directionVector=None, radius=1.0, toggleArc=False, sections=8, degree=3, collinear=None)
     
         :param points: two or three points, packed or unpacked
         :type points: tuple, list, :class:`~paya.runtime.data.Point`,
@@ -31,7 +31,8 @@ paya.runtime.plugs.NurbsCurve
         :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
         :param bool collinear/col: for three-point arcs only: prevent the arc
             from disappearing with an error when the input points are
-            collinear; defaults to True
+            collinear; defaults to True if *directionVector* was provided,
+            otherwise False.
         :return: An output for a circular arc.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
     
