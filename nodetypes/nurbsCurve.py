@@ -1,3 +1,5 @@
+from importlib import reload
+import paya.lib.nurbsutil as _nu
 import paya.lib.mathops as _mo
 import pymel.core.nodetypes as _nt
 from paya.util import short
@@ -5,6 +7,139 @@ import paya.runtime as r
 
 
 class NurbsCurve:
+
+    #-----------------------------------------------------|    Constructors
+
+    @classmethod
+    @short(
+        degree='d',
+        under='u',
+        name='n',
+        conformShapeNames='csn',
+        intermediate='i',
+        displayType='dt',
+        bSpline='bsp'
+    )
+    def create(
+            cls,
+            *points,
+            degree=3,
+            name=None,
+            bSpline=False,
+            under=None,
+            displayType=None,
+            conformShapeNames=True,
+            intermediate=False
+    ):
+        """
+        Draws static or dynamic curves.
+
+        :param \*points: the input points; can be values or attributes
+        :type \*points: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`, :class:`~paya.runtime.plugs.Vector`
+        :param bool bSpline/bsp: only available if *degree* is 3; draw as a
+            bSpline (similar to drawing by EP); defaults to False
+        :param int degree/d: the curve degree; defaults to 3
+        :param under/u: an optional destination parent; no space conversion
+            will take place; if the parent has transforms, the curve shape
+            will be transformed as well; defaults to None
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: str, int, None, tuple, list
+        :param bool conformShapeNames/csn: ignored if *under* is ``None``;
+            conform destination parent shapes after reparenting; defaults to
+            True
+        :param bool intermediate: set the shape to intermediate; defaults to
+            False
+        :param displayType/dt: if provided, an index or enum label:
+
+            - 0: 'Normal'
+            - 1: 'Template'
+            - 2: 'Reference'
+
+            If omitted, display overrides won't be activated at all.
+        :type displayType/dt: None, int, str
+        :type displayType/dt:
+        :return: The curve shape.
+        :rtype: :class:`NurbsCurve`
+        """
+        points = _mo.expandVectorArgs(points)
+        num = len(points)
+
+        if bSpline:
+            if degree is not 3:
+                raise RuntimeError(
+                   "bSpline drawing is only available for degree 3."
+                )
+
+            drawDegree = 1
+
+        else:
+            drawDegree = degree
+
+        minNum = drawDegree+1
+
+        if num < minNum:
+            raise RuntimeError(
+                "At least {} CVs needed for degree {}.".format(
+                    minNum,
+                    degree
+                )
+            )
+
+        infos = [_mo.info(point) for point in points]
+        points = [info[0] for info in infos]
+        hasPlugs = any([info[2] for info in infos])
+
+        if hasPlugs:
+            _points = [info[0].get() if info[2]
+                else info[0] for info in infos]
+
+        else:
+            _points = points
+
+        # Soft-draw
+        curveXf = r.curve(
+            name=cls.makeName(n=name),
+            knot=_nu.getKnotList(num, drawDegree),
+            point=_points,
+            degree=drawDegree
+        )
+
+        # Reparent
+        curveShape = curveXf.getShape()
+
+        if under:
+            r.parent(curveShape, under, r=True, shape=True)
+            r.delete(curveXf)
+
+            if conformShapeNames:
+                r.PyNode(under).conformShapeNames()
+
+        # Modify
+        if bSpline or hasPlugs:
+            origShape = curveShape.getOriginalGeometry(create=True).node()
+
+            if hasPlugs:
+                for i, point in enumerate(points):
+                    point >> origShape.attr('controlPoints')[i]
+
+            if bSpline:
+                origShape.attr('worldSpace'
+                    ).bSpline() >> curveShape.attr('create')
+
+            if not hasPlugs:
+                curveShape.deleteHistory()
+
+        # Configure
+        if intermediate:
+            curveShape.attr('intermediateObject').set(True)
+
+        if displayType is not None:
+            curveShape.attr('overrideEnabled').set(True)
+            curveShape.attr('overrideDisplayType').set(displayType)
+
+        return curveShape
 
     @classmethod
     def createFromMacro(cls, macro, **overrides):
