@@ -76,6 +76,27 @@ class NonPlugStringError(RuntimeError):
     A string passed to :func:`info` does not represent a Maya attribute.
     """
 
+def isPlug(item):
+    """
+    :param item: the item to inspect
+    :type item: str, :class:`pymel.core.general.PyNode`,
+        :class:`pymel.core.general.Attribute`
+    :return: ``True`` if *item* represents an attribute, otherwise ``False``.
+    :rtype: bool
+    """
+    if isinstance(item, p.Attribute):
+        return True
+
+    if isinstance(item, str):
+        try:
+            item = p.Attribute(item)
+            return True
+
+        except p.MayaNodeError:
+            pass
+
+    return False
+
 def asGeoPlug(item):
     """
     Attempts to conform *item* into a geometry output
@@ -494,6 +515,9 @@ def createMatrix(
 
         else:
             if ortho:
+                if thirdLength is None:
+                    thirdLength = 1.0 # for parity with aimMatrix
+
                 vec1, vec2 = vectors
                 axis1, axis2 = axes
 
@@ -523,10 +547,10 @@ def createMatrix(
                 else:
                     vec2 = _vec2
 
-                if thirdLengthIsDefined:
-                    vec3 = vec3.normal() * thirdLength
+                vec3 = vec3.normal() * thirdLength
 
-                absAxis3 = [ax for ax in 'xyz' if ax not in (absAxis1, absAxis2)][0]
+                absAxis3 = [ax for ax in 'xyz' if \
+                    ax not in (absAxis1, absAxis2)][0]
 
                 return createMatrix(
                     absAxis1, vec1, absAxis2, vec2, absAxis3, vec3,
