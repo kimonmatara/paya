@@ -226,6 +226,46 @@ class NurbsCurve:
     def localGeoOutput(self):
         return self.attr('local')
 
+    #-----------------------------------------------------|    Curve-level info
+
+    @short(reuse='re')
+    def initCurveInfo(self, reuse=True):
+        """
+        Initialises, or retrieves, a ``curveInfo`` node connected to this
+        curve.
+
+        :param bool reuse/re: look for existing nodes
+        :return: The ``curveInfo`` node.
+        :rtype: :class:`~paya.runtime.nodes.CurveInfo`
+        """
+        if reuse:
+            outputs = self.attr('worldSpace').outputs(type='curveInfo')
+
+            if outputs:
+                return outputs[0]
+
+        node = r.nodes.CurveInfo.createNode()
+        self.attr('worldSpace') >> node.attr('inputCurve')
+        return node
+
+    @short(plug='p', tolerance='tol')
+    def length(self, plug=False, tolerance=0.001):
+        """
+        Overload of :meth:`pymel.core.nodetypes.NurbsCurve.length`.
+
+        :param bool plug/p: return an attribute, not just a value;
+            defaults to False
+        :param float tolerance/tol: ignored for the plug implementation;
+            defaults to 0.001
+        :return: The length of this curve.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        """
+        if plug:
+            info = self.initCurveInfo()
+            return info.attr('arcLength')
+
+        return r.nodetypes.NurbsCurve.length(self, tolerance=tolerance)
+
     #-----------------------------------------------------|    Point sampling
 
     @short(plug='p')
