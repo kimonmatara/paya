@@ -65,6 +65,40 @@ paya.runtime.nodes.DependNode
         :return: This node's name and type in a dictionary.
         :rtype: dict
     
+    .. py:method:: addVectorAttr(name, keyable=None, channelBox=None, input=None, defaultValue=None, lock=False)
+    
+        :param name: the attribute name
+        :param bool keyable/k: make the attribute keyable; defaults to True
+        :param bool channelBox/cb: make the attribute settable; defaults to
+            False
+        :param input/i: an optional input for the attribute
+        :type input/i: str, :class:`~paya.runtime.plugs.Vector`
+        :param defaultValue/dv: an optional default value for the attribute;
+            defaults to [0.0, 0.0, 0.0]
+        :type defaultValue/dv: list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`
+        :param bool lock/l: lock the attribute; defaults to False
+        :return: A vector / point attribute (i.e., a compound of type
+            ``double3`` with children of type ``double``).
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: addEulerAttr(name, keyable=None, channelBox=None, input=None, defaultValue=None, lock=False)
+    
+        :param name: the attribute name
+        :param bool keyable/k: make the attribute keyable; defaults to True
+        :param bool channelBox/cb: make the attribute settable; defaults to
+            False
+        :param input/i: an optional input for the attribute
+        :type input/i: str, :class:`~paya.runtime.plugs.Vector`
+        :param defaultValue/dv: an optional default value for the attribute;
+            defaults to [0.0, 0.0, 0.0]
+        :type defaultValue/dv: list, tuple,
+            :class:`~paya.runtime.data.EulerRotation`
+        :param bool lock/l: lock the attribute; defaults to False
+        :return: An euler rotation attribute (i.e., a compound of type
+            ``double3`` with children of type ``doubleAngle``)
+        :rtype: :class:`~paya.runtime.plugs.EulerRotation`
+    
     .. py:method:: addAttr(attrName, channelBox=None, **kwargs)
     
         Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to add the

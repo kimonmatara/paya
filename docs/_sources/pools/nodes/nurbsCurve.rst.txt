@@ -59,98 +59,66 @@ paya.runtime.nodes.NurbsCurve
         
         :param dict macro: the macro to edit
     
-    .. py:method:: closestPoint_(refPoint)
+    .. py:method:: closestPoint_(refPoint, plug=False)
     
-        Returns the closest world-space point along this curve to the given
-        reference point. If the reference point is a plug, the return will
-        also be a plug.
-        
-        For persistent sampling against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.closestPoint` on
-        ``.worldSpace[0]``.
-        
         :param refPoint: the reference point
         :type refPoint: list, tuple, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
-        :return: The closest point along the curve to *refPoint*.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The closest world-space point along this curve to the given
+            reference point.
         :rtype: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: pointAtParam(param)
+    .. py:method:: pointAtParam(param, plug=False)
     
-        Returns a world-space point at the specified parameter. If the
-        parameter is a plug, the return will also be a plug.
-        
-        For persistent sampling against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.pointAtParam` on
-        ``.worldSpace[0]``.
-        
         :param param: the parameter at which to sample
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
-        :return: The sampled point.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A world-space point at the specified parameter.
         :type: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: pointAtLength(length)
+    .. py:method:: pointAtLength(length, plug=False)
     
-        Returns a world-space point at the specified length. If the
-        length is a plug, the return will also be a plug.
-        
-        For persistent sampling against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.pointAtLength` on
-        ``.worldSpace[0]``.
-        
         :param length: the length at which to sample
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The sampled point.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A world-space point at the specified length.
         :type: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: pointAtFraction(fraction)
+    .. py:method:: pointAtFraction(fraction, plug=False)
     
-        Returns a world-space point at the specified length fraction.
-        If the fraction is a plug, the return will also be a plug.
-        
-        For persistent sampling against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.pointAtFraction` on
-        ``.worldSpace[0]``.
-        
         :param fraction: the length fraction at which to sample
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The sampled point.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A world-space point at the specified length fraction.
         :type: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: distributePoints(numberOrFractions)
+    .. py:method:: distributePoints(numberOrFractions, plug=False)
     
-        Returns world-space points distributed along the length of the curve.
-        
-        For a dynamic version, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.distributePoints` on
-        ``.worldSpace[0]``.
-        
         :param numberOrFractions: this can either be a list of length
             fractions, or a number
         :type numberOrFractions: tuple, list or int
-        :return: The distributed points.
-        :rtype: [:class:`~paya.runtime.data.Point`]
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: World-space points distributed along the length of the curve.
+        :rtype: [:class:`~paya.runtime.data.Point`],
+            [:class:`~paya.runtime.plug.Vector`]
     
-    .. py:method:: paramAtPoint(point, asComponent=True)
+    .. py:method:: paramAtPoint(point, asComponent=True, plug=False)
     
-        Returns the parameter at the given point. If the point is
-        a plug, the return will also be a plug. This is a 'forgiving'
+        Returns the parameter at the given point. This is a 'forgiving'
         implementation; a closest param will still be returned if the
         point is not on the curve.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.paramAtPoint` on
-        ``.worldSpace[0]``.
         
         :alias: ``closestParam``
         :param point: the reference point
         :type point: list, tuple, :class:`~paya.runtime.data.Point`
             :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: force a dynamic output; defaults to False
         :param bool asComponent/ac: return an instance of
             :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
             a float; defaults to True
@@ -158,128 +126,215 @@ paya.runtime.nodes.NurbsCurve
         :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: paramAtFraction(fraction, asComponent=True)
+    .. py:method:: paramAtFraction(fraction, asComponent=True, plug=False)
     
-        Returns the parameter at the given length fraction. If the fraction
-        is a plug, the return will also be a plug.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.paramAtFraction` on
-        ``.worldSpace[0]``.
-        
         :param fraction: the length fraction at which to sample
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output; defaults to False
         :param bool asComponent/ac: return an instance of
             :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
             a float; defaults to True
-        :return: The sampled parameter.
+        :return: The parameter at the given length fraction.
         :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: paramAtLength(length, asComponent=True)
+    .. py:method:: paramAtLength(length, asComponent=True, plug=False)
     
-        Returns the parameter at the given length. If the length
-        is a plug, the return will also be a plug.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.paramAtLength` on
-        ``.worldSpace[0]``.
-        
         :param length: the length at which to sample
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output; defaults to False
         :param bool asComponent/ac: return an instance of
             :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
             a float; defaults to True
-        :return: The sampled parameter.
+        :return: The parameter at the given length.
         :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: lengthAtFraction(fraction)
+    .. py:method:: lengthAtFraction(fraction, plug=False)
     
-        Returns the curve length at the given fraction. If the fraction
-        is a plug, the return will also be a plug.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtFraction` on
-        ``.worldSpace[0]``.
-        
         :param fraction: the length fraction
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The curve length.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The curve length at the given fraction.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: lengthAtParam(param)
+    .. py:method:: lengthAtParam(param, plug=False)
     
-        Returns the curve length at the given parameter. If the parameter
-        if a plug, the return will also be a plug.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtParam` on
-        ``.worldSpace[0]``.
-        
         :param param: the parameter
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
-        :return: The curve length.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: Tthe curve length at the given parameter.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: lengthAtPoint(point)
+    .. py:method:: lengthAtPoint(point, plug=False)
     
-        Returns the curve length at the given point. If the point
-        if a plug, the return will also be a plug.
-        
-        This is a 'forgiving' implementation; a closest point will be used
-        if *point* is not on the curve.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtPoint` on
-        ``.worldSpace[0]``.
+        Returns the curve length at the given point. This is a 'forgiving'
+        implementation; a closest point will be used if *point* is not on the
+        curve.
         
         :param point: the point
         :type point: list, tuple, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: force a dynamic output; defaults to False
         :return: The curve length.
         :rtype: :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: fractionAtLength(length)
+    .. py:method:: fractionAtLength(length, plug=False)
     
-        Returns the length fraction at the given length. If *length* is a
-        plug, the return will also be a plug.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtLength` on
-        ``.worldSpace[0]``.
-        
         :param length: the length at which to sample a fraction
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The fraction.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The length fraction at the given length.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: fractionAtParam(param)
+    .. py:method:: fractionAtParam(param, plug=False)
     
-        Returns the length fraction at the given parameter. If *param* is a
-        plug, the return will also be a plug.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtParam` on
-        ``.worldSpace[0]``.
-        
         :param param: the parameter at which to sample a fraction
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
-        :return: The fraction.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The length fraction at the given parameter
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: fractionAtPoint(point)
+    .. py:method:: fractionAtPoint(point, plug=False)
     
-        Returns the length fraction at the given point. If *point* is a
-        plug, the return will also be a plug.
-        
-        To sample dynamically against a reference value, call
-        :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtPoint` on
-        ``.worldSpace[0]``.
-        
         :param point: the point at which to sample a fraction
-        :return: The fraction.
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The length fraction at the given point.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: upVectorAtParam(param, plug=False)
+    
+        :param param: the parameter at which to sample the up vector
+        :rtype param: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: upVectorAtFraction(fraction, plug=False)
+    
+        :param fraction: the length fraction at which to sample the up vector
+        :rtype fraction: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: upVectorAtLength(fraction, plug=False)
+    
+        :param length: the length at which to sample the up vector
+        :rtype length: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: upVectorAtPoint(point, plug=False)
+    
+        :param point: the point at which to sample the up vector
+        :rtype point: list, tuple, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: matrixAtParam(param, tangentAxis, upAxis, upVector=None, upCurve=None, plug=False)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param param: the parameter at which to sample the matrix
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A matrix at the given parameter.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtFraction(fraction, tangentAxis, upAxis, upVector=None, upCurve=None, plug=False)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param fraction: the fraction at which to sample the matrix
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A matrix at the given fraction.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtLength(length, tangentAxis, upAxis, upVector=None, upCurve=None, plug=False)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param length: the length at which to sample the matrix
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A matrix at the given length.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtPoint(point, tangentAxis, upAxis, upVector=None, upCurve=None, plug=False)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param point: the point at which to sample the matrix
+        :type point: tuple, list, :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.data.Point`,
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A matrix at the given point.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`

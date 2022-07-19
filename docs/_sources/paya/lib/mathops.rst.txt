@@ -21,6 +21,26 @@ plug workflows.
 
     Decorator version of :class:`NativeUnits`.
 
+.. py:function:: isPlug(item)
+
+    :param item: the item to inspect
+    :type item: str, :class:`pymel.core.general.PyNode`,
+        :class:`pymel.core.general.Attribute`
+    :return: ``True`` if *item* represents an attribute, otherwise ``False``.
+    :rtype: bool
+
+.. py:function:: asGeoPlug(item)
+
+    Attempts to conform *item* into a geometry output
+    
+    :param item: the item to inspect
+    :type item: str, :class:`~paya.runtime.nodes.Transform`,
+        :class:`~paya.runtime.nodes.Shape`,
+        :class:`~paya.runtime.plugs.Geometry`,
+    :raises TypeError: Could not derive a geometry output.
+    :return: The geometry output.
+    :rtype: :class:`~paya.runtime.plugs.Geometry`
+
 .. py:function:: info(item, angle=False)
 
     Returns a tuple of three members:

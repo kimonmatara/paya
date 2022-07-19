@@ -38,9 +38,6 @@ paya.runtime.plugs.NurbsCurve
     
     .. py:classmethod:: createLine(startPoint, endPoint, degree=None, numCVs=None)
     
-        Configures a ``makeNurbsSquare`` node to generate a single NURBS
-        curve output for a line and returns the output.
-        
         :param startPoint: the start point of the line
         :type startPoint: tuple, list, str, :class:`~paya.runtime.plugs.Math1D`
         :param startPoint: the end point of the line
@@ -50,7 +47,7 @@ paya.runtime.plugs.NurbsCurve
         :param int numCVs/cvs: the number of CVs; if omitted, it is
             automatically derived from 'degree'; if 'degree' is also omitted,
             defaults to 2
-        :return: The curve output.
+        :return: A curve output for a straight line.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
     
     .. py:method:: info(reuse=True)
@@ -120,12 +117,10 @@ paya.runtime.plugs.NurbsCurve
     
     .. py:method:: distributePoints(numberOrFractions)
     
-        Returns world-space points distributed along the length of the curve.
-        
         :param numberOrFractions: this can either be a list of length
             fractions, or a number
         :type numberOrFractions: tuple, list or int
-        :return: The distributed points.
+        :return: World-space points distributed along the length of the curve.
         :rtype: [:class:`~paya.runtime.plugs.Vector`]
     
     .. py:method:: pointAtParam(param)
@@ -226,6 +221,132 @@ paya.runtime.plugs.NurbsCurve
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
         :return: The length fraction at the given length.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: upVectorAtParam(param)
+    
+        :param param: the parameter at which to sample the upVector
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: upVectorAtFraction(fraction)
+    
+        :param fraction: the fraction at which to sample the upVector
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: upVectorAtLength(length)
+    
+        :param length: the length at which to sample the upVector
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: upVectorAtPoint(point)
+    
+        :param point: the point at which to sample the upVector
+        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`,
+        :return: A vector that's perpendicular to both the curve normal
+            and tangent.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: matrixAtParam(param, tangentAxis, upAxis, upCurve=None, upVector=None)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param param: the parameter at which to sample the matrix
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :return: A matrix at the given parameter.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtFraction(fraction, tangentAxis, upAxis, upCurve=None, upVector=None)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param fraction: the fraction at which to sample the matrix
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :return: A matrix at the given fraction.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtLength(length, tangentAxis, upAxis, upCurve=None, upVector=None)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param length: the length at which to sample the matrix
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :return: A matrix at the given length.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtPoint(point, tangentAxis, upAxis, upCurve=None, upVector=None)
+    
+        If both *upCurve* and *upVector* are omitted, an up vector is
+        derived from the curve tangent and normal.
+        
+        :param point: the point at which to sample the matrix
+        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upVector/upv: an explicit up vector for the matrix; defaults
+            to None
+        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
+             :class:`~paya.runtime.plugs.Vector`,
+        :return: A matrix at the given point.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
     
     .. py:method:: attach(*curves, blend=False, blendBias=0.5, parameter=0.1, blendKnotInsertion=False, reverse1=False, reverse2=False, multipleKnots=True)
     

@@ -10,8 +10,9 @@ paya.runtime.plugs.Geometry
     
         Creates a shape node and connects this geometry output into its input.
         
-        :param name/n: one or more name elements
-        :type name/n: None, str, int, list, tuple
+        :param name/n: the shape name; this will be explicit; no name
+            management is performed; defaults to None
+        :type name/n: None, str
         :param under/u: a transform parent for the new shape; a new transform
             will be generated if this is omitted
         :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
