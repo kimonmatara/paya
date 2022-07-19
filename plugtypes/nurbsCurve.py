@@ -471,6 +471,188 @@ class NurbsCurve:
         """
         return length / self.length()
 
+    #--------------------------------------|    Matrix sampling
+
+    @short(
+        upVector='upv',
+        upCurve='upc'
+    )
+    def matrixAtParam(
+            self,
+            param,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None
+    ):
+        """
+        If neither *upVector* nor *upCurve* is provided, the curve normal will
+        be used.
+
+        :param param: the parameter at which to sample a matrix
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to align to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to align to the up vector, for example
+            'x'
+        :param upVector: an up vector for the matrix
+        :type upVector: None, list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve: an up curve; if this is provided, an up vector will be
+            derived by aiming at the nearest point on this curve; defaults to
+            None
+        :type upCurve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :return: A matrix at the given parameter.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        info = self.infoAtParam(param)
+        position = info.attr('position')
+
+        if upCurve:
+            upCurve = r.PyNode(upCurve)
+            target = upCurve.attr('worldSpace')[0].closestPoint(position)
+            upVector = target-position
+
+        elif not upVector:
+            upVector = info.attr('normal')
+
+        return r.createMatrix(
+            tangentAxis, info.attr('tangent'),
+            upAxis, upVector,
+            t=position,
+            psl=True
+        )
+
+    @short(
+        upVector='upv',
+        upCurve='upc'
+    )
+    def matrixAtFraction(
+            self,
+            fraction,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None
+    ):
+        """
+        If neither *upVector* nor *upCurve* is provided, the curve normal will
+        be used.
+
+        :param fraction: the length fraction at which to sample a matrix
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to align to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to align to the up vector, for example
+            'x'
+        :param upVector: an up vector for the matrix
+        :type upVector: None, list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve: an up curve; if this is provided, an up vector will be
+            derived by aiming at the nearest point on this curve; defaults to
+            None
+        :type upCurve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :return: A matrix at the given parameter.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        param = self.paramAtFraction(fraction)
+        return self.matrixAtParam(
+            param,
+            tangentAxis,
+            upAxis,
+            upv=upVector,
+            upc=upCurve
+        )
+
+    @short(
+        upVector='upv',
+        upCurve='upc'
+    )
+    def matrixAtLength(
+            self,
+            fraction,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None
+    ):
+        """
+        If neither *upVector* nor *upCurve* is provided, the curve normal will
+        be used.
+
+        :param length: the length at which to sample a matrix
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to align to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to align to the up vector, for example
+            'x'
+        :param upVector: an up vector for the matrix
+        :type upVector: None, list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve: an up curve; if this is provided, an up vector will be
+            derived by aiming at the nearest point on this curve; defaults to
+            None
+        :type upCurve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :return: A matrix at the given parameter.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        param = self.paramAtLength(length)
+
+        return self.matrixAtParam(
+            param,
+            tangentAxis,
+            upAxis,
+            upv=upVector,
+            upc=upCurve
+        )
+
+    @short(
+        upVector='upv',
+        upCurve='upc'
+    )
+    def matrixAtPoint(
+            self,
+            point,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None
+    ):
+        """
+        If neither *upVector* nor *upCurve* is provided, the curve normal will
+        be used.
+
+        :param point: the point at which to sample a matrix
+        :type point: list, tuple, :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.data.Point`
+        :param str tangentAxis: the axis to align to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to align to the up vector, for example
+            'x'
+        :param upVector: an up vector for the matrix
+        :type upVector: None, list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve: an up curve; if this is provided, an up vector will be
+            derived by aiming at the nearest point on this curve; defaults to
+            None
+        :type upCurve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :return: A matrix at the given parameter.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        param = self.paramAtPoint(point)
+
+        return self.matrixAtParam(
+            param,
+            tangentAxis,
+            upAxis,
+            upv=upVector,
+            upc=upCurve
+        )
+
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    Extensions
     #---------------------------------------------------------------|

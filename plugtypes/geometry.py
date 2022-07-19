@@ -23,8 +23,9 @@ class Geometry:
         """
         Creates a shape node and connects this geometry output into its input.
 
-        :param name/n: one or more name elements
-        :type name/n: None, str, int, list, tuple
+        :param name/n: the shape name; this will be explicit; no name
+            management is performed; defaults to None
+        :type name/n: None, str
         :param under/u: a transform parent for the new shape; a new transform
             will be generated if this is omitted
         :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
@@ -39,19 +40,18 @@ class Geometry:
         clsname = self.__class__.__name__
         nodeType = clsname[0].lower() + clsname[1:]
 
-        shape = r.createNode(nodeType)
+        kw = {}
+
+        if name:
+            kw['n'] = name
+
+        shape = r.createNode(nodeType, **kw)
         self >> shape.geoInput
 
         if intermediate:
             shape.attr('intermediateObject').set(True)
 
         xf = shape.getParent()
-
-        doRename = not(under and conformShapeNames)
-
-        if doRename:
-            name = shape.__class__.makeName(n=name)
-            xf.rename(name)
 
         if under:
             r.parent(shape, under, r=True, shape=True)

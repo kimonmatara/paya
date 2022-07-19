@@ -118,7 +118,7 @@ class NurbsCurve:
 
         # Modify
         if bSpline or hasPlugs:
-            origShape = curveShape.getOriginalGeometry(create=True).node()
+            origShape = curveShape.getOrigInput(create=True).node()
 
             if hasPlugs:
                 for i, point in enumerate(points):
@@ -236,7 +236,7 @@ class NurbsCurve:
 
         For persistent sampling against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.closestPoint` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param refPoint: the reference point
         :type refPoint: list, tuple, :class:`~paya.runtime.data.Point`,
@@ -259,7 +259,7 @@ class NurbsCurve:
 
         For persistent sampling against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.pointAtParam` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param param: the parameter at which to sample
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
@@ -282,7 +282,7 @@ class NurbsCurve:
 
         For persistent sampling against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.pointAtLength` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param length: the length at which to sample
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
@@ -305,7 +305,7 @@ class NurbsCurve:
 
         For persistent sampling against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.pointAtFraction` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param fraction: the length fraction at which to sample
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
@@ -327,7 +327,7 @@ class NurbsCurve:
 
         For a dynamic version, call
         :meth:`~paya.runtime.plugs.NurbsCurve.distributePoints` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param numberOrFractions: this can either be a list of length
             fractions, or a number
@@ -355,7 +355,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.paramAtPoint` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :alias: ``closestParam``
         :param point: the reference point
@@ -391,7 +391,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.paramAtFraction` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param fraction: the length fraction at which to sample
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
@@ -423,7 +423,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.paramAtLength` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param length: the length at which to sample
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
@@ -455,7 +455,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtFraction` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param fraction: the length fraction
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
@@ -476,7 +476,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtParam` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param param: the parameter
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
@@ -501,7 +501,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtPoint` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param point: the point
         :type point: list, tuple, :class:`~paya.runtime.data.Point`,
@@ -527,7 +527,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtLength` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param length: the length at which to sample a fraction
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
@@ -548,7 +548,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtParam` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param param: the parameter at which to sample a fraction
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
@@ -570,7 +570,7 @@ class NurbsCurve:
 
         To sample dynamically against a reference value, call
         :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtPoint` on
-        ``.worldSpace[0]``.
+        ``.local`` or ``.worldSpace``.
 
         :param point: the point at which to sample a fraction
         :return: The fraction.

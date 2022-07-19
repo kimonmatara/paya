@@ -6,6 +6,11 @@ paya.runtime.nodes.DeformableShape
 
 .. py:class:: DeformableShape(*args, **kwargs)
 
+    .. py:classmethod:: getPlugClass()
+    
+        :return: The geometry attribute subclass associated with this shape.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+    
     .. py:method:: deleteHistory()
     
         Deletes history on this node.
@@ -18,7 +23,7 @@ paya.runtime.nodes.DeformableShape
         :return: True if this shape has history, otherwise False.
         :rtype: bool
     
-    .. py:method:: getOriginalGeometry(create=False)
+    .. py:method:: getOrigInput(create=False)
     
         :param bool create/c: create the original geometry if it doesn't
             already exist
@@ -26,7 +31,7 @@ paya.runtime.nodes.DeformableShape
             in this shape's history, or None
         :rtype: :class:`~paya.runtime.plugs.Geometry`, None
     
-    .. py:method:: getHistoricalGeometry(create=False)
+    .. py:method:: getHistoryInput(create=False)
     
         :param create/c: create a historical input if it doesn't already exist
         :return: The input into this shape, or None

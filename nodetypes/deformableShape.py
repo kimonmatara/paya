@@ -4,6 +4,31 @@ import paya.runtime as r
 
 class DeformableShape:
 
+    #-----------------------------------------------------------|    Abstract I/O
+
+    @property
+    def geoInput(self):
+        raise NotImplementedError
+
+    @property
+    def worldGeoOutput(self):
+        raise NotImplementedError
+
+    @property
+    def localGeoOutput(self):
+        raise NotImplementedError
+
+    #--------------------------------------------------------|    Plug interops
+
+    @classmethod
+    def getPlugClass(cls):
+        """
+        :return: The geometry attribute subclass associated with this shape.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+        """
+        # The following should not error
+        return getattr(r.plugs, cls.__name__)
+
     #--------------------------------------------------------|    History management
 
     def deleteHistory(self):
@@ -24,7 +49,7 @@ class DeformableShape:
         return bool(self.geoInput.inputs())
 
     @short(create='c')
-    def getOriginalGeometry(self, create=False):
+    def getOrigInput(self, create=False):
         """
         :param bool create/c: create the original geometry if it doesn't
             already exist
@@ -42,7 +67,7 @@ class DeformableShape:
             return r.Attribute(result[0])
 
     @short(create='c')
-    def getHistoricalGeometry(self, create=False):
+    def getHistoryInput(self, create=False):
         """
         :param create/c: create a historical input if it doesn't already exist
         :return: The input into this shape, or None
@@ -54,4 +79,4 @@ class DeformableShape:
             return inputs[0]
 
         if create:
-            return self.getOriginalGeometry(create=True)
+            return self.getOrigInput(create=True)
