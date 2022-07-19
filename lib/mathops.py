@@ -76,6 +76,33 @@ class NonPlugStringError(RuntimeError):
     A string passed to :func:`info` does not represent a Maya attribute.
     """
 
+def asGeoPlug(item):
+    """
+    Attempts to conform *item* into a geometry output
+
+    :param item: the item to inspect
+    :type item: str, :class:`~paya.runtime.nodes.Transform`,
+        :class:`~paya.runtime.nodes.Shape`,
+        :class:`~paya.runtime.plugs.Geometry`,
+    :raises TypeError: Could not derive a geometry output.
+    :return: The geometry output.
+    :rtype: :class:`~paya.runtime.plugs.Geometry`
+    """
+    if isinstance(item, str):
+        try:
+            return p.Attribute(item)
+
+        except p.MayaNodeError:
+            return p.PyNode(item).worldGeoOutput
+
+    elif isinstance(item, p.Attribute):
+        return item
+
+    elif isinstance(item, (p.nodetypes.Transform, p.nodetypes.Shape)):
+        return item.worldGeoOutput
+
+    else:
+        raise TypeError("Can't derive a geo output from {}.".format(item))
 
 def info(item, angle=False):
     """
