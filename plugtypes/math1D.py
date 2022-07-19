@@ -403,6 +403,29 @@ class Math1D:
         """
         return self.min(other)
 
+    def gatedClamp(self, floorOrCeiling, floorOpen, ceilingOpen):
+        """
+        Useful for squash-and-stretch control.
+
+        :param floorOrCeiling: acts as a floor or ceiling for this output,
+            depending on *floorOpen* and *ceilingOpen*
+        :type floorOrCeiling: float, :class:`~paya.runtime.plugs.Math1D`
+        :param floorOpen: when this is at 0.0, this output won't dip below
+            *floorOrCeiling*
+        :type floorOpen: float, :class:`~paya.runtime.plugs.Math1D`
+        :param ceilingOpen: when this is at 0.0, this output won't rise above
+            *floorOrCeiling*
+        :return: The clamped output.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        ceiling = self.maxClamp(floorOrCeiling)
+        ceiling = ceiling.blend(self, weight=ceilingOpen)
+
+        floor = ceiling.minClamp(floorOrCeiling)
+        floor = floor.blend(ceiling, weight=floorOpen)
+
+        return floor
+
     #-----------------------------------------------------------------|    Comparisons
 
     def min(self,*others):
