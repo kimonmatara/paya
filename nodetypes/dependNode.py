@@ -121,6 +121,142 @@ class DependNode:
 
     #-----------------------------------------------------------|    Attr management
 
+    def _addVectorOrEulerAttr(
+            self,
+            name,
+            suffixes='XYZ',
+            angle=False,
+            keyable=None,
+            channelBox=None,
+            defaultValue=None,
+            input=None,
+            lock=False
+    ):
+        if keyable is None and channelBox is None:
+            keyable = True
+            channelBox = False
+
+        elif keyable is None:
+            keyable = not channelBox
+
+        else:
+            channelBox = not keyable
+
+        kw = {}
+
+        if keyable:
+            kw['k'] = True
+
+        self.addAttr(name, at='double3', nc=3, **kw)
+
+        kw = {'at': 'doubleAngle' if angle else 'double', 'parent': name}
+
+        if keyable:
+            kw['k'] = True
+
+        for i, suffix in enumerate(suffixes):
+            if defaultValue is not None:
+                kw['defaultValue'] = defaultValue[i]
+
+            self.addAttr(name+suffix, **kw)
+
+        main = self.attr(name)
+
+        if input is not None:
+            input >> main
+
+        if channelBox:
+            main.set(cb=True)
+
+            for child in main.getChildren():
+                child.set(cb=True)
+
+        if lock:
+            main.lock(recursive=True)
+
+        return main
+
+    @short(
+        keyable='k',
+        channelBox='cb',
+        input='i',
+        defaultValue='dv',
+        lock='l'
+    )
+    def addVectorAttr(
+            self,
+            name,
+            keyable=None,
+            channelBox=None,
+            input=None,
+            defaultValue=None,
+            lock=False
+    ):
+        """
+        :param name: the attribute name
+        :param bool keyable/k: make the attribute keyable; defaults to True
+        :param bool channelBox/cb: make the attribute settable; defaults to
+            False
+        :param input/i: an optional input for the attribute
+        :type input/i: str, :class:`~paya.runtime.plugs.Vector`
+        :param defaultValue/dv: an optional default value for the attribute;
+            defaults to [0.0, 0.0, 0.0]
+        :type defaultValue/dv: list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`
+        :param bool lock/l: lock the attribute; defaults to False
+        :return: A vector / point attribute (i.e., a compound of type
+            ``double3`` with children of type ``double``).
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+        """
+        return self._addVectorOrEulerAttr(
+            name, keyable=keyable,
+            channelBox=channelBox,
+            input=input,
+            defaultValue=defaultValue,
+            lock=lock
+        )
+
+    @short(
+        keyable='k',
+        channelBox='cb',
+        input='i',
+        defaultValue='dv',
+        lock='l'
+    )
+    def addEulerAttr(
+            self,
+            name,
+            keyable=None,
+            channelBox=None,
+            input=None,
+            defaultValue=None,
+            lock=False
+    ):
+        """
+        :param name: the attribute name
+        :param bool keyable/k: make the attribute keyable; defaults to True
+        :param bool channelBox/cb: make the attribute settable; defaults to
+            False
+        :param input/i: an optional input for the attribute
+        :type input/i: str, :class:`~paya.runtime.plugs.Vector`
+        :param defaultValue/dv: an optional default value for the attribute;
+            defaults to [0.0, 0.0, 0.0]
+        :type defaultValue/dv: list, tuple,
+            :class:`~paya.runtime.data.EulerRotation`
+        :param bool lock/l: lock the attribute; defaults to False
+        :return: An euler rotation attribute (i.e., a compound of type
+            ``double3`` with children of type ``doubleAngle``)
+        :rtype: :class:`~paya.runtime.plugs.EulerRotation`
+        """
+        return self._addVectorOrEulerAttr(
+            name, keyable=keyable,
+            channelBox=channelBox,
+            input=input,
+            defaultValue=defaultValue,
+            lock=lock,
+            angle=True
+        )
+
     @property
     def attrSections(self):
         return _atr.Sections(self, 'attrSections')
