@@ -554,7 +554,7 @@ class NurbsCurve:
             else:
                 param = paramOrFraction
 
-            poci = self.infoAtParam(paramOrFraction)
+            poci = self.infoAtParam(param)
 
             # Get vecs
 
@@ -653,13 +653,22 @@ class NurbsCurve:
             to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
-        :param upObject: used as an aiming interest on its own, or as a source
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
             for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
             defaults to False
         :param globalScale/gs: used to normalize tangent stretch and / or to
             define vector lengths; if omitted, all vectors will be normalized;
             defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
@@ -668,7 +677,6 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         return self._matrixAtParamOrFraction(
-            self,
             param,
             tangentAxis,
             upAxis,
@@ -711,13 +719,22 @@ class NurbsCurve:
             to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
-        :param upObject: used as an aiming interest on its own, or as a source
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
             for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
             defaults to False
         :param globalScale/gs: used to normalize tangent stretch and / or to
             define vector lengths; if omitted, all vectors will be normalized;
             defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
@@ -726,8 +743,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         return self._matrixAtParamOrFraction(
-            self,
-            param,
+            fraction,
             tangentAxis,
             upAxis,
             ts=tangentStretch,
@@ -769,13 +785,22 @@ class NurbsCurve:
             to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
-        :param upObject: used as an aiming interest on its own, or as a source
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
             for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
             defaults to False
         :param globalScale/gs: used to normalize tangent stretch and / or to
             define vector lengths; if omitted, all vectors will be normalized;
             defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
@@ -784,7 +809,6 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         return self._matrixAtParamOrFraction(
-            self,
             self.fractionAtLength(length),
             tangentAxis,
             upAxis,
@@ -820,21 +844,30 @@ class NurbsCurve:
     ):
         """
         :param point: the point at which to sample the matrix
-        :type point: tuple, list, :class:`~paya.runtime.data.Point`,
-            :class:`~paya.runtime.plugs.Vector`
+        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Point`
         :param str tangentAxis: the axis to align to the curve tangent
         :param str upAxis: the axis to align to the resolved up vector
         :param bool tangentStretch/ts: incorporate tangent stretching; defaults
             to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
-        :param upObject: used as an aiming interest on its own, or as a source
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
             for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
             defaults to False
         :param globalScale/gs: used to normalize tangent stretch and / or to
             define vector lengths; if omitted, all vectors will be normalized;
             defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
@@ -843,7 +876,6 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         return self._matrixAtParamOrFraction(
-            self,
             self.paramAtPoint(point),
             tangentAxis,
             upAxis,
@@ -892,8 +924,12 @@ class NurbsCurve:
         return [self.lengthAtFraction(fraction) for fraction in fractions]
 
     @short(
+        globalScale='gs',
+        tangentStretch='ts',
         upVectors='upv',
-        upCurve='upc'
+        upObject='upo',
+        upCurve='upc',
+        matchedCurve='mc'
     )
     def distributeMatrices(
             self,
@@ -901,31 +937,54 @@ class NurbsCurve:
             tangentAxis,
             upAxis,
             upVectors=None,
-            upCurve=None
+            upCurve=None,
+            upObject=None,
+            globalScale=None,
+            matchedCurve=False,
+            tangentStretch=False
     ):
         """
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :param str tangentAxis: the axis to map to the curve tangent, for
-            example '-y'
-        :param str upAxis: the axis to map to the upVector, for
-            example 'x'
-        :param upVectors/upv: if this is provided, it should be a *list* of
-            upVectors (one per fraction); defaults to None
-        :type upVectors/upv: None, [list, tuple, str,
+        :param numberOrFractions: either a number of sample points, or an
+            explicit list of 0.0 -> 1.0 length fractions
+        :type numberOrFractions: int, [float],
+            [:class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the axis to align to the curve tangent
+        :param str upAxis: the axis to align to the resolved up vector
+        :param bool tangentStretch/ts: incorporate tangent stretching; defaults
+            to False
+        :param upVector/upv: used as an up vector on its own, or extracted from
+            *upObject*; this can be provided as a single vector, or a list of
+            vectors (one per sample point); defaults to None
+        :type upVector/upv: None, list, tuple, str,
             :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`]
-        :param upCurve/upc: if this is provided, an up vector will be derived by
-            aiming towards its closest point; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
-        :return: Matrices distributed along the length of the curve.
+            :class:`~paya.runtime.plugs.Vector`
+            [list], [tuple], [str],
+            [:class:`~paya.runtime.data.Vector`],
+            [:class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
+            for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
+            defaults to False
+        :param globalScale/gs: used to normalize tangent stretch and / or to
+            define vector lengths; if omitted, all vectors will be normalized;
+            defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid unnecessary closest-point
+            calculations; defaults to False
+        :return: Matrices distributed uniformly along the curve.
         :rtype: [:class:`~paya.runtime.plugs.Matrix`]
         """
         fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
         num = len(fractions)
+
+        if upVectors:
+            upVectors = _mo.resolveMultiVectorArg(num, upVectors)
 
         out = []
 
@@ -936,44 +995,16 @@ class NurbsCurve:
                     tangentAxis,
                     upAxis,
                     upv=upVectors[i] if upVectors else None,
-                    upc=upCurve
+                    upc=upCurve,
+                    upo=upObject,
+                    gs=globalScale,
+                    mc=matchedCurve,
+                    ts=tangentStretch
                 )
 
-            out.append(matrix)
+                out.append(matrix)
 
         return out
-
-    # @short(
-    #     upVectors='upv',
-    #     upCurve='upc',
-    #     squashStretch='ss',
-    #     globalScale='gs'
-    # )
-    # def distributeAimingMatrices(
-    #         self,
-    #         numberOrFractions,
-    #         downAxis,
-    #         upAxis,
-    #         globalScale=None,
-    #         squashStretch=False,
-    #         upVectors=None,
-    #         upCurve=None
-    # ):
-    #     # The most efficient way to pull this off is actually with
-    #     fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
-    #     points = [self.pointAtFraction(fraction) for fraction in fractions]
-    #
-    #     aimVecs = []
-    #
-    #     for i, thisPoint in enumerate(points[0:-1]):
-    #         nextPoint = points[i+1]
-    #         aimVecs.append(nextPoint-thisPoint)
-    #
-    #     if not upVectors:
-    #         if upCurve:
-
-
-
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    Extensions
