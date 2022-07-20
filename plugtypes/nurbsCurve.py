@@ -301,22 +301,6 @@ class NurbsCurve:
 
     #--------------------------------------|    Point sampling
 
-    def distributePoints(self, numberOrFractions):
-        """
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :return: World-space points distributed along the length of the curve.
-        :rtype: [:class:`~paya.runtime.plugs.Vector`]
-        """
-        if isinstance(numberOrFractions, int):
-            fractions = _mo.floatRange(0, 1, numberOrFractions)
-
-        else:
-            fractions = numberOrFractions
-
-        return [self.pointAtFraction(fraction) for fraction in fractions]
-
     def pointAtParam(self, param):
         """
         :param param: the parameter to sample
@@ -595,7 +579,8 @@ class NurbsCurve:
             example 'x'
         :param upCurve/upc: if this is provided, an up vector will be derived by
             aiming towards its closest point; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+        :type upCurve/upc: None, str,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.plugs.NurbsCurve`,
         :param upVector/upv: an explicit up vector for the matrix; defaults
@@ -703,6 +688,103 @@ class NurbsCurve:
             upc=upCurve,
             upv=upVector
         )
+
+    #--------------------------------------|    Distributions
+
+    @staticmethod
+    def _resolveNumberOrFractionsArg(numberOrFractions):
+        if isinstance(numberOrFractions, int):
+            fractions = _mo.floatRange(0, 1, numberOrFractions)
+
+        else:
+            fractions = list(numberOrFractions)
+
+        return fractions
+
+    def distributePoints(self, numberOrFractions):
+        """
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: World-space points distributed along the length of the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`]
+        """
+        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        return [self.pointAtFraction(fraction) for fraction in fractions]
+
+    def distributeParams(self, numberOrFractions):
+        """
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: Parameters distributed along the length of the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Math1D`]
+        """
+        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        return [self.paramAtFraction(fraction) for fraction in fractions]
+
+    def distributeLengths(self, numberOrFractions):
+        """
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: Fractional lengths along the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Math1D`]
+        """
+        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        return [self.lengthAtFraction(fraction) for fraction in fractions]
+
+    @short(
+        upVectors='upv',
+        upCurve='upc'
+    )
+    def distributeMatrices(
+            self,
+            numberOrFractions,
+            tangentAxis,
+            upAxis,
+            upVectors=None,
+            upCurve=None
+    ):
+        """
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :param str tangentAxis: the axis to map to the curve tangent, for
+            example '-y'
+        :param str upAxis: the axis to map to the upVector, for
+            example 'x'
+        :param upVectors/upv: if this is provided, it should be a *list* of
+            upVectors (one per fraction); defaults to None
+        :type upVectors/upv: None, [list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: if this is provided, an up vector will be derived by
+            aiming towards its closest point; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :return: Matrices distributed along the length of the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Math1D`]
+        """
+        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        num = len(fractions)
+
+        out = []
+
+        for i, fraction in enumerate(fractions):
+            with r.Name(i+1):
+                matrix = self.matrixAtFraction(
+                    fraction,
+                    tangentAxis,
+                    upAxis,
+                    upv=upVectors[i] if upVectors else None,
+                    upc=upCurve
+                )
+
+            out.append(matrix)
+
+        return out
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    Extensions
