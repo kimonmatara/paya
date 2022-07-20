@@ -522,6 +522,10 @@ class NurbsCurve:
     ):
         #----------------------------------|    Conform arguments
 
+        if not fraction:
+            if isinstance(paramOrFraction, r.Component):
+                paramOrFraction = float(paramOrFraction)
+
         if upVector:
             upVector = _mo.info(upVector)[0]
 
@@ -532,15 +536,11 @@ class NurbsCurve:
             upCurve = _mo.asGeoPlug(upCurve)
 
         if globalScale is None:
-            hasCustomScale = False
             globalScale = 1.0
+            gsIsPlug = False
 
         else:
-            hasCustomScale = not(
-                isinstance(globalScale, (int, float)) and globalScale == 1.0
-            )
-
-            globalScale = _mo.info(globalScale)[0]
+            globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
 
         if upCurve:
 
@@ -608,17 +608,24 @@ class NurbsCurve:
 
         #----------------------------------|    Configure scaling
 
-        if hasCustomScale or tangentStretch:
+        if gsIsPlug or tangentStretch:
+            if gsIsPlug:
+                # Normalize the input
+                _globalScale = globalScale.get()
+
+                if _globalScale != 1.0:
+                    globalScale /= _globalScale
+
+            factors = [globalScale] * 3
+
             if tangentStretch:
-                factors = [globalScale] * 3
+                tangentLength = tangent.length()
+                tangentScale = tangentLength / tangentLength.get()
+
                 tangentIndex = 'xyz'.index(tangentAxis.strip('-'))
-                factors[tangentIndex] = tangent.length()
+                factors[tangentIndex] = tangentScale
 
-                smtx = r.createScaleMatrix(*factors)
-
-            else:
-                smtx = r.createScaleMatrix(globalScale)
-
+            smtx = r.createScaleMatrix(*factors)
             matrix = smtx * matrix
 
         return matrix
