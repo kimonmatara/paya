@@ -691,16 +691,6 @@ class NurbsCurve:
 
     #--------------------------------------|    Distributions
 
-    @staticmethod
-    def _resolveNumberOrFractionsArg(numberOrFractions):
-        if isinstance(numberOrFractions, int):
-            fractions = _mo.floatRange(0, 1, numberOrFractions)
-
-        else:
-            fractions = list(numberOrFractions)
-
-        return fractions
-
     def distributePoints(self, numberOrFractions):
         """
         :param numberOrFractions: this can either be a list of length
@@ -709,7 +699,7 @@ class NurbsCurve:
         :return: World-space points distributed along the length of the curve.
         :rtype: [:class:`~paya.runtime.plugs.Vector`]
         """
-        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
         return [self.pointAtFraction(fraction) for fraction in fractions]
 
     def distributeParams(self, numberOrFractions):
@@ -720,7 +710,7 @@ class NurbsCurve:
         :return: Parameters distributed along the length of the curve.
         :rtype: [:class:`~paya.runtime.plugs.Math1D`]
         """
-        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
         return [self.paramAtFraction(fraction) for fraction in fractions]
 
     def distributeLengths(self, numberOrFractions):
@@ -731,7 +721,7 @@ class NurbsCurve:
         :return: Fractional lengths along the curve.
         :rtype: [:class:`~paya.runtime.plugs.Math1D`]
         """
-        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
         return [self.lengthAtFraction(fraction) for fraction in fractions]
 
     @short(
@@ -767,7 +757,7 @@ class NurbsCurve:
         :return: Matrices distributed along the length of the curve.
         :rtype: [:class:`~paya.runtime.plugs.Math1D`]
         """
-        fractions = self._resolveNumberOrFractionsArg(numberOrFractions)
+        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
         num = len(fractions)
 
         out = []
