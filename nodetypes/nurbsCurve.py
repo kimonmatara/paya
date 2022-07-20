@@ -353,26 +353,6 @@ class NurbsCurve:
         length = self.length() * fraction
         return self.pointAtLength(length)
 
-    @short(plug='p')
-    def distributePoints(self, numberOrFractions, plug=False):
-        """
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :param bool plug/p: force a dynamic output; defaults to False
-        :return: World-space points distributed along the length of the curve.
-        :rtype: [:class:`~paya.runtime.data.Point`],
-            [:class:`~paya.runtime.plug.Vector`]
-        """
-        if isinstance(numberOrFractions, int):
-            fractions = _mo.floatRange(0, 1, numberOrFractions)
-
-        else:
-            fractions = numberOrFractions
-
-        return [self.pointAtFraction(
-            fraction, p=plug) for fraction in fractions]
-
     #-----------------------------------------------------|    Param sampling
 
     @short(asComponent='ac', plug='p')
@@ -879,3 +859,78 @@ class NurbsCurve:
             upc=upCurve,
             p=plug
         )
+
+    #-----------------------------------------------------|    Distributions
+
+    @short(plug='p')
+    def distributePoints(self, numberOrFractions, plug=False):
+        """
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: World-space points distributed along the length of the curve.
+        :rtype: [:class:`~paya.runtime.data.Point`],
+            [:class:`~paya.runtime.plug.Vector`]
+        """
+        if isinstance(numberOrFractions, int):
+            fractions = _mo.floatRange(0, 1, numberOrFractions)
+
+        else:
+            fractions = numberOrFractions
+
+        return [self.pointAtFraction(
+            fraction, p=plug) for fraction in fractions]
+
+    @short(
+        plug='p',
+        asComponents='ac'
+    )
+    def distributeParams(
+            self,
+            numberOrFractions,
+            plug=False,
+            asComponent=True
+    ):
+        """
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :param bool asComponent/ac: if parameter values are returned, use
+            :class:`~paya.runtime.comps.NurbsCurveParameter` instances instead
+            of floats; defaults to True
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: Parameters distributed along the length of the curve.
+        :rtype: [float], [:class:`~paya.runtime.comps.NurbsCurveParameter`],
+            [:class:`~paya.runtime.plugs.Math1D`]
+        """
+        if isinstance(numberOrFractions, int):
+            fractions = _mo.floatRange(0, 1, numberOrFractions)
+
+        else:
+            fractions = numberOrFractions
+
+        return [self.paramAtFraction(
+            fraction,
+            p=plug,
+            ac=asComponent
+        ) for fraction in fractions]
+
+    @short(plug='p')
+    def distributeLengths(self, numberOrFractions, plug=False):
+        """
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: Lengths distributed along the curve.
+        :rtype: [float], [:class:`~paya.runtime.plugs.Math1D`]
+        """
+        if isinstance(numberOrFractions, int):
+            fractions = _mo.floatRange(0, 1, numberOrFractions)
+
+        else:
+            fractions = numberOrFractions
+
+        return [self.lengthAtFraction(
+            fraction, p=plug) for fraction in fractions]
