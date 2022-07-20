@@ -29,6 +29,36 @@ axisVecs = {
     'translate': p.datatypes.Point([0,0,0])
 }
 
+def isVectorValueOrPlug(item):
+    """
+    :param item: the item to inspect
+    :return: ``True`` if *item* is a vector attribute or value, otherwise
+        ``False``.
+    :rtype: bool
+    """
+    if isinstance(item, p.datatypes.Vector):
+        return True
+
+    if isinstance(item, p.Attribute):
+        md = item.__math_dimension__
+
+        return md is 3
+
+    if isinstance(item, str):
+        try:
+            plug = p.Attribute(item)
+
+        except p.MayaNodeError:
+            return False
+
+        return plug.__math_dimension__ is 3
+
+    if isinstance(item, (tuple, list)):
+        if len(item) is 3:
+            return all([isScalarValue(member) for member in item])
+
+    return False
+
 def isTupleOrListOfScalarValues(x):
     """
     :param x: the item to inspect
@@ -92,7 +122,7 @@ def isPlug(item):
             item = p.Attribute(item)
             return True
 
-        except p.MayaNodeError:
+        except (p.MayaNodeError, TypeError):
             pass
 
     return False
@@ -113,7 +143,7 @@ def asGeoPlug(item):
         try:
             return p.Attribute(item)
 
-        except p.MayaNodeError:
+        except (p.MayaNodeError, TypeError):
             return p.PyNode(item).worldGeoOutput
 
     elif isinstance(item, p.Attribute):
@@ -780,6 +810,8 @@ def getAimVectorsFromPoints(points, tolerance=1e-7):
     Derives aim vectors from points. Needs at least two points. The length of
     the returned list will always be one less than the length of the points.
 
+    This is a value-only method.
+
     :param points: the source points (values)
     :param float tolerance/tol: any vectors below this length will be
         replaced by neighbouring vectors; defaults to 1e-7
@@ -809,6 +841,8 @@ def deflipVectors(vectors):
     """
     Returns a list where each vector is flipped if that would bring it closer
     to the previous one.
+
+    This is a value-only method.
 
     :param vectors: the source vectors (values)
     :return: The deflipped vectors.
@@ -843,6 +877,8 @@ def getAimAndUpVectorsFromPoints(points, refVector, tolerance=1e-7):
     Given a list of points and a reference up vector, returns aim vectors and
     up vectors that can be used in matrix construction, for example to draw
     chains.
+
+    This is a value-only method.
 
     :param points: the source points (values)
     :param refVector: a reference up vector
@@ -941,6 +977,8 @@ def getAimingMatricesFromPoints(
     Given a list of points and a reference up vector, returns aiming matrices
     which can be used to draw chains and other systems.
 
+    This is a value-only method.
+
     :param points: the source points (values)
     :param str downAxis: the aiming axis
     :param str upAxis: the axis to bias towards the reference vector
@@ -1025,3 +1063,60 @@ def expandVectorArgs(*args):
     expand(args)
 
     return buffer
+
+def resolveMultiVectorArg(number, vector):
+    """
+    Resolves a vector argument into a list of vectors of length
+    *number*. Used by curve-framing methods such as
+    :meth:`~paya.runtime.plugs.distributeMatrices`.
+
+    :param number: the number of required members
+    :param vector: the user-passed vector argument
+    :return: A list of vectors of length *number*.
+    """
+    items = []
+
+    def expand(item):
+        if isinstance(item, p.datatypes.Vector):
+            items.append(item)
+
+        elif isinstance(item, (p.Attribute, str)):
+            items.append(item)
+
+        elif isinstance(item, (tuple, list)):
+            if len(item) is 3:
+                if all([isScalarValue(member) for member in item]):
+                    items.append(item)
+                else:
+                    for member in item:
+                        expand(member)
+            else:
+                raise TypeError("Can't interpret as vector: {}".format(item))
+
+        else:
+            raise TypeError("Can't interpret as vector: {}".format(item))
+
+    expand(vector)
+
+    num = len(items)
+
+    if num is 1:
+        return items * number
+
+    if num is not number:
+        raise ValueError(
+            "Please pass one vector, or one vector per sample point."
+        )
+
+    return items
+
+def resolveNumberOrFractionsArg(arg):
+    """
+    Loosely conforms a ``numberOrFractions`` user argument. If the
+    argument is an integer, a range of floats is returned. Otherwise,
+    the argument is passed through without further checking.
+    """
+    if isinstance(arg, int):
+        return floatRange(0, 1, arg)
+
+    return arg
