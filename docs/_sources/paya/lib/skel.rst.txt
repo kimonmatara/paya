@@ -47,10 +47,12 @@ paya.lib.skel
             ``paya.config.downAxis``
         :param str upAxis: the axis to map to the up vector; defaults to
             ``paya.config.upAxis``
-        :param upVector: the reference up vector
+        :param upVector: one up vector hint, or one vector per point
+        :type upVector: tuple, list, :class:`~paya.runtime.data.Vector`,
+            [tuple, list, :class:`~paya.runtime.data.Vector`]
         :param under/u: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
-            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+            :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: The constructed chain.
         :rtype: :class:`Chain`
     
@@ -69,7 +71,7 @@ paya.lib.skel
         :type upVectorOrCurve: list, :class:`~paya.runtime.data.Vector`, str,
             :class:`~paya.runtime.nodes.DagNode`
         :param float tolerance/tol: see
-            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+            :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: The constructed chain.
         :rtype: :class:`Chain`
     
@@ -82,7 +84,7 @@ paya.lib.skel
         :param str upAxis: the axis to map to the up vector
         :type upVector: list, :class:`~paya.runtime.data.Vector`
         :param float tolerance/tol: see
-            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+            :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: ``self``
         :rtype: :class:`Chain`
     

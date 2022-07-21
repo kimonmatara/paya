@@ -43,3 +43,15 @@ paya.util.functions
     :param flags: one or more user flag arguments
     :return: The resolved flags.
     :rtype: tuple
+
+.. py:function:: conditionalExpandArgs(*args, gate=None)
+
+    Flattens tuples and lists in user arguments into a single list.
+    
+    :param \*args: the arguments to expand
+    :param gate/g: if provided, this should be a callable that takes
+        one argument and returns ``True`` if the item should be expanded
+        or not (useful for preserving vectors in list form etc.); will
+        only be used for tuples and lists; defaults to None
+    :return: The flattened args.
+    :rtype: list

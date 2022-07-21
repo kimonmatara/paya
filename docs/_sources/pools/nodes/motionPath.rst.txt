@@ -1,0 +1,47 @@
+*****************************
+paya.runtime.nodes.MotionPath
+*****************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: MotionPath(*args, **kwargs)
+
+    .. py:method:: configFollow(frontAxis, upAxis, worldUpVector=None, worldUpObject=None)
+    
+        Performs quick configuration of follow options. If no 'up' hints are
+        provided, the curve normal is used. All previous configuration is
+        discarded.
+        
+        :param str frontAxis: the axis aligned to the curve tangent, e.g. '-y'
+        :param str upAxis: the axis aligned to the resolved up vector, e.g.
+            'x'
+        :param worldUpVector/wu: if provided on its own, used for ``Vector``
+            mode; if combined with *worldUpObject*, used for
+            ``Object Rotation`` mode; defaults to None
+        :type worldUpVector/wu: None, list, tuple, str,
+            :class:`~paya.runtime.plugs.Vector`
+        :param worldUpObject/wuo: if provided on its own, used for ``Object Up``
+            mode; if combined with **worldUpVector**, used for
+            ``Object Rotation`` mode; defaults to None
+        :type worldUpObject/wuo: None, str,
+            :class:`~paya.runtime.nodes.Transform`
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+    
+    .. py:method:: setFrontAxis(axis)
+    
+        Convenience method. Sets *frontAxis* and *inverseFront*
+        on the motionPath using a single argument.
+        
+        :param str axis: the axis to set, for example '-y'
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+    
+    .. py:method:: setUpAxis(axis)
+    
+        Convenience method. Sets *upAxis* and *inverseUp*
+        on the motionPath using a single argument.
+        
+        :param str axis: the axis to set, for example 'x'
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`

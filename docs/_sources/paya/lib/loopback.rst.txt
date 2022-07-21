@@ -1,0 +1,23 @@
+=================
+paya.lib.loopback
+=================
+
+.. py:module:: paya.lib.loopback
+
+Internal. Implements the geometry loopbacks.
+
+.. py:class:: Loopback
+
+    Used to reappropriate geometry plug methods as shape methods. The plug
+    methods are copied over to the shape, and wrapped so that they generate
+    shapes instead of output plugs. In some cases the calling shape itself
+    will be replaced.
+    
+    :Example:
+    
+    .. code-block:: python
+    
+        class NurbsCurve:
+    
+            attach = Loopback()
+            detach = Loopback()

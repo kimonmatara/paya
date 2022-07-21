@@ -115,14 +115,6 @@ paya.runtime.plugs.NurbsCurve
         :return: The ``nearestPointOnCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
     
-    .. py:method:: distributePoints(numberOrFractions)
-    
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :return: World-space points distributed along the length of the curve.
-        :rtype: [:class:`~paya.runtime.plugs.Vector`]
-    
     .. py:method:: pointAtParam(param)
     
         :param param: the parameter to sample
@@ -255,98 +247,223 @@ paya.runtime.plugs.NurbsCurve
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: matrixAtParam(param, tangentAxis, upAxis, upCurve=None, upVector=None)
+    .. py:method:: matrixAtParam(param, tangentAxis, upAxis, squashStretch=False, upVector=None, upObject=None, upCurve=None, globalScale=None, matchedCurve=False)
     
-        If both *upCurve* and *upVector* are omitted, an up vector is
-        derived from the curve tangent and normal.
-        
         :param param: the parameter at which to sample the matrix
-        :type param: float, :class:`~paya.runtime.plugs.Math1D`
-        :param str tangentAxis: the axis to map to the curve tangent, for
-            example '-y'
-        :param str upAxis: the axis to map to the upVector, for
-            example 'x'
-        :param upCurve/upc: if this is provided, an up vector will be derived by
-            aiming towards its closest point; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
-        :param upVector/upv: an explicit up vector for the matrix; defaults
-            to None
-        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
-             :class:`~paya.runtime.plugs.Vector`,
-        :return: A matrix at the given parameter.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: matrixAtFraction(fraction, tangentAxis, upAxis, upCurve=None, upVector=None)
-    
-        If both *upCurve* and *upVector* are omitted, an up vector is
-        derived from the curve tangent and normal.
-        
-        :param fraction: the fraction at which to sample the matrix
-        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :param str tangentAxis: the axis to map to the curve tangent, for
-            example '-y'
-        :param str upAxis: the axis to map to the upVector, for
-            example 'x'
-        :param upCurve/upc: if this is provided, an up vector will be derived by
-            aiming towards its closest point; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
-        :param upVector/upv: an explicit up vector for the matrix; defaults
-            to None
-        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
-             :class:`~paya.runtime.plugs.Vector`,
-        :return: A matrix at the given fraction.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: matrixAtLength(length, tangentAxis, upAxis, upCurve=None, upVector=None)
-    
-        If both *upCurve* and *upVector* are omitted, an up vector is
-        derived from the curve tangent and normal.
-        
-        :param length: the length at which to sample the matrix
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :param str tangentAxis: the axis to map to the curve tangent, for
-            example '-y'
-        :param str upAxis: the axis to map to the upVector, for
-            example 'x'
-        :param upCurve/upc: if this is provided, an up vector will be derived by
-            aiming towards its closest point; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
-        :param upVector/upv: an explicit up vector for the matrix; defaults
-            to None
-        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
-             :class:`~paya.runtime.plugs.Vector`,
-        :return: A matrix at the given length.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: matrixAtPoint(point, tangentAxis, upAxis, upCurve=None, upVector=None)
-    
-        If both *upCurve* and *upVector* are omitted, an up vector is
-        derived from the curve tangent and normal.
-        
-        :param point: the point at which to sample the matrix
-        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
+        :type param: float, str, :class:`~paya.runtime.Math1D`
+        :param str tangentAxis: the axis to align to the curve tangent
+        :param str upAxis: the axis to align to the resolved up vector
+        :param bool squashStretch/ss: incorporate tangent stretching
+            (dynamic only); defaults to False
+        :param upVector/upv: used as an up vector on its own, or extracted from
+            *upObject*; defaults to None
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param str tangentAxis: the axis to map to the curve tangent, for
-            example '-y'
-        :param str upAxis: the axis to map to the upVector, for
-            example 'x'
-        :param upCurve/upc: if this is provided, an up vector will be derived by
-            aiming towards its closest point; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
-        :param upVector/upv: an explicit up vector for the matrix; defaults
-            to None
-        :type upVector/upv: tuple, list, :class:`~paya.runtime.data.Vector`,
-             :class:`~paya.runtime.plugs.Vector`,
-        :return: A matrix at the given point.
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
+            for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
+            defaults to False
+        :param globalScale/gs: used to drive scaling; the scale will be
+            normalised; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid unnecessary closest-point
+            calculations; defaults to False
+        :return: A matrix at the specified parameter, constructed using the
+            most efficient DG configuration for the given options.
         :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtFraction(fraction, tangentAxis, upAxis, squashStretch=False, upVector=None, upObject=None, upCurve=None, globalScale=None, matchedCurve=False)
+    
+        :param fraction: the fraction at which to sample the matrix
+        :type fraction: float, str, :class:`~paya.runtime.Math1D`
+        :param str tangentAxis: the axis to align to the curve tangent
+        :param str upAxis: the axis to align to the resolved up vector
+        :param bool squashStretch/ss: incorporate tangent stretching
+            (dynamic only); defaults to False
+        :param upVector/upv: used as an up vector on its own, or extracted from
+            *upObject*; defaults to None
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
+            for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
+            defaults to False
+        :param globalScale/gs: used to drive scaling; the scale will be
+            normalised; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid unnecessary closest-point
+            calculations; defaults to False
+        :return: A matrix at the specified fraction, constructed using the
+            most efficient DG configuration for the given options.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtLength(length, tangentAxis, upAxis, squashStretch=False, upVector=None, upObject=None, upCurve=None, globalScale=None, matchedCurve=False)
+    
+        :param length: the length at which to sample the matrix
+        :type length: float, str, :class:`~paya.runtime.Math1D`
+        :param str tangentAxis: the axis to align to the curve tangent
+        :param str upAxis: the axis to align to the resolved up vector
+        :param bool squashStretch/ss: incorporate tangent stretching
+            (dynamic only); defaults to False
+        :param upVector/upv: used as an up vector on its own, or extracted from
+            *upObject*; defaults to None
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
+            for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
+            defaults to False
+        :param globalScale/gs: used to drive scaling; the scale will be
+            normalised; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid unnecessary closest-point
+            calculations; defaults to False
+        :return: A matrix at the specified length, constructed using the
+            most efficient DG configuration for the given options.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtPoint(point, tangentAxis, upAxis, squashStretch=False, upVector=None, upObject=None, upCurve=None, globalScale=None, matchedCurve=False)
+    
+        :param point: the point at which to sample the matrix
+        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Point`
+        :param str tangentAxis: the axis to align to the curve tangent
+        :param str upAxis: the axis to align to the resolved up vector
+        :param bool squashStretch/ss: incorporate tangent stretching
+            (dynamic only); defaults to False
+        :param upVector/upv: used as an up vector on its own, or extracted from
+            *upObject*; defaults to None
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
+            for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
+            defaults to False
+        :param globalScale/gs: used to drive scaling; the scale will be
+            normalised; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid unnecessary closest-point
+            calculations; defaults to False
+        :return: A matrix at the specified point, constructed using the
+            most efficient DG configuration for the given options.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: distributePoints(numberOrFractions)
+    
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: World-space points distributed along the length of the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`]
+    
+    .. py:method:: distributeParams(numberOrFractions)
+    
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: Parameters distributed along the length of the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Math1D`]
+    
+    .. py:method:: distributeLengths(numberOrFractions)
+    
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :type numberOrFractions: tuple, list or int
+        :return: Fractional lengths along the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Math1D`]
+    
+    .. py:method:: distributeMatrices(numberOrFractions, tangentAxis, upAxis, upVector=None, upCurve=None, squashStretch=False, globalScale=None, matchedCurve=None)
+    
+        If neither *upVector* or *upCurve* are provided, curve normals are
+        used.
+        
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the matrix axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the matrix to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :return: Matrices, distributed along the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Matrix`]
+    
+    .. py:method:: distributeAimingMatrices(numberOrFractions, aimAxis, upAxis, upVector=None, upCurve=None, globalScale=None, squashStretch=False, matchedCurve=False)
+    
+        Similar to :meth:`distributeMatrices` except that here the matrices
+        are aimed at each other for a 'chain-like' effect. If neither
+        *upVector* or *upCurve* are provided, curve normals are used.
+        
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the matrix axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the matrix to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :return: Matrices, distributed along the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Matrix`]
     
     .. py:method:: attach(*curves, blend=False, blendBias=0.5, parameter=0.1, blendKnotInsertion=False, reverse1=False, reverse2=False, multipleKnots=True)
     

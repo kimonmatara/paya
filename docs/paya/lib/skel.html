@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.lib.suffixes" href="suffixes.html" />
-    <link rel="prev" title="paya.lib.nurbsutil" href="nurbsutil.html" /> 
+    <link rel="prev" title="paya.lib.plugops" href="plugops.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -74,9 +74,11 @@
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="loopback.html">paya.lib.loopback</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugops.html">paya.lib.plugops</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.skel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
@@ -201,10 +203,11 @@ up vector.</p>
 <code class="docutils literal notranslate"><span class="pre">paya.config.downAxis</span></code></p></li>
 <li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to map to the up vector; defaults to
 <code class="docutils literal notranslate"><span class="pre">paya.config.upAxis</span></code></p></li>
-<li><p><strong>upVector</strong> – the reference up vector</p></li>
+<li><p><strong>upVector</strong> (tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+[tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – one up vector hint, or one vector per point</p></li>
 <li><p><strong>under/u</strong> – an optional parent for the chain; defaults to None</p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see
-<a class="reference internal" href="mathops.html#paya.lib.mathops.getAimingMatricesFromPoints" title="paya.lib.mathops.getAimingMatricesFromPoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getAimingMatricesFromPoints()</span></code></a></p></li>
+<a class="reference internal" href="mathops.html#paya.lib.mathops.getChainedAimMatrices" title="paya.lib.mathops.getChainedAimMatrices"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getChainedAimMatrices()</span></code></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -232,7 +235,7 @@ fractions, or a number</p></li>
 <li><p><strong>upVectorOrCurve</strong> (list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, str,
 <a class="reference internal" href="../../pools/nodes/dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a>) – either an up vector, or an up curve</p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see
-<a class="reference internal" href="mathops.html#paya.lib.mathops.getAimingMatricesFromPoints" title="paya.lib.mathops.getAimingMatricesFromPoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getAimingMatricesFromPoints()</span></code></a></p></li>
+<a class="reference internal" href="mathops.html#paya.lib.mathops.getChainedAimMatrices" title="paya.lib.mathops.getChainedAimMatrices"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getChainedAimMatrices()</span></code></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -255,7 +258,7 @@ fractions, or a number</p></li>
 <li><p><strong>downAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the aiming (bone) axis</p></li>
 <li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to map to the up vector</p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – see
-<a class="reference internal" href="mathops.html#paya.lib.mathops.getAimingMatricesFromPoints" title="paya.lib.mathops.getAimingMatricesFromPoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getAimingMatricesFromPoints()</span></code></a></p></li>
+<a class="reference internal" href="mathops.html#paya.lib.mathops.getChainedAimMatrices" title="paya.lib.mathops.getChainedAimMatrices"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getChainedAimMatrices()</span></code></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -721,7 +724,7 @@ defaults to False</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="nurbsutil.html" class="btn btn-neutral float-left" title="paya.lib.nurbsutil" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plugops.html" class="btn btn-neutral float-left" title="paya.lib.plugops" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="suffixes.html" class="btn btn-neutral float-right" title="paya.lib.suffixes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

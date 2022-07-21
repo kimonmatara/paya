@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.nurbsutil &mdash; paya 0.7.2 documentation</title>
+  <title>paya.lib.loopback &mdash; paya 0.7.2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.lib.plugops" href="plugops.html" />
-    <link rel="prev" title="paya.lib.names" href="names.html" /> 
+    <link rel="next" title="paya.lib.mathops" href="mathops.html" />
+    <link rel="prev" title="paya.lib.controlshapes" href="controlshapes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -74,10 +74,10 @@
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="loopback.html">paya.lib.loopback</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.loopback</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.nurbsutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
 <li class="toctree-l3"><a class="reference internal" href="plugops.html">paya.lib.plugops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
@@ -114,9 +114,9 @@
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../paya.html">paya</a> &raquo;</li>
           <li><a href="../lib.html">paya.lib</a> &raquo;</li>
-      <li>paya.lib.nurbsutil</li>
+      <li>paya.lib.loopback</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/paya/lib/nurbsutil.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/paya/lib/loopback.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -124,16 +124,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-paya.lib.nurbsutil">
-<span id="paya-lib-nurbsutil"></span><h1>paya.lib.nurbsutil<a class="headerlink" href="#module-paya.lib.nurbsutil" title="Permalink to this headline"></a></h1>
+  <section id="module-paya.lib.loopback">
+<span id="paya-lib-loopback"></span><h1>paya.lib.loopback<a class="headerlink" href="#module-paya.lib.loopback" title="Permalink to this headline"></a></h1>
+<p>Internal. Implements the geometry loopbacks.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.loopback.Loopback">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Loopback</span></span><a class="headerlink" href="#paya.lib.loopback.Loopback" title="Permalink to this definition"></a></dt>
+<dd><p>Used to reappropriate geometry plug methods as shape methods. The plug
+methods are copied over to the shape, and wrapped so that they generate
+shapes instead of output plugs. In some cases the calling shape itself
+will be replaced.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NurbsCurve</span><span class="p">:</span>
+
+    <span class="n">attach</span> <span class="o">=</span> <span class="n">Loopback</span><span class="p">()</span>
+    <span class="n">detach</span> <span class="o">=</span> <span class="n">Loopback</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="names.html" class="btn btn-neutral float-left" title="paya.lib.names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="plugops.html" class="btn btn-neutral float-right" title="paya.lib.plugops" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="controlshapes.html" class="btn btn-neutral float-left" title="paya.lib.controlshapes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mathops.html" class="btn btn-neutral float-right" title="paya.lib.mathops" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

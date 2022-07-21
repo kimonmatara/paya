@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.lib.names" href="names.html" />
-    <link rel="prev" title="paya.lib.controlshapes" href="controlshapes.html" /> 
+    <link rel="prev" title="paya.lib.loopback" href="loopback.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -74,9 +74,11 @@
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="loopback.html">paya.lib.loopback</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plugops.html">paya.lib.plugops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
@@ -124,17 +126,16 @@
              
   <section id="module-paya.lib.mathops">
 <span id="paya-lib-mathops"></span><h1>paya.lib.mathops<a class="headerlink" href="#module-paya.lib.mathops" title="Permalink to this headline"></a></h1>
-<p>Defines supporting methods for maths rigging and, more broadly, mixed value /
-plug workflows.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.isTupleOrListOfScalarValues">
-<span class="sig-name descname"><span class="pre">isTupleOrListOfScalarValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.isTupleOrListOfScalarValues" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.lib.mathops.isVectorValueOrPlug">
+<span class="sig-name descname"><span class="pre">isVectorValueOrPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.isVectorValueOrPlug" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – the item to inspect</p>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if x is a tuple or list of scalar values, otherwise False.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> is a vector value or attribute, otherwise
+False</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
@@ -155,109 +156,141 @@ plug workflows.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.isPlug">
-<span class="sig-name descname"><span class="pre">isPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.isPlug" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>item</strong> (str, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.general.PyNode</span></code></a>,
-<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.general.Attribute</span></code></a>) – the item to inspect</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> represents an attribute, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.asGeoPlug">
-<span class="sig-name descname"><span class="pre">asGeoPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.asGeoPlug" title="Permalink to this definition"></a></dt>
-<dd><p>Attempts to conform <em>item</em> into a geometry output</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>item</strong> (str, <a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,
-<a class="reference internal" href="../../pools/nodes/shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>,
-<a class="reference internal" href="../../pools/plugs/geometry.html#paya.runtime.plugs.Geometry" title="paya.runtime.plugs.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a>,) – the item to inspect</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – Could not derive a geometry output.</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The geometry output.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../../pools/plugs/geometry.html#paya.runtime.plugs.Geometry" title="paya.runtime.plugs.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.info">
-<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.info" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a tuple of three members:
--   The item conformed to the highest-level type available
--   The item’s mathematical dimension (e.g. 16 for matrices)
--   <code class="docutils literal notranslate"><span class="pre">True</span></code> if the item is a plug, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-<p>In short: item, dimension, isplug.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>item</strong> (<em>any type</em>) – the item to process</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>NonPlugStringError</strong> – <code class="docutils literal notranslate"><span class="pre">item</span></code> is a string that could not be
-instantiated as a plug.</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.asValue">
-<span class="sig-name descname"><span class="pre">asValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.asValue" title="Permalink to this definition"></a></dt>
-<dd><p>If x is a plug, returns its value. Otherwise, returns x.</p>
+<dt class="sig sig-object py" id="paya.lib.mathops.floatRange">
+<span class="sig-name descname"><span class="pre">floatRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numValues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.floatRange" title="Permalink to this definition"></a></dt>
+<dd><p>A variant of Python’s <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> for floats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – the item to inspect</p></li>
-<li><p><strong>plug/p</strong> – if you already know whether x is a plug, specify it
-here.</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the minimum value</p></li>
+<li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the maximum value</p></li>
+<li><p><strong>numValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of values to generate</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The value</p>
+<dd class="field-even"><p>A list of float values between <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>,
+inclusively.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.mathops.LinearInterpolator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LinearInterpolator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.LinearInterpolator" title="Permalink to this definition"></a></dt>
+<dd><p>Simple, dict-like interpolator implementation, similar to a linear
+animation curve in Maya. Works with any value type that can be handled by
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.util.arrays/pymel.util.arrays.blend.html#pymel.util.arrays.blend" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.util.arrays.blend()</span></code></a>, but types should not be mixed.</p>
+<dl class="field-list">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">interp</span> <span class="o">=</span> <span class="n">LinearInterpolator</span><span class="p">()</span>
+<span class="n">interp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">interp</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">interp</span><span class="p">[</span><span class="mi">11</span><span class="p">])</span>
+<span class="c1"># Result: 31.0</span>
+</pre></div>
+</div>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.conform">
-<span class="sig-name descname"><span class="pre">conform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.conform" title="Permalink to this definition"></a></dt>
-<dd><p>If x is a <strong>value</strong>, then:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>If its dimension is 3, it’s returned as a <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p></li>
-<li><p>If its dimension is 4, it’s returned as a <a class="reference internal" href="../../pools/data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a></p></li>
-<li><p>If its dimension is 16, it’s returned as a <a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p></li>
-<li><p>In all other cases, it’s returned as-is</p></li>
-</ul>
-</div></blockquote>
-<p>If x is a <strong>plug</strong>, then it’s returned as an instance of the appropriate
-<a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">floatRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numValues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>A variant of Python’s <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> for floats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – the item to conform</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the minimum value</p></li>
+<li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the maximum value</p></li>
+<li><p><strong>numValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of values to generate</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The conformed item.</p>
+<dd class="field-even"><p>A list of float values between <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>,
+inclusively.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<a class="reference internal" href="../../pools/data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a>, <a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>
-or <a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.chaseNones">
+<span class="sig-name descname"><span class="pre">chaseNones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.chaseNones" title="Permalink to this definition"></a></dt>
+<dd><p>Resolves <code class="docutils literal notranslate"><span class="pre">None</span></code> members in an iterable by filling in with neighbouring
+values. If the first member is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the next defined value is used.
+If any internal member is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the last resolved value is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source</strong> – the iterable to fill-in</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list with no <code class="docutils literal notranslate"><span class="pre">None</span></code> members.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.blendNones">
+<span class="sig-name descname"><span class="pre">blendNones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.blendNones" title="Permalink to this definition"></a></dt>
+<dd><p>A blending version of <a class="reference internal" href="#paya.lib.mathops.chaseNones" title="paya.lib.mathops.chaseNones"><code class="xref py py-func docutils literal notranslate"><span class="pre">chaseNones()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – the iterable to fill-in</p></li>
+<li><p><strong>ratios</strong> – if provided, it should be a list of ratios from 0.0 to
+1.0 (one per member) to bias the blending; if omitted, it will be
+autogenerated using <a class="reference internal" href="#id0" title="paya.lib.mathops.floatRange"><code class="xref py py-func docutils literal notranslate"><span class="pre">floatRange()</span></code></a>; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list with no <code class="docutils literal notranslate"><span class="pre">None</span></code> members.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.resolveNumberOrFractionsArg">
+<span class="sig-name descname"><span class="pre">resolveNumberOrFractionsArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.resolveNumberOrFractionsArg" title="Permalink to this definition"></a></dt>
+<dd><p>Loosely conforms a <code class="docutils literal notranslate"><span class="pre">numberOrFractions</span></code> user argument. If the
+argument is an integer, a range of floats is returned. Otherwise,
+the argument is passed through without further checking.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.conformVectorArg">
+<span class="sig-name descname"><span class="pre">conformVectorArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.conformVectorArg" title="Permalink to this definition"></a></dt>
+<dd><p>Conforms <em>arg</em> into a single vector value or plug, or to a list of vectors
+of the required length (to assign, say, a reference vector to every point
+in a chaining operation).</p>
+<p>This is loosely checked. Edge cases, like the user passing non-vector
+values, aren’t caught.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> (tuple, list, str, <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the user vector argument to wrangle</p></li>
+<li><p><strong>listLength/ll</strong> – if this is specified, then the argument will be
+conformed, by iterable multiplication, to a list of this length;
+if it’s omitted, a single vector will be returned; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The conformed vector argument.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list, <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -364,179 +397,38 @@ matrix is a plug or value; defaults to None</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="paya.lib.mathops.LinearInterpolator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LinearInterpolator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.LinearInterpolator" title="Permalink to this definition"></a></dt>
-<dd><p>Simple, dict-like interpolator implementation, similar to a linear
-animation curve in Maya. Works with any value type that can be handled by
-<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.util.arrays/pymel.util.arrays.blend.html#pymel.util.arrays.blend" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.util.arrays.blend()</span></code></a>, but types should not be mixed.</p>
-<dl class="field-list">
-<dt class="field-odd">Example</dt>
-<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">interp</span> <span class="o">=</span> <span class="n">LinearInterpolator</span><span class="p">()</span>
-<span class="n">interp</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
-<span class="n">interp</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="mi">40</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">interp</span><span class="p">[</span><span class="mi">11</span><span class="p">])</span>
-<span class="c1"># Result: 31.0</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.floatRange">
-<span class="sig-name descname"><span class="pre">floatRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numValues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.floatRange" title="Permalink to this definition"></a></dt>
-<dd><p>A variant of Python’s <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> for floats.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the minimum value</p></li>
-<li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the maximum value</p></li>
-<li><p><strong>numValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of values to generate</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of float values between <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>,
-inclusively.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.chaseNones">
-<span class="sig-name descname"><span class="pre">chaseNones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.chaseNones" title="Permalink to this definition"></a></dt>
-<dd><p>Resolves <code class="docutils literal notranslate"><span class="pre">None</span></code> members in an iterable by filling in with neighbouring
-values. If the first member is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the next defined value is used.
-If any internal member is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the last resolved value is used.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>source</strong> – the iterable to fill-in</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list with no <code class="docutils literal notranslate"><span class="pre">None</span></code> members.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.blendNones">
-<span class="sig-name descname"><span class="pre">blendNones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.blendNones" title="Permalink to this definition"></a></dt>
-<dd><p>A blending version of <a class="reference internal" href="#paya.lib.mathops.chaseNones" title="paya.lib.mathops.chaseNones"><code class="xref py py-func docutils literal notranslate"><span class="pre">chaseNones()</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>source</strong> – the iterable to fill-in</p></li>
-<li><p><strong>ratios</strong> – if provided, it should be a list of ratios from 0.0 to
-1.0 (one per member) to bias the blending; if omitted, it will be
-autogenerated using <a class="reference internal" href="#paya.lib.mathops.floatRange" title="paya.lib.mathops.floatRange"><code class="xref py py-func docutils literal notranslate"><span class="pre">floatRange()</span></code></a>; defaults to None</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list with no <code class="docutils literal notranslate"><span class="pre">None</span></code> members.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.getAimVectorsFromPoints">
-<span class="sig-name descname"><span class="pre">getAimVectorsFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getAimVectorsFromPoints" title="Permalink to this definition"></a></dt>
-<dd><p>Derives aim vectors from points. Needs at least two points. The length of
-the returned list will always be one less than the length of the points.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> – the source points (values)</p></li>
-<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – any vectors below this length will be
-replaced by neighbouring vectors; defaults to 1e-7</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>NoInterpolationKeysError</strong> – none of the derived vectors were
-longer than the specified tolerance</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The list of aim vectors.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.mathops.deflipVectors">
 <span class="sig-name descname"><span class="pre">deflipVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.deflipVectors" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list where each vector is flipped if that would bring it closer
-to the previous one.</p>
+to the preceding one. This is a value-only method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>vectors</strong> – the source vectors (values)</p>
+<dd class="field-odd"><p><strong>vectors</strong> ([tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the source vectors (values)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The deflipped vectors.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+<dd class="field-odd"><p>[<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.getAimAndUpVectorsFromPoints">
-<span class="sig-name descname"><span class="pre">getAimAndUpVectorsFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getAimAndUpVectorsFromPoints" title="Permalink to this definition"></a></dt>
-<dd><p>Given a list of points and a reference up vector, returns aim vectors and
-up vectors that can be used in matrix construction, for example to draw
-chains.</p>
-<dl class="field-list simple">
+<dt class="sig sig-object py" id="paya.lib.mathops.getAimVectors">
+<span class="sig-name descname"><span class="pre">getAimVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getAimVectors" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> – the source points (values)</p></li>
-<li><p><strong>refVector</strong> (<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list) – a reference up vector</p></li>
-<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – aim vectors or cross products with lengths
-below this tolerance will be replaced with neighbouring ones;
-defaults to 1e-7</p></li>
-</ul>
+<dd class="field-odd"><p><strong>points</strong> ([list, tuple, <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the points</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of aim vectors and a list of up vectors</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – Fewer than two points were provided.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.getAimingMatricesFromPoints">
-<span class="sig-name descname"><span class="pre">getAimingMatricesFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getAimingMatricesFromPoints" title="Permalink to this definition"></a></dt>
-<dd><p>Given a list of points and a reference up vector, returns aiming matrices
-which can be used to draw chains and other systems.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> – the source points (values)</p></li>
-<li><p><strong>downAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the aiming axis</p></li>
-<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to bias towards the reference vector</p></li>
-<li><p><strong>refVector</strong> (<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list) – a reference up vector</p></li>
-<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – aim vectors or cross products with lengths
-below this tolerance will be replaced with neighbouring ones;
-defaults to 1e-7</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of matrices</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Aiming vectors derived from the input points. The output list
+will always be one member shorter than the input list.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -544,35 +436,87 @@ defaults to 1e-7</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.mathops.pointsIntoUnitCube">
 <span class="sig-name descname"><span class="pre">pointsIntoUnitCube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.pointsIntoUnitCube" title="Permalink to this definition"></a></dt>
-<dd><p>Normalizes points so that they fit inside a unit cube.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – the points to normalize</p>
+<dd class="field-odd"><p><strong>points</strong> ([tuple, list, <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]) – the points to normalize</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The normalized points.</p>
+<dd class="field-even"><p>The points, fit inside a unit cube.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p>
+<dd class="field-odd"><p>[<a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.expandVectorArgs">
-<span class="sig-name descname"><span class="pre">expandVectorArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.expandVectorArgs" title="Permalink to this definition"></a></dt>
-<dd><p>Similar to <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.util.arguments/pymel.util.arguments.expandArgs.html#pymel.util.arguments.expandArgs" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">expandArgs()</span></code></a>, except it won’t
-expand lists or tuples of three scalars.</p>
+<dt class="sig sig-object py" id="paya.lib.mathops.getFramedAimAndUpVectors">
+<span class="sig-name descname"><span class="pre">getFramedAimAndUpVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getFramedAimAndUpVectors" title="Permalink to this definition"></a></dt>
+<dd><p>Value-only method.</p>
+<p>Returns paired lists of aim and up vectors based on points and
+<em>upVector</em>, which can be a single vector or one vector per point.</p>
+<p>The final up vectors are derived using cross products, and biased
+towards the provided hints. Where the points are in-line, cross products
+are either blended from neighbours or swapped out for the user up vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>*args</strong> – <p>the arguments to expand</p>
-</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> ([tuple, list, <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]) – the starting points</p></li>
+<li><p><strong>upVector</strong> (tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – one up hint vector, or one vector per point</p></li>
+<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – any cross products below this length will be
+interpolated from neighbours; defaults to 1e-7</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A flattened list.</p>
+<dd class="field-even"><p>A list of aim vectors and a list of up vectors.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+<dd class="field-odd"><p>([<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>],
+[<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.getChainedAimMatrices">
+<span class="sig-name descname"><span class="pre">getChainedAimMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getChainedAimMatrices" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> – the starting points</p></li>
+<li><p><strong>aimAxis</strong> – the matrix axes to align to the aiming vectors,
+for example ‘-y’.</p></li>
+<li><p><strong>upAxis</strong> – the matrix axes to align to the resolved up vectors,
+for example ‘x’</p></li>
+<li><p><strong>upVector</strong> – either one up vector hint, or a list of up vectors
+(one per point)</p></li>
+<li><p><strong>squashStretch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow squash-and-stretch on the aiming vectors;
+defaults to False</p></li>
+<li><p><strong>globalScale/gs</strong> – an optional plug for the scale component; defaults
+to None</p></li>
+<li><p><strong>framed/fra</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if there are no plugs in the passed
+parameters, perform cross product framing via
+<a class="reference internal" href="#paya.lib.mathops.getFramedAimAndUpVectors" title="paya.lib.mathops.getFramedAimAndUpVectors"><code class="xref py py-func docutils literal notranslate"><span class="pre">getFramedAimAndUpVectors()</span></code></a> (recommended when drawing chains
+with triads, for example legs); defaults to False</p></li>
+<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – if <em>framed</em> is on, any cross products
+below this length will be interpolated from neighbours; defaults to
+1e-7</p></li>
+</ul>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+[tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.10)"><strong>NotImplementedError</strong></a> – <em>framed</em> was requested but some of
+the arguments were plugs</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Chained-aiming matrices, suitable for drawing or driving chains
+or control hierarchies.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="../../pools/plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -583,7 +527,7 @@ expand lists or tuples of three scalars.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="controlshapes.html" class="btn btn-neutral float-left" title="paya.lib.controlshapes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="loopback.html" class="btn btn-neutral float-left" title="paya.lib.loopback" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="names.html" class="btn btn-neutral float-right" title="paya.lib.names" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

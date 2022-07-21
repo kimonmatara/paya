@@ -151,6 +151,21 @@ paya.runtime.plugs.Math1D
         :return: The max-clamped output.
         :rtype: :class:`Math1D`
     
+    .. py:method:: gatedClamp(floorOrCeiling, floorOpen, ceilingOpen)
+    
+        Useful for squash-and-stretch control.
+        
+        :param floorOrCeiling: acts as a floor or ceiling for this output,
+            depending on *floorOpen* and *ceilingOpen*
+        :type floorOrCeiling: float, :class:`~paya.runtime.plugs.Math1D`
+        :param floorOpen: when this is at 0.0, this output won't dip below
+            *floorOrCeiling*
+        :type floorOpen: float, :class:`~paya.runtime.plugs.Math1D`
+        :param ceilingOpen: when this is at 0.0, this output won't rise above
+            *floorOrCeiling*
+        :return: The clamped output.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+    
     .. py:method:: min(*others)
     
         Returns the minimum amongst ``self`` and ``\*others``.

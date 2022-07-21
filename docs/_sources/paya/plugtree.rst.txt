@@ -44,3 +44,31 @@ Paya attribute subtypes.
 .. py:function:: expandTree()
 
     Called on import to expand the explicit ``tree`` dictionary procedurally.
+
+.. py:function:: numericUnitTypeIs1D(unitType)
+
+    :param int unitType: the MFnNumericData unit type value
+    :return: True if MFnNumericData enum index represents a scalar, otherwise
+        False
+    :rtype: bool
+
+.. py:function:: getTypeFromDataBlock(mplug, asString=False)
+
+    :param mplug: the MPlug to inspect
+    :type mplug: :class:`~maya.OpenMaya.MPlug`
+    :param bool asString: return an API type string instead of an enum; defaults
+        to False
+    :return: An API type string or enum for the MPlug's data block.
+    :rtype: str, int
+
+.. py:function:: getTypeFromMPlug(mplug, inherited=False)
+
+    Returns abstract type information from an MPlug, similar to
+    :func:`pymel.core.general.nodeType`.
+    
+    :param mplug: the MPlug to inspect
+    :type mplug: :class:`~maya.OpenMaya.MPlug`
+    :param bool inherited/i: return a list including ancestors;
+        defaults to False
+    :return: The type information.
+    :rtype: str, [str]

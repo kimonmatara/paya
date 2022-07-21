@@ -379,6 +379,30 @@ instead of extrapolating; defaults to <code class="docutils literal notranslate"
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Math1D.gatedClamp">
+<span class="sig-name descname"><span class="pre">gatedClamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">floorOrCeiling</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">floorOpen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceilingOpen</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math1D.gatedClamp" title="Permalink to this definition"></a></dt>
+<dd><p>Useful for squash-and-stretch control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>floorOrCeiling</strong> (float, <a class="reference internal" href="#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – acts as a floor or ceiling for this output,
+depending on <em>floorOpen</em> and <em>ceilingOpen</em></p></li>
+<li><p><strong>floorOpen</strong> (float, <a class="reference internal" href="#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – when this is at 0.0, this output won’t dip below
+<em>floorOrCeiling</em></p></li>
+<li><p><strong>ceilingOpen</strong> – when this is at 0.0, this output won’t rise above
+<em>floorOrCeiling</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The clamped output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.Math1D.min">
 <span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">others</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math1D.min" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the minimum amongst <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">\*others</span></code>.</p>

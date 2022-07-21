@@ -182,6 +182,65 @@ similarly to <code class="docutils literal notranslate"><span class="pre">nodeTy
 <dd><p>Called on import to expand the explicit <code class="docutils literal notranslate"><span class="pre">tree</span></code> dictionary procedurally.</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.numericUnitTypeIs1D">
+<span class="sig-name descname"><span class="pre">numericUnitTypeIs1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unitType</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.numericUnitTypeIs1D" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unitType</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the MFnNumericData unit type value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if MFnNumericData enum index represents a scalar, otherwise
+False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.getTypeFromDataBlock">
+<span class="sig-name descname"><span class="pre">getTypeFromDataBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mplug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asString</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getTypeFromDataBlock" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mplug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">MPlug</span></code>) – the MPlug to inspect</p></li>
+<li><p><strong>asString</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return an API type string instead of an enum; defaults
+to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An API type string or enum for the MPlug’s data block.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.getTypeFromMPlug">
+<span class="sig-name descname"><span class="pre">getTypeFromMPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mplug</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inherited</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getTypeFromMPlug" title="Permalink to this definition"></a></dt>
+<dd><p>Returns abstract type information from an MPlug, similar to
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.nodeType.html#pymel.core.general.nodeType" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.nodeType()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mplug</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">MPlug</span></code>) – the MPlug to inspect</p></li>
+<li><p><strong>inherited/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return a list including ancestors;
+defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The type information.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>, [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
