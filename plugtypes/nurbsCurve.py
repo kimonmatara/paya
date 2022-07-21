@@ -688,7 +688,7 @@ class NurbsCurve:
             param,
             tangentAxis,
             upAxis,
-            ts=squashStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -753,7 +753,7 @@ class NurbsCurve:
             fraction,
             tangentAxis,
             upAxis,
-            ts=squashStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -818,7 +818,7 @@ class NurbsCurve:
             self.fractionAtLength(length),
             tangentAxis,
             upAxis,
-            ts=squashStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -884,7 +884,7 @@ class NurbsCurve:
             self.paramAtPoint(point),
             tangentAxis,
             upAxis,
-            ts=squashStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -929,11 +929,11 @@ class NurbsCurve:
         return [self.lengthAtFraction(fraction) for fraction in fractions]
 
     @short(
+        upVector='upv',
+        upCurve='upc',
         squashStretch='ss',
         globalScale='gs',
-        matchedCurve='mc',
-        upVector='upv',
-        upCurve='upc'
+        matchedCurve='mc'
     )
     def distributeMatrices(
             self,
@@ -944,81 +944,76 @@ class NurbsCurve:
             upCurve=None,
             squashStretch=False,
             globalScale=None,
-            matchedCurve=False
+            matchedCurve=None
     ):
         """
-        Either *upCurve* or *upVector* must be provided. Scale will always
-        be pre-normalized, regardless of *globalScale* / *squashStretch*
-        options.
+        If neither *upVector* or *upCurve* are provided, curve normals are
+        used.
 
-        :param int numberOrFractions: either the number of fractions to
-            generate, or an explicit list of fractions
-        :param str tangentAxis: the matrix axis to align to the curve tangent,
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix axis to align to the up vector, for
+        :param str upAxis: the matrix to align to the resolved up vector, for
             example 'x'
-        :param upVector/upv: either one up vector, or one up vector per sample
-            fraction; defaults to None
-        :type upVector:
-            None, tuple, list, str,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`,
-            [tuple, list, str, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`]
-        :param upCurve/upc: an 'up' curve, similar to Maya's ``curveWarp``
-            configuration; defaults to None
-        :type upCurve/upc: str, None,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool squashStretch/ss: allow stretching of the tangent
-            vectors; defaults to False
-        :param globalScale/gs: a scalar for the baseline scale; defaults to
-            None
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: sample points on *upCurve* by matched
-            parameter rather than closest-point; defaults to False
-        :return: Matrices, distributed uniformly along the curve.
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :return: Matrices, distributed along the curve.
         :rtype: [:class:`~paya.runtime.plugs.Matrix`]
         """
-        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
-        num = len(fractions)
+        #----------------------------------------|    Resolve args
 
-        if num < 1:
-            return []
+        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
+        number = len(fractions)
 
         if upVector:
-            upVectors = _mo.conformVectorArg(upVector, ll=num)
-
-        elif upCurve:
-            upVectors = [None] * num
+            upVectors = _mo.conformVectorArg(upVector, ll=number)
 
         else:
-            raise ValueError("No up vector hints.")
+            upVectors = [None] * number
+
+        #----------------------------------------|    Execute
 
         out = []
 
-        for i in range(num):
+        for i, fraction in enumerate(fractions):
             with r.Name(i+1):
                 matrix = self.matrixAtFraction(
-                    fractions[i],
+                    fraction,
                     tangentAxis,
                     upAxis,
                     upv=upVectors[i],
                     upc=upCurve,
+                    ss=squashStretch,
                     gs=globalScale,
                     mc=matchedCurve
                 )
 
-            out.append(matrix)
+                out.append(matrix)
 
         return out
 
     @short(
-        upCurve='upc',
         upVector='upv',
-        squashStretch='ss',
+        upCurve='upc',
         globalScale='gs',
+        squashStretch='ss',
         matchedCurve='mc'
     )
     def distributeAimingMatrices(
@@ -1026,78 +1021,87 @@ class NurbsCurve:
             numberOrFractions,
             aimAxis,
             upAxis,
-            upCurve=None,
             upVector=None,
-            squashStretch=False,
+            upCurve=None,
             globalScale=None,
+            squashStretch=False,
             matchedCurve=False
     ):
         """
-        Similar to :meth:`distributeMatrices`, but here the matrices aim
-        towards each other for a 'chain' effect.
+        Similar to :meth:`distributeMatrices` except that here the matrices
+        are aimed at each other for a 'chain-like' effect. If neither
+        *upVector* or *upCurve* are provided, curve normals are used.
 
-        Either *upCurve* or *upVector* must be provided. Scale will always
-        be pre-normalized, regardless of *globalScale* / *squashStretch*
-        options.
-
-        :param int numberOrFractions: either the number of fractions to
-            generate, or an explicit list of fractions
-        :param str aimAxis: the aiming axis, for example '-y'
-        :param str upAxis: the axis to align to the up vector, for example 'x'
-        :param upVector/upv: either one up vector, or one up vector per sample
-            fraction; defaults to None
-        :type upVector:
-            None, tuple, list, str,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`,
-            [tuple, list, str, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`]
-        :param upCurve/upc: an 'up' curve, similar to Maya's ``curveWarp``
-            configuration; defaults to None
-        :type upCurve/upc: str, None,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool squashStretch/ss: allow stretching of the tangent
-            vectors; defaults to False
-        :param globalScale/gs: a scalar for the baseline scale; defaults to
-            None
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the matrix axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the matrix to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: sample points on *upCurve* by matched
-            parameter rather than closest-point; defaults to False
-        :return: Aimed matrices, distributed uniformly along the curve.
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :return: Matrices, distributed along the curve.
         :rtype: [:class:`~paya.runtime.plugs.Matrix`]
         """
-        if upCurve is None and upVector is None:
-            raise ValueError("No up vector hints.")
 
         fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
-        num = len(fractions)
+        number = len(fractions)
 
-        if num < 1:
-            return []
+        mps = [self.initMotionPath(
+            fractionMode=True, uValue=fraction) for fraction in fractions]
 
-        points = [self.pointAtFraction(f) for f in fractions]
+        points = [mp.attr('allCoordinates') for mp in mps]
 
-        if upCurve:
-            upCurve = _mo.asGeoPlug(upCurve, ws=True)
+        aimVectors = _mo.getAimVectors(points)
+        aimVectors.append(aimVectors[-1])
 
-            if matchedCurve:
-                params = [self.paramAtPoint(point) for point in points]
-
-            upVectors = []
-
-            for i, point in enumerate(points):
-                if matchedCurve:
-                    interest = upCurve.pointAtParam(params[i])
-
-                else:
-                    interest = upCurve.closestPoint(point)
-
-                upVectors.append(interest-point)
+        if upVector:
+            upVectors = _mo.conformVectorArg(upVector, ll=number)
 
         else:
-            upVectors = _mo.conformVectorArg(upVector, ll=num)
+            upVectors = []
+
+            if upCurve:
+                upCurve = _mo.asGeoPlug(upCurve, ws=True)
+
+                for i in range(number):
+                    if matchedCurve:
+                        param = self.paramAtFraction(fractions[i])
+                        interest = upCurve.pointAtParam(param)
+
+                    else:
+                        interest = upCurve.closestPoint(points[i])
+
+                    upVectors.append(interest-points[i])
+
+            else:
+                # configure follow on the motion paths and pull
+                # the normal vectors
+
+                for i, mp in enumerate(mps):
+                    mp.attr('follow').set(True)
+                    mp.setFrontAxis(aimAxis)
+                    mp.setUpAxis(upAxis)
+                    mp.attr('worldUpType').set('Normal')
+                    matrix = mp.attr('orientMatrix')
+                    upVector = matrix.getAxis(upAxis)
+                    upVectors.append(upVector)
 
         return _mo.getChainedAimMatrices(
             points,
