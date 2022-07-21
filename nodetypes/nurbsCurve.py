@@ -283,9 +283,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').closestPoint(refPoint)
 
-        p, dim, isplug = _mo.info(refPoint)
+        p, dim, pisplug = _mo.info(refPoint)
 
-        if isplug:
+        if pisplug:
             return self.attr('worldSpace').closestPoint(refPoint)
 
         return self.closestPoint(refPoint, space='world')
@@ -304,9 +304,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').pointAtParam(param)
 
-        p, dim, isplug = _mo.info(param)
+        p, dim, pisplug = _mo.info(param)
 
-        if isplug:
+        if pisplug:
             return self.attr('worldSpace').pointAtParam(param)
 
         return self.getPointAtParam(float(param), space='world')
@@ -324,9 +324,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').pointAtLength(length)
 
-        length, dim, isplug = _mo.info(length)
+        length, dim, lisplug = _mo.info(length)
 
-        if isplug:
+        if lisplug:
             return self.attr('worldSpace').pointAtLength(length)
 
         param = self.findParamFromLength(length)
@@ -345,9 +345,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').pointAtFraction(fraction)
 
-        fraction, dim, isplug = _mo.info(fraction)
+        fraction, dim, fisplug = _mo.info(fraction)
 
-        if isplug:
+        if fisplug:
             return self.attr('worldSpace').pointAtFraction(fraction)
 
         length = self.length() * fraction
@@ -377,9 +377,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').paramAtPoint(point)
 
-        point, dim, isplug = _mo.info(point)
+        point, dim, pisplug = _mo.info(point)
 
-        if isplug:
+        if pisplug:
             return self.attr('worldSpace').paramAtPoint(point)
 
         point = self.closestPoint_(point)
@@ -408,9 +408,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').paramAtFraction(fraction)
 
-        fraction, dim, isplug = _mo.info(fraction)
+        fraction, dim, fisplug = _mo.info(fraction)
 
-        if isplug:
+        if fisplug:
             return self.attr('worldSpace').paramAtFraction(fraction)
 
         length = self.length() * fraction
@@ -437,9 +437,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').paramAtLength(length)
 
-        length, dim, isplug = _mo.info(length)
+        length, dim, lisplug = _mo.info(length)
 
-        if isplug:
+        if lisplug:
             return self.attr('worldSpace').paramAtLength(length)
 
         param = self.findParamFromLength(length)
@@ -463,9 +463,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').lengthAtFraction()
 
-        fraction, dim, isplug = _mo.info(fraction)
+        fraction, dim, fisplug = _mo.info(fraction)
 
-        if isplug:
+        if fisplug:
             return self.attr('worldSpace').lengthAtFraction()
 
         return self.length() * fraction
@@ -483,9 +483,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').lengthAtParam()
 
-        param, dim, isplug = _mo.info(param)
+        param, dim, pisplug = _mo.info(param)
 
-        if isplug:
+        if pisplug:
             return self.attr('worldSpace').lengthAtParam()
 
         return self.findLengthFromParam(float(param))
@@ -508,9 +508,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').lengthAtPoint(point)
 
-        point, dim, isplug = _mo.info(point)
+        point, dim, pisplug = _mo.info(point)
 
-        if isplug:
+        if pisplug:
             return self.attr('worldSpace').lengthAtPoint(point)
 
         param = self.paramAtPoint(point)
@@ -530,9 +530,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').fractionAtLength(length)
 
-        length, dim, isplug = _mo.info(length)
+        length, dim, lisplug = _mo.info(length)
 
-        if isplug:
+        if lisplug:
             return self.attr('worldSpace').fractionAtLength(length)
 
         return length / self.length()
@@ -550,9 +550,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').fractionAtParam(param)
 
-        param, dim, isplug = _mo.info(param)
+        param, dim, pisplug = _mo.info(param)
 
-        if isplug:
+        if pisplug:
             return self.attr('worldSpace').fractionAtParam(param)
 
         return self.lengthAtParam(param) / self.length()
@@ -568,9 +568,9 @@ class NurbsCurve:
         if plug:
             return self.attr('worldSpace').fractionAtPoint(point)
 
-        point, dim, isplug = _mo.info(point)
+        point, dim, pisplug = _mo.info(point)
 
-        if isplug:
+        if pisplug:
             return self.attr('worldSpace').fractionAtPoint(point)
 
         param = self.paramAtPoint(point)
@@ -644,7 +644,7 @@ class NurbsCurve:
     #-----------------------------------------------------|    Matrix sampling
 
     @short(
-        tangentStretch='ts',
+        squashStretch='ss',
         upVector='upv',
         upObject='upo',
         upCurve='upc',
@@ -658,7 +658,7 @@ class NurbsCurve:
             paramOrFraction,
             tangentAxis,
             upAxis,
-            tangentStretch=False, # ignored in soft impl
+            squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
             upCurve=None,
@@ -667,6 +667,8 @@ class NurbsCurve:
             matchedCurve=False,
             plug=False
     ):
+        # defaults to the normal if no up vector hints
+
         if plug or any((
             _mo.isPlug(x) for x in [
                 paramOrFraction, upVector, upCurve, globalScale]
@@ -675,7 +677,7 @@ class NurbsCurve:
                 paramOrFraction,
                 tangentAxis,
                 upAxis,
-                ts=tangentStretch,
+                ss=squashStretch,
                 upv=upVector,
                 upo=upObject,
                 upc=upCurve,
@@ -732,7 +734,7 @@ class NurbsCurve:
             upAxis, upVector, t=position).pk(t=True, r=True)
 
     @short(
-        tangentStretch='ts',
+        squashStretch='ss',
         upVector='upv',
         upObject='upo',
         upCurve='upc',
@@ -745,7 +747,7 @@ class NurbsCurve:
             param,
             tangentAxis,
             upAxis,
-            tangentStretch=False, # ignored in soft impl
+            squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
             upCurve=None,
@@ -758,7 +760,7 @@ class NurbsCurve:
         :type param: float, str, :class:`~paya.runtime.Math1D`
         :param str tangentAxis: the axis to align to the curve tangent
         :param str upAxis: the axis to align to the resolved up vector
-        :param bool tangentStretch/ts: incorporate tangent stretching
+        :param bool squashStretch/ss: incorporate tangent stretching
             (dynamic only); defaults to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
@@ -788,7 +790,7 @@ class NurbsCurve:
             param,
             tangentAxis,
             upAxis,
-            ts=tangentStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -799,7 +801,7 @@ class NurbsCurve:
         )
 
     @short(
-        tangentStretch='ts',
+        squashStretch='ss',
         upVector='upv',
         upObject='upo',
         upCurve='upc',
@@ -812,7 +814,7 @@ class NurbsCurve:
             fraction,
             tangentAxis,
             upAxis,
-            tangentStretch=False, # ignored in soft impl
+            squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
             upCurve=None,
@@ -825,7 +827,7 @@ class NurbsCurve:
         :type fraction: float, str, :class:`~paya.runtime.Math1D`
         :param str tangentAxis: the axis to align to the curve tangent
         :param str upAxis: the axis to align to the resolved up vector
-        :param bool tangentStretch/ts: incorporate tangent stretching
+        :param bool squashStretch/ss: incorporate tangent stretching
             (dynamic only); defaults to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
@@ -855,7 +857,7 @@ class NurbsCurve:
             fraction,
             tangentAxis,
             upAxis,
-            ts=tangentStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -866,7 +868,7 @@ class NurbsCurve:
         )
 
     @short(
-        tangentStretch='ts',
+        squashStretch='ss',
         upVector='upv',
         upObject='upo',
         upCurve='upc',
@@ -879,7 +881,7 @@ class NurbsCurve:
             length,
             tangentAxis,
             upAxis,
-            tangentStretch=False, # ignored in soft impl
+            squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
             upCurve=None,
@@ -892,7 +894,7 @@ class NurbsCurve:
         :type length: float, str, :class:`~paya.runtime.Math1D`
         :param str tangentAxis: the axis to align to the curve tangent
         :param str upAxis: the axis to align to the resolved up vector
-        :param bool tangentStretch/ts: incorporate tangent stretching
+        :param bool squashStretch/ss: incorporate tangent stretching
             (dynamic only); defaults to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
@@ -922,7 +924,7 @@ class NurbsCurve:
             self.paramAtLength(length),
             tangentAxis,
             upAxis,
-            ts=tangentStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -933,7 +935,7 @@ class NurbsCurve:
         )
 
     @short(
-        tangentStretch='ts',
+        squashStretch='ss',
         upVector='upv',
         upObject='upo',
         upCurve='upc',
@@ -947,7 +949,7 @@ class NurbsCurve:
             point,
             tangentAxis,
             upAxis,
-            tangentStretch=False,
+            squashStretch=False,
             upVector=None,
             upObject=None,
             upCurve=None,
@@ -961,7 +963,7 @@ class NurbsCurve:
             :class:`~paya.runtime.plugs.Point`
         :param str tangentAxis: the axis to align to the curve tangent
         :param str upAxis: the axis to align to the resolved up vector
-        :param bool tangentStretch/ts: incorporate tangent stretching
+        :param bool squashStretch/ss: incorporate tangent stretching
             (dynamic only); defaults to False
         :param upVector/upv: used as an up vector on its own, or extracted from
             *upObject*; defaults to None
@@ -993,7 +995,7 @@ class NurbsCurve:
             self.paramAtPoint(point),
             tangentAxis,
             upAxis,
-            ts=tangentStretch,
+            ss=squashStretch,
             upv=upVector,
             upo=upObject,
             upc=upCurve,
@@ -1066,207 +1068,87 @@ class NurbsCurve:
         return [self.lengthAtFraction(
             fraction, p=plug) for fraction in fractions]
 
-    # @short(
-    #     globalScale='gs',
-    #     tangentStretch='ts',
-    #     upVectors='upv',
-    #     upCurve='upc',
-    #     matchedCurve='mc',
-    #     plug='p'
-    # )
-    # def distributeMatrices(
-    #         self,
-    #         numberOrFractions,
-    #         tangentAxis,
-    #         upAxis,
-    #         upVectors=None,
-    #         upCurve=None,
-    #         globalScale=None,
-    #         matchedCurve=False,
-    #         tangentStretch=False,
-    #         plug=False
-    # ):
-    #     """
-    #     :param numberOrFractions: either a number of sample points, or an
-    #         explicit list of 0.0 -> 1.0 length fractions
-    #     :type numberOrFractions: int, [float],
-    #         [:class:`~paya.runtime.plugs.Math1D`]
-    #     :param str tangentAxis: the axis to align to the curve tangent
-    #     :param str upAxis: the axis to align to the resolved up vector
-    #     :param bool tangentStretch/ts: incorporate tangent stretching
-    #         (dynamic only); defaults to False
-    #     :param upVector/upv: used as an up vector on its own, or extracted from
-    #         *upObject*; this can be provided as a single vector, or a list of
-    #         vectors (one per sample point); defaults to None
-    #     :type upVector/upv: None, list, tuple, str,
-    #         :class:`~paya.runtime.data.Vector`,
-    #         :class:`~paya.runtime.plugs.Vector`
-    #         [list], [tuple], [str],
-    #         [:class:`~paya.runtime.data.Vector`],
-    #         [:class:`~paya.runtime.plugs.Vector`]
-    #     :param upCurve/upc: an up curve; defaults to None
-    #     :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
-    #         :class:`~paya.runtime.nodes.NurbsCurve`,
-    #         :class:`~paya.runtime.plugs.NurbsCurve`
-    #     :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
-    #         defaults to False
-    #     :param globalScale/gs: used to drive scaling on dynamic matrices only;
-    #         the scale will be normalised; defaults to None
-    #     :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-    #     :param bool matchedCurve/mc: set this to True when *upCurve* has the
-    #         same U domain as this curve, to avoid unnecessary closest-point
-    #         calculations; defaults to False
-    #     :return: Matrices distributed uniformly along the curve.
-    #     :rtype: [:class:`~paya.runtime.plugs.Matrix`],
-    #         [:class:`~paya.runtime.data.Matrix`]
-    #     """
-    #     fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
-    #     num = len(fractions)
-    #
-    #     if upVectors:
-    #         upVectors = _mo.resolveMultiVectorArg(num, upVectors)
-    #
-    #     out = []
-    #
-    #     for i, fraction in enumerate(fractions):
-    #         with r.Name(i+1):
-    #             matrix = self.matrixAtFraction(
-    #                 fraction,
-    #                 tangentAxis,
-    #                 upAxis,
-    #                 upv=upVectors[i] if upVectors else None,
-    #                 upc=upCurve,
-    #                 gs=globalScale,
-    #                 mc=matchedCurve,
-    #                 ts=tangentStretch,
-    #                 p=plug
-    #             )
-    #
-    #             out.append(matrix)
-    #
-    #     return out
-    #
-    # @short(
-    #     globalScale='gs',
-    #     tangentStretch='ts',
-    #     upVectors='upv',
-    #     upCurve='upc',
-    #     matchedCurve='mc',
-    #     plug='p'
-    # )
-    # def distributeAimingMatrices(
-    #         self,
-    #         numberOrFractions,
-    #         downAxis,
-    #         upAxis,
-    #         upVectors=None,
-    #         upCurve=None,
-    #         globalScale=None,
-    #         matchedCurve=False,
-    #         tangentStretch=False,
-    #         plug=False
-    # ):
-    #     """
-    #     :param numberOrFractions: either a number of sample points, or an
-    #         explicit list of 0.0 -> 1.0 length fractions
-    #     :type numberOrFractions: int, [float],
-    #         [:class:`~paya.runtime.plugs.Math1D`]
-    #     :param str downAxis: the aiming axis for each matrix
-    #     :param str upAxis: the axis to align to the resolved up vector
-    #     :type upVector/upv: None, list, tuple, str,
-    #         :class:`~paya.runtime.data.Vector`,
-    #         :class:`~paya.runtime.plugs.Vector`
-    #         [list], [tuple], [str],
-    #         [:class:`~paya.runtime.data.Vector`],
-    #         [:class:`~paya.runtime.plugs.Vector`]
-    #     :param upCurve/upc: an up curve; defaults to None
-    #     :param globalScale/gs: used to drive scaling on dynamic matrices only;
-    #         the scale will be normalised; defaults to None
-    #     :param matchedCurve:
-    #     :param bool tangentStretch/ts: incorporate tangent stretching
-    #         (dynamic only); defaults to False
-    #     :param bool plug/p: force a dynamic output; defaults to False
-    #     :return: Aiming matrices, uniformly distributed along the length of
-    #         this curve.
-    #     :rtype: [:class:`~paya.runtime.data.Matrix`]
-    #         [:class:`~paya.runtime.plugs.Matrix`]
-    #     """
-    #     defer = False
-    #
-    #     if plug:
-    #         defer = True
-    #
-    #     else:
-    #         if upVectors is not None:
-    #             if any((_mo.isPlug(x) for x in upVectors)):
-    #                 defer = True
-    #
-    #             else:
-    #                 if any((_mo.isPlug(x) for x in [
-    #                     upCurve, globalScale, matchedCurve])):
-    #                     defer = True
-    #
-    #     if defer:
-    #         return self.attr('worldSpace')[0].distributeAimingMatrices(
-    #             numberOrFractions,
-    #             downAxis,
-    #             upAxis,
-    #             upv=upVectors,
-    #             upc=upCurve,
-    #             gs=globalScale,
-    #             mc=matchedCurve,
-    #             ts=tangentStretch
-    #         )
-    #
-    #     #------------------------------------|    Soft implementation
-    #
-    #     fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
-    #     params = [self.paramAtFraction(fraction) for fraction in fractions]
-    #     points = [self.pointAtParam(param) for param in params]
-    #
-    #     num = len(fractions)
-    #
-    #     if upVectors:
-    #         upVectors = _mo.resolveMultiVectorArg(num, upVectors)
-    #
-    #     elif upCurve:
-    #         upCurve = r.PyNode(upCurve)
-    #
-    #         if matchedCurve:
-    #             interests = [upCurve.pointAtParam(
-    #                 float(param)) for param in params]
-    #
-    #         else:
-    #             interests = [upCurve.closestPoint_(point) for point in points]
-    #
-    #         upVectors = [interest-point for \
-    #                 interest, point in zip(interests, points)]
-    #
-    #     else:
-    #         upVectors = [self.normal(
-    #             float(param), space='world') for param in params]
-    #
-    #     aimVectors = []
-    #
-    #     for i, thisPoint in enumerate(points[:-1]):
-    #         nextPoint = points[i+1]
-    #         aimVectors.append(nextPoint-thisPoint)
-    #
-    #     aimVectors.append(aimVectors[-1])
-    #
-    #     matrices = []
-    #
-    #     for point, aimVector, upVector in zip(
-    #         points,
-    #         aimVectors,
-    #         upVectors
-    #     ):
-    #         matrix = r.createMatrix(
-    #             downAxis, aimVector,
-    #             upAxis, upVector,
-    #             t=point
-    #         ).pk(t=True, r=True)
-    #
-    #         matrices.append(matrix)
-    #
-    #     return matrices
+    @short(
+        upVector='upv',
+        upCurve='upc',
+        squashStretch='ss',
+        globalScale='gs',
+        matchedCurve='mc'
+    )
+    def distributeMatrices(
+            self,
+            numberOrFractions,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None,
+            squashStretch=False,
+            globalScale=None,
+            matchedCurve=None
+    ):
+        """
+        If neither *upVector* or *upCurve* are provided, curve normals are
+        used.
+
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the matrix axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the matrix to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :return: Matrices, distributed along the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Matrix`]
+        """
+        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
+        number = len(fractions)
+
+        if upVector:
+            upVectors = _mo.conformVectorArg(upVector, ll=number)
+
+        else:
+            upVectors = [None] * number
+
+        if any((_mo.isPlug(f) for f in fractions)) \
+                or (upVector and any((_mo.isPlug(v) for v in upVectors))) \
+                or _mo.isPlug(globalScale) \
+                or _mo.isPlug(upCurve):
+            return self.distributeMatrices(
+                fractions,
+                tangentAxis, upAxis,
+                upv=upVector, upc=upCurve,
+                ss=squashStretch, gs=globalScale,
+                mc=matchedCurve
+            )
+
+        out = []
+
+        for i, fraction in enumerate(fractions):
+            matrix = self.matrixAtFraction(
+                fraction,
+                tangentAxis,
+                upAxis,
+                upv=upVectors[i],
+                upc=upCurve
+            )
+
+            out.append(matrix)
+
+        return out
