@@ -9,7 +9,9 @@ from pprint import pprint
 
 import maya.OpenMaya as om
 
-#------------------------------------------------------|    Tree init and editing
+#-----------------------------------------------------------|
+#-----------------------------------------------------------|    Tree init and editing
+#-----------------------------------------------------------|
 
 class NoPathError(RuntimeError):
     """
@@ -147,7 +149,6 @@ def createPath(path):
     for key in path:
         current = current.setdefault(key, {})
 
-
 def routeDataType(dataType):
     # Where 'dataType' must be either a data enumerator from om.MFn
     # of a data enumerator from om.MFnData
@@ -242,9 +243,17 @@ def expandTree():
 
 expandTree()
 
-#------------------------------------------------------|    Type analysis
+#-----------------------------------------------------------|
+#-----------------------------------------------------------|    MPlug analysis
+#-----------------------------------------------------------|
 
 def numericUnitTypeIs1D(unitType):
+    """
+    :param int unitType: the MFnNumericData unit type value
+    :return: True if MFnNumericData enum index represents a scalar, otherwise
+        False
+    :rtype: bool
+    """
     for item in [
         om.MFnNumericData.k2Short,
         om.MFnNumericData.k3Short,
@@ -267,6 +276,14 @@ def numericUnitTypeIs1D(unitType):
     return True
 
 def getTypeFromDataBlock(mplug, asString=False):
+    """
+    :param mplug: the MPlug to inspect
+    :type mplug: :class:`~maya.OpenMaya.MPlug`
+    :param bool asString: return an API type string instead of an enum; defaults
+        to False
+    :return: An API type string or enum for the MPlug's data block.
+    :rtype: str, int
+    """
     if mplug.isArray():
         _mplug = mplug.elementByLogicalIndex(0)
 
@@ -277,59 +294,6 @@ def getTypeFromDataBlock(mplug, asString=False):
     data = hnd.data()
 
     return data.apiTypeStr() if asString else data.apiType()
-#
-# def getKeyAndParentForDataType(dataType):
-#     # Where 'dataType' is an apiTypeStr for a MFn.kType data type
-#
-#     if dataType == 'kInvalid':
-#         return 'Data', 'Attribute'
-#
-#     # Styles
-#     # kStringData / kMatrixData etc.
-#     # kStringArrayData
-#     # kData3Double, kData3Short
-#
-#     # e.g. kStringArrayData
-#     pat = r"^k(.*?Array)Data$"
-#     mt = re.match(pat, dataType)
-#
-#     if mt:
-#         key = mt.groups()[0]
-#         parent = 'DataArray'
-#         return key, parent
-#
-#     # e.g. kStringData
-#     pat = r"^k(.*?)Data$"
-#     mt = re.match(pat, dataType)
-#
-#     if mt:
-#         basename = mt.groups()[0]
-#
-#         if basename in [
-#             'PluginGeometry',
-#             'Mesh',
-#             'Lattice',
-#             'NurbsCurve',
-#             'BezierCurve',
-#             'NurbsSurface',
-#             'Sphere',
-#             'SubdSurface',
-#             'DynSweptGeometry'
-#         ]:
-#             return basename, 'Geometry'
-#
-#         return basename, 'Data'
-#
-#     # e.g. kData3Double
-#
-#     pat = r"^k(Data.*)$"
-#     mt = re.match(pat, dataType)
-#
-#     if mt:
-#         basename = mt.groups()[0]
-#         return basename, 'Data'
-#
-#     raise ValueError("Can't route data type {}".format(dataType))
 
 def _getTypeFromMPlug(mplug):
     if mplug.isCompound():
@@ -446,6 +410,17 @@ def _getTypeFromMPlug(mplug):
     return 'Attribute'
 
 def getTypeFromMPlug(mplug, inherited=False):
+    """
+    Returns abstract type information from an MPlug, similar to
+    :func:`pymel.core.general.nodeType`.
+
+    :param mplug: the MPlug to inspect
+    :type mplug: :class:`~maya.OpenMaya.MPlug`
+    :param bool inherited/i: return a list including ancestors;
+        defaults to False
+    :return: The type information.
+    :rtype: str, [str]
+    """
     out = _getTypeFromMPlug(mplug)
 
     # Consider restoring the below once we have a solution for
