@@ -8,7 +8,7 @@ class Subdiv:
 
     @property
     def worldGeoOutput(self):
-        return self.attr('worldSubdiv')[0]
+        return self.attr('worldSubdiv')
 
     @property
     def localGeoOutput(self):
