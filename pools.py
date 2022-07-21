@@ -235,7 +235,7 @@ class ClassPool:
 
         bases = [base for base in bases if base is not object]
 
-        if not any([issubclass(base, preferredBase) for base in bases]):
+        if not any((issubclass(base, preferredBase) for base in bases)):
             # If there's a custom user base class, leave it at index 0
             # so that its branch gets evaluated first via multiple inheritance
             bases.append(preferredBase)
