@@ -8,7 +8,7 @@ class Lattice:
 
     @property
     def worldGeoOutput(self):
-        return self.attr('worldLattice')[0]
+        return self.attr('worldLattice')
 
     @property
     def localGeoOutput(self):
