@@ -133,19 +133,22 @@ class Chain(object):
             ``paya.config.downAxis``
         :param str upAxis: the axis to map to the up vector; defaults to
             ``paya.config.upAxis``
-        :param upVector: the reference up vector
+        :param upVector: one up vector hint, or one vector per point
+        :type upVector: tuple, list, :class:`~paya.runtime.data.Vector`,
+            [tuple, list, :class:`~paya.runtime.data.Vector`]
         :param under/u: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
-            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+            :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: The constructed chain.
         :rtype: :class:`Chain`
         """
-        matrices = _mo.getAimingMatricesFromPoints(
+        matrices = _mo.getChainedAimMatrices(
             points,
             downAxis,
             upAxis,
             upVector,
-            tol=tolerance
+            tol=tolerance,
+            fra=True
         )
 
         return cls.createFromMatrices(matrices, u=under)
@@ -175,7 +178,7 @@ class Chain(object):
         :type upVectorOrCurve: list, :class:`~paya.runtime.data.Vector`, str,
             :class:`~paya.runtime.nodes.DagNode`
         :param float tolerance/tol: see
-            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+            :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: The constructed chain.
         :rtype: :class:`Chain`
         """
@@ -184,7 +187,7 @@ class Chain(object):
 
         if isinstance(upVectorOrCurve, (str, r.PyNode)):
             upCurve = r.PyNode(upVectorOrCurve)
-            aimVectors = _mo.getAimVectorsFromPoints(points)
+            aimVectors = _mo.getAimVectors(points, col=True)
             aimVectors.append(aimVectors[-1])
 
             upVectors = []
@@ -195,7 +198,7 @@ class Chain(object):
                 upVectors.append(upVector)
 
         else:
-            aimVectors, upVectors = _mo.getAimAndUpVectorsFromPoints(
+            aimVectors, upVectors = _mo.getFramedAimAndUpVectors(
                 points, upVectorOrCurve, tol=tolerance
             )
 
@@ -226,18 +229,19 @@ class Chain(object):
         :param str upAxis: the axis to map to the up vector
         :type upVector: list, :class:`~paya.runtime.data.Vector`
         :param float tolerance/tol: see
-            :func:`paya.lib.mathops.getAimingMatricesFromPoints`
+            :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: ``self``
         :rtype: :class:`Chain`
         """
         points = self.points()
 
-        matrices = _mo.getAimingMatricesFromPoints(
+        matrices = _mo.getChainedAimMatrices(
             points,
             downAxis,
             upAxis,
             upVector,
-            tol=tolerance
+            tol=tolerance,
+            fra=True
         )
 
         parents = []
