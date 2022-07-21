@@ -1,22 +1,10 @@
-"""
-Defines supporting methods for maths rigging and, more broadly, mixed value /
-plug workflows.
-"""
-
 from collections import UserDict
-from functools import wraps, reduce
+from paya.lib.plugops import *
+from paya.util import conditionalExpandArgs
 
-import maya.OpenMaya as om
-import maya.cmds as m
-import pymel.core as p
-from pymel.util.arrays import Array
-import pymel.util as _pu
-
-from paya.util import short, LazyModule
-
-r = LazyModule('paya.runtime')
-
-isScalarValue = lambda x: isinstance(x, (int, float, bool))
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Constants
+#--------------------------------------------------------------|
 
 axisVecs = {
     'x': p.datatypes.Vector([1,0,0]),
@@ -29,44 +17,41 @@ axisVecs = {
     'translate': p.datatypes.Point([0,0,0])
 }
 
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Exceptions
+#--------------------------------------------------------------|
+
+class NoInterpolationKeysError(RuntimeError):
+    """
+    A blending or interpolation operation has no keys to work with.
+    """
+
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Supplemental type analysis
+#--------------------------------------------------------------|
+
 def isVectorValueOrPlug(item):
     """
     :param item: the item to inspect
-    :return: ``True`` if *item* is a vector attribute or value, otherwise
-        ``False``.
+    :return: ``True`` if *item* is a vector value or attribute, otherwise
+        False
     :rtype: bool
     """
     if isinstance(item, p.datatypes.Vector):
         return True
 
-    if isinstance(item, p.Attribute):
-        md = item.__math_dimension__
-
-        return md is 3
-
-    if isinstance(item, str):
-        try:
-            plug = p.Attribute(item)
-
-        except p.MayaNodeError:
-            return False
-
-        return plug.__math_dimension__ is 3
-
     if isinstance(item, (tuple, list)):
-        if len(item) is 3:
-            return all([isScalarValue(member) for member in item])
+        return len(item) is 3 and all(
+            [isScalarValue(member) for member in item])
 
-    return False
+    cls = type(item)
 
-def isTupleOrListOfScalarValues(x):
-    """
-    :param x: the item to inspect
-    :return: True if x is a tuple or list of scalar values, otherwise False.
-    :rtype: bool
-    """
-    return isinstance(x, (tuple, list)) and \
-           all([isScalarValue(member) for member in x])
+    return issubclass(cls, r.plugs.Math3D
+        ) and not issubclass(cls, r.plugs.EulerRotation)
+
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Unit conversion
+#--------------------------------------------------------------|
 
 class NativeUnits(object):
     """
@@ -100,164 +85,246 @@ def nativeUnits(f):
 
     return wrapper
 
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Soft interpolation utilities
+#--------------------------------------------------------------|
 
-class NonPlugStringError(RuntimeError):
+def floatRange(start, end, numValues):
     """
-    A string passed to :func:`info` does not represent a Maya attribute.
+    A variant of Python's :class:`range` for floats.
+
+    :param float start: the minimum value
+    :param float end: the maximum value
+    :param int numValues: the number of values to generate
+    :return: A list of float values between ``start`` and ``end``,
+        inclusively.
+    :rtype: list
+    """
+    grain = (float(end)-float(start)) / (numValues-1)
+    return [grain * x for x in range(numValues)]
+
+class NoInterpolationKeysError(RuntimeError):
+    """
+    A blending or interpolation operation has no keys to work with.
     """
 
-def isPlug(item):
+class LinearInterpolator(UserDict):
     """
-    :param item: the item to inspect
-    :type item: str, :class:`pymel.core.general.PyNode`,
-        :class:`pymel.core.general.Attribute`
-    :return: ``True`` if *item* represents an attribute, otherwise ``False``.
-    :rtype: bool
-    """
-    if isinstance(item, p.Attribute):
-        return True
+    Simple, dict-like interpolator implementation, similar to a linear
+    animation curve in Maya. Works with any value type that can be handled by
+    :func:`pymel.util.arrays.blend`, but types should not be mixed.
 
-    if isinstance(item, str):
+    :Example:
+
+        .. code-block:: python
+
+            interp = LinearInterpolator()
+            interp[10] = 30
+            interp[20] = 40
+            print(interp[11])
+            # Result: 31.0
+    """
+    def __setitem__(self, ratio, value):
+        ratio = float(ratio)
+        super(LinearInterpolator, self).__setitem__(ratio, value)
+
+    def __getitem__(self, sampleRatio):
+        sampleRatio = float(sampleRatio)
+
         try:
-            item = p.Attribute(item)
-            return True
+            return self.data[sampleRatio]
 
-        except (p.MayaNodeError, TypeError):
-            pass
+        except KeyError:
+            ratios = list(sorted(self.keys()))
 
-    return False
+            ln = len(ratios)
 
-def asGeoPlug(item):
+            if ln:
+                values = [self[ratio] for ratio in ratios]
+
+                if ln is 1:
+                    return values[0]
+
+                if ln >= 2:
+                    if sampleRatio <= ratios[0]:
+                        return values[0]
+
+                    if sampleRatio >= ratios[-1]:
+                        return values[-1]
+
+                    startEndRatios = zip(ratios, ratios[1:])
+                    startEndValues = zip(values, values[1:])
+
+                    for startEndRatio, startEndValue in zip(
+                            startEndRatios, startEndValues):
+                        startRatio, endRatio = startEndRatio
+
+                        if sampleRatio >= startRatio and \
+                                sampleRatio <= endRatio:
+                            ratioRatio = (sampleRatio-startRatio
+                                          ) / (endRatio-startRatio)
+                            startValue, endValue = startEndValue
+
+                            return _pu.blend(startValue,
+                                             endValue, weight=ratioRatio)
+
+                    raise RuntimeError("Could not bracket a sample value.")
+
+        raise NoInterpolationKeysError
+
+def floatRange(start, end, numValues):
     """
-    Attempts to conform *item* into a geometry output
+    A variant of Python's :class:`range` for floats.
 
-    :param item: the item to inspect
-    :type item: str, :class:`~paya.runtime.nodes.Transform`,
-        :class:`~paya.runtime.nodes.Shape`,
-        :class:`~paya.runtime.plugs.Geometry`,
-    :raises TypeError: Could not derive a geometry output.
-    :return: The geometry output.
-    :rtype: :class:`~paya.runtime.plugs.Geometry`
+    :param float start: the minimum value
+    :param float end: the maximum value
+    :param int numValues: the number of values to generate
+    :return: A list of float values between ``start`` and ``end``,
+        inclusively.
+    :rtype: list
     """
-    if isinstance(item, str):
-        try:
-            return p.Attribute(item)
+    grain = (float(end)-float(start)) / (numValues-1)
+    return [grain * x for x in range(numValues)]
 
-        except (p.MayaNodeError, TypeError):
-            return p.PyNode(item).worldGeoOutput
-
-    elif isinstance(item, p.Attribute):
-        return item
-
-    elif isinstance(item, (p.nodetypes.Transform, p.nodetypes.Shape)):
-        return item.worldGeoOutput
-
-    else:
-        raise TypeError("Can't derive a geo output from {}.".format(item))
-
-def info(item, angle=False):
+def chaseNones(source):
     """
-    Returns a tuple of three members:
-    -   The item conformed to the highest-level type available
-    -   The item's mathematical dimension (e.g. 16 for matrices)
-    -   ``True`` if the item is a plug, otherwise ``False``
+    Resolves ``None`` members in an iterable by filling in with neighbouring
+    values. If the first member is ``None``, the next defined value is used.
+    If any internal member is ``None``, the last resolved value is used.
 
-    In short: item, dimension, isplug.
-
-    :param item: the item to process
-    :type item: any type
-    :raises NonPlugStringError: ``item`` is a string that could not be
-        instantiated as a plug.
-    :return: :class:`tuple`
+    :param source: the iterable to fill-in
+    :return: A list with no ``None`` members.
+    :rtype: list
     """
-    if isinstance(item, p.Attribute):
-        isplug = True
+    source = list(source)
+    ln = len(source)
 
-    else:
-        if isinstance(item, str):
-            try:
-                item = p.Attribute(item)
-                isplug = True
+    if ln:
+        nn = source.count(None)
 
-            except:
-                raise NonPlugStringError(
-                    "'{}' does not represent an attribute.".format(item)
+        if nn is ln:
+            raise NoInterpolationKeysError
+
+        resolved = []
+
+        for i, member in enumerate(source):
+            if member is None:
+                if i is 0:
+                    for nextMember in source[1:]:
+                        if nextMember is not None:
+                            resolved.append(nextMember)
+                            break
+
+                else:
+                    resolved.append(resolved[-1])
+
+            else:
+                resolved.append(member)
+
+        return resolved
+
+    return []
+
+def blendNones(source, ratios=None):
+    """
+    A blending version of :func:`chaseNones`.
+
+    :param source: the iterable to fill-in
+    :param ratios: if provided, it should be a list of ratios from 0.0 to
+        1.0 (one per member) to bias the blending; if omitted, it will be
+        autogenerated using :func:`floatRange`; defaults to None
+    :return: A list with no ``None`` members.
+    :rtype: list
+    """
+    source = list(source)
+    ln = len(source)
+
+    if ln:
+        nn = source.count(None)
+
+        if nn is ln:
+            raise NoInterpolationKeysError
+
+        if ratios:
+            ratios = list(ratios)
+
+            if len(ratios) is not ln:
+                raise RuntimeError(
+                    "If provided, 'ratios' should be of "+
+                    "the same length as 'source'."
                 )
 
         else:
-            isplug = False
+            ratios = floatRange(0, 1, ln)
 
-    if isplug:
-        mathdim = item.__math_dimension__
+        interpolator = LinearInterpolator()
 
-    else:
-        if isinstance(item, Array):
-            mathdim = len(item.flat)
+        for ratio, member in zip(ratios, source):
+            if member is not None:
+                interpolator[ratio] = member
 
-        else:
-            if isScalarValue(item):
-                mathdim = 1
+        resolved = []
 
-            elif isTupleOrListOfScalarValues(item):
-                mathdim = len(item)
-
-                try:
-                    customcls = {
-                        3: p.datatype.EulerRotation \
-                            if angle else p.datatypes.Vector,
-                        4: p.datatypes.Quaternion,
-                        16: p.datatypes.Matrix
-                    }[mathdim]
-
-                    item = customcls(item)
-
-                except KeyError:
-                    pass
+        for ratio, member in zip(ratios, source):
+            if member is None:
+                resolved.append(interpolator[ratio])
 
             else:
-                mathdim = None
+                resolved.append(member)
 
-    return item, mathdim, isplug
+        return resolved
 
-@short(plug='p')
-def asValue(x, plug=None):
+    return []
+
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Arg wrangling
+#--------------------------------------------------------------|
+
+@short(listLength='ll')
+def conformVectorArg(arg, listLength=None):
     """
-    If x is a plug, returns its value. Otherwise, returns x.
+    Conforms *arg* into a single vector value or plug, or to a list of vectors
+    of the required length (to assign, say, a reference vector to every point
+    in a chaining operation).
 
-    :param x: the item to inspect
-    :param plug/p: if you already know whether x is a plug, specify it
-        here.
-    :return: The value
+    This is loosely checked. Edge cases, like the user passing non-vector
+    values, aren't caught.
+
+    :param arg: the user vector argument to wrangle
+    :type arg: tuple, list, str, :class:`~paya.runtime.plugs.Vector`,
+        :class:`~paya.runtime.data.Vector`
+    :param listLength/ll: if this is specified, then the argument will be
+        conformed, by iterable multiplication, to a list of this length;
+        if it's omitted, a single vector will be returned; defaults to None
+    :return: The conformed vector argument.
+    :rtype: list, :class:`~paya.runtime.plugs.Vector`,
+        :class:`~paya.runtime.data.Vector`
     """
-    if plug:
-        return p.Attribute(x).get()
+    arg = conditionalExpandArgs(
+        arg, gate=lambda x: not isVectorValueOrPlug(x))
 
-    x, xdim, xisplug = info(x)
+    arg = [info(x)[0] for x in arg]
 
-    if xisplug:
-        return x.get()
+    if listLength is None:
+        return arg[0]
 
-    return x
+    ln = len(arg)
 
-def conform(x):
-    """
-    If x is a **value**, then:
+    if ln is listLength:
+        return arg
 
-        - If its dimension is 3, it's returned as a :class:`~paya.runtime.data.Vector`
-        - If its dimension is 4, it's returned as a :class:`~paya.runtime.data.Quaternion`
-        - If its dimension is 16, it's returned as a :class:`~paya.runtime.data.Matrix`
-        - In all other cases, it's returned as-is
+    if ln is 1:
+        return arg * listLength
 
-    If x is a **plug**, then it's returned as an instance of the appropriate
-    :class:`~paya.runtime.plugs.Attribute`
+    raise ValueError(
+        "The resolved vector list can't be "+
+        "multiplied to the required length "+
+        "of {}.".format(listLength)
+    )
 
-    :param x: the item to conform
-    :return: The conformed item.
-    :rtype: :class:`~paya.runtime.data.Vector`,
-        :class:`~paya.runtime.data.Quaternion`, :class:`~paya.runtime.data.Matrix`
-        or :class:`~paya.runtime.plugs.Attribute`
-    """
-    return info(x)[0]
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Matrix construction
+#--------------------------------------------------------------|
 
 def multMatrices(*matrices):
     """
@@ -459,8 +526,8 @@ def createMatrix(
 
                 node = r.nodes.AimMatrix.createNode()
 
-                _vec1 = asValue(vectors[0], p=vectorInfos[0][2])
-                _vec2 = asValue(vectors[1], p=vectorInfos[1][2])
+                _vec1 = asValue(vectors[0])
+                _vec2 = asValue(vectors[1])
 
                 axis1, axis2 = axes
 
@@ -631,222 +698,19 @@ def createMatrix(
 
 cm = createMatrix
 
-class NoInterpolationKeysError(RuntimeError):
-    """
-    A blending or interpolation operation has no keys to work with.
-    """
-
-class LinearInterpolator(UserDict):
-    """
-    Simple, dict-like interpolator implementation, similar to a linear
-    animation curve in Maya. Works with any value type that can be handled by
-    :func:`pymel.util.arrays.blend`, but types should not be mixed.
-
-    :Example:
-
-        .. code-block:: python
-
-            interp = LinearInterpolator()
-            interp[10] = 30
-            interp[20] = 40
-            print(interp[11])
-            # Result: 31.0
-    """
-    def __setitem__(self, ratio, value):
-        ratio = float(ratio)
-        super(LinearInterpolator, self).__setitem__(ratio, value)
-
-    def __getitem__(self, sampleRatio):
-        sampleRatio = float(sampleRatio)
-
-        try:
-            return self.data[sampleRatio]
-
-        except KeyError:
-            ratios = list(sorted(self.keys()))
-
-            ln = len(ratios)
-
-            if ln:
-                values = [self[ratio] for ratio in ratios]
-
-                if ln is 1:
-                    return values[0]
-
-                if ln >= 2:
-                    if sampleRatio <= ratios[0]:
-                        return values[0]
-
-                    if sampleRatio >= ratios[-1]:
-                        return values[-1]
-
-                    startEndRatios = zip(ratios, ratios[1:])
-                    startEndValues = zip(values, values[1:])
-
-                    for startEndRatio, startEndValue in zip(
-                            startEndRatios, startEndValues):
-                        startRatio, endRatio = startEndRatio
-
-                        if sampleRatio >= startRatio and \
-                                sampleRatio <= endRatio:
-                            ratioRatio = (sampleRatio-startRatio
-                                          ) / (endRatio-startRatio)
-                            startValue, endValue = startEndValue
-
-                            return _pu.blend(startValue,
-                                             endValue, weight=ratioRatio)
-
-                    raise RuntimeError("Could not bracket a sample value.")
-
-        raise NoInterpolationKeysError
-
-def floatRange(start, end, numValues):
-    """
-    A variant of Python's :class:`range` for floats.
-
-    :param float start: the minimum value
-    :param float end: the maximum value
-    :param int numValues: the number of values to generate
-    :return: A list of float values between ``start`` and ``end``,
-        inclusively.
-    :rtype: list
-    """
-    grain = (float(end)-float(start)) / (numValues-1)
-    return [grain * x for x in range(numValues)]
-
-def chaseNones(source):
-    """
-    Resolves ``None`` members in an iterable by filling in with neighbouring
-    values. If the first member is ``None``, the next defined value is used.
-    If any internal member is ``None``, the last resolved value is used.
-
-    :param source: the iterable to fill-in
-    :return: A list with no ``None`` members.
-    :rtype: list
-    """
-    source = list(source)
-    ln = len(source)
-
-    if ln:
-        nn = source.count(None)
-
-        if nn is ln:
-            raise NoInterpolationKeysError
-
-        resolved = []
-
-        for i, member in enumerate(source):
-            if member is None:
-                if i is 0:
-                    for nextMember in source[1:]:
-                        if nextMember is not None:
-                            resolved.append(nextMember)
-                            break
-
-                else:
-                    resolved.append(resolved[-1])
-
-            else:
-                resolved.append(member)
-
-        return resolved
-
-    return []
-
-def blendNones(source, ratios=None):
-    """
-    A blending version of :func:`chaseNones`.
-
-    :param source: the iterable to fill-in
-    :param ratios: if provided, it should be a list of ratios from 0.0 to
-        1.0 (one per member) to bias the blending; if omitted, it will be
-        autogenerated using :func:`floatRange`; defaults to None
-    :return: A list with no ``None`` members.
-    :rtype: list
-    """
-    source = list(source)
-    ln = len(source)
-
-    if ln:
-        nn = source.count(None)
-
-        if nn is ln:
-            raise NoInterpolationKeysError
-
-        if ratios:
-            ratios = list(ratios)
-
-            if len(ratios) is not ln:
-                raise RuntimeError(
-                    "If provided, 'ratios' should be of "+
-                    "the same length as 'source'."
-                )
-
-        else:
-            ratios = floatRange(0, 1, ln)
-
-        interpolator = LinearInterpolator()
-
-        for ratio, member in zip(ratios, source):
-            if member is not None:
-                interpolator[ratio] = member
-
-        resolved = []
-
-        for ratio, member in zip(ratios, source):
-            if member is None:
-                resolved.append(interpolator[ratio])
-
-            else:
-                resolved.append(member)
-
-        return resolved
-
-    return []
-
-@short(tolerance='tol')
-def getAimVectorsFromPoints(points, tolerance=1e-7):
-    """
-    Derives aim vectors from points. Needs at least two points. The length of
-    the returned list will always be one less than the length of the points.
-
-    This is a value-only method.
-
-    :param points: the source points (values)
-    :param float tolerance/tol: any vectors below this length will be
-        replaced by neighbouring vectors; defaults to 1e-7
-    :raises NoInterpolationKeysError: none of the derived vectors were
-        longer than the specified tolerance
-    :return: The list of aim vectors.
-    :rtype: :class:`list` of :class:`~paya.runtime.data.Vector`
-    """
-    points = list(map(p.datatypes.Point, points))
-
-    if len(points) > 1:
-        vectors = []
-
-        for i, point in enumerate(points[1:], start=1):
-            prev = points[i-1]
-            vector = point-prev
-            ln = vector.length()
-
-            if vector.length() < tolerance:
-                vector = None
-
-            vectors.append(vector)
-
-        return chaseNones(vectors)
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Framing
+#--------------------------------------------------------------|
 
 def deflipVectors(vectors):
     """
     Returns a list where each vector is flipped if that would bring it closer
-    to the previous one.
-
-    This is a value-only method.
+    to the preceding one. This is a value-only method.
 
     :param vectors: the source vectors (values)
+    :type vectors: [tuple, list, :class:`~paya.runtime.data.Vector`]
     :return: The deflipped vectors.
-    :rtype: :class:`list` of :class:`~paya.runtime.data.Vector`
+    :rtype: [:class:`~paya.runtime.data.Vector`]
     """
     vectors = [p.datatypes.Vector(v).normal() for v in vectors]
     ln = len(vectors)
@@ -871,147 +735,34 @@ def deflipVectors(vectors):
 
     return vectors
 
-@short(tolerance='tol')
-def getAimAndUpVectorsFromPoints(points, refVector, tolerance=1e-7):
+def getAimVectors(points):
     """
-    Given a list of points and a reference up vector, returns aim vectors and
-    up vectors that can be used in matrix construction, for example to draw
-    chains.
-
-    This is a value-only method.
-
-    :param points: the source points (values)
-    :param refVector: a reference up vector
-    :type refVector: :class:`~paya.runtime.data.Vector`, list
-    :param float tolerance/tol: aim vectors or cross products with lengths
-        below this tolerance will be replaced with neighbouring ones;
-        defaults to 1e-7
-    :return: A list of aim vectors and a list of up vectors
-    :rtype: tuple
+    :param points: the points
+    :type points: [list, tuple, :class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :raises ValueError: Fewer than two points were provided.
+    :return: Aiming vectors derived from the input points. The output list
+        will always be one member shorter than the input list.
     """
-    points = list(map(p.datatypes.Point, points))
-    ln = len(points)
+    if len(points) > 1:
+        points = [info(point)[0] for point in points]
 
-    if ln > 1:
-        refVector = p.datatypes.Vector(refVector).normal()
+        out = []
 
-        if ln is 2:
-            aimVecs = [points[1]-points[0]] * 2
-            upVecs = [refVector] * 2
+        for i, thisPoint in enumerate(points[:-1]):
+            nextPoint = points[i+1]
+            out.append(nextPoint-thisPoint)
 
-            return aimVecs, upVecs
+        return out
 
-        else:
-            aimVecs = getAimVectorsFromPoints(points, tol=tolerance)
-
-            # Get interpolation info to use later in up vector calcs
-
-            lengthRatios = [0.0]
-            aimVecLengths = [aimVec.length() for aimVec in aimVecs]
-            fullLength = sum(aimVecLengths)
-            cumulLength = 0.0
-
-            for aimVec, aimVecLength in zip(aimVecs, aimVecLengths):
-                cumulLength += aimVecLength
-                lengthRatios.append(cumulLength / fullLength)
-
-            # Get up vectors
-
-            upVecs = []
-
-            for i, aimVec in enumerate(aimVecs[1:], start=1):
-                prev = aimVecs[i-1]
-                upVec = prev.normal().cross(aimVec.normal())
-
-                if upVec.length() < tolerance:
-                    upVec = None
-
-                else:
-                    upVec = upVec.normal()
-
-                upVecs.append(upVec)
-
-            if upVecs.count(None) == len(upVecs):
-                upVecs = [refVector] * (len(aimVecs)-1)
-
-            else:
-                # First, bias towards the reference vector, dodging Nones
-
-                _upVecs = []
-
-                for upVec in upVecs:
-                    if upVec is None:
-                        _upVecs.append(upVec)
-
-                    else:
-                        neg = upVec * -1
-
-                        if refVector.dot(neg) > refVector.dot(upVec):
-                            upVec = neg
-
-                    _upVecs.append(upVec)
-
-                upVecs = _upVecs
-
-                upVecs = blendNones(upVecs, lengthRatios[1:-1])
-                upVecs = deflipVectors(upVecs)
-
-            # Pad
-
-            upVecs = [upVecs[0]] + upVecs + [upVecs[-1]]
-            aimVecs.append(aimVecs[-1])
-
-            return aimVecs, upVecs
-
-    raise RuntimeError("Need at least two points.")
-
-@short(tolerance='tol')
-def getAimingMatricesFromPoints(
-        points,
-        downAxis,
-        upAxis,
-        refVector,
-        tolerance=1e-7
-):
-    """
-    Given a list of points and a reference up vector, returns aiming matrices
-    which can be used to draw chains and other systems.
-
-    This is a value-only method.
-
-    :param points: the source points (values)
-    :param str downAxis: the aiming axis
-    :param str upAxis: the axis to bias towards the reference vector
-    :param refVector: a reference up vector
-    :type refVector: :class:`~paya.runtime.data.Vector`, list
-    :param float tolerance/tol: aim vectors or cross products with lengths
-        below this tolerance will be replaced with neighbouring ones;
-        defaults to 1e-7
-    :return: A list of matrices
-    :rtype: :class:`list` of :class:`~paya.runtime.data.Matrix`
-    """
-    aimVectors, upVectors = getAimAndUpVectorsFromPoints(
-        points, refVector, tol=tolerance
-    )
-
-    out = []
-
-    for point, aimVector, upVector in zip(points, aimVectors, upVectors):
-        matrix = createMatrix(downAxis, aimVector, upAxis, upVector, t=point
-                              ).pk(t=True, r=True)
-
-        out.append(matrix)
-
-    return out
+    raise ValueError("Need at least two points.")
 
 def pointsIntoUnitCube(points):
     """
-    Normalizes points so that they fit inside a unit cube.
-
     :param points: the points to normalize
-    :type points: list
-    :return: The normalized points.
-    :rtype: list of :class:`~paya.runtime.data.Point`
+    :type points: [tuple, list, :class:`~paya.runtime.data.Point`]
+    :return: The points, fit inside a unit cube.
+    :rtype: [:class:`~paya.runtime.data.Point`]
     """
     xVals = list(map(abs,[point[0] for point in points]))
     yVals = list(map(abs, [point[1] for point in points]))
@@ -1029,94 +780,236 @@ def pointsIntoUnitCube(points):
     except ZeroDivisionError:
         scaleFactor = 1.0
 
-    scaleMatrix = r.createMatrix()
-    scaleMatrix.x *= scaleFactor
-    scaleMatrix.y *= scaleFactor
-    scaleMatrix.z *= scaleFactor
-
+    scaleMatrix = createScaleMatrix(scaleFactor)
     return [r.data.Point(point) ^ scaleMatrix for point in points]
 
-def expandVectorArgs(*args):
+@short(tolerance='tol')
+def getFramedAimAndUpVectors(points, upVector, tolerance=1e-7):
     """
-    Similar to :func:`~pymel.util.arguments.expandArgs`, except it won't
-    expand lists or tuples of three scalars.
+    Value-only method.
 
-    :param *args: the arguments to expand
-    :return: A flattened list.
-    :rtype: list
+    Returns paired lists of aim and up vectors based on points and
+    *upVector*, which can be a single vector or one vector per point.
+
+    The final up vectors are derived using cross products, and biased
+    towards the provided hints. Where the points are in-line, cross products
+    are either blended from neighbours or swapped out for the user up vectors.
+
+    :param points: the starting points
+    :type points: [tuple, list, :class:`~paya.runtime.data.Point`]
+    :param upVector: one up hint vector, or one vector per point
+    :type upVector: tuple, list, :class:`~paya.runtime.data.Vector`
+    :param bool tolerance/tol: any cross products below this length will be
+        interpolated from neighbours; defaults to 1e-7
+    :return: A list of aim vectors and a list of up vectors.
+    :rtype: ([:class:`~paya.runtime.data.Vector`],
+        [:class:`~paya.runtime.data.Vector`])
     """
-    buffer = []
+    refVector = upVector
+    points = [r.data.Point(point) for point in points]
+    ln = len(points)
 
-    def expand(elem):
-        if isinstance(elem, (tuple, list)):
-            elem = list(elem)
+    if ln > 1:
+        refVecs = conformVectorArg(refVector, ll=ln)
 
-            if len(elem) is 3 and all([isScalarValue(x) for x in elem]):
-                buffer.append(elem)
+        if ln is 2:
+            aimVecs = [points[1]-points[0]] * 2
+            upVecs = refVecs
+
+            return aimVecs, upVecs
+
+        else:
+            aimVecs = getAimVectors(points)
+
+        # Get interpolation info to use later in up vector calcs
+        lengthRatios = [0.0]
+        aimVecLengths = [aimVec.length() for aimVec in aimVecs]
+        fullLength = sum(aimVecLengths)
+        cumulLength = 0.0
+
+        for aimVec, aimVecLength in zip(aimVecs, aimVecLengths):
+            cumulLength += aimVecLength
+            lengthRatios.append(cumulLength / fullLength)
+
+        # Get up vectors
+        upVecs = []
+
+        for i, aimVec in enumerate(aimVecs[1:], start=1):
+            prev = aimVecs[i-1]
+            upVec = prev.normal().cross(aimVec.normal())
+
+            if upVec.length() < tolerance:
+                upVec = None
 
             else:
-                for x in elem:
-                    expand(x)
+                upVec = upVec.normal()
+
+            upVecs.append(upVec)
+
+        if upVecs.count(None) == len(upVecs):
+            upVecs = [refVector] * (len(aimVecs)-1)
+
         else:
-            buffer.append(elem)
+            # First, bias towards the reference vectors, dodging Nones
+            _upVecs = []
 
-    expand(args)
+            for upVec, refVec in zip(upVecs, refVecs[1:-1]):
+                if upVec is None:
+                    _upVecs.append(upVec)
 
-    return buffer
-
-def resolveMultiVectorArg(number, vector):
-    """
-    Resolves a vector argument into a list of vectors of length
-    *number*. Used by curve-framing methods such as
-    :meth:`~paya.runtime.plugs.distributeMatrices`.
-
-    :param number: the number of required members
-    :param vector: the user-passed vector argument
-    :return: A list of vectors of length *number*.
-    """
-    items = []
-
-    def expand(item):
-        if isinstance(item, p.datatypes.Vector):
-            items.append(item)
-
-        elif isinstance(item, (p.Attribute, str)):
-            items.append(item)
-
-        elif isinstance(item, (tuple, list)):
-            if len(item) is 3:
-                if all([isScalarValue(member) for member in item]):
-                    items.append(item)
                 else:
-                    for member in item:
-                        expand(member)
-            else:
-                raise TypeError("Can't interpret as vector: {}".format(item))
+                    neg = upVec * -1
 
-        else:
-            raise TypeError("Can't interpret as vector: {}".format(item))
+                    if refVec.dot(neg) > refVec.dot(upVec):
+                        upVec = neg
 
-    expand(vector)
+                _upVecs.append(upVec)
 
-    num = len(items)
+            upVecs = _upVecs
+            upVecs = blendNones(upVecs, lengthRatios[1:-1])
+            upVecs = deflipVectors(upVecs)
 
-    if num is 1:
-        return items * number
+        # Pad
+        upVecs = [upVecs[0]] + upVecs + [upVecs[-1]]
+        aimVecs.append(aimVecs[-1])
 
-    if num is not number:
-        raise ValueError(
-            "Please pass one vector, or one vector per sample point."
+        return aimVecs, upVecs
+
+    raise ValueError("Need at least two points.")
+
+@short(
+    tolerance='tol',
+    framed='fra',
+    squashStretch='ss',
+    globalScale='gs'
+)
+def getChainedAimMatrices(
+        points,
+        aimAxis,
+        upAxis,
+        upVector,
+        squashStretch=False,
+        globalScale=None,
+        framed=False,
+        tolerance=1e-7
+):
+    """
+    :param points: the starting points
+    :param aimAxis: the matrix axes to align to the aiming vectors,
+        for example '-y'.
+    :param upAxis: the matrix axes to align to the resolved up vectors,
+        for example 'x'
+    :param upVector: either one up vector hint, or a list of up vectors
+        (one per point)
+    :type:
+        tuple, list, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+        [tuple, list, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+    :param bool squashStretch: allow squash-and-stretch on the aiming vectors;
+        defaults to False
+    :param globalScale/gs: an optional plug for the scale component; defaults
+        to None
+    :param bool framed/fra: if there are no plugs in the passed
+        parameters, perform cross product framing via
+        :func:`getFramedAimAndUpVectors` (recommended when drawing chains
+        with triads, for example legs); defaults to False
+    :param float tolerance/tol: if *framed* is on, any cross products
+        below this length will be interpolated from neighbours; defaults to
+        1e-7
+    :raises NotImplementedError: *framed* was requested but some of
+        the arguments were plugs
+    :return: Chained-aiming matrices, suitable for drawing or driving chains
+        or control hierarchies.
+    :rtype: [:class:`~paya.runtime.plugs.Matrix`]
+    """
+    pointInfos = [info(point) for point in points]
+    points = [pointInfo[0] for pointInfo in pointInfos]
+    num = len(points)
+
+    if globalScale is None:
+        globalScale = 1.0
+        gsIsPlug = False
+
+    else:
+        globalScale, gsDim, gsIsPlug = info(globalScale)
+
+    upVectors = conformVectorArg(upVector, ll=num)
+
+    hasPlugs = gsIsPlug \
+       or any((pointInfo[2] for pointInfo in pointInfos)) \
+       or any((isPlug(upVector) for upVector in upVectors))
+
+    if hasPlugs and framed:
+        raise NotImplementedError(
+            "Cross product calculations are "+
+            "not available for dynamic points."
         )
 
-    return items
+    if hasPlugs and (gsIsPlug or squashStretch):
+        editScale = True
 
-def resolveNumberOrFractionsArg(arg):
-    """
-    Loosely conforms a ``numberOrFractions`` user argument. If the
-    argument is an integer, a range of floats is returned. Otherwise,
-    the argument is passed through without further checking.
-    """
-    if isinstance(arg, int):
-        return floatRange(0, 1, arg)
+        if squashStretch:
+            downIndex = 'xyz'.index(aimAxis.strip('-'))
 
-    return arg
+        else:
+            baseScaleMtx = createScaleMatrix(globalScale)
+
+    else:
+        editScale = False
+
+    matrices = []
+
+    if hasPlugs or not framed:
+        aimVectors = getAimVectors(points)
+        aimVectors.append(aimVectors[-1])
+
+        matrices = []
+
+        for i, point, aimVector, upVector in zip(
+            range(num),
+            points,
+            aimVectors,
+            upVectors
+        ):
+            with r.Name(i+1):
+                matrix = r.createMatrix(
+                    aimAxis, aimVector,
+                    upAxis, upVector,
+                    t=point
+                ).pick(t=True, r=True)
+
+                if editScale:
+                    if squashStretch:
+                        aimLen = aimVector.length()
+                        _aimLen = aimLen.get()
+
+                        if _aimLen != 1.0:
+                            aimLen /= _aimLen
+
+                        factors = [globalScale] * 3
+                        factors[downIndex] = aimLen
+
+                        smtx = createScaleMatrix(*factors)
+
+                    else:
+                        smtx = baseScaleMtx
+
+                    matrix = smtx * matrix
+
+            matrices.append(matrix)
+
+    else:
+        aimVectors, upVectors = \
+            getFramedAimAndUpVectors(points, upVectors, tol=tolerance)
+
+        for point, aimVector, upVector in zip(
+            points, aimVectors, upVectors
+        ):
+            matrices.append(
+                createMatrix(
+                    aimAxis, aimVector,
+                    upAxis, upVector,
+                    t=point
+                ).pick(t=True, r=True)
+            )
+
+    return matrices
