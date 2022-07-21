@@ -47,12 +47,8 @@ class MotionPath:
             plug.set(default)
 
         self.attr('follow').set(True)
-
-        self.attr('frontAxis').set(frontAxis.upper().strip('-'))
-        self.attr('upAxis').set(upAxis.upper().strip('-'))
-
-        self.attr('inverseFront').set('-' in frontAxis)
-        self.attr('inverseUp').set('-' in upAxis)
+        self.setFrontAxis(frontAxis)
+        self.setUpAxis(upAxis)
 
         if worldUpVector:
             worldUpVector >> self.attr('worldUpVector')
@@ -71,3 +67,32 @@ class MotionPath:
             self.attr('worldUpType').set('Object Up')
 
         return self
+
+    def setFrontAxis(self, axis):
+        """
+        Convenience method. Sets *frontAxis* and *inverseFront*
+        on the motionPath using a single argument.
+
+        :param str axis: the axis to set, for example '-y'
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+        """
+        axis = axis.upper()
+        self.attr('frontAxis').set(axis.strip('-'))
+        self.attr('inverseFront').set('-' in axis)
+        return self
+
+    def setUpAxis(self, axis):
+        """
+        Convenience method. Sets *upAxis* and *inverseUp*
+        on the motionPath using a single argument.
+
+        :param str axis: the axis to set, for example 'x'
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+        """
+        axis = axis.upper()
+        self.attr('upAxis').set(axis.strip('-'))
+        self.attr('inverseUp').set('-' in axis)
+        return self
+
