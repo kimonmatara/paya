@@ -1152,3 +1152,120 @@ class NurbsCurve:
             out.append(matrix)
 
         return out
+
+    @short(
+        upVector='upv',
+        upCurve='upc',
+        squashStretch='ss',
+        globalScale='gs',
+        matchedCurve='mc'
+    )
+    def distributeAimingMatrices(
+            self,
+            numberOrFractions,
+            aimAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None,
+            squashStretch=False,
+            globalScale=None,
+            matchedCurve=None
+    ):
+        """
+        Similar to :meth:`distributeMatrices` except that here the matrices
+        are aimed at each other for a 'chain-like' effect. If neither
+        *upVector* or *upCurve* are provided, curve normals are used.
+
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the matrix axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the matrix to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :return: Matrices, distributed along the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Matrix`],
+            [:class:`~paya.runtime.data.Matrix`]
+        """
+        fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
+        number = len(fractions)
+
+        if upVector:
+            upVector = _mo.conformVectorArg(upVector, ll=number)
+
+        if upVector and any((_mo.isPlug(member) for member in upVector)) \
+                or _mo.isPlug(upCurve) \
+                or _mo.isPlug(globalScale) \
+                or any((_mo.isPlug(f) for f in fractions)):
+            return self.attr('worldSpace').distributeAimingMatrices(
+                fractions,
+                aimAxis,
+                upAxis,
+                upv=upVector,
+                upc=upCurve,
+                ss=squashStretch,
+                gs=globalScale,
+                mc=matchedCurve
+            )
+
+        points = [self.pointAtFraction(f) for f in fractions]
+        aimVecs = _mo.getAimVectors(points)
+        aimVecs.append(aimVecs[-1])
+
+        if upVector:
+            upVectors = upVector
+
+        else:
+            upVectors = []
+
+            if upCurve:
+                upCurve = r.PyNode(upCurve)
+
+                for i in range(number):
+                    if matchedCurve:
+                        param = self.paramAtFraction(fractions[i], ac=False)
+                        interest = upCurve.pointAtParam(param)
+
+                    else:
+                        interest = upCurve.closestPoint_(points[i])
+
+                    upVectors.append(interest-points[i])
+
+            else:
+                for i in range(number):
+                    param = self.paramAtFraction(fractions[i], ac=False)
+                    upVectors.append(self.normal(param, space='world'))
+
+        matrices = []
+
+        for point, aimVector, upVector in zip(
+            points,
+            aimVecs,
+            upVectors
+        ):
+            matrix = r.createMatrix(
+                aimAxis, aimVector,
+                upAxis, upVector,
+                t=point
+            ).pick(t=True, r=True)
+
+            matrices.append(matrix)
+
+        return matrices
