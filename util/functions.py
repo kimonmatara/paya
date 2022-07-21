@@ -78,3 +78,40 @@ def resolveFlags(*flags):
 
     else:
         return ()
+
+
+@short(gate='g')
+def conditionalExpandArgs(*args, gate=None):
+    """
+    Flattens tuples and lists in user arguments into a single list.
+
+    :param \*args: the arguments to expand
+    :param gate/g: if provided, this should be a callable that takes
+        one argument and returns ``True`` if the item should be expanded
+        or not (useful for preserving vectors in list form etc.); will
+        only be used for tuples and lists; defaults to None
+    :return: The flattened args.
+    :rtype: list
+    """
+    out = []
+
+    if gate is None:
+        gate = lambda x: True
+
+    def expand(x):
+        if isinstance(x, (tuple, list)):
+            x = list(x)
+
+            if gate(x):
+                for member in x:
+                    expand(member)
+
+            else:
+                out.append(x)
+
+        else:
+            out.append(x)
+
+    expand(args)
+
+    return out
