@@ -73,7 +73,9 @@ class Matrix:
         compensatePivots='cp',
         compensateJointOrient='cjo',
         compensateRotateAxis='cra',
-        compensateJointScale='cjs'
+        compensateJointScale='cjs',
+        worldSpace='ws',
+        maintainOffset='mo'
     )
     def decomposeAndApply(
             self,
@@ -86,7 +88,8 @@ class Matrix:
             compensateJointOrient=True,
             compensateRotateAxis=True,
             compensateJointScale=True,
-            fast=False
+            worldSpace=False,
+            maintainOffset=False
     ):
         """
         Decomposes and applies this matrix to a transform.
@@ -97,7 +100,6 @@ class Matrix:
         :param bool rotate/r: apply rotation
         :param bool scale/s: apply scale
         :param bool shear/sh: apply shear
-        :param bool fast: skip all compensations; defaults to False
         :param bool compensateJointScale/cjs: account for
             segmentScaleCompensate on joints; defaults to True
         :param bool compensateJointOrient/cjo: account for jointOrient on
@@ -107,14 +109,26 @@ class Matrix:
             to True
         :param bool compensatePivots/cp: compensate for pivots (non-joint
             transforms only); defaults to False
-        :return: For convenience, the return of :meth:`decompose` is passed
-            along
-        :rtype: dict
+        :param bool worldSpace/ws: premultiply this matrix with the inverse
+            of the transform's parent matrix to negate the parent stack;
+            defaults to False
+        :param bool maintainOffset/mo: this is here for parity with
+            :meth:`paya.runtime.plugs.Matrix.decomposeAndApply`; when True,
+            the transform won't be modified at all; defaults to False
+        :return: ``self``
+        :rtype: :class:`Matrix`
         """
         #-------------------------------------|    Prep
 
+        if maintainOffset:
+            return self
+
         translate, rotate, scale, shear = \
             resolveFlags(translate, rotate, scale, shear)
+
+        if not any([translate, rotate, scale, shear]):
+            r.warning("No channels requested, skipping.")
+            return self
 
         xf = r.PyNode(transform)
         isJoint = isinstance(xf, _nt.Joint)
@@ -122,23 +136,19 @@ class Matrix:
         if isJoint:
             compensatePivots = False
 
+            fast = not any([compensateRotateAxis,
+                compensateJointScale, compensateJointOrient])
+
         else:
             compensateJointScale = compensateJointOrient = False
+            fast = not any([compensateRotateAxis, compensatePivots])
 
-        if fast:
-            compensateJointScale \
-                = compensateJointOrient \
-                = compensateRotateAxis \
-                = compensatePivots \
-                = False
+        #-------------------------------------|    Preprocessing
 
-        else:
-            fast = not any([
-                compensateJointOrient,
-                compensateRotateAxis,
-                compensateJointScale,
-                compensatePivots
-            ])
+        matrix = self
+
+        if worldSpace:
+            matrix *= xf.attr('pim')[0].get()
 
         #-------------------------------------|    Fast bail
 
@@ -158,7 +168,7 @@ class Matrix:
                 except:
                     r.warning("Couldn't set attribute: {}".format(dest))
 
-            return decomposition
+            return self
 
         #-------------------------------------|    Main implementation
 
@@ -222,7 +232,67 @@ class Matrix:
                 except:
                     r.warning("Couldn't set attribute: {}".format(dest))
 
-        return decomposition
+        return self
+
+    @short(
+        worldSpace='ws',
+        persistentCompensation='pc',
+        preserveInheritsTransform='pit',
+        maintainOffset='mo'
+    )
+    def applyViaOpm(
+            self,
+            transform,
+            worldSpace=False,
+            persistentCompensation=False,
+            preserveInheritsTransform=False,
+            maintainOffset=False
+    ):
+        """
+        Poses a transform by modifying its ``offsetParentMatrix`` attribute,
+        with SRT channels compensated.
+
+        :param transform: the transform to drive
+        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :param bool worldSpace/ws: drive the transform in world-space;
+            defaults to False
+        :param bool persistentCompensation/pc: unused; here for parity with
+            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`
+        :param preserveInheritsTransform/pit: when *worldSpace* is
+            requested, don't edit the ``inheritsTransform`` attribute on
+            the transform; instead, localise against the current parent;
+            defaults to False
+        :param bool maintainOffset/mo: this is here for parity with
+            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`; it won't have
+            any effect unless *worldSpace* is requested and
+            *preserveInheritsTransform* is False, in which case the object
+            pose will be preserved and its ``inheritsTransform`` attribute
+            will be set to False; defaults to False
+        :return: ``self``
+        :rtype: :class:`Matrix`
+        """
+        xf = r.PyNode(transform)
+
+        if maintainOffset:
+            matrix = xf.getMatrix(worldSpace=True)
+
+        else:
+            matrix = self
+
+        if worldSpace:
+            if preserveInheritsTransform:
+                pnt = xf.getParent()
+
+                if pnt:
+                    matrix *= pnt.getMatrix(worldSpace=True).inverse()
+
+            else:
+                xf.attr('inheritsTransform').set(False)
+
+        matrix = xf.getMatrix().inverse() * matrix
+        xf.attr('opm').set(matrix)
+
+        return self
 
     #-----------------------------------------------------------|    Addition
 
