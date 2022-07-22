@@ -1073,7 +1073,8 @@ class NurbsCurve:
         upCurve='upc',
         squashStretch='ss',
         globalScale='gs',
-        matchedCurve='mc'
+        matchedCurve='mc',
+        plug='p'
     )
     def distributeMatrices(
             self,
@@ -1084,7 +1085,8 @@ class NurbsCurve:
             upCurve=None,
             squashStretch=False,
             globalScale=None,
-            matchedCurve=None
+            matchedCurve=None,
+            plug=False
     ):
         """
         If neither *upVector* or *upCurve* are provided, curve normals are
@@ -1095,7 +1097,7 @@ class NurbsCurve:
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None
@@ -1110,6 +1112,7 @@ class NurbsCurve:
             :class:`paya.runtime.plugs.NurbsCurve`
         :param bool squashStretch/ss: allow tangent scaling; defaults to False
         :param globalScale/gs: a global scaling factor; defaults to None
+        :param bool plug/p: force a dynamic output; defaults to False
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
@@ -1126,11 +1129,14 @@ class NurbsCurve:
         else:
             upVectors = [None] * number
 
-        if any((_mo.isPlug(f) for f in fractions)) \
-                or (upVector and any((_mo.isPlug(v) for v in upVectors))) \
-                or _mo.isPlug(globalScale) \
-                or _mo.isPlug(upCurve):
-            return self.distributeMatrices(
+        plug = plug \
+           or any((_mo.isPlug(f) for f in fractions)) \
+           or (upVector and any((_mo.isPlug(v) for v in upVectors))) \
+           or _mo.isPlug(globalScale) \
+           or _mo.isPlug(upCurve)
+
+        if plug:
+            return self.attr('worldSpace').distributeMatrices(
                 fractions,
                 tangentAxis, upAxis,
                 upv=upVector, upc=upCurve,
@@ -1158,7 +1164,8 @@ class NurbsCurve:
         upCurve='upc',
         squashStretch='ss',
         globalScale='gs',
-        matchedCurve='mc'
+        matchedCurve='mc',
+        plug='p'
     )
     def distributeAimingMatrices(
             self,
@@ -1169,7 +1176,8 @@ class NurbsCurve:
             upCurve=None,
             squashStretch=False,
             globalScale=None,
-            matchedCurve=None
+            matchedCurve=None,
+            plug=False
     ):
         """
         Similar to :meth:`distributeMatrices` except that here the matrices
@@ -1181,7 +1189,7 @@ class NurbsCurve:
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None
@@ -1194,12 +1202,14 @@ class NurbsCurve:
         :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
             :class:`paya.runtime.nodes.NurbsCurve`,
             :class:`paya.runtime.plugs.NurbsCurve`
-        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param bool squashStretch/ss: allow aim vector scaling; defaults to
+            False
         :param globalScale/gs: a global scaling factor; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
             defaults to False
+        :param bool plug/p: force a dynamic output; defaults to False
         :return: Matrices, distributed along the curve.
         :rtype: [:class:`~paya.runtime.plugs.Matrix`],
             [:class:`~paya.runtime.data.Matrix`]
@@ -1210,10 +1220,13 @@ class NurbsCurve:
         if upVector:
             upVector = _mo.conformVectorArg(upVector, ll=number)
 
-        if upVector and any((_mo.isPlug(member) for member in upVector)) \
-                or _mo.isPlug(upCurve) \
-                or _mo.isPlug(globalScale) \
-                or any((_mo.isPlug(f) for f in fractions)):
+        plug = plug \
+            or (upVector and any((_mo.isPlug(member) for member in upVector))) \
+            or _mo.isPlug(upCurve) \
+            or _mo.isPlug(globalScale) \
+            or any((_mo.isPlug(f) for f in fractions))
+
+        if plug:
             return self.attr('worldSpace').distributeAimingMatrices(
                 fractions,
                 aimAxis,
@@ -1269,3 +1282,178 @@ class NurbsCurve:
             matrices.append(matrix)
 
         return matrices
+
+    @short(
+        upVector='upv',
+        upCurve='upc',
+        squashStretch='ss',
+        globalScale='gs',
+        matchedCurve='mc',
+        plug='p'
+    )
+    def fitChain(
+            self,
+            numberOrFractions,
+            aimAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None,
+            squashStretch=False,
+            globalScale=None,
+            matchedCurve=None,
+            plug=False
+    ):
+        """
+        Draws a joint chain along this curve. If *plug* is True, or if any of
+        the arguments are plugs, then the chain will be dynamically attached.
+
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate joints
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the joint axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the joint axis to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow bone scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :param bool plug/p: force a dynamic result; defaults to False
+        :return: A chain, fitted to this curve statically or dynamically.
+        :rtype: :class:`~paya.lib.skel.Chain`
+        """
+        matrices = self.distributeAimingMatrices(
+            numberOrFractions,
+            aimAxis,
+            upAxis,
+            upv=upVector,
+            upc=upCurve,
+            ss=squashStretch,
+            gs=globalScale,
+            mc=matchedCurve,
+            p=plug
+        )
+
+        hasPlugs = any((_mo.info(m)[2] for m in matrices))
+
+        if hasPlugs:
+            _matrices = [m.get() for m in matrices]
+
+        else:
+            _matrices = matrices
+
+        chain = r.Chain.createFromMatrices(_matrices)
+
+        if hasPlugs:
+            for i, matrix, joint in zip(
+                range(len(matrices)),
+                matrices,
+                chain
+            ):
+                with r.Name(i+1):
+                    matrix.applyViaOpm(joint, ws=True)
+
+        return chain
+
+    @short(
+        upVector='upv',
+        upCurve='upc',
+        squashStretch='ss',
+        globalScale='gs',
+        matchedCurve='mc',
+        plug='p'
+    )
+    def distributeJoints(
+            self,
+            numberOrFractions,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            upCurve=None,
+            squashStretch=False,
+            globalScale=None,
+            matchedCurve=None,
+            plug=False
+    ):
+        """
+        If neither *upVector* or *upCurve* are provided, curve normals are
+        used.
+
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the joint axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the joint axis to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow tangent scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :param bool plug/p: force a dynamic output; defaults to False
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :return: Joints, distributed along the curve.
+        :rtype: [:class:`~paya.runtime.nodes.Joint`]
+        """
+        matrices = self.distributeMatrices(
+            numberOrFractions,
+            tangentAxis,
+            upAxis,
+            upv=upVector,
+            upc=upCurve,
+            ss=squashStretch,
+            gs=globalScale,
+            mc=matchedCurve,
+            p=plug
+        )
+
+        hasPlugs = any((_mo.info(m)[2] for m in matrices))
+
+        if hasPlugs:
+            _matrices = [m.get() for m in matrices]
+
+        else:
+            _matrices = matrices
+
+        joints = []
+
+        for i, _matrix in enumerate(_matrices):
+            with r.Name(i+1):
+                joint = r.nodes.Joint.create(wm=_matrix)
+                joints.append(joint)
+
+        if hasPlugs:
+            for i, matrix, joint in zip(
+                range(len(matrices)),
+                matrices,
+                joints
+            ):
+                with r.Name(i+1):
+                    matrix.applyViaOpm(joint, ws=True)
+
+        return joints
