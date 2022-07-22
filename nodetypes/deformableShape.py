@@ -49,7 +49,7 @@ class DeformableShape:
         return bool(self.geoInput.inputs())
 
     @short(create='c')
-    def getOrigInput(self, create=False):
+    def getOrigPlug(self, create=False):
         """
         :param bool create/c: create the original geometry if it doesn't
             already exist
@@ -67,7 +67,7 @@ class DeformableShape:
             return r.Attribute(result[0])
 
     @short(create='c')
-    def getHistoryInput(self, create=False):
+    def getHistoryPlug(self, create=False):
         """
         :param create/c: create a historical input if it doesn't already exist
         :return: The input into this shape, or None
@@ -79,4 +79,4 @@ class DeformableShape:
             return inputs[0]
 
         if create:
-            return self.getOrigInput(create=True)
+            return self.getOrigPlug(create=True)
