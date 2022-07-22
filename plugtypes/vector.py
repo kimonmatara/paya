@@ -377,6 +377,17 @@ class Vector:
 
         return ffm.attr('output')
 
+    def asShearMatrix(self):
+        """
+        Composes this output's three components into a shear matrix.
+
+        :return: The shear matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        cm = r.nodes.ComposeMatrix.createNode()
+        self >> cm.attr('inputShear')
+        return cm.attr('outputMatrix')
+
     def asEulerRotation(self):
         """
         Returns XYZ euler rotations for this vector.
