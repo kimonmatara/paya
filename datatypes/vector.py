@@ -646,3 +646,16 @@ class Vector:
         matrix.z = r.data.Vector([0, 0, 1]) * self[2]
 
         return matrix
+
+    def asShearMatrix(self):
+        """
+        Composes this output's three components into a shear matrix.
+
+        :return: The shear matrix.
+        :rtype: :class:`~paya.runtime.data.Matrix`
+        """
+        this = r.data.TransformationMatrix(self)
+        out = r.data.TransformationMatrix()
+        shear = this.getShear('transform')
+        out.setShear(shear, 'transform')
+        return r.data.Matrix(out)
