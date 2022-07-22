@@ -13,18 +13,14 @@ class Joint:
         displayLocalAxis='dla',
         worldMatrix='wm',
         under='u',
-        name='n',
-        decompose='dec',
-        freeze='fr'
+        name='n'
     )
     def create(
             cls,
             displayLocalAxis=True,
             worldMatrix=None,
             under=None,
-            name=None,
-            decompose=False,
-            freeze=True
+            name=None
     ):
         """
         Creates a joint.
@@ -48,44 +44,38 @@ class Joint:
             joint.setParent(under)
 
         if worldMatrix:
-            worldMatrix, wdim, wisplug = _mo.info(worldMatrix)
-
-            if freeze:
-                # Get soft matrix
-                if wisplug:
-                    _worldMatrix = worldMatrix.get()
-
-                else:
-                    _worldMatrix = worldMatrix
-
-                joint.setMatrix(_worldMatrix)
-
-
-
-
-            # # Get soft matrix
-            #
-            #
-
-            # if freeze
-            #
-            # joint.setMatrix(_worldMatrix, worldSpace=True)
-            # r.makeIdentity(joint, apply=True, r=True, jo=False)
-            #
-            # if wisplug:
-            #     if decompose:
-            #         worldMatrix *= joint.attr('pim')[0]
-            #         worldMatrix.decomposeAndApply(joint)
-            #
-            #     else:
-            #         joint.attr('it').set(False)
-            #         worldMatrix >> joint.attr('opm')
-            #         joint.setMatrix(r.data.Matrix())
+            joint.setMatrix(worldMatrix, worldSpace=True)
+            r.makeIdentity(joint, apply=True, r=True, jo=False, s=True)
 
         if displayLocalAxis:
             joint.attr('dla').set(True)
 
         return joint
+
+    #------------------------------------------------------------|    Visual testing
+
+    def insertCube(self, size=1.0):
+        """
+        Inserts a poly cube under (including transform) under the joint
+        to help test transformations visually.
+
+        :param float size/siz: a single scalar for the cube's width, height
+            and depth; defaults to 1.0
+        :return: The cube transform.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+        """
+        cube = r.polyCube(
+            ch=False,
+            w=size, h=size, d=size,
+            n=r.nodes.Mesh.makeName('{}_test_cube'.format(self.basename())),
+            sd=2,
+            sh=2,
+            sw=2
+        )[0]
+
+        r.parent(cube, self)
+        cube.setMatrix(r.data.Matrix())
+        return cube
 
     #------------------------------------------------------------|    Inspections
 
