@@ -395,7 +395,9 @@ class Matrix:
         compensatePivots='cp',
         compensateJointOrient='cjo',
         compensateRotateAxis='cra',
-        compensateJointScale='cjs'
+        compensateJointScale='cjs',
+        worldSpace='ws',
+        maintainOffset='mo'
     )
     def decomposeAndApply(
             self,
@@ -408,7 +410,8 @@ class Matrix:
             compensateJointOrient=True,
             compensateRotateAxis=True,
             compensateJointScale=True,
-            fast=False
+            worldSpace=False,
+            maintainOffset=False
     ):
         """
         Decomposes and applies this matrix to a transform.
@@ -419,7 +422,11 @@ class Matrix:
         :param bool rotate/r: apply rotation
         :param bool scale/s: apply scale
         :param bool shear/sh: apply shear
-        :param bool fast: skip all compensations; defaults to False
+        :param bool maintainOffset/mo: maintain relative pose; defaults to
+            False
+        :param bool worldSpace/ws: premultiply this matrix with
+            ``parentInverseMatrix`` on the transform to negate the
+            parent stack; defaults to False
         :param bool compensateJointScale/cjs: account for
             segmentScaleCompensate on joints; defaults to True
         :param bool compensateJointOrient/cjo: account for jointOrient on
@@ -429,14 +436,17 @@ class Matrix:
             to True
         :param bool compensatePivots/cp: compensate for pivots (non-joint
             transforms only); this is expensive, so defaults to False
-        :return: For convenience, the return of :meth:`decompose` is passed
-            along
-        :rtype: dict
+        :return: ``self``
+        :rtype: :class:`Matrix`
         """
-        #-------------------------------------|    Prep
+        #-------------------------------------|    Prep / early bail
 
         translate, rotate, scale, shear = \
             resolveFlags(translate, rotate, scale, shear)
+
+        if not any([translate, rotate, scale, shear]):
+            r.warning("No channels requested, skipping.")
+            return self
 
         xf = r.PyNode(transform)
         isJoint = isinstance(xf, _nt.Joint)
@@ -444,23 +454,22 @@ class Matrix:
         if isJoint:
             compensatePivots = False
 
+            fast = not any([compensateRotateAxis,
+                compensateJointScale, compensateJointOrient])
+
         else:
             compensateJointScale = compensateJointOrient = False
+            fast = not any([compensateRotateAxis, compensatePivots])
 
-        if fast:
-            compensateJointScale \
-                = compensateJointOrient \
-                = compensateRotateAxis \
-                = compensatePivots \
-                = False
+        #-------------------------------------|    Preprocessing
 
-        else:
-            fast = not any([
-                compensateJointOrient,
-                compensateRotateAxis,
-                compensateJointScale,
-                compensatePivots
-            ])
+        matrix = self
+
+        if worldSpace:
+            matrix *= xf.attr('pim')[0]
+
+        if maintainOffset:
+            matrix = xf.getMatrix() * matrix.asOffset()
 
         #-------------------------------------|    Fast bail
 
@@ -481,12 +490,9 @@ class Matrix:
                         "Couldn't connect into attribute: {}".format(dest)
                     )
 
-            return decomposition
+            return self
 
         #-------------------------------------|    Main implementation
-
-
-        matrix = self
 
         #-------------------------|    Disassemble
 
@@ -552,7 +558,74 @@ class Matrix:
                         "Couldn't connect into attribute: {}".format(dest)
                     )
 
-        return decomposition
+        return self
+
+    @short(
+        worldSpace='ws',
+        persistentCompensation='pc',
+        preserveInheritsTransform='pit',
+        maintainOffset='mo'
+    )
+    def applyViaOpm(
+            self,
+            transform,
+            worldSpace=False,
+            persistentCompensation=False,
+            preserveInheritsTransform=False,
+            maintainOffset=False
+    ):
+        """
+        Uses this matrix to drive a transform via a connection into the
+        ``offsetParentMatrix``, with compensations against the transform's
+        SRT channels.
+
+        .. warning::
+
+            When *worldSpace* is combined with *preserveInheritsTransform*,
+            the matrix will only be localised against the current parent.
+            The solution will break if the transform is subsequently
+            reparented.
+
+        :param transform: the transform to drive
+        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :param bool worldSpace/ws: drive the transform in world-space;
+            defaults to False
+        :param bool maintainOffset/mo: preserve relative pose on application;
+            defaults to False
+        :param bool persistentCompensation/pc: compensate for the transform's
+            SRT channels persistently, so that the world pose will remain
+            the same even if they change; defaults to False
+        :param preserveInheritsTransform/pit: when *worldSpace* is
+            requested, don't edit the ``inheritsTransform`` attribute on
+            the transform; instead, localise against the current parent;
+            defaults to False
+        :return: ``self``
+        :rtype: :class:`Matrix`
+        """
+        matrix = self
+        xf = r.PyNode(transform)
+
+        if maintainOffset:
+            matrix = xf.getMatrix(worldSpace=True) * matrix.asOffset()
+
+        if worldSpace:
+            if preserveInheritsTransform:
+                r.warning(
+                    "To preserve 'inheritsTransform', the driver "+
+                    "matrix for {} ".format(xf)+"will only be "+
+                    "localised against the current parent."
+                )
+                pnt = xf.getParent()
+
+                if pnt:
+                    matrix *= pnt.attr('wim')
+
+            else:
+                xf.attr('inheritsTransform').set(False)
+
+        matrix = xf.attr('im'
+            ).get(p=persistentCompensation) * matrix
+        matrix >> xf.attr('opm')
 
     #--------------------------------------------------------------------|    Hold
 
