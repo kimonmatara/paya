@@ -40,7 +40,9 @@ class EulerRotation:
     def get(self, plug=False, **kwargs):
         """
         Overrides :meth:`~paya.runtime.plugs.Attribute.get` to return
-        :class:`~paya.runtime.data.EulerRotation` values.
+        :class:`~paya.runtime.data.EulerRotation` values. If this is the
+        ``rotate`` channel on a transform node, rotation order is taken
+        from the
         """
         if plug:
             return self
@@ -48,7 +50,16 @@ class EulerRotation:
         result = r.plugs.Attribute.get(self, **kwargs)
 
         if isinstance(result, _dt.Vector):
-            return r.data.EulerRotation(result)
+            rotation = r.data.EulerRotation(result)
+
+            node = self.node()
+
+            if isinstance(node, _nt.Transform):
+                if self.attrName() == 'r':
+                    rotation.order = node.attr(
+                        'rotateOrder').get(asString=True).upper()
+
+            return rotation
 
         return result
 
