@@ -955,7 +955,7 @@ class NurbsCurve:
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None
@@ -1037,7 +1037,7 @@ class NurbsCurve:
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None
