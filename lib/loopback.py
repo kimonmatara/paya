@@ -57,7 +57,7 @@ class Loopback:
 
             @wraps(f)
             def wrapper(self, *args, **kwargs):
-                workingPlug = self.getHistoricalGeometry(create=True)
+                workingPlug = self.getHistoryPlug(create=True)
                 result = f(workingPlug, *args, **kwargs)
 
                 multi = isinstance(result, (tuple, list))
