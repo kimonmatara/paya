@@ -325,6 +325,42 @@ class EulerRotation:
 
         return _dt.EulerRotation.__rpow__(self, other)
 
-    @property
-    def asRotateMatrix(self):
-        return self.asMatrix
+    @short(rotateOrder='ro')
+    def asRotateMatrix(self, rotateOrder=None):
+        """
+        :param rotateOrder/ro: override the rotate order; this doesn't perform
+            any reordering, it merely treats the rotation differently when
+            composing the matrix; defaults to None
+        :type rotateOrder/ro: None, int, str
+        :return: This euler rotation as a matrix.
+        :rtype: :class:`~paya.runtime.data.Matrix`
+        """
+        if rotateOrder is None:
+            return self.asMatrix()
+
+        if isinstance(rotateOrder, str):
+            rotateOrder = 'XYZ'
+
+        elif isinstance(rotateOrder, int):
+            rotateOrder = self.order.enumtype.keys()[rotateOrder]
+
+        else:
+            # Assume it's an EnumValue, cast it to string
+            rotateOrder = str(rotateOrder)
+
+        rotation = self.copy()
+        rotation.order = rotateOrder
+
+        return rotation.asMatrix()
+
+    def copy(self):
+        """
+        Overloads the base :meth:`~pymel.core.datatypes.EulerRotation.copy` to
+        include rotation order.
+
+        :return: A copy of this euler rotation.
+        :rtype: :class:`EulerRotation`.
+        """
+        out = _dt.EulerRotation.copy(self)
+        out.order = self.order
+        return out
