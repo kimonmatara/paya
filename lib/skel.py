@@ -100,8 +100,7 @@ class Chain(object):
 
         for i, matrix in enumerate(matrices):
             joint = r.nodes.Joint.create(
-                wm=matrix.pick(t=True, r=True),
-                n=i+1,
+                wm=matrix, n=i+1,
                 under=joints[-1] if joints else under
             )
 
