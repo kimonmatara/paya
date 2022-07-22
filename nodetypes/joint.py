@@ -1,3 +1,4 @@
+import paya.lib.mathops as _mo
 from paya.util import short
 import maya.cmds as m
 import paya.runtime as r
@@ -12,14 +13,18 @@ class Joint:
         displayLocalAxis='dla',
         worldMatrix='wm',
         under='u',
-        name='n'
+        name='n',
+        decompose='dec',
+        freeze='fr'
     )
     def create(
             cls,
             displayLocalAxis=True,
             worldMatrix=None,
             under=None,
-            name=None
+            name=None,
+            decompose=False,
+            freeze=True
     ):
         """
         Creates a joint.
@@ -43,8 +48,39 @@ class Joint:
             joint.setParent(under)
 
         if worldMatrix:
-            joint.setMatrix(worldMatrix, worldSpace=True)
-            r.makeIdentity(joint, apply=True, r=True, jo=False)
+            worldMatrix, wdim, wisplug = _mo.info(worldMatrix)
+
+            if freeze:
+                # Get soft matrix
+                if wisplug:
+                    _worldMatrix = worldMatrix.get()
+
+                else:
+                    _worldMatrix = worldMatrix
+
+                joint.setMatrix(_worldMatrix)
+
+
+
+
+            # # Get soft matrix
+            #
+            #
+
+            # if freeze
+            #
+            # joint.setMatrix(_worldMatrix, worldSpace=True)
+            # r.makeIdentity(joint, apply=True, r=True, jo=False)
+            #
+            # if wisplug:
+            #     if decompose:
+            #         worldMatrix *= joint.attr('pim')[0]
+            #         worldMatrix.decomposeAndApply(joint)
+            #
+            #     else:
+            #         joint.attr('it').set(False)
+            #         worldMatrix >> joint.attr('opm')
+            #         joint.setMatrix(r.data.Matrix())
 
         if displayLocalAxis:
             joint.attr('dla').set(True)
@@ -100,7 +136,26 @@ class Joint:
 
         return r.Chain.getFromRoot(self)
 
-    #------------------------------------------------------------|    Sampling
+    #------------------------------------------------------------|    Matrices
+
+    def setMatrix(self, matrix, worldSpace=False):
+        """
+        Overloads :meth:`pymel.core.nodetypes.Transform.setMatrix` to include
+        shear, which is observed on joints in Maya >= 2022.
+
+        :param matrix: the matrix to apply
+        :type matrix: list, tuple, :class:`~paya.runtime.data.Matrix`
+        :param bool worldSpace: apply in world space
+        """
+        matrix = r.data.Matrix(matrix)
+
+        if worldSpace:
+            matrix *= self.attr('pim')[0].get()
+
+        r.nodetypes.Joint.setMatrix(self, matrix)
+        matrix = r.data.TransformationMatrix(matrix)
+        shear = matrix.getShear('transform')
+        self.attr('shear').set(shear)
 
     @short(plug='p')
     def getJointOrientMatrix(self, plug=False):
