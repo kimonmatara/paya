@@ -1,4 +1,5 @@
 from importlib import reload
+from paya.lib.loopback import Loopback
 import paya.lib.nurbsutil as _nu
 import paya.lib.mathops as _mo
 import pymel.core.nodetypes as _nt
@@ -118,7 +119,7 @@ class NurbsCurve:
 
         # Modify
         if bSpline or hasPlugs:
-            origShape = curveShape.getOrigInput(create=True).node()
+            origShape = curveShape.getOrigPlug(create=True).node()
 
             if hasPlugs:
                 for i, point in enumerate(points):
@@ -181,6 +182,21 @@ class NurbsCurve:
             shape.attr('f').set(1)
 
         return shape
+
+    #-----------------------------------------------------|    Loopbacks
+
+    subCurve = Loopback()
+    detach = Loopback()
+    retract = Loopback()
+    reverse = Loopback()
+    toBezier = Loopback()
+    toNurbs = Loopback()
+    bSpline = Loopback()
+    cvRebuild  = Loopback()
+    rebuild = Loopback()
+    cageRebuild = Loopback()
+    blend = Loopback()
+    setLength = Loopback()
 
     #-----------------------------------------------------|    Macro
 
