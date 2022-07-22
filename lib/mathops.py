@@ -289,7 +289,7 @@ def resolveNumberOrFractionsArg(arg):
     if isinstance(arg, int):
         return floatRange(0, 1, arg)
 
-    return [_mo.info(x)[0] for x in arg]
+    return [info(x)[0] for x in arg]
 
 @short(listLength='ll')
 def conformVectorArg(arg, listLength=None):
