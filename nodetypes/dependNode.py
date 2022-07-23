@@ -69,7 +69,58 @@ class DependNode:
 
     bn = basename
 
+    @short(uuid='uid', managedNames='mn')
+    def rename(self, *elems, ignoreShape=False,
+               uuid=False, managedNames=False):
+        """
+        Overloads :func:`pymel.core.general.rename` to add the following:
+
+        -   multiple name elements
+        -   optional name management
+
+        :param \*elems: one or more name elements; these will be strung
+            together with underscores; ignored if *uuid* is True
+        :type \*elems: None, str, int, tuple, list
+        :param ignoreShape: indicates that renaming of shape nodes below
+            transform nodes should be prevented; defaults to False
+        :param uuid: Indicates that the new name is actually a UUID, and that
+            the command should change the node’s UUID (In which case its name
+            remains unchanged); defaults to False
+        :param bool managedNames/mn: perform Paya name management, i.e.:
+
+            - inherit prefixes from :class:`~paya.lib.names.Name` blocks
+            - apply the type suffix
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.DependNode`
+        """
+        if uuid:
+            # Bail
+            return r.nodetypes.DependNode.rename(self, uuid=True)
+
+        if managedNames:
+            name = self.makeName(*elems)
+
+        else:
+            name = _nm.make(*elems, control=self.isControl())
+
+        r.nodetypes.DependNode.rename(self, name, ignoreShape=ignoreShape)
+        return self
+
     #-----------------------------------------------------------|    Constructors
+
+    # Remove this if we never end up using it
+    # @classmethod
+    # def getFactoryConstructor(cls):
+    #     """
+    #     :return: A 'factory' constructor retrieved via
+    #         :mod:`maya.internal.common.cmd.base`, where available.
+    #     :rtype: None or callable
+    #     """
+    #     import maya.internal.common.cmd.base as mayaCmdBase
+    #
+    #     cls = mayaCmdBase.getCommandClass(
+    #         '{}.cmd_create'.format(cls.__melnode__))
+    #     return cls().execute
 
     @classmethod
     @short(name='n')
@@ -118,6 +169,27 @@ class DependNode:
         :rtype: dict
         """
         return {'name': str(self), 'nodeType': self.__melnode__}
+
+    #-----------------------------------------------------------|    Control management
+
+    def isControl(self, *state): # Overloaded on DAG node
+        """
+        :param bool \*state: if ``True``, make this node a controller; if
+            ``False``, remove any controller tags; if omitted, return whether
+            this node is a controller
+        :raises NotImplementedError: The control state can't be edited on non-
+            DAG nodes.
+        :return: bool or None
+        """
+        if len(state):
+            if state[0]:
+                raise NotImplementedError(
+                    "The control state of non-DAG nodes can't be edited."
+                )
+
+            return
+
+        return False
 
     #-----------------------------------------------------------|    Attr management
 
