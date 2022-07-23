@@ -108,9 +108,6 @@ class CurveWarp:
         r.select(geometry, curve)
         node = r.PyNode(mel.eval('createCurveWarp'))
 
-        name = cls.makeName(name)
-        m.evalDeferred('m.rename("{}", "{}")'.format(str(node), name))
-
         # Config
         if aimCurve:
             aimCurve = _po.asGeoPlug(aimCurve, ws=True)
@@ -136,5 +133,12 @@ class CurveWarp:
             node.attr('alignmentMode').set(index)
 
         node.attr('aimCurveMode').set(2 if closestPoint else 1)
+
+        name = cls.makeName(name)
+        node.rename(name)
+        # m.evalDeferred(
+        #     'import maya.cmds as m; m.rename("{}", "{}")'.format(
+        #         str(node), name)
+        # )
 
         return node
