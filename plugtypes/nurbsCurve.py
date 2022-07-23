@@ -1,5 +1,6 @@
 import paya.lib.mathops as _mo
 import pymel.util as _pu
+import paya.lib.nurbsutil as _nu
 from paya.util import short
 import paya.runtime as r
 
@@ -254,6 +255,7 @@ class NurbsCurve:
             parameter.
         :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
         """
+        param = _nu.conformUParamArg(param)
         node = r.nodes.PointOnCurveInfo.createNode()
         self >> node.attr('inputCurve')
         param >> node.attr('parameter')
@@ -300,6 +302,14 @@ class NurbsCurve:
         return node
 
     #--------------------------------------|    Point sampling
+
+    def pointAtCV(self, cv):
+        """
+        :param cv: the CV to sample
+        :type cv: int, :class:`~paya.runtime.comps.NurbsCurveCV`
+        :return: A point position at the specified CV.
+        """
+        return self.info().attr('controlPoints')[int(cv)]
 
     def pointAtParam(self, param):
         """
@@ -396,7 +406,7 @@ class NurbsCurve:
         :return: The length at the given parameter.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        return self.detachCurve(param, keep=0)[0].length()
+        return self.detach(param, select=0)[0].length()
 
     def lengthAtFraction(self, fraction):
         """
@@ -450,43 +460,43 @@ class NurbsCurve:
         """
         return length / self.length()
 
-    #--------------------------------------|    Up vector sampling
+    #--------------------------------------|    Binormal sampling
 
-    def upVectorAtParam(self, param):
+    def binormalAtParam(self, param):
         """
-        :param param: the parameter at which to sample the upVector
+        :param param: the parameter at which to sample the binormal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        return self.infoAtParam(param).upVector
+        return self.infoAtParam(param).binormal
 
-    def upVectorAtFraction(self, fraction):
+    def binormalAtFraction(self, fraction):
         """
-        :param fraction: the fraction at which to sample the upVector
+        :param fraction: the fraction at which to sample the binormal
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         param = self.paramAtFraction(fraction)
-        return self.upVectorAtParam(param)
+        return self.binormalAtParam(param)
 
-    def upVectorAtLength(self, length):
+    def binormalAtLength(self, length):
         """
-        :param length: the length at which to sample the upVector
+        :param length: the length at which to sample the binormal
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         param = self.paramAtLength(length)
-        return self.upVectorAtParam(param)
+        return self.binormalAtParam(param)
 
-    def upVectorAtPoint(self, point):
+    def binormalAtPoint(self, point):
         """
-        :param point: the point at which to sample the upVector
+        :param point: the point at which to sample the binormal
         :type point: list, tuple, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`,
         :return: A vector that's perpendicular to both the curve normal
@@ -494,7 +504,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         param = self.paramAtPoint(point)
-        return self.upVectorAtParam(param)
+        return self.binormalAtParam(param)
 
     #--------------------------------------|    Matrix sampling
 
@@ -1490,6 +1500,9 @@ class NurbsCurve:
         :return: The sub-curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
+        minValue = _nu.conformUParamArg(minValue)
+        maxValue = _nu.conformUParamArg(maxValue)
+
         node = r.nodes.SubCurve.createNode()
         self >> node.attr('inputCurve')
         minValue >> node.attr('minValue')
@@ -1510,6 +1523,7 @@ class NurbsCurve:
         :return: [:class:`~paya.runtime.plugs.NurbsCurve`]
         """
         parameters = _pu.expandArgs(*parameters)
+        parameters = [_nu.conformUParamArg(param) for param in parameters]
 
         if not parameters:
             raise RuntimeError("No parameter(s) specified.")
@@ -1522,7 +1536,7 @@ class NurbsCurve:
             parameter >> node.attr('parameter')[i]
 
         node.attr('outputCurve').evaluate()
-        outputIndices = range(len(parameters)-1)
+        outputIndices = range(len(parameters)+1)
 
         if select is None:
             selectedIndices = outputIndices
@@ -1534,8 +1548,10 @@ class NurbsCurve:
                 node.attr('keep')[
                     outputIndex].set(outputIndex in selectedIndices)
 
-        return [node.attr('outputCurve'
+        out = [node.attr('outputCurve'
             )[selectedIndex] for selectedIndex in selectedIndices]
+
+        return out
 
     @short(atStart='ats', atBothEnds='abe')
     def retract(self, length, atStart=None, atBothEnds=None):
