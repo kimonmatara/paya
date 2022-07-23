@@ -1,8 +1,11 @@
 from importlib import reload
+
+import pymel.core.nodetypes as _nt
+
+import paya.lib.nurbsutil as _nu
 from paya.lib.loopback import Loopback
 import paya.lib.nurbsutil as _nu
 import paya.lib.mathops as _mo
-import pymel.core.nodetypes as _nt
 from paya.util import short
 import paya.runtime as r
 
@@ -307,6 +310,19 @@ class NurbsCurve:
         return self.closestPoint(refPoint, space='world')
 
     @short(plug='p')
+    def pointAtCV(self, cv, plug=False):
+        """
+        :param cv: the CV to sample
+        :type cv: int, :class:`~paya.runtime.comps.NurbsCurveCV`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The world-space point position of the specified CV.
+        """
+        if plug:
+            return self.attr('worldSpace').pointAtCV(cv)
+
+        return r.pointPosition(cv, world=True)
+
+    @short(plug='p')
     def pointAtParam(self, param, plug=False):
         """
         :param param: the parameter at which to sample
@@ -317,6 +333,8 @@ class NurbsCurve:
         :type: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
         """
+        param = _nu.conformUParamArg(param)
+
         if plug:
             return self.attr('worldSpace').pointAtParam(param)
 
@@ -493,9 +511,11 @@ class NurbsCurve:
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
-        :return: Tthe curve length at the given parameter.
+        :return: The curve length at the given parameter.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
         """
+        param = _nu.conformUParamArg(param)
+
         if plug:
             return self.attr('worldSpace').lengthAtParam()
 
@@ -563,6 +583,8 @@ class NurbsCurve:
         :return: The length fraction at the given parameter
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
         """
+        param = _nu.conformUParamArg(param)
+
         if plug:
             return self.attr('worldSpace').fractionAtParam(param)
 
@@ -595,21 +617,22 @@ class NurbsCurve:
     #-----------------------------------------------------|    Up vector sampling
 
     @short(plug='p')
-    def upVectorAtParam(self, param, plug=False):
+    def binormalAtParam(self, param, plug=False):
         """
-        :param param: the parameter at which to sample the up vector
+        :param param: the parameter at which to sample the binormal
         :rtype param: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
+        param = _nu.conformUParamArg(param)
         p, pdim, pisplug = _mo.info(param)
 
         plug = plug or pisplug
 
         if plug:
-            return self.attr('worldSpace').upVectorAtParam(param)
+            return self.attr('worldSpace').binormalAtParam(param)
 
         else:
             position, tangent, derivative = \
@@ -618,9 +641,9 @@ class NurbsCurve:
             return tangent.cross(derivative).normal()
 
     @short(plug='p')
-    def upVectorAtFraction(self, fraction, plug=False):
+    def binormalAtFraction(self, fraction, plug=False):
         """
-        :param fraction: the length fraction at which to sample the up vector
+        :param fraction: the length fraction at which to sample the binormal
         :rtype fraction: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A vector that's perpendicular to both the curve normal
@@ -628,12 +651,12 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         param = self.paramAtFraction(fraction)
-        return self.upVectorAtParam(param, p=plug)
+        return self.binormalAtParam(param, p=plug)
 
     @short(plug='p')
-    def upVectorAtLength(self, fraction, plug=False):
+    def binormalAtLength(self, fraction, plug=False):
         """
-        :param length: the length at which to sample the up vector
+        :param length: the length at which to sample the binormal
         :rtype length: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A vector that's perpendicular to both the curve normal
@@ -641,12 +664,12 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         param = self.paramAtLength(length)
-        return self.upVectorAtParam(param, p=plug)
+        return self.binormalAtParam(param, p=plug)
 
     @short(plug='p')
-    def upVectorAtPoint(self, point, plug=False):
+    def binormalAtPoint(self, point, plug=False):
         """
-        :param point: the point at which to sample the up vector
+        :param point: the point at which to sample the binormal
         :rtype point: list, tuple, str, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
         :param bool plug/p: force a dynamic output; defaults to False
@@ -655,7 +678,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         param = self.paramAtPoint(point)
-        return self.upVectorAtParam(param, p=plug)
+        return self.binormalAtParam(param, p=plug)
 
     #-----------------------------------------------------|    Matrix sampling
 
@@ -683,6 +706,9 @@ class NurbsCurve:
             matchedCurve=False,
             plug=False
     ):
+        if not fraction:
+            paramOrFraction = _nu.conformUParamArg(paramOrFraction)
+
         # defaults to the normal if no up vector hints
 
         if plug or any((
@@ -1473,3 +1499,69 @@ class NurbsCurve:
                     matrix.applyViaOpm(joint, ws=True)
 
         return joints
+
+    #-----------------------------------------------------|    Clusters
+
+    @short(tolerance='tol')
+    def getCollocatedCVGroups(self, tolerance=1e-6):
+        """
+        :param float tolerance/tol: the collocation tolerance;
+            defaults to 1e-7
+        :return: A list of lists, where each sub-list comprises CVs which
+            are collocated.
+        :rtype: [[:class:`~paya.runtime.comps.NurbsCurveCV`]]
+        """
+        cvs = list(self.comp('cv'))
+        num = len(cvs)
+        indices = range(num)
+        points = [r.pointPosition(cv, world=True) for cv in cvs]
+
+        groups = []
+
+        usedIndices = []
+
+        for i, startCV, startPoint in zip(indices, cvs, points):
+            if i in usedIndices:
+                continue
+
+            group = [startCV]
+            usedIndices.append(i)
+
+            for x, cv, point in zip(indices, cvs, points):
+                if x in usedIndices:
+                    continue
+
+                if point.isEquivalent(startPoint, tol=1e-6):
+                    group.append(cv)
+                    usedIndices.append(x)
+
+            groups.append(group)
+
+        return groups
+
+    @short(tolerance='tol', mergeCollocated='mcl')
+    def clusterAll(self, mergeCollocated=False, tolerance=1e-6):
+        """
+        Clusters-up the CVs on this curve.
+
+        :param bool mergeCollocated/mcl: merge the start / end CVs
+            if they overlap within the specified *tolerance*; defaults to
+            False
+        :return: The clusters.
+        :rtype: [:class:`~paya.runtime.nodes.Cluster`]
+        """
+        if mergeCollocated:
+            items = self.getCollocatedCVGroups(tol=tolerance)
+
+        else:
+            items = self.comp('cv')
+
+        clusters = []
+
+        for i, item in enumerate(items):
+            with r.Name(i+1):
+                cluster = r.nodes.Cluster.create(item)
+
+            clusters.append(cluster)
+
+        return clusters
