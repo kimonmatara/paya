@@ -69,6 +69,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveWarp.html">CurveWarp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="deformableShape.html">DeformableShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
@@ -193,6 +194,408 @@ False</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.subCurve">
+<span class="sig-name descname"><span class="pre">subCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.subCurve" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.subCurve" title="paya.runtime.plugs.NurbsCurve.subCurve"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.subCurve()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Connects and configures a <code class="docutils literal notranslate"><span class="pre">subCurve</span></code> node and returns its output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minValue</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – a source for the <code class="docutils literal notranslate"><span class="pre">minValue</span></code> attribute</p></li>
+<li><p><strong>maxValue</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – a source for the <code class="docutils literal notranslate"><span class="pre">maxValue</span></code> attribute</p></li>
+<li><p><strong>relative/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – set the node to ‘relative’; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The sub-curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.detach">
+<span class="sig-name descname"><span class="pre">detach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.detach" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.detach" title="paya.runtime.plugs.NurbsCurve.detach"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.detach()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Detaches this curve at the specified parameter(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*parameters</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the parameter(s) at which to ‘cut’ the curve</p></li>
+<li><p><strong>select/sel</strong> – a subset of output indices to include in the
+return; <code class="docutils literal notranslate"><span class="pre">keep</span></code> attributes will configured accordingly</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.retract">
+<span class="sig-name descname"><span class="pre">retract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atStart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atBothEnds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.retract" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.retract" title="paya.runtime.plugs.NurbsCurve.retract"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.retract()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Retracts this curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the retraction length</p></li>
+<li><p><strong>atStart/ats</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – retract at the start of the curve instead
+of the end; defaults to False</p></li>
+<li><p><strong>atBothEnds</strong> – retract at both ends of the curve; defaults to
+False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The modified curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.reverse">
+<span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.reverse" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.reverse" title="paya.runtime.plugs.NurbsCurve.reverse"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.reverse()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The reversed curve.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.toBezier">
+<span class="sig-name descname"><span class="pre">toBezier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">economy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.toBezier" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.toBezier" title="paya.runtime.plugs.NurbsCurve.toBezier"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.toBezier()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Converts this NURBS curve to a Bezier curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>economy/eco</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – just return <code class="docutils literal notranslate"><span class="pre">self</span></code> if this is already
+a Bezier curve; defaults to True</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The bezier curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.toNurbs">
+<span class="sig-name descname"><span class="pre">toNurbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">economy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.toNurbs" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.toNurbs" title="paya.runtime.plugs.NurbsCurve.toNurbs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.toNurbs()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Converts this Bezier curve to a NURBS curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>economy/eco</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – just return <code class="docutils literal notranslate"><span class="pre">self</span></code> if this is already
+a NURBS curve; defaults to True</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The NURBS curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.bSpline">
+<span class="sig-name descname"><span class="pre">bSpline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.bSpline" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.bSpline" title="paya.runtime.plugs.NurbsCurve.bSpline"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.bSpline()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keepRange/kr</strong> (int, str, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – <p>An index or enum key for the <code class="docutils literal notranslate"><span class="pre">.keepRange</span></code>
+mode:</p>
+<ul>
+<li><p>0: ‘0 to 1’</p></li>
+<li><p>1: ‘Original’ (the default)</p></li>
+<li><p>2: ‘0 to #spans’</p></li>
+</ul>
+</p></li>
+<li><p><strong>tolerance/tol</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the fit tolerance; defaults to 0.1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The B-spline.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.cvRebuild">
+<span class="sig-name descname"><span class="pre">cvRebuild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numCVs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endKnots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Multiple</span> <span class="pre">end</span> <span class="pre">knots'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Original'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepControlPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepEndPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepTangents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.cvRebuild" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.cvRebuild" title="paya.runtime.plugs.NurbsCurve.cvRebuild"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.cvRebuild()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Rebuilds this curve to the specified number of CVs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>degree/d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the degree to build to; defaults to this curve’s
+(current) degree if omitted</p></li>
+<li><p><strong>endKnots/end</strong> – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘Non Multiple end knots’</p></li>
+<li><p>1: ‘Multiple end knots’ (the default)</p></li>
+</ul>
+</p></li>
+<li><p><strong>keepRange/kr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘0 to 1’</p></li>
+<li><p>1: ‘Original’ (the default)</p></li>
+<li><p>2: ‘0 to #spans’</p></li>
+</ul>
+</p></li>
+<li><p><strong>keepEndPoints/kep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep end points; defaults to True</p></li>
+<li><p><strong>keepTangents/kt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep tangents; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rebuilt curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.rebuild">
+<span class="sig-name descname"><span class="pre">rebuild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rebuildType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Uniform'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endKnots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Multiple</span> <span class="pre">end</span> <span class="pre">knots'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Original'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepControlPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepEndPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepTangents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.rebuild" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.rebuild" title="paya.runtime.plugs.NurbsCurve.rebuild"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.rebuild()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rebuildType/rt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘Uniform’ (the default)</p></li>
+<li><p>1: ‘Reduce Spans’</p></li>
+<li><p>2: ‘Match Knots’</p></li>
+<li><p>3: ‘No Mults’</p></li>
+<li><p>4: ‘Curvature’</p></li>
+<li><p>5: ‘End Conditions’</p></li>
+<li><p>6: ‘Clean’</p></li>
+</ul>
+</p></li>
+<li><p><strong>spans/s</strong> (int, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the number of spans to build to; defaults to this
+curve’s (current) number of spans if omitted</p></li>
+<li><p><strong>degree/d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the degree to build to; defaults to this curve’s
+(current) degree if omitted</p></li>
+<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the fit tolerance; defaults to 0.01</p></li>
+<li><p><strong>smooth/sm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the ‘smoothing’ factor; defaults to -3.0</p></li>
+<li><p><strong>endKnots/end</strong> – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘Non Multiple end knots’</p></li>
+<li><p>1: ‘Multiple end knots’ (the default)</p></li>
+</ul>
+</p></li>
+<li><p><strong>keepRange/kr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>An enum index or label:</p>
+<ul>
+<li><p>0: ‘0 to 1’</p></li>
+<li><p>1: ‘Original’ (the default)</p></li>
+<li><p>2: ‘0 to #spans’</p></li>
+</ul>
+</p></li>
+<li><p><strong>keepControlPoints/kcp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep control points; defaults to
+False</p></li>
+<li><p><strong>keepEndPoints/kep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep end points; defaults to True</p></li>
+<li><p><strong>keepTangents/kt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep tangents; defaults to False</p></li>
+<li><p><strong>matchCurve/mc</strong> (None, str, <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>) – ignored if <em>rebuildType</em> is not 2 or ‘Match Knots`;
+a NURBS curve attribute whose knots to match; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rebuilt curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.cageRebuild">
+<span class="sig-name descname"><span class="pre">cageRebuild</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.cageRebuild" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.cageRebuild" title="paya.runtime.plugs.NurbsCurve.cageRebuild"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.cageRebuild()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A linear curve with the same CVs as this one.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.blend">
+<span class="sig-name descname"><span class="pre">blend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">otherCurve</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.blend" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.blend" title="paya.runtime.plugs.NurbsCurve.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.blend()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Blends this curve output towards <em>otherCurve</em> via an <code class="docutils literal notranslate"><span class="pre">avgCurves</span></code>
+node. You may get unexpected results if the curves don’t match
+in terms of spans, degree etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>otherCurve</strong> (str, <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>) – the curve to blend towards</p></li>
+<li><p><strong>weight/w</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the blend weight; the other curve will take over
+fully at 1.0; defaults to 0.5</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The blended curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.setLength">
+<span class="sig-name descname"><span class="pre">setLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targetLength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atStart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extrapolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipleKnots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.setLength" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Geometry Loopback</p>
+<p>This method is a wrapper for <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.setLength" title="paya.runtime.plugs.NurbsCurve.setLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.setLength()</span></code></a>.
+Attribute returns are replaced with shapes. These should be
+caught, as some operations may entirely replace the original
+shape instance.</p>
+<p>History is always preserved. Use
+<a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> to clear
+where needed.</p>
+<p class="rubric">Original Documentation</p>
+<p>Uses gated retractions and extensions to force the length of this
+curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>targetLength</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the target length</p></li>
+<li><p><strong>atStart/ats</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – anchor the curve at the end rather than the
+start; defaults to False</p></li>
+<li><p><strong>vector</strong> (None, tuple, list, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – a vector along which to extend; this is recommended for
+spine setups where tangency should be more tightly controlled; if
+this is omitted, the <em>linear / circular / extrapolate</em> modes will
+be used instead</p></li>
+<li><p><strong>circular/cir</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>vector</em> was provided; use the
+‘circular’ mode of the <code class="docutils literal notranslate"><span class="pre">extendCurve</span></code> node; defaults to False</p></li>
+<li><p><strong>linear/lin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>vector</em> was provided;
+use the ‘linear’ mode of the <code class="docutils literal notranslate"><span class="pre">extendCurve</span></code> node; defaults to
+False</p></li>
+<li><p><strong>extrapolate/ext</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>vector</em> was provided;
+use the ‘extrapolate’ mode of the <code class="docutils literal notranslate"><span class="pre">extendCurve</span></code> node; defaults
+to True</p></li>
+<li><p><strong>multipleKnots</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – keep multiple knots; defaults to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.macro">
 <span class="sig-name descname"><span class="pre">macro</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.macro" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -276,6 +679,22 @@ reference point.</p>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
 <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.pointAtCV">
+<span class="sig-name descname"><span class="pre">pointAtCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.pointAtCV" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cv</strong> (int, <a class="reference internal" href="../comps/nurbsCurveCV.html#paya.runtime.comps.NurbsCurveCV" title="paya.runtime.comps.NurbsCurveCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveCV</span></code></a>) – the CV to sample</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The world-space point position of the specified CV.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -448,7 +867,7 @@ a float; defaults to True</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tthe curve length at the given parameter.</p>
+<dd class="field-even"><p>The curve length at the given parameter.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a></p>
@@ -539,12 +958,12 @@ curve.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.upVectorAtParam">
-<span class="sig-name descname"><span class="pre">upVectorAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtParam" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.binormalAtParam">
+<span class="sig-name descname"><span class="pre">binormalAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.binormalAtParam" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>param</strong> – the parameter at which to sample the up vector</p></li>
+<li><p><strong>param</strong> – the parameter at which to sample the binormal</p></li>
 <li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
 </ul>
 </dd>
@@ -562,12 +981,12 @@ and tangent.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.upVectorAtFraction">
-<span class="sig-name descname"><span class="pre">upVectorAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtFraction" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.binormalAtFraction">
+<span class="sig-name descname"><span class="pre">binormalAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.binormalAtFraction" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fraction</strong> – the length fraction at which to sample the up vector</p></li>
+<li><p><strong>fraction</strong> – the length fraction at which to sample the binormal</p></li>
 <li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
 </ul>
 </dd>
@@ -585,12 +1004,12 @@ and tangent.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.upVectorAtLength">
-<span class="sig-name descname"><span class="pre">upVectorAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtLength" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.binormalAtLength">
+<span class="sig-name descname"><span class="pre">binormalAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.binormalAtLength" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>length</strong> – the length at which to sample the up vector</p></li>
+<li><p><strong>length</strong> – the length at which to sample the binormal</p></li>
 <li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
 </ul>
 </dd>
@@ -608,12 +1027,12 @@ and tangent.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.upVectorAtPoint">
-<span class="sig-name descname"><span class="pre">upVectorAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtPoint" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.binormalAtPoint">
+<span class="sig-name descname"><span class="pre">binormalAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.binormalAtPoint" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>point</strong> – the point at which to sample the up vector</p></li>
+<li><p><strong>point</strong> – the point at which to sample the binormal</p></li>
 <li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
 </ul>
 </dd>
@@ -857,7 +1276,7 @@ fractions, or a number</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.distributeMatrices">
-<span class="sig-name descname"><span class="pre">distributeMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangentAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchedCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeMatrices" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">distributeMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangentAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchedCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeMatrices" title="Permalink to this definition"></a></dt>
 <dd><p>If neither <em>upVector</em> or <em>upCurve</em> are provided, curve normals are
 used.</p>
 <dl class="field-list simple">
@@ -867,7 +1286,7 @@ used.</p>
 length fractions at which to generate matrices</p></li>
 <li><p><strong>tangentAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the matrix axis to map to the curve tangent,
 for example ‘-y’</p></li>
-<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the matrix to align to the resolved up vector, for
+<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the matrix axis to align to the resolved up vector, for
 example ‘x’</p></li>
 <li><p><strong>upVector/upv</strong> (None,
 list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
@@ -879,6 +1298,7 @@ a list of up vectors (one per fraction); defaults to None</p></li>
 <code class="docutils literal notranslate"><span class="pre">curveWarp</span></code>; defaults to None</p></li>
 <li><p><strong>squashStretch/ss</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow tangent scaling; defaults to False</p></li>
 <li><p><strong>globalScale/gs</strong> (None, float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – a global scaling factor; defaults to None</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
 <li><p><strong>matchedCurve/mc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – set this to True when <em>upCurve</em> has the
 same U domain as this curve, to avoid closest-point calculations;
 defaults to False</p></li>
@@ -895,7 +1315,7 @@ defaults to False</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.distributeAimingMatrices">
-<span class="sig-name descname"><span class="pre">distributeAimingMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchedCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeAimingMatrices" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">distributeAimingMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchedCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeAimingMatrices" title="Permalink to this definition"></a></dt>
 <dd><p>Similar to <a class="reference internal" href="#paya.runtime.nodes.NurbsCurve.distributeMatrices" title="paya.runtime.nodes.NurbsCurve.distributeMatrices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">distributeMatrices()</span></code></a> except that here the matrices
 are aimed at each other for a ‘chain-like’ effect. If neither
 <em>upVector</em> or <em>upCurve</em> are provided, curve normals are used.</p>
@@ -906,7 +1326,87 @@ are aimed at each other for a ‘chain-like’ effect. If neither
 length fractions at which to generate matrices</p></li>
 <li><p><strong>tangentAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the matrix axis to map to the curve tangent,
 for example ‘-y’</p></li>
-<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the matrix to align to the resolved up vector, for
+<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the matrix axis to align to the resolved up vector, for
+example ‘x’</p></li>
+<li><p><strong>upVector/upv</strong> (None,
+list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+[list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – if provided, should be either a single up vector or a
+a list of up vectors (one per fraction); defaults to None</p></li>
+<li><p><strong>upCurve/upc</strong> (None, str, <a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,
+<a class="reference internal" href="#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.nodes.NurbsCurve</span></code></a>,
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve</span></code></a>) – an ‘up’ curve, as seen for example on Maya’s
+<code class="docutils literal notranslate"><span class="pre">curveWarp</span></code>; defaults to None</p></li>
+<li><p><strong>squashStretch/ss</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow aim vector scaling; defaults to
+False</p></li>
+<li><p><strong>globalScale/gs</strong> (None, float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – a global scaling factor; defaults to None</p></li>
+<li><p><strong>matchedCurve/mc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – set this to True when <em>upCurve</em> has the
+same U domain as this curve, to avoid closest-point calculations;
+defaults to False</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrices, distributed along the curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>],
+[<a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.fitChain">
+<span class="sig-name descname"><span class="pre">fitChain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchedCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.fitChain" title="Permalink to this definition"></a></dt>
+<dd><p>Draws a joint chain along this curve. If <em>plug</em> is True, or if any of
+the arguments are plugs, then the chain will be dynamically attached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numberOrFractions</strong> (int, [float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>]) – a single number of a list of explicit
+length fractions at which to generate joints</p></li>
+<li><p><strong>tangentAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the joint axis to map to the curve tangent,
+for example ‘-y’</p></li>
+<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the joint axis to align to the resolved up vector, for
+example ‘x’</p></li>
+<li><p><strong>upVector/upv</strong> (None,
+list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+[list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – if provided, should be either a single up vector or a
+a list of up vectors (one per fraction); defaults to None</p></li>
+<li><p><strong>upCurve/upc</strong> (None, str, <a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,
+<a class="reference internal" href="#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.nodes.NurbsCurve</span></code></a>,
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve</span></code></a>) – an ‘up’ curve, as seen for example on Maya’s
+<code class="docutils literal notranslate"><span class="pre">curveWarp</span></code>; defaults to None</p></li>
+<li><p><strong>squashStretch/ss</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow bone scaling; defaults to False</p></li>
+<li><p><strong>globalScale/gs</strong> (None, float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – a global scaling factor; defaults to None</p></li>
+<li><p><strong>matchedCurve/mc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – set this to True when <em>upCurve</em> has the
+same U domain as this curve, to avoid closest-point calculations;
+defaults to False</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic result; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A chain, fitted to this curve statically or dynamically.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../paya/lib/skel.html#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.distributeJoints">
+<span class="sig-name descname"><span class="pre">distributeJoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOrFractions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangentAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchedCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeJoints" title="Permalink to this definition"></a></dt>
+<dd><p>If neither <em>upVector</em> or <em>upCurve</em> are provided, curve normals are
+used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numberOrFractions</strong> (int, [float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>]) – a single number of a list of explicit
+length fractions at which to generate matrices</p></li>
+<li><p><strong>tangentAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the joint axis to map to the curve tangent,
+for example ‘-y’</p></li>
+<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the joint axis to align to the resolved up vector, for
 example ‘x’</p></li>
 <li><p><strong>upVector/upv</strong> (None,
 list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
@@ -918,17 +1418,54 @@ a list of up vectors (one per fraction); defaults to None</p></li>
 <code class="docutils literal notranslate"><span class="pre">curveWarp</span></code>; defaults to None</p></li>
 <li><p><strong>squashStretch/ss</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow tangent scaling; defaults to False</p></li>
 <li><p><strong>globalScale/gs</strong> (None, float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – a global scaling factor; defaults to None</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output; defaults to False</p></li>
 <li><p><strong>matchedCurve/mc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – set this to True when <em>upCurve</em> has the
 same U domain as this curve, to avoid closest-point calculations;
 defaults to False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Matrices, distributed along the curve.</p>
+<dd class="field-even"><p>Joints, distributed along the curve.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[<a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>],
-[<a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>]</p>
+<dd class="field-odd"><p>[<a class="reference internal" href="joint.html#paya.runtime.nodes.Joint" title="paya.runtime.nodes.Joint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Joint</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.getCollocatedCVGroups">
+<span class="sig-name descname"><span class="pre">getCollocatedCVGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.getCollocatedCVGroups" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the collocation tolerance;
+defaults to 1e-7</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of lists, where each sub-list comprises CVs which
+are collocated.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[[<a class="reference internal" href="../comps/nurbsCurveCV.html#paya.runtime.comps.NurbsCurveCV" title="paya.runtime.comps.NurbsCurveCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveCV</span></code></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.clusterAll">
+<span class="sig-name descname"><span class="pre">clusterAll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mergeCollocated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.clusterAll" title="Permalink to this definition"></a></dt>
+<dd><p>Clusters-up the CVs on this curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mergeCollocated/mcl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – merge the start / end CVs
+if they overlap within the specified <em>tolerance</em>; defaults to
+False</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The clusters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="cluster.html#paya.runtime.nodes.Cluster" title="paya.runtime.nodes.Cluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cluster</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>

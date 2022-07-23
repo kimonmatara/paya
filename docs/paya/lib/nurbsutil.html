@@ -126,6 +126,43 @@
              
   <section id="module-paya.lib.nurbsutil">
 <span id="paya-lib-nurbsutil"></span><h1>paya.lib.nurbsutil<a class="headerlink" href="#module-paya.lib.nurbsutil" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.nurbsutil.getKnotList">
+<span class="sig-name descname"><span class="pre">getKnotList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numCVs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.nurbsutil.getKnotList" title="Permalink to this definition"></a></dt>
+<dd><p>Given a number of CVs and a degree, returns a knot list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numCVs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of CVs</p></li>
+<li><p><strong>degree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the degree; one of 1, 2, 3, 5 or 7</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The knot list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.nurbsutil.conformUParamArg">
+<span class="sig-name descname"><span class="pre">conformUParamArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uParam</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.nurbsutil.conformUParamArg" title="Permalink to this definition"></a></dt>
+<dd><p>If <em>uParam</em> is a component, returns its float form; otherwise returns
+an attribute instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>uParam</strong> (float, str,
+<a class="reference internal" href="../../pools/comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the U curve parameter argument to conform</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The conformed parameter.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

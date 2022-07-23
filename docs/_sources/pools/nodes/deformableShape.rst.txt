@@ -23,7 +23,7 @@ paya.runtime.nodes.DeformableShape
         :return: True if this shape has history, otherwise False.
         :rtype: bool
     
-    .. py:method:: getOrigInput(create=False)
+    .. py:method:: getOrigPlug(create=False)
     
         :param bool create/c: create the original geometry if it doesn't
             already exist
@@ -31,7 +31,7 @@ paya.runtime.nodes.DeformableShape
             in this shape's history, or None
         :rtype: :class:`~paya.runtime.plugs.Geometry`, None
     
-    .. py:method:: getHistoryInput(create=False)
+    .. py:method:: getHistoryPlug(create=False)
     
         :param create/c: create a historical input if it doesn't already exist
         :return: The input into this shape, or None

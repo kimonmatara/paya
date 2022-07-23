@@ -161,7 +161,7 @@ or <a class="reference internal" href="eulerRotation.html#paya.runtime.data.Eule
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.data.Matrix.decomposeAndApply">
-<span class="sig-name descname"><span class="pre">decomposeAndApply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensatePivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensateJointOrient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensateRotateAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensateJointScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Matrix.decomposeAndApply" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">decomposeAndApply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensatePivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensateJointOrient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensateRotateAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensateJointScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maintainOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Matrix.decomposeAndApply" title="Permalink to this definition"></a></dt>
 <dd><p>Decomposes and applies this matrix to a transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -171,7 +171,6 @@ or <a class="reference internal" href="eulerRotation.html#paya.runtime.data.Eule
 <li><p><strong>rotate/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – apply rotation</p></li>
 <li><p><strong>scale/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – apply scale</p></li>
 <li><p><strong>shear/sh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – apply shear</p></li>
-<li><p><strong>fast</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – skip all compensations; defaults to False</p></li>
 <li><p><strong>compensateJointScale/cjs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – account for
 segmentScaleCompensate on joints; defaults to True</p></li>
 <li><p><strong>compensateJointOrient/cjo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – account for jointOrient on
@@ -181,14 +180,53 @@ set this to False to emulate Maya constraint behaviour; defaults
 to True</p></li>
 <li><p><strong>compensatePivots/cp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – compensate for pivots (non-joint
 transforms only); defaults to False</p></li>
+<li><p><strong>worldSpace/ws</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – premultiply this matrix with the inverse
+of the transform’s parent matrix to negate the parent stack;
+defaults to False</p></li>
+<li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – this is here for parity with
+<a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix.decomposeAndApply" title="paya.runtime.plugs.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix.decomposeAndApply()</span></code></a>; when True,
+the transform won’t be modified at all; defaults to False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>For convenience, the return of <a class="reference internal" href="#paya.runtime.data.Matrix.decompose" title="paya.runtime.data.Matrix.decompose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decompose()</span></code></a> is passed
-along</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.Matrix.applyViaOpm">
+<span class="sig-name descname"><span class="pre">applyViaOpm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persistentCompensation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserveInheritsTransform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maintainOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Matrix.applyViaOpm" title="Permalink to this definition"></a></dt>
+<dd><p>Poses a transform by modifying its <code class="docutils literal notranslate"><span class="pre">offsetParentMatrix</span></code> attribute,
+with SRT channels compensated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transform</strong> (str, <a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the transform to drive</p></li>
+<li><p><strong>worldSpace/ws</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – drive the transform in world-space;
+defaults to False</p></li>
+<li><p><strong>persistentCompensation/pc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – unused; here for parity with
+<a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix.applyViaOpm" title="paya.runtime.plugs.Matrix.applyViaOpm"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix.applyViaOpm()</span></code></a></p></li>
+<li><p><strong>preserveInheritsTransform/pit</strong> – when <em>worldSpace</em> is
+requested, don’t edit the <code class="docutils literal notranslate"><span class="pre">inheritsTransform</span></code> attribute on
+the transform; instead, localise against the current parent;
+defaults to False</p></li>
+<li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – this is here for parity with
+<a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix.applyViaOpm" title="paya.runtime.plugs.Matrix.applyViaOpm"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix.applyViaOpm()</span></code></a>; it won’t have
+any effect unless <em>worldSpace</em> is requested and
+<em>preserveInheritsTransform</em> is False, in which case the object
+pose will be preserved and its <code class="docutils literal notranslate"><span class="pre">inheritsTransform</span></code> attribute
+will be set to False; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

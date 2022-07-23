@@ -69,6 +69,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveWarp.html">CurveWarp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="deformableShape.html">DeformableShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
@@ -134,15 +135,12 @@
 <dt class="sig sig-object py" id="paya.runtime.nodes.PointOnCurveInfo">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointOnCurveInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.PointOnCurveInfo" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.PointOnCurveInfo.getUpVectorOutput">
-<span class="sig-name descname"><span class="pre">getUpVectorOutput</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.PointOnCurveInfo.getUpVectorOutput" title="Permalink to this definition"></a></dt>
-<dd><p>Getter for the <code class="docutils literal notranslate"><span class="pre">.upVector</span></code> / <code class="docutils literal notranslate"><span class="pre">.upv</span></code> property.</p>
-<p>Initialises, or retrieves, a vector that’s perpendicular to the
-normal, and closer to what it intuitively meant as an ‘up’ vector
-on curves.</p>
+<dt class="sig sig-object py" id="paya.runtime.nodes.PointOnCurveInfo.getBinormal">
+<span class="sig-name descname"><span class="pre">getBinormal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.PointOnCurveInfo.getBinormal" title="Permalink to this definition"></a></dt>
+<dd><p>Getter for the <code class="docutils literal notranslate"><span class="pre">.binormal</span></code> property.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The up vector.</p>
+<dd class="field-odd"><p>The binormal.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>

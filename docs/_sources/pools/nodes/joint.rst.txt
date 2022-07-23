@@ -23,6 +23,16 @@ paya.runtime.nodes.Joint
         :return: The joint.
         :rtype: :class:`~paya.runtime.nodes.Joint`
     
+    .. py:method:: insertCube(size=1.0)
+    
+        Inserts a poly cube under (including transform) under the joint
+        to help test transformations visually.
+        
+        :param float size/siz: a single scalar for the cube's width, height
+            and depth; defaults to 1.0
+        :return: The cube transform.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+    
     .. py:method:: skinClusters()
     
         :return: Associated skinClusters, in no particular order.
@@ -42,6 +52,15 @@ paya.runtime.nodes.Joint
         :return: A chain from this joint up to and including 'to'
             (if provided), or terminating before the first branch.
         :rtype: :class:`~paya.lib.skel.Chain`
+    
+    .. py:method:: setMatrix(matrix, worldSpace=False)
+    
+        Overloads :meth:`pymel.core.nodetypes.Transform.setMatrix` to include
+        shear, which is observed on joints in Maya >= 2022.
+        
+        :param matrix: the matrix to apply
+        :type matrix: list, tuple, :class:`~paya.runtime.data.Matrix`
+        :param bool worldSpace: apply in world space
     
     .. py:method:: getJointOrientMatrix(plug=False)
     

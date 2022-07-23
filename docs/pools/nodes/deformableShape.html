@@ -69,6 +69,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveWarp.html">CurveWarp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">DeformableShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
@@ -174,8 +175,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.getOrigInput">
-<span class="sig-name descname"><span class="pre">getOrigInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.getOrigInput" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.getOrigPlug">
+<span class="sig-name descname"><span class="pre">getOrigPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.getOrigPlug" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>create/c</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – create the original geometry if it doesn’t
@@ -192,8 +193,8 @@ in this shape’s history, or None</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.getHistoryInput">
-<span class="sig-name descname"><span class="pre">getHistoryInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.getHistoryInput" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="paya.runtime.nodes.DeformableShape.getHistoryPlug">
+<span class="sig-name descname"><span class="pre">getHistoryPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DeformableShape.getHistoryPlug" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>create/c</strong> – create a historical input if it doesn’t already exist</p>

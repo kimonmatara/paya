@@ -85,3 +85,20 @@ paya.runtime.data.EulerRotation
         
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rpow__` to add
         support for 1D and 3D plugs.
+    
+    .. py:method:: asRotateMatrix(rotateOrder=None)
+    
+        :param rotateOrder/ro: override the rotate order; this doesn't perform
+            any reordering, it merely treats the rotation differently when
+            composing the matrix; defaults to None
+        :type rotateOrder/ro: None, int, str
+        :return: This euler rotation as a matrix.
+        :rtype: :class:`~paya.runtime.data.Matrix`
+    
+    .. py:method:: copy()
+    
+        Overloads the base :meth:`~pymel.core.datatypes.EulerRotation.copy` to
+        include rotation order.
+        
+        :return: A copy of this euler rotation.
+        :rtype: :class:`EulerRotation`.

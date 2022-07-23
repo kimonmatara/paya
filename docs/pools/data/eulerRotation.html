@@ -220,6 +220,39 @@ support for 1D and 3D plugs.</p>
 support for 1D and 3D plugs.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.EulerRotation.asRotateMatrix">
+<span class="sig-name descname"><span class="pre">asRotateMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotateOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.EulerRotation.asRotateMatrix" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rotateOrder/ro</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – override the rotate order; this doesn’t perform
+any reordering, it merely treats the rotation differently when
+composing the matrix; defaults to None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This euler rotation as a matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.EulerRotation.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.EulerRotation.copy" title="Permalink to this definition"></a></dt>
+<dd><p>Overloads the base <code class="xref py py-meth docutils literal notranslate"><span class="pre">copy()</span></code> to
+include rotation order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A copy of this euler rotation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.data.EulerRotation" title="paya.runtime.data.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

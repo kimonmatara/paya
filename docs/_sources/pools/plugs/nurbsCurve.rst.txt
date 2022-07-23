@@ -115,6 +115,12 @@ paya.runtime.plugs.NurbsCurve
         :return: The ``nearestPointOnCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
     
+    .. py:method:: pointAtCV(cv)
+    
+        :param cv: the CV to sample
+        :type cv: int, :class:`~paya.runtime.comps.NurbsCurveCV`
+        :return: A point position at the specified CV.
+    
     .. py:method:: pointAtParam(param)
     
         :param param: the parameter to sample
@@ -214,33 +220,33 @@ paya.runtime.plugs.NurbsCurve
         :return: The length fraction at the given length.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: upVectorAtParam(param)
+    .. py:method:: binormalAtParam(param)
     
-        :param param: the parameter at which to sample the upVector
+        :param param: the parameter at which to sample the binormal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: upVectorAtFraction(fraction)
+    .. py:method:: binormalAtFraction(fraction)
     
-        :param fraction: the fraction at which to sample the upVector
+        :param fraction: the fraction at which to sample the binormal
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: upVectorAtLength(length)
+    .. py:method:: binormalAtLength(length)
     
-        :param length: the length at which to sample the upVector
+        :param length: the length at which to sample the binormal
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: upVectorAtPoint(point)
+    .. py:method:: binormalAtPoint(point)
     
-        :param point: the point at which to sample the upVector
+        :param point: the point at which to sample the binormal
         :type point: list, tuple, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`,
         :return: A vector that's perpendicular to both the curve normal
@@ -410,7 +416,7 @@ paya.runtime.plugs.NurbsCurve
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None
@@ -443,7 +449,7 @@ paya.runtime.plugs.NurbsCurve
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None

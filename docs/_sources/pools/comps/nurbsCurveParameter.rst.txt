@@ -6,7 +6,86 @@ paya.runtime.comps.NurbsCurveParameter
 
 .. py:class:: NurbsCurveParameter(*args, **kwargs)
 
+    .. py:method:: isRange()
+    
+        :return: True if this component represents a range.
+        :rtype: bool
+    
+    .. py:method:: indices()
+    
+        :return: A tuple of either one or two indices
+            (representing a U range).
+        :rtype: (float), (float, float)
+    
     .. py:method:: __float__()
     
         :return: This parameter as a float.
+        :raises ValueError: Can't return a float because this parameter
+            instance represents a range.
         :rtype: :class:`float`
+    
+    .. py:method:: point(plug=False)
+    
+        :alias: ``getWorldPosition`` / ``gwp``
+        :param bool plug/p: return a plug, not value; defaults to False
+        :return: A world position at this parameter.
+    
+    .. py:method:: matrix(tangentAxis, upAxis, squashStretch=False, upVector=None, upObject=None, upCurve=None, globalScale=None, matchedCurve=False, plug=False)
+    
+        :param str tangentAxis: the axis to align to the curve tangent
+        :param str upAxis: the axis to align to the resolved up vector
+        :param bool squashStretch/ss: incorporate tangent stretching
+            (dynamic only); defaults to False
+        :param upVector/upv: used as an up vector on its own, or extracted from
+            *upObject*; defaults to None
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upCurve/upc: an up curve; defaults to None
+        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param upObject/upo: used as an aiming interest on its own, or as a source
+            for *upVector*; defaults to None
+        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param globalScale/gs: used to drive scaling on dynamic matrices only;
+            the scale will be normalised; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid unnecessary closest-point
+            calculations; defaults to False
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: A matrix at the specified parameter, constructed using the
+            most efficient DG configuration for the given options.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`,
+            :class:`~paya.runtime.data.Matrix`
+    
+    .. py:method:: fraction(plug=False)
+    
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The length fraction at the given parameter
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: length(param, plug=False)
+    
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The curve length at the given parameter.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: detach()
+    
+        :return: The resulting shape segments.
+        :rtype: [:class:`~paya.runtime.nodes.NurbsCurve`]
+    
+    .. py:method:: subCurve(*toParameter)
+    
+        Returns a sub-curve (via a ``subCurve`` node). If this is a ranged
+        parameter, its range is used. Otherwise, *toParameter* is used for
+        the end.
+        
+        :param \*toParameter: the end parameter for the segment if this
+            parameter is not ranged.
+        :type \*toParameter: float, string,
+            :class:`~paya.runtime.comps.NurbsCurveParameter`
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The resulting shape.

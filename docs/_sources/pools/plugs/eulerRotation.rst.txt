@@ -23,7 +23,9 @@ paya.runtime.plugs.EulerRotation
     .. py:method:: get(plug=False, **kwargs)
     
         Overrides :meth:`~paya.runtime.plugs.Attribute.get` to return
-        :class:`~paya.runtime.data.EulerRotation` values.
+        :class:`~paya.runtime.data.EulerRotation` values. If this is the
+        ``rotate`` channel on a transform node, rotation order is taken
+        from the transform.
     
     .. py:method:: set(*args, **kwargs)
     

@@ -1,0 +1,34 @@
+*******************************
+paya.runtime.comps.NurbsCurveCV
+*******************************
+
+.. py:currentmodule:: paya.runtime.comps
+
+.. py:class:: NurbsCurveCV(*args, **kwargs)
+
+    .. py:method:: isRange()
+    
+        :return: True if this component represents a range.
+        :rtype: bool
+    
+    .. py:method:: __int__()
+    
+        :raises ValueError: Can't return an integer because this instance
+            represents a range of CVS.
+        :return: The CV index.
+        :rtype: int
+    
+    .. py:method:: getWorldPosition(plug=False)
+    
+        :alias: ``gwp``
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The world-space point position of the specified CV.
+    
+    .. py:method:: cluster(**createFlags)
+    
+        Clusters this CV.
+        
+        :param \*\*createFlags: forwarded to
+            :meth:`paya.runtime.nodes.Cluster.create`.
+        :return: The cluster node.
+        :rtype: :class:`~paya.runtime.nodes.Cluster`

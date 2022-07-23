@@ -46,6 +46,342 @@ paya.runtime.nodes.NurbsCurve
         :return: A curve constructed using the macro.
         :rtype: :class:`NurbsCurve`.
     
+    .. py:method:: subCurve(minValue, maxValue, relative=False)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.subCurve`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Connects and configures a ``subCurve`` node and returns its output.
+        
+        :param minValue: a source for the ``minValue`` attribute
+        :type minValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param maxValue: a source for the ``maxValue`` attribute
+        :type maxValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool relative/r: set the node to 'relative'; defaults to False
+        :return: The sub-curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: detach(*parameters, select=None)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.detach`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Detaches this curve at the specified parameter(s).
+        
+        :param \*parameters: the parameter(s) at which to 'cut' the curve
+        :type \*parameters: float, :class:`~paya.runtime.plugs.Math1D`
+        :param select/sel: a subset of output indices to include in the
+            return; ``keep`` attributes will configured accordingly
+        :return: [:class:`~paya.runtime.plugs.NurbsCurve`]
+    
+    .. py:method:: retract(length, atStart=None, atBothEnds=None)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.retract`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Retracts this curve.
+        
+        :param length: the retraction length
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool atStart/ats: retract at the start of the curve instead
+            of the end; defaults to False
+        :param atBothEnds: retract at both ends of the curve; defaults to
+            False
+        :return: The modified curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: reverse()
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.reverse`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        :return: The reversed curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: toBezier(economy=True)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.toBezier`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Converts this NURBS curve to a Bezier curve.
+        
+        :param bool economy/eco: just return ``self`` if this is already
+            a Bezier curve; defaults to True
+        :return: The bezier curve.
+        :rtype: :class:`~paya.runtime.plugs.BezierCurve`
+    
+    .. py:method:: toNurbs(economy=True)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.toNurbs`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Converts this Bezier curve to a NURBS curve.
+        
+        :param bool economy/eco: just return ``self`` if this is already
+            a NURBS curve; defaults to True
+        :return: The NURBS curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: bSpline(tolerance=0.1, keepRange=1)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.bSpline`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        :param keepRange/kr: An index or enum key for the ``.keepRange``
+            mode:
+        
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        
+        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param tolerance/tol: the fit tolerance; defaults to 0.1
+        :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The B-spline.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: cvRebuild(numCVs, degree=None, endKnots='Multiple end knots', keepRange='Original', keepControlPoints=False, keepEndPoints=True, keepTangents=False)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.cvRebuild`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Rebuilds this curve to the specified number of CVs.
+        
+        :param int degree/d: the degree to build to; defaults to this curve's
+            (current) degree if omitted
+        :param endKnots/end: An enum index or label:
+        
+            - 0: 'Non Multiple end knots'
+            - 1: 'Multiple end knots' (the default)
+        :type endKnots: int, str
+        :param keepRange/kr: An enum index or label:
+        
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        :type keepRange/kr: int, str
+        :param bool keepEndPoints/kep: keep end points; defaults to True
+        :param bool keepTangents/kt: keep tangents; defaults to False
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: rebuild(rebuildType='Uniform', spans=None, degree=None, tolerance=0.01, smooth=-3, endKnots='Multiple end knots', keepRange='Original', keepControlPoints=False, keepEndPoints=True, keepTangents=False, matchCurve=None)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.rebuild`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        :param rebuildType/rt: An enum index or label:
+        
+            - 0: 'Uniform' (the default)
+            - 1: 'Reduce Spans'
+            - 2: 'Match Knots'
+            - 3: 'No Mults'
+            - 4: 'Curvature'
+            - 5: 'End Conditions'
+            - 6: 'Clean'
+        :type rebuildType/rt: int, str
+        :param spans/s: the number of spans to build to; defaults to this
+            curve's (current) number of spans if omitted
+        :type spans/s: int, :class:`~paya.runtime.plugs.Math1D`
+        :param int degree/d: the degree to build to; defaults to this curve's
+            (current) degree if omitted
+        :param float tolerance/tol: the fit tolerance; defaults to 0.01
+        :param float smooth/sm: the 'smoothing' factor; defaults to -3.0
+        :param endKnots/end: An enum index or label:
+        
+            - 0: 'Non Multiple end knots'
+            - 1: 'Multiple end knots' (the default)
+        :type endKnots: int, str
+        :param keepRange/kr: An enum index or label:
+        
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        :type keepRange/kr: int, str
+        :param bool keepControlPoints/kcp: keep control points; defaults to
+            False
+        :param bool keepEndPoints/kep: keep end points; defaults to True
+        :param bool keepTangents/kt: keep tangents; defaults to False
+        :param matchCurve/mc: ignored if *rebuildType* is not 2 or 'Match Knots`;
+            a NURBS curve attribute whose knots to match; defaults to None
+        :type matchCurve/mc: None, str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: cageRebuild()
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.cageRebuild`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        :return: A linear curve with the same CVs as this one.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: blend(otherCurve, weight=0.5)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.blend`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Blends this curve output towards *otherCurve* via an ``avgCurves``
+        node. You may get unexpected results if the curves don't match
+        in terms of spans, degree etc.
+        
+        :param otherCurve: the curve to blend towards
+        :type otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param weight/w: the blend weight; the other curve will take over
+            fully at 1.0; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The blended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: setLength(targetLength, atStart=False, vector=None, linear=None, circular=None, extrapolate=None, multipleKnots=True)
+    
+        .. rubric:: Geometry Loopback
+        
+        This method is a wrapper for :meth:`paya.runtime.plugs.NurbsCurve.setLength`.
+        Attribute returns are replaced with shapes. These should be
+        caught, as some operations may entirely replace the original
+        shape instance.
+        
+        History is always preserved. Use
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` to clear
+        where needed.
+        
+        .. rubric:: Original Documentation
+        
+        Uses gated retractions and extensions to force the length of this
+        curve.
+        
+        :param targetLength: the target length
+        :type targetLength: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool atStart/ats: anchor the curve at the end rather than the
+            start; defaults to False
+        :param vector: a vector along which to extend; this is recommended for
+            spine setups where tangency should be more tightly controlled; if
+            this is omitted, the *linear / circular / extrapolate* modes will
+            be used instead
+        :type vector: None, tuple, list, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool circular/cir: ignored if *vector* was provided; use the
+            'circular' mode of the ``extendCurve`` node; defaults to False
+        :param bool linear/lin: ignored if *vector* was provided;
+            use the 'linear' mode of the ``extendCurve`` node; defaults to
+            False
+        :param bool extrapolate/ext: ignored if *vector* was provided;
+            use the 'extrapolate' mode of the ``extendCurve`` node; defaults
+            to True
+        :param bool multipleKnots: keep multiple knots; defaults to True
+        :return:
+    
     .. py:method:: macro()
     
         :return: A simplified representation of this curve that can be used
@@ -89,6 +425,13 @@ paya.runtime.nodes.NurbsCurve
             reference point.
         :rtype: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: pointAtCV(cv, plug=False)
+    
+        :param cv: the CV to sample
+        :type cv: int, :class:`~paya.runtime.comps.NurbsCurveCV`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The world-space point position of the specified CV.
     
     .. py:method:: pointAtParam(param, plug=False)
     
@@ -174,7 +517,7 @@ paya.runtime.nodes.NurbsCurve
         :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
-        :return: Tthe curve length at the given parameter.
+        :return: The curve length at the given parameter.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
     
     .. py:method:: lengthAtPoint(point, plug=False)
@@ -215,36 +558,36 @@ paya.runtime.nodes.NurbsCurve
         :return: The length fraction at the given point.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: upVectorAtParam(param, plug=False)
+    .. py:method:: binormalAtParam(param, plug=False)
     
-        :param param: the parameter at which to sample the up vector
+        :param param: the parameter at which to sample the binormal
         :rtype param: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: upVectorAtFraction(fraction, plug=False)
+    .. py:method:: binormalAtFraction(fraction, plug=False)
     
-        :param fraction: the length fraction at which to sample the up vector
+        :param fraction: the length fraction at which to sample the binormal
         :rtype fraction: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: upVectorAtLength(fraction, plug=False)
+    .. py:method:: binormalAtLength(fraction, plug=False)
     
-        :param length: the length at which to sample the up vector
+        :param length: the length at which to sample the binormal
         :rtype length: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A vector that's perpendicular to both the curve normal
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: upVectorAtPoint(point, plug=False)
+    .. py:method:: binormalAtPoint(point, plug=False)
     
-        :param point: the point at which to sample the up vector
+        :param point: the point at which to sample the binormal
         :rtype point: list, tuple, str, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
         :param bool plug/p: force a dynamic output; defaults to False
@@ -415,7 +758,7 @@ paya.runtime.nodes.NurbsCurve
         :return: Lengths distributed along the curve.
         :rtype: [float], [:class:`~paya.runtime.plugs.Math1D`]
     
-    .. py:method:: distributeMatrices(numberOrFractions, tangentAxis, upAxis, upVector=None, upCurve=None, squashStretch=False, globalScale=None, matchedCurve=None)
+    .. py:method:: distributeMatrices(numberOrFractions, tangentAxis, upAxis, upVector=None, upCurve=None, squashStretch=False, globalScale=None, matchedCurve=None, plug=False)
     
         If neither *upVector* or *upCurve* are provided, curve normals are
         used.
@@ -425,7 +768,7 @@ paya.runtime.nodes.NurbsCurve
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None
@@ -440,6 +783,7 @@ paya.runtime.nodes.NurbsCurve
             :class:`paya.runtime.plugs.NurbsCurve`
         :param bool squashStretch/ss: allow tangent scaling; defaults to False
         :param globalScale/gs: a global scaling factor; defaults to None
+        :param bool plug/p: force a dynamic output; defaults to False
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
@@ -447,7 +791,7 @@ paya.runtime.nodes.NurbsCurve
         :return: Matrices, distributed along the curve.
         :rtype: [:class:`~paya.runtime.plugs.Matrix`]
     
-    .. py:method:: distributeAimingMatrices(numberOrFractions, aimAxis, upAxis, upVector=None, upCurve=None, squashStretch=False, globalScale=None, matchedCurve=None)
+    .. py:method:: distributeAimingMatrices(numberOrFractions, aimAxis, upAxis, upVector=None, upCurve=None, squashStretch=False, globalScale=None, matchedCurve=None, plug=False)
     
         Similar to :meth:`distributeMatrices` except that here the matrices
         are aimed at each other for a 'chain-like' effect. If neither
@@ -458,7 +802,75 @@ paya.runtime.nodes.NurbsCurve
         :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
-        :param str upAxis: the matrix to align to the resolved up vector, for
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow aim vector scaling; defaults to
+            False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: Matrices, distributed along the curve.
+        :rtype: [:class:`~paya.runtime.plugs.Matrix`],
+            [:class:`~paya.runtime.data.Matrix`]
+    
+    .. py:method:: fitChain(numberOrFractions, aimAxis, upAxis, upVector=None, upCurve=None, squashStretch=False, globalScale=None, matchedCurve=None, plug=False)
+    
+        Draws a joint chain along this curve. If *plug* is True, or if any of
+        the arguments are plugs, then the chain will be dynamically attached.
+        
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate joints
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the joint axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the joint axis to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
+        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool squashStretch/ss: allow bone scaling; defaults to False
+        :param globalScale/gs: a global scaling factor; defaults to None
+        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+            same U domain as this curve, to avoid closest-point calculations;
+            defaults to False
+        :param bool plug/p: force a dynamic result; defaults to False
+        :return: A chain, fitted to this curve statically or dynamically.
+        :rtype: :class:`~paya.lib.skel.Chain`
+    
+    .. py:method:: distributeJoints(numberOrFractions, tangentAxis, upAxis, upVector=None, upCurve=None, squashStretch=False, globalScale=None, matchedCurve=None, plug=False)
+    
+        If neither *upVector* or *upCurve* are provided, curve normals are
+        used.
+        
+        :param numberOrFractions: a single number of a list of explicit
+            length fractions at which to generate matrices
+        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param str tangentAxis: the joint axis to map to the curve tangent,
+            for example '-y'
+        :param str upAxis: the joint axis to align to the resolved up vector, for
             example 'x'
         :param upVector/upv: if provided, should be either a single up vector or a
             a list of up vectors (one per fraction); defaults to None
@@ -473,10 +885,28 @@ paya.runtime.nodes.NurbsCurve
             :class:`paya.runtime.plugs.NurbsCurve`
         :param bool squashStretch/ss: allow tangent scaling; defaults to False
         :param globalScale/gs: a global scaling factor; defaults to None
+        :param bool plug/p: force a dynamic output; defaults to False
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
         :param bool matchedCurve/mc: set this to True when *upCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
             defaults to False
-        :return: Matrices, distributed along the curve.
-        :rtype: [:class:`~paya.runtime.plugs.Matrix`],
-            [:class:`~paya.runtime.data.Matrix`]
+        :return: Joints, distributed along the curve.
+        :rtype: [:class:`~paya.runtime.nodes.Joint`]
+    
+    .. py:method:: getCollocatedCVGroups(tolerance=1e-06)
+    
+        :param float tolerance/tol: the collocation tolerance;
+            defaults to 1e-7
+        :return: A list of lists, where each sub-list comprises CVs which
+            are collocated.
+        :rtype: [[:class:`~paya.runtime.comps.NurbsCurveCV`]]
+    
+    .. py:method:: clusterAll(mergeCollocated=False, tolerance=1e-06)
+    
+        Clusters-up the CVs on this curve.
+        
+        :param bool mergeCollocated/mcl: merge the start / end CVs
+            if they overlap within the specified *tolerance*; defaults to
+            False
+        :return: The clusters.
+        :rtype: [:class:`~paya.runtime.nodes.Cluster`]
