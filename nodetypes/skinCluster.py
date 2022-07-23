@@ -171,46 +171,26 @@ class SkinCluster:
 
     @staticmethod
     def _splitArgsIntoInflsGeos(*args, geometry=None, influence=None):
+        # Returns infls, geos
+
         geos = []
         infls = []
 
-        items = list(map(r.PyNode, _pu.expandArgs(*args)))
-
-        for item in items:
-            if isinstance(item, r.nodetypes.DeformableShape):
-                geos.append(item)
-
-            elif isinstance(item, r.nodetypes.Transform):
-                shapes = item.getShapes(noIntermediate=True)
-
-                states = [isinstance(shape,
-                    r.nodetypes.DeformableShape) for shape in shapes]
-
-                if all(states):
-                    geos.append(item)
-
-                elif not any(states):
-                    infls.append(item)
-
-                else:
-                    raise RuntimeError(
-                        "Can't determine whether {} is a geometry or "+
-                        "influence. Pass through 'influence' or 'geometry'"+
-                        " to disambiguate.".format(item)
-                    )
-
-            else:
-                raise RuntimeError(
-                        "Can't determine whether {} is a geometry or "+
-                        "influence. Pass through 'influence' or 'geometry'"+
-                        " to disambiguate.".format(item)
-                    )
-
         if geometry:
-            geos += list(map(r.PyNode, _pu.expandArgs(geometry)))
+            geos += [r.PyNode(x) for x in _pu.expandArgs(geometry)]
 
         if influence:
-            infls += list(map(r.PyNode, _pu.expandArgs(influence)))
+            infls += [r.PyNode(x) for x in _pu.expandArgs(influence)]
+
+        if args:
+            args = [r.PyNode(x) for x in _pu.expandArgs(*args)]
+
+            for arg in args:
+                if isinstance(arg, r.nodetypes.Joint):
+                    infls.append(arg)
+
+                else:
+                    geos.append(arg)
 
         return infls, geos
 
