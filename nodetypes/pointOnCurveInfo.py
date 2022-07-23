@@ -5,15 +5,11 @@ class PointOnCurveInfo:
 
     #------------------------------------------------------|    Sampling
 
-    def getUpVectorOutput(self):
+    def getBinormal(self):
         """
-        Getter for the ``.upVector`` / ``.upv`` property.
+        Getter for the ``.binormal`` property.
 
-        Initialises, or retrieves, a vector that's perpendicular to the
-        normal, and closer to what it intuitively meant as an 'up' vector
-        on curves.
-
-        :return: The up vector.
+        :return: The binormal.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
 
@@ -36,4 +32,4 @@ class PointOnCurveInfo:
 
         return plug
 
-    upVector = property(fget=getUpVectorOutput)
+    binormal = property(fget=getBinormal)
