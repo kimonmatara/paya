@@ -291,6 +291,17 @@ def resolveNumberOrFractionsArg(arg):
 
     return [info(x)[0] for x in arg]
 
+def expandVectorArgs(*args):
+    """
+    Expands *args*, stopping at anything that looks like a vector value
+    or plug.
+
+    :param \*args: the arguments to expand
+    :return: The expanded arguments.
+    """
+    return conditionalExpandArgs(
+        *args, gate=lambda x: not isVectorValueOrPlug(x))
+
 @short(listLength='ll')
 def conformVectorArg(arg, listLength=None):
     """
