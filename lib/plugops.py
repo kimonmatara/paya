@@ -111,7 +111,7 @@ def asGeoPlug(item, worldSpace=False):
     :return: A geometry output.
     """
     if isinstance(item, p.Attribute):
-        if isinstance(item, r.data.Geometry):
+        if isinstance(item, r.plugs.Geometry):
             return item
 
         raise RuntimeError(
@@ -120,8 +120,7 @@ def asGeoPlug(item, worldSpace=False):
 
     if isinstance(item, str):
         try:
-            plug = p.Attribute(item)
-            return asGeoPlug(plug)
+            return p.Attribute(item)
 
         except:
             try:
@@ -134,6 +133,9 @@ def asGeoPlug(item, worldSpace=False):
 
             except:
                 pass
+
+    if isinstance(item, p.nodetypes.DagNode):
+        return item.worldGeoOutput if worldSpace else item.localGeoOutput
 
     raise RuntimeError(
         "Couldn't extract a geometry plug from: {}".format(item)
