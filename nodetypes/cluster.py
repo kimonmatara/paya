@@ -1,3 +1,4 @@
+import pymel.util as _pu
 from paya.util import short
 import paya.runtime as r
 
@@ -8,104 +9,125 @@ class Cluster:
 
     @classmethod
     @short(
-        handle='hnd',
-        name='n'
+        weightedNode='wn',
+        bindState='bs',
+        geometry='g'
     )
     def create(
             cls,
-            *geometry,
-            handle=None,
+            *geos,
+            geometry=None,
+            weightedNode=None,
+            bindState=False,
             name=None,
-            **mayaFlags
+            **kwargs
     ):
-        """
-        See :func:`~pymel.core.animation.cluster` for documentation on *mayaFlags*.
+        # Wrangle args, prep
 
-        :param \*geometry: optional geometry to bind
-        :type \*geometry: tuple, list, str, :class:`~paya.runtime.nodes.DagNode`,
-            :class:`~paya.runtime.comps.Component`,
-        :param handle/hnd: an optional alternative handle for the cluster; if
-            this is provided, it will override the *weightedNode/wn* argument;
-            defaults to None
-        :type handle/hnd: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param name/n: one or more name elements; defaults to None
-        :param \*\*mayaFlags: forwarded to
-            :func:`~pymel.core.animation.cluster`
-        :return: The cluster node. The handle can be accessed through the
-            ``.handle`` property.
-        :rtype: :class:`~paya.runtime.nodes.Cluster`
-        """
-        #--------------------------------------|    Edit kwargs
+        allgeo = []
 
-        # Define our overrides
+        if geos:
+            allgeo += list(_pu.expandArgs(*geos))
 
-        ourKwargs = {}
+        if geometry:
+            allgeo += list(_pu.expandArgs(geometry))
 
-        if handle:
-            customHandle = True
-            ourKwargs['weightedNode'] = (handle, handle)
-            ourKwargs['bindState'] = True
+        mayaKwargs = {}
+
+        if bindState:
+            mayaKwargs['bindState'] = True
+
+        if weightedNode:
+            mayaKwargs['weightedNode'] = \
+                cls._conformWeightedNodeArg(weightedNode)
+            customWn = True
 
         else:
-            customHandle = False
+            customWn = False
 
-        # Update Maya kwargs
+        r.select(cl=True)
 
-        mayaFlags.update(ourKwargs)
+        if allgeo:
+            r.select(allgeo)
 
-        #--------------------------------------|    Execute
+        # Execute
 
-        node, handle = r.cluster(*geometry, **mayaFlags)
+        kwargs.update(mayaKwargs)
+        node, wn = r.cluster(**kwargs)
 
-        #--------------------------------------|    Post-config
+        # Post config
+        node.rename(name, mn=True)
 
-        handleName = r.nodes.ClusterHandle.makeName(name)
-
-        if customHandle:
-            node._getClusterHandleShape().rename(handleName+'Shape')
-        else:
-            handle.rename(handleName)
-
-        nodeName = cls.makeName(name)
-        node.rename(nodeName)
+        if not customWn:
+            wn.rename(name, mn=True)
 
         return node
 
-    #--------------------------------------------------------|    Weighted-node management
+    #--------------------------------------------------------|    Weighted node management
 
-    def getHandle(self):
+    @staticmethod
+    def _conformWeightedNodeArg(*args):
+        args = list(_pu.expandArgs(*args))
+
+        ln = len(args)
+
+        if ln is 0 or ln > 2:
+            raise ValueError("Need one or two values for weightedNode.")
+
+        if ln is 1:
+            out = args * 2
+
+        else:
+            out = args[0]
+
+        return out
+
+    def getWeightedNode(self):
         """
-        Getter for ``.handle`` property. Returns the weighted node.
+        Overload of :meth:`pymel.core.nodetypes.Cluster.getWeightedNode`
+        for return type.
 
-        :return: The handle *transform*.
-        :rtype :class:`~paya.runtime.nodes.Transform`
+        Getter for ``weightedNode`` / ``wn`` property.
+
+        :return: The weighted node.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        return r.PyNode(self.getWeightedNode())
+        result = r.nodetypes.Cluster.getWeightedNode(self)
 
-    def _getClusterHandleShape(self):
-        # Returns the 'clusterHandle' node connected to this cluster.
-        inputs = self.attr('clusterXforms'
-                ).inputs(plugs=True, type='clusterHandle')
+        if result:
+            return r.PyNode(result)
 
-        if inputs:
-            return inputs[0].node()
-
-    def setHandle(self, handle):
+    @short(bindState='bs')
+    def setWeightedNode(self, *args, bindState=False):
         """
-        Setter for ``.handle`` property. Swaps-out the weighted node.
-        :param handle: the new handle
-        :type handle: str, :class:`~paya.runtime.nodes.Transform`
+        Overloads :meth:`pymel.core.nodetypes.Cluster.setWeightedNode` to
+        accept a single argument for the weighted node. This will merely
+        be duplicated and passed along.
+
+        Setter for ``weightedNode`` / ``wn`` property.
+
+        :param \*args: the weighted node arg(s)
+        :type \*args: str, :class:`~paya.runtime.nodes.Transform`
+        :param bool bindState/bs: maintain offset when switching weighted
+            nodes; defaults to False
         :return: ``self``
-        :rtype: :class:`~paya.runtime.nodes.Cluster`
+        :rtype: :class:`Cluster`
         """
-        r.cluster(self, e=True, wn=(handle, handle), bs=True)
+        args = _pu.expandArgs(*args)
 
-        cHandleShape = self._getClusterHandleShape()
+        ln = len(args)
 
-        if inputs:
-            # Clean up the clusterHandle shape
-            cHandleShape = inputs[0].node()
-            cHandleShape.attr('origin').set([0, 0, 0])
-            cHandleShape.attr('intermediateObject').set(True)
+        if ln:
+            if ln is 1:
+                args = [args] * 2
 
-        return self
+            elif ln > 2:
+                raise ValueError(
+                    "Need one or two arguments, packed or unpacked."
+                )
+        else:
+            raise ValueError(
+                "Need one or two arguments, packed or unpacked."
+            )
+
+    weightedNode = wn = property(fget=getWeightedNode, fset=setWeightedNode)
