@@ -686,7 +686,7 @@ class NurbsCurve:
         squashStretch='ss',
         upVector='upv',
         upObject='upo',
-        upCurve='upc',
+        aimCurve='aic',
         fraction='fr',
         globalScale='gs',
         matchedCurve='mc',
@@ -700,7 +700,7 @@ class NurbsCurve:
             squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
-            upCurve=None,
+            aimCurve=None,
             fraction=False,
             globalScale=None, # ignored in soft impl
             matchedCurve=False,
@@ -713,7 +713,7 @@ class NurbsCurve:
 
         if plug or any((
             _mo.isPlug(x) for x in [
-                paramOrFraction, upVector, upCurve, globalScale]
+                paramOrFraction, upVector, aimCurve, globalScale]
         )):
             return self.attr('worldSpace')._matrixAtParamOrFraction(
                 paramOrFraction,
@@ -722,7 +722,7 @@ class NurbsCurve:
                 ss=squashStretch,
                 upv=upVector,
                 upo=upObject,
-                upc=upCurve,
+                aic=aimCurve,
                 fr=fraction,
                 gs=globalScale,
                 mc=matchedCurve
@@ -734,8 +734,8 @@ class NurbsCurve:
         if upObject:
             upObject = r.PyNode(upObject)
 
-        if upCurve:
-            upCurve = r.PyNode(upCurve)
+        if aimCurve:
+            aimCurve = r.PyNode(aimCurve)
 
         #------------------------------|    Soft implementation
 
@@ -760,12 +760,12 @@ class NurbsCurve:
                 upVector = upObject.getWorldPosition()-position
 
             else:
-                if upCurve:
+                if aimCurve:
                     if matchedCurve:
-                        interest = upCurve.pointAtParam(param)
+                        interest = aimCurve.pointAtParam(param)
 
                     else:
-                        interest = upCurve.closestPoint_(position)
+                        interest = aimCurve.closestPoint_(position)
 
                     upVector = interest-position
 
@@ -779,7 +779,7 @@ class NurbsCurve:
         squashStretch='ss',
         upVector='upv',
         upObject='upo',
-        upCurve='upc',
+        aimCurve='aic',
         globalScale='gs',
         matchedCurve='mc',
         plug='p'
@@ -792,7 +792,7 @@ class NurbsCurve:
             squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
-            upCurve=None,
+            aimCurve=None,
             globalScale=None, # ignored in soft impl
             matchedCurve=False,
             plug=False
@@ -809,8 +809,8 @@ class NurbsCurve:
         :type upVector/upv: None, list, tuple, str,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param upCurve/upc: an up curve; defaults to None
-        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+        :param aimCurve/aic: an up curve; defaults to None
+        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`
         :param upObject/upo: used as an aiming interest on its own, or as a source
@@ -819,7 +819,7 @@ class NurbsCurve:
         :param globalScale/gs: used to drive scaling on dynamic matrices only;
             the scale will be normalised; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
         :param bool plug/p: force a dynamic output; defaults to False
@@ -835,7 +835,7 @@ class NurbsCurve:
             ss=squashStretch,
             upv=upVector,
             upo=upObject,
-            upc=upCurve,
+            aic=aimCurve,
             fr=False,
             gs=globalScale,
             mc=matchedCurve,
@@ -846,7 +846,7 @@ class NurbsCurve:
         squashStretch='ss',
         upVector='upv',
         upObject='upo',
-        upCurve='upc',
+        aimCurve='aic',
         globalScale='gs',
         matchedCurve='mc',
         plug='p'
@@ -859,7 +859,7 @@ class NurbsCurve:
             squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
-            upCurve=None,
+            aimCurve=None,
             globalScale=None, # ignored in soft impl
             matchedCurve=False,
             plug=False
@@ -876,8 +876,8 @@ class NurbsCurve:
         :type upVector/upv: None, list, tuple, str,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param upCurve/upc: an up curve; defaults to None
-        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+        :param aimCurve/aic: an up curve; defaults to None
+        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`
         :param upObject/upo: used as an aiming interest on its own, or as a source
@@ -886,7 +886,7 @@ class NurbsCurve:
         :param globalScale/gs: used to drive scaling on dynamic matrices only;
             the scale will be normalised; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
         :param bool plug/p: force a dynamic output; defaults to False
@@ -902,7 +902,7 @@ class NurbsCurve:
             ss=squashStretch,
             upv=upVector,
             upo=upObject,
-            upc=upCurve,
+            aic=aimCurve,
             fr=True,
             gs=globalScale,
             mc=matchedCurve,
@@ -913,7 +913,7 @@ class NurbsCurve:
         squashStretch='ss',
         upVector='upv',
         upObject='upo',
-        upCurve='upc',
+        aimCurve='aic',
         globalScale='gs',
         matchedCurve='mc',
         plug='p'
@@ -926,7 +926,7 @@ class NurbsCurve:
             squashStretch=False, # ignored in soft impl
             upVector=None,
             upObject=None,
-            upCurve=None,
+            aimCurve=None,
             globalScale=None, # ignored in soft impl
             matchedCurve=False,
             plug=False
@@ -943,8 +943,8 @@ class NurbsCurve:
         :type upVector/upv: None, list, tuple, str,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param upCurve/upc: an up curve; defaults to None
-        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+        :param aimCurve/aic: an up curve; defaults to None
+        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`
         :param upObject/upo: used as an aiming interest on its own, or as a source
@@ -953,7 +953,7 @@ class NurbsCurve:
         :param globalScale/gs: used to drive scaling on dynamic matrices only;
             the scale will be normalised; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
         :param bool plug/p: force a dynamic output; defaults to False
@@ -969,7 +969,7 @@ class NurbsCurve:
             ss=squashStretch,
             upv=upVector,
             upo=upObject,
-            upc=upCurve,
+            aic=aimCurve,
             fr=False,
             gs=globalScale,
             mc=matchedCurve,
@@ -980,7 +980,7 @@ class NurbsCurve:
         squashStretch='ss',
         upVector='upv',
         upObject='upo',
-        upCurve='upc',
+        aimCurve='aic',
         fraction='fr',
         globalScale='gs',
         matchedCurve='mc',
@@ -994,7 +994,7 @@ class NurbsCurve:
             squashStretch=False,
             upVector=None,
             upObject=None,
-            upCurve=None,
+            aimCurve=None,
             globalScale=None,
             matchedCurve=False,
             plug=False
@@ -1012,8 +1012,8 @@ class NurbsCurve:
         :type upVector/upv: None, list, tuple, str,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param upCurve/upc: an up curve; defaults to None
-        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+        :param aimCurve/aic: an up curve; defaults to None
+        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`
         :param upObject/upo: used as an aiming interest on its own, or as a source
@@ -1024,7 +1024,7 @@ class NurbsCurve:
         :param globalScale/gs: used to drive scaling on dynamic matrices only;
             the scale will be normalised; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
         :param bool plug/p: force a dynamic output; defaults to False
@@ -1040,7 +1040,7 @@ class NurbsCurve:
             ss=squashStretch,
             upv=upVector,
             upo=upObject,
-            upc=upCurve,
+            aic=aimCurve,
             gs=globalScale,
             mc=matchedCurve,
             fr=False,
@@ -1112,7 +1112,7 @@ class NurbsCurve:
 
     @short(
         upVector='upv',
-        upCurve='upc',
+        aimCurve='aic',
         squashStretch='ss',
         globalScale='gs',
         matchedCurve='mc',
@@ -1124,14 +1124,14 @@ class NurbsCurve:
             tangentAxis,
             upAxis,
             upVector=None,
-            upCurve=None,
+            aimCurve=None,
             squashStretch=False,
             globalScale=None,
             matchedCurve=None,
             plug=False
     ):
         """
-        If neither *upVector* or *upCurve* are provided, curve normals are
+        If neither *upVector* or *aimCurve* are provided, curve normals are
         used.
 
         :param numberOrFractions: a single number of a list of explicit
@@ -1147,16 +1147,16 @@ class NurbsCurve:
             None,
             list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
             [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
-        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+        :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
             ``curveWarp``; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
             :class:`paya.runtime.nodes.NurbsCurve`,
             :class:`paya.runtime.plugs.NurbsCurve`
         :param bool squashStretch/ss: allow tangent scaling; defaults to False
         :param globalScale/gs: a global scaling factor; defaults to None
         :param bool plug/p: force a dynamic output; defaults to False
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
             defaults to False
         :return: Matrices, distributed along the curve.
@@ -1175,13 +1175,13 @@ class NurbsCurve:
            or any((_mo.isPlug(f) for f in fractions)) \
            or (upVector and any((_mo.isPlug(v) for v in upVectors))) \
            or _mo.isPlug(globalScale) \
-           or _mo.isPlug(upCurve)
+           or _mo.isPlug(aimCurve)
 
         if plug:
             return self.attr('worldSpace').distributeMatrices(
                 fractions,
                 tangentAxis, upAxis,
-                upv=upVector, upc=upCurve,
+                upv=upVector, aic=aimCurve,
                 ss=squashStretch, gs=globalScale,
                 mc=matchedCurve
             )
@@ -1194,7 +1194,7 @@ class NurbsCurve:
                 tangentAxis,
                 upAxis,
                 upv=upVectors[i],
-                upc=upCurve
+                aic=aimCurve
             )
 
             out.append(matrix)
@@ -1203,7 +1203,7 @@ class NurbsCurve:
 
     @short(
         upVector='upv',
-        upCurve='upc',
+        aimCurve='aic',
         squashStretch='ss',
         globalScale='gs',
         matchedCurve='mc',
@@ -1215,7 +1215,7 @@ class NurbsCurve:
             aimAxis,
             upAxis,
             upVector=None,
-            upCurve=None,
+            aimCurve=None,
             squashStretch=False,
             globalScale=None,
             matchedCurve=None,
@@ -1224,7 +1224,7 @@ class NurbsCurve:
         """
         Similar to :meth:`distributeMatrices` except that here the matrices
         are aimed at each other for a 'chain-like' effect. If neither
-        *upVector* or *upCurve* are provided, curve normals are used.
+        *upVector* or *aimCurve* are provided, curve normals are used.
 
         :param numberOrFractions: a single number of a list of explicit
             length fractions at which to generate matrices
@@ -1239,16 +1239,16 @@ class NurbsCurve:
             None,
             list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
             [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
-        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+        :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
             ``curveWarp``; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
             :class:`paya.runtime.nodes.NurbsCurve`,
             :class:`paya.runtime.plugs.NurbsCurve`
         :param bool squashStretch/ss: allow aim vector scaling; defaults to
             False
         :param globalScale/gs: a global scaling factor; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
             defaults to False
         :param bool plug/p: force a dynamic output; defaults to False
@@ -1264,7 +1264,7 @@ class NurbsCurve:
 
         plug = plug \
             or (upVector and any((_mo.isPlug(member) for member in upVector))) \
-            or _mo.isPlug(upCurve) \
+            or _mo.isPlug(aimCurve) \
             or _mo.isPlug(globalScale) \
             or any((_mo.isPlug(f) for f in fractions))
 
@@ -1274,7 +1274,7 @@ class NurbsCurve:
                 aimAxis,
                 upAxis,
                 upv=upVector,
-                upc=upCurve,
+                aic=aimCurve,
                 ss=squashStretch,
                 gs=globalScale,
                 mc=matchedCurve
@@ -1290,16 +1290,16 @@ class NurbsCurve:
         else:
             upVectors = []
 
-            if upCurve:
-                upCurve = r.PyNode(upCurve)
+            if aimCurve:
+                aimCurve = r.PyNode(aimCurve)
 
                 for i in range(number):
                     if matchedCurve:
                         param = self.paramAtFraction(fractions[i], ac=False)
-                        interest = upCurve.pointAtParam(param)
+                        interest = aimCurve.pointAtParam(param)
 
                     else:
-                        interest = upCurve.closestPoint_(points[i])
+                        interest = aimCurve.closestPoint_(points[i])
 
                     upVectors.append(interest-points[i])
 
@@ -1327,7 +1327,7 @@ class NurbsCurve:
 
     @short(
         upVector='upv',
-        upCurve='upc',
+        aimCurve='aic',
         squashStretch='ss',
         globalScale='gs',
         matchedCurve='mc',
@@ -1339,7 +1339,7 @@ class NurbsCurve:
             aimAxis,
             upAxis,
             upVector=None,
-            upCurve=None,
+            aimCurve=None,
             squashStretch=False,
             globalScale=None,
             matchedCurve=None,
@@ -1362,15 +1362,15 @@ class NurbsCurve:
             None,
             list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
             [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
-        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+        :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
             ``curveWarp``; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
             :class:`paya.runtime.nodes.NurbsCurve`,
             :class:`paya.runtime.plugs.NurbsCurve`
         :param bool squashStretch/ss: allow bone scaling; defaults to False
         :param globalScale/gs: a global scaling factor; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
             defaults to False
         :param bool plug/p: force a dynamic result; defaults to False
@@ -1382,7 +1382,7 @@ class NurbsCurve:
             aimAxis,
             upAxis,
             upv=upVector,
-            upc=upCurve,
+            aic=aimCurve,
             ss=squashStretch,
             gs=globalScale,
             mc=matchedCurve,
@@ -1412,7 +1412,7 @@ class NurbsCurve:
 
     @short(
         upVector='upv',
-        upCurve='upc',
+        aimCurve='aic',
         squashStretch='ss',
         globalScale='gs',
         matchedCurve='mc',
@@ -1424,14 +1424,14 @@ class NurbsCurve:
             tangentAxis,
             upAxis,
             upVector=None,
-            upCurve=None,
+            aimCurve=None,
             squashStretch=False,
             globalScale=None,
             matchedCurve=None,
             plug=False
     ):
         """
-        If neither *upVector* or *upCurve* are provided, curve normals are
+        If neither *upVector* or *aimCurve* are provided, curve normals are
         used.
 
         :param numberOrFractions: a single number of a list of explicit
@@ -1447,16 +1447,16 @@ class NurbsCurve:
             None,
             list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
             [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
-        :param upCurve/upc: an 'up' curve, as seen for example on Maya's
+        :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
             ``curveWarp``; defaults to None
-        :type upCurve/upc: None, str, :class:`~paya.runtime.nodes.Transform`,
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
             :class:`paya.runtime.nodes.NurbsCurve`,
             :class:`paya.runtime.plugs.NurbsCurve`
         :param bool squashStretch/ss: allow tangent scaling; defaults to False
         :param globalScale/gs: a global scaling factor; defaults to None
         :param bool plug/p: force a dynamic output; defaults to False
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid closest-point calculations;
             defaults to False
         :return: Joints, distributed along the curve.
@@ -1467,7 +1467,7 @@ class NurbsCurve:
             tangentAxis,
             upAxis,
             upv=upVector,
-            upc=upCurve,
+            aic=aimCurve,
             ss=squashStretch,
             gs=globalScale,
             mc=matchedCurve,

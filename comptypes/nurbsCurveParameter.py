@@ -57,7 +57,7 @@ class NurbsCurveParameter:
         squashStretch='ss',
         upVector='upv',
         upObject='upo',
-        upCurve='upc',
+        aimCurve='aic',
         globalScale='gs',
         matchedCurve='mc',
         plug='p'
@@ -69,7 +69,7 @@ class NurbsCurveParameter:
             squashStretch=False,
             upVector=None,
             upObject=None,
-            upCurve=None,
+            aimCurve=None,
             globalScale=None,
             matchedCurve=False,
             plug=False
@@ -84,8 +84,8 @@ class NurbsCurveParameter:
         :type upVector/upv: None, list, tuple, str,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param upCurve/upc: an up curve; defaults to None
-        :type upCurve/upc: str, :class:`~paya.runtime.nodes.Transform`,
+        :param aimCurve/aic: an up curve; defaults to None
+        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`
         :param upObject/upo: used as an aiming interest on its own, or as a source
@@ -94,7 +94,7 @@ class NurbsCurveParameter:
         :param globalScale/gs: used to drive scaling on dynamic matrices only;
             the scale will be normalised; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *upCurve* has the
+        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
             same U domain as this curve, to avoid unnecessary closest-point
             calculations; defaults to False
         :param bool plug/p: force a dynamic output; defaults to False
@@ -110,7 +110,7 @@ class NurbsCurveParameter:
             ss=squashStretch,
             upv=upVector,
             upo=upObject,
-            upc=upCurve,
+            aic=aimCurve,
             gs=globalScale,
             mc=matchedCurve,
             p=plug

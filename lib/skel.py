@@ -164,7 +164,7 @@ class Chain(object):
             tolerance=1e-7
     ):
         """
-        Draws a chain (once) along a curve. Either 'upCurve' or 'upVector'
+        Draws a chain (once) along a curve. Either 'aimCurve' or 'upVector'
         must be provided.
 
         :param numberOrFractions: this can either be a list of length
@@ -185,14 +185,14 @@ class Chain(object):
         points = curve.distributePoints(numberOrFractions)
 
         if isinstance(upVectorOrCurve, (str, r.PyNode)):
-            upCurve = r.PyNode(upVectorOrCurve)
+            aimCurve = r.PyNode(upVectorOrCurve)
             aimVectors = _mo.getAimVectors(points, col=True)
             aimVectors.append(aimVectors[-1])
 
             upVectors = []
 
             for point in points:
-                upPoint = upCurve.takeClosestPoint(point)
+                upPoint = aimCurve.takeClosestPoint(point)
                 upVector = upPoint-point
                 upVectors.append(upVector)
 
