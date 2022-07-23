@@ -93,7 +93,8 @@ class Loopback:
                     outShapes.append(heroShape)
 
                 for sourcePlug in sourcePlugs[1:]:
-                    shape = sourcePlug.createShape(under=pnt)
+                    # shape = sourcePlug.createShape(under=pnt)
+                    shape = sourcePlug.createShape()
                     outShapes.append(shape)
 
                 if multi:
