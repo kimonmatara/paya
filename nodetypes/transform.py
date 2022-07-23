@@ -374,6 +374,18 @@ class Transform:
 
         return self.attr('rotateAxis').get().asRotateMatrix()
 
+    def makeIdentity(self, **kwargs):
+        """
+        Convenience wrapper for :func:`pymel.internal.pmcmds.makeIdentity`.
+
+        :param \*\*kwargs: passed along to
+            :func:`pymel.internal.pmcmds.makeIdentity`.
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+        """
+        r.makeIdentity(self, **kwargs)
+        return self
+
     #--------------------------------------------------------|    Offset groups
 
     def createOffsetGroups(self, *suffixes):
