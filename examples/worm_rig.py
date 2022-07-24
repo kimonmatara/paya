@@ -76,7 +76,7 @@ def createWormRig(
         stretchDriver >> stretched.weight
 
         # Drive the bump map too
-        bumpDriver = squashStretchRatio.remap(0.75, 1.25, 0.32, 0.0)
+        bumpDriver = squashStretchRatio.remap(0.5, 1.25, 0.32, 0.0)
         bumpDriver >> r.PyNode('fractal2').attr('amplitude')
 
         # Skinning
