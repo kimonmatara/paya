@@ -1,6 +1,6 @@
 import paya.runtime as r
 
-def makeWormRig(
+def createWormRig(
         startLoc,
         endLoc,
         numJoints,
@@ -14,9 +14,8 @@ def makeWormRig(
 
     .. code-block:: python
 
-        # Navigate to the starter scene first.
         import paya.examples.worm_rig as wr
-        wr.makeWormRig('locator1', 'locator2', 12, 'base', 'squashed', 'stretched')
+        wr.createWormRig('locator1', 'locator2', 12, 'base', 'squashed', 'stretched')
 
     :param startLoc: a locator to mark the root of the worm spine
     :param endLoc:  a locator to mark the tip of the worm spine
@@ -75,6 +74,10 @@ def makeWormRig(
 
         stretchDriver = squashStretchRatio.remap(1.0, 1.25, 0.0, 1.0)
         stretchDriver >> stretched.weight
+
+        # Drive the bump map too
+        bumpDriver = squashStretchRatio.remap(0.75, 1.25, 0.32, 0.0)
+        bumpDriver >> r.PyNode('fractal2').attr('amplitude')
 
         # Skinning
         joints = spineCurve.distributeJoints(
