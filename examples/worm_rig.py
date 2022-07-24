@@ -52,11 +52,13 @@ def makeWormRig(
                     pickWalkParent=controls[-1] if controls else None,
                     keyable=['translate', 'rotate'],
                     color=6,
-                    size=1.25
+                    size=1.25,
+                    lineWidth=2.0
                 )
 
                 cvs = [spineCurve.cv[i], aimCurve.cv[i]]
-                cluster = r.nodes.Cluster.create(cvs, handle=control)
+                cluster = r.nodes.Cluster.create(
+                    cvs, weightedNode=control, bindState=True)
 
                 controls.append(control)
 
