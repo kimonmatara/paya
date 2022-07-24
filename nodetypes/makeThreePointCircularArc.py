@@ -74,7 +74,6 @@ class MakeThreePointCircularArc:
                 self.deleteAttr(attrName)
 
         # Init the output
-
         if self.hasAttr('compensatedOutputCurve'):
             self.deleteAttr('compensatedOutputCurve')
 
@@ -135,8 +134,9 @@ class MakeThreePointCircularArc:
         middlePoint = inline.ifElse(
             proxies[1]+jitterVector,
             proxies[1]
-        )
+        ).setClass(r.plugs.Vector)
 
+        self.attr('point2').release(recursive=True)
         middlePoint >> self.attr('point2')
 
         for mainPlug in mainPlugs:
