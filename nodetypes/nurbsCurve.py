@@ -1,5 +1,6 @@
 from importlib import reload
 
+import pymel.util as _pu
 import pymel.core.nodetypes as _nt
 
 import paya.lib.nurbsutil as _nu
@@ -22,7 +23,8 @@ class NurbsCurve:
         conformShapeNames='csn',
         intermediate='i',
         displayType='dt',
-        bSpline='bsp'
+        bSpline='bsp',
+        lineWidth='lw'
     )
     def create(
             cls,
@@ -33,7 +35,8 @@ class NurbsCurve:
             under=None,
             displayType=None,
             conformShapeNames=True,
-            intermediate=False
+            intermediate=False,
+            lineWidth=None
     ):
         """
         Draws static or dynamic curves.
@@ -63,7 +66,8 @@ class NurbsCurve:
 
             If omitted, display overrides won't be activated at all.
         :type displayType/dt: None, int, str
-        :type displayType/dt:
+        :param lineWidth/lw: an override for the line width; defaults to None
+        :type lineWidth/lw: None, float
         :return: The curve shape.
         :rtype: :class:`NurbsCurve`
         """
@@ -143,7 +147,94 @@ class NurbsCurve:
             curveShape.attr('overrideEnabled').set(True)
             curveShape.attr('overrideDisplayType').set(displayType)
 
+        if lineWidth is not None:
+            curveShape.attr('lineWidth').set(lineWidth)
+
         return curveShape
+
+    @classmethod
+    @short(
+        radius='r',
+        directionVector='dv',
+        toggleArc='tac',
+        sections='s',
+        degree='d',
+        name='n',
+        lineWidth='lw'
+    )
+    def createArc(
+            cls,
+            *points,
+            directionVector=None,
+            radius=1.0,
+            toggleArc=False,
+            sections=8,
+            degree=3,
+            guard=None,
+            name=None,
+            lineWidth=None
+    ):
+        """
+        Constructs a circular arc. The arc will be live if any of the
+        arguments are plugs.
+
+        :param points: two or three points, packed or unpacked
+        :type points: tuple, list, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.data.Vector`
+        :param directionVector/dv:
+            on two-point arcs this defaults to [0, 0, 1] (Z) and defines
+            the arc's 'normal';
+            on three point arcs it must be provided explicitly if 'guard'
+            is requested, and it is used to jitter the input points to avoid
+            Maya errors
+        :type directionVector/dv: None, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param radius/r: for two-point arcs only: the arc radius; defaults to
+            1.0
+        :type radius/r: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool toggleArc/tac: for two-point arcs only: draw the arc
+            on the outside; defaults to False
+        :param sections/s: the number of arc sections; defaults to 8
+        :type sections/s: int, :class:`~paya.runtime.plugs.Math1D`
+        :param degree/d: the arc degree; defaults to 3
+        :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
+        :param bool guard: for three-point arcs only: prevent the arc
+            from disappearing with an error when the input points are
+            collinear; defaults to True if *directionVector* was provided,
+            otherwise False.
+        :param lineWidth/lw: an override for the line width; defaults to None
+        :type lineWidth/lw: None, float
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: str, int, None, tuple, list
+        :return: The curve shape.
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
+        """
+        points = _mo.expandVectorArgs(*points)
+
+        live = any((_mo.isPlug(point) for point in points)) \
+            or (directionVector and _mo.isPlug(directionVector)) \
+            or _mo.isPlug(radius)
+
+        output = r.plugs.NurbsCurve.createArc(
+            points,
+            directionVector=directionVector,
+            radius=radius,
+            toggleArc=toggleArc,
+            sections=sections,
+            degree=degree,
+            guard=guard
+        )
+
+        shape = output.createShape(n=name)
+
+        if not live:
+            shape.deleteHistory()
+
+        if lineWidth is not None:
+            shape.attr('lineWidth').set(lineWidth)
+
+        return shape
 
     @classmethod
     def createFromMacro(cls, macro, **overrides):
@@ -425,6 +516,19 @@ class NurbsCurve:
         return param
 
     closestParam = paramAtPoint
+
+    @short(plug='p')
+    def closestFraction(self, point, plug=False):
+        """
+        :param point: the reference point
+        :type point: tuple, list, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :return: The closest length fraction to the given point.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        """
+        param = self.closestParam(point, p=plug)
+        return self.fractionAtParam(param, p=plug)
 
     @short(asComponent='ac', plug='p')
     def paramAtFraction(self, fraction, asComponent=True, plug=False):
