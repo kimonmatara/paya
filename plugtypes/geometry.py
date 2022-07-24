@@ -11,7 +11,8 @@ class Geometry:
         under='u',
         intermediate='i',
         name='n',
-        conformShapeNames='csn'
+        conformShapeNames='csn',
+        managedNames='mn'
     )
     def createShape(
             self,
@@ -23,9 +24,10 @@ class Geometry:
         """
         Creates a shape node and connects this geometry output into its input.
 
-        :param name/n: the shape name; this will be explicit; no name
-            management is performed; defaults to None
-        :type name/n: None, str
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, list, tuple
+        :param bool managedNames/mn: use Paya name management; defaults to
+            True
         :param under/u: a transform parent for the new shape; a new transform
             will be generated if this is omitted
         :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
@@ -37,21 +39,20 @@ class Geometry:
         :return: The new shape.
         :rtype: :class:`~paya.runtime.nodes.Shape`
         """
+        # Get the namesake shape class
         clsname = self.__class__.__name__
-        nodeType = clsname[0].lower() + clsname[1:]
+        cls = getattr(r.nodes, clsname)
+        nodeType = cls.__melnode__
 
-        kw = {}
+        # Create the shape node; this will be nested under a transform we may
+        # or may not keep
 
-        if name:
-            kw['n'] = name
-
-        shape = r.createNode(nodeType, **kw)
+        shape = cls.createNode(n=name)
+        xf = shape.getParent()
         self >> shape.geoInput
 
         if intermediate:
             shape.attr('intermediateObject').set(True)
-
-        xf = shape.getParent()
 
         if under:
             r.parent(shape, under, r=True, shape=True)
@@ -61,6 +62,7 @@ class Geometry:
                 r.PyNode(under).conformShapeNames()
 
         return shape
+
 
     def getShapeMFn(self):
         """
