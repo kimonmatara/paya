@@ -53,7 +53,7 @@ class Cluster:
         # Execute
 
         kwargs.update(mayaKwargs)
-        node, wn = r.cluster(**kwargs)
+        node, wn = [r.PyNode(item) for item in r.cluster(**kwargs)]
 
         # Post config
         node.rename(name, mn=True)
