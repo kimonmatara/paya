@@ -17,8 +17,7 @@ class NurbsCurve:
         directionVector='dv',
         toggleArc='tac',
         sections='s',
-        degree='d',
-        collinear='col'
+        degree='d'
     )
     def createArc(
             cls,
@@ -28,7 +27,7 @@ class NurbsCurve:
             toggleArc=False,
             sections=8,
             degree=3,
-            collinear=None
+            guard=None
     ):
         """
         :param points: two or three points, packed or unpacked
@@ -37,7 +36,7 @@ class NurbsCurve:
         :param directionVector/dv:
             on two-point arcs this defaults to [0, 0, 1] (Z) and defines
             the arc's 'normal';
-            on three point arcs it must be provided explicitly if 'collinear'
+            on three point arcs it must be provided explicitly if 'guard'
             is requested, and it is used to jitter the input points to avoid
             Maya errors
         :type directionVector/dv: None, tuple, list,
@@ -52,13 +51,15 @@ class NurbsCurve:
         :type sections/s: int, :class:`~paya.runtime.plugs.Math1D`
         :param degree/d: the arc degree; defaults to 3
         :type degree/d: int, :class:`~paya.runtime.plugs.Math1D`
-        :param bool collinear/col: for three-point arcs only: prevent the arc
+        :param bool guard: for three-point arcs only: prevent the arc
             from disappearing with an error when the input points are
             collinear; defaults to True if *directionVector* was provided,
             otherwise False.
         :return: An output for a circular arc.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
+        points = _mo.expandVectorArgs(*points)
+
         num = len(points)
 
         if num is 1:
@@ -81,20 +82,17 @@ class NurbsCurve:
             return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
 
         elif num is 3:
-            if collinear is None:
+            if guard is None:
                 if directionVector is None:
-                    collinear = False
+                    guard = False
 
                 else:
-                    collinear = True
+                    guard = True
 
-                print('The direction vector is ', directionVector)
-                print('Collinear has been resolved to ', collinear)
-
-            elif collinear and directionVector is None:
+            elif guard and directionVector is None:
                 raise ValueError(
                     "The direction vector is required for three"+
-                    "-point arcs if 'collinear' has been "+
+                    "-point arcs if 'guard' has been "+
                     "requested."
                 )
 
@@ -105,7 +103,7 @@ class NurbsCurve:
             sections >> node.attr('sections')
             degree >> node.attr('degree')
 
-            if collinear:
+            if guard:
                 return node.getCompensatedOutputCurve(directionVector)
 
             else:
@@ -348,6 +346,17 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         return self.initNearestPointOnCurve(point).attr('position')
+
+    def closestFraction(self, point):
+        """
+        :param point: the reference point
+        :type point: tuple, list, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The closest length fraction to the given point.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        param = self.closestParam(point)
+        return self.fractionAtParam(param)
 
     #--------------------------------------|    Param sampling
 
@@ -1914,7 +1923,10 @@ class NurbsCurve:
         retractLength = retractLength.minClamp(0.0)
 
         extendLength = targetLength-baseLength
-        extendLength = extendLength.minClamp(0.0)
+
+        # The following is 0.1 and not 0.0 to avoid node calc errors; the
+        # output will be switched out anyway
+        extendLength = extendLength.minClamp(0.1)
 
         if vector is None:
             extension = self.extendByLength(
