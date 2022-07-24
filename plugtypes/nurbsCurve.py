@@ -1636,7 +1636,7 @@ class NurbsCurve:
         return node.attr('outputCurve')
 
     @short(tolerance='tol', keepRange='kr')
-    def bSpline(self, tolerance=0.1, keepRange=1):
+    def bSpline(self, tolerance=0.001, keepRange=1):
         """
         :param keepRange/kr: An index or enum key for the ``.keepRange``
             mode:
@@ -1646,7 +1646,7 @@ class NurbsCurve:
             - 2: '0 to #spans'
 
         :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param tolerance/tol: the fit tolerance; defaults to 0.1
+        :param tolerance/tol: the fit tolerance; defaults to 0.001
         :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
         :return: The B-spline.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
