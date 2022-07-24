@@ -78,8 +78,8 @@ class ControlShapesLibrary(UserDict):
 
     #------------------------------------------------------|    Appying
 
-    @short(replace='rep')
-    def applyToControls(self, name, controls, replace=True):
+    @short(replace='rep', lineWidth='lw')
+    def applyToControls(self, name, controls, replace=True, lineWidth=None):
         """
         Adds shapes to the specified controls from the named library entry.
 
@@ -87,12 +87,19 @@ class ControlShapesLibrary(UserDict):
         :param list controls: the controls to add shapes to
         :param bool replace/rep: replace existing shapes on the controls;
             defaults to True
+        :param float lineWidth/lw: an override for the line width; defaults
+            to None
         :return: The newly-generated control shape nodes.
         :rtype: list of :class:`~paya.runtime.nodes.Shape`
         """
         macros = self[name]
         srcShapes = [
             r.nodes.DependNode.createFromMacro(macro) for macro in macros]
+
+        if lineWidth is not None:
+            for srcShape in srcShapes:
+                if isinstance(srcShape, p.nodetypes.NurbsCurve):
+                    srcShape.attr('lineWidth').set(lineWidth)
 
         for srcShape in srcShapes:
             srcShape.addAttr('libCtrlShape', dt='string').set(name)
@@ -104,7 +111,14 @@ class ControlShapesLibrary(UserDict):
             r.parent(srcShape, srcGp, r=True, shape=True)
             r.delete(parent)
 
-        newShapes = srcGp.copyCtShapesTo(controls, color=False, rep=replace)
+        newShapes = srcGp.copyCtShapesTo(
+            controls,
+            color=False,
+            lineWidth=lineWidth is not None,
+            shape=True,
+            rep=replace
+        )
+
         r.delete(srcGp)
 
         return newShapes
