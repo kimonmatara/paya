@@ -126,7 +126,8 @@ class Transform:
         rotateOrder='ro',
         asControl='ac',
         offsetGroups='og',
-        pickWalkParent='pwp'
+        pickWalkParent='pwp',
+        lineWidth='lw'
     )
     def createControl(
             cls,
@@ -141,7 +142,8 @@ class Transform:
             rotateOrder='xyz',
             asControl=True,
             offsetGroups='offset',
-            pickWalkParent=None
+            pickWalkParent=None,
+            lineWidth=None
     ):
         """
         Creates rig controls. Also available directly on :mod:`paya.runtime`.
@@ -176,6 +178,8 @@ class Transform:
             ignored if *asControl* is False; defaults to None
         :type pickWalkParent/pwp: str,
             :class:`~paya.runtime.nodes.DependNode`
+        :param float lineWidth/lw: an override for the control shapes' line
+            width; defaults to None
         :return: The generated control.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
@@ -214,7 +218,7 @@ class Transform:
             ct.isControl(True)
 
             if shape:
-                ct.setCtShapesFromLib(shape)
+                ct.setCtShapesFromLib(shape, lw=lineWidth)
 
             if size != 1.0:
                 ct.scaleCtShapes([size]*3)
@@ -580,15 +584,18 @@ class Transform:
 
         return self
 
-    def setCtShapesFromLib(self, libKey):
+    @short(lineWidth='lw')
+    def setCtShapesFromLib(self, libKey, lineWidth=None):
         """
         Sets control shapes to the named library entry.
 
         :param str name: the name of the library entry, e.g. 'cube'
+        :param float lineWidth/lw: an override for the line width;
+            defaults to None
         :return: The newly-generated control shapes.
         :rtype: list of :class:`~paya.runtime.nodes.Shape`
         """
-        controlShapes.applyToControls(libKey, [self])
+        controlShapes.applyToControls(libKey, [self], lw=lineWidth)
 
     @short(backward='back')
     def cycleCtShapes(self, backward=False):
@@ -701,6 +708,13 @@ class Transform:
                 out['color'] = shape.attr('overrideColor').get()
                 break
 
+            if isinstance(shape, r.nodetypes.NurbsCurve):
+                lw = shape.attr('lineWidth').get()
+
+                if lw > 0.0:
+                    out['lineWidth'] = lw
+                    break
+
         if 'color' not in out:
             out['color'] = None
 
@@ -726,6 +740,11 @@ class Transform:
 
             config['vis'].node().unlock()
 
+        if 'lineWidth' in config:
+            for shape in shapes:
+                if isinstance(shape, r.nodetypes.NurbsCurve):
+                    shape.attr('lineWidth').set(config['lineWidth'])
+
         color = config['color']
 
         if color is None:
@@ -749,7 +768,8 @@ class Transform:
         worldSpace='ws',
         mirrorAxis='ma',
         color='col',
-        shape='sh'
+        shape='sh',
+        lineWidth='lw'
     )
     def copyCtShapesTo(
             self,
@@ -758,6 +778,7 @@ class Transform:
             worldSpace=False,
             mirrorAxis=None,
             color=None,
+            lineWidth=None,
             shape=None
     ):
         """
@@ -770,6 +791,7 @@ class Transform:
         :param bool shape/sh: copy shapes; if this is ``False``, all other
             arguments except ``color`` are ignored
         :param bool color/col: copy color
+        :param bool lineWidth/lw: copy line width
         :param \*destControls: one or more controls to copy shapes to
         :type \*destControls: list, str,
             :class:`~paya.runtime.nodes.Transform`
@@ -787,24 +809,32 @@ class Transform:
         destControls = list(map(r.PyNode, _pu.expandArgs(*destControls)))
 
         if destControls:
-            shape, color = resolveFlags(shape, color)
-
-            if color and not shape: # Quick bail
-                col = self.colorCtShapes()
-
-                if col is not None:
-                    for destControl in destControls:
-                        destControl.colorCtShapes(col)
-
-                return self
+            shape, color, lineWidth = resolveFlags(shape, color, lineWidth)
 
             if not shape:
+                if color:
+                    col = self.colorCtShapes()
+
+                    if col is not None:
+                        for destControl in destControls:
+                            destControl.colorCtShapes(col)
+
+                if lineWidth:
+                    srcLineWidth = self.getCtShapesLineWidth()
+
+                    if srcLineWidth is not None:
+                        for destControl in destControls:
+                            destControl.setCtShapesLineWidth(srcLineWidth)
+
                 return self
 
             # Prep main source
 
             _srcGp = r.group(empty=True)
             srcShapes = self.getCtShapes()
+
+            if lineWidth:
+                srcLineWidth = self.getCtShapesLineWidth()
 
             r.parent(srcShapes, _srcGp, r=True, shape=True, add=True)
             srcGp = _srcGp.duplicate()[0]
@@ -814,7 +844,7 @@ class Transform:
                 mirrorMtx = r.createMatrix()
 
                 setattr(mirrorMtx, mirrorAxis,
-                        getattr(mirrorMtx, mirrorAxis)*-1.0)
+                    getattr(mirrorMtx, mirrorAxis)*-1.0)
 
             if worldSpace:
                 matrix = self.getMatrix(worldSpace=True)
@@ -839,6 +869,13 @@ class Transform:
                 if color:
                     del(config['color'])
 
+                if lineWidth:
+                    try:
+                        del(config['lineWidth'])
+
+                    except KeyError:
+                        pass
+
                 if replace:
                     r.delete(oldShapes)
 
@@ -847,7 +884,7 @@ class Transform:
                 if worldSpace:
                     thisSrcGp.setParent(destControl)
                     r.makeIdentity(thisSrcGp,
-                                   apply=True, t=True, r=True, s=True)
+                        apply=True, t=True, r=True, s=True)
 
                     thisSrcGp.setParent(None)
 
@@ -861,6 +898,12 @@ class Transform:
                 destControl.conformShapeNames()
 
             r.delete(srcGp)
+
+            if lineWidth:
+                if srcLineWidth is not None:
+                    for shape in newShapes:
+                        if isinstance(shape, r.nodetypes.NurbsCurve):
+                            shape.attr('lineWidth').set(srcLineWidth)
 
             return newShapes
 
@@ -877,4 +920,36 @@ class Transform:
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
         controlShapes.addFromControl(self, entryName)
+        return self
+
+    def getCtShapesLineWidth(self):
+        """
+        :return: The first encountered line width which is above 0.0
+            (i.e. not the Maya default of -1.0), or None
+        :rtype: float, None
+        """
+        for shape in self.getCtShapes():
+            if isinstance(shape, r.nodetypes.NurbsCurve):
+                lw = shape.attr('lineWidth').get()
+
+                if lw > 0.0:
+                    return lw
+
+    def setCtShapesLineWidth(self, lineWidth):
+        """
+        Sets the line width on NURBS control shapes.
+
+        :param lineWidth: the line width to set; if None is passed,
+            the line width will be set to -1.0
+        type lineWidth: float, None
+        :return: ``self``
+        :rtype: :class:`Transform`
+        """
+        if lineWidth is None:
+            lineWidth = -1.0
+
+        for shape in self.getCtShapes():
+            if isinstance(shape, r.nodetypes.NurbsCurve):
+                shape.attr('lineWidth').set(lineWidth)
+
         return self
