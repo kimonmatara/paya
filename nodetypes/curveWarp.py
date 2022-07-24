@@ -136,9 +136,5 @@ class CurveWarp:
 
         name = cls.makeName(name)
         node.rename(name)
-        # m.evalDeferred(
-        #     'import maya.cmds as m; m.rename("{}", "{}")'.format(
-        #         str(node), name)
-        # )
 
         return node
