@@ -6,35 +6,27 @@ paya.runtime.nodes.Cluster
 
 .. py:class:: Cluster(*args, **kwargs)
 
-    .. py:classmethod:: create(*geometry, handle=None, name=None, **mayaFlags)
+    .. py:method:: getWeightedNode()
     
-        See :func:`~pymel.core.animation.cluster` for documentation on *mayaFlags*.
+        Overload of :meth:`pymel.core.nodetypes.Cluster.getWeightedNode`
+        for return type.
         
-        :param \*geometry: optional geometry to bind
-        :type \*geometry: tuple, list, str, :class:`~paya.runtime.nodes.DagNode`,
-            :class:`~paya.runtime.comps.Component`,
-        :param handle/hnd: an optional alternative handle for the cluster; if
-            this is provided, it will override the *weightedNode/wn* argument;
-            defaults to None
-        :type handle/hnd: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param name/n: one or more name elements; defaults to None
-        :param \*\*mayaFlags: forwarded to
-            :func:`~pymel.core.animation.cluster`
-        :return: The cluster node. The handle can be accessed through the
-            ``.handle`` property.
-        :rtype: :class:`~paya.runtime.nodes.Cluster`
-    
-    .. py:method:: getHandle()
-    
-        Getter for ``.handle`` property. Returns the weighted node.
+        Getter for ``weightedNode`` / ``wn`` property.
         
-        :return: The handle *transform*.
-        :rtype :class:`~paya.runtime.nodes.Transform`
+        :return: The weighted node.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
     
-    .. py:method:: setHandle(handle)
+    .. py:method:: setWeightedNode(*args, bindState=False)
     
-        Setter for ``.handle`` property. Swaps-out the weighted node.
-        :param handle: the new handle
-        :type handle: str, :class:`~paya.runtime.nodes.Transform`
+        Overloads :meth:`pymel.core.nodetypes.Cluster.setWeightedNode` to
+        accept a single argument for the weighted node. This will merely
+        be duplicated and passed along.
+        
+        Setter for ``weightedNode`` / ``wn`` property.
+        
+        :param \*args: the weighted node arg(s)
+        :type \*args: str, :class:`~paya.runtime.nodes.Transform`
+        :param bool bindState/bs: maintain offset when switching weighted
+            nodes; defaults to False
         :return: ``self``
-        :rtype: :class:`~paya.runtime.nodes.Cluster`
+        :rtype: :class:`Cluster`

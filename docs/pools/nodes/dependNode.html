@@ -186,6 +186,41 @@ suffix; defaults to False</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.rename">
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreShape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">managedNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.rename" title="Permalink to this definition"></a></dt>
+<dd><p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.rename.html#pymel.core.general.rename" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.rename()</span></code></a> to add the following:</p>
+<ul class="simple">
+<li><p>multiple name elements</p></li>
+<li><p>optional name management</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*elems</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – one or more name elements; these will be strung
+together with underscores; ignored if <em>uuid</em> is True</p></li>
+<li><p><strong>ignoreShape</strong> – indicates that renaming of shape nodes below
+transform nodes should be prevented; defaults to False</p></li>
+<li><p><strong>uuid</strong> – Indicates that the new name is actually a UUID, and that
+the command should change the node?s UUID (In which case its name
+remains unchanged); defaults to False</p></li>
+<li><p><strong>managedNames/mn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – <p>perform Paya name management, i.e.:</p>
+<ul>
+<li><p>inherit prefixes from <a class="reference internal" href="../../paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks</p></li>
+<li><p>apply the type suffix</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.createNode">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.createNode" title="Permalink to this definition"></a></dt>
 <dd><p>Object-oriented version of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a> with
@@ -235,6 +270,25 @@ name and node type.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.isControl">
+<span class="sig-name descname"><span class="pre">isControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.isControl" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, make this node a controller; if
+<code class="docutils literal notranslate"><span class="pre">False</span></code>, remove any controller tags; if omitted, return whether
+this node is a controller</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.10)"><strong>NotImplementedError</strong></a> – The control state can’t be edited on non-
+DAG nodes.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool or None</p>
 </dd>
 </dl>
 </dd></dl>

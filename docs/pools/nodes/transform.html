@@ -170,7 +170,7 @@ applied to the SRT channels; defaults to None</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Transform.createControl">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cube'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldMatrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channelBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotateOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xyz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asControl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsetGroups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'offset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pickWalkParent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.createControl" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cube'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldMatrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channelBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotateOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xyz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asControl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsetGroups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'offset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pickWalkParent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineWidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.createControl" title="Permalink to this definition"></a></dt>
 <dd><p>Creates rig controls. Also available directly on <a class="reference internal" href="../../paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -198,6 +198,8 @@ defaults to ‘offset’</p></li>
 <li><p><strong>pickWalkParent/pwp</strong> (str,
 <a class="reference internal" href="dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a>) – an optional pick-walk parent for this control;
 ignored if <em>asControl</em> is False; defaults to None</p></li>
+<li><p><strong>lineWidth/lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – an override for the control shapes’ line
+width; defaults to None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -333,6 +335,24 @@ be cooked only once, and afterwards retrieved via a
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.makeIdentity">
+<span class="sig-name descname"><span class="pre">makeIdentity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.makeIdentity" title="Permalink to this definition"></a></dt>
+<dd><p>Convenience wrapper for <code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.internal.pmcmds.makeIdentity()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – passed along to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.internal.pmcmds.makeIdentity()</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Transform.createOffsetGroups">
 <span class="sig-name descname"><span class="pre">createOffsetGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">suffixes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.createOffsetGroups" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -413,11 +433,15 @@ degrees.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Transform.setCtShapesFromLib">
-<span class="sig-name descname"><span class="pre">setCtShapesFromLib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">libKey</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.setCtShapesFromLib" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setCtShapesFromLib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">libKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineWidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.setCtShapesFromLib" title="Permalink to this definition"></a></dt>
 <dd><p>Sets control shapes to the named library entry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the library entry, e.g. ‘cube’</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the library entry, e.g. ‘cube’</p></li>
+<li><p><strong>lineWidth/lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – an override for the line width;
+defaults to None</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The newly-generated control shapes.</p>
@@ -489,7 +513,7 @@ otherwise, a color index.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Transform.copyCtShapesTo">
-<span class="sig-name descname"><span class="pre">copyCtShapesTo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">destControls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mirrorAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.copyCtShapesTo" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copyCtShapesTo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">destControls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mirrorAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineWidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.copyCtShapesTo" title="Permalink to this definition"></a></dt>
 <dd><p>Copies control shapes and / or color from this control to one or more
 destination controls. The ‘shape’ and ‘color’ flags can be defined by
 omission, Maya-style; for example, to copy only color, just pass
@@ -501,6 +525,7 @@ unless explicitly set.</p>
 <li><p><strong>shape/sh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – copy shapes; if this is <code class="docutils literal notranslate"><span class="pre">False</span></code>, all other
 arguments except <code class="docutils literal notranslate"><span class="pre">color</span></code> are ignored</p></li>
 <li><p><strong>color/col</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – copy color</p></li>
+<li><p><strong>lineWidth/lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – copy line width</p></li>
 <li><p><strong>*destControls</strong> (list, str,
 <a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – one or more controls to copy shapes to</p></li>
 <li><p><strong>replace/rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – remove existing shapes on the destination
@@ -537,6 +562,35 @@ example ‘x’;  defaults to <code class="docutils literal notranslate"><span c
 <dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getCtShapesLineWidth">
+<span class="sig-name descname"><span class="pre">getCtShapesLineWidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getCtShapesLineWidth" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The first encountered line width which is above 0.0
+(i.e. not the Maya default of -1.0), or None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.setCtShapesLineWidth">
+<span class="sig-name descname"><span class="pre">setCtShapesLineWidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lineWidth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.setCtShapesLineWidth" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the line width on NURBS control shapes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lineWidth</strong> – the line width to set; if None is passed,
+the line width will be set to -1.0</p>
+</dd>
+</dl>
+<p>type lineWidth: float, None
+:return: <code class="docutils literal notranslate"><span class="pre">self</span></code>
+:rtype: <a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
 </dd></dl>
 
 </dd></dl>

@@ -84,6 +84,14 @@ paya.lib.mathops
     argument is an integer, a range of floats is returned. Otherwise,
     the argument is passed through without further checking.
 
+.. py:function:: expandVectorArgs(*args)
+
+    Expands *args*, stopping at anything that looks like a vector value
+    or plug.
+    
+    :param \*args: the arguments to expand
+    :return: The expanded arguments.
+
 .. py:function:: conformVectorArg(arg, listLength=None)
 
     Conforms *arg* into a single vector value or plug, or to a list of vectors

@@ -34,7 +34,7 @@ paya.runtime.nodes.Transform
         :return: The transform.
         :rtype: :class:`~paya.runtime.nodes.Transform`
     
-    .. py:classmethod:: createControl(name=None, under=None, shape='cube', size=1.0, color=None, worldMatrix=None, keyable=None, channelBox=None, rotateOrder='xyz', asControl=True, offsetGroups='offset', pickWalkParent=None)
+    .. py:classmethod:: createControl(name=None, under=None, shape='cube', size=1.0, color=None, worldMatrix=None, keyable=None, channelBox=None, rotateOrder='xyz', asControl=True, offsetGroups='offset', pickWalkParent=None, lineWidth=None)
     
         Creates rig controls. Also available directly on :mod:`paya.runtime`.
         
@@ -68,6 +68,8 @@ paya.runtime.nodes.Transform
             ignored if *asControl* is False; defaults to None
         :type pickWalkParent/pwp: str,
             :class:`~paya.runtime.nodes.DependNode`
+        :param float lineWidth/lw: an override for the control shapes' line
+            width; defaults to None
         :return: The generated control.
         :rtype: :class:`~paya.runtime.nodes.Transform`
     
@@ -134,6 +136,15 @@ paya.runtime.nodes.Transform
         :rtype: :class:`paya.runtime.data.Matrix` or
             :class:`paya.runtime.plugs.Matrix`
     
+    .. py:method:: makeIdentity(**kwargs)
+    
+        Convenience wrapper for :func:`pymel.internal.pmcmds.makeIdentity`.
+        
+        :param \*\*kwargs: passed along to
+            :func:`pymel.internal.pmcmds.makeIdentity`.
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+    
     .. py:method:: createOffsetGroups(*suffixes)
     
         :param \*suffixes: one or more offset group suffixes; defaults to
@@ -177,11 +188,13 @@ paya.runtime.nodes.Transform
         :type scale: list, tuple, :class:`~pymel.core.datatypes.Array`
         :return: ``self``
     
-    .. py:method:: setCtShapesFromLib(libKey)
+    .. py:method:: setCtShapesFromLib(libKey, lineWidth=None)
     
         Sets control shapes to the named library entry.
         
         :param str name: the name of the library entry, e.g. 'cube'
+        :param float lineWidth/lw: an override for the line width;
+            defaults to None
         :return: The newly-generated control shapes.
         :rtype: list of :class:`~paya.runtime.nodes.Shape`
     
@@ -217,7 +230,7 @@ paya.runtime.nodes.Transform
             otherwise, a color index.
         :rtype: :class:`~paya.runtime.nodes.Transform` or int
     
-    .. py:method:: copyCtShapesTo(*destControls, replace=True, worldSpace=False, mirrorAxis=None, color=None, shape=None)
+    .. py:method:: copyCtShapesTo(*destControls, replace=True, worldSpace=False, mirrorAxis=None, color=None, lineWidth=None, shape=None)
     
         Copies control shapes and / or color from this control to one or more
         destination controls. The 'shape' and 'color' flags can be defined by
@@ -228,6 +241,7 @@ paya.runtime.nodes.Transform
         :param bool shape/sh: copy shapes; if this is ``False``, all other
             arguments except ``color`` are ignored
         :param bool color/col: copy color
+        :param bool lineWidth/lw: copy line width
         :param \*destControls: one or more controls to copy shapes to
         :type \*destControls: list, str,
             :class:`~paya.runtime.nodes.Transform`
@@ -250,3 +264,19 @@ paya.runtime.nodes.Transform
         :param str entryName: the name of the new library entry
         :return: ``self``
         :rtype: :class:`~paya.runtime.nodes.Transform`
+    
+    .. py:method:: getCtShapesLineWidth()
+    
+        :return: The first encountered line width which is above 0.0
+            (i.e. not the Maya default of -1.0), or None
+        :rtype: float, None
+    
+    .. py:method:: setCtShapesLineWidth(lineWidth)
+    
+        Sets the line width on NURBS control shapes.
+        
+        :param lineWidth: the line width to set; if None is passed,
+            the line width will be set to -1.0
+        type lineWidth: float, None
+        :return: ``self``
+        :rtype: :class:`Transform`
