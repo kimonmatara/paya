@@ -281,7 +281,11 @@ class NurbsCurve:
 
     subCurve = Loopback()
     detach = Loopback()
+    extend = Loopback()
+    extendByVector = Loopback()
+    extendToPoint = Loopback()
     retract = Loopback()
+    setLength = Loopback()
     reverse = Loopback()
     toBezier = Loopback()
     toNurbs = Loopback()
@@ -290,7 +294,6 @@ class NurbsCurve:
     rebuild = Loopback()
     cageRebuild = Loopback()
     blend = Loopback()
-    setLength = Loopback()
 
     #-----------------------------------------------------|    Macro
 
@@ -1643,18 +1646,17 @@ class NurbsCurve:
 
         return groups
 
-    @short(tolerance='tol', mergeCollocated='mcl')
-    def clusterAll(self, mergeCollocated=False, tolerance=1e-6):
+    @short(tolerance='tol', merge='mer')
+    def clusterAll(self, merge=False, tolerance=1e-6):
         """
         Clusters-up the CVs on this curve.
 
-        :param bool mergeCollocated/mcl: merge the start / end CVs
-            if they overlap within the specified *tolerance*; defaults to
-            False
+        :param bool merge/mer: merge CVs if they overlap within the specified
+            *tolerance*; defaults to False
         :return: The clusters.
         :rtype: [:class:`~paya.runtime.nodes.Cluster`]
         """
-        if mergeCollocated:
+        if merge:
             items = self.getCollocatedCVGroups(tol=tolerance)
 
         else:
