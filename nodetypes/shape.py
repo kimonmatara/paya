@@ -7,6 +7,51 @@ class Shape:
     #-----------------------------------------------------------|    Constructors
 
     @classmethod
+    @short(
+        name='n',
+        under='u',
+        conformShapeNames='csn',
+        intermediate='i'
+    )
+    def createShape(
+            cls,
+            name=None,
+            under=None,
+            conformShapeNames=True,
+            intermediate=False
+    ):
+        """
+        Basic shape constructor.
+
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, tuple, list, str, int
+        :param under/u: a custom destination parent; defaults to None
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool conformShapeNames/csn: ignored if *under* was omitted;
+            conform destination shape names after reparenting; defaults to
+            True
+        :param bool intermediate/i: create the shape as an intermediate
+            object; defaults to False
+        :return: The shape node.
+        :rtype: :class:`Shape`
+        """
+        shape = cls.createNode(n=name)
+        parent = shape.getParent()
+
+        if under:
+            newParent = r.PyNode(under)
+            r.parent(shape, newParent, r=True, shape=True)
+            r.delete(parent)
+
+            if conformShapeNames:
+                newParent.conformShapeNames()
+
+        if intermediate:
+            shape.attr('intermediateObject').set(True)
+
+        return shape
+
+    @classmethod
     @short(name='n')
     def createNode(cls, name=None):
         """
