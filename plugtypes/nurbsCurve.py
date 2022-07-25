@@ -1242,8 +1242,9 @@ class NurbsCurve:
             defaults to False
         :param bool multipleKnots/mul: keep multiple knots; defaults to
             True
-        :param bool useSegment/seg: extend using an attached segment instead
-            of an ``extendCurve`` node; defaults to False
+        :param bool useSegment/seg: for improved accuracy, extend using an
+            attached line segment instead of the 'Linear' mode of an
+            ``extendCurve`` node; defaults to False
         :return: This curve, extended along the specified vector.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
@@ -1289,8 +1290,9 @@ class NurbsCurve:
             defaults to False
         :param bool multipleKnots/mul: keep multiple knots; defaults to
             True
-        :param bool useSegment/seg: extend using an attached segment instead
-            of an ``extendCurve`` node; defaults to False
+        :param bool useSegment/seg: for improved accuracy, extend using an
+            attached line segment instead of the 'Linear' mode of an
+            ``extendCurve`` node; defaults to False
         :return: This curve, extended to meet the specified point
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
@@ -1422,8 +1424,8 @@ class NurbsCurve:
         :param bool extrapolate/ext: if extending by distance, use the
             'extrapolate' mode of the ``extendCurve`` node; defaults to False
         :param bool useSegment/seg: if extending by vector or point, don't use
-            an ``extendCurve`` node; instead, attach a line segment; defaults
-            to False
+            an ``extendCurve`` node; for improved accuracy, attach a line
+            segment instead; defaults to False
         :param bool multipleKnots/mul: keep multiple knots; defaults to
             True
         :param bool atStart/ats: extend from the start of the curve rather than the end;
