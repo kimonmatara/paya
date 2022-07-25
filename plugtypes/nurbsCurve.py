@@ -215,7 +215,7 @@ class NurbsCurve:
         """
         return self.info().attr('arcLength')
 
-    def getCVs(self):
+    def getControlPoints(self):
         """
         :return: The ``.controlPoints`` multi-attribute of a connected
             ``curveInfo`` node.
@@ -224,7 +224,6 @@ class NurbsCurve:
         plug = self.info().attr('controlPoints')
         plug.evaluate()
         return plug
-
     #--------------------------------------|    Info (bundled) sampling
 
     def initMotionPath(self, **config):
@@ -520,39 +519,60 @@ class NurbsCurve:
     @short(
         squashStretch='ss',
         upVector='upv',
-        upObject='upo',
         aimCurve='aic',
         fraction='fr',
         globalScale='gs',
-        matchedCurve='mc'
+        closestPoint='cp'
     )
-    def _matrixAtParamOrFraction(
+    def matrixAtParamOrFraction(
             self,
             paramOrFraction,
             tangentAxis,
             upAxis,
-            squashStretch=False,
             upVector=None,
-            upObject=None,
             aimCurve=None,
-            fraction=False,
+            closestPoint=True,
             globalScale=None,
-            matchedCurve=False
-    ):
-        #----------------------------------|    Conform arguments
+            squashStretch=False,
+            fraction=False
+            ):
+        """
+        Base curve framing implementation. Uses ``motionPath`` and / or
+        ``pointOnCurveInfo`` nodes.
+
+        :param paramOrFraction: a parameter of length fraction at which
+            to sample the matrix
+        :type paramOrFraction: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent,
+            e.g. '-y'
+        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
+        :param upVector/upv: an explicit up vector; defaults to None
+        :type upVector/upv: None, str, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
+            the ``curveWarp`` deformer; defaults to False
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: sample points on the aim-curve by
+            proximity rather than matched parameter; defaults to True
+        :param globalScale/gs: ignored if not a plug; a baseline scale (will
+            be normalized); defaults to None
+        :type globalScale/gs: None, float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow the tangent vector to squash and
+            stretch; defaults to False
+        :param bool fraction/fr: interpret *paramOrFraction* as a length
+            fraction rather than a parameter; defaults to False
+        :return: The constructed matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        #---------------------------------------------|    Conform arguments
 
         if not fraction:
             if isinstance(paramOrFraction, r.Component):
                 paramOrFraction = float(paramOrFraction)
-
-        if upVector:
-            upVector = _mo.info(upVector)[0]
-
-        if upObject:
-            upObject = r.PyNode(upObject)
-
-        if aimCurve:
-            aimCurve = _mo.asGeoPlug(aimCurve, ws=True)
 
         if globalScale is None:
             globalScale = 1.0
@@ -561,71 +581,76 @@ class NurbsCurve:
         else:
             globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
 
+            if not gsIsPlug:
+                globalScale = 1.0
+
         if aimCurve:
+            aimCurve = _mo.asGeoPlug(aimCurve, ws=True)
 
-            #------------------------------|    pointOnCurveInfo implementation
+        #---------------------------------------------|    Implementation
 
-            # Use pointOnCurveInfo
+        if fraction: # via motionPath
+            mp = self.initMotionPath(
+                fractionMode=True, uValue=paramOrFraction)
 
-            if fraction:
-                param = self.paramAtFraction(paramOrFraction)
+            point = mp.attr('allCoordinates')
 
-            else:
-                param = paramOrFraction
-
-            poci = self.infoAtParam(param)
-
-            # Get vecs
-
-            tangent = poci.attr('tangent')
-            position = poci.attr('position')
+            kwargs = {}
 
             if upVector:
-                if upObject:
-                    upVector = upVector * upObject.attr('wm')
-
-            elif upObject:
-                upVector = upObject.getWorldPosition(p=True)-position
+                kwargs['worldUpVector'] = upVector
 
             elif aimCurve:
-                if matchedCurve:
-                    interest = aimCurve.pointAtParam(param)
+                if closestPoint:
+                    interest = aimCurve.closestPoint(point)
 
                 else:
-                    interest = aimCurve.closestPoint(position)
+                    param = self.paramAtPoint(point)
+                    interest = aimCurve.pointAtParam(param)
 
-                upVector = interest-position
+                kwargs['worldUpVector'] = interest-point
 
-            else:
-                upVector = poci.attr('normal')
+            mp.configFollow(tangentAxis, upAxis, **kwargs)
+
+            # Complete the matrix
+            srmatrix = mp.attr('orientMatrix')
+            tmtx = point.asTranslateMatrix()
+            matrix = srmatrix * tmtx
+
+            if squashStretch:
+                tangentLength = matrix.getAxis(tangentAxis).length()
+
+        else: # via pointOnCurveInfo
+            poci = self.infoAtParam(paramOrFraction)
+
+            point = poci.attr('position')
+            tangent = poci.attr('tangent')
+
+            if not upVector:
+                if aimCurve:
+                    if closestPoint:
+                        interest = aimCurve.closestPoint(point)
+
+                    else:
+                        param = self.paramAtPoint(point)
+                        interest = aimCurve.pointAtParam(param)
+
+                    upVector = interest-point
+
+                else:
+                    upVector = poci.attr('tangent')
 
             matrix = r.createMatrix(
                 tangentAxis, tangent,
                 upAxis, upVector,
-                t=position
-            ).pk(t=True, r=True)
-
-        else:
-            #------------------------------|    motionPath implementation
-
-            mp = r.nodes.MotionPath.createNode()
-            self >> mp.attr('geometryPath')
-
-            paramOrFraction >> mp.attr('uValue')
-            mp.attr('fractionMode').set(fraction)
-
-            mp.configFollow(tangentAxis, upAxis, wu=upVector, wuo=upObject)
-
-            # Edit the matrix
-            rsmtx = mp.attr('orientMatrix')
+                translate=position
+            )
 
             if squashStretch:
-                tangent = rsmtx.getAxis(tangentAxis)
+                tangentLength = tangent.length()
 
-            tmtx = mp.attr('allCoordinates').asTranslateMatrix()
-            matrix = rsmtx.pk(r=True) * tmtx
-
-        #----------------------------------|    Configure scaling
+        # Post-process matrix
+        matrix = matrix.pick(translate=True, rotate=True)
 
         if gsIsPlug or squashStretch:
             if gsIsPlug:
@@ -637,7 +662,6 @@ class NurbsCurve:
             factors = [globalScale] * 3
 
             if squashStretch:
-                tangentLength = tangent.length()
                 _tangentLength = tangentLength.get()
 
                 if _tangentLength != 1.0:
@@ -654,262 +678,228 @@ class NurbsCurve:
     @short(
         squashStretch='ss',
         upVector='upv',
-        upObject='upo',
         aimCurve='aic',
-        fraction='fr',
         globalScale='gs',
-        matchedCurve='mc'
-    )
-    def matrixAtParam(
-            self,
-            param,
-            tangentAxis,
-            upAxis,
-            squashStretch=False,
-            upVector=None,
-            upObject=None,
-            aimCurve=None,
-            globalScale=None,
-            matchedCurve=False
-    ):
-        """
-        :param param: the parameter at which to sample the matrix
-        :type param: float, str, :class:`~paya.runtime.Math1D`
-        :param str tangentAxis: the axis to align to the curve tangent
-        :param str upAxis: the axis to align to the resolved up vector
-        :param bool squashStretch/ss: incorporate tangent stretching
-            (dynamic only); defaults to False
-        :param upVector/upv: used as an up vector on its own, or extracted from
-            *upObject*; defaults to None
-        :type upVector/upv: None, list, tuple, str,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an up curve; defaults to None
-        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param upObject/upo: used as an aiming interest on its own, or as a source
-            for *upVector*; defaults to None
-        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
-            defaults to False
-        :param globalScale/gs: used to drive scaling; the scale will be
-            normalised; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
-            same U domain as this curve, to avoid unnecessary closest-point
-            calculations; defaults to False
-        :return: A matrix at the specified parameter, constructed using the
-            most efficient DG configuration for the given options.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-        """
-        return self._matrixAtParamOrFraction(
-            param,
-            tangentAxis,
-            upAxis,
-            ss=squashStretch,
-            upv=upVector,
-            upo=upObject,
-            aic=aimCurve,
-            gs=globalScale,
-            mc=matchedCurve,
-            fr=False
-        )
-
-    @short(
-        squashStretch='ss',
-        upVector='upv',
-        upObject='upo',
-        aimCurve='aic',
-        fraction='fr',
-        globalScale='gs',
-        matchedCurve='mc'
-    )
-    def matrixAtFraction(
-            self,
-            fraction,
-            tangentAxis,
-            upAxis,
-            squashStretch=False,
-            upVector=None,
-            upObject=None,
-            aimCurve=None,
-            globalScale=None,
-            matchedCurve=False
-    ):
-        """
-        :param fraction: the fraction at which to sample the matrix
-        :type fraction: float, str, :class:`~paya.runtime.Math1D`
-        :param str tangentAxis: the axis to align to the curve tangent
-        :param str upAxis: the axis to align to the resolved up vector
-        :param bool squashStretch/ss: incorporate tangent stretching
-            (dynamic only); defaults to False
-        :param upVector/upv: used as an up vector on its own, or extracted from
-            *upObject*; defaults to None
-        :type upVector/upv: None, list, tuple, str,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an up curve; defaults to None
-        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param upObject/upo: used as an aiming interest on its own, or as a source
-            for *upVector*; defaults to None
-        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
-            defaults to False
-        :param globalScale/gs: used to drive scaling; the scale will be
-            normalised; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
-            same U domain as this curve, to avoid unnecessary closest-point
-            calculations; defaults to False
-        :return: A matrix at the specified fraction, constructed using the
-            most efficient DG configuration for the given options.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-        """
-        return self._matrixAtParamOrFraction(
-            fraction,
-            tangentAxis,
-            upAxis,
-            ss=squashStretch,
-            upv=upVector,
-            upo=upObject,
-            aic=aimCurve,
-            gs=globalScale,
-            mc=matchedCurve,
-            fr=True
-        )
-
-    @short(
-        squashStretch='ss',
-        upVector='upv',
-        upObject='upo',
-        aimCurve='aic',
-        fraction='fr',
-        globalScale='gs',
-        matchedCurve='mc'
-    )
-    def matrixAtLength(
-            self,
-            length,
-            tangentAxis,
-            upAxis,
-            squashStretch=False,
-            upVector=None,
-            upObject=None,
-            aimCurve=None,
-            globalScale=None,
-            matchedCurve=False
-    ):
-        """
-        :param length: the length at which to sample the matrix
-        :type length: float, str, :class:`~paya.runtime.Math1D`
-        :param str tangentAxis: the axis to align to the curve tangent
-        :param str upAxis: the axis to align to the resolved up vector
-        :param bool squashStretch/ss: incorporate tangent stretching
-            (dynamic only); defaults to False
-        :param upVector/upv: used as an up vector on its own, or extracted from
-            *upObject*; defaults to None
-        :type upVector/upv: None, list, tuple, str,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an up curve; defaults to None
-        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param upObject/upo: used as an aiming interest on its own, or as a source
-            for *upVector*; defaults to None
-        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
-            defaults to False
-        :param globalScale/gs: used to drive scaling; the scale will be
-            normalised; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
-            same U domain as this curve, to avoid unnecessary closest-point
-            calculations; defaults to False
-        :return: A matrix at the specified length, constructed using the
-            most efficient DG configuration for the given options.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-        """
-        return self._matrixAtParamOrFraction(
-            self.fractionAtLength(length),
-            tangentAxis,
-            upAxis,
-            ss=squashStretch,
-            upv=upVector,
-            upo=upObject,
-            aic=aimCurve,
-            gs=globalScale,
-            mc=matchedCurve,
-            fr=True
-        )
-
-    @short(
-        squashStretch='ss',
-        upVector='upv',
-        upObject='upo',
-        aimCurve='aic',
-        fraction='fr',
-        globalScale='gs',
-        matchedCurve='mc'
+        closestPoint='cp'
     )
     def matrixAtPoint(
             self,
             point,
             tangentAxis,
             upAxis,
-            squashStretch=False,
             upVector=None,
-            upObject=None,
             aimCurve=None,
+            closestPoint=True,
             globalScale=None,
-            matchedCurve=False
-    ):
+            squashStretch=False
+            ):
         """
         :param point: the point at which to sample the matrix
-        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
-            :class:`~paya.runtime.plugs.Point`
-        :param str tangentAxis: the axis to align to the curve tangent
-        :param str upAxis: the axis to align to the resolved up vector
-        :param bool squashStretch/ss: incorporate tangent stretching
-            (dynamic only); defaults to False
-        :param upVector/upv: used as an up vector on its own, or extracted from
-            *upObject*; defaults to None
-        :type upVector/upv: None, list, tuple, str,
+        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
+        :param upVector/upv: an explicit up vector; defaults to None
+        :type upVector/upv: None, str, tuple, list,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an up curve; defaults to None
-        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
+        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
+            the ``curveWarp`` deformer; defaults to False
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.plugs.NurbsCurve`
-        :param upObject/upo: used as an aiming interest on its own, or as a source
-            for *upVector*; defaults to None
-        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool fraction/fr: interpret *paramOrFraction* as a fraction;
-            defaults to False
-        :param globalScale/gs: used to drive scaling; the scale will be
-            normalised; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
-            same U domain as this curve, to avoid unnecessary closest-point
-            calculations; defaults to False
-        :return: A matrix at the specified point, constructed using the
-            most efficient DG configuration for the given options.
+        :param bool closestPoint/cp: sample points on the aim-curve by
+            proximity rather than matched parameter; defaults to True
+        :param globalScale/gs: ignored if not a plug; a baseline scale (will
+            be normalized); defaults to None
+        :type globalScale/gs: None, float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow the tangent vector to squash and
+            stretch; defaults to False
+        :return: The constructed matrix.
         :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
-        return self._matrixAtParamOrFraction(
+        return self.matrixAtParamOrFraction(
             self.paramAtPoint(point),
             tangentAxis,
             upAxis,
-            ss=squashStretch,
             upv=upVector,
-            upo=upObject,
             aic=aimCurve,
+            cp=closestPoint,
             gs=globalScale,
-            mc=matchedCurve,
-            fr=False
+            ss=squashStretch,
+            fraction=False
+        )
+
+    @short(
+        squashStretch='ss',
+        upVector='upv',
+        aimCurve='aic',
+        globalScale='gs',
+        closestPoint='cp'
+    )
+    def matrixAtParam(
+            self,
+            param,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            aimCurve=None,
+            closestPoint=True,
+            globalScale=None,
+            squashStretch=False
+            ):
+        """
+        :param param: the parameter at which to sample the matrix
+        :type param: float, str,
+            :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent,
+            e.g. '-y'
+        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
+        :param upVector/upv: an explicit up vector; defaults to None
+        :type upVector/upv: None, str, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
+            the ``curveWarp`` deformer; defaults to False
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: sample points on the aim-curve by
+            proximity rather than matched parameter; defaults to True
+        :param globalScale/gs: ignored if not a plug; a baseline scale (will
+            be normalized); defaults to None
+        :type globalScale/gs: None, float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow the tangent vector to squash and
+            stretch; defaults to False
+        :return: The constructed matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        return self.matrixAtParamOrFraction(
+            _nu.conformUParamArg(param),
+            tangentAxis,
+            upAxis,
+            upv=upVector,
+            aic=aimCurve,
+            cp=closestPoint,
+            gs=globalScale,
+            ss=squashStretch,
+            fraction=False
+        )
+
+    @short(
+        squashStretch='ss',
+        upVector='upv',
+        aimCurve='aic',
+        globalScale='gs',
+        closestPoint='cp'
+    )
+    def matrixAtFraction(
+            self,
+            fraction,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            aimCurve=None,
+            closestPoint=True,
+            globalScale=None,
+            squashStretch=False
+            ):
+        """
+        :param fraction: the fraction at which to sample the matrix
+        :type fraction: float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent,
+            e.g. '-y'
+        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
+        :param upVector/upv: an explicit up vector; defaults to None
+        :type upVector/upv: None, str, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
+            the ``curveWarp`` deformer; defaults to False
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: sample points on the aim-curve by
+            proximity rather than matched parameter; defaults to True
+        :param globalScale/gs: ignored if not a plug; a baseline scale (will
+            be normalized); defaults to None
+        :type globalScale/gs: None, float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow the tangent vector to squash and
+            stretch; defaults to False
+        :return: The constructed matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        return self.matrixAtParamOrFraction(
+            fraction,
+            tangentAxis,
+            upAxis,
+            upv=upVector,
+            aic=aimCurve,
+            cp=closestPoint,
+            gs=globalScale,
+            ss=squashStretch,
+            fraction=True
+        )
+
+    @short(
+        squashStretch='ss',
+        upVector='upv',
+        aimCurve='aic',
+        globalScale='gs',
+        closestPoint='cp'
+    )
+    def matrixAtLength(
+            self,
+            length,
+            tangentAxis,
+            upAxis,
+            upVector=None,
+            aimCurve=None,
+            closestPoint=True,
+            globalScale=None,
+            squashStretch=False
+            ):
+        """
+        :param length: the length at which to sample the matrix
+        :type length: float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param str tangentAxis: the axis to map to the curve tangent,
+            e.g. '-y'
+        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
+        :param upVector/upv: an explicit up vector; defaults to None
+        :type upVector/upv: None, str, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
+            the ``curveWarp`` deformer; defaults to False
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: sample points on the aim-curve by
+            proximity rather than matched parameter; defaults to True
+        :param globalScale/gs: ignored if not a plug; a baseline scale (will
+            be normalized); defaults to None
+        :type globalScale/gs: None, float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow the tangent vector to squash and
+            stretch; defaults to False
+        :return: The constructed matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        """
+        return self.matrixAtParamOrFraction(
+            self.fractionAtLength(length),
+            tangentAxis,
+            upAxis,
+            upv=upVector,
+            aic=aimCurve,
+            cp=closestPoint,
+            gs=globalScale,
+            ss=squashStretch,
+            fraction=True
         )
 
     #--------------------------------------|    Distributions
@@ -1248,7 +1238,7 @@ class NurbsCurve:
         :return: This curve, extended along the specified vector.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        points = list(self.getCVs())
+        points = list(self.getControlPoints())
         startPoint = points[0 if atStart else -1]
         endPoint = startPoint + vector
 
@@ -1297,7 +1287,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
         if useSegment:
-            allPoints = list(self.getCVs())
+            allPoints = list(self.getControlPoints())
             startPoint = allPoints[0 if atStart else -1]
             segment = self.createLine(startPoint, point)
 
