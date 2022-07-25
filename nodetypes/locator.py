@@ -5,6 +5,53 @@ import paya.runtime as r
 
 class Locator:
 
+    #-----------------------------------------------------|    Constructor
+
+    @classmethod
+    @short(
+        worldMatrix='wm',
+        displayLocalAxis='dla',
+        name='n',
+        size='siz'
+    )
+    def create(
+            cls,
+            worldMatrix=None,
+            displayLocalAxis=False,
+            name=None,
+            under=None,
+            size=1.0
+    ):
+        """
+        Locator constructor. Note that the return is the locator *shape*, not
+        its transform.
+
+        :param worldMatrix/wm: a world-matrix for the locator transform;
+            ignored if a custom parent is specified via *under*/*u*; defaults
+            to None
+        :param bool displayLocalAxis/dla: display local rotation axes; defaults to
+            None
+        :param float size/siz: a convenience scalar for the locator
+            ``localScale`` attribute; defaults to 1.0
+        :param under/u: a custom parent for the locator *shape*; defaults to None
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, tuple, list
+        :return: The locator shape.
+        :rtype: :class:`Locator`
+        """
+        shape = cls.createShape(u=under, n=name)
+
+        if worldMatrix and under is None:
+            shape.getParent().setMatrix(worldMatrix)
+
+        shape.attr('localScale').set([size] * 3)
+
+        if displayLocalAxis:
+            shape.attr('displayLocalAxis').set(True)
+
+        return shape
+
     #-----------------------------------------------------|    Macros
 
     @classmethod
