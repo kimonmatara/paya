@@ -381,6 +381,27 @@ class NurbsCurve:
 
     #-----------------------------------------------------|    Point sampling
 
+    @short(worldSpace='ws')
+    def getCVs(self, space='preTransform', worldSpace=None):
+        """
+        Overloads :meth:`paya.runtime.nodes.NurbsCurve.getCVs` to add
+        *worldSpace*/*ws*.
+
+        :param str space: one of 'transform', 'preTransform', 'object',
+            'world'; defaults to 'preTransform'
+        :param worldSpace/ws: if ``True``, overrides *space* to 'world';
+            if ``False``, overrides *space* to 'object'; defaults to None
+        :return: The CV points.
+        :rtype: [:class:`~paya.runtime.comps.NurbsCurveCV`]
+        """
+        kwargs = {}
+
+        if worldSpace is None:
+            kwargs['space'] = space
+
+        else:
+            kwargs['space'] = 'world' if worldSpace else 'object'
+
     @short(plug='p')
     def closestPoint_(self, refPoint, plug=False):
         """
