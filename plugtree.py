@@ -206,10 +206,12 @@ def routeDataType(dataType):
         'Sphere',
         'DynSweptGeometry',
         'PluginGeometry',
-        'Subdiv',
-        'BezierCurve'
+        'Subdiv'
     ]:
         return basename, 'Geometry'
+
+    elif basename == 'BezierCurve':
+        return basename, 'NurbsCurve'
 
     return basename, 'Data'
 
