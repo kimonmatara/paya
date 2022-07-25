@@ -159,8 +159,9 @@ class Name:
 
         return False
 
-@short(name='n', nodeType='nt', control='ct')
-def make(*elems, name=None, node=None, nodeType=None, control=False):
+@short(name='n', nodeType='nt', control='ct', inheritNames='inh')
+def make(*elems, name=None, node=None,
+         nodeType=None, control=False, inheritNames=None):
     """
     Constructs Maya node names.
 
@@ -178,6 +179,8 @@ def make(*elems, name=None, node=None, nodeType=None, control=False):
     :param nodeType/nt: a reference node type for the suffix lookups, or
         'payaControl' for controls; defaults to None
     :type nodeType/nt: None, str
+    :param bool inheritNames/inh: inherit from :class:`Name` blocks; defaults
+        to the namesake flag in :mod:`paya.config`
     :return: A Maya node name.
     :rtype: str
     """
@@ -188,7 +191,10 @@ def make(*elems, name=None, node=None, nodeType=None, control=False):
 
     elems = conformElems(elems)
 
-    if config['inheritNames']:
+    if inheritNames is None:
+        inheritNames = config['inheritNames']
+
+    if inheritNames:
         if Name.__elems__:
             elems = Name.__elems__ + elems
 
