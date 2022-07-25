@@ -394,13 +394,10 @@ class NurbsCurve:
         :return: The CV points.
         :rtype: [:class:`~paya.runtime.comps.NurbsCurveCV`]
         """
-        kwargs = {}
+        if worldSpace is not None:
+            space = 'world' if worldSpace else 'object'
 
-        if worldSpace is None:
-            kwargs['space'] = space
-
-        else:
-            kwargs['space'] = 'world' if worldSpace else 'object'
+        return r.nodetypes.NurbsCurve.getCVs(self, space=space)
 
     @short(plug='p')
     def closestPoint_(self, refPoint, plug=False):
