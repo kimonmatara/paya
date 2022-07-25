@@ -22,6 +22,36 @@ class Cluster:
             name=None,
             **kwargs
     ):
+        """
+        Cluster constructor.
+
+        :param \*geos: one or more geometries to include in the deformation
+        :type \*geos: str, list, tuple,
+            :class:`~paya.runtime.nodes.DeformableShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param geometry/g: an alternative geometry aggregator
+        :type geometry/g: str, list, tuple,
+            :class:`~paya.runtime.nodes.DeformableShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param weightedNode/wn: use this to swap in a custom user handle;
+            unlike on the standard :func:`~pymel.core.animation.cluster`
+            command, here this will also accept a single argument; defaults to
+            None
+        :type weightedNode/wn: None, tuple, list, str,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool bindState/bs: similar to *maintainOffset* on constraints;
+            prevents jumping when the custom weighted node has transformations;
+            defaults to False
+        :param name/n: one or more name elements; these will be applied both
+            to the cluster node and its adjuncts; defaults to None
+        :type name/n: None, tuple, list, str, int
+        :param \*\*kwargs: forwarded to :func:`~pymel.core.animation.cluster`;
+            see :func:`~pymel.core.animation.cluster` for details
+        :return: The cluster node. To get the weighted node (transform), use
+            :meth:`getWeightedNode` or the ``weightedNode`` / ``wn`` property.
+        :rtype: :class:`~paya.runtime.nodes.Cluster`
+        """
+
         # Wrangle args, prep
 
         allgeo = []
