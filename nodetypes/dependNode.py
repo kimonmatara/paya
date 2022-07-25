@@ -101,7 +101,7 @@ class DependNode:
             name = self.makeName(*elems)
 
         else:
-            name = _nm.make(*elems, control=self.isControl())
+            name = _nm.make(*elems, control=self.isControl(), inh=False)
 
         r.nodetypes.DependNode.rename(self, name, ignoreShape=ignoreShape)
         return self
