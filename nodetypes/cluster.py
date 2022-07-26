@@ -1,163 +1,316 @@
 import pymel.util as _pu
+import paya.lib.names as _nm
 from paya.util import short
 import paya.runtime as r
 
 
 class Cluster:
 
-    #--------------------------------------------------------|    Constructor
+    #------------------------------------------------|    Constructor
 
     @classmethod
     @short(
-        weightedNode='wn',
+        geometry='g',
+        maintainOffset='mo',
+        conformShapeName='csn',
+        resetVisualOrigin='rvo',
+        intermediateShape='i',
         bindState='bs',
-        geometry='g'
+        weightedNode='wn',
+        worldMatrix='wm',
+        name='n',
+        freeze='fr',
+        handle='hnd'
     )
     def create(
             cls,
             *geos,
             geometry=None,
-            weightedNode=None,
-            bindState=False,
+            handle=None,
+            maintainOffset=None,
+            conformShapeName=False,
+            resetVisualOrigin=True,
+            intermediateShape=None,
+            worldMatrix=None,
+            freeze=True,
             name=None,
-            **kwargs
+            **mayaKwargs
     ):
         """
         Cluster constructor.
 
-        :param \*geos: one or more geometries to include in the deformation
-        :type \*geos: str, list, tuple,
-            :class:`~paya.runtime.nodes.DeformableShape`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param geometry/g: an alternative geometry aggregator
-        :type geometry/g: str, list, tuple,
-            :class:`~paya.runtime.nodes.DeformableShape`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param weightedNode/wn: use this to swap in a custom user handle;
-            unlike on the standard :func:`~pymel.core.animation.cluster`
-            command, here this will also accept a single argument; defaults to
-            None
-        :type weightedNode/wn: None, tuple, list, str,
-            :class:`~paya.runtime.nodes.Transform`
-        :param bool bindState/bs: similar to *maintainOffset* on constraints;
-            prevents jumping when the custom weighted node has transformations;
-            defaults to False
-        :param name/n: one or more name elements; these will be applied both
-            to the cluster node and its adjuncts; defaults to None
+        :param name/n: one or more name elements; defaults to None
         :type name/n: None, tuple, list, str, int
-        :param \*\*kwargs: forwarded to :func:`~pymel.core.animation.cluster`;
-            see :func:`~pymel.core.animation.cluster` for details
-        :return: The cluster node. To get the weighted node (transform), use
-            :meth:`getWeightedNode` or the ``weightedNode`` / ``wn`` property.
-        :rtype: :class:`~paya.runtime.nodes.Cluster`
+        :param \*geos: one or more geometries to bind
+        :type \*geos: None, str, tuple, list,
+            :class:`~paya.runtime.nodes.DeformableShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param geometry/g: alternative geometry aggregator; defaults to None
+        :type geometry/g: None, str, tuple, list,
+            :class:`~paya.runtime.nodes.DeformableShape`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param handle/hnd: a custom user handle (weighted node) for the
+            cluster; if provided, will override the *weightedNode* / *wn*
+            argument for :func:`~pymel.core.animation.cluster`; defaults to
+            None
+        :param bool maintainOffset/mo: prevent deformation jumps when
+            assigning a custom handle that has transform values; if provided,
+            will override the *bindState* / *bs* argument for
+            :func:`~pymel.core.animation.cluster`; defaults to None
+        :param bool conformShapeName/csn: when using a custom handle, rename
+            the :class:`~paya.runtime.nodes.ClusterHandle` node accordingly;
+            defaults to True
+        :param bool resetVisualOrigin/rvo: when using a custom handle, modify
+            ``origin`` on the :class:`~paya.runtime.nodes.ClusterHandle` node
+            accordingly; defaults to True
+        :param bool intermediateShape/i: sets the 'intermediate' state of the
+            :class:`~paya.runtime.nodes.ClusterHandle` node; where a custom
+            weighted node is specified, this defaults to True if the
+            destination parent has hero shapes, otherwise False; if no custom
+            handle is specified, defaults to False
+        :param worldMatrix/wm: ignored if a custom handle is specified;
+            modifes the initial matrix of the default cluster handle; defaults
+            to None
+        :param bool freeze/fr: ignored if *worldMatrix* was omitted, or if
+            a custom handle was specified; after applying custom
+            transformations to the default handle, freeze transform and scale
+            but preserve rotation; defaults to True
+        :type worldMatrix/wm: None, list, tuple,
+            :class:`~paya.runtime.data.Matrix`
+        :param \*\*mayaKwargs: passed along to
+            :func:`~pymel.core.animation.cluster`, except where overriden by
+            other options
+        :return: The cluster node. To get the handle transform, use
+            :meth:`getHandle`.
         """
 
-        # Wrangle args, prep
-
-        allgeo = []
+        # Aggregate geometries
+        allGeos = []
 
         if geos:
-            allgeo += list(_pu.expandArgs(*geos))
+            allGeos += list(_pu.expandArgs(geos))
 
         if geometry:
-            allgeo += list(_pu.expandArgs(geometry))
+            allGeos += list(_pu.expandArgs(geometry))
 
-        mayaKwargs = {}
-
-        if bindState:
-            mayaKwargs['bindState'] = True
-
-        if weightedNode:
-            mayaKwargs['weightedNode'] = \
-                cls._conformWeightedNodeArg(weightedNode)
-            customWn = True
+        # Hijack handle swapping args so that we can swap separately
+        # via setHandle()
+        if handle:
+            newWeightedNode = handle
 
         else:
-            customWn = False
+            newWeightedNode = \
+                mayaKwargs.get('weightedNode', [None, None])[0]
 
-        r.select(cl=True)
+        if maintainOffset is None:
+            maintainOffset = mayaKwargs.get('bindState', False)
 
-        if allgeo:
-            r.select(allgeo)
+        try:
+            del(mayaKwargs['bindState'])
 
-        # Execute
+        except KeyError:
+            pass
 
-        kwargs.update(mayaKwargs)
-        node, wn = [r.PyNode(item) for item in r.cluster(**kwargs)]
+        # Run
+        result = r.cluster(*allGeos, **mayaKwargs)
+        newNode = r.PyNode(result[0])
+        newNode.renameSystem(name)
 
-        # Post config
-        node.rename(name, mn=True)
-
-        if not customWn:
-            wn.rename(name, mn=True)
-
-        return node
-
-    #--------------------------------------------------------|    Weighted node management
-
-    @staticmethod
-    def _conformWeightedNodeArg(*args):
-        args = list(_pu.expandArgs(*args))
-
-        ln = len(args)
-
-        if ln is 0 or ln > 2:
-            raise ValueError("Need one or two values for weightedNode.")
-
-        if ln is 1:
-            out = args * 2
+        if newWeightedNode:
+            customMatrix = False
 
         else:
-            out = args[0]
+            customMatrix = worldMatrix is not None
 
-        return out
+        if customMatrix:
+            origName = newNode.getHandle().basename()
 
-    def getWeightedNode(self):
+            newWeightedNode = r.group(empty=True)
+            newWeightedNode.setMatrix(worldMatrix)
+
+            if freeze:
+                newWeightedNode.makeIdentity(
+                    apply=True, t=True, scale=True, rotate=False)
+
+            conformShapeName = False
+            resetVisualOrigin = True
+            maintainOffset = True
+            intermediateShape = False
+
+        # Swap handle
+        if newWeightedNode:
+            newNode.setHandle(
+                newWeightedNode,
+                csn=conformShapeName,
+                rvo=resetVisualOrigin,
+                dph=True,
+                mo=maintainOffset,
+                i=intermediateShape
+            )
+
+            if customMatrix:
+                newWeightedNode.rename(origName)
+
+        elif intermediateShape is not None:
+            newNode.getHandleShape(
+                ).attr('intermediateObject').set(intermediateShape)
+
+        return newNode
+
+    #------------------------------------------------|    Handle management
+
+    def getHandle(self):
         """
-        Overload of :meth:`pymel.core.nodetypes.Cluster.getWeightedNode`
-        for return type.
+        Paya's flavour of :meth:`~paya.runtime.nodes.getWeightedNode`. Getter
+        for ``handle`` property.
 
-        Getter for ``weightedNode`` / ``wn`` property.
-
-        :return: The weighted node.
+        :return: The cluster handle transform (weighted node).
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        result = r.nodetypes.Cluster.getWeightedNode(self)
+        result = self.attr('matrix').inputs()
 
         if result:
-            return r.PyNode(result)
+            return result[0]
 
-    @short(bindState='bs')
-    def setWeightedNode(self, *args, bindState=False):
+    @short(
+        maintainOffset='mo',
+        intermediateShape='i',
+        resetVisualOrigin='rvo',
+        deletePreviousHandle='dph',
+        conformShapeName='csn'
+    )
+    def setHandle(
+            self,
+            transform,
+            maintainOffset=False,
+            intermediateShape=None,
+            resetVisualOrigin=True,
+            deletePreviousHandle=False,
+            conformShapeName=True
+    ):
         """
-        Overloads :meth:`pymel.core.nodetypes.Cluster.setWeightedNode` to
-        accept a single argument for the weighted node. This will merely
-        be duplicated and passed along.
+        Swaps-in a custom handle transform (weighted node). Setter for
+        ``handle`` property.
 
-        Setter for ``weightedNode`` / ``wn`` property.
-
-        :param \*args: the weighted node arg(s)
-        :type \*args: str, :class:`~paya.runtime.nodes.Transform`
-        :param bool bindState/bs: maintain offset when switching weighted
-            nodes; defaults to False
+        :param transform: the node to swap-in
+        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :param bool maintainOffset/mo: prevent changes in deformation;
+            defaults to False
+        :param bool intermediateShape/i: after reparenting the
+            :class:`~paya.runtime.nodes.ClusterHandle` node, set it to
+            intermediate; defaults to True if the destination parent has
+            hero shapes, otherwise False
+        :param bool resetVisualOrigin/rvo: edit the ``origin`` attribute
+            on the :class:`~paya.runtime.nodes.ClusterHandle` so that it
+            matches the new handle; defauls to True
+        :param bool deletePreviousHandle/dph: delete the current weighted node
+            after completing the swap
+        :param bool copyName/cn: copy the name of the current weighted node
+        :param bool conformShapeName/csn: after reparenting the
+            :class:`~paya.runtime.nodes.ClusterHandle` node, rename it to
+            match the destination transform; defaults to True
         :return: ``self``
         :rtype: :class:`Cluster`
         """
-        args = _pu.expandArgs(*args)
+        xf = r.PyNode(transform)
 
-        ln = len(args)
+        if intermediateShape is None:
+            intermediateShape = bool(xf.getHeroShapes())
 
-        if ln:
-            if ln is 1:
-                args = [args] * 2
+        previous = self.getHandle()
 
-            elif ln > 2:
-                raise ValueError(
-                    "Need one or two arguments, packed or unpacked."
-                )
-        else:
-            raise ValueError(
-                "Need one or two arguments, packed or unpacked."
-            )
+        r.cluster(self, e=True, wn=[xf, xf], bs=maintainOffset)
 
-    weightedNode = wn = property(fget=getWeightedNode, fset=setWeightedNode)
+        if deletePreviousHandle:
+            r.delete(previous)
+
+        handleShape = self.getHandleShape()
+
+        if conformShapeName:
+            handleShape.conformName()
+
+        handleShape.resetVisualOrigin()
+        handleShape.attr('intermediateObject').set(intermediateShape)
+
+        return self
+
+    handle = property(fget=getHandle, fset=setHandle)
+
+    #------------------------------------------------|    Name management
+
+    @short(managedNames='mn')
+    def renameSystem(self, *elems, managedNames=True):
+        """
+        Renames the entire cluster system, including the weighted node,
+        cluster handle shape and the cluster node itself.
+
+        :param \*elems: one or more name elements
+        :type \*elems: None, tuple, list, int, str
+        :param bool managedNames/mn: inherit from
+            :class:`~paya.lib.names.Name` blocks and apply type suffixes;
+            defaults to True
+        :return: ``self``
+        :rtype: `Cluster`
+        """
+        cluster = self
+        clusterHandleShape = self.getHandleShape()
+        clusterHandle = self.getHandle()
+
+        # Rename the cluster handle
+        kw = {}
+
+        if managedNames:
+            kw['inh'] = True
+
+            if clusterHandle.isControl():
+                kw['control'] = True
+
+            else:
+                kw['node'] = clusterHandle
+
+        clusterHandleName = _nm.make(*elems, **kw)
+        clusterHandle.rename(clusterHandleName)
+
+        # Rename the cluster handle shape
+        clusterHandleShape.conformName()
+
+        # Rename the cluster node itself
+        kw = {}
+
+        if managedNames:
+            kw['inh'] = True
+            kw['node'] = self
+
+        name = _nm.make(*elems, **kw)
+        self.rename(name)
+
+        return self
+
+    #------------------------------------------------|    Handle shape management
+
+    def getHandleShape(self):
+        """
+        Getter for ``handleShape`` property.
+
+        :return: The connected class:`~paya.runtime.nodes.ClusterHandle` node,
+            if any.
+        :rtype: class:`~paya.runtime.nodes.ClusterHandle`
+        """
+        inputs = self.attr('clusterXforms').inputs(plugs=True)
+
+        if inputs:
+            return inputs[0].node()
+
+    handleShape = property(fget=getHandleShape)
+
+    #------------------------------------------------|    Matrix management
+
+    def normalize(self):
+        """
+        Compensates transformations on the cluster to un-deform the geometry.
+
+        :return: ``self``
+        :rtype: :class:`Cluster`
+        """
+        self.attr('bindPreMatrix').set(self.attr('matrix').get().inverse())
+        return self
