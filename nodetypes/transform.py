@@ -2,6 +2,7 @@ import maya.cmds as m
 import paya.config as config
 import pymel.util as _pu
 
+import paya.lib.names as _nm
 from paya.util import short, resolveFlags
 from paya.lib.controlshapes import controlShapes
 import paya.runtime as r
@@ -233,6 +234,34 @@ class Transform:
 
     #--------------------------------------------------------|    Shape / transform management
 
+    @short(managedNames='mn', name='n')
+    def duplicate(self, name=None, managedNames=False):
+        """
+        Overloads the base PyMEL method for added naming options.
+
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, tuple, list
+        :param bool managedNames/mn: inherit name elements from
+            :class:`~paya.lib.names.Name` blocks and apply type suffixes;
+            defaults to False
+        :return: The duplicated objects.
+        :rtype: [:class:`~paya.runtime.nodes.Transform`]
+        """
+        kwargs = {}
+
+        if name:
+            nameKwargs = {}
+
+            if managedNames:
+                nameKwargs['node'] = self
+
+            else:
+                nameKwargs['inheritNames'] = False
+
+            kwargs['name'] = _nm.make(name, **nameKwargs)
+
+        return r.nodetypes.Transform.duplicate(self, **kwargs)
+
     def toShape(self):
         """
         :return: If this node is a transform, its first shape child;
@@ -433,45 +462,114 @@ class Transform:
 
     #--------------------------------------------------------|    Shapes
 
-    def conformShapeNames(self):
+    @short(
+        includeIntermediateShapes='iis',
+        shapeList='shl'
+    )
+    def conformShapeNames(self,
+            includeIntermediateShapes=False, shapeList=None):
         """
         Conforms the names of this transform's shape children to the Maya
-        convention. Intermediate shapes are ignored, except where renaming
-        them is needed to enforce logical numbering amongst the non-
-        intermediate ones.
+        convention.
 
+        :param bool includeIntermediateShapes/iis: process intermediate shapes
+            as well
+        :param shapeList/shl: if this is provided, it will be used instead of
+            scanning for the transform's children; defaults to None
+        :type shapeList/shl: None, [str, :class:`~paya.runtime.nodes.Shape`]
         :return: ``self``
-        :rtype: :class:`~paya.runtime.nodes.Transform`
+        :rtype: :class:`Transform`
         """
-        visibleShapes = []
-        intermShapes = []
-
-        for shape in self.getShapes():
-            if shape.isIntermediate():
-                intermShapes.append(shape)
-            else:
-                visibleShapes.append(shape)
-
-        origIntermShapeNames = [
-            intermShape.basename() for intermShape in intermShapes]
-
-        for shape in visibleShapes + intermShapes:
-            shape.rename('tempName')
-
         bn = self.basename()
+        ourShapes = self.getShapes(noIntermediate=False)
 
-        for i, shape in enumerate(visibleShapes):
-            name = bn + 'Shape'
+        # Determine worklist
+        if shapeList:
+            worklist = []
+            shapeList = _pu.expandArgs(shapeList)
 
-            if i > 0:
-                name += str(i)
+            for member in shapeList:
+                member = r.PyNode(member)
 
-            shape.rename(name)
+                if isinstance(member, r.nodetypes.Shape):
+                    if member.hasParent(self):
+                        if not(
+                                (not includeIntermediateShapes) \
+                                and member.isIntermediate):
+                            worklist.append(member)
+                    else:
+                        raise RuntimeError(
+                            "Not a child of {}: {}".format(self, member)
+                        )
 
-        for shape, origName in zip(intermShapes, origIntermShapeNames):
-            shape.rename(origName)
+                else:
+                    raise TypeError(
+                        "Not a shape: {}".format(member)
+                    )
+
+        else:
+            if includeIntermediateShapes:
+                mainShapes = []
+                intermShapes = []
+
+                for shape in ourShapes:
+                    if shape.isIntermediate():
+                        intermShapes.append(shape)
+
+                    else:
+                        mainShapes.append(shape)
+
+                worklist = mainShapes + intermShapes
+
+            else:
+                worklist = [shape for shape in \
+                    ourShapes if not shape.isIntermediate()]
+
+        # Rename all nodes in worklist to gibberish temporarily
+        for node in worklist:
+            node.rename('gibberish')
+
+        unprocessedNodes = set(ourShapes)-set(worklist)
+        reservedNames = [unprocessedNode.basename(
+            ) for unprocessedNode in unprocessedNodes]
+
+        # Iterate
+        for node in worklist:
+            count = 0
+
+            while True:
+                name = '{}Shape'.format(bn)
+
+                if count:
+                    name += str(count)
+
+                if name in reservedNames:
+                    count += 1
+                    continue
+
+                reservedNames.append(name)
+                break
+
+            node.rename(name)
 
         return self
+
+    #--------------------------------------------------------|    General shape utils
+
+    def getHeroShapes(self):
+        """
+        :return: All non-intermediate shapes under this transform.
+        :rtype: [:class:`~paya.runtime.nodes.Shape`]
+        """
+        return self.getShapes(noIntermediate=True)
+
+    def getIntermediateShapes(self):
+        """
+        :return: All intermediate shapes under this transform.
+        :rtype: [:class:`~paya.runtime.nodes.Shape`]
+        """
+        return [shape for shape in self.getShapes(
+            noIntermediate=False) if shape.isIntermediate()]
 
     #--------------------------------------------------------|    Control Shapes
 
