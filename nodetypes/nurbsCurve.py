@@ -20,7 +20,7 @@ class NurbsCurve:
         degree='d',
         under='u',
         name='n',
-        conformShapeNames='csn',
+        conformShapeName='csn',
         intermediate='i',
         displayType='dt',
         bSpline='bsp',
@@ -34,7 +34,7 @@ class NurbsCurve:
             bSpline=False,
             under=None,
             displayType=None,
-            conformShapeNames=True,
+            conformShapeName=True,
             intermediate=False,
             lineWidth=None
     ):
@@ -53,9 +53,8 @@ class NurbsCurve:
         :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
         :param name/n: one or more name elements; defaults to None
         :type name/n: str, int, None, tuple, list
-        :param bool conformShapeNames/csn: ignored if *under* is ``None``;
-            conform destination parent shapes after reparenting; defaults to
-            True
+        :param bool conformShapeName/csn: if reparenting, rename the shape to match
+            the destination parent; defaults to True
         :param bool intermediate: set the shape to intermediate; defaults to
             False
         :param displayType/dt: if provided, an index or enum label:
@@ -121,8 +120,8 @@ class NurbsCurve:
             r.parent(curveShape, under, r=True, shape=True)
             r.delete(curveXf)
 
-            if conformShapeNames:
-                r.PyNode(under).conformShapeNames()
+            if conformShapeName:
+                curveShape.conformName()
 
         # Modify
         if bSpline or hasPlugs:
@@ -432,6 +431,9 @@ class NurbsCurve:
         """
         if plug:
             return self.attr('worldSpace').pointAtCV(cv)
+
+        if isinstance(cv, int):
+            cv = self.comp('cv')[cv]
 
         return r.pointPosition(cv, world=True)
 
@@ -1552,6 +1554,7 @@ class NurbsCurve:
 
         :param bool merge/mer: merge CVs if they overlap within the specified
             *tolerance*; defaults to False
+        :param float tolerance/tol: the merging tolerance; defaults to 1e-6
         :return: The clusters.
         :rtype: [:class:`~paya.runtime.nodes.Cluster`]
         """
