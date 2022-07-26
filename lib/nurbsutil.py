@@ -94,3 +94,12 @@ def itemsAsBezierAnchors(items):
         out.append(group)
 
     return out
+
+def legalNumCVsForBezier(numCVs):
+    """
+    :param int numCVs: the number of CVs
+    :return: ``True`` if the specified number of CVs is legal for a
+        bezier curve, otherwise False.
+    """
+    numAnchors = (numCVs + 2) / 3
+    return numAnchors.is_integer()
