@@ -1,3 +1,5 @@
+import maya.OpenMaya as om
+
 import paya.lib.mathops as _mo
 import pymel.util as _pu
 import paya.lib.nurbsutil as _nu
@@ -183,6 +185,26 @@ class NurbsCurve:
         matrix = scaleMatrix * matrix
 
         return output.transform(matrix)
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    Inspections
+    #---------------------------------------------------------------|
+
+    def getKnotDomain(self):
+        """
+        :return: The current knot domain for the curve.
+        :rtype: (float, float)
+        """
+        mfn = self.getShapeMFn()
+        minPtr = om.MScriptUtil().asDoublePtr()
+        maxPtr = om.MScriptUtil().asDoublePtr()
+
+        result = mfn.getKnotDomain(minPtr, maxPtr)
+
+        return (
+            om.MScriptUtil(minPtr).asDouble(),
+            om.MScriptUtil(maxPtr).asDouble(),
+        )
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    Sampling
@@ -542,7 +564,10 @@ class NurbsCurve:
 
         :param paramOrFraction: a parameter of length fraction at which
             to sample the matrix
-        :type paramOrFraction: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :type paramOrFraction:
+            float, str,
+            :class:`~paya.runtime.comps.NurbsCurveParameter`,
+            :class:`~paya.runtime.plugs.Math1D`
         :param str tangentAxis: the axis to map to the curve tangent,
             e.g. '-y'
         :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
@@ -581,7 +606,13 @@ class NurbsCurve:
         else:
             globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
 
-            if not gsIsPlug:
+            if gsIsPlug:
+                _globalScale = globalScale.get()
+
+                if _globalScale != 1.0:
+                    globalScale /= _globalScale
+
+            else:
                 globalScale = 1.0
 
         if aimCurve:
@@ -653,12 +684,6 @@ class NurbsCurve:
         matrix = matrix.pick(translate=True, rotate=True)
 
         if gsIsPlug or squashStretch:
-            if gsIsPlug:
-                _globalScale = globalScale.get()
-
-                if _globalScale != 1.0:
-                    globalScale /= _globalScale
-
             factors = [globalScale] * 3
 
             if squashStretch:
@@ -941,8 +966,8 @@ class NurbsCurve:
         upVector='upv',
         aimCurve='aic',
         squashStretch='ss',
-        globalScale='gs',
-        matchedCurve='mc'
+        closestPoint='cp',
+        globalScale='gs'
     )
     def distributeMatrices(
             self,
@@ -951,17 +976,16 @@ class NurbsCurve:
             upAxis,
             upVector=None,
             aimCurve=None,
-            squashStretch=False,
-            globalScale=None,
-            matchedCurve=None
+            squashStretch=None,
+            closestPoint=True,
+            globalScale=None
     ):
         """
-        If neither *upVector* or *aimCurve* are provided, curve normals are
-        used.
-
-        :param numberOrFractions: a single number of a list of explicit
-            length fractions at which to generate matrices
-        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param numberOrFractions: this can either be a number of uniform
+            fractions to generate, or an explicit list of fractions
+        :type numberOrFractions: float, [float],
+            :class:`~paya.runtime.plugs.Math1D`,
+            [:class:`~paya.runtime.plugs.Math1D`]
         :param str tangentAxis: the matrix axis to map to the curve tangent,
             for example '-y'
         :param str upAxis: the matrix axis to align to the resolved up vector, for
@@ -974,20 +998,18 @@ class NurbsCurve:
             [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
         :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
             ``curveWarp``; defaults to None
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`paya.runtime.nodes.NurbsCurve`,
-            :class:`paya.runtime.plugs.NurbsCurve`
-        :param bool squashStretch/ss: allow tangent scaling; defaults to False
-        :param globalScale/gs: a global scaling factor; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
-            same U domain as this curve, to avoid closest-point calculations;
-            defaults to False
-        :return: Matrices, distributed along the curve.
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from the aim curve by
+            proximity rather than matched parameter; defaults to True
+        :param bool squashStretch/ss: allow squash and stretch on the tangent
+            vectors; defaults to False
+        :param globalScale/gs: ignored if not a plug; a baseline scaling
+            factor (will be normalized); defaults to None
+        :return: Matrices, distributed uniformly (by length) along this curve.
         :rtype: [:class:`~paya.runtime.plugs.Matrix`]
         """
-        #----------------------------------------|    Resolve args
-
         fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
         number = len(fractions)
 
@@ -997,21 +1019,16 @@ class NurbsCurve:
         else:
             upVectors = [None] * number
 
-        #----------------------------------------|    Execute
-
         out = []
 
         for i, fraction in enumerate(fractions):
             with r.Name(i+1):
                 matrix = self.matrixAtFraction(
                     fraction,
-                    tangentAxis,
-                    upAxis,
-                    upv=upVectors[i],
-                    aic=aimCurve,
-                    ss=squashStretch,
-                    gs=globalScale,
-                    mc=matchedCurve
+                    tangentAxis, upAxis,
+                    upv=upVectors[i], aic=aimCurve,
+                    cp=closestPoint, gs=globalScale,
+                    ss=squashStretch
                 )
 
                 out.append(matrix)
@@ -1021,9 +1038,9 @@ class NurbsCurve:
     @short(
         upVector='upv',
         aimCurve='aic',
-        globalScale='gs',
         squashStretch='ss',
-        matchedCurve='mc'
+        closestPoint='cp',
+        globalScale='gs'
     )
     def distributeAimingMatrices(
             self,
@@ -1032,19 +1049,20 @@ class NurbsCurve:
             upAxis,
             upVector=None,
             aimCurve=None,
-            globalScale=None,
-            squashStretch=False,
-            matchedCurve=False
+            squashStretch=None,
+            closestPoint=True,
+            globalScale=None
     ):
         """
-        Similar to :meth:`distributeMatrices` except that here the matrices
-        are aimed at each other for a 'chain-like' effect. If neither
-        *upVector* or *aimCurve* are provided, curve normals are used.
+        Similar to :meth:`distributeMatrices`, but here the matrices aim at
+        each other for a 'chained' effect.
 
-        :param numberOrFractions: a single number of a list of explicit
-            length fractions at which to generate matrices
-        :type numberOrFractions: int, [float, :class:`~paya.runtime.plugs.Math1D`]
-        :param str tangentAxis: the matrix axis to map to the curve tangent,
+        :param numberOrFractions: this can either be a number of uniform
+            fractions to generate, or an explicit list of fractions
+        :type numberOrFractions: float, [float],
+            :class:`~paya.runtime.plugs.Math1D`,
+            [:class:`~paya.runtime.plugs.Math1D`]
+        :param str aimAxis: the matrix axis to map to the aim vectors,
             for example '-y'
         :param str upAxis: the matrix axis to align to the resolved up vector, for
             example 'x'
@@ -1056,26 +1074,42 @@ class NurbsCurve:
             [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
         :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
             ``curveWarp``; defaults to None
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`paya.runtime.nodes.NurbsCurve`,
-            :class:`paya.runtime.plugs.NurbsCurve`
-        :param bool squashStretch/ss: allow tangent scaling; defaults to False
-        :param globalScale/gs: a global scaling factor; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
-            same U domain as this curve, to avoid closest-point calculations;
-            defaults to False
-        :return: Matrices, distributed along the curve.
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from the aim curve by
+            proximity rather than matched parameter; defaults to True
+        :param bool squashStretch/ss: allow squash and stretch on the aim
+            vectors; defaults to False
+        :param globalScale/gs: ignored if not a plug; a baseline scaling
+            factor (will be normalized); defaults to None
+        :return: Matrices, distributed uniformly (by length) along this curve.
         :rtype: [:class:`~paya.runtime.plugs.Matrix`]
         """
+        if globalScale is None:
+            globalScale = 1.0
+            gsIsPlug = False
+
+        else:
+            globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
+
+            if gsIsPlug:
+                _globalScale = globalScale.get()
+
+                if _globalScale != 1.0:
+                    globalScale /= _globalScale
+
+            else:
+                globalScale = 1.0
 
         fractions = _mo.resolveNumberOrFractionsArg(numberOrFractions)
         number = len(fractions)
 
-        mps = [self.initMotionPath(
-            fractionMode=True, uValue=fraction) for fraction in fractions]
+        motionPaths = [self.initMotionPath(
+            uValue=fraction, fractionMode=True) for fraction in fractions]
 
-        points = [mp.attr('allCoordinates') for mp in mps]
+        points = [motionPath.attr(
+            'allCoordinates') for motionPath in motionPaths]
 
         aimVectors = _mo.getAimVectors(points)
         aimVectors.append(aimVectors[-1])
@@ -1089,37 +1123,61 @@ class NurbsCurve:
             if aimCurve:
                 aimCurve = _mo.asGeoPlug(aimCurve, ws=True)
 
-                for i in range(number):
-                    if matchedCurve:
-                        param = self.paramAtFraction(fractions[i])
-                        interest = aimCurve.pointAtParam(param)
+                for point in points:
+                    if closestPoint:
+                        interest = aimCurve.closestPoint(point)
 
                     else:
-                        interest = aimCurve.closestPoint(points[i])
+                        param = self.paramAtPoint(point)
+                        interest = aimCurve.pointAtParam(param)
 
-                    upVectors.append(interest-points[i])
-
-            else:
-                # configure follow on the motion paths and pull
-                # the normal vectors
-
-                for i, mp in enumerate(mps):
-                    mp.attr('follow').set(True)
-                    mp.setFrontAxis(aimAxis)
-                    mp.setUpAxis(upAxis)
-                    mp.attr('worldUpType').set('Normal')
-                    matrix = mp.attr('orientMatrix')
-                    upVector = matrix.getAxis(upAxis)
+                    upVector = interest-point
                     upVectors.append(upVector)
 
-        return _mo.getChainedAimMatrices(
+            else:
+                # Configure all the motion paths for follow, defaulting
+                # to normal, and extract the tangent vector
+
+                for motionPath in motionPaths:
+                    motionPath.configFollow(aimAxis, upAxis)
+                    upVector = motionPath.attr('orientMatrix').getAxis(aimAxis)
+                    upVectors.append(upVector)
+
+        matrices = []
+
+        if squashStretch:
+            aimIndex = 'xyz'.index(aimAxis.strip('-'))
+
+        for i, point, aimVector, upVector in zip(
+            range(number),
             points,
-            aimAxis,
-            upAxis,
-            upVectors,
-            ss=squashStretch,
-            gs=globalScale
-        )
+            aimVectors,
+            upVectors
+        ):
+            matrix = r.createMatrix(
+                aimAxis, aimVector,
+                upAxis, upVector,
+                translate=point
+            ).pick(translate=True, rotate=True)
+
+            if gsIsPlug or squashStretch:
+                factors = [globalScale] * 3
+
+                if squashStretch:
+                    aimLength = aimVector.length()
+                    _aimLength = aimLength.get()
+
+                    if _aimLength != 1.0:
+                        aimLength /= _aimLength
+
+                    factors[aimIndex] = aimLength
+
+                smtx = r.createScaleMatrix(*factors)
+                matrix = smtx * matrix
+
+            matrices.append(matrix)
+
+        return matrices
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    Extensions
