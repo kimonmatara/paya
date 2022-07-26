@@ -11,7 +11,7 @@ class Geometry:
         under='u',
         intermediate='i',
         name='n',
-        conformShapeNames='csn',
+        conformShapeName='csn',
         managedNames='mn'
     )
     def createShape(
@@ -19,7 +19,7 @@ class Geometry:
             name=None,
             under=None,
             intermediate=False,
-            conformShapeNames=True
+            conformShapeName=True
     ):
         """
         Creates a shape node and connects this geometry output into its input.
@@ -33,9 +33,8 @@ class Geometry:
         :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool intermediate/i: make the shape an intermediate objects;
             defaults to False
-        :param bool conformShapeNames/csn: ignored if 'under' is None; run a
-            conform on the destination transform's shapes after reparenting;
-            defaults to True
+        :param bool conformShapeName/csn: ignored if 'under' is None; rename
+            the shape if it is reparented; defaults to True
         :return: The new shape.
         :rtype: :class:`~paya.runtime.nodes.Shape`
         """
@@ -58,8 +57,8 @@ class Geometry:
             r.parent(shape, under, r=True, shape=True)
             r.delete(xf)
 
-            if conformShapeNames:
-                r.PyNode(under).conformShapeNames()
+            if conformShapeName:
+                shape.conformName()
 
         return shape
 
