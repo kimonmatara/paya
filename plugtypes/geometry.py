@@ -63,7 +63,6 @@ class Geometry:
 
         return shape
 
-
     def getShapeMFn(self):
         """
         Returns an API function set for the shape type associated with this
@@ -82,6 +81,7 @@ class Geometry:
         else:
             plug = self
 
+        plug.evaluate()
         mplug = plug.__apimplug__()
         handle = mplug.asMDataHandle()
         mobj = handle.data()
