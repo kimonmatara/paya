@@ -52,7 +52,8 @@ def createWormRig(
                     keyable=['translate', 'rotate'],
                     color=6,
                     size=1.25,
-                    lineWidth=2.0
+                    lineWidth=2.0,
+                    rotateOrder='zxy' # for easier twist control
                 )
 
                 cvs = [spineCurve.cv[i], aimCurve.cv[i]]
