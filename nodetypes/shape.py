@@ -10,14 +10,14 @@ class Shape:
     @short(
         name='n',
         under='u',
-        conformShapeNames='csn',
+        conformShapeName='csn',
         intermediate='i'
     )
     def createShape(
             cls,
             name=None,
             under=None,
-            conformShapeNames=True,
+            conformShapeName=True,
             intermediate=False
     ):
         """
@@ -27,9 +27,8 @@ class Shape:
         :type name/n: None, tuple, list, str, int
         :param under/u: a custom destination parent; defaults to None
         :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool conformShapeNames/csn: ignored if *under* was omitted;
-            conform destination shape names after reparenting; defaults to
-            True
+        :param bool conformShapeName/csn: ignored if *under* was omitted;
+            rename the shape after it is reparented; defaults to True
         :param bool intermediate/i: create the shape as an intermediate
             object; defaults to False
         :return: The shape node.
@@ -43,8 +42,8 @@ class Shape:
             r.parent(shape, newParent, r=True, shape=True)
             r.delete(parent)
 
-            if conformShapeNames:
-                newParent.conformShapeNames()
+            if conformShapeName:
+                shape.conformName()
 
         if intermediate:
             shape.attr('intermediateObject').set(True)
@@ -88,3 +87,70 @@ class Shape:
             :class:`~paya.runtime.nodes.Transform`
         """
         return self.getParent()
+
+    #-----------------------------------------------------------|    Name management
+
+    def conformName(self):
+        """
+        Conforms this shape's name to a Maya-standard name derived from the
+        transform parent.
+
+        :return: ``self``
+        :rtype: :class:`Shape`
+        """
+
+        # Pseudo:
+        #     If this shape is intermediate:
+        #         give it lowest priority and derive a name from the xform
+        #     else:
+        #         rename all intermediate shapes to temporary
+        #         give this least priority amongst hero shapes
+        #         rename intermediate shapes back to original and let Maya
+        #         append numbers where needed
+
+        xf = self.getParent()
+        bn = xf.basename()
+        isInterm = self.isIntermediate()
+
+        def withoutSelf(itr):
+            return [member for member in itr if member != self]
+
+        heroShapes = withoutSelf(xf.getHeroShapes())
+        intermShapes = withoutSelf(xf.getIntermediateShapes())
+
+        if isInterm:
+            otherShapes = heroShapes + intermShapes
+
+        else:
+            otherShapes = heroShapes
+            origIntermNames = []
+
+            for shape in intermShapes:
+                origIntermNames.append(shape.basename())
+                shape.rename('temporary_name')
+
+        reservedNames = [otherShape.basename() for otherShape in otherShapes]
+
+        count = 0
+
+        while True:
+            name = '{}Shape'.format(bn)
+
+            if count:
+                name += str(count)
+
+            if name in reservedNames:
+                count += 1
+                continue
+
+            break
+
+        self.rename(name)
+
+        if not isInterm:
+            for shape, origName in zip(
+                intermShapes, origIntermNames
+            ):
+                shape.rename(origName)
+
+        return self
