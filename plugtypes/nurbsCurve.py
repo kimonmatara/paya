@@ -328,7 +328,10 @@ class NurbsCurve:
         :type cv: int, :class:`~paya.runtime.comps.NurbsCurveCV`
         :return: A point position at the specified CV.
         """
-        return self.info().attr('controlPoints')[int(cv)]
+        if not isinstance(cv, int):
+            cv = int(r.Component(cv))
+
+        return self.info().attr('controlPoints')[cv]
 
     def pointAtParam(self, param):
         """
