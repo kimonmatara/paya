@@ -3,6 +3,20 @@ What's New
 ##########
 
 *************
+Version 0.8.2
+*************
+
+Bugs Fixed
+==========
+
+*   :meth:`paya.runtime.data.Vector.angle` and :meth:`paya.runtime.plugs.Vector.angle` return the wrong subclass of
+    :class:`~paya.runtime.plugs.Attribute`
+
+*   :class:`~paya.lib.mathops.NativeUnits` is defeated by new-scene / open-scene / save-scene events (fix: added
+    API callbacks and changed the class to a singleton that will ignore nested calls, to cut down on callback
+    maintenance)
+
+*************
 Version 0.8.1
 *************
 
@@ -26,7 +40,7 @@ Bugs Fixed
 ==========
 
 *   Up vectors are not properly iterated inside
-    :meth:`~paya.runtime.nodes.NurbsCurve.distributeMatrices`
+    :meth:`paya.runtime.nodes.NurbsCurve.distributeMatrices`
 
 ---------
 

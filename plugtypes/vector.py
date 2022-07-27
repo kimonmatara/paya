@@ -292,6 +292,7 @@ class Vector:
         if complete:
             dot = cross.dot(other, normalize=True)
             angle = dot.gt(0.0).ifElse(_pu.radians(360.0)-angle, angle)
+            angle.__class__ = r.plugs.Angle
 
         return angle
 

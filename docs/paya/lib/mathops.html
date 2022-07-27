@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.mathops &mdash; paya 0.8.1 documentation</title>
+  <title>paya.lib.mathops &mdash; paya 0.8.2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.1
+                0.8.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -148,8 +148,15 @@ False</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.lib.mathops.NativeUnits">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NativeUnits</span></span><a class="headerlink" href="#paya.lib.mathops.NativeUnits" title="Permalink to this definition"></a></dt>
-<dd><p>Context manager. Switches Maya to centimetres and radians.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NativeUnits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.NativeUnits" title="Permalink to this definition"></a></dt>
+<dd><p>Context manager. Switches Maya to centimetres and radians. New-scene /
+open-scene / save-scene events are compensated for with API callbacks.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.mathops.NativeUnits.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.NativeUnits.__new__" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return a new object.  See help(type) for accurate signature.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py function">

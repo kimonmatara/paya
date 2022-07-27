@@ -1,4 +1,7 @@
 from collections import UserDict
+
+import maya.OpenMaya as om
+
 from paya.lib.plugops import *
 from paya.util import conditionalExpandArgs
 
@@ -53,24 +56,83 @@ def isVectorValueOrPlug(item):
 #--------------------------------------------------------------|    Unit conversion
 #--------------------------------------------------------------|
 
-class NativeUnits(object):
+class NativeUnits:
     """
-    Context manager. Switches Maya to centimetres and radians.
+    Context manager. Switches Maya to centimetres and radians. New-scene /
+    open-scene / save-scene events are compensated for with API callbacks.
     """
-    def __enter__(self):
-        self._prevlinear = m.currentUnit(q=True, linear=True)
-        self._prevangle = m.currentUnit(q=True, angle=True)
+    __instance__ = None
+    __depth__ = 0
 
-        m.currentUnit(linear='cm')
-        m.currentUnit(angle='rad')
+    def __new__(cls, *args, **kwargs):
+        if cls.__instance__ is None:
+            cls.__instance__ = object.__new__(cls)
+
+        return cls.__instance__
+
+    def __enter__(self):
+        if NativeUnits.__depth__ is 0:
+            self._captureUserUnits()
+            self._applyNativeUnits()
+            self._addCallbacks()
+
+        NativeUnits.__depth__ += 1
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        m.currentUnit(linear=self._prevlinear)
-        m.currentUnit(angle=self._prevangle)
+        NativeUnits.__depth__ -= 1
+
+        if NativeUnits.__depth__ is 0:
+            self._removeCallbacks()
+            self._applyUserUnits()
 
         return False
+
+    def _captureUserUnits(self):
+        self._userUnits = {
+            'linear': m.currentUnit(q=True, linear=True),
+            'angle': m.currentUnit(q=True, angle=True)
+        }
+
+    def _applyNativeUnits(self):
+        m.currentUnit(linear='cm')
+        m.currentUnit(angle='rad')
+
+    def _applyUserUnits(self):
+        m.currentUnit(linear=self._userUnits['linear'])
+        m.currentUnit(angle=self._userUnits['angle'])
+
+    def _addCallbacks(self):
+        self.afterNewCb = om.MSceneMessage.addCallback(
+            om.MSceneMessage.kAfterNew, self._afterNew)
+
+        self.afterOpenCb = om.MSceneMessage.addCallback(
+            om.MSceneMessage.kAfterOpen, self._afterOpen)
+
+        self.beforeSaveCb = om.MSceneMessage.addCallback(
+            om.MSceneMessage.kBeforeSave, self._beforeSave)
+
+        self.afterSaveCb = om.MSceneMessage.addCallback(
+            om.MSceneMessage.kAfterSave, self._afterSave)
+
+    def _removeCallbacks(self):
+        om.MMessage.removeCallback(self.afterOpenCb)
+        om.MMessage.removeCallback(self.beforeSaveCb)
+        om.MSceneMessage.removeCallback(self.afterSaveCb)
+
+    def _afterNew(self, *args):
+        self._applyNativeUnits()
+
+    def _afterOpen(self, *args):
+        self._captureUserUnits()
+        self._applyNativeUnits()
+
+    def _beforeSave(self, *args):
+        self._applyUserUnits()
+
+    def _afterSave(self, *args):
+        self._applyNativeUnits()
 
 def nativeUnits(f):
     """
@@ -80,7 +142,6 @@ def nativeUnits(f):
     def wrapper(*args, **kwargs):
         with NativeUnits():
             result = f(*args, **kwargs)
-
         return result
 
     return wrapper

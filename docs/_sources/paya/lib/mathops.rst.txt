@@ -11,9 +11,14 @@ paya.lib.mathops
         False
     :rtype: bool
 
-.. py:class:: NativeUnits
+.. py:class:: NativeUnits(*args, **kwargs)
 
-    Context manager. Switches Maya to centimetres and radians.
+    Context manager. Switches Maya to centimetres and radians. New-scene /
+    open-scene / save-scene events are compensated for with API callbacks.
+
+    .. py:staticmethod:: __new__(*args, **kwargs)
+    
+        Create and return a new object.  See help(type) for accurate signature.
 
 .. py:function:: nativeUnits(f)
 
