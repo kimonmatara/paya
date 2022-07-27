@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plug (Attribute) Types &mdash; paya 0.8.1 documentation</title>
+  <title>paya.test &mdash; paya 0.8.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="paya.runtime.plugs.Angle" href="plugs/angle.html" />
-    <link rel="prev" title="paya.runtime.nodes.Transform" href="nodes/transform.html" /> 
+    <link rel="next" title="paya.util" href="util.html" />
+    <link rel="prev" title="paya.runtime" href="runtime.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -66,31 +66,21 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../types_index.html">Types</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="nodes_index.html">Nodes</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Plugs (Attributes)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="plugs/angle.html">Angle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/attribute.html">Attribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/compound.html">Compound</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/enum.html">Enum</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/eulerRotation.html">EulerRotation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/geometry.html">Geometry</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/math3D.html">Math3D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/matrix.html">Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/nurbsCurve.html">NurbsCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/quaternion.html">Quaternion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/string.html">String</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugs/vector.html">Vector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../types_index.html">Types</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">paya.environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">paya.examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools.html">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html">paya.runtime</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">paya.util</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="comps_index.html">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_index.html">Data</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../paya.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../implementation.html">Implementation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../licence.html">MIT License</a></li>
@@ -111,10 +101,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../types_index.html">Types</a> &raquo;</li>
-      <li>Plug (Attribute) Types</li>
+          <li><a href="../paya.html">paya</a> &raquo;</li>
+      <li>paya.test</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/pools/plugs_index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/paya/test.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -122,35 +112,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="plug-attribute-types">
-<h1>Plug (Attribute) Types<a class="headerlink" href="#plug-attribute-types" title="Permalink to this headline"></a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="plugs/angle.html">Angle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/attribute.html">Attribute</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/compound.html">Compound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/enum.html">Enum</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/eulerRotation.html">EulerRotation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/math3D.html">Math3D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/matrix.html">Matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/nurbsCurve.html">NurbsCurve</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/quaternion.html">Quaternion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/string.html">String</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plugs/vector.html">Vector</a></li>
-</ul>
-</div>
+  <section id="module-paya.test">
+<span id="paya-test"></span><h1>paya.test<a class="headerlink" href="#module-paya.test" title="Permalink to this headline"></a></h1>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="nodes/transform.html" class="btn btn-neutral float-left" title="paya.runtime.nodes.Transform" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="plugs/angle.html" class="btn btn-neutral float-right" title="paya.runtime.plugs.Angle" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="runtime.html" class="btn btn-neutral float-left" title="paya.runtime" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="util.html" class="btn btn-neutral float-right" title="paya.util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
