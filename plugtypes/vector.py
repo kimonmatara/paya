@@ -260,35 +260,6 @@ class Vector:
 
         return node.attr('output')
 
-    def angle(self, other, euler=False, axisAngle=False):
-        """
-        Returns the unsigned, 180-degree-range angle between this vector and
-        ``other``.
-
-        :param other: the other vector
-        :type other: :class:`~paya.runtime.plugs.Math3D`,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.data.Point`, list, str
-        :param bool euler: return an euler angle
-            triple compound, defaults to False
-        :param bool axisAngle: return an axis, angle tuple;
-            defaults to False
-        :return: A single angle output, a triple euler compound,
-            or a tuple of *(axis vector, angle)*, depending on flags
-        :rtype: :class:`~paya.runtime.plugs.Vector` or :class:`tuple`
-        """
-        node = r.nodes.AngleBetween.createNode()
-        self >> node.attr('vector1')
-        node.attr('vector2').put(other)
-
-        if euler:
-            return node.attr('euler')
-
-        if axisAngle:
-            return node.attr('axis'), node.attr('angle')
-
-        return node.attr('angle')
-
     @short(clockNormal='cn')
     def angle(self, other, clockNormal=None):
         """
