@@ -254,6 +254,46 @@ class Math1D:
 
     #-----------------------------------------------------------------|    Sign
 
+    def setSign(self, positive):
+        """
+        :param bool positive: set the sign to positive
+        :return: This scalar, with the sign forced to positive if *positive* is
+            ``True``, otherwise to negative
+        """
+        thisAbs = self.abs()
+
+        if positive:
+            return thisAbs
+
+        return -thisAbs
+
+    def copySignFrom(self, other):
+        """
+        Copies the sign from another scalar.
+
+        :param other: the scalar from which to copy the sign
+        :type other: float, int, :class:`~paya.runtime.plugs.Math1D`
+        :return: This scalar, with sign copied from *other*.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        other, otherDim, otherIsPlug = _mo.info(other)
+
+        thisAbs = self.abs()
+
+        if otherIsPlug:
+            out = other.lt(0.0).ifElse(
+                -thisAbs,
+                thisAbs
+            )
+
+            out.__class__ = type(self)
+
+        else:
+            if other < 0:
+                return thisAbs
+
+            return -thisAbs
+
     def abs(self):
         """
         :return: ``self``, unsigned.
