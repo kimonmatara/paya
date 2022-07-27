@@ -17,35 +17,33 @@ for attribute (including subtype), component and data types with true inheritanc
 
     .. rubric:: Total Curve Madness
 
-    *   Extensive :doc:`sampling and editing methods on NURBS and Bezier curve shapes, plugs and components
-        <curves>`.
-    *   :ref:`Complete curve framing <curve_framing>`: extract dynamic and static matrices from any point, parameter,
+    *   Extensive sampling and editing methods on NURBS and Bezier curve shapes, plugs and components
+        curves.
+    *   Complete curve framing: extract dynamic and static matrices from any point, parameter,
         length or fraction of a NURBS or Bezier curve.
-    *   :ref:`Distribute joints and drive chains <curve_distributions>` with ease; control up vectors explicitly or with
+    *   Distribute joints and drive chains with ease; control up vectors explicitly or with
         aim curves.
-    *   :ref:`True, evaluated curve length locking <length_locking>`.
-    *   Use plug methods to :ref:`work fully procedurally in the DG <procedural_geo_editing>` and only create shapes
+    *   True, evaluated curve length locking.
+    *   Use plug methods to work fully procedurally in the DG and only create shapes
         where you need them.
-    *   :ref:`Create two- and three-point circular arcs that won't disappear with an error when the input points
-        are in-line <arcs>`.
-    *   Use ``clusterAll`` to cluster-up curves with automatic merging of overlapping
+    *   Create two- and three-point circular arcs that won't disappear with an error when the input points
+        are in-line.
+    *   Use ``clusterAll()`` to cluster-up curves with automatic merging of overlapping
         CVs.
     *   Options to manage line widths added to the control shape methods and elsewhere.
 
     .. rubric:: Across the Board
 
-    *   A standard constructor and smart editing methods for :class:`cluster <paya.runtime.nodes.Cluster>` deformers.
-    *   A standard constructor for :class:`curveWarp <paya.runtime.nodes.CurveWarp>` deformers.
-    *   New ``maintainOffset/mo`` and ``worldSpace`` options for ``decomposeAndApply``,
-        and a dedicated ``applyViaOpm`` method
-    *   New methods to :ref:`manage procedural history edits <procedural_geo_editing>` in Maya-standard ways:
-        ``getOrigPlug``,
-        ``getHistoryPlug``,
-        ``deleteHistory`` and
-        ``getShapeMFn``
-    *   New maths methods: :meth:`~paya.runtime.plugs.Math1D.gatedClamp()` and
-        :meth:`~paya.runtime.plugs.Vector.asShearMatrix()`
-    *   And more! 
-
+    *   A standard constructor and smart editing methods for cluster deformers.
+    *   A standard constructor for curveWarp deformers.
+    *   New ``maintainOffset/mo`` and ``worldSpace`` options for ``decomposeAndApply()``,
+        and a dedicated ``applyViaOpm()`` method
+    *   New methods to manage procedural history edits  in Maya-standard ways:
+        ``getOrigPlug()``,
+        ``getHistoryPlug()``,
+        ``deleteHistory()`` and
+        ``getShapeMFn()``
+    *   New maths methods: ``gatedClamp()`` and ``asShearMatrix()``
+    *   And more!
 
 Full documentation can be found `here <https://kimonmatara.github.io/paya/>`_.
