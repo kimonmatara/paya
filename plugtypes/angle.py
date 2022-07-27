@@ -47,3 +47,17 @@ class Angle:
                 args = [value]
 
         r.plugs.Attribute.set(self, *args, **kwargs)
+
+    # def asPositive(self):
+    #     """
+    #     If this angle is a negative number, returns
+    #
+    #     :return:
+    #     """
+
+    def unwind(self):
+        """
+        Removes 360 winds from this angle, for example an angle of 400 becomes
+
+        :return:
+        """
