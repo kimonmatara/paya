@@ -1267,7 +1267,6 @@ class NurbsCurve:
 
         if upVector:
             upVectors = _mo.conformVectorArg(upVector, ll=number)
-
         else:
             upVectors = [None] * number
 
@@ -1278,7 +1277,7 @@ class NurbsCurve:
                 matrix = self.matrixAtFraction(
                     fraction,
                     tangentAxis, upAxis,
-                    upv=upVector, aic=aimCurve,
+                    upv=upVectors[i], aic=aimCurve,
                     ss=squashStretch, cp=closestPoint,
                     gs=globalScale, p=plug
                 )
