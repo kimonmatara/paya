@@ -1050,7 +1050,7 @@ class Bone(Chain):
             startUpMatrix = _mo.info(startUpMatrix)[0]
             startUpVector = self[0].getMatrix(worldSpace=True).getAxis(upAxis)
             startUpVector *= startUpMatrix.asOffset()
-            startUpVector.makePerpendicularTo(downVector)
+            startUpVector.rejectFrom(downVector)
 
         _downAxis = downAxis.strip('-')
         _upAxis = upAxis.strip('-')
@@ -1090,10 +1090,9 @@ class Bone(Chain):
                 endUpMatrix = _mo.info(endUpMatrix)[0]
 
             endUpVector = startUpVector.get() * endUpMatrix.asOffset()
-            endUpVector = endUpVector.makePerpendicularTo(downVector)
+            endUpVector = endUpVector.rejectFrom(downVector)
 
             # Get slave ratios
-
             slaveRatios = twistChain.ratios()
 
             # Iterate

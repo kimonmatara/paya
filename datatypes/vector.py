@@ -604,21 +604,36 @@ class Vector:
 
         return angle
 
-    def makePerpendicularTo(self, other):
+    def projectOnto(self, other):
         """
-        Orthogonises this vector against 'other'.
+        See https://en.wikipedia.org/wiki/Vector_projection.
 
-        :param other: the other vector
-        :type other: :class:`paya.runtime.data.Vector`,
-            :class:`paya.runtime.plugs.Vector`,
-        :return: The modified vector.
-        :rtype: :class:`Vector`
+        :param other: the vector onto which to project this one
+        :type other: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The project of this vector onto *other*.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
         other = _mo.info(other)[0]
-        cross1 = self.cross(other)
-        out = other.cross(cross1)
-        out = out.normal() * self.length()
-        return out
+        return (self.dot(other) / other.dot(other)) * other
+
+    def rejectFrom(self, other):
+        """
+        Same as 'make perpendicular to' (although length will change).
+        See https://en.wikipedia.org/wiki/Vector_projection.
+
+        :param other: the vector from which to reject this one
+        :type other: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The rejection of this vector from *other*.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        """
+        other = _mo.info(other)[0]
+        cosTheta = self.dot(other, nr=True)
+        rejection = self - (self.length() * cosTheta) * other.normal()
+        return rejection
 
     #--------------------------------------------------------------------|    Conversions
 
