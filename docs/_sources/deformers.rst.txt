@@ -14,7 +14,9 @@ like the non-linear variants, use :func:`~pymel.core.animation.deformer`; still 
 special classes.
 
 To get around this, consistent ``create()`` constructors are being rolled out across all deformers in Paya. As at
-**version 0.7**, these are available on skinClusters and blendShapes. Stay tuned for more.
+**version 0.8**, these are available on :class:`skinCluster <paya.runtime.nodes.SkinCluster>`,
+:class:`blendShape <paya.runtime.nodes.BlendShape>`, :class:`curveWarp <paya.runtime.nodes.CurveWarp`
+and :class:`cluster <paya.runtime.nodes.Cluster>` deformers. Stay tuned for more.
 
 Retrieving Deformers
 --------------------
@@ -377,3 +379,84 @@ To swap out target geometry use :meth:`~paya.lib.bsnboltons.Subtarget.setShape`,
 .. note::
 
     Geometry assignments are not live (connected) when the blend shape node is in *post-deformation* mode.
+
+=======
+Cluster
+=======
+
+Constructor
+-----------
+
+The standard :meth:`~paya.runtime.nodes.Cluster.create` constructor on :class:`~paya.runtime.nodes.Cluster` does a
+smarter and cleaner job of handle-swapping than the standard :func:`~pymel.core.animation.cluster` command:
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: cluster_handle_swap.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            handle, geo = r.ls(sl=True)
+            r.nodes.Cluster.create(geo, handle=handle, maintainOffset=True)
+
+
+Other Points of Access
+----------------------
+
+Look for component methods that allow you to create clusters in-context, such as
+:meth:`~paya.runtime.comps.NurbsCurveCV.cluster` on :class:`~paya.runtime.comps.NurbsCurveCV`.
+
+Swapping Out Weighted Nodes (User Handles)
+------------------------------------------
+
+Two methods on :class:`~paya.runtime.nodes.Cluster`, :meth:`~paya.runtime.nodes.Cluster.getHandle` and
+:meth:`~paya.runtime.nodes.Cluster.setHandle`, offer a variety of options to perform handle (weighted node) swapping
+cleanly.
+
+Normalizing Deformations
+------------------------
+
+Use :meth:`~paya.runtime.nodes.Cluster.normalize` to reset geometry offsets:
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: cluster_norm.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            cluster = r.nodes.Cluster.getFromGeo('pSphere1')[0]
+            cluster.normalize()
+
+=========
+CurveWarp
+=========
+
+Constructor
+-----------
+
+The standard :meth:`~paya.runtime.nodes.CurveWarp.create` constructor on :class:`~paya.runtime.nodes.CurveWarp` is
+probably the cleanest and easiest way to initialise the deformer via script in Maya:
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: curve_warp.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            curve, geo = r.ls(sl=True) # order doesn't matter
+            cw = r.nodes.CurveWarp.create(curve, geo)

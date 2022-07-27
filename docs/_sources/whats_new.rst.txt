@@ -2,6 +2,258 @@
 What's New
 ##########
 
+***********
+Version 0.8
+***********
+
+Additions to Examples
+=====================
+
+*   :func:`paya.examples.worm_rig.createWormRig`;
+    layout scene at ``/examples/worm_rig_layout.ma``
+
+
+Additions & Changes to Modules
+==============================
+
+*   On :mod:`paya.lib.controlshapes`: Added line-width management
+
+*   On :mod:`paya.lib.mathops`:
+    :func:`paya.lib.mathops.getAimVectors`
+    :func:`paya.lib.mathops.getFramedAimAndUpVectors`
+    :func:`paya.lib.mathops.getChainedAimMatrices`
+
+*   On :mod:`paya.lib.names`:
+    :func:`~paya.lib.names.make` (new *inheritNames*/*inh* keyword)
+
+*   On :mod:`paya.lib.nurbsutil`:
+    :func:`~paya.lib.nurbsutil.conformUParamArg`
+    :func:`~paya.lib.nurbsutil.legalNumCVsForBezier`
+    :func:`~paya.lib.nurbsutil.itemsAsBezierAnchors`
+
+Additions & Changes to Node Types
+=================================
+
+*   On :class:`~paya.runtime.nodes.BezierCurve`:
+    :meth:`~paya.runtime.nodes.BezierCurve.create`
+    :meth:`~paya.runtime.nodes.BezierCurve.numAnchors`
+    :meth:`~paya.runtime.nodes.BezierCurve.paramAtAnchor`
+    :meth:`~paya.runtime.nodes.BezierCurve.getCVsAtAnchor`
+    :meth:`~paya.runtime.nodes.BezierCurve.getControlPoints` (overload)
+    :meth:`~paya.runtime.nodes.BezierCurve.matrixAtAnchor`
+    :meth:`~paya.runtime.nodes.BezierCurve.clusterAll` (overload)
+
+
+*   On :class:`~paya.runtime.nodes.Cluster`:
+    :meth:`~paya.runtime.nodes.Cluster.create`
+    :meth:`~paya.runtime.nodes.Cluster.getHandle`
+    :meth:`~paya.runtime.nodes.Cluster.setHandle`
+    ``handle`` (property)
+    :meth:`~paya.runtime.nodes.Cluster.renameSystem`
+    :meth:`~paya.runtime.nodes.Cluster.getHandleShape`
+    ``handleShape`` (property)
+    :meth:`~paya.runtime.nodes.Cluster.normalize`
+
+*   On :class:`~paya.runtime.nodes.ClusterHandle`:
+    :meth:`~paya.runtime.nodes.ClusterHandle.getClusterNode`
+    :class:`~paya.runtime.nodes.ClusterHandle.resetVisualOrigin`
+
+*   On :class:`~paya.runtime.nodes.CurveWarp`:
+    :meth:`~paya.runtime.nodes.CurveWarp.create`
+
+*   On :class:`~paya.runtime.nodes.DeformableShape`:
+    :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory`
+    :meth:`~paya.runtime.nodes.DeformableShape.hasHistory`
+    :meth:`~paya.runtime.nodes.DeformableShape.getOrigPlug`
+    :meth:`~paya.runtime.nodes.DeformableShape.getHistoryPlug`
+
+*   On :class:`~paya.runtime.nodes.DependNode`:
+    :meth:`~paya.runtime.nodes.DependNode.rename` (new *managedNames* option)
+    :meth:`~paya.runtime.nodes.DependNode.addVectorAttr`
+    :meth:`~paya.runtime.nodes.DependNode.addEulerAttr`
+
+*   On :class:`~paya.runtime.nodes.Joint`:
+    :meth:`~paya.runtime.nodes.Joint.insertCube`
+
+*   On :class:`~paya.runtime.nodes.Locator`:
+    :meth:`~paya.runtime.nodes.Locator.create`
+
+*   On :class:`~paya.runtime.nodes.MakeThreePointCircularArc`:
+    :meth:`~paya.runtime.nodes.MakeThreePointCircularArc.getCompensatedOutputCurve`
+
+*   On :class:`~paya.runtime.nodes.MotionPath`:
+    :meth:`~paya.runtime.nodes.MotionPath.configFollow`
+    :meth:`~paya.runtime.nodes.MotionPath.setFrontAxis`
+    :meth:`~paya.runtime.nodes.MotionPath.setUpAxis`
+
+*   On :class:`~paya.runtime.nodes.NurbsCurve`:
+    :meth:`~paya.runtime.nodes.NurbsCurve.create` (more options, dynamic building)
+    :meth:`~paya.runtime.nodes.NurbsCurve.subCurve`
+    :meth:`~paya.runtime.nodes.NurbsCurve.detach`
+    :meth:`~paya.runtime.nodes.NurbsCurve.retract`
+    :meth:`~paya.runtime.nodes.NurbsCurve.reverse`
+    :meth:`~paya.runtime.nodes.NurbsCurve.toBezier`
+    :meth:`~paya.runtime.nodes.NurbsCurve.toNurbs`
+    :meth:`~paya.runtime.nodes.NurbsCurve.bSpline`
+    :meth:`~paya.runtime.nodes.NurbsCurve.cvRebuild`
+    :meth:`~paya.runtime.nodes.NurbsCurve.rebuild`
+    :meth:`~paya.runtime.nodes.NurbsCurve.cageRebuild`
+    :meth:`~paya.runtime.nodes.NurbsCurve.blend`
+    :meth:`~paya.runtime.nodes.NurbsCurve.setLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.initCurveInfo`
+    :meth:`~paya.runtime.nodes.NurbsCurve.length`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestPoint_`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestPoint_`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtCV`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.paramAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.paramAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.paramAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.lengthAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.lengthAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.lengthAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fractionAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fractionAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fractionAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributePoints`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeParams`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeLengths`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeMatrices`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeAimingMatrices`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fitChain`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeJoints`
+    :meth:`~paya.runtime.nodes.NurbsCurve.getCollocatedCVGroups`
+    :meth:`~paya.runtime.nodes.NurbsCurve.clusterAll`
+
+*   On :class:`~paya.runtime.nodes.PointOnCurveInfo`:
+    :meth:`~paya.runtime.nodes.PointOnCurveInfo.getBinormal`
+
+*   On :class:`~paya.runtime.nodes.Shape`:
+    :meth:`~paya.runtime.nodes.Shape.createShape`
+
+*   On :class:`~paya.runtime.nodes.Transform`:
+    :meth:`~paya.runtime.nodes.Transform.getCtShapesLineWidth`
+    :meth:`~paya.runtime.nodes.Transform.setCtShapesLineWidth`
+    :meth:`~paya.runtime.nodes.Transform.createControl` (added line width option)
+    :meth:`~paya.runtime.nodes.Transform.makeIdentity`
+
+Additions & Changes to Plug (Attribute) Types
+=============================================
+
+*   On :class:`~paya.runtime.plugs.Attribute`:
+    :meth:`~paya.runtime.plugs.Attribute.getNextArrayIndex`
+
+*   On :class:`~paya.runtime.plugs.BezierCurve`:
+    :meth:`~paya.runtime.plugs.BezierCurve.getShapeMFn`
+    :meth:`~paya.runtime.plugs.BezierCurve.numAnchors`
+    :meth:`~paya.runtime.plugs.BezierCurve.paramAtAnchor`
+    :meth:`~paya.runtime.plugs.BezierCurve.getControlPoints` (overload)
+    :meth:`~paya.runtime.plugs.BezierCurve.matrixAtAnchor`
+
+*   On :class:`~paya.runtime.plugs.Geometry`:
+    :meth:`~paya.runtime.plugs.Geometry.createShape`
+    :meth:`~paya.runtime.plugs.Geometry.getShapeMFn`
+    :meth:`~paya.runtime.plugs.Geometry.transform`
+
+*   On :class:`~paya.runtime.plugs.Math1D`:
+    :meth:`~paya.runtime.plugs.Math1D.gatedClamp`
+
+*   On :class:`~paya.runtime.plugs.Matrix`:
+    :meth:`~paya.runtime.plugs.Matrix.decomposeAndApply` (added *maintainOffset* and *worldSpace* options)
+    :meth:`~paya.runtime.plugs.Matrix.applyViaOpm`
+
+*   On :class:`~paya.runtime.plugs.NurbsCurve`:
+    :meth:`~paya.runtime.plugs.NurbsCurve.createArc`
+    :meth:`~paya.runtime.plugs.NurbsCurve.createLine`
+    :meth:`~paya.runtime.plugs.NurbsCurve.info`
+    :meth:`~paya.runtime.plugs.NurbsCurve.length`
+    :meth:`~paya.runtime.plugs.NurbsCurve.getCVs`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initMotionPath`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initNearestPointOnCurve`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtCV`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.closestPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.closestFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.closestParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.paramAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.paramAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.paramAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributePoints`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeParams`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeLengths`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeMatrices`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeAimingMatrices`
+    :meth:`~paya.runtime.plugs.NurbsCurve.attach`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initExtendCurve`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extendByVector`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extendToPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extendByLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extend`
+    :meth:`~paya.runtime.plugs.NurbsCurve.subCurve`
+    :meth:`~paya.runtime.plugs.NurbsCurve.detach`
+    :meth:`~paya.runtime.plugs.NurbsCurve.retract`
+    :meth:`~paya.runtime.plugs.NurbsCurve.reverse`
+    :meth:`~paya.runtime.plugs.NurbsCurve.toBezier`
+    :meth:`~paya.runtime.plugs.NurbsCurve.toNurbs`
+    :meth:`~paya.runtime.plugs.NurbsCurve.bSpline`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initRebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.cvRebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.rebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.cageRebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.blend`
+    :meth:`~paya.runtime.plugs.NurbsCurve.setLength`
+
+*   On :class:`~paya.runtime.plugs.Vector`:
+    :meth:`~paya.runtime.plugs.Vector.asShearMatrix`
+
+
+Bugs Fixed
+==========
+
+*   :meth:`paya.runtime.nodes.SkinCluster.create` does not parse influences / geometries
+    correctly
+
+*   Issues with rotation order propagation on the following:
+
+    *   :meth:`paya.runtime.plugs.EulerRotation.get`
+    *   :meth:`~paya.runtime.plugs.Matrix.asEulerRotation`
+    *   :meth:`paya.runtime.plugs.EulerRotation.asRotateMatrix`
+
+------
+
 *************
 Version 0.7.2
 *************

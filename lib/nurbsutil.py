@@ -46,11 +46,13 @@ def itemsAsBezierAnchors(items):
     :type items: list, tuple
     :return: The items organised into a list of dicts, where:
 
-    [
-        {'root': item, 'out': item}, # first
-        {'in': item, 'root': item, 'out': item}, # internal
-        {'in': item, 'root': item} # last
-    ]
+    .. code-block:: python
+
+        [
+            {'root': item, 'out': item}, # first
+            {'in': item, 'root': item, 'out': item}, # internal
+            {'in': item, 'root': item} # last
+        ]
 
     :rtype: [dict]
     """

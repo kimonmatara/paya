@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paya: PyMEL for Riggers &mdash; paya 0.7.2 documentation</title>
+  <title>Paya: PyMEL for Riggers &mdash; paya 0.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
@@ -107,21 +108,144 @@ for an integrated and familiar experience.</p>
 <p>Customisation is easy, and goes far beyond PyMEL’s
 <a class="reference external" href="https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py">virtual classes</a> system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.</p>
-<div class="admonition-new-in-version-0-7 admonition">
-<p class="admonition-title">New in version 0.7</p>
+<div class="admonition-new-in-version-0-8 admonition">
+<p class="admonition-title">New in version 0.8</p>
+<p class="rubric">Total Curve Madness</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="deformers.html#blend-shapes"><span class="std std-ref">A concise, Pythonic interface for managing blend shape targets</span></a>, including tangent- and
-transform- space, inverted correctives and more. Never use <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.blendShape.html#pymel.core.animation.blendShape" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">blendShape()</span></code></a> again!</p></li>
-<li><p>A new <a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.combine" title="paya.runtime.plugs.Math1D.combine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">combine()</span></code></a> method on scalar attributes leverages <code class="docutils literal notranslate"><span class="pre">combinationShape</span></code>
-nodes</p></li>
-<li><p><a class="reference internal" href="whats_new.html"><span class="doc">And more</span></a>!</p></li>
+<li><p>Extensive <a class="reference internal" href="curves.html"><span class="doc">sampling and editing methods on NURBS and Bezier curve shapes, plugs and components</span></a>.</p></li>
+<li><p><a class="reference internal" href="curves.html#curve-framing"><span class="std std-ref">Complete curve framing</span></a>: extract dynamic and static matrices from any point, parameter,
+length or fraction of a NURBS or Bezier curve.</p></li>
+<li><p><a class="reference internal" href="curves.html#curve-distributions"><span class="std std-ref">Distribute joints and drive chains</span></a> with ease; control up vectors explicitly or with
+aim curves.</p></li>
+<li><p><a class="reference internal" href="curves.html#length-locking"><span class="std std-ref">True, evaluated curve length locking</span></a>.</p></li>
+<li><p>Use plug methods to <a class="reference internal" href="geo_basics.html#procedural-geo-editing"><span class="std std-ref">work fully procedurally in the DG</span></a> and only create shapes
+where you need them.</p></li>
+<li><p><a class="reference internal" href="curves.html#arcs"><span class="std std-ref">Create two- and three-point circular arcs that won’t disappear with an error when the input points
+are in-line</span></a>.</p></li>
+<li><p>Use <a class="reference internal" href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.clusterAll" title="paya.runtime.nodes.NurbsCurve.clusterAll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clusterAll()</span></code></a> to cluster-up curves with automatic merging of overlapping
+CVs.</p></li>
+<li><p>Options to manage line widths added to the control shape methods and elsewhere.</p></li>
+</ul>
+<p class="rubric">Across the Board</p>
+<ul class="simple">
+<li><p>A standard constructor and smart editing methods for <a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster" title="paya.runtime.nodes.Cluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">cluster</span></code></a> deformers.</p></li>
+<li><p>A standard constructor for <a class="reference internal" href="pools/nodes/curveWarp.html#paya.runtime.nodes.CurveWarp" title="paya.runtime.nodes.CurveWarp"><code class="xref py py-class docutils literal notranslate"><span class="pre">curveWarp</span></code></a> deformers.</p></li>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">maintainOffset/mo</span></code> and <code class="docutils literal notranslate"><span class="pre">worldSpace</span></code> options for <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.decomposeAndApply" title="paya.runtime.plugs.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decomposeAndApply()</span></code></a>,
+and a dedicated <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.applyViaOpm" title="paya.runtime.plugs.Matrix.applyViaOpm"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyViaOpm()</span></code></a> method</p></li>
+<li><p>New methods to <a class="reference internal" href="geo_basics.html#procedural-geo-editing"><span class="std std-ref">manage procedural history edits</span></a> in Maya-standard ways:
+<a class="reference internal" href="pools/nodes/deformableShape.html#paya.runtime.nodes.DeformableShape.getOrigPlug" title="paya.runtime.nodes.DeformableShape.getOrigPlug"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getOrigPlug()</span></code></a>,
+<a class="reference internal" href="pools/nodes/deformableShape.html#paya.runtime.nodes.DeformableShape.getHistoryPlug" title="paya.runtime.nodes.DeformableShape.getHistoryPlug"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getHistoryPlug()</span></code></a>,
+<a class="reference internal" href="pools/nodes/deformableShape.html#paya.runtime.nodes.DeformableShape.deleteHistory" title="paya.runtime.nodes.DeformableShape.deleteHistory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deleteHistory()</span></code></a> and
+<a class="reference internal" href="pools/plugs/geometry.html#paya.runtime.plugs.Geometry.getShapeMFn" title="paya.runtime.plugs.Geometry.getShapeMFn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getShapeMFn()</span></code></a></p></li>
+<li><p>New maths methods: <a class="reference internal" href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.gatedClamp" title="paya.runtime.plugs.Math1D.gatedClamp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gatedClamp()</span></code></a> and
+<a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.asShearMatrix" title="paya.runtime.plugs.Vector.asShearMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asShearMatrix()</span></code></a></p></li>
+<li><p><a class="reference internal" href="whats_new.html"><span class="doc">And more!</span></a></p></li>
 </ul>
 </div>
-<section id="example-rigging-a-radial-repulsor">
-<h2>Example: Rigging a Radial Repulsor<a class="headerlink" href="#example-rigging-a-radial-repulsor" title="Permalink to this headline"></a></h2>
-<img alt="_images/repulsor.gif" src="_images/repulsor.gif" />
+<section id="example-1-worm-rig">
+<h2>Example #1: Worm Rig<a class="headerlink" href="#example-1-worm-rig" title="Permalink to this headline"></a></h2>
+<p>This rig features two bezier tangent controls, per-anchor twist, pick-walking and squash-and-stretch with triggered
+blend shapes and bump map. The layout scene can be found here: <code class="docutils literal notranslate"><span class="pre">paya/examples/worm_rig_layout.ma</span></code>. The build method is
+defined inside <a class="reference internal" href="paya/examples/worm_rig.html#module-paya.examples.worm_rig" title="paya.examples.worm_rig"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.examples.worm_rig</span></code></a>.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">PyMEL</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Run Call</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/worm_rig.gif" src="_images/worm_rig.gif" />
+</figure>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.examples.worm_rig</span> <span class="k">as</span> <span class="nn">wr</span>
+
+<span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;worm&#39;</span><span class="p">):</span>
+    <span class="n">wr</span><span class="o">.</span><span class="n">createWormRig</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">,</span> <span class="s1">&#39;locator2&#39;</span><span class="p">,</span>
+        <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;squashed&#39;</span><span class="p">,</span> <span class="s1">&#39;stretched&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+
+<span class="k">def</span> <span class="nf">createWormRig</span><span class="p">(</span>
+        <span class="n">startLoc</span><span class="p">,</span>
+        <span class="n">endLoc</span><span class="p">,</span>
+        <span class="n">numJoints</span><span class="p">,</span>
+        <span class="n">baseMesh</span><span class="p">,</span>
+        <span class="n">squashMesh</span><span class="p">,</span>
+        <span class="n">stretchMesh</span>
+<span class="p">):</span>
+    <span class="c1"># Get layout information</span>
+    <span class="n">startPoint</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="n">startLoc</span><span class="p">)</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
+    <span class="n">endPoint</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="n">endLoc</span><span class="p">)</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span>
+    <span class="n">spineVector</span> <span class="o">=</span> <span class="p">(</span><span class="n">endPoint</span><span class="o">-</span><span class="n">startPoint</span><span class="p">)</span>
+
+    <span class="c1"># Draw the curves</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">startPoint</span><span class="o">+</span><span class="p">(</span><span class="n">spineVector</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="o">*</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+
+    <span class="n">spineCurve</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">BezierCurve</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;main&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getParent</span><span class="p">()</span>
+    <span class="n">aimCurve</span> <span class="o">=</span> <span class="n">spineCurve</span><span class="o">.</span><span class="n">duplicate</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;aim&#39;</span><span class="p">,</span> <span class="n">managedNames</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">aimCurve</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;translateY&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">aimCurve</span><span class="o">.</span><span class="n">makeIdentity</span><span class="p">(</span><span class="n">apply</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Draw controls, drive the curves</span>
+    <span class="n">controls</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">anchorIndex</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">spineCurve</span><span class="o">.</span><span class="n">matrixAtAnchor</span><span class="p">(</span><span class="n">anchorIndex</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">upv</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="n">anchorIndex</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">control</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">createControl</span><span class="p">(</span>
+                <span class="n">worldMatrix</span><span class="o">=</span><span class="n">matrix</span><span class="p">,</span>
+                <span class="n">pickWalkParent</span><span class="o">=</span><span class="n">controls</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">controls</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">keyable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;translate&#39;</span><span class="p">,</span> <span class="s1">&#39;rotate&#39;</span><span class="p">,</span> <span class="s1">&#39;scaleZ&#39;</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                <span class="n">size</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
+                <span class="n">lineWidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                <span class="n">rotateOrder</span><span class="o">=</span><span class="s1">&#39;zxy&#39;</span> <span class="c1"># for easier twist control</span>
+            <span class="p">)</span>
+
+            <span class="n">cvs</span> <span class="o">=</span> <span class="n">spineCurve</span><span class="o">.</span><span class="n">getCVsAtAnchor</span><span class="p">(</span><span class="n">anchorIndex</span><span class="p">,</span> <span class="n">asComponents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cvs</span> <span class="o">+=</span> <span class="n">aimCurve</span><span class="o">.</span><span class="n">getCVsAtAnchor</span><span class="p">(</span><span class="n">anchorIndex</span><span class="p">,</span> <span class="n">asComponents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Cluster</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">cvs</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="n">maintainOffset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">controls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">control</span><span class="p">)</span>
+
+    <span class="c1"># Driven blend shapes</span>
+    <span class="n">blend</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">BlendShape</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">baseMesh</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">squashed</span> <span class="o">=</span> <span class="n">blend</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">squashMesh</span><span class="p">)</span>
+    <span class="n">stretched</span> <span class="o">=</span> <span class="n">blend</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">stretchMesh</span><span class="p">)</span>
+
+    <span class="n">squashStretchRatio</span> <span class="o">=</span> <span class="n">spineCurve</span><span class="o">.</span><span class="n">length</span><span class="p">(</span>
+        <span class="n">plug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="n">spineCurve</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+
+    <span class="n">squashDriver</span> <span class="o">=</span> <span class="n">squashStretchRatio</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">squashDriver</span> <span class="o">&gt;&gt;</span> <span class="n">squashed</span><span class="o">.</span><span class="n">weight</span>
+
+    <span class="n">stretchDriver</span> <span class="o">=</span> <span class="n">squashStretchRatio</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">stretchDriver</span> <span class="o">&gt;&gt;</span> <span class="n">stretched</span><span class="o">.</span><span class="n">weight</span>
+
+    <span class="c1"># Drive the bump map too</span>
+    <span class="n">bumpDriver</span> <span class="o">=</span> <span class="n">squashStretchRatio</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">bumpDriver</span> <span class="o">&gt;&gt;</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;fractal2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;amplitude&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Skinning</span>
+    <span class="n">joints</span> <span class="o">=</span> <span class="n">spineCurve</span><span class="o">.</span><span class="n">distributeJoints</span><span class="p">(</span>
+        <span class="n">numJoints</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span>
+        <span class="n">aimCurve</span><span class="o">=</span><span class="n">aimCurve</span><span class="p">,</span>
+        <span class="n">closestPoint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">plug</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="n">skin</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">SkinCluster</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">joints</span><span class="p">,</span> <span class="n">baseMesh</span><span class="p">,</span> <span class="n">dropoffRate</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Cleanup</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">hide</span><span class="p">(</span><span class="n">squashMesh</span><span class="p">,</span> <span class="n">stretchMesh</span><span class="p">,</span>
+           <span class="n">spineCurve</span><span class="p">,</span> <span class="n">aimCurve</span><span class="p">,</span> <span class="n">startLoc</span><span class="p">,</span> <span class="n">endLoc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="example-2-radial-repulsor">
+<h2>Example #2: Radial Repulsor<a class="headerlink" href="#example-2-radial-repulsor" title="Permalink to this headline"></a></h2>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Paya</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">PyMEL</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/repulsor.gif" src="_images/repulsor.gif" />
+</figure>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span>
 <span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
 <span class="kn">from</span> <span class="nn">paya.util</span> <span class="kn">import</span> <span class="n">pad</span>
 
@@ -154,7 +278,7 @@ nodes</p></li>
         <span class="p">(</span><span class="n">repCentre</span> <span class="o">+</span> <span class="n">vector</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">sphere</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span>
+</div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span>
 <span class="kn">import</span> <span class="nn">pymel.core</span> <span class="k">as</span> <span class="nn">p</span>
 
 <span class="k">def</span> <span class="nf">createRadialRepulsor</span><span class="p">(</span>

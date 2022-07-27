@@ -172,20 +172,6 @@ class LinearInterpolator(UserDict):
 
         raise NoInterpolationKeysError
 
-def floatRange(start, end, numValues):
-    """
-    A variant of Python's :class:`range` for floats.
-
-    :param float start: the minimum value
-    :param float end: the maximum value
-    :param int numValues: the number of values to generate
-    :return: A list of float values between ``start`` and ``end``,
-        inclusively.
-    :rtype: list
-    """
-    grain = (float(end)-float(start)) / (numValues-1)
-    return [grain * x for x in range(numValues)]
-
 def chaseNones(source):
     """
     Resolves ``None`` members in an iterable by filling in with neighbouring

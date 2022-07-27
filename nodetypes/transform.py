@@ -1039,7 +1039,7 @@ class Transform:
 
         :param lineWidth: the line width to set; if None is passed,
             the line width will be set to -1.0
-        type lineWidth: float, None
+        :type lineWidth: float, None
         :return: ``self``
         :rtype: :class:`Transform`
         """

@@ -1270,7 +1270,7 @@ class Targets:
         :param bool connect/con: connect the source shape; defaults to True
             if the blend shape node is in 'pre-deformation' mode, otherwise
             False
-        param int index/i: a preferred logical (sparse) index for the target;
+        :param int index/i: a preferred logical (sparse) index for the target;
             this mustn't already exist; if omitted, defaults to the next non-
             contiguous index.
         :raises RuntimeError:

@@ -59,7 +59,7 @@ class NurbsCurveParameter:
         upObject='upo',
         aimCurve='aic',
         globalScale='gs',
-        matchedCurve='mc',
+        closestPoint='cp',
         plug='p'
     )
     def matrix(
@@ -68,10 +68,9 @@ class NurbsCurveParameter:
             upAxis,
             squashStretch=False,
             upVector=None,
-            upObject=None,
             aimCurve=None,
             globalScale=None,
-            matchedCurve=False,
+            closestPoint=True,
             plug=False
     ):
         """
@@ -88,15 +87,11 @@ class NurbsCurveParameter:
         :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
             :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`
-        :param upObject/upo: used as an aiming interest on its own, or as a source
-            for *upVector*; defaults to None
-        :type upObject/upo: None, str, :class:`~paya.runtime.nodes.Transform`
         :param globalScale/gs: used to drive scaling on dynamic matrices only;
             the scale will be normalised; defaults to None
         :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool matchedCurve/mc: set this to True when *aimCurve* has the
-            same U domain as this curve, to avoid unnecessary closest-point
-            calculations; defaults to False
+        :param bool closestPoint/mc: pull points from *aimCurve* based on
+            proximity rather than matched parameter; defaults to True
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A matrix at the specified parameter, constructed using the
             most efficient DG configuration for the given options.
@@ -109,10 +104,9 @@ class NurbsCurveParameter:
             upAxis,
             ss=squashStretch,
             upv=upVector,
-            upo=upObject,
             aic=aimCurve,
             gs=globalScale,
-            mc=matchedCurve,
+            cp=closestPoint,
             p=plug
         )
 

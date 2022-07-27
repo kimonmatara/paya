@@ -1,0 +1,68 @@
+******************************
+paya.runtime.plugs.BezierCurve
+******************************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: BezierCurve(*args, **kwargs)
+
+    .. py:method:: getShapeMFn()
+    
+        Returns an API function set for the shape type associated with this
+        plug, initialised around the MObject of the data block. Useful for
+        performing spot inspections (like ``numCVs()`` on a curve output)
+        without creating a shape.
+        
+        :return: The function set.
+        :rtype: :class:`~maya.OpenMaya.MFnDagNode`
+    
+    .. py:method:: numAnchors()
+    
+        :return: The number of anchors on this bezier curve.
+        :rtype: int
+    
+    .. py:method:: paramAtAnchor(anchorIndex)
+    
+        This is a fixed calculation, since anchors always 'touch' the curve at
+        same parameter.
+        
+        :param int anchorIndex: the anchor index
+        :return: The U parameter.
+    
+    .. py:method:: getControlPoints(anchors=False)
+    
+        Overloads :meth:`paya.runtime.plugs.NurbsCurve.getControlPoints` to
+        add the *anchors* / *a* option.
+        
+        :param bool anchors/a: organise the return into bezier anchor groups;
+            see :func:`paya.lib.nurbsutil.itemsAsBezierAnchors`; defaults to
+            False
+        :return: The control points.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`], [dict]
+    
+    .. py:method:: matrixAtAnchor(anchorIndex, tangentAxis, upAxis, upVector=None, aimCurve=None, closestPoint=True, globalScale=None, squashStretch=False)
+    
+        :param int anchorIndex: the anchor index
+        :param str tangentAxis: the axis to map to the anchor tangent,
+            for example '-y'
+        :param str upAxis: the axis to map to the resolve up vector,
+            for example 'x'
+        :param upVector/upv: an explicit up vector; defaults to None
+        :type upVector/upv: None, tuple, list, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param aimCurve/aic: an aim curve to derive up vectors from;
+            defaults to None
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: pull points from the aim curve based on
+            proximity, not matched parameter; defaults to True
+        :param globalScale/gs: ignored if not a plug; a baseline scalar;
+            defaults to None
+        :type globalScale/gs: None, str, float,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squash-and-stretch on the tangent
+            vector; defaults to False
+        :return: A matrix at the specified anchor.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`

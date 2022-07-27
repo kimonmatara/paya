@@ -17,7 +17,8 @@ class ClusterHandle:
     def resetVisualOrigin(self):
         """
         Edits the 'origin' so that it overlaps the weighted node's
-            rotate pivot.
+        rotate pivot.
+
         :return: ``self``
         :rtype: :class:`ClusterHandle`
         """

@@ -6,6 +6,25 @@ paya.runtime.nodes.Locator
 
 .. py:class:: Locator(*args, **kwargs)
 
+    .. py:classmethod:: create(worldMatrix=None, displayLocalAxis=False, name=None, under=None, size=1.0)
+    
+        Locator constructor. Note that the return is the locator *shape*, not
+        its transform.
+        
+        :param worldMatrix/wm: a world-matrix for the locator transform;
+            ignored if a custom parent is specified via *under*/*u*; defaults
+            to None
+        :param bool displayLocalAxis/dla: display local rotation axes; defaults to
+            None
+        :param float size/siz: a convenience scalar for the locator
+            ``localScale`` attribute; defaults to 1.0
+        :param under/u: a custom parent for the locator *shape*; defaults to None
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, tuple, list
+        :return: The locator shape.
+        :rtype: :class:`Locator`
+    
     .. py:classmethod:: createFromMacro(macro, **overrides)
     
         :param dict macro: the type of macro returned by :meth:`macro`

@@ -13,21 +13,157 @@ Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-.. admonition:: New in version 0.7
+.. admonition:: New in version 0.8
 
-    *   :ref:`A concise, Pythonic interface for managing blend shape targets <blend_shapes>`, including tangent- and
-        transform- space, inverted correctives and more. Never use :func:`~pymel.core.animation.blendShape` again!
-    *   A new :meth:`~paya.runtime.plugs.Math1D.combine` method on scalar attributes leverages ``combinationShape``
-        nodes
-    *   :doc:`And more <whats_new>`!
+    .. rubric:: Total Curve Madness
+
+    *   Extensive :doc:`sampling and editing methods on NURBS and Bezier curve shapes, plugs and components
+        <curves>`.
+    *   :ref:`Complete curve framing <curve_framing>`: extract dynamic and static matrices from any point, parameter,
+        length or fraction of a NURBS or Bezier curve.
+    *   :ref:`Distribute joints and drive chains <curve_distributions>` with ease; control up vectors explicitly or with
+        aim curves.
+    *   :ref:`True, evaluated curve length locking <length_locking>`.
+    *   Use plug methods to :ref:`work fully procedurally in the DG <procedural_geo_editing>` and only create shapes
+        where you need them.
+    *   :ref:`Create two- and three-point circular arcs that won't disappear with an error when the input points
+        are in-line <arcs>`.
+    *   Use :meth:`~paya.runtime.nodes.NurbsCurve.clusterAll` to cluster-up curves with automatic merging of overlapping
+        CVs.
+    *   Options to manage line widths added to the control shape methods and elsewhere.
+
+    .. rubric:: Across the Board
+
+    *   A standard constructor and smart editing methods for :class:`cluster <paya.runtime.nodes.Cluster>` deformers.
+    *   A standard constructor for :class:`curveWarp <paya.runtime.nodes.CurveWarp>` deformers.
+    *   New ``maintainOffset/mo`` and ``worldSpace`` options for :meth:`~paya.runtime.plugs.Matrix.decomposeAndApply`,
+        and a dedicated :meth:`~paya.runtime.plugs.Matrix.applyViaOpm` method
+    *   New methods to :ref:`manage procedural history edits <procedural_geo_editing>` in Maya-standard ways:
+        :meth:`~paya.runtime.nodes.DeformableShape.getOrigPlug`,
+        :meth:`~paya.runtime.nodes.DeformableShape.getHistoryPlug`,
+        :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` and
+        :meth:`~paya.runtime.plugs.Geometry.getShapeMFn`
+    *   New maths methods: :meth:`~paya.runtime.plugs.Math1D.gatedClamp()` and
+        :meth:`~paya.runtime.plugs.Vector.asShearMatrix()`
+    *   :doc:`And more! <whats_new>`
 
 
-Example: Rigging a Radial Repulsor
-----------------------------------
+Example #1: Worm Rig
+--------------------
 
-.. image:: repulsor.gif
+This rig features two bezier tangent controls, per-anchor twist, pick-walking and squash-and-stretch with triggered
+blend shapes and bump map. The layout scene can be found here: ``paya/examples/worm_rig_layout.ma``. The build method is
+defined inside :mod:`paya.examples.worm_rig`.
 
 .. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: worm_rig.gif
+            :align: center
+
+    .. tab:: Run Call
+
+        .. code-block:: python
+
+            import paya.examples.worm_rig as wr
+
+            with r.Name('worm'):
+                wr.createWormRig('locator1', 'locator2',
+                    16, 'base', 'squashed', 'stretched')
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            import paya.runtime as r
+
+            def createWormRig(
+                    startLoc,
+                    endLoc,
+                    numJoints,
+                    baseMesh,
+                    squashMesh,
+                    stretchMesh
+            ):
+                # Get layout information
+                startPoint = r.PyNode(startLoc).getWorldPosition()
+                endPoint = r.PyNode(endLoc).getWorldPosition()
+                spineVector = (endPoint-startPoint)
+
+                # Draw the curves
+                points = [startPoint+(spineVector * (1/3 * i)) for i in range(4)]
+
+                spineCurve = r.nodes.BezierCurve.create(points, name='main').getParent()
+                aimCurve = spineCurve.duplicate(name='aim', managedNames=True)[0]
+                aimCurve.attr('translateY').set(1.5)
+                aimCurve.makeIdentity(apply=True)
+
+                # Draw controls, drive the curves
+                controls = []
+
+                for anchorIndex in (0, 1):
+                    matrix = spineCurve.matrixAtAnchor(anchorIndex, 'z', 'x', upv=[0,1,0])
+
+                    with r.Name(anchorIndex+1):
+                        control = r.createControl(
+                            worldMatrix=matrix,
+                            pickWalkParent=controls[-1] if controls else None,
+                            keyable=['translate', 'rotate', 'scaleZ'],
+                            color=6,
+                            size=1.25,
+                            lineWidth=2.0,
+                            rotateOrder='zxy' # for easier twist control
+                        )
+
+                        cvs = spineCurve.getCVsAtAnchor(anchorIndex, asComponents=True)
+                        cvs += aimCurve.getCVsAtAnchor(anchorIndex, asComponents=True)
+                        r.nodes.Cluster.create(cvs, handle=control, maintainOffset=True)
+
+                        controls.append(control)
+
+                # Driven blend shapes
+                blend = r.nodes.BlendShape.create(baseMesh, pre=True)
+                squashed = blend.targets.add(squashMesh)
+                stretched = blend.targets.add(stretchMesh)
+
+                squashStretchRatio = spineCurve.length(
+                    plug=True) / spineCurve.length()
+
+                squashDriver = squashStretchRatio.remap(1.0, 0.75, 0.0, 1.0)
+                squashDriver >> squashed.weight
+
+                stretchDriver = squashStretchRatio.remap(1.0, 1.25, 0.0, 1.0)
+                stretchDriver >> stretched.weight
+
+                # Drive the bump map too
+                bumpDriver = squashStretchRatio.remap(0.5, 1.25, 0.32, 0.0)
+                bumpDriver >> r.PyNode('fractal2').attr('amplitude')
+
+                # Skinning
+                joints = spineCurve.distributeJoints(
+                    numJoints, 'y', 'x',
+                    aimCurve=aimCurve,
+                    closestPoint=True,
+                    plug=True
+                )
+
+                skin = r.nodes.SkinCluster.create(joints, baseMesh, dropoffRate=2)
+
+                # Cleanup
+                r.hide(squashMesh, stretchMesh,
+                       spineCurve, aimCurve, startLoc, endLoc)
+
+
+Example #2: Radial Repulsor
+---------------------------
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: repulsor.gif
+            :align: center
 
     .. tab:: Paya
 
@@ -159,6 +295,7 @@ Example: Rigging a Radial Repulsor
     Joint Chains <joint_chains>
     IK Handles <ik>
     deformers
+    geometry
     Controls <controls>
     User Attributes <user_attrs>
     Node Names <naming_nodes>

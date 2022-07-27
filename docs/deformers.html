@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deformers &mdash; paya 0.7.2 documentation</title>
+  <title>Deformers &mdash; paya 0.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -17,10 +17,11 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Controls" href="controls.html" />
+    <link rel="next" title="Geometry" href="geometry.html" />
     <link rel="prev" title="IK Handles" href="ik.html" /> 
 </head>
 
@@ -33,7 +34,7 @@
             <img src="_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -81,8 +82,20 @@
 <li class="toctree-l3"><a class="reference internal" href="#assigning-target-geometry">Assigning Target Geometry</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#cluster">Cluster</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Constructor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-points-of-access">Other Points of Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#swapping-out-weighted-nodes-user-handles">Swapping Out Weighted Nodes (User Handles)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#normalizing-deformations">Normalizing Deformations</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#curvewarp">CurveWarp</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Constructor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
@@ -137,7 +150,9 @@
 like the non-linear variants, use <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.deformer.html#pymel.core.animation.deformer" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">deformer()</span></code></a>; still others, like <code class="docutils literal notranslate"><span class="pre">proximityWrap</span></code>, use
 special classes.</p>
 <p>To get around this, consistent <code class="docutils literal notranslate"><span class="pre">create()</span></code> constructors are being rolled out across all deformers in Paya. As at
-<strong>version 0.7</strong>, these are available on skinClusters and blendShapes. Stay tuned for more.</p>
+<strong>version 0.8</strong>, these are available on <a class="reference internal" href="pools/nodes/skinCluster.html#paya.runtime.nodes.SkinCluster" title="paya.runtime.nodes.SkinCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">skinCluster</span></code></a>,
+<a class="reference internal" href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape" title="paya.runtime.nodes.BlendShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">blendShape</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">curveWarp</span> <span class="pre">&lt;paya.runtime.nodes.CurveWarp</span></code>
+and <a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster" title="paya.runtime.nodes.Cluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">cluster</span></code></a> deformers. Stay tuned for more.</p>
 </section>
 <section id="retrieving-deformers">
 <h3>Retrieving Deformers<a class="headerlink" href="#retrieving-deformers" title="Permalink to this headline"></a></h3>
@@ -449,6 +464,64 @@ mode.</p>
 </div>
 </section>
 </section>
+<section id="cluster">
+<h2>Cluster<a class="headerlink" href="#cluster" title="Permalink to this headline"></a></h2>
+<section id="id2">
+<h3>Constructor<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<p>The standard <a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster.create" title="paya.runtime.nodes.Cluster.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> constructor on <a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster" title="paya.runtime.nodes.Cluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cluster</span></code></a> does a
+smarter and cleaner job of handle-swapping than the standard <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.cluster.html#pymel.core.animation.cluster" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">cluster()</span></code></a> command:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/cluster_handle_swap.gif" src="_images/cluster_handle_swap.gif" />
+</figure>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">handle</span><span class="p">,</span> <span class="n">geo</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Cluster</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">geo</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">,</span> <span class="n">maintainOffset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="other-points-of-access">
+<h3>Other Points of Access<a class="headerlink" href="#other-points-of-access" title="Permalink to this headline"></a></h3>
+<p>Look for component methods that allow you to create clusters in-context, such as
+<a class="reference internal" href="pools/comps/nurbsCurveCV.html#paya.runtime.comps.NurbsCurveCV.cluster" title="paya.runtime.comps.NurbsCurveCV.cluster"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cluster()</span></code></a> on <a class="reference internal" href="pools/comps/nurbsCurveCV.html#paya.runtime.comps.NurbsCurveCV" title="paya.runtime.comps.NurbsCurveCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveCV</span></code></a>.</p>
+</section>
+<section id="swapping-out-weighted-nodes-user-handles">
+<h3>Swapping Out Weighted Nodes (User Handles)<a class="headerlink" href="#swapping-out-weighted-nodes-user-handles" title="Permalink to this headline"></a></h3>
+<p>Two methods on <a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster" title="paya.runtime.nodes.Cluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cluster</span></code></a>, <a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster.getHandle" title="paya.runtime.nodes.Cluster.getHandle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getHandle()</span></code></a> and
+<a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster.setHandle" title="paya.runtime.nodes.Cluster.setHandle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setHandle()</span></code></a>, offer a variety of options to perform handle (weighted node) swapping
+cleanly.</p>
+</section>
+<section id="normalizing-deformations">
+<h3>Normalizing Deformations<a class="headerlink" href="#normalizing-deformations" title="Permalink to this headline"></a></h3>
+<p>Use <a class="reference internal" href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster.normalize" title="paya.runtime.nodes.Cluster.normalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normalize()</span></code></a> to reset geometry offsets:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/cluster_norm.gif" src="_images/cluster_norm.gif" />
+</figure>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Cluster</span><span class="o">.</span><span class="n">getFromGeo</span><span class="p">(</span><span class="s1">&#39;pSphere1&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+</section>
+<section id="curvewarp">
+<h2>CurveWarp<a class="headerlink" href="#curvewarp" title="Permalink to this headline"></a></h2>
+<section id="id3">
+<h3>Constructor<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<p>The standard <a class="reference internal" href="pools/nodes/curveWarp.html#paya.runtime.nodes.CurveWarp.create" title="paya.runtime.nodes.CurveWarp.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> constructor on <a class="reference internal" href="pools/nodes/curveWarp.html#paya.runtime.nodes.CurveWarp" title="paya.runtime.nodes.CurveWarp"><code class="xref py py-class docutils literal notranslate"><span class="pre">CurveWarp</span></code></a> is
+probably the cleanest and easiest way to initialise the deformer via script in Maya:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/curve_warp.gif" src="_images/curve_warp.gif" />
+</figure>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">curve</span><span class="p">,</span> <span class="n">geo</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># order doesn&#39;t matter</span>
+<span class="n">cw</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">CurveWarp</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">geo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+</section>
 </section>
 
 
@@ -456,7 +529,7 @@ mode.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ik.html" class="btn btn-neutral float-left" title="IK Handles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="controls.html" class="btn btn-neutral float-right" title="Controls" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="geometry.html" class="btn btn-neutral float-right" title="Geometry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

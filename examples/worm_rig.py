@@ -16,7 +16,9 @@ def createWormRig(
     .. code-block:: python
 
         import paya.examples.worm_rig as wr
-        wr.createWormRig('locator1', 'locator2', 16, 'base', 'squashed', 'stretched')
+
+        with r.Name('worm'):
+            wr.createWormRig('locator1', 'locator2', 16, 'base', 'squashed', 'stretched')
 
     :param startLoc: a locator to mark the root of the worm spine
     :param endLoc:  a locator to mark the tip of the worm spine
@@ -48,7 +50,7 @@ def createWormRig(
             control = r.createControl(
                 worldMatrix=matrix,
                 pickWalkParent=controls[-1] if controls else None,
-                keyable=['translate', 'rotate', 'scaleZ'],
+                keyable=['translate', 'rotate', 'scaleZ', 'rotateOrder'],
                 color=6,
                 size=1.25,
                 lineWidth=2.0,
@@ -90,5 +92,5 @@ def createWormRig(
     skin = r.nodes.SkinCluster.create(joints, baseMesh, dropoffRate=2)
 
     # Cleanup
-    r.hide(squashMesh, stretchMesh,
+    r.hide(squashMesh, stretchMesh, joints,
            spineCurve, aimCurve, startLoc, endLoc)

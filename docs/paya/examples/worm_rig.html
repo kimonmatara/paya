@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.examples.worm_rig &mdash; paya 0.7.2 documentation</title>
+  <title>paya.examples.worm_rig &mdash; paya 0.8 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
@@ -117,13 +118,13 @@
   <section id="module-paya.examples.worm_rig">
 <span id="paya-examples-worm-rig"></span><h1>paya.examples.worm_rig<a class="headerlink" href="#module-paya.examples.worm_rig" title="Permalink to this headline"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.examples.worm_rig.makeWormRig">
-<span class="sig-name descname"><span class="pre">makeWormRig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startLoc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endLoc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numJoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseMesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashMesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stretchMesh</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.examples.worm_rig.makeWormRig" title="Permalink to this definition"></a></dt>
-<dd><p>Worm rig example with per-point twist, pick-walk controls and driven blend
-shapes. Navigate to <code class="docutils literal notranslate"><span class="pre">paya/examples/worm_rig_layout.ma</span></code> and run this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Navigate to the starter scene first.</span>
-<span class="kn">import</span> <span class="nn">paya.examples.worm_rig</span> <span class="k">as</span> <span class="nn">wr</span>
-<span class="n">wr</span><span class="o">.</span><span class="n">makeWormRig</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">,</span> <span class="s1">&#39;locator2&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;squashed&#39;</span><span class="p">,</span> <span class="s1">&#39;stretched&#39;</span><span class="p">)</span>
+<dt class="sig sig-object py" id="paya.examples.worm_rig.createWormRig">
+<span class="sig-name descname"><span class="pre">createWormRig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startLoc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endLoc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numJoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseMesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashMesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stretchMesh</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.examples.worm_rig.createWormRig" title="Permalink to this definition"></a></dt>
+<dd><p>Worm rig example with per-point twist, pick-walk Bezier controls and
+driven blend shapes. Navigate to <code class="docutils literal notranslate"><span class="pre">paya/examples/worm_rig_layout.ma</span></code>
+and run this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.examples.worm_rig</span> <span class="k">as</span> <span class="nn">wr</span>
+<span class="n">wr</span><span class="o">.</span><span class="n">createWormRig</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">,</span> <span class="s1">&#39;locator2&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;squashed&#39;</span><span class="p">,</span> <span class="s1">&#39;stretched&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

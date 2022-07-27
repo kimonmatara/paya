@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Node Names &mdash; paya 0.7.2 documentation</title>
+  <title>Node Names &mdash; paya 0.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -34,7 +34,7 @@
             <img src="_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Node Names</a><ul>
@@ -150,7 +151,8 @@ letter ‘tags’ in Maya’s <a class="reference external" href="https://help.a
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Type suffixes and the <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> context manager are ignored by standard Maya commands:</p>
+<p>Because Paya doesn’t modify default PyMEL behaviour, type suffixes and the <a class="reference internal" href="paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> context
+manager are ignored by standard PyMEL commands:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;eye&#39;</span><span class="p">):</span>
     <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">createNode</span><span class="p">()</span> <span class="c1"># Paya constructor flavour of createNode()</span>
     <span class="c1"># eye_JOIN</span>
@@ -159,8 +161,10 @@ letter ‘tags’ in Maya’s <a class="reference external" href="https://help.a
     <span class="c1"># joint1</span>
 </pre></div>
 </div>
-<p>To use Paya-style node names with standard Maya commands, call
-<a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.makeName" title="paya.runtime.nodes.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a> on a relevant node type and pass the result along:</p>
+<p>Some PyMEL <em>methods</em>, like <a class="reference internal" href="pools/nodes/transform.html#paya.runtime.nodes.Transform.duplicate" title="paya.runtime.nodes.Transform.duplicate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">duplicate()</span></code></a> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">rename()</span></code> have been overloaded to add a <em>managedNames</em> / <em>mn</em> option. In all
+other cases, you can call <a class="reference internal" href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.makeName" title="paya.runtime.nodes.DependNode.makeName"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makeName()</span></code></a> on a relevant node type and pass the
+result along:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;eye&#39;</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Joint</span><span class="o">.</span><span class="n">makeName</span><span class="p">()</span>
     <span class="n">r</span><span class="o">.</span><span class="n">createNode</span><span class="p">(</span><span class="s1">&#39;joint&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>

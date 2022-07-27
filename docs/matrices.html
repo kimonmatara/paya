@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrices &mdash; paya 0.7.2 documentation</title>
+  <title>Matrices &mdash; paya 0.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -34,7 +34,7 @@
             <img src="_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -76,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
@@ -148,7 +149,10 @@
 Basics</span></a> that at least one of the operands must be an instance of
 <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> or <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Matrix.html#pymel.core.datatypes.Matrix" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver1</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/mults_viewport.gif" src="_images/mults_viewport.gif" />
+</figure>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver1</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
 <span class="n">driver2</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span>
 <span class="n">driven</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
 
@@ -156,9 +160,6 @@ Basics</span></a> that at least one of the operands must be an instance of
 <span class="n">matrix</span> <span class="o">&gt;&gt;</span>  <span class="n">driven</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/mults_viewport.gif" src="_images/mults_viewport.gif" />
-</figure>
 </div></div>
 </section>
 <section id="inverting">
@@ -172,24 +173,30 @@ Basics</span></a> that at least one of the operands must be an instance of
 <section id="applying">
 <span id="applying-matrices"></span><h2>Applying<a class="headerlink" href="#applying" title="Permalink to this headline"></a></h2>
 <p>The most performant way in Maya to apply a matrix to a transform node is to set, or connect, the node’s
-<code class="docutils literal notranslate"><span class="pre">offsetParentMatrix</span></code> input. This also has the advantage of leaving the SRT channels free for editing:</p>
+<code class="docutils literal notranslate"><span class="pre">offsetParentMatrix</span></code> input. The <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.applyViaOpm" title="paya.runtime.plugs.Matrix.applyViaOpm"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyViaOpm()</span></code></a> method offers additional options for
+world-space driving and offset preservation:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">PyMEL / Paya</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">spaceLocator</span><span class="p">()</span>
-<span class="n">driven</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">polyCube</span><span class="p">(</span><span class="n">ch</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="n">driver</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">driven</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/opm_offset.gif" src="_images/opm_offset.gif" />
+</figure>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/opm_offset_graph.png" src="_images/opm_offset_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span><span class="p">,</span> <span class="n">driven</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">driver</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">applyViaOpm</span><span class="p">(</span><span class="n">driven</span><span class="p">,</span> <span class="n">maintainOffset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/opm_drive.gif" src="_images/opm_drive.gif" />
-</figure>
 </div></div>
 <p id="selective-application">To modify SRT channels selectively via decomposition, use the <a class="reference internal" href="glossary.html#term-Universal"><span class="xref std std-term">universal</span></a> method
 <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.decomposeAndApply" title="paya.runtime.plugs.Matrix.decomposeAndApply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decomposeAndApply()</span></code></a>. By default this accounts for <code class="docutils literal notranslate"><span class="pre">rotateAxis</span></code> and, on joints
 only, <code class="docutils literal notranslate"><span class="pre">jointOrient</span></code> and <code class="docutils literal notranslate"><span class="pre">inverseScale</span></code>. In the following example <code class="docutils literal notranslate"><span class="pre">rotateAxis</span></code> compensation is disabled for a
 simpler network:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Graph</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decomposeAndApply</span><span class="p">(</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Graph</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/decomp_graph.png" src="_images/decomp_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decomposeAndApply</span><span class="p">(</span>
     <span class="n">driven</span><span class="p">,</span>
     <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -197,9 +204,6 @@ simpler network:</p>
     <span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/decomp_graph.png" src="_images/decomp_graph.png" />
-</figure>
 </div></div>
 </section>
 <section id="filtering">
@@ -208,19 +212,19 @@ simpler network:</p>
 been implemented on data classes. Here’s a variant of the earlier <a class="reference internal" href="#selective-application"><span class="std std-ref">selective-application</span></a>
 example without matrix decomposition:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-3-3-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-2" name="3-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">translationMatrix</span> <span class="o">=</span> <span class="n">locator1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-3-3-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-2" name="3-2" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/decomp.gif" src="_images/decomp.gif" />
+</figure>
+</div><div aria-labelledby="tab-3-3-1" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-1" name="3-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/pickmatrix_graph.png" src="_images/pickmatrix_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-3-3-2" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-2" name="3-2" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">translationMatrix</span> <span class="o">=</span> <span class="n">locator1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">rotationMatrix</span> <span class="o">=</span> <span class="n">locator2</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">combinedMatrix</span> <span class="o">=</span> <span class="n">rotationMatrix</span> <span class="o">*</span> <span class="n">translationMatrix</span>
 
 <span class="n">combinedMatrix</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-3-1" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-1" name="3-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/pickmatrix_graph.png" src="_images/pickmatrix_graph.png" />
-</figure>
-</div><div aria-labelledby="tab-3-3-2" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-2" name="3-2" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/decomp.gif" src="_images/decomp.gif" />
-</figure>
 </div></div>
 </section>
 <section id="offsetting">
@@ -228,7 +232,13 @@ example without matrix decomposition:</p>
 <p>Use <a class="reference internal" href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.asOffset" title="paya.runtime.plugs.Matrix.asOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asOffset()</span></code></a> to preserve relative pose when applying a dynamic matrix to a
 transform. This is functionally the same as the <code class="docutils literal notranslate"><span class="pre">maintainOffset</span></code> option on Maya’s constraints:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-4-4-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-2" name="4-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">initialPose</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-4-4-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-2" name="4-2" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/maintainOffset.gif" src="_images/maintainOffset.gif" />
+</figure>
+</div><div aria-labelledby="tab-4-4-1" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-1" name="4-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/maintainOffset_graph.png" src="_images/maintainOffset_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-4-4-2" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-2" name="4-2" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">initialPose</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">getMatrix</span><span class="p">(</span><span class="n">worldSpace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">matrix</span> <span class="o">=</span> <span class="n">initialPose</span> <span class="o">*</span> <span class="n">loc</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldMatrix&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">asOffset</span><span class="p">()</span>
 
 <span class="n">decomposition</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">ro</span><span class="o">=</span><span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;rotateOrder&#39;</span><span class="p">))</span>
@@ -236,12 +246,6 @@ transform. This is functionally the same as the <code class="docutils literal no
 <span class="n">decomposition</span><span class="p">[</span><span class="s1">&#39;rotate&#39;</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;rotate&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-4-4-1" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-1" name="4-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/maintainOffset_graph.png" src="_images/maintainOffset_graph.png" />
-</figure>
-</div><div aria-labelledby="tab-4-4-2" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-2" name="4-2" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/maintainOffset.gif" src="_images/maintainOffset.gif" />
-</figure>
 </div></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -285,19 +289,19 @@ it merely returns an identity (‘null’) matrix.</p></li>
 Translation can be specified via the <code class="docutils literal notranslate"><span class="pre">translate</span></code> / <code class="docutils literal notranslate"><span class="pre">t</span></code> keyword argument, and there are additional options to control
 the lengths of the second and third axis vectors:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-5-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-5-5-0" name="5-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-5-5-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-1" name="5-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-5-5-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-2" name="5-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-5-5-0" class="sphinx-tabs-panel" id="panel-5-5-0" name="5-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aim</span> <span class="o">=</span> <span class="n">locator1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-5-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-5-5-0" name="5-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-5-5-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-1" name="5-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-5-5-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-5-5-2" name="5-2" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-5-5-0" class="sphinx-tabs-panel" id="panel-5-5-0" name="5-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/ortho_matrix.gif" src="_images/ortho_matrix.gif" />
+</figure>
+</div><div aria-labelledby="tab-5-5-1" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-1" name="5-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/ortho_matrix_graph.png" src="_images/ortho_matrix_graph.png" />
+</figure>
+</div><div aria-labelledby="tab-5-5-2" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-2" name="5-2" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">aim</span> <span class="o">=</span> <span class="n">locator1</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
 <span class="n">up</span> <span class="o">=</span> <span class="n">locator2</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
 
 <span class="n">matrix</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">createMatrix</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">aim</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">matrix</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-5-5-1" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-1" name="5-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/ortho_matrix_graph.png" src="_images/ortho_matrix_graph.png" />
-</figure>
-</div><div aria-labelledby="tab-5-5-2" class="sphinx-tabs-panel" hidden="true" id="panel-5-5-2" name="5-2" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/ortho_matrix.gif" src="_images/ortho_matrix.gif" />
-</figure>
 </div></div>
 </section>
 <section id="explicit-assembly">
@@ -306,7 +310,13 @@ the lengths of the second and third axis vectors:</p>
 <a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.createMatrix" title="paya.lib.mathops.createMatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">createMatrix()</span></code></a> instead. If the input vectors are not orthogonal, the result will be a shear
 matrix:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-6-6-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-6-6-0" name="6-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-6-6-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-6-6-1" name="6-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-6-6-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-6-6-2" name="6-2" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-6-6-0" class="sphinx-tabs-panel" id="panel-6-6-0" name="6-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-6-6-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-6-6-0" name="6-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-6-6-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-6-6-1" name="6-1" role="tab" tabindex="-1">Graph</button><button aria-controls="panel-6-6-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-6-6-2" name="6-2" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-6-6-0" class="sphinx-tabs-panel" id="panel-6-6-0" name="6-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/shear_matrix.gif" src="_images/shear_matrix.gif" />
+</figure>
+</div><div aria-labelledby="tab-6-6-1" class="sphinx-tabs-panel" hidden="true" id="panel-6-6-1" name="6-1" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/shear_matrix.png" src="_images/shear_matrix.png" />
+</figure>
+</div><div aria-labelledby="tab-6-6-2" class="sphinx-tabs-panel" hidden="true" id="panel-6-6-2" name="6-2" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cube</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;pCube1&#39;</span><span class="p">)</span>
 <span class="n">zVector</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
 <span class="n">xVector</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldPosition&#39;</span><span class="p">)</span>
 <span class="n">yVector</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
@@ -316,12 +326,6 @@ matrix:</p>
 <span class="n">matrix</span> <span class="o">&gt;&gt;</span> <span class="n">cube</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;offsetParentMatrix&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-6-6-1" class="sphinx-tabs-panel" hidden="true" id="panel-6-6-1" name="6-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/shear_matrix.png" src="_images/shear_matrix.png" />
-</figure>
-</div><div aria-labelledby="tab-6-6-2" class="sphinx-tabs-panel" hidden="true" id="panel-6-6-2" name="6-2" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/shear_matrix.gif" src="_images/shear_matrix.gif" />
-</figure>
 </div></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>

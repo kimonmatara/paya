@@ -60,7 +60,7 @@ Node-naming utilities, usually called indirectly.
         the block
     :type padding/pad: None, int
 
-.. py:function:: make(*elems, name=None, node=None, nodeType=None, control=False)
+.. py:function:: make(*elems, name=None, node=None, nodeType=None, control=False, inheritNames=None)
 
     Constructs Maya node names.
     
@@ -78,5 +78,7 @@ Node-naming utilities, usually called indirectly.
     :param nodeType/nt: a reference node type for the suffix lookups, or
         'payaControl' for controls; defaults to None
     :type nodeType/nt: None, str
+    :param bool inheritNames/inh: inherit from :class:`Name` blocks; defaults
+        to the namesake flag in :mod:`paya.config`
     :return: A Maya node name.
     :rtype: str

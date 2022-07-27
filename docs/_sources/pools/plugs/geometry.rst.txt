@@ -6,21 +6,21 @@ paya.runtime.plugs.Geometry
 
 .. py:class:: Geometry(*args, **kwargs)
 
-    .. py:method:: createShape(name=None, under=None, intermediate=False, conformShapeNames=True)
+    .. py:method:: createShape(name=None, under=None, intermediate=False, conformShapeName=True)
     
         Creates a shape node and connects this geometry output into its input.
         
-        :param name/n: the shape name; this will be explicit; no name
-            management is performed; defaults to None
-        :type name/n: None, str
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, str, int, list, tuple
+        :param bool managedNames/mn: use Paya name management; defaults to
+            True
         :param under/u: a transform parent for the new shape; a new transform
             will be generated if this is omitted
         :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool intermediate/i: make the shape an intermediate objects;
             defaults to False
-        :param bool conformShapeNames/csn: ignored if 'under' is None; run a
-            conform on the destination transform's shapes after reparenting;
-            defaults to True
+        :param bool conformShapeName/csn: ignored if 'under' is None; rename
+            the shape if it is reparented; defaults to True
         :return: The new shape.
         :rtype: :class:`~paya.runtime.nodes.Shape`
     

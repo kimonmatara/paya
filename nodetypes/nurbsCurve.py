@@ -1508,6 +1508,54 @@ class NurbsCurve:
 
         return out
 
+    @short(
+        upVector='upv',
+        closestPoint='cp',
+        globalScale='gs',
+        squashStretch='ss',
+        aimCurve='aic',
+        plug='p',
+        under='u'
+    )
+    def fitChain(
+            self,
+            numberOrFractions,
+            aimAxis,
+            upAxis,
+            upVector=None,
+            aimCurve=None,
+            closestPoint=True,
+            globalScale=None,
+            squashStretch=False,
+            plug=False,
+            under=None
+    ):
+        matrices = self.distributeAimingMatrices(
+            numberOrFractions,
+            aimAxis, upAxis,
+            upv=upVector, aic=aimCurve,
+            cp=closestPoint, gs=globalScale,
+            ss=squashStretch, p=plug
+        )
+
+        if plug:
+            _matrices = [matrix.get() for matrix in matrices]
+
+        else:
+            _matrices = matrices
+
+        chain = r.Chain.createFromMatrices(_matrices, under=under)
+
+        if plug:
+            for i, matrix, joint in zip(
+                range(len(matrices)),
+                matrices,
+                chain
+            ):
+                matrix.applyViaOpm(joint, worldSpace=True)
+
+        return chain
+
     #-----------------------------------------------------|    Clusters
 
     @short(tolerance='tol')

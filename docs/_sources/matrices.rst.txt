@@ -25,6 +25,11 @@ Basics <operator_basics>` that at least one of the operands must be an instance 
 
 .. tabs::
 
+    .. tab:: Viewport
+
+        .. figure:: mults_viewport.gif
+            :align: center
+
     .. tab:: Paya
 
         .. code-block:: python
@@ -35,11 +40,6 @@ Basics <operator_basics>` that at least one of the operands must be an instance 
 
             matrix = driver1.attr('worldMatrix') * driver2.attr('worldMatrix')
             matrix >>  driven.attr('offsetParentMatrix')
-
-    .. tab:: Viewport
-
-        .. figure:: mults_viewport.gif
-            :align: center
 
 =========
 Inverting
@@ -59,23 +59,28 @@ Applying
 ========
 
 The most performant way in Maya to apply a matrix to a transform node is to set, or connect, the node's
-``offsetParentMatrix`` input. This also has the advantage of leaving the SRT channels free for editing:
+``offsetParentMatrix`` input. The :meth:`~paya.runtime.plugs.Matrix.applyViaOpm` method offers additional options for
+world-space driving and offset preservation:
 
 .. tabs::
 
-    .. tab:: PyMEL / Paya
+    .. tab:: Viewport
+
+        .. figure:: opm_offset.gif
+            :align: center
+
+    .. tab:: Graph
+
+        .. figure:: opm_offset_graph.png
+            :align: center
+
+    .. tab:: Paya
 
         .. code-block:: python
 
-            driver = r.spaceLocator()
-            driven = r.polyCube(ch=False)[0]
-
-            driver.attr('worldMatrix') >> driven.attr('offsetParentMatrix')
-
-    .. tab:: Viewport
-
-        .. figure:: opm_drive.gif
-            :align: center
+            driver, driven = r.ls(sl=True)
+            driver.attr('worldMatrix'
+                ).applyViaOpm(driven, maintainOffset=True)
 
 .. _selective_application:
 
@@ -85,6 +90,11 @@ only, ``jointOrient`` and ``inverseScale``. In the following example ``rotateAxi
 simpler network:
 
 .. tabs::
+
+    .. tab:: Graph
+
+        .. figure:: decomp_graph.png
+            :align: center
 
     .. tab:: Paya
 
@@ -97,11 +107,6 @@ simpler network:
                 compensateRotateAxis=False
                 )
 
-    .. tab:: Graph
-
-            .. figure:: decomp_graph.png
-                :align: center
-
 =========
 Filtering
 =========
@@ -111,6 +116,16 @@ been implemented on data classes. Here's a variant of the earlier :ref:`selectiv
 example without matrix decomposition:
 
 .. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: decomp.gif
+            :align: center
+
+    .. tab:: Graph
+
+        .. figure:: pickmatrix_graph.png
+            :align: center
 
     .. tab:: Paya
 
@@ -122,16 +137,6 @@ example without matrix decomposition:
 
             combinedMatrix >> cube.attr('offsetParentMatrix')
 
-    .. tab:: Graph
-
-        .. figure:: pickmatrix_graph.png
-            :align: center
-
-    .. tab:: Viewport
-
-        .. figure:: decomp.gif
-            :align: center
-
 ==========
 Offsetting
 ==========
@@ -140,6 +145,16 @@ Use :meth:`~paya.runtime.plugs.Matrix.asOffset` to preserve relative pose when a
 transform. This is functionally the same as the ``maintainOffset`` option on Maya's constraints:
 
 .. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: maintainOffset.gif
+            :align: center
+
+    .. tab:: Graph
+
+        .. figure:: maintainOffset_graph.png
+            :align: center
 
     .. tab:: Paya
 
@@ -151,16 +166,6 @@ transform. This is functionally the same as the ``maintainOffset`` option on May
             decomposition = matrix.decompose(ro=cube.attr('rotateOrder'))
             decomposition['translate'] >> cube.attr('translate')
             decomposition['rotate'] >> cube.attr('rotate')
-
-    .. tab:: Graph
-
-        .. figure:: maintainOffset_graph.png
-            :align: center
-
-    .. tab:: Viewport
-
-        .. figure:: maintainOffset.gif
-            :align: center
 
 .. tip::
     *   When using a direct connection into ``offsetParentMatrix`` instead of decomposition, the above example won't
@@ -213,6 +218,16 @@ the lengths of the second and third axis vectors:
 
 .. tabs::
 
+    .. tab:: Viewport
+
+        .. figure:: ortho_matrix.gif
+            :align: center
+
+    .. tab:: Graph
+
+        .. figure:: ortho_matrix_graph.png
+            :align: center
+
     .. tab:: Paya
 
         .. code-block:: python
@@ -223,16 +238,6 @@ the lengths of the second and third axis vectors:
             matrix = r.createMatrix('z', aim, 'x', up).pick(r=True)
             matrix >> cube.attr('offsetParentMatrix')
 
-    .. tab:: Graph
-
-        .. figure:: ortho_matrix_graph.png
-            :align: center
-
-    .. tab:: Viewport
-
-        .. figure:: ortho_matrix.gif
-            :align: center
-
 
 Explicit Assembly
 -----------------
@@ -242,6 +247,16 @@ To specify a matrix completely, pass three *axis*:*vector* pairs (i.e. six argum
 matrix:
 
 .. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: shear_matrix.gif
+            :align: center
+
+    .. tab:: Graph
+
+        .. figure:: shear_matrix.png
+            :align: center
 
     .. tab:: Paya
 
@@ -255,16 +270,6 @@ matrix:
             matrix = r.createMatrix('z', zVector, 'x', xVector, 'y', yVector)
 
             matrix >> cube.attr('offsetParentMatrix')
-
-    .. tab:: Graph
-
-        .. figure:: shear_matrix.png
-            :align: center
-
-    .. tab:: Viewport
-
-        .. figure:: shear_matrix.gif
-            :align: center
 
 .. tip::
 

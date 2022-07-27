@@ -6,6 +6,21 @@ paya.runtime.nodes.Shape
 
 .. py:class:: Shape(*args, **kwargs)
 
+    .. py:classmethod:: createShape(name=None, under=None, conformShapeName=True, intermediate=False)
+    
+        Basic shape constructor.
+        
+        :param name/n: one or more name elements; defaults to None
+        :type name/n: None, tuple, list, str, int
+        :param under/u: a custom destination parent; defaults to None
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool conformShapeName/csn: ignored if *under* was omitted;
+            rename the shape after it is reparented; defaults to True
+        :param bool intermediate/i: create the shape as an intermediate
+            object; defaults to False
+        :return: The shape node.
+        :rtype: :class:`Shape`
+    
     .. py:classmethod:: createNode(name=None)
     
         Object-oriented version of :func:`pymel.core.general.createNode` with
@@ -29,3 +44,11 @@ paya.runtime.nodes.Shape
             itself.
         :rtype: :class:`~paya.runtime.nodes.Shape` or
             :class:`~paya.runtime.nodes.Transform`
+    
+    .. py:method:: conformName()
+    
+        Conforms this shape's name to a Maya-standard name derived from the
+        transform parent.
+        
+        :return: ``self``
+        :rtype: :class:`Shape`

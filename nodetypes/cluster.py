@@ -1,3 +1,4 @@
+import maya.cmds as m
 import pymel.util as _pu
 import paya.lib.names as _nm
 from paya.util import short
@@ -312,5 +313,5 @@ class Cluster:
         :return: ``self``
         :rtype: :class:`Cluster`
         """
-        self.attr('bindPreMatrix').set(self.attr('matrix').get().inverse())
+        r.cluster(self, e=True, bs=True)
         return self

@@ -57,7 +57,8 @@ The :class:`~paya.lib.names.Name` context manager confers the following advantag
 
 .. note::
 
-    Type suffixes and the :class:`~paya.lib.names.Name` context manager are ignored by standard Maya commands:
+    Because Paya doesn't modify default PyMEL behaviour, type suffixes and the :class:`~paya.lib.names.Name` context
+    manager are ignored by standard PyMEL commands:
 
     .. code-block:: python
 
@@ -68,8 +69,10 @@ The :class:`~paya.lib.names.Name` context manager confers the following advantag
             r.createNode('joint') # Standard command doesn't manage names
             # joint1
 
-    To use Paya-style node names with standard Maya commands, call
-    :meth:`~paya.runtime.nodes.DependNode.makeName` on a relevant node type and pass the result along:
+    Some PyMEL *methods*, like :meth:`~paya.runtime.nodes.Transform.duplicate` and
+    :meth:`~paya.runtime.nodes.Transform.rename` have been overloaded to add a *managedNames* / *mn* option. In all
+    other cases, you can call :meth:`~paya.runtime.nodes.DependNode.makeName` on a relevant node type and pass the
+    result along:
 
     .. code-block:: python
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.bsnboltons &mdash; paya 0.7.2 documentation</title>
+  <title>paya.lib.bsnboltons &mdash; paya 0.8 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.7.2
+                0.8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
@@ -1213,17 +1214,13 @@ creation; defaults to 0.0</p></li>
 <li><p><strong>connect/con</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – connect the source shape; defaults to True
 if the blend shape node is in ‘pre-deformation’ mode, otherwise
 False</p></li>
+<li><p><strong>index/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – a preferred logical (sparse) index for the target;
+this mustn’t already exist; if omitted, defaults to the next non-
+contiguous index.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>param int index/i: a preferred logical (sparse) index for the target;</dt><dd><p>this mustn’t already exist; if omitted, defaults to the next non-
-contiguous index.</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – <ul class="simple">
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – <ul class="simple">
 <li><p>both <em>transform</em> and <em>tangent</em> were specified</p></li>
 <li><p>either <em>transform</em> or <em>tangent</em> were specified and the blend
 shape node is not in ‘post-deformation’ mode</p></li>
@@ -1232,11 +1229,11 @@ shape node is not in ‘post-deformation’ mode</p></li>
 </ul>
 </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The target instance.</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The target instance.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.bsnboltons.Target" title="paya.lib.bsnboltons.Target"><code class="xref py py-class docutils literal notranslate"><span class="pre">Target</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

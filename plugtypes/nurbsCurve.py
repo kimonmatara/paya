@@ -677,7 +677,7 @@ class NurbsCurve:
             matrix = r.createMatrix(
                 tangentAxis, tangent,
                 upAxis, upVector,
-                translate=position
+                translate=point
             )
 
             if squashStretch:

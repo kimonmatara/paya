@@ -4,16 +4,16 @@ paya.examples.worm_rig
 
 .. py:module:: paya.examples.worm_rig
 
-.. py:function:: makeWormRig(startLoc, endLoc, numJoints, baseMesh, squashMesh, stretchMesh)
+.. py:function:: createWormRig(startLoc, endLoc, numJoints, baseMesh, squashMesh, stretchMesh)
 
-    Worm rig example with per-point twist, pick-walk controls and driven blend
-    shapes. Navigate to ``paya/examples/worm_rig_layout.ma`` and run this:
+    Worm rig example with per-point twist, pick-walk Bezier controls and
+    driven blend shapes. Navigate to ``paya/examples/worm_rig_layout.ma``
+    and run this:
     
     .. code-block:: python
     
-        # Navigate to the starter scene first.
         import paya.examples.worm_rig as wr
-        wr.makeWormRig('locator1', 'locator2', 12, 'base', 'squashed', 'stretched')
+        wr.createWormRig('locator1', 'locator2', 16, 'base', 'squashed', 'stretched')
     
     :param startLoc: a locator to mark the root of the worm spine
     :param endLoc:  a locator to mark the tip of the worm spine

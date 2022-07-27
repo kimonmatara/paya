@@ -1,0 +1,168 @@
+***************
+Geometry Basics
+***************
+
+Paya methods for geometry editing and sampling can be found on shape, attribute and component instances. As at
+**version 0.8**, NURBS and Bezier curves are best-represented, with more to follow.
+
+========
+Sampling
+========
+
+Geometry *sampling* refers to the extraction of geometry characteristics such as point positions, normals and so on.
+This information can be obtained *statically* (i.e. read once as values) or *dynamically* (i.e. as constantly-updating
+attributes that can be plugged into rigs).
+
+Sampling Methods on Shapes
+--------------------------
+
+When a sampling method is called on a shape, by default it will return values. If the method accepts a *plug*/*p*
+argument, this can be used to request a dynamic output instead. In addition, many sampling methods on shapes will
+default to dynamic output if they receive attributes are arguments.
+
+For example, here are a few ways to use :meth:`~paya.runtime.nodes.NurbsCurve.pointAtParam` on
+:class:`~paya.runtime.nodes.NurbsCurve`:
+
+.. code-block:: python
+
+    curve = r.PyNode('curve1')
+
+    # Static
+    point = curve.pointAtParam(0.5)
+    print(point)
+    # [-1.304898110589346, 0.0, 2.7682413933789762] (Point instance)
+
+    # Dynamic
+    point = curve.pointAtParam(0.5, plug=True)
+    print(point)
+    # NPCI.position (pointOnCurveInfo output)
+
+    # Implicitly dynamic, as parameter was specified using
+    # an attribute
+    parameter = r.PyNode('settings_CTRL').attr('paramToSample')
+    point = curve.pointAtParam(parameter)
+    # NPCI.position (pointOnCurveInfo output)
+
+Sampling Methods on Plugs
+-------------------------
+
+Sampling methods can also be called on geometry output plugs. If the plug is on a shape, it's important to check it's
+the right one. Maya shapes typically include both local- and world-space outputs, and these aren't consistently named.
+For example, on a curve there is ``local`` and ``worldSpace``, whereas on a mesh the equivalent plugs are ``outMesh``
+and ``worldMesh``.
+
+To make things easier, Paya implements ``geoInput``, ``localGeoOutput`` and ``worldGeoOutput`` properties on all
+geometry shape instances:
+
+.. code-block:: python
+
+    curve = r.PyNode('curve1')
+    print(curve.localGeoOutput)
+    # curveShape1.worldSpace
+
+When a sampling method is called on an output plug, it will *always* be dynamic, unless otherwise noted in the docs:
+
+.. code-block:: python
+
+    point = curve.worldGeoOutput.pointAtParam(0.5)
+    print(point)
+    # NPCI.position (pointOnCurveInfo output)
+
+=======
+Editing
+=======
+
+Editing Methods on Shapes
+-------------------------
+
+Geometry-editing methods on shapes work similarly to Maya's commands, with the exception that the global
+*constructionHistory* preference is always overriden to ``True``. This is to prevent a stray ``False`` preference from
+tanking scripted rig builds. History can always be deleted afterwards using the
+:meth:`~paya.runtime.nodes.DeformableShape.deleteHistory` method:
+
+.. code-block:: python
+
+    segments = curve.detach(0.5)
+    print(segments)
+    # [nt.NurbsCurve('curveShape1'), nt.NurbsCurve('NCRVShape')]
+
+    for segment in segments:
+        segment.deleteHistory()
+
+.. _procedural_geo_editing:
+
+Editing Methods on Plugs
+------------------------
+
+Working with plugs allows you to build complex editing networks in the dependency graph before connecting to an output
+shape. This gives you more control, and cuts down on shape clutter, but takes slightly more housekeeping. A typical
+workflow is to:
+
+1.  Use :meth:`getHistoryPlug(create=True) <paya.runtime.nodes.DeformableShape.getHistoryPlug>` to get a geometry
+    stream 'before' the hero shape, so that you don't work on its outputs directly
+2.  Chain-up some operations
+3.  Connect back into the input on the hero shape (if you're unsure of the right attribute just use Paya's ``geoInput``
+    property).
+
+In the following example, a clustered linear curve is converted to a cubic curve and chipped off:
+
+.. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: plug_geo_editing.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            curve = r.PyNode('main_NCRV')
+            stream = curve.getHistoryPlug(create=True)
+            stream = stream.bSpline()
+            stream = stream.detach(0.3, 1.5, select=1)[0]
+            stream >> curve.geoInput
+
+It won't always be possible to plug into an existing shape; for example, when an edit operation yields an incompatible
+geometry type or multiple outputs. In such cases, you can use :meth:`~paya.runtime.plugs.Geometry.createShape` to
+create new shapes.
+
+In the following variant of the previous example, the bottom segment is 'rendered' as an added scene curve:
+
+.. tabs::
+
+    .. tab:: Viewport & Outliner
+
+        .. figure:: multiple_outputs.gif
+            :align: center
+
+    .. tab:: Paya
+
+        .. code-block:: python
+
+            curve = r.PyNode('main_NCRV')
+            stream = curve.getHistoryPlug(create=True)
+            stream = stream.bSpline()
+            segments = stream.detach(0.5, 1.3, select=(0, 2))
+            segments[0] >> curve.geoInput
+            segments[1].createShape()
+
+Transforming Geometry in the Dependency Graph
+---------------------------------------------
+
+The :meth:`~paya.runtime.plugs.Geometry.transform` method on :class:`~paya.runtime.plugs.Geometry` pairs well with
+matrix operators to enable complex transformations of geometry at the plug level, for example to apply thickness scaling
+to the ``wrap`` and ``proximityWrap`` deformers.
+
+=================
+Component Methods
+=================
+
+Many sampling and editing methods are also available on components, typically with more concise names. Call :func:`help`
+on a component instance of interest to see what methods are available. Here's a variant of
+:meth:`~paya.runtime.nodes.NurbsCurve.pointAtParam` on :class:`~paya.runtime.comps.NurbsCurveParameter`:
+
+.. code-block:: python
+
+    print(curve.u[0.5].point(plug=True))
+    # NPCI.position (pointOnCurveInfo output)
