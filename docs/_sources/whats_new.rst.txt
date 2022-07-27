@@ -9,12 +9,14 @@ Version 0.8.2
 Bugs Fixed
 ==========
 
-*   :meth:`paya.runtime.data.Vector.angle` and :meth:`paya.runtime.plugs.Vector.angle` return the wrong subclass of
-    :class:`~paya.runtime.plugs.Attribute`
+*   :meth:`paya.runtime.data.Vector.angle` and :meth:`paya.runtime.plugs.Vector.angle` do not return an instance of
+    :class:`~paya.runtime.plugs.Angle` when dynamic
 
 *   :class:`~paya.lib.mathops.NativeUnits` is defeated by new-scene / open-scene / save-scene events (fix: added
     API callbacks and changed the class to a singleton that will ignore nested calls, to cut down on callback
     maintenance)
+
+------
 
 *************
 Version 0.8.1

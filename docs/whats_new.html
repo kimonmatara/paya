@@ -202,14 +202,15 @@
 <section id="bugs-fixed">
 <h3>Bugs Fixed<a class="headerlink" href="#bugs-fixed" title="Permalink to this headline"></a></h3>
 <ul class="simple">
-<li><p><a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.angle" title="paya.runtime.data.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.data.Vector.angle()</span></code></a> and <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.angle" title="paya.runtime.plugs.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector.angle()</span></code></a> return the wrong subclass of
-<a class="reference internal" href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p></li>
+<li><p><a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.angle" title="paya.runtime.data.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.data.Vector.angle()</span></code></a> and <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.angle" title="paya.runtime.plugs.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector.angle()</span></code></a> do not return an instance of
+<a class="reference internal" href="pools/plugs/angle.html#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a> when dynamic</p></li>
 <li><p><a class="reference internal" href="paya/lib/mathops.html#paya.lib.mathops.NativeUnits" title="paya.lib.mathops.NativeUnits"><code class="xref py py-class docutils literal notranslate"><span class="pre">NativeUnits</span></code></a> is defeated by new-scene / open-scene / save-scene events (fix: added
 API callbacks and changed the class to a singleton that will ignore nested calls, to cut down on callback
 maintenance)</p></li>
 </ul>
 </section>
 </section>
+<hr class="docutils" />
 <section id="version-0-8-1">
 <h2>Version 0.8.1<a class="headerlink" href="#version-0-8-1" title="Permalink to this headline"></a></h2>
 <section id="changes-to-plug-types">
