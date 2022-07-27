@@ -106,15 +106,26 @@ paya.runtime.plugs.Vector
         :return: The angle from this vector to ``other``.
         :rtype: :class:`~paya.runtime.plugs.Angle`
     
-    .. py:method:: makePerpendicularTo(other)
+    .. py:method:: projectOnto(other)
     
-        Orthogonises this vector against 'other'.
+        See https://en.wikipedia.org/wiki/Vector_projection.
         
-        :param other: the other vector
-        :type other: :class:`paya.runtime.data.Vector`,
-            :class:`paya.runtime.plugs.Vector`,
-        :return: The modified vector.
-        :rtype: :class:`Vector`
+        :param other: the vector onto which to project this one
+        :type other: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The project of this vector onto *other*.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: rejectFrom(other)
+    
+        Same as 'make perpendicular to' (although length will change).
+        See https://en.wikipedia.org/wiki/Vector_projection.
+        
+        :param other: the vector from which to reject this one
+        :type other: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The rejection of this vector from *other*.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
     
     .. py:method:: asTranslateMatrix()
     

@@ -124,7 +124,9 @@
 driven blend shapes. Navigate to <code class="docutils literal notranslate"><span class="pre">paya/examples/worm_rig_layout.ma</span></code>
 and run this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.examples.worm_rig</span> <span class="k">as</span> <span class="nn">wr</span>
-<span class="n">wr</span><span class="o">.</span><span class="n">createWormRig</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">,</span> <span class="s1">&#39;locator2&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;squashed&#39;</span><span class="p">,</span> <span class="s1">&#39;stretched&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;worm&#39;</span><span class="p">):</span>
+    <span class="n">wr</span><span class="o">.</span><span class="n">createWormRig</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">,</span> <span class="s1">&#39;locator2&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;squashed&#39;</span><span class="p">,</span> <span class="s1">&#39;stretched&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

@@ -45,6 +45,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#current-rc">Current (RC)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#changes-to-plug-types">Changes to Plug Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changes-to-data-types">Changes to Data Types</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-8">Version 0.8</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#additions-to-examples">Additions to Examples</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additions-changes-to-modules">Additions &amp; Changes to Modules</a></li>
@@ -187,6 +192,27 @@
              
   <section id="what-s-new">
 <h1>What’s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline"></a></h1>
+<section id="current-rc">
+<h2>Current (RC)<a class="headerlink" href="#current-rc" title="Permalink to this headline"></a></h2>
+<section id="changes-to-plug-types">
+<h3>Changes to Plug Types<a class="headerlink" href="#changes-to-plug-types" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>On <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>:
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">makePerpendicularTo()</span></code> replaced with
+<a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.rejectFrom" title="paya.runtime.plugs.Vector.rejectFrom"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rejectFrom()</span></code></a>; added
+<a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.projectOnto" title="paya.runtime.plugs.Vector.projectOnto"><code class="xref py py-meth docutils literal notranslate"><span class="pre">projectOnto()</span></code></a></p></li>
+</ul>
+</section>
+<section id="changes-to-data-types">
+<h3>Changes to Data Types<a class="headerlink" href="#changes-to-data-types" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>On <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>:
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">makePerpendicularTo()</span></code> replaced with
+<a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.rejectFrom" title="paya.runtime.data.Vector.rejectFrom"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rejectFrom()</span></code></a>; added
+<a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.projectOnto" title="paya.runtime.data.Vector.projectOnto"><code class="xref py py-meth docutils literal notranslate"><span class="pre">projectOnto()</span></code></a></p></li>
+</ul>
+</section>
+</section>
 <section id="version-0-8">
 <h2>Version 0.8<a class="headerlink" href="#version-0-8" title="Permalink to this headline"></a></h2>
 <section id="additions-to-examples">
@@ -665,7 +691,7 @@ instead of <code class="xref py py-func docutils literal notranslate"><span clas
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a>:
 <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.angle" title="paya.runtime.data.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">angle()</span></code></a> (new ‘clockNormal’ option)
-<a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.makePerpendicularTo" title="paya.runtime.data.Vector.makePerpendicularTo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makePerpendicularTo()</span></code></a>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">makePerpendicularTo()</span></code>
 <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.blend" title="paya.runtime.data.Vector.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blend()</span></code></a> (new options)
 <a class="reference internal" href="pools/data/vector.html#paya.runtime.data.Vector.rotateByAxisAngle" title="paya.runtime.data.Vector.rotateByAxisAngle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rotateByAxisAngle()</span></code></a></p></li>
 </ul>
@@ -675,7 +701,7 @@ instead of <code class="xref py py-func docutils literal notranslate"><span clas
 <ul class="simple">
 <li><p>On <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>:
 <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.angle" title="paya.runtime.plugs.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">angle()</span></code></a> (new ‘clockNormal’ option)
-<a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.makePerpendicularTo" title="paya.runtime.plugs.Vector.makePerpendicularTo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">makePerpendicularTo()</span></code></a>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">makePerpendicularTo()</span></code>
 <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.blend" title="paya.runtime.plugs.Vector.blend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">blend()</span></code></a> (new options)
 <a class="reference internal" href="pools/plugs/vector.html#paya.runtime.plugs.Vector.rotateByAxisAngle" title="paya.runtime.plugs.Vector.rotateByAxisAngle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rotateByAxisAngle()</span></code></a></p></li>
 </ul>
