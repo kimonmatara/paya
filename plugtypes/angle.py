@@ -57,7 +57,10 @@ class Angle:
 
     def unwind(self):
         """
-        Removes 360 winds from this angle, for example an angle of 400 becomes
+        Removes 360 winds from this angle, for example an angle of 400 becomes 40.
 
-        :return:
+        :return: This angle, unwound.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
+        thisAbs = self.abs()
+        

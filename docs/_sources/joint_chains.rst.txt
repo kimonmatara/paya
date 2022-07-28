@@ -15,6 +15,11 @@ uses the vector form of the world X axis:
 
 .. tabs::
 
+    .. tab:: Viewport
+
+        .. figure:: chain_from_points.gif
+            :align: center
+
     .. tab:: Paya
 
         .. code-block:: python
@@ -25,16 +30,16 @@ uses the vector form of the world X axis:
             with r.Name('L_leg'):
                 chain = r.Chain.createFromPoints(points, 'y', 'x', upVector)
 
-    .. tab:: Viewport
-
-        .. figure:: chain_from_points.gif
-            :align: center
-
 To draw a chain **along a curve**, use :meth:`~paya.lib.skel.Chain.createFromCurve`. This can take either an up vector
 or, similar to Maya's ``curveWarp`` deformer, an up *curve*. The following example uses custom axes, with curves
 extracted from a NURBS surface to help visualise twist:
 
 .. tabs::
+
+    .. tab:: Viewport
+
+        .. figure:: chain_from_curve.gif
+            :align: center
 
     .. tab:: Paya
 
@@ -45,11 +50,6 @@ extracted from a NURBS surface to help visualise twist:
             with r.Name('spine'):
                 chain = r.Chain.createFromCurve(
                     mainCurve, 12, '-x', 'z', upCurve)
-
-    .. tab:: Viewport
-
-        .. figure:: chain_from_curve.gif
-            :align: center
 
 To draw a chain with joints **at specified matrices**, use :meth:`~paya.lib.skel.Chain.createFromMatrices`. There are no
 axis or vector arguments; joint positions and orientations are taken from the matrices, with scaling information
@@ -92,6 +92,11 @@ subdivided to create a twist chain which is then driven with full support for st
 
 .. tabs::
 
+    .. tab:: Viewport
+
+        .. figure:: leg_skel_edit.gif
+            :align: center
+
     .. tab:: Paya
 
         .. code-block:: python
@@ -129,8 +134,3 @@ subdivided to create a twist chain which is then driven with full support for st
             for joint in twistChain:
                 joint.attr('radius').set(0.5)
                 joint.attr('displayLocalAxis').set(True)
-
-    .. tab:: Viewport
-
-        .. figure:: leg_skel_edit.gif
-            :align: center

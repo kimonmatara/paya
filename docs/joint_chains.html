@@ -114,31 +114,31 @@ class are returned by various methods, and the class itself is available on <a c
 Maya’s aim constraints, this requires an <em>up vector</em> to resolve the secondary axis orientation. The following example
 uses the vector form of the world X axis:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">xform</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span> <span class="k">for</span> <span class="n">xform</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/chain_from_points.gif" src="_images/chain_from_points.gif" />
+</figure>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">xform</span><span class="o">.</span><span class="n">getWorldPosition</span><span class="p">()</span> <span class="k">for</span> <span class="n">xform</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
 <span class="n">upVector</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
 <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;L_leg&#39;</span><span class="p">):</span>
     <span class="n">chain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">Chain</span><span class="o">.</span><span class="n">createFromPoints</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">upVector</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/chain_from_points.gif" src="_images/chain_from_points.gif" />
-</figure>
 </div></div>
 <p>To draw a chain <strong>along a curve</strong>, use <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain.createFromCurve" title="paya.lib.skel.Chain.createFromCurve"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createFromCurve()</span></code></a>. This can take either an up vector
 or, similar to Maya’s <code class="docutils literal notranslate"><span class="pre">curveWarp</span></code> deformer, an up <em>curve</em>. The following example uses custom axes, with curves
 extracted from a NURBS surface to help visualise twist:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mainCurve</span><span class="p">,</span> <span class="n">upCurve</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/chain_from_curve.gif" src="_images/chain_from_curve.gif" />
+</figure>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mainCurve</span><span class="p">,</span> <span class="n">upCurve</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="k">with</span> <span class="n">r</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;spine&#39;</span><span class="p">):</span>
     <span class="n">chain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">Chain</span><span class="o">.</span><span class="n">createFromCurve</span><span class="p">(</span>
         <span class="n">mainCurve</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;-x&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">upCurve</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/chain_from_curve.gif" src="_images/chain_from_curve.gif" />
-</figure>
 </div></div>
 <p>To draw a chain with joints <strong>at specified matrices</strong>, use <a class="reference internal" href="paya/lib/skel.html#paya.lib.skel.Chain.createFromMatrices" title="paya.lib.skel.Chain.createFromMatrices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createFromMatrices()</span></code></a>. There are no
 axis or vector arguments; joint positions and orientations are taken from the matrices, with scaling information
@@ -168,7 +168,10 @@ above, you’ll have to get one from existing joints. To load a chain from a roo
 for a full reference. In the following example, a leg chain and a foot chain are spliced together, reoriented and
 subdivided to create a twist chain which is then driven with full support for stretch and translation:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Paya</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Viewport</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">legChain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Viewport</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Paya</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><figure class="align-center">
+<img alt="_images/leg_skel_edit.gif" src="_images/leg_skel_edit.gif" />
+</figure>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">legChain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
 <span class="n">footChain</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;joint4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">chainFromHere</span><span class="p">()</span>
 <span class="n">legChain</span><span class="o">.</span><span class="n">appendChain</span><span class="p">(</span><span class="n">footChain</span><span class="p">)</span>
 
@@ -203,9 +206,6 @@ subdivided to create a twist chain which is then driven with full support for st
     <span class="n">joint</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;displayLocalAxis&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><figure class="align-center">
-<img alt="_images/leg_skel_edit.gif" src="_images/leg_skel_edit.gif" />
-</figure>
 </div></div>
 </section>
 </section>
