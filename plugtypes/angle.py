@@ -94,7 +94,7 @@ class Angle:
         out.__class__ = type(self)
         return out
 
-    def unwindClosest(self):
+    def unwindShortest(self):
         """
         :return: This angle, unwound and, if over 180, converted to negative
             form.
@@ -129,7 +129,7 @@ class Angle:
         twist setups.
 
         This method is more efficient than switching between the outputs of
-        :meth:`unwindClosest`, :meth:`unwindPositive` and
+        :meth:`unwindShortest`, :meth:`unwindPositive` and
         :meth:`unwindNegative`.
 
         :param switchAttr: the switch attribute; should be of type ``enum``
