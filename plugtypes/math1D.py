@@ -616,6 +616,18 @@ class Math1D:
         """
         return self._makeCompCondition(other,5)
 
+    def inRange(self, minValue, maxValue):
+        """
+        :param minValue: the floor value
+        :type minValue: float, int, str, :class:`Math1D`
+        :param maxValue: the ceiling value
+        :type maxnValue: float, int, str, :class:`Math1D`
+        :return: :return: A ``condition`` node output that can be
+            evaluated as a gating ``bool``.
+        :rtype: ``Math1D``
+        """
+        return self.ge(minValue) * self.le(maxValue)
+
     #--------------------------------------------------------------------|    Gates
 
     def choose(self, outputs):
@@ -630,7 +642,10 @@ class Math1D:
         :param list outputs: list of outputs from which to choose
         :type outputs: [``Attribute``]
         """
-        outputs = map(r.Attribute, outputs)
+        # the inline if-else is necessary otherwise r.Attribute will discard
+        # any custom class assignments
+        outputs = [r.Attribute(output) if not \
+            isinstance(output, r.Attribute) else output for output in outputs]
 
         node = r.nodes.Choice.createNode()
         self >> node.attr('selector')
@@ -639,7 +654,6 @@ class Math1D:
             output >> node.attr('input')[i]
 
         out = node.attr('output')
-
         plugTypes = [type(output) for output in outputs]
 
         if len(set(plugTypes)) is 1:
