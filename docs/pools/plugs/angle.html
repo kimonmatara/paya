@@ -144,6 +144,89 @@ that instances of <code class="xref py py-class docutils literal notranslate"><s
 with units that don’t match the UI setting are set correctly.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Angle.unwind">
+<span class="sig-name descname"><span class="pre">unwind</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Angle.unwind" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>This angle, unwound and with the sign preserved.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Angle.unwindPositive">
+<span class="sig-name descname"><span class="pre">unwindPositive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Angle.unwindPositive" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The unwound positive form of the angle.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Angle.unwindNegative">
+<span class="sig-name descname"><span class="pre">unwindNegative</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Angle.unwindNegative" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The unwound negative form of the angle.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Angle.unwindClosest">
+<span class="sig-name descname"><span class="pre">unwindClosest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Angle.unwindClosest" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>This angle, unwound and, if over 180, converted to negative
+form.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Angle.unwindSwitch">
+<span class="sig-name descname"><span class="pre">unwindSwitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">switchAttr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shortestIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positiveIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negativeIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Angle.unwindSwitch" title="Permalink to this definition"></a></dt>
+<dd><p>Unwinds this angle, with the ‘shortest’ / ‘positive’ / ‘negative’
+modes chosen from a user attribute (typically an enum). Useful for
+twist setups.</p>
+<p>This method is more efficient than switching between the outputs of
+<a class="reference internal" href="#paya.runtime.plugs.Angle.unwindClosest" title="paya.runtime.plugs.Angle.unwindClosest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unwindClosest()</span></code></a>, <a class="reference internal" href="#paya.runtime.plugs.Angle.unwindPositive" title="paya.runtime.plugs.Angle.unwindPositive"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unwindPositive()</span></code></a> and
+<a class="reference internal" href="#paya.runtime.plugs.Angle.unwindNegative" title="paya.runtime.plugs.Angle.unwindNegative"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unwindNegative()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>switchAttr</strong> – the switch attribute; should be an enum or a ‘long’</p></li>
+<li><p><strong>shortestIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the attribute index for ‘shortest’; defaults
+to 0</p></li>
+<li><p><strong>positiveIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the attribute index for ‘positive’; defaults
+to 1</p></li>
+<li><p><strong>negativeIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the attribute index for ‘negative’; defaults
+to 2</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The unwound angle.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
