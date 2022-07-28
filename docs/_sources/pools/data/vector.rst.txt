@@ -6,13 +6,15 @@ paya.runtime.data.Vector
 
 .. py:class:: Vector(*args, **kwargs)
 
-    .. py:method:: createLocator(name=None)
+    .. py:method:: createLocator(name=None, size=1.0)
     
         :shorthand: ``cl``
         
         :param name/n: one or more optional name elements; defaults to None
         :rtype name/n: None, list, int, str
-        :return: A locator with this vector / point piped into its
+        :param float size/siz: a single scalar for the locator's
+            ``localScale`` channels; defaults to 1.0
+        :return: A locator with this 3D compound piped into its
             ``translate`` channel.
         :rtype: :class:`~paya.runtime.nodes.Transform`
     

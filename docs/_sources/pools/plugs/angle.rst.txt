@@ -33,7 +33,7 @@ paya.runtime.plugs.Angle
         :return: The unwound negative form of the angle.
         :rtype: :class:`~paya.runtime.plugs.Angle`
     
-    .. py:method:: unwindClosest()
+    .. py:method:: unwindShortest()
     
         :return: This angle, unwound and, if over 180, converted to negative
             form.
@@ -46,7 +46,7 @@ paya.runtime.plugs.Angle
         twist setups.
         
         This method is more efficient than switching between the outputs of
-        :meth:`unwindClosest`, :meth:`unwindPositive` and
+        :meth:`unwindShortest`, :meth:`unwindPositive` and
         :meth:`unwindNegative`.
         
         :param switchAttr: the switch attribute; should be of type ``enum``

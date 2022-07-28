@@ -268,6 +268,16 @@ paya.runtime.plugs.Math1D
             evaluated as a gating ``bool``.
         :rtype: ``Math1D``
     
+    .. py:method:: inRange(minValue, maxValue)
+    
+        :param minValue: the floor value
+        :type minValue: float, int, str, :class:`Math1D`
+        :param maxValue: the ceiling value
+        :type maxnValue: float, int, str, :class:`Math1D`
+        :return: :return: A ``condition`` node output that can be
+            evaluated as a gating ``bool``.
+        :rtype: ``Math1D``
+    
     .. py:method:: choose(outputs)
     
         Uses this attribute as an index selector for any number of other
