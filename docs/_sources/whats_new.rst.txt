@@ -2,14 +2,21 @@
 What's New
 ##########
 
-***********
-Repo (Beta)
-***********
+*************
+Version 0.8.4
+*************
+
+Bugs Fixed
+==========
+
+*   Unary :meth:`paya.runtime.plugs.Vector.__neg__` returns an incorrect output
 
 Additions & Changes to Plug Types
 =================================
 
-*   On :class:`~paya.runtime.plugs.Math1D`: Changed all expressions to evaluate on-demand rather than always
+*   On :class:`~paya.runtime.plugs.Math1D`: Changed all expressions to evaluate on-demand rather than always; added
+    :meth:`~paya.runtime.plugs.Math1D.inRange`
+
 *   On :class:`~paya.runtime.plugs.Angle`: :meth:`~paya.runtime.plugs.Angle.unwind`
     :meth:`~paya.runtime.plugs.Angle.unwindPositive` :meth:`~paya.runtime.plugs.Angle.unwindNegative`,
     :meth:`~paya.runtime.plugs.Angle.unwindShortest` :meth:`~paya.runtime.plugs.Angle.unwindSwitch`
