@@ -59,3 +59,5 @@ def findMelProc(procName):
         return path
 
     raise RuntimeError("Not a MEL procedure.")
+
+pn = PyNode
