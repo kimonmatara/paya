@@ -117,6 +117,7 @@ class NativeUnits:
             om.MSceneMessage.kAfterSave, self._afterSave)
 
     def _removeCallbacks(self):
+        om.MMessage.removeCallback(self.afterNewCb)
         om.MMessage.removeCallback(self.afterOpenCb)
         om.MMessage.removeCallback(self.beforeSaveCb)
         om.MSceneMessage.removeCallback(self.afterSaveCb)

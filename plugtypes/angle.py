@@ -47,3 +47,13 @@ class Angle:
                 args = [value]
 
         r.plugs.Attribute.set(self, *args, **kwargs)
+
+    def toUnwoundPositive(self):
+        out = self % _pu.radians(360.0)
+        out.__class__ = type(self)
+        return out
+
+    def toUnwoundNegative(self):
+        out = self % _pu.radians(-360.0)
+        out.__class__ = type(self)
+        return out

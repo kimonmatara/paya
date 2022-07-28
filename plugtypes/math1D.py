@@ -697,7 +697,7 @@ class Math1D:
         expr = '{}({})'.format(operation,str(self))
         node = r.nodes.Expression.createNode(n=operation)
         node.attr('expression').set('.O[0] = {}'.format(expr))
-        r.expression(node, e=True, alwaysEvaluate=False)
+        # r.expression(node, e=True, alwaysEvaluate=False) # tentative
         return node.attr('output')[0]
 
     #--------------------------------------------------------------------|    Trigonometry
