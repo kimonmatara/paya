@@ -49,7 +49,9 @@ paya.runtime.plugs.Angle
         :meth:`unwindClosest`, :meth:`unwindPositive` and
         :meth:`unwindNegative`.
         
-        :param switchAttr: the switch attribute; should be an enum or a 'long'
+        :param switchAttr: the switch attribute; should be of type ``enum``
+            or ``long``
+        :type switchAttr: str, :class:`~paya.runtime.plugs.Math1D`
         :param int shortestIndex: the attribute index for 'shortest'; defaults
             to 0
         :param int positiveIndex: the attribute index for 'positive'; defaults
