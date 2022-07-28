@@ -202,7 +202,8 @@ class DependNode:
             channelBox=None,
             defaultValue=None,
             input=None,
-            lock=False
+            lock=False,
+            multi=False
     ):
         if keyable is None and channelBox is None:
             keyable = True
@@ -218,6 +219,16 @@ class DependNode:
 
         if keyable:
             kw['k'] = True
+
+        if multi:
+            if input is None:
+                kw['multi'] = True
+
+            else:
+                raise ValueError(
+                    "An input can't be provided if "+
+                    "the attribute is a multi."
+                )
 
         self.addAttr(name, at='double3', nc=3, **kw)
 
@@ -237,14 +248,15 @@ class DependNode:
         if input is not None:
             input >> main
 
-        if channelBox:
-            main.set(cb=True)
+        if not multi:
+            if channelBox:
+                main.set(cb=True)
 
-            for child in main.getChildren():
-                child.set(cb=True)
+                for child in main.getChildren():
+                    child.set(cb=True)
 
-        if lock:
-            main.lock(recursive=True)
+            if lock:
+                main.lock(recursive=True)
 
         return main
 
@@ -253,7 +265,8 @@ class DependNode:
         channelBox='cb',
         input='i',
         defaultValue='dv',
-        lock='l'
+        lock='l',
+        multi='m'
     )
     def addVectorAttr(
             self,
@@ -262,14 +275,18 @@ class DependNode:
             channelBox=None,
             input=None,
             defaultValue=None,
-            lock=False
+            lock=False,
+            multi=False
     ):
         """
         :param name: the attribute name
         :param bool keyable/k: make the attribute keyable; defaults to True
         :param bool channelBox/cb: make the attribute settable; defaults to
             False
-        :param input/i: an optional input for the attribute
+        :param bool multi/m: create a multi (array) attribute; defaults to
+            False
+        :param input/i: an optional input for the attribute, if it's not a
+            multi
         :type input/i: str, :class:`~paya.runtime.plugs.Vector`
         :param defaultValue/dv: an optional default value for the attribute;
             defaults to [0.0, 0.0, 0.0]
@@ -285,7 +302,8 @@ class DependNode:
             channelBox=channelBox,
             input=input,
             defaultValue=defaultValue,
-            lock=lock
+            lock=lock,
+            multi=multi
         )
 
     @short(
@@ -293,7 +311,8 @@ class DependNode:
         channelBox='cb',
         input='i',
         defaultValue='dv',
-        lock='l'
+        lock='l',
+        multi='m'
     )
     def addEulerAttr(
             self,
@@ -302,12 +321,15 @@ class DependNode:
             channelBox=None,
             input=None,
             defaultValue=None,
-            lock=False
+            lock=False,
+            multi=False
     ):
         """
         :param name: the attribute name
         :param bool keyable/k: make the attribute keyable; defaults to True
         :param bool channelBox/cb: make the attribute settable; defaults to
+            False
+        :param bool multi/m: create a multi (array) attribute; defaults to
             False
         :param input/i: an optional input for the attribute
         :type input/i: str, :class:`~paya.runtime.plugs.Vector`
@@ -326,7 +348,8 @@ class DependNode:
             input=input,
             defaultValue=defaultValue,
             lock=lock,
-            angle=True
+            angle=True,
+            multi=multi
         )
 
     @property
