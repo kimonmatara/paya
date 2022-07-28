@@ -8,18 +8,22 @@ class Math3D:
 
     #-----------------------------------------------------------|    Testing
 
-    @short(name='n')
-    def createLocator(self, name=None):
+    @short(name='n', size='siz')
+    def createLocator(self, name=None, size=1.0):
         """
         :shorthand: ``cl``
 
         :param name/n: one or more optional name elements; defaults to None
         :rtype name/n: None, list, int, str
+        :param float size/siz: a single scalar for the locator's
+            ``localScale`` channels; defaults to 1.0
         :return: A locator with this 3D compound piped into its
             ``translate`` channel.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        loc = r.nodes.Locator.createNode(n=name).getParent()
+        locShape = r.nodes.Locator.createNode(n=name)
+        locShape.attr("localScale").set([size] * 3)
+        loc = locShape.getParent()
         self >> loc.attr('t')
         return loc
 
@@ -141,7 +145,7 @@ class Math3D:
         """
         Implements **unary negation** (``-``).
         """
-        return self * 3
+        return self * -1
 
     #-----------------------------------------------------------|    Divide
     
