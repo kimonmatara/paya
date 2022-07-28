@@ -3,6 +3,7 @@ from collections import UserDict
 import maya.OpenMaya as om
 
 from paya.lib.plugops import *
+import pymel.util as _pu
 from paya.util import conditionalExpandArgs
 
 #--------------------------------------------------------------|
@@ -162,8 +163,9 @@ def floatRange(start, end, numValues):
         inclusively.
     :rtype: list
     """
-    grain = (float(end)-float(start)) / (numValues-1)
-    return [grain * x for x in range(numValues)]
+    grain = 1.0 / (numValues-1)
+    ratios = [grain * x for x in range(numValues)]
+    return [_pu.blend(start, end, weight=ratio) for ratio in ratios]
 
 class NoInterpolationKeysError(RuntimeError):
     """
@@ -1083,3 +1085,168 @@ def getChainedAimMatrices(
             )
 
     return matrices
+
+def parallelTransport(normal, tangents):
+    """
+    Implements **parallel transport** as described in the
+    `Houdini demonstration by Manuel Casasola Merkle <https://www.sidefx.com/tutorials/parallel-transport/>`_
+    based on the `paper by Hanson and Ma
+    <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.65.7632&rep=rep1&type=pdf>`_.
+
+    If any of the arguments are plugs, the outputs will be plugs as well. The
+    first output normal is a pass-through of the *normal* argument.
+
+    :param normal: the starting normal (or up vector)
+    :type normal: list, tuple, :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+    :param tangents: the tangent samples along the curve
+    :type tangents: [list, tuple, :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :return: The resolved normals / up vectors.
+    :rtype: [:class:`paya.runtime.data.Vector`],
+        [:class:`paya.runtime.plugs.Vector`]
+    """
+    normal, normalDim, normalIsPlug = info(normal)
+    tangentInfos = [info(tangent) for tangent in tangents]
+    tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
+    tangentPlugStates = [tangentInfo[2] for tangentInfo in tangentInfos]
+    hasTangentPlugs = any(tangentPlugStates)
+
+    if hasTangentPlugs:
+        allTangentsArePlugs = all(tangentPlugStates)
+
+    else:
+        allTangentsArePlugs = False
+
+    hasPlugs = hasTangentPlugs or normalIsPlug
+
+    outNormals = [normal]
+
+    if hasPlugs:
+        if not allTangentsArePlugs:
+            # Conform all to plugs to simplify operations
+            pb = r.nodes.Network.createNode()
+            multi = pb.addVectorAttr('conformed', multi=True)
+            index = 0
+
+            tangents = []
+
+            for tangentInfo in tangentInfos:
+                if tangentInfo[2]:
+                    tangent = tangentInfo[0]
+
+                else:
+                    multi[index].set(tangentInfo[0])
+                    tangent = multi[index]
+                    index += 1
+
+                tangents.append(tangent)
+
+        for i, thisTangent in enumerate(tangents[:-1]):
+            nextTangent = tangents[i+1]
+            dot = thisTangent.dot(nextTangent, nr=True)
+
+            inline = dot.ge(1.0-1e-7)
+
+            binormal = thisTangent.cross(nextTangent, nr=True)
+            theta = dot.acos()
+
+            thisNormal = outNormals[i]
+            nextNormal = inline.ifElse(
+                thisNormal,
+                thisNormal.rotateByAxisAngle(binormal, theta)
+            )
+
+            outNormals.append(nextNormal)
+
+    else:
+        # Soft implementation
+        for i, thisTangent in enumerate(tangents[:-1]):
+            nextTangent = tangents[i+1]
+            dot = thisTangent.dot(nextTangent, nr=True)
+
+            if dot >= 1.0-1e-7:
+                nextNormal = outNormals[i]
+
+            else:
+                binormal = thisTangent.cross(nextTangent, nr=True)
+                theta = _pu.acos(dot)
+
+                nextNormal = outNormals[i
+                    ].rotateByAxisAngle(binormal, theta)
+
+            outNormals.append(nextNormal)
+
+    return outNormals
+
+def bidirectionalParallelTransport(
+        startNormal,
+        endNormal,
+        tangents,
+        blendRatios=None
+):
+    """
+    .. warning::
+
+        Currently, this method will only accept plugs for *startNormal*,
+        *endNormal* and *tangents*.
+
+    Bidirectional version of :func:`parallelTransport`. Either (but not both)
+    *startNormal* or *endNormal* can be passed as ``None``. If they are both
+    provided, the output vectors will be blended by closest angle. Good for
+    twist effects.
+
+    :param startNormal: the start normal
+    :type startNormal: None, [str, :class:`~paya.runtime.plugs.Vector`]
+    :param endNormal: the end normal
+    :type endNormal: None, [str, :class:`~paya.runtime.plugs.Vector`]
+    :param tangents: the tangents for which to derive normals
+    :type tangents: [:class:`~paya.runtime.plugs.Vector`]
+    :param blendRatios: explicit ratios for the blend operation (one
+        per tangent); defaults to ``floatRange(0, 1, len(tangents))``
+    :type blendRatios: [float]
+    :return: The resolved normals.
+    :rtype: [:class:`~paya.runtime.plugs.Vector`]
+    """
+    if (startNormal is None) and (endNormal is None):
+        raise ValueError("Please specify startNormal and / or endNormal.")
+
+    fromStart = []
+    fromEnd = []
+
+    if startNormal is not None:
+        fromStart = parallelTransport(startNormal, tangents)
+
+    if endNormal is not None:
+        fromEnd = parallelTransport(endNormal, tangents[::-1])[::-1]
+
+    if fromStart:
+        if fromEnd:
+            out = []
+            num = len(tangents)
+
+            if blendRatios:
+                if len(blendRatios) != num:
+                    raise ValueError("Not enough blend ratios.")
+            else:
+                blendRatios = _mo.floatRange(0, 1, len(tangents))
+
+            for normalFromStart, normalFromEnd, tangent, blendRatio in zip(
+                fromStart, fromEnd, tangents, blendRatios
+            ):
+                angle = normalFromEnd.angle(
+                    normalFromStart, normalFromEnd)
+
+                angle = angle.unwindShortest()
+                angle *= blendRatio
+
+                solved = normalFromStart.rotateByAxisAngle(tangent, angle)
+                out.append(solved)
+
+        else:
+            out = fromStart
+
+    else:
+        out = fromEnd
+
+    return out
