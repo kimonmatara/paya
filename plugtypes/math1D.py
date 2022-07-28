@@ -301,7 +301,16 @@ class Math1D:
         """
         return self.ge(0).ifElse(self,-self).setClass(type(self))
 
-   #-----------------------------------------------------------------|    Loops and ranges
+    #-----------------------------------------------------------------|    Loops and ranges
+
+    def trunc(self):
+        """
+        :return: The truncation of this float.
+        :type: :class:`~paya.runtime.plugs.Math1D`
+        """
+        out = self.unaryExpr('trunc')
+        out.__class__ = type(self)
+        return out
 
     @short(method='m')
     def combine(self, *others, method='multiplication'):
@@ -676,7 +685,7 @@ class Math1D:
 
     #--------------------------------------------------------------------|    Expression utils
 
-    def unaryExpr(self,operation):
+    def unaryExpr(self, operation):
         """
         Constructs an expression that calls the specified operation on 'self'.
         Used to implement all the trig methods.
@@ -688,6 +697,7 @@ class Math1D:
         expr = '{}({})'.format(operation,str(self))
         node = r.nodes.Expression.createNode(n=operation)
         node.attr('expression').set('.O[0] = {}'.format(expr))
+        r.expression(node, e=True, alwaysEvaluate=False)
         return node.attr('output')[0]
 
     #--------------------------------------------------------------------|    Trigonometry
