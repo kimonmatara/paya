@@ -1229,13 +1229,13 @@ def bidirectionalParallelTransport(
                 if len(blendRatios) != num:
                     raise ValueError("Not enough blend ratios.")
             else:
-                blendRatios = _mo.floatRange(0, 1, len(tangents))
+                blendRatios = floatRange(0, 1, len(tangents))
 
             for normalFromStart, normalFromEnd, tangent, blendRatio in zip(
                 fromStart, fromEnd, tangents, blendRatios
             ):
-                angle = normalFromEnd.angle(
-                    normalFromStart, normalFromEnd)
+                angle = normalFromStart.angle(
+                    normalFromEnd, clockNormal=tangent)
 
                 angle = angle.unwindShortest()
                 angle *= blendRatio
