@@ -4,123 +4,359 @@ import paya.runtime as r
 
 class RemapValue:
 
-    #--------------------------------------------------|    Color config
-
-    def resetColors(self):
-        """
-        Resets the entire ``color`` compound multi to the state it would
-        be had the node just been created.
-
-        :return: ``self``
-        :rtype: :class:`RemapValue`
-        """
-        colMulti = self.attr('color')
-        indices = colMulti.getArrayIndices()
-
-        hasZero = 0 in indices
-        hasOne = 1 in indices
-
-        if not hasZero:
-            colMulti[0].attr('color_Position').set(0.0)
-            colMulti[0].attr('color_Color').set([0, 0, 0])
-            colMulti[0].attr('color_Interp').set(1)
-
-        if not hasZero:
-            colMulti[1].attr('color_Position').set(1.0)
-            colMulti[1].attr('color_Color').set([1, 1, 1])
-            colMulti[1].attr('color_Interp').set(1)
-
-        for index in indices:
-            compound = colMulti[index]
-            compound.attr('color_Position').release()
-            compound.attr('color_Interp').release()
-            compound.attr('color_Color').release(recursive=True)
-
-            if index in (0, 1):
-                compound.attr('color_Position').set(index)
-                compound.attr('color_Color').set([index] * 3)
-                compound.attr('color_Interp').set(1)
-
-            else:
-                r.removeMultiInstance(colMulti[index], b=True)
+    #-------------------------------------------------------|    Value management
 
     @short(interpolation='i')
-    def setColors(self, positions, colors, interpolation='Linear'):
+    def setValues(self, positions, values, interpolation=None):
         """
-        Defines colors at the specified positions.
+        Sets (or connects) all values on this node. The entire previous
+        configuration of the ``value`` compound multi is discarded.
 
-        :param positions: a list of color positions
+        :param positions: the positions at which to set values
         :type positions: [float, :class:`~paya.runtime.plugs.Math1D`]
-        :param colors: a list of color vector values or plugs
-        :type colors: [tuple, lists, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`]
-        :param interpolation/i: an enum or index for the 'interpolation'
-            drop down for each color, where:
+        :param values: the values to set; must be the same number as
+            *positions*
+        :type values:  [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param interpolation: this can be either one enum key or index
+            for the value interpolation, or a list of them. The enums
+            are:
 
-            0: 'None'
-            1: 'Linear' (the default)
-            2: 'Smooth'
-            3: 'Spline
-        :type interpolation/i: str, int, :class:`~paya.runtime.plugs.Math1D`
+            -   0: 'None'
+            -   1: 'Linear' (the default)
+            -   2: 'Smooth'
+            -   3: 'Spline'
         :return: ``self``
         :rtype: :class:`RemapValue`
         """
+        number = len(positions)
+
+        if len(values) is not number:
+            raise ValueError("Unequal number of positions and values.")
+
+        if interpolation is None:
+            interpolations = ['Linear'] * number
+
+        elif isinstance(interpolation, (tuple, list)):
+            if len(interpolation) is not number:
+                raise ValueError("Incorrect number of interpolation entries.")
+
+            interpolations = list(interpolation)
+
+        else:
+            interpolations = [interpolation] * number
+
+        self.resetValues()
+
+        for i, position, value, interpolation in zip(
+                range(number),
+                positions,
+                values,
+                interpolations
+        ):
+            compound = self.attr('value')[i]
+
+            position >> compound.attr('value_Position')
+            value >> compound.attr('value_FloatValue')
+            interpolation >> compound.attr('value_Interp')
+
+        return self
+
+    def resetValues(self):
+        """
+        Resets the *value* compound array.
+
+        :return: ``self``
+        :rtype: :class:`RemapValue`
+        """
+        indices = self.attr('value').getArrayIndices()
+
+        for index in (0, 1):
+            plug = self.attr('value')[index]
+
+            if index in indices:
+                plug.attr('value_Position').release()
+                plug.attr('value_FloatValue').release()
+                plug.attr('value_Interp').release()
+
+            plug.attr('value_Position').set(index)
+            plug.attr('value_FloatValue').set(index)
+            plug.attr('value_Interp').set('Linear')
+
+        for index in indices:
+            if index in (0, 1):
+                continue
+
+            plug = self.attr('value')[index]
+            plug.attr('value_Position').release()
+            plug.attr('value_FloatValue').release()
+            plug.attr('value_Interp').release()
+
+            r.removeMultiInstance(plug, b=True)
+
+    def sampleValue(self, position):
+        """
+        Samples an interpolated value at the specified position.
+
+        :param position: the position at which to sample a value
+        :type position: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The value sample output.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        clone = self.createClone()
+        clone.attr('inputValue').release()
+        position >> clone.attr('inputValue')
+        return clone.attr('outValue')
+
+    #-------------------------------------------------------|    Color management
+    
+    @short(interpolation='i')
+    def setColors(self, positions, colors, interpolation=None):
+        """
+        Sets (or connects) all colors on this node. The entire previous
+        configuration of the ``color`` compound multi is discarded.
+
+        :param positions: the positions at which to set colors
+        :type positions: [float, :class:`~paya.runtime.plugs.Math1D`]
+        :param colors: the colors to set; must be the same number as
+            *positions*
+        :type colors:  [list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`]
+        :param interpolation: this can be either one enum key or index
+            for the color interpolation, or a list of them. The enums
+            are:
+            -   0: 'None'
+            -   1: 'Linear' (the default)
+            -   2: 'Smooth'
+            -   3: 'Spline'
+        :return: ``self``
+        :rtype: :class:`RemapColor`
+        """
+        number = len(positions)
+
+        if len(colors) is not number:
+            raise ColorError("Unequal number of positions and colors.")
+
+        if interpolation is None:
+            interpolations = ['Linear'] * number
+
+        elif isinstance(interpolation, (tuple, list)):
+            if len(interpolation) is not number:
+                raise ColorError("Incorrect number of interpolation entries.")
+
+            interpolations = list(interpolation)
+
+        else:
+            interpolations = [interpolation] * number
+
         self.resetColors()
 
-        for i, position, color in zip(
-            range(len(positions)),
-            positions,
-            colors
+        for i, position, color, interpolation in zip(
+                range(number),
+                positions,
+                colors,
+                interpolations
         ):
             compound = self.attr('color')[i]
+
             position >> compound.attr('color_Position')
             color >> compound.attr('color_Color')
             interpolation >> compound.attr('color_Interp')
 
         return self
 
-    #--------------------------------------------------|    Sampling
+    def resetColors(self):
+        """
+        Resets the *color* compound array.
+
+        :return: ``self``
+        :rtype: :class:`RemapValue`
+        """
+        indices = self.attr('color').getArrayIndices()
+
+        for index in (0, 1):
+            plug = self.attr('color')[index]
+
+            if index in indices:
+                plug.attr('color_Position').release()
+                plug.attr('color_Color').release(recursive=True)
+                plug.attr('color_Interp').release()
+
+            plug.attr('color_Position').set(index)
+            plug.attr('color_Color').set([index]*3)
+            plug.attr('color_Interp').set('Linear')
+
+        for index in indices:
+            if index in (0, 1):
+                continue
+
+            plug = self.attr('color')[index]
+            plug.attr('color_Position').release()
+            plug.attr('color_Color').release(recursive=True)
+            plug.attr('color_Interp').release()
+
+            r.removeMultiInstance(plug, b=True)
 
     def sampleColor(self, position):
         """
         Samples an interpolated color at the specified position.
 
-        :param position: the position at which to sample the color
-        :type position: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :return: The sampled color.
+        :param position: the position at which to sample a color
+        :type position: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The color sample output.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        name = type(self).makeName('{}_clone', format(self.basename()))
-        dup = self.duplicate(n=name)[0]
-        dup.attr('inputValue').unlock()
-        position >> dup.attr('inputValue')
+        clone = self.createClone()
+        clone.attr('inputValue').release()
+        position >> clone.attr('inputValue')
+        return clone.attr('outColor')
 
-        srcIndices = self.attr('color').getArrayIndices()
+    #-------------------------------------------------------|    State management
 
-        for index in srcIndices:
-            srcCompound = self.attr('color')[index]
-            destCompound = dup.attr('color')[index]
+    @short(skipInputValue='siv')
+    def resetNode(self, skipInputValue=False):
+        """
+        Removes all inputs from this node and resets all attributes to
+        defaults.
 
-            for attrName in ('color_Position', 'color_Interp', 'color_Color'):
-                src = srcCompound.attr(attrName)
-                dest = destCompound.attr(attrName)
+        :param bool skipInputValue/siv: don't modify the ``inputValue``
+            attribute; defaults to False
+        :return: ``self``
+        :rtype: :class:`RemapValue`
+        """
+        self.resetValues()
+        self.resetColors()
 
+        if not skipInputValue:
+            self.attr('inputValue').release()
+            self.attr('inputValue').set(0.0)
+
+        for attrName, default in zip(
+            ['inputMin', 'inputMax', 'outputMin',
+                'outputMax', 'caching', 'frozen', 'nodeState'],
+            [0.0, 0.0, 1.0, 0.0, 1.0, False, False, 0]
+        ):
+            plug = self.attr(attrName)
+            plug.release()
+            plug.set(default)
+
+        return self
+
+    #-------------------------------------------------------|    Sampling / cloning
+
+    @short(skipInputValue='siv')
+    def driveSlave(self, slave, skipInputValue=False):
+        """
+        Drives another ``remapValue`` node completely.
+
+        :param slave: the node to drive
+        :type slave: str, :class:`RemapValue`
+        :param bool skipInputValue/siv: don't modify the slave ``inputValue``
+            attribute; defaults to False
+        :return: ``self``
+        :rtype: :class:`RemapValue`
+        """
+        slave = r.pn(slave)
+        slave.resetNode(skipInputValue=skipInputValue)
+        
+        if not skipInputValue:
+            slave.attr('inputValue').release()
+            self.attr('inputValue') >> slave.attr('inputValue')
+
+        for attrName in ['inputMin', 'inputMax', 'outputMin', 'outputMax']:
+            src = self.attr(attrName)
+            dest = slave.attr(attrName)
+
+            src >> dest
+
+        # Values
+        srcCompoundArr = self.attr('value')
+        destCompoundArr = slave.attr('value')
+        srcIndices = srcCompoundArr.getArrayIndices()
+        destIndices = destCompoundArr.getArrayIndices()
+
+        for srcIndex in srcIndices:
+            srcCompound = srcCompoundArr[srcIndex]
+            destCompound = destCompoundArr[srcIndex]
+
+            for name in ['value_Position',
+                         'value_FloatValue', 'value_Interp']:
+                src = srcCompound.attr(name)
+                dest = destCompound.attr(name)
+
+                dest.release(recursive=True)
                 src >> dest
-                dest.lock()
-
-        destIndices = dup.attr('color').getArrayIndices()
 
         for destIndex in destIndices:
-            if destIndex in srcIndices:
-                continue
+            if destIndex not in srcIndices:
+                plug = destCompoundArr[destIndex]
 
-            destCompound = dup.attr('color')[destIndex]
+                for name in ['value_Position',
+                             'value_FloatValue', 'value_Interp']:
+                    plug.attr(name).release(recursive=True)
 
-            for attrName in (
-                    'color_Position', 'color_Color', 'color_Interp'):
-                plug = destCompound.attr(attrName)
-                plug.release()
+                r.removeMultiInstance(plug, b=True)
 
-            r.removeMultiInstance(destCompound, b=True)
+        # Colors
+        srcCompoundArr = self.attr('color')
+        destCompoundArr = slave.attr('color')
+        srcIndices = srcCompoundArr.getArrayIndices()
+        destIndices = destCompoundArr.getArrayIndices()
 
-        return dup.attr('outColor')
+        for srcIndex in srcIndices:
+            srcCompound = srcCompoundArr[srcIndex]
+            destCompound = destCompoundArr[srcIndex]
+
+            for name in ['color_Position',
+                         'color_Color', 'color_Interp']:
+                src = srcCompound.attr(name)
+                dest = destCompound.attr(name)
+
+                dest.release(recursive=True)
+                src >> dest
+
+        for destIndex in destIndices:
+            if destIndex not in srcIndices:
+                plug = destCompoundArr[destIndex]
+
+                for name in ['color_Position',
+                             'color_Color', 'color_Interp']:
+                    plug.attr(name).release(recursive=True)
+
+                r.removeMultiInstance(plug, b=True)
+
+    def createClone(self):
+        """
+        :return: A new ``remapValue`` node, driven by this one.
+        :rtype: :class:`RemapValue`
+        """
+        clone = r.nodes.RemapValue.createNode(
+            name='{}_clone'.format(self.basename(sts=True))
+        )
+
+        self.driveSlave(clone)
+        self.attr('message') >> clone.addAttr('cloneMaster', at='message')
+
+        return clone
+
+    def getClones(self):
+        """
+        :return: Nodes created using :meth:`createClone`.
+        :rtype: [:class:`RemapValue`]
+        """
+        outputs = self.attr('message').outputs(type='remapValue', plugs=True)
+        outputs = [output for output in outputs \
+            if output.attrName() == 'cloneMaster']
+
+        return [output.node() for output in outputs]
+
+    def updateClones(self):
+        """
+        Reconnects current clones. This is normally necessary after adding
+        or removing ``color`` or ``value`` indices on this node.
+
+        :return: ``self``
+        :rtype: :class:`RemapValue`
+        """
+        for clone in self.getClones():
+            self.driveSlave(clone, siv=True)
