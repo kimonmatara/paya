@@ -1354,10 +1354,10 @@ class NurbsCurve:
         number = len(fractions)
 
         if upVector:
-            upVector = _mo.conformVectorArg(upVector)
+            upVector = _mo.conformVectorArg(upVector, ll=number)
 
         if any((_mo.isPlug(fraction) for fraction in fractions)) \
-                or upVector and _mo.isPlug(upVector) \
+                or upVector and any((_mo.isPlug(member) for member in upVector)) \
                 or aimCurve and _mo.isPlug(aimCurve) \
                 or globalScale and _mo.isPlug(globalScale):
             return self.attr('worldSpace').distributeAimingMatrices(
