@@ -10,6 +10,139 @@ import paya.runtime as r
 class NurbsCurve:
 
     #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    Parallel transport
+    #---------------------------------------------------------------|
+
+    def sampleUpVector(self, param):
+        outputs = [output for output in \
+                   self.outputs(plugs=True, type='remapValue') if \
+                   output.attrName() == 'sampleCurve']
+
+        if outputs:
+            rmnode = outputs[0].node()
+            return rmnode.sampleColor(param)
+
+        raise RuntimeError("Parallel transport hasn't been initialised.")
+
+    def initParallelTransport(self, params, normals, accuracy):
+        """
+        For each segment, create this info pack:
+            {
+                'startNormal'
+                'endNormal'
+                'tangentSampleParams',
+                'tangents' -- construct these carefully to avoid duplicated
+                    sampling
+            }
+
+        for segmentIndex, infopack:
+
+            pass startNormal, endNormal and tangents straight to
+            bidirectionalParallelTransport(), get the result
+
+            test the result with matrices (hack the tangent info node)
+
+            Add the result to the info pack
+
+        Extract a flat mapping of param: normal from the info packs, taking
+        care to remove overlapping internal elements
+
+        Use this mapping to configure a remapValue node for later sampling
+        """
+        # Wrangle args
+        params = [_nu.conformUParamArg(param) for param in params]
+        normals = [_mo.conformVectorArg(normal) for normal in normals]
+
+        pairs = list(zip(params, normals))
+        pairs.sort(key=lambda x: x[0])
+        params = [pair[0] for pair in pairs]
+        normals = [pair[1] for pair in pairs]
+
+        umin, umax = self.getKnotDomain()
+
+        if umin not in params:
+            params.insert(0, umin)
+            normals.insert(None, umin)
+
+        if umax not in params:
+            params.append(umax)
+            normals.append(None, umax)
+
+        num = len(params)
+
+        # Create per-segment info packs
+        infoPacks = []
+
+        for i, param, normal in zip(
+            range(len(params)-1),
+            params[:-1],
+            normals[:-1]
+        ):
+            infoPack = {}
+            infoPack['startParam'] = param
+            infoPack['nextParam'] = params[i+1]
+            infoPack['startNormal'] = normals[i]
+            infoPack['endNormal'] = normals[i+1]
+
+            infoPack['tangentSampleParams'] = \
+                _mo.floatRange(param, params[i+1], accuracy)
+
+            infoPacks.append(infoPack)
+
+        # Add tangent samples to each info pack, taking care not to replicate
+        # overlapping samples
+
+        for i, infoPack in enumerate(infoPacks):
+            inner = i > 0
+            tangentSampleParams = infoPack['tangentSampleParams'][:]
+
+            if inner:
+                del(tangentSampleParams[0])
+
+            tangents = [self.infoAtParam(tangentSampleParam
+                ).attr('tangent') for tangentSampleParam \
+                in tangentSampleParams]
+
+            if inner:
+                tangents.insert(0, infoPacks[i-1]['tangents'][-1])
+
+            infoPack['tangents'] = tangents
+
+        # Run the parallel transport per-segment
+
+        for i, infoPack in enumerate(infoPacks):
+            infoPack['normals'] = _mo.bidirectionalParallelTransport(
+                infoPack['startNormal'], infoPack['endNormal'],
+                infoPack['tangents']
+            )
+
+        outParams = []
+        outNormals = []
+        numSegments = len(infoPacks)
+
+        for i, infoPack in enumerate(infoPacks):
+            lastIndex = len(infoPack['tangents'])
+
+            if i < numSegments-1:
+                lastIndex -= 1
+
+            last = i == len(infoPacks)-1
+
+            theseParams = infoPack['tangentSampleParams'][:lastIndex]
+            theseNormals = infoPack['normals'][:lastIndex]
+
+            outParams += theseParams
+            outNormals += theseNormals
+
+        # Use a remapValue node to create an interpolation setup
+
+        rmnode = r.nodes.RemapValue.createNode()
+        rmnode.setColors(outParams, outNormals)
+
+        # Tag this attribute for DG navigation
+        self >> rmnode.addAttr('sampleCurve', at='message')
+
+    #---------------------------------------------------------------|
     #---------------------------------------------------------------|    Constructors
     #---------------------------------------------------------------|
 
@@ -2003,3 +2136,4 @@ class NurbsCurve:
         retraction = self.retract(retractLength, ats=atStart)
 
         return baseLength.ge(targetLength).ifElse(retraction, extension)
+
