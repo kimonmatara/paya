@@ -598,14 +598,24 @@ class ParsedSubtypePool(ShadowPool):
 
     __meta_base__ = ParsedSubtypePoolMeta
 
-    # def getFromPyMELInstance(self, inst):
-    #     attrName = self.getCrossPoolRoot().__melnode__+'Type'
-    #
-    #     if inst.hasAttr(attrName):
-    #
+    def getFromPyMELInstance(self, inst):
+        raise NotImplementedError
 
     def getCrossPoolRoot(self):
         raise NotImplementedError
+
+    def tagCrossPoolRoot(self):
+        cls = self.getCrossPoolRoot()
+        cls.__supports_parsed_subtypes__ = True
+        cls.__subtype_pool__ = self
+
+    def __init__(self):
+        super().__init__()
+        self.tagCrossPoolRoot()
+
+    def purge(self):
+        super().purge()
+        self.tagCrossPoolRoot()
 
     def conformBases(self, clsname, bases):
         bases = [b for b in bases if b is not object]
@@ -621,6 +631,8 @@ class ParsedSubtypePool(ShadowPool):
 
         if '__new__' in dct:
             raise RuntimeError("Can't override __new__ on Paya classes.")
+
+        dct['__is_parsed_subtype__'] = True
 
         return dct
 
@@ -678,6 +690,6 @@ networks = NetworkSubtypesPool()
 #----------------------------------------------------------------|    REGISTRY
 #----------------------------------------------------------------|
 
-pools = [nodes, comps, plugs, data, networks]
+pools = [nodes, comps, plugs, data, networks] # order matters
 poolsByShortName = {pool.shortName(): pool for pool in pools}
 poolsByLongName = {pool.longName():pool for pool in pools}
