@@ -26,6 +26,13 @@ for clsname, cls in inspect.getmembers(_dt,inspect.isclass):
 pyMELIsPatched = False
 
 
+# Parsed types should not receive a patch otherwise they'll hijack
+# instantiations
+
+poolsToPatch = [pool for pool in _pl.pools \
+    if not isinstance(pool, _pl.ParsedSubtypePool)]
+
+
 def patchPyMEL(quiet=False):
     """
     Patches PyMEL so that it will return custom paya classes instead of
@@ -65,7 +72,7 @@ def patchPyMEL(quiet=False):
             cls.__new__ = staticmethod(__new__)
 
         # Patch pool root classes
-        for pool in _pl.pools:
+        for pool in poolsToPatch:
             for root in pool.__roots__:
                 root.__paya_pool__ = pool
 
@@ -85,7 +92,7 @@ def unpatchPyMEL(quiet=False):
 
     if pyMELIsPatched:
         # Unpatch pool root classes
-        for pool in _pl.pools:
+        for pool in poolsToPatch:
             for root in pool.__roots__:
                 del(root.__paya_pool__)
 

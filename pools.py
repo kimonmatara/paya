@@ -598,6 +598,12 @@ class ParsedSubtypePool(ShadowPool):
 
     __meta_base__ = ParsedSubtypePoolMeta
 
+    # def getFromPyMELInstance(self, inst):
+    #     attrName = self.getCrossPoolRoot().__melnode__+'Type'
+    #
+    #     if inst.hasAttr(attrName):
+    #
+
     def getCrossPoolRoot(self):
         raise NotImplementedError
 
