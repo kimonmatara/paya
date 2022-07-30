@@ -1,5 +1,19 @@
+import paya.lib.mathops as _mo
 from paya.util import short
 import paya.runtime as r
+
+#-----------------------------------------------------------|
+#-----------------------------------------------------------|   Errors
+#-----------------------------------------------------------|
+
+class NoExistingSampleError(RuntimeError):
+    """
+    No existing sample was found.
+    """
+
+#-----------------------------------------------------------|
+#-----------------------------------------------------------|   Main class
+#-----------------------------------------------------------|
 
 
 class RemapValue:
@@ -7,7 +21,7 @@ class RemapValue:
     #-------------------------------------------------------|    Value management
 
     @short(interpolation='i')
-    def setValues(self, positions, values, interpolation=None):
+    def setValues(self, positions, values, interpolation='Linear'):
         """
         Sets (or connects) all values on this node. The entire previous
         configuration of the ``value`` compound multi is discarded.
@@ -33,10 +47,7 @@ class RemapValue:
         if len(values) is not number:
             raise ValueError("Unequal number of positions and values.")
 
-        if interpolation is None:
-            interpolations = ['Linear'] * number
-
-        elif isinstance(interpolation, (tuple, list)):
+        if isinstance(interpolation, (tuple, list)):
             if len(interpolation) is not number:
                 raise ValueError("Incorrect number of interpolation entries.")
 
@@ -93,24 +104,49 @@ class RemapValue:
 
             r.removeMultiInstance(plug, b=True)
 
-    def sampleValue(self, position):
+    def _findValueSample(self, position):
+        position, pdim, pisplug = _mo.info(position)
+
+        clones = self.getClones()
+
+        for clone in clones:
+            inputs = clone.attr('inputValue').inputs(plugs=True)
+
+            if inputs and pisplug:
+                if inputs[0] == position:
+                    return clone.attr('outValue')
+
+            elif (not inputs) and (not pisplug):
+                if clone.attr('inputValue').get() == position:
+                    return clone.attr('outValue')
+
+        raise NoExistingSampleError
+
+    @short(reuse='re')
+    def sampleValue(self, position, reuse=True):
         """
         Samples an interpolated value at the specified position.
 
         :param position: the position at which to sample a value
         :type position: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool reuse/re: look for an existing sample for the same
+            position value or plug; defaults to True
         :return: The value sample output.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        clone = self.createClone()
-        clone.attr('inputValue').release()
-        position >> clone.attr('inputValue')
-        return clone.attr('outValue')
+        try:
+            return self._findValueSample(position)
+
+        except NoExistingSampleError:
+            clone = self.createClone()
+            clone.attr('inputValue').release()
+            position >> clone.attr('inputValue')
+            return clone.attr('outValue')
 
     #-------------------------------------------------------|    Color management
     
     @short(interpolation='i')
-    def setColors(self, positions, colors, interpolation=None):
+    def setColors(self, positions, colors, interpolation='Linear'):
         """
         Sets (or connects) all colors on this node. The entire previous
         configuration of the ``color`` compound multi is discarded.
@@ -137,10 +173,7 @@ class RemapValue:
         if len(colors) is not number:
             raise ColorError("Unequal number of positions and colors.")
 
-        if interpolation is None:
-            interpolations = ['Linear'] * number
-
-        elif isinstance(interpolation, (tuple, list)):
+        if isinstance(interpolation, (tuple, list)):
             if len(interpolation) is not number:
                 raise ColorError("Incorrect number of interpolation entries.")
 
