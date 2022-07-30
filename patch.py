@@ -41,11 +41,11 @@ def patchPyMEL(quiet=False):
 
     else:
         # Patch instantiators
-
         def __new__(cls,*args,**kwargs):
             instance = cls.__old_new__(cls,*args,**kwargs)
             pmcls = type(instance)
-            pool = _pl.getPoolFromPmBase(pmcls)
+
+            pool = pmcls.__paya_pool__
 
             try:
                 customCls = pool.getFromPyMELInstance(instance)
@@ -64,11 +64,15 @@ def patchPyMEL(quiet=False):
             cls.__old_new__ = staticmethod(cls.__new__)
             cls.__new__ = staticmethod(__new__)
 
+        # Patch pool root classes
+        for pool in _pl.pools:
+            for root in pool.__roots__:
+                root.__paya_pool__ = pool
+
         pyMELIsPatched = True
 
         if not quiet:
             print("PyMEL patched successfully.")
-
 
 def unpatchPyMEL(quiet=False):
     """
@@ -80,6 +84,12 @@ def unpatchPyMEL(quiet=False):
     global pyMELIsPatched
 
     if pyMELIsPatched:
+        # Unpatch pool root classes
+        for pool in _pl.pools:
+            for root in pool.__roots__:
+                del(root.__paya_pool__)
+
+        # Unpatch instantiators
         for cls in classesToPatch:
             if '__old_new__' in cls.__dict__:
                 cls.__new__ = staticmethod(cls.__old_new__)

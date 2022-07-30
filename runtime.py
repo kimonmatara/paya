@@ -38,7 +38,7 @@ class Runtime:
         from paya.pools import pools
 
         for pool in pools:
-            setattr(self, pool.shortName, pool)
+            setattr(self, pool.shortName(), pool)
 
         self._pools = pools
 

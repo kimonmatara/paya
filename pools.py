@@ -1,261 +1,384 @@
-"""
-Defines the template class interfaces served by the ``nodes``,
-``plugs``, ``comps`` and ``data`` attributes on :py:mod:`paya.runtime`.
-
-This module is not intended for direct use.
-"""
-
 import inspect
-import sys
 import os
+import re
+import sys
 
-import maya.cmds as m
-import pymel.core.nodetypes as _nt
-import pymel.core.datatypes as _dt
-import pymel.core.general as _gen
+import pymel.core.nodetypes
+import pymel.core.general
+import pymel.core.datatypes
 
 import paya
-import paya.config as config
+from paya.util import path_to_dotpath
 import paya.plugtree as _pt
-from paya.util import cap, uncap, path_to_dotpath
 
-paya_root = os.path.dirname(paya.__file__)
-rootpkg = paya.__name__
+payaroot = os.path.dirname(paya.__file__)
 
-#------------------------------------------------------------|
-#------------------------------------------------------------|    Exceptions
-#------------------------------------------------------------|
+
+#----------------------------------------------------------------|
+#----------------------------------------------------------------|    Errors
+#----------------------------------------------------------------|
 
 class MissingTemplateError(RuntimeError):
     """
-    Raised when a module can't be found for a requested template class.
+    A template module could not be found for a requested class.
     """
-    pass
+
+class NoPyMELCounterpartError(RuntimeError):
+    """
+    Raised by a subclass of :class:`ShadowPool` when a PyMEL base
+    can't be found for a requested Paya class.
+    """
+
+class ClassTooBasicError(RuntimeError):
+    """
+    The class that was requested from a PyMEL-shadowing class pool is
+    an ancestor of one of the terminating classes in __roots__.
+    """
 
 class UnsupportedLookupError(RuntimeError):
     """
-    Raised when MatrixN or Array are requested from the 'data' pool.
+    The class pool does not allow lookups for the attempted name.
     """
-    pass
 
-#------------------------------------------------------------|
-#------------------------------------------------------------|    Misc
-#------------------------------------------------------------|
-
-def ispmcls(cls):
-    """
-    :param cls: The class to query
-    :return: ``True`` if the class is a 'vanilla' PyMEL class,
-        otherwise ``False``.
-    :rtype: bool
-    """
-    return cls.__module__.startswith('pymel.')
-
-def iscustomcls(cls):
-    """
-    :param cls: The class to query
-    :return: ``True`` if the class is a **paya** class,
-        otherwise ``False``.
-    :rtype: bool
-    """
-    return rootpkg in cls.__module__
-
-#------------------------------------------------------------|
-#------------------------------------------------------------|    paya metaclass
-#------------------------------------------------------------|
-
-class PayaMeta(type):
-    """
-    Base Paya metaclass. This is never used directly, but rather subclassed as
-    a mix-in for PyMEL's standard metaclasses.
-    """
-    def mro(cls):
-        """
-        Explicitly controls Paya class inheritance.
-        """
-        clsname = cls.__name__
-
-        defaultmro = super().mro()
-
-        # Build up a 'head' from the main class to the first encountered
-        # PyMEL namesake
-
-        outmro = [cls]
-        pickupindex = None
-        pmbase = None
-        pool = None
-
-        for i, mrocls in enumerate(defaultmro[1:],start=1):
-
-            outmro.append(mrocls)
-
-            if ispmcls(mrocls):
-                pickupindex = i+1
-                pmbase = mrocls
-                pool = getPoolFromPmBase(pmbase)
-                break
-
-        # If the terminator class wasn't encountered, continue
-        # to insert our classes into the inheritance
-
-        if pmbase in pool.__pm_root_classes__:
-            outmro += pmbase.__mro__[1:]
-
-        else:
-            for i, mrocls in enumerate(
-                    defaultmro[pickupindex:],
-                    start=pickupindex
-            ):
-                if ispmcls(mrocls):
-                    clsname = mrocls.__name__
-
-                    try:
-                        insertcls = pool.getByName(clsname)
-                        outmro += [insertcls,mrocls]
-
-                    except UnsupportedLookupError:
-                        outmro.append(mrocls)
-
-                    if mrocls in pool.__pm_root_classes__:
-                        outmro += defaultmro[i+1:]
-                        break
-
-                else:
-                    outmro.append(mrocls)
-
-        return outmro
-
-#------------------------------------------------------------|
-#------------------------------------------------------------|    Abstract base class
-#------------------------------------------------------------|
+#----------------------------------------------------------------|
+#----------------------------------------------------------------|    ABC
+#----------------------------------------------------------------|
 
 class ClassPool:
-    """
-    Abstract. Defines base functionality for all template class pools.
-    """
 
-    #-------------------------------------------------|    Config
-
+    __unsupported_lookups__ = []
     __singular__ = None # e.g. 'node'
     __plural__ = None # e.g. 'nodes'
+    __meta_base__ = type
 
-    __pm_mod__ = None # e.g. _nt
-    __pm_root_classes__ = None # e.g. [DependNode]
-
-    #-------------------------------------------------|    Instantiation
-
-    def __new__(cls):
-        if cls is ClassPool:
-            raise RuntimeError("Can't instantiate abstract base class.")
-
-        return object.__new__(cls)
-
-    #-------------------------------------------------|    Init
+    #------------------------------------------------------------|    Init
 
     def __init__(self):
         self._cache = {}
-        self._metacache = {}    # PM meta: paya: meta; never flushed
-        self._pmbasecache = {}  # name lookup: PM base; never flushed
 
-        self._longName = '{}types'.format(self.__singular__)
-        self._shortName = self.__plural__
-        self._dirPath = os.path.join(paya_root, self.longName)
-        self._dotPath = '.'.join([rootpkg, self._longName])
+    #------------------------------------------------------------|    Basic inspections
 
-    #-------------------------------------------------|    Info
-
-    @property
     def dirPath(self):
-        return self._dirPath
+        """
+        :return: The full directory path for the template package.
+        :rtype: str
+        """
+        return os.path.join(payaroot, self.__singular__+'types')
 
-    @property
-    def dotPath(self):
-        return self._dotPath
-
-    @property
     def longName(self):
-        return self._longName
+        """
+        :return: The long name of this pool, for example 'nodetypes'.
+        :rtype: str
+        """
+        return self.__singular__+'types'
 
-    @property
     def shortName(self):
-        return self._shortName
+        """
+        :return: The short name of this pool, for example 'nodes'.
+        :rtype: str
+        """
+        return self.__plural__
 
-    #-------------------------------------------------|    Class construction
+    #------------------------------------------------------------|    Purgings
 
-    def _getMeta(self, clsname):
-        pmbase = self._getPmBase(clsname)
-        pmmeta = type(pmbase)
+    def purge(self):
+        self._cache.clear()
 
-        metaname = pmmeta.__name__+'PayaMeta'
+        searchString = 'paya.'+self.longName()
+        modsToDelete = [name for name in sys.modules if searchString in name]
+
+        for modToDelete in modsToDelete:
+            del(sys.modules[modToDelete])
+
+        print("Purged class pool {}.".format(self))
+
+    #------------------------------------------------------------|    Retrieval
+
+    def getMeta(self, clsname):
+        """
+        :param str clsname: the name of the class being retrieved
+        :return: An appropriate metaclass for the requested class.
+        :rtype: type
+        """
+        return self.__meta_base__
+
+    def inventBasesDict(self, clsname):
+        """
+        :param clsname: the name of the class being retrieved
+        :raise NotImplementedError: Invention is not implemented for this pool.
+        :return: Bases and a dict that can be used to construct a stand-in
+            class in the absence of a template.
+        :rtype: (tuple, dict)
+        """
+        raise NotImplementedError(
+            "Invention is not implemented for this pool.")
+
+    def conformBases(self, clsname, bases):
+        """
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+        """
+        raise NotImplementedError
+
+    def conformDict(self, clsname, dct):
+        """
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+        """
+        dct = dct.copy()
+        dct['__module__'] = 'paya.{}.{}'.format(
+            self.longName(), clsname[0].lower()+clsname[1:])
+        dct['__paya_pool__'] = self
+
+        return dct
+
+    def getBasesDictFromTemplate(self, clsname):
+        """
+        Looks for a template for the requested class and, if one is found,
+        returns its conformed bases and dictionary.
+
+        :param clsname: the name of the class being retrieved
+        :return: The bases and dictionary.
+        :rtype: (tuple, dict)
+        """
+        dirpath = self.dirPath()
+        requiredModBasename = clsname[0].lower()+clsname[1:]
+        foundModuleFile = None
+
+        for root, dirs, files in os.walk(dirpath):
+            for fil in files:
+                head, tail = os.path.splitext(fil)
+
+                if (head and head[0] in ('.', '_')) \
+                        or (not head) \
+                        or (tail != '.py'):
+                    continue
+
+                if head == requiredModBasename:
+                    foundModuleFile = os.path.join(root, fil)
+
+
+        if foundModuleFile is None:
+            raise MissingTemplateError(
+                "Couldn't find template for class '{}'.".format(clsname)
+            )
+
+        # Convert the file path to a dotpath and source the module
+        modName = path_to_dotpath(foundModuleFile)
+        exec("import "+modName) in locals()
+
+        mod = eval(modName)
+
+        cls = getattr(mod, clsname)
+        bases = self.conformBases(clsname, cls.__bases__)
+        dct = self.conformDict(clsname, dict(cls.__dict__))
+
+        return bases, dct
+
+    def buildClass(self, clsname):
+        """
+        Builds a final class. If a template is available, it is used.
+        Otherwise, if this pool implements invention, the class is invented.
+        If this pool doesn't implement invention, an exception is raised.
+
+        :param str clsname: the name of the class to build
+        :raises MissingTemplateError: A template couldn't be found, and this
+            pool doesn't implement invention.
+        :return: The built class.
+        :rtype: type
+        """
+        try:
+            bases, dct = self.getBasesDictFromTemplate(clsname)
+
+        except MissingTemplateError as exc:
+            try:
+                bases, dct = self.inventBasesDict(clsname)
+
+            except NotImplementedError:
+                raise exc
+
+        # Build the class from the bases and the dict
+        meta = self.getMeta(clsname)
+        cls = type.__new__(meta, clsname, bases, dct)
+
+        # Modify the module field into a 'runtime' format only after
+        # the class is built
+        cls.__module__ = 'paya.runtime.'+self.shortName()
+
+        return cls
+
+    def getByName(self, clsname):
+        """
+        Retrieves a Paya class by name.
+
+        Previously-constructed classes are returned from a cache. If the class
+        is not in the cache then, if there's a template for it, information
+        from the template will be used to build the class. If there's no
+        template then, if this pool implements invention, the class will be
+        invented. Otherwise, an exception will be raised.
+
+        :param str clsname: the name of the class to retrieve
+        :raises MissingTemplateError: A template couldn't be found, and this
+            pool doesn't implement invention.
+        :return: The retrieved class.
+        :rtype: type
+        """
+        if clsname in self.__unsupported_lookups__:
+            raise UnsupportedLookupError(
+                "This class pool does not serve '{}'.".format(clsname)
+            )
 
         try:
-            return self._metacache[metaname]
+            return self._cache[clsname]
 
         except KeyError:
-            metacls = type(metaname, (PayaMeta, pmmeta), {})
-            self._metacache[metaname] = metacls
+            cls = self.buildClass(clsname)
+            self._cache[clsname] = cls
 
-            return metacls
+        return cls
 
-    def _getPreferredBase(self, clsname):
-        return self._getPmBase(clsname)
+    def __getitem__(self, clsname):
+        """
+        Keyed access using :meth:`getByName`.
+        """
+        return self.getByName(clsname)
 
-    def _getPmBase(self, clsname):
+    def __getattr__(self, clsname):
+        """
+        Dotted access uing :meth:`getByName`.
+        """
         try:
-            return self._pmbasecache[clsname]
+            return self.getByName(clsname)
 
-        except KeyError:
-            self._pmbasecache[clsname] = pmbase \
-                = getattr(self.__pm_mod__, clsname)
+        except:
+            raise AttributeError(
+                "Couldn't find attribute or class '{}'.".format(clsname)
+            )
 
-            return pmbase
+    #------------------------------------------------------------|    Repr
 
-    def _getTemplateFilePath(self, clsname):
+    def __repr__(self):
+        return 'paya.runtime.'+self.__plural__
+
+
+class ShadowPool(ClassPool):
+    """
+    Abstract base class for pools that directly shadow PyMEL namesakes.
+    """
+    __pm_mod__ = None # e.g. pymel.core.nodetypes
+    __roots__ = []
+
+    #------------------------------------------------------------|    Metaclass
+
+    class ShadowPoolMeta(type):
         """
-        Caution: For speed, this doesn't check for duplicates; the first
-        match is always returned.
+        Base metaclass for PyMEL-shadowing Paya classes.
         """
-        filename = '{}.py'.format(uncap(clsname))
 
-        for root, dirs, files in os.walk(self.dirPath):
-            for file in files:
-                if file == filename:
-                    return os.path.join(root, file)
+        def mro(cls):
+            """
+            Defines the method resolution order
 
-        raise MissingTemplateError(
-            "Couldn't find template file {} under {}".format(
-                filename, self.dirPath)
-        )
+            :return:
+            """
+            pool = cls.__dict__['__paya_pool__']
+            defaultmro = super().mro()
+            outmro = [cls]
 
-    def _getModuleSignature(self, clsname):
-        return '{}.{}'.format(self.dotPath, uncap(clsname))
+            # Basic idea: if a PyMEL class is encountered:
+            # 1) Ensure preceding member is a Paya shadow
+            # 2) If the PyMEL class is the pool's roots, append
+            # 3) the rest of the mro and bolt
 
-    def _getConformedBases(self, clsname, bases):
-        preferredBase = self._getPreferredBase(clsname)
+            for i, member in enumerate(defaultmro[1:], start=1):
+                modname = member.__dict__['__module__']
 
-        bases = [base for base in bases if base is not object]
+                if 'pymel.' in modname:
+                    previous = outmro[i-1]
 
-        if not any((issubclass(base, preferredBase) for base in bases)):
-            # If there's a custom user base class, leave it at index 0
-            # so that its branch gets evaluated first via multiple inheritance
-            bases.append(preferredBase)
+                    if not('paya.' in previous.__dict__['__module__'] \
+                           and previous.__name__ == member.__name__):
 
-        return tuple(bases)
+                        try:
+                            subclass = pool[member.__name__]
+                            outmro.append(subclass)
 
-    def _getConformedDict(self, clsname, dct):
-        dct = dict(dct)
+                        except UnsupportedLookupError:
+                            pass
 
-        dct['__module__'] = self._getModuleSignature(clsname)
-        dct['__pm_base__'] = pmbase = self._getPmBase(clsname)
+                    outmro.append(member)
 
-        # Insert an overriden __new__ that will prevent the paya class
-        # from ever being instantiated; instead, the PM base will be
-        # instantiated and __class__ reassigned on the instance.
+                    if member in pool.__roots__:
+                        outmro += defaultmro[i+1:]
+                        break
+
+                elif 'paya.' in modname:
+                    outmro.append(member)
+
+                else:
+                    outmro += defaultmro[i:]
+                    break
+
+            return outmro
+
+        def __new__(meta, clsname, bases, dct):
+            modname = dct['__module__']
+            longPoolName = re.match(
+                r"^.*?paya\.([^\.]+types).*$",
+                modname
+            ).groups()[0]
+
+            pool = globals()['poolsByLongName'][longPoolName]
+            dct['__paya_pool__'] = pool
+
+            return super().__new__(meta, clsname, bases, dct)
+
+
+    __meta_base__ = ShadowPoolMeta
+
+    #------------------------------------------------------------|    Init
+
+    def __init__(self):
+        super().__init__()
+        self.metacache = {}
+
+    #------------------------------------------------------------|    Retrieval
+
+    def getFromPyMELInstance(self, inst):
+        lookup = inst.__class__.__name__
+        return self.getByName(lookup)
+
+    def inventBasesDict(self, clsname):
+        """
+        :param clsname: the name of the class being retrieved
+        :raise NotImplementedError: Invention is not implemented for this pool.
+        :return: Bases and a dict that can be used to construct a stand-in
+            class in the absence of a template.
+        :rtype: (tuple, dict)
+        """
+        bases = self.conformBases(clsname, tuple())
+        dct = self.conformDict(clsname, {})
+
+        return bases, dct
+
+    def conformDict(self, clsname, dct):
+        dct = super().conformDict(clsname, dct).copy()
+        pmbase = self.getPmBase(clsname)
 
         if '__new__' in dct:
-            raise RuntimeError(
-                'Overriding __new__ on paya classes is not allowed.'
-            )
+            raise RuntimeError("Can't override __new__ on Paya classes.")
 
         def __new__(cls, *args, **kwargs):
             inst = pmbase.__new__(pmbase, *args, **kwargs)
@@ -264,197 +387,179 @@ class ClassPool:
             return inst
 
         dct['__new__'] = __new__
-
         return dct
 
-    def _getBasesDictFromTemplate(self, clsname):
-        # Source the template class from disk
 
-        filepath = self._getTemplateFilePath(clsname)
-        dotpath = path_to_dotpath(filepath)
+    def conformBases(self, clsname, bases):
+        """
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
 
-        exec("import {}".format(dotpath)) in locals()
-        mod = eval(dotpath)
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+        """
+        bases = [base for base in bases if base is not object]
+        requiredPmBase = self.getPmBase(clsname)
 
-        cls = getattr(mod, clsname)
+        if not any([issubclass(base, requiredPmBase) for base in bases]):
+            # Append, so that any user-inserted abstract classes can be
+            # evaluated first through multiple inheritance
+            bases.append(requiredPmBase)
 
-        return cls.__bases__, cls.__dict__
+        return tuple(bases)
 
-    def _getSpec(self, clsname):
+    def getMeta(self, clsname):
+        """
+        :param str clsname: the name of the class being retrieved
+        :return: An appropriate metaclass for the requested class.
+        :rtype: type
+        """
+        pmbase = self.getPmBase(clsname)
+        pmMeta = type(pmbase)
+
         try:
-            bases, dct = self._getBasesDictFromTemplate(clsname)
-
-        except MissingTemplateError:
-            bases, dct = (), {}
-
-        return self._getConformedBases(clsname, bases), \
-               self._getConformedDict(clsname, dct)
-
-    def _buildClass(self, clsname):
-        bases, dct = self._getSpec(clsname)
-        meta = self._getMeta(clsname)
-
-        return type.__new__(meta, clsname, bases, dct)
-
-    #-------------------------------------------------|    High-level access
-
-    def getFromPyMELInstance(self, inst):
-        """
-        Given a PyNode or PyMEL data type instance, returns a custom class
-        suitable for assignment.
-
-        :param inst: the PyNode or PyMEL data type instance
-        :return: The custom class.
-        """
-        lookup = inst.__class__.__name__
-        return self.getByName(lookup)
-
-    def getByName(self, clsname):
-        """
-        Returns a custom class by name.
-
-        :param str clsname: the name of the class to retrieve
-        :return: The custom class.
-        """
-        try:
-            return self._cache[clsname]
+            ourMeta = self.metacache[pmMeta]
 
         except KeyError:
-            newcls = self._buildClass(clsname)
-            self._cache[clsname] = newcls
+            ourMeta = self.__meta_base__
 
-            return newcls
+            if not issubclass(ourMeta, pmMeta):
+                # Dynamically construct a new meta to dodge compatibility
+                # issues
 
-    def __getitem__(self, clsname):
-        return self.getByName(clsname)
+                if ourMeta is type:
+                    # This pool has no defined metaclass, default to the
+                    # PM metaclass
+                    ourMeta = pmMeta
 
-    def __getattr__(self, item):
-        return self[item]
+                else:
+                    metaname = pmMeta.__name__+'PayaShadow'
+                    metabases = (ourMeta, pmMeta)
+                    metadict = dict(ourMeta.__dict__)
+                    ourMeta = type(metaname, metabases, metadict)
 
-    #-------------------------------------------------|    Clearing / reloading
+                self.metacache[pmMeta] = ourMeta
 
-    def purge(self):
+        return ourMeta
+
+    def getPmBase(self, clsname):
         """
-        Clears the cache so that subsequent class lookups will trigger
-        reloads.
+        :param str clsname: the class being retrieved
+        :return: A PyMEL base for the requested class.
+        :rtype: type
         """
-        self._cache.clear()
+        try:
+            pmbase = getattr(self.__pm_mod__, clsname)
 
-        modsToDelete = [name for name in sys.modules \
-                        if name.startswith(self.dotPath+'.')]
+            for root in self.__roots__:
+                if pmbase is root:
+                    break # ok
 
-        for modToDelete in modsToDelete:
-            del(sys.modules[modToDelete])
+                if issubclass(root, pmbase):
+                    raise ClassTooBasicError(
+                    "The pool does not support subclassing"+
+                    " from {}.".format(pmbase)
+                )
 
-        print("Purged class pool {}.".format(self))
+            return pmbase
 
-    #-------------------------------------------------|    Dict
+        except AttributeError:
+            raise NoPyMELCounterpartError(
+                ("No PyMEL base could be found for '{}' inside"+
+                " {}.").format(clsname, self.__pm_mod__)
+            )
 
-    @property
-    def keys(self):
-        return self._cache.keys
 
-    @property
-    def values(self):
-        return self._cache.values
-
-    @property
-    def items(self):
-        return self._cache.items
-
-    @property
-    def __len__(self):
-        return self._cache.__len__
-
-    @property
-    def __contains__(self):
-        return self._cache.__contains__
-
-    #-------------------------------------------------|    Repr
-
-    def __repr__(self):
-        return 'paya.{}'.format(self.shortName)
-
-#------------------------------------------------------------|
-#------------------------------------------------------------|    Pool classes
-#------------------------------------------------------------|
-
-class NodeClassPool(ClassPool):
-    """
-    Serves custom classes for **nodes**.
-    """
+class NodeClassPool(ShadowPool):
 
     __singular__ = 'node'
     __plural__ = 'nodes'
-    __pm_mod__ = _nt
-    __pm_root_classes__ = [_nt.DependNode]
+    __pm_mod__ = pymel.core.nodetypes
+    __roots__ = [pymel.core.nodetypes.DependNode]
 
 nodes = NodeClassPool()
 
 
-class PlugClassPool(ClassPool):
-    """
-    Serves custom classes for **plugs** (attributes) off of an inheritance tree
-    defined inside ``paya/plugtree.json``.
-    """
-
-    __singular__ = 'plug'
-    __plural__ = 'plugs'
-    __pm_mod__ = _gen
-    __pm_root_classes__ = [_gen.Attribute]
-
-    #-------------------------------------------------|    Class construction
-
-    def _getPmBase(self, *args):
-        # Always return Attribute for plugs, since PyMEL doesn't
-        # furnish any other types
-        return self.__pm_root_classes__[0]
-
-    def _getPreferredBase(self, clsname):
-        if clsname == 'Attribute':
-            return self.__pm_root_classes__[0]
-
-        typePath = _pt.getPath(clsname)
-        return self.getByName(typePath[-2])
-
-    #-------------------------------------------------|    High-level access
-
-    def getFromPyMELInstance(self, inst):
-        """
-        Overloads :py:meth:`ClassPool.getFromPyMELInstance` to implement
-        ``MPlug`` inspections.
-
-        :param inst: the PyNode or PyMEL data type instance
-        :return: The custom class.
-        """
-        mplug = inst.__apimplug__()
-        lookup = _pt.getTypeFromMPlug(mplug)
-
-        return self.getByName(lookup)
-
-plugs = PlugClassPool()
-
-
-class CompClassPool(ClassPool):
-    """
-    Serves custom classes for **components**.
-    """
-
+class CompClassPool(ShadowPool):
     __singular__ = 'comp'
     __plural__ = 'comps'
-    __pm_mod__ = _gen
-    __pm_root_classes__ = [_gen.Component]
+    __pm_mod__ = pymel.core.general
+    __roots__ = [pymel.core.general.Component]
+
 
 comps = CompClassPool()
 
 
+class PlugClassPool(ShadowPool):
+
+    __singular__ = 'plug'
+    __plural__ = 'plugs'
+    __pm_mod__ = pymel.core.general
+    __roots__ = [pymel.core.general.Attribute]
+
+    def getFromPyMELInstance(self, inst):
+        mplug = inst.__apimplug__()
+        lookup = _pt.getTypeFromMPlug(mplug)
+        return self.getByName(lookup)
+
+    def getPmBase(self, clsname):
+        """
+        :param str clsname: the class being retrieved
+        :return: A PyMEL base for the requested class.
+        :rtype: type
+        """
+        return pymel.core.general.Attribute
+
+    def conformBases(self, clsname, bases):
+        """
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+        """
+        # Requirements:
+        # The classname must be in the plugtree.
+        # The last of the bases must be a subclass of the plugtree
+        # base.
+
+        bases = [base for base in bases if base is not object]
+
+        ptPath = _pt.getPath(clsname)
+        ln = len(ptPath)
+
+        if ln is 1:
+            requiredBase = pymel.core.general.Attribute
+
+        elif ln is 2:
+            requiredBase = self['Attribute']
+
+        else:
+            requiredBase = self[ptPath[-2]]
+
+        if not any([issubclass(
+                base, requiredBase) for base in bases]):
+            bases.append(requiredBase)
+
+        return tuple(bases)
+
+
+plugs = PlugClassPool()
+
 def getRootDataClasses():
-    classes = [pair[1] for pair in inspect.getmembers(_dt, inspect.isclass)]
+    classes = [pair[1] for pair in \
+           inspect.getmembers(pymel.core.datatypes, inspect.isclass)]
 
     out = []
 
     for cls in classes:
-        mro = list(reversed(cls.__mro__))
+        mro = cls.__mro__[::-1]
 
         for anc in mro[1:]:
             if anc.__module__ == 'builtins':
@@ -468,53 +573,105 @@ def getRootDataClasses():
 
     return list(set(out))
 
-class DataClassPool(ClassPool):
-    """
-    Serves custom classes for **data objects**, for example
-    :class:`~pymel.core.datatypes.Matrix` instances returned by
-    :py:meth:`~pymel.core.nodetypes.Transform.getMatrix`.
-    """
 
-    __unsupported_lookups__ = ['VectorN', 'MatrixN', 'Array']
+class DataClassPool(ShadowPool):
 
     __singular__ = __plural__ = 'data'
-    __pm_mod__ = _dt
+    __roots__ = getRootDataClasses()
+    __pm_mod__ = pymel.core.datatypes
+    __unsupported_lookups__ = ['VectorN', 'MatrixN', 'Array']
 
-    __pm_root_classes__ = getRootDataClasses()
-
-    def getByName(self, clsname):
-        """
-        Overloads :py:meth:`ClassPool.getByName` to prevent customisation of
-        sensitive types such as :py:class:`pymel.core.datatypes.MatrixN` by
-        raising ``UnsupportedLookupError``.
-
-        :param str clsname: the name of the class to retrieve
-        :return: The custom class.
-        """
-        if clsname in self.__unsupported_lookups__:
-            raise UnsupportedLookupError(
-                "Pool {} can't serve class '{}'".format(self, clsname)
-                )
-
-        return super().getByName(clsname)
 
 data = DataClassPool()
 
-pools = [nodes, plugs, comps, data]
 
-poolLookupsCache = {}
+class ParsedSubtypePool(ShadowPool):
 
-def getPoolFromPmBase(pmbase):
-    """
-    Given a PyMEL base class, returns the most appropriate class pool
-    to source a swap-in from.
-    """
-    try:
-        return poolLookupsCache[pmbase]
+    __pm_mod__ = pymel.core.nodetypes
+    __roots__ = [pymel.core.nodetypes.Network]
 
-    except KeyError:
-        for cls in pmbase.__mro__:
-            for pool in pools:
-                if cls in pool.__pm_root_classes__:
-                    poolLookupsCache[pmbase] = pool
-                    return pool
+    class ParsedSubtypePoolMeta(type):
+        """
+        Base metaclass for PyMEL-shadowing Paya classes.
+        """
+        pass
+
+    __meta_base__ = ParsedSubtypePoolMeta
+
+    def getCrossPoolRoot(self):
+        raise NotImplementedError
+
+    def conformBases(self, clsname, bases):
+        bases = [b for b in bases if b is not object]
+        root = self.getCrossPoolRoot()
+
+        if not any([issubclass(b, root) for b in bases]):
+            bases.append(root)
+
+        return tuple(bases)
+
+    def conformDict(self, clsname, dct):
+        dct = ClassPool.conformDict(self, clsname, dct).copy()
+
+        if '__new__' in dct:
+            raise RuntimeError("Can't override __new__ on Paya classes.")
+
+        return dct
+
+    def getMeta(self, clsname):
+        """
+        :param str clsname: the name of the class being retrieved
+        :return: An appropriate metaclass for the requested class.
+        :rtype: type
+        """
+        root = self.getCrossPoolRoot()
+        baseMeta = type(root)
+
+        try:
+            ourMeta = self.metacache[baseMeta]
+
+        except KeyError:
+            ourMeta = self.__meta_base__
+
+            if not issubclass(ourMeta, baseMeta):
+                # Dynamically construct a new meta to dodge compatibility
+                # issues
+
+                if ourMeta is type:
+                    # This pool has no defined metaclass, default to the
+                    # base metaclass
+                    ourMeta = baseMeta
+
+                else:
+                    metaname = baseMeta.__name__+'PayaShadow'
+                    metabases = (ourMeta, baseMeta)
+                    metadict = dict(ourMeta.__dict__)
+                    ourMeta = type(metaname, metabases, metadict)
+
+                self.metacache[baseMeta] = ourMeta
+
+        return ourMeta
+
+    def inventBasesDict(self, clsname):
+        raise NotImplementedError(
+            "Invention is not implemented for this pool.")
+
+
+class NetworkSubtypesPool(ParsedSubtypePool):
+
+    __singular__ = 'network'
+    __plural__ = 'networks'
+
+    def getCrossPoolRoot(self):
+        return nodes['Network']
+
+
+networks = NetworkSubtypesPool()
+
+#----------------------------------------------------------------|
+#----------------------------------------------------------------|    REGISTRY
+#----------------------------------------------------------------|
+
+pools = [nodes, comps, plugs, data, networks]
+poolsByShortName = {pool.shortName(): pool for pool in pools}
+poolsByLongName = {pool.longName():pool for pool in pools}
