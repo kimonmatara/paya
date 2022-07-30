@@ -678,8 +678,8 @@ class Math1D:
 
     #--------------------------------------------------------------------|    Blending
 
-    @short(weight='w')
-    def blend(self,other,weight=0.5):
+    @short(weight='w', swap='sw')
+    def blend(self, other, weight=0.5, swap=False):
         """
         Blends this output towards ``other``.
 
@@ -687,12 +687,13 @@ class Math1D:
         :type other: 1D value type, or :class:`Math1D`
         :param weight/w: 'other' will be fully active at 1.0; defaults to 0.5
         :type weight/w: 1D value type or :class:`Math1D`
+        :param bool swap/sw: swap operands; defaults to False
         :return: The blended output.
         :rtype: :class:`Math1D`
         """
         node = r.nodes.BlendTwoAttr.createNode()
-        self >> node.attr('input')[0]
-        other >> node.attr('input')[1]
+        self >> node.attr('input')[1 if swap else 0]
+        other >> node.attr('input')[0 if swap else 1]
         weight >> node.attr('attributesBlender')
 
         return node.attr('output')
