@@ -116,16 +116,19 @@ class Angle:
     )
     def unwindSwitch(
             self,
-            switchAttr,
+            switchSource,
             shortestIndex=0,
             positiveIndex=1,
             negativeIndex=2
     ):
         """
-        Unwinds this angle using a mode picked from a user switcher attribute.
+        Unwinds this angle using a mode picked using an integer value or plug
+        (typically an animator switcher attribute).
 
-        :param switchAttr: an attribute of type ``enum`` or ``int``
-        :type switchAttr: str, :class:`~paya.runtime.plugs.Math1D`
+        :param switchSource: either an integer value to pick an
+            implementation, or an attribute of type ``enum`` or ``int`` to
+            switch between all implementations
+        :type switchSource: int, str, :class:`~paya.runtime.plugs.Math1D`
         :param int shortestIndex/si: the attribute output value that should
             activate 'shortest' mode; defaults to 0
         :param int positiveIndex/pi: the attribute output value that should
@@ -135,50 +138,74 @@ class Angle:
         :return: The switched output.
         :rtype: :class:`Angle`
         """
-        switchAttr = r.Attribute(switchAttr)
+        if isinstance(switchSource, r.Attribute):
+            switchIsPlug = True
 
-        unwound = self.unwind()
-        wind = _pu.radians(360.0)
+        elif isinstance(switchSource, str):
+            switchSource = r.Attribute(switchSource)
+            switchIsPlug = True
 
-        #------------------------|    Positive
+        elif isinstance(switchSource, int):
+            switchIsPlug = False
 
-        isNeg = unwound.lt(0.0)
+        else:
+            raise TypeError("Switch source not an integer or integer plug.")
 
-        correctedToPositive = isNeg.ifElse(
-            wind + unwound,
-            unwound
-        )
+        if switchIsPlug:
+            unwound = self.unwind()
+            wind = _pu.radians(360.0)
 
-        #------------------------|    Negative
+            #------------------------|    Positive
 
-        correctedToNegative = isNeg.ifElse(
-            unwound,
-            unwound-wind
-        )
+            isNeg = unwound.lt(0.0)
 
-        #------------------------|    Shortest
-
-        over180 = unwound.gt(_pu.radians(180))
-        under180 = unwound.lt(_pu.radians(-180))
-
-        over180Correction = unwound-_pu.radians(360.0)
-        under180Correction = _pu.radians(360.0)+unwound
-
-        shortestCorrection = over180.ifElse(
-            over180Correction,
-            under180.ifElse(
-                under180Correction,
+            correctedToPositive = isNeg.ifElse(
+                wind + unwound,
                 unwound
-            ))
+            )
 
-        #------------------------|    Switch
+            #------------------------|    Negative
 
-        pairs = zip(
-            [shortestIndex, positiveIndex, negativeIndex],
-            [shortestCorrection, correctedToPositive, correctedToNegative]
-        )
+            correctedToNegative = isNeg.ifElse(
+                unwound,
+                unwound-wind
+            )
 
-        pairs = list(sorted(pairs, key=lambda x: x[0]))
-        outputs = [pair[1] for pair in pairs]
+            #------------------------|    Shortest
 
-        return switchAttr.choose(outputs).setClass(type(self))
+            over180 = unwound.gt(_pu.radians(180))
+            under180 = unwound.lt(_pu.radians(-180))
+
+            over180Correction = unwound-_pu.radians(360.0)
+            under180Correction = _pu.radians(360.0)+unwound
+
+            shortestCorrection = over180.ifElse(
+                over180Correction,
+                under180.ifElse(
+                    under180Correction,
+                    unwound
+                ))
+
+            #------------------------|    Switch
+
+            pairs = zip(
+                [shortestIndex, positiveIndex, negativeIndex],
+                [shortestCorrection, correctedToPositive, correctedToNegative]
+            )
+
+            pairs = list(sorted(pairs, key=lambda x: x[0]))
+            outputs = [pair[1] for pair in pairs]
+
+            return switchSource.choose(outputs).setClass(type(self))
+
+        else:
+            pairs = zip(
+                [shortestIndex, positiveIndex, negativeIndex],
+                [self.unwindShortest, self.unwindPositive,
+                                    self.unwindNegative]
+            )
+
+            pairs = list(sorted(pairs, key=lambda x: x[0]))
+            method = pairs[switchSource][1]
+
+            return method()

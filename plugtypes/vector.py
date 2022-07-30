@@ -125,16 +125,20 @@ class Vector:
     @short(
         weight='w',
         swap='sw',
+        byVectorAngle='bva',
+        clockNormal='cn',
         includeLength='ilg',
-        byVectorAngle='bva'
+        unwindSwitch='uws'
     )
     def blend(
             self,
             other,
             weight=0.5,
             swap=False,
+            byVectorAngle=None,
             includeLength=False,
-            byVectorAngle=False
+            clockNormal=None,
+            unwindSwitch=None
     ):
         """
         :param other: the vector that will be fully active when 'weight'
@@ -146,12 +150,38 @@ class Vector:
         :param bool swap/sw: swap operands around; defaults to False
         :param bool byVectorAngle/bva: blend by rotating one vector towards
             the other, rather than via linear value interpolation; defaults
-            to False
-        :param bool includeLength/ilg: ignored if 'byVectorAngle' is False;
-            blend vector lengths (magnitudes) as well; defaults to False
+            to ``True`` if *clockNormal* is provided, otherwise ``False``
+        :param bool includeLength/ilg: blend vector lengths (magnitudes)
+            as well; defaults to False
+        :param clockNormal/cn: an optional winding vector; providing this
+            will enable the unwinding options when blending by angle;
+            defaults to None
+        :type clockNormal/cn: None, tuple, list, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param unwindSwitch/uws: ignored if *clockNormal* was omitted; an
+            integer value or plug to pick an angle unwinding mode:
+
+            - ``0`` for shortest (the default)
+            - ``1`` for positive
+            - ``2`` for negative
+
+        :type unwindSwitch/uws: int, str, :class:`~paya.runtime.plugs.Math1D`
         :return: The blended vector.
         :rtype: :class:`paya.runtime.plugs.Vector`
         """
+        #---------------------------------------------|    Wrangle args
+
+        byVectorAngle = byVectorAngle or (clockNormal is not None)
+
+        if unwindSwitch is None:
+            unwindSwitch = 0
+
+        elif clockNormal is None:
+            raise ValueError(
+                "A clock normal is required to perform angle unwinding."
+            )
+
         other, otherDim, otherIsPlug = _mo.info(other)
 
         if swap:
@@ -165,16 +195,22 @@ class Vector:
             secondIsPlug = otherIsPlug
 
         if byVectorAngle:
-            cross = first.cross(second)
-            baseAngle = first.angle(second)
-            targetAngle = baseAngle * weight
-            outVector = first.rotateByAxisAngle(cross, targetAngle)
 
-            if includeLength:
-                targetLength = first.length().blend(second.length(), w=weight)
-                outVector = outVector.normal() * targetLength
+            #-----------------------------------------|    Angle impl
+
+            angle = first.angle(second, cn=clockNormal)
+            angle = angle.unwindSwitch(unwindSwitch)
+
+            if not clockNormal:
+                clockNormal = first.cross(second)
+
+            angle *= weight
+            outVector = first.rotateByAxisAngle(clockNormal, angle)
 
         else:
+
+            #-----------------------------------------|    Linear impl
+
             node = r.nodes.BlendColors.createNode()
             node.attr('color2').put(first, p=firstIsPlug)
             node.attr('color1').put(second, p=secondIsPlug)
@@ -182,7 +218,21 @@ class Vector:
 
             outVector = node.attr('output')
 
+        if includeLength:
+            firstLength = first.length()
+            secondLength = second.length()
+
+            if firstIsPlug:
+                length = firstLength.blend(secondLength, w=weight)
+
+            else:
+                length = secondLength.blend(
+                    firstLength, w=weight, sw=True)
+
+            outVector = outVector.normal() * length
+
         return outVector
+
 
     def rotateByAxisAngle(self, axisVector, angle):
         """
@@ -281,7 +331,7 @@ class Vector:
         else:
             complete = True
             clockNormal, cnDim, cnIsPlug = _mo.info(clockNormal)
-            cross = self.cross(clockNormal)
+            cross = self.cross(clockNormal) # correct
 
         ab = r.createNode('angleBetween')
         self >> ab.attr('vector1')

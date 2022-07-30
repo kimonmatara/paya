@@ -367,21 +367,22 @@ class Vector:
     @short(
         weight='w',
         swap='sw',
+        byVectorAngle='bva',
+        clockNormal='cn',
         includeLength='ilg',
-        byVectorAngle='bva'
+        unwindSwitch='uws'
     )
     def blend(
             self,
             other,
             weight=0.5,
             swap=False,
+            byVectorAngle=None,
             includeLength=False,
-            byVectorAngle=False
+            clockNormal=None,
+            unwindSwitch=None
     ):
         """
-        If 'other' or 'weight' is a plug, then the return will also be a
-        plug.
-
         :param other: the vector that will be fully active when 'weight'
             is 1.0 (or 0.0, if 'swap' is True)
         :type other: list, tuple, :class:`paya.runtime.data.Vector`,
@@ -391,14 +392,46 @@ class Vector:
         :param bool swap/sw: swap operands around; defaults to False
         :param bool byVectorAngle/bva: blend by rotating one vector towards
             the other, rather than via linear value interpolation; defaults
-            to False
-        :param bool includeLength/ilg: ignored if 'byVectorAngle' is False;
-            blend vector lengths (magnitudes) as well; defaults to False
+            to ``True`` if *clockNormal* is provided, otherwise ``False``
+        :param bool includeLength/ilg: blend vector lengths (magnitudes)
+            as well; defaults to False
+        :param clockNormal/cn: an optional winding vector; providing this
+            will enable the unwinding options when blending by angle;
+            defaults to None
+        :type clockNormal/cn: None, tuple, list, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param int unwindSwitch/uws: ignored if *clockNormal* was omitted; an
+            integer value to pick an angle unwinding mode:
+
+            - ``0`` for shortest (the default)
+            - ``1`` for positive
+            - ``2`` for negative
+
         :return: The blended vector.
-        :rtype: :class:`paya.runtime.data.Vector` or
-            :class:`paya.runtime.plugs.Vector`
+        :rtype: :class:`paya.runtime.plugs.Vector`,
+            :class:`paya.runtime.data.Vector`
         """
+        #---------------------------------------------|    Wrangle args
+
+        byVectorAngle = byVectorAngle or (clockNormal is not None)
+
+        if unwindSwitch is None:
+            unwindSwitch = 0
+
+        elif clockNormal is None:
+            raise ValueError(
+                "A clock normal is required to perform angle unwinding."
+            )
+
         other, otherDim, otherIsPlug = _mo.info(other)
+
+        if clockNormal:
+            clockNormal, cnDim, cnIsPlug = _mo.info(clockNormal)
+
+        else:
+            cnIsPlug = False
+
         weight, weightDim, weightIsPlug = _mo.info(weight)
 
         if swap:
@@ -412,40 +445,47 @@ class Vector:
             secondIsPlug = otherIsPlug
 
         if byVectorAngle:
-            cross = first.cross(second)
-            baseAngle = first.angle(second)
-            targetAngle = baseAngle * weight
-            outVector = first.rotateByAxisAngle(cross, targetAngle)
 
-            if includeLength:
-                firstLength = first.length()
-                secondLength = second.length()
+            #-----------------------------------------|    Angle impl
 
-                if firstIsPlug:
-                    targetLength = firstLength.blend(secondLength, w=weight)
+            angle = first.angle(second, cn=clockNormal)
+            angle = angle.unwindSwitch(unwindSwitch)
 
-                elif secondIsPlug:
-                    targetLength = secondLength.blend(
-                        firstLength, w=weight, swap=True)
+            if not clockNormal:
+                clockNormal = first.cross(second)
 
-                else:
-                    targetLength = _pu.blend(
-                        firstLength, secondLength, weight=weight
-                    )
-
-                outVector = outVector.normal() * targetLength
+            angle *= weight
+            outVector = first.rotateByAxisAngle(clockNormal, angle)
 
         else:
-            if any([firstIsPlug, secondIsPlug, weightIsPlug]):
+
+            #-----------------------------------------|    Linear impl
+
+            if otherIsPlug or weightIsPlug:
                 node = r.nodes.BlendColors.createNode()
                 node.attr('color2').put(first, p=firstIsPlug)
                 node.attr('color1').put(second, p=secondIsPlug)
-                node.attr('blender').put(weight, weightIsPlug)
+                weight >> node.attr('blender')
 
                 outVector = node.attr('output')
 
             else:
                 outVector = _pu.blend(first, second, weight=weight)
+
+        if includeLength:
+            firstLength = first.length()
+            secondLength = second.length()
+
+            if firstIsPlug:
+                length = firstLength.blend(secondLength, weight=weight)
+
+            elif secondIsPlug:
+                length = secondLength.blend(firstLength, w=weight, sw=True)
+
+            else:
+                length = _pu.blend(firstLength, secondLength, w=weight)
+
+            outVector = outVector.normal() * length
 
         return outVector
         
@@ -584,10 +624,11 @@ class Vector:
             hasPlugs = cnIsPlug or otherIsPlug
 
         if complete:
-            cross = self.cross(clockNormal)
+            cross = self.cross(clockNormal) # correct
 
         if hasPlugs:
             ab = r.createNode('angleBetween')
+
             ab.attr('vector1').set(self)
             ab.attr('vector2').put(other, p=otherIsPlug)
 
@@ -602,10 +643,12 @@ class Vector:
             angle = _dt.Vector.angle(self, other)
 
             if complete:
-                dot = self.dot(other, normalize=True)
+                dot = cross.dot(other, normalize=True)
 
                 if dot > 0.0:
                     angle = _pu.radians(360.0)-angle
+
+            angle = r.data.Angle(angle, unit='radians')
 
         return angle
 

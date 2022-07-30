@@ -1,4 +1,5 @@
 import pymel.util as _pu
+from paya.util import short
 import paya.runtime as r
 
 
@@ -56,3 +57,40 @@ class Angle:
                 unwound -= wind
 
         return type(self)(unwound, unit=unit)
+
+    @short(
+        shortestIndex='si',
+        positiveIndex='pi',
+        negativeIndex='ni'
+    )
+    def unwindSwitch(
+            self,
+            switchSource,
+            shortestIndex=0,
+            positiveIndex=1,
+            negativeIndex=2
+    ):
+        """
+        Unwinds this angle using a mode picked using an integer value.
+
+        :param switchSource: an integer value to pick an implementation
+        :type switchSource: int
+        :param int shortestIndex/si: the integer value that should pick
+            :meth:`unwindShortest`; defaults to 0
+        :param int positiveIndex/pi: the integer value that should pick
+            :meth:`unwindPositive`; defaults to 1
+        :param int negativeIndex/ni: the integer value that should pick
+            :meth:`unwindNegative`; defaults to 2
+        :return: The switched output.
+        :rtype: :class:`Angle`
+        """
+        pairs = [
+            (shortestIndex, self.unwindShortest),
+            (positiveIndex, self.unwindPositive),
+            (negativeIndex, self.unwindNegative)
+            ]
+
+        pairs = list(sorted(pairs, key=lambda x: x[0]))
+        method = pairs[switchSource][1]
+
+        return method()
