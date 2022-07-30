@@ -1572,7 +1572,6 @@ class NurbsCurve:
         points = [r.pointPosition(cv, world=True) for cv in cvs]
 
         groups = []
-
         usedIndices = []
 
         for i, startCV, startPoint in zip(indices, cvs, points):
