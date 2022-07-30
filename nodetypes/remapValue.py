@@ -6,9 +6,9 @@ import paya.runtime as r
 #-----------------------------------------------------------|   Errors
 #-----------------------------------------------------------|
 
-class NoExistingSampleError(RuntimeError):
+class NoCloneForParamError(RuntimeError):
     """
-    No existing sample was found.
+    No clone was found for the specified sample parameter.
     """
 
 #-----------------------------------------------------------|
@@ -104,24 +104,6 @@ class RemapValue:
 
             r.removeMultiInstance(plug, b=True)
 
-    def _findValueSample(self, position):
-        position, pdim, pisplug = _mo.info(position)
-
-        clones = self.getClones()
-
-        for clone in clones:
-            inputs = clone.attr('inputValue').inputs(plugs=True)
-
-            if inputs and pisplug:
-                if inputs[0] == position:
-                    return clone.attr('outValue')
-
-            elif (not inputs) and (not pisplug):
-                if clone.attr('inputValue').get() == position:
-                    return clone.attr('outValue')
-
-        raise NoExistingSampleError
-
     @short(reuse='re')
     def sampleValue(self, position, reuse=True):
         """
@@ -135,9 +117,9 @@ class RemapValue:
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
         try:
-            return self._findValueSample(position)
+            return self.findCloneWithPosition(position).attr('outValue')
 
-        except NoExistingSampleError:
+        except NoCloneForParamError:
             clone = self.createClone()
             clone.attr('inputValue').release()
             position >> clone.attr('inputValue')
@@ -230,19 +212,26 @@ class RemapValue:
 
             r.removeMultiInstance(plug, b=True)
 
+    @short(reuse='re')
     def sampleColor(self, position):
         """
         Samples an interpolated color at the specified position.
 
         :param position: the position at which to sample a color
         :type position: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool reuse/re: look for an existing sample for the same
+            position value or plug; defaults to True
         :return: The color sample output.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        clone = self.createClone()
-        clone.attr('inputValue').release()
-        position >> clone.attr('inputValue')
-        return clone.attr('outColor')
+        try:
+            return self.findCloneWithPosition(position).attr('outColor')
+
+        except NoCloneForParamError:
+            clone = self.createClone()
+            clone.attr('inputValue').release()
+            position >> clone.attr('inputValue')
+            return clone.attr('outColor')
 
     #-------------------------------------------------------|    State management
 
@@ -382,6 +371,31 @@ class RemapValue:
             if output.attrName() == 'cloneMaster']
 
         return [output.node() for output in outputs]
+
+    def findCloneWithPosition(self, position):
+        """
+        :param position: the position value or plug
+        :type position: float, :class:`~paya.runtime.plugs.Math1D`
+        :raises NoCloneForParamError: No clone was found.
+        :return: An existing clone configured for the specified position.
+        :rtype: :class:`RemapValue`
+        """
+        position, pdim, pisplug = _mo.info(position)
+
+        clones = self.getClones()
+
+        for clone in clones:
+            inputs = clone.attr('inputValue').inputs(plugs=True)
+
+            if inputs and pisplug:
+                if inputs[0] == position:
+                    return clone.attr('outValue')
+
+            elif (not inputs) and (not pisplug):
+                if clone.attr('inputValue').get() == position:
+                    return clone.attr('outValue')
+
+        raise NoExistingSampleError
 
     def updateClones(self):
         """
