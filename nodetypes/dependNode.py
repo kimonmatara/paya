@@ -1,9 +1,11 @@
 import pymel.util as _pu
 import paya.lib.names as _nm
 import paya.lib.attrs as _atr
-from paya.util import short, resolveFlags
+from paya.util import short, resolveFlags, LazyModule
 import paya.lib.names as _nm
-import paya.runtime as r
+# import paya.runtime as r
+
+r = LazyModule('paya.runtime')
 
 
 class MakeName(object):
@@ -48,6 +50,30 @@ class MakeName(object):
 
 
 class DependNode:
+
+    #-----------------------------------------------------------|    Subtype management
+
+    __is_parsed_subtype__ = False
+    __supports_parsed_subtypes__ = False
+    __subtype_pool__ = None
+
+    def expandClass(self):
+        if self.__supports_parsed_subtypes__:
+            pool = self.__subtype_pool__
+
+            if self.hasAttr('payaSubtype'):
+                attr = self.attr('payaSubtype')
+                clsname = attr.get()
+                clsname = clsname[0].upper()+clsname[1:]
+
+                try:
+                    self.__class__ = pool[clsname]
+
+                except:
+                    r.warning(("Subtype '{}' could "+
+                        "not be retrieved.").format(clsname))
+
+        return self
 
     #-----------------------------------------------------------|    Name management
 
@@ -108,20 +134,6 @@ class DependNode:
 
     #-----------------------------------------------------------|    Constructors
 
-    # Remove this if we never end up using it
-    # @classmethod
-    # def getFactoryConstructor(cls):
-    #     """
-    #     :return: A 'factory' constructor retrieved via
-    #         :mod:`maya.internal.common.cmd.base`, where available.
-    #     :rtype: None or callable
-    #     """
-    #     import maya.internal.common.cmd.base as mayaCmdBase
-    #
-    #     cls = mayaCmdBase.getCommandClass(
-    #         '{}.cmd_create'.format(cls.__melnode__))
-    #     return cls().execute
-
     @classmethod
     @short(name='n')
     def createNode(cls, name=None):
@@ -135,7 +147,16 @@ class DependNode:
         :rtype: :class:`~pymel.core.general.PyNode`
         """
         name = cls.makeName(name)
-        return r.createNode(cls.__melnode__, n=name)
+        out = r.createNode(cls.__melnode__, n=name)
+
+        if cls.__is_parsed_subtype__:
+            attr = out.addAttr('payaSubtype', dt='string', hidden=True)
+            clsname = cls.__name__
+            typename = clsname[0].lower()+clsname[1:]
+            attr.set(typename)
+            out.__class__ = cls.__subtype_pool__[clsname]
+
+        return out
 
     @classmethod
     def createFromMacro(cls, macro, **overrides):
