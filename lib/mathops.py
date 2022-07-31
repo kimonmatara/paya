@@ -1256,13 +1256,21 @@ def forceVectorsAsPlugs(vectors):
 
 @nativeUnits
 @short(ratios='rat', unwindSwitch='uws')
-def blendCurveNormalSets(tangents, normalsA,
-                      normalsB, ratios=None, unwindSwitch=0):
+def blendCurveNormalSets(normalsA, normalsB,
+            tangents, ratios=None, unwindSwitch=0):
     """
     Blends between two sets of normals along a curve. The number of
     tangents, normalsA, normalsB and ratios must be the same. If any inputs
     are plugs then the outputs will also be plugs.
 
+    :param normalsA: the first set of normals
+    :type normalsA: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param normalsB: the first set of normals
+    :type normalsB: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
     :param tangents: the curve tangents around which to rotate the normals
     :type tangents: [list, tuple,
         :class:`~paya.runtime.data.Vector`,
@@ -1398,7 +1406,9 @@ def blendBetweenCurveNormals(startNormal,
     if fwds:
         if bwds:
             return blendCurveNormalSets(
-                fwds, bwds, rat=ratios, uws=unwindSwitch)
+                fwds, bwds, tangents,
+                rat=ratios, uws=unwindSwitch
+            )
 
         return fwds
 
