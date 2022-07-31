@@ -1,68 +1,69 @@
-from paya.util import short
 import paya.lib.plugops as _po
 import paya.runtime as r
+from paya.util import short
+
 
 
 class CurveAimUpGenerator(r.networks.CurveUpGenerator):
     """
-    Derives curve up vector plugs based on interest points sampled from an
-    'aim' curve, similar to how the ``curveWarp`` deformer does it.
+    Curve up vector generator that pulls interest points from an 'aim'
+    curve, similar to the option on
+    :class:`curveWarp <paya.runtime.nodes.CurveWarp>` deformers.
     """
-
-    #----------------------------------------------------|    Constructor
 
     @classmethod
     @short(closestPoint='cp')
-    def create(cls, mainCurve, aimCurve, closestPoint=True):
+    def create(cls, curve, aimCurve, closestPoint=True):
         """
+        :param curve: the main curve
+        :type curve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
         :param aimCurve: the aim curve
-        :type aimCurve: str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurves`
+        :type aimCurve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
         :param bool closestPoint/cp: pull points from the aim curve
-            by proximity rather than matched parameter; defaults to
+            based on proximity, not matched parameter; defaults to
             True
-        :return: An up-vector sampler system based on an aim curve.
-        :rtype: :class:`CurveAimUpGenerator`.
+        :return: The network node for the up vector sample system.
+        :rtype: :class:`~paya.runtime.nodes.Network`
         """
-        curvePlug = _po.asGeoPlug(mainCurve, worldSpace=True)
-        nameElems = (curvePlug.node().basename(), 'aim_curve_up')
+        # Wrangle args
+        curve = _po.asGeoPlug(curve, ws=True)
+        aimCurve = _po.asGeoPlug(aimCurve, ws=True)
 
-        with r.Name(nameElems):
-            node = cls._create(curvePlug, aimCurve, closestPoint=closestPoint)
-
-        return node
-
-    @classmethod
-    def _create(cls, curvePlug, aimCurve, closestPoint=True):
-        node = super(cls, cls)._create(curvePlug)
-        aimCurve = _po.asGeoPlug(aimCurve, worldSpace=True)
-        aimCurve >> node.addAttr('aimCurve', at='message')
-        node.addAttr('closestPoint',
+        with r.Name(curve.node().basename(sts=True), 'aim_up_gen'):
+            # Prep node
+            node = cls.createNode()
+            curve >> node.addAttr('curve', at='message')
+            aimCurve >> node.addAttr('aimCurve', at='message')
+            node.addAttr('closestPoint',
                 at='bool', k=True, dv=closestPoint).lock()
+            node._addSamplesAttr()
 
         return node
 
-    #----------------------------------------------------|    Sampling
-
-    def aimCurvePlug(self):
+    def aimCurve(self):
         """
-        :return: The output of the aim curve associated with this system.
+        :return: The associated aim curve's geo output.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
         return self.attr('aimCurve').inputs(plugs=True)[0]
 
     def _sampleAt(self, parameter):
-        mainCurve = self.curvePlug()
-        aimCurve = self.aimCurvePlug()
-        cp = self.attr('closestPoint').get()
+        curve = self.curve()
+        aimCurve = self.aimCurve()
+        refPoint = curve.pointAtParam(parameter)
+        closestPoint = self.attr('closestPoint').get()
 
-        refPoint = mainCurve.pointAtParam(parameter)
-
-        if cp:
+        if closestPoint:
             interest = aimCurve.closestPoint(refPoint)
 
         else:
             interest = aimCurve.pointAtParam(parameter)
 
         return interest-refPoint
+
+
+
