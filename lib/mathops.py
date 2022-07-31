@@ -1,5 +1,6 @@
 from collections import UserDict
 
+import maya.cmds as m
 import maya.OpenMaya as om
 
 from paya.lib.plugops import *
@@ -98,6 +99,12 @@ class NativeUnits:
             self._captureUserUnits()
             self._applyNativeUnits()
             self._addCallbacks()
+
+            if self._userUnits['angle'] != 'rad':
+                r.warning("Switching Maya to radians.")
+
+            if self._userUnits['linear'] != 'cm':
+                r.warning('Switching Maya to centimeters.')
 
         NativeUnits.__depth__ += 1
 
