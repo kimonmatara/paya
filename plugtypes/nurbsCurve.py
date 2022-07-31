@@ -653,6 +653,7 @@ class NurbsCurve:
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: Normalize the tangent; defaults to False
         :return: The curve tangent at the given parameter.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         info = self.infoAtParam(param)
         return info.attr('normalizedTangent' if normalize else 'tangent')
