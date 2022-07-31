@@ -58,6 +58,16 @@ class DependNode:
     __subtype_pool__ = None
 
     def expandClass(self):
+        """
+        If this node type supports parsed subtypes, reads the
+        subtype attribute (if available) and attempts to source
+        and assign the class to the instance.
+
+        If this is not possible, a warning is issued and no
+        reassignment is performed.
+
+        :return: ``self``
+        """
         if self.__supports_parsed_subtypes__:
             pool = self.__subtype_pool__
 
@@ -67,7 +77,7 @@ class DependNode:
                 clsname = clsname[0].upper()+clsname[1:]
 
                 try:
-                    self.__class__ = pool[clsname]
+                    self.__class__ = pool.getByName(clsname)
 
                 except:
                     r.warning(("Subtype '{}' could "+
@@ -150,11 +160,11 @@ class DependNode:
         out = r.createNode(cls.__melnode__, n=name)
 
         if cls.__is_parsed_subtype__:
-            attr = out.addAttr('payaSubtype', dt='string', hidden=True)
+            attr = out.addAttr('payaSubtype', dt='string')
             clsname = cls.__name__
             typename = clsname[0].lower()+clsname[1:]
             attr.set(typename)
-            out.__class__ = cls.__subtype_pool__[clsname]
+            out.__class__ = cls.__subtype_pool__.getByName(clsname)
 
         return out
 
