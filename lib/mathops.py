@@ -1,3 +1,4 @@
+from functools import wraps
 from collections import UserDict
 
 import maya.cmds as m
@@ -101,10 +102,10 @@ class NativeUnits:
             self._addCallbacks()
 
             if self._userUnits['angle'] != 'rad':
-                r.warning("Switching Maya to radians.")
+                r.warning("Switching Maya to rad.")
 
             if self._userUnits['linear'] != 'cm':
-                r.warning('Switching Maya to centimeters.')
+                r.warning('Switching Maya to cm.')
 
         NativeUnits.__depth__ += 1
 
@@ -116,6 +117,12 @@ class NativeUnits:
         if NativeUnits.__depth__ is 0:
             self._removeCallbacks()
             self._applyUserUnits()
+
+            if self._userUnits['angle'] != 'rad':
+                r.warning("Switching Maya back to {}.".format(self._userUnits['angle']))
+
+            if self._userUnits['linear'] != 'cm':
+                r.warning("Switching Maya back to {}.".format(self._userUnits['linear']))
 
         return False
 
