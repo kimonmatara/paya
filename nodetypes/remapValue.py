@@ -6,9 +6,9 @@ import paya.runtime as r
 #-----------------------------------------------------------|   Errors
 #-----------------------------------------------------------|
 
-class NoCloneForParamError(RuntimeError):
+class NoCloneForPositionError(RuntimeError):
     """
-    No clone was found for the specified sample parameter.
+    No clone was found for the specified sample position.
     """
 
 #-----------------------------------------------------------|
@@ -21,7 +21,7 @@ class RemapValue:
     #-------------------------------------------------------|    Value management
 
     @short(interpolation='i')
-    def setValues(self, positions, values, interpolation='Linear'):
+    def setValues(self, positionValuePairs, interpolation='Linear'):
         """
         Sets (or connects) all values on this node. The entire previous
         configuration of the ``value`` compound multi is discarded.
@@ -42,10 +42,7 @@ class RemapValue:
         :return: ``self``
         :rtype: :class:`RemapValue`
         """
-        number = len(positions)
-
-        if len(values) is not number:
-            raise ValueError("Unequal number of positions and values.")
+        number = len(positionValuePairs)
 
         if isinstance(interpolation, (tuple, list)):
             if len(interpolation) is not number:
@@ -57,6 +54,7 @@ class RemapValue:
             interpolations = [interpolation] * number
 
         self.resetValues()
+        positions, values = zip(*positionValuePairs)
 
         for i, position, value, interpolation in zip(
                 range(number),
@@ -65,7 +63,6 @@ class RemapValue:
                 interpolations
         ):
             compound = self.attr('value')[i]
-
             position >> compound.attr('value_Position')
             value >> compound.attr('value_FloatValue')
             interpolation >> compound.attr('value_Interp')
@@ -119,7 +116,7 @@ class RemapValue:
         try:
             return self.findCloneWithPosition(position).attr('outValue')
 
-        except NoCloneForParamError:
+        except NoCloneForPositionError:
             clone = self.createClone()
             clone.attr('inputValue').release()
             position >> clone.attr('inputValue')
@@ -128,7 +125,7 @@ class RemapValue:
     #-------------------------------------------------------|    Color management
     
     @short(interpolation='i')
-    def setColors(self, positions, colors, interpolation='Linear'):
+    def setColors(self, positionColorPairs, interpolation='Linear'):
         """
         Sets (or connects) all colors on this node. The entire previous
         configuration of the ``color`` compound multi is discarded.
@@ -150,10 +147,7 @@ class RemapValue:
         :return: ``self``
         :rtype: :class:`RemapColor`
         """
-        number = len(positions)
-
-        if len(colors) is not number:
-            raise ColorError("Unequal number of positions and colors.")
+        number = len(positionColorPairs)
 
         if isinstance(interpolation, (tuple, list)):
             if len(interpolation) is not number:
@@ -165,6 +159,7 @@ class RemapValue:
             interpolations = [interpolation] * number
 
         self.resetColors()
+        positions, colors = zip(*positionColorPairs)
 
         for i, position, color, interpolation in zip(
                 range(number),
@@ -227,7 +222,7 @@ class RemapValue:
         try:
             return self.findCloneWithPosition(position).attr('outColor')
 
-        except NoCloneForParamError:
+        except NoCloneForPositionError:
             clone = self.createClone()
             clone.attr('inputValue').release()
             position >> clone.attr('inputValue')
@@ -376,7 +371,7 @@ class RemapValue:
         """
         :param position: the position value or plug
         :type position: float, :class:`~paya.runtime.plugs.Math1D`
-        :raises NoCloneForParamError: No clone was found.
+        :raises NoCloneForPositionError: No clone was found.
         :return: An existing clone configured for the specified position.
         :rtype: :class:`RemapValue`
         """
@@ -395,7 +390,7 @@ class RemapValue:
                 if clone.attr('inputValue').get() == position:
                     return clone.attr('outValue')
 
-        raise NoExistingSampleError
+        raise NoCloneForPositionError
 
     def updateClones(self):
         """
