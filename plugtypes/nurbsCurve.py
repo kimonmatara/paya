@@ -2,7 +2,6 @@ import maya.OpenMaya as om
 import pymel.util as _pu
 
 import paya.lib.mathops as _mo
-import paya.lib.nurbsutil as _nu
 from paya.util import short
 import paya.runtime as r
 
@@ -410,8 +409,6 @@ class NurbsCurve:
             parameter.
         :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
         """
-        param = _nu.conformUParamArg(param)
-
         if reuse:
             param, paramDim, paramIsPlug = _mo.info(param)
 
@@ -733,9 +730,7 @@ class NurbsCurve:
         :param paramOrFraction: a parameter of length fraction at which
             to sample the matrix
         :type paramOrFraction:
-            float, str,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
+            float, str, :class:`~paya.runtime.plugs.Math1D`
         :param str tangentAxis: the axis to map to the curve tangent,
             e.g. '-y'
         :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
@@ -943,9 +938,7 @@ class NurbsCurve:
             ):
         """
         :param param: the parameter at which to sample the matrix
-        :type param: float, str,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
+        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param str tangentAxis: the axis to map to the curve tangent,
             e.g. '-y'
         :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
@@ -970,7 +963,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         return self.matrixAtParamOrFraction(
-            _nu.conformUParamArg(param),
+            param,
             tangentAxis,
             upAxis,
             upv=upVector,
@@ -1727,9 +1720,6 @@ class NurbsCurve:
         :return: The sub-curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        minValue = _nu.conformUParamArg(minValue)
-        maxValue = _nu.conformUParamArg(maxValue)
-
         node = r.nodes.SubCurve.createNode()
         self >> node.attr('inputCurve')
         minValue >> node.attr('minValue')
@@ -1750,7 +1740,6 @@ class NurbsCurve:
         :return: [:class:`~paya.runtime.plugs.NurbsCurve`]
         """
         parameters = _pu.expandArgs(*parameters)
-        parameters = [_nu.conformUParamArg(param) for param in parameters]
 
         if not parameters:
             raise RuntimeError("No parameter(s) specified.")
@@ -2168,4 +2157,3 @@ class NurbsCurve:
         retraction = self.retract(retractLength, ats=atStart)
 
         return baseLength.ge(targetLength).ifElse(retraction, extension)
-
