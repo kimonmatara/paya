@@ -1217,75 +1217,190 @@ def parallelTransport(normal, tangents):
 
     return outNormals
 
-
-def bidirectionalParallelTransport(
-        startNormal,
-        endNormal,
-        tangents,
-        blendRatios=None
-):
+def forceVectorsAsPlugs(vectors):
     """
-    .. warning::
+    If any of the provided vectors are plugs, they are passed-through
+    as-is; those that aren't are used as values for array attributes
+    on a utility node, which are passed along instead.
 
-        Currently, this method will only accept plugs for *startNormal*,
-        *endNormal* and *tangents*.
-
-    Bidirectional version of :func:`parallelTransport`. Either (but not both)
-    *startNormal* or *endNormal* can be passed as ``None``. If they are both
-    provided, the output vectors will be blended by closest angle. Good for
-    twist effects.
-
-    :param startNormal: the start normal
-    :type startNormal: None, [str, :class:`~paya.runtime.plugs.Vector`]
-    :param endNormal: the end normal
-    :type endNormal: None, [str, :class:`~paya.runtime.plugs.Vector`]
-    :param tangents: the tangents for which to derive normals
-    :type tangents: [:class:`~paya.runtime.plugs.Vector`]
-    :param blendRatios: explicit ratios for the blend operation (one
-        per tangent); defaults to ``floatRange(0, 1, len(tangents))``
-    :type blendRatios: [float]
-    :return: The resolved normals.
+    :param vectors: the vectors to inspect
+    :type vectors: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :return: The conformed vector outputs.
     :rtype: [:class:`~paya.runtime.plugs.Vector`]
     """
-    if (startNormal is None) and (endNormal is None):
-        raise ValueError("Please specify startNormal and / or endNormal.")
 
-    fromStart = []
-    fromEnd = []
+    vectorInfos = [info(vector) for vector in vectors]
+    plugStates = [vectorInfo[2] for vectorInfo in vectorInfos]
 
-    if startNormal is not None:
-        fromStart = parallelTransport(startNormal, tangents)
+    if all(plugStates):
+        return [vectorInfo[0] for vectorInfo in vectorInfos]
 
-    if endNormal is not None:
-        fromEnd = parallelTransport(endNormal, tangents[::-1])[::-1]
+    nd = r.nodes.Network.createNode(n='vecs_as_plugs')
+    array = nd.addVectorAttr('vector', multi=True)
 
-    if fromStart:
-        if fromEnd:
-            out = []
-            num = len(tangents)
+    out = []
+    index = 0
 
-            if blendRatios:
-                if len(blendRatios) != num:
-                    raise ValueError("Not enough blend ratios.")
-            else:
-                blendRatios = floatRange(0, 1, len(tangents))
-
-            for normalFromStart, normalFromEnd, tangent, blendRatio in zip(
-                fromStart, fromEnd, tangents, blendRatios
-            ):
-                angle = normalFromStart.angle(
-                    normalFromEnd, clockNormal=tangent)
-
-                angle = angle.unwindShortest()
-                angle *= blendRatio
-
-                solved = normalFromStart.rotateByAxisAngle(tangent, angle)
-                out.append(solved)
+    for vectorInfo in vectorInfos:
+        if vectorInfo[2]:
+            out.append(vectorInfo[0])
 
         else:
-            out = fromStart
-
-    else:
-        out = fromEnd
+            array[index].set(vectorInfo[0])
+            out.append(array[index])
+            index += 1
 
     return out
+
+@nativeUnits
+@short(ratios='rat', unwindSwitch='uws')
+def blendCurveNormalSets(tangents, normalsA,
+                      normalsB, ratios=None, unwindSwitch=0):
+    """
+    Blends between two sets of normals along a curve. The number of
+    tangents, normalsA, normalsB and ratios must be the same. If any inputs
+    are plugs then the outputs will also be plugs.
+
+    :param tangents: the curve tangents around which to rotate the normals
+    :type tangents: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param ratios/rat: per-normal blend ratios; if omitted, a uniform range of
+        floats will be generated automatically; defaults to None
+    :type ratios/rat: None, [float, :class:`~paya.runtime.plugs.Math1D`]
+    :param unwindSwitch/uws: an integer value or attribute to pick between:
+
+        0 - shortest angle unwinding (the default)
+        1 - positive angle unwinding
+        2 - negative angle unwinding
+
+    :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
+    :raises ValueError: Unequal argument lengths.
+    :return: The blended set of curve normals.
+    :rtype: :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+    """
+    #-------------------------------|    Wrangle args / early escape
+
+    # Check lengths
+    numTangents = len(tangents)
+    numNormalsA = len(normalsA)
+    numNormalsB = len(normalsB)
+
+    if numTangents is numNormalsA is numNormalsB:
+        if ratios is None:
+            ratios = floatRange(0, 1, numTangents)
+            numRatios = numTangents
+
+        else:
+            ratios = list(ratios)
+            numRatios = len(ratios)
+
+            if numRatios is not numTangents:
+                raise ValueError("Unequal argment lengths.")
+
+    else:
+        raise ValueError("Unequal argment lengths.")
+
+    tangentInfos = [info(tangent) for tangent in tangents]
+    tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
+    
+    normalAInfos = [info(normalA) for normalA in normalsA]
+    normalsA = [normalAInfo[0] for normalAInfo in normalAInfos]
+    
+    normalBInfos = [info(normalB) for normalB in normalsB]
+    normalsB = [normalBInfo[0] for normalBInfo in normalBInfos]
+
+    ratioInfos = [info(ratio) for ratio in ratios]
+    ratios = [ratioInfo[0] for ratio in ratios]
+
+    uwInfo = info(unwindSwitch)
+    unwindSwitch = uwInfo[0]
+
+    hasPlugs = uwInfo[2] \
+        or any((tangentInfo[2] for tangentInfo in tangentInfos)) \
+        or any((normalAInfo[2] for normalAInfo in normalAInfos)) \
+        or any((normalBInfo[2] for normalBInfo in normalBInfos)) \
+        or any((ratioInfo[2] for ratioInfo in ratioInfos))
+
+    if hasPlugs:
+        tangents = forceVectorsAsPlugs(tangents)
+        normalsA = forceVectorsAsPlugs(normalsA)
+        normalsB = forceVectorsAsPlugs(normalsB)
+
+    #-------------------------------|    Iterate
+
+    out = []
+
+    for tangent, normalA, normalB, ratio in zip(
+        tangents, normalsA, normalsB, ratios
+    ):
+        blended = normalA.blend(normalB,
+            clockNormal=tangent, unwindSwitch=unwindSwitch)
+
+        out.append(blended)
+
+    return out
+
+@short(ratios='rat', unwindSwitch='uws')
+def blendBetweenCurveNormals(startNormal,
+        endNormal, tangents, ratios=None, unwindSwitch=0):
+    """
+    Blends between a forward and backward parallel-transport solution. If
+    either of *startNormal* or *endNormal* are ``None``, the solution will
+    only be performed in one direction and returned on its own.
+
+    :param startNormal: the normal at the start of the blend range
+    :type startNormal: list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+    :param endNormal: list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+    :param tangents: tangents along the blend range; one normal will
+        be generated per tangent; the more tangents, the higher the
+        accurace of the parallel transport solve
+    :param ratios: if provided, should be a list of float values or plugs
+        (one per tangent); if omitted, a uniform float range will be generated
+        automatically; defaults to None
+    :type ratios: None, [float, :class:`~paya.runtime.plugs.Math1D`]
+    :param unwindSwitch/uws: an integer value or attribute to pick between:
+
+        0 - shortest angle unwinding (the default)
+        1 - positive angle unwinding
+        2 - negative angle unwinding
+
+    :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
+    :raises ValueError: One of:
+        - Unequal numbers of tangents and ratios (if provided)
+        - Both *startNormal* and *endNormal* are ``None``
+    :return: The normals.
+    :rtype: [:class:`~paya.runtime.plugs.Vector`]
+    """
+    if not(startNormal or endNormal):
+        raise ValueError(
+            "Please provide a start normal and / or an end normal.")
+
+    if ratios:
+        if len(ratios) != len(tangents):
+            raise ValueError("Unequal numbers of ratios and tangents.")
+
+    fwds = bwds = None
+
+    if startNormal:
+        fwds = parallelTransport(startNormal, tangents)
+
+    if endNormal:
+        bwds = parallelTransport(endNormal, tangents[::-1])[::-1]
+
+    if fwds:
+        if bwds:
+            return blendCurveNormalSets(
+                fwds, bwds, rat=ratios, uws=unwindSwitch)
+
+        return fwds
+
+    return bwds
+
