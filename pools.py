@@ -1,3 +1,4 @@
+import traceback
 import inspect
 import os
 import re
@@ -44,7 +45,31 @@ class UnsupportedLookupError(RuntimeError):
 #----------------------------------------------------------------|    ABC
 #----------------------------------------------------------------|
 
+
+class ClassPoolBrowser:
+    """
+    Browsing wrapper for a class pool instance. Classes can be retrieved
+    using dotted or keyed syntax.
+    """
+
+    def __init__(self, pool):
+        self.__pool__ = pool
+
+    def __getattr__(self, item):
+        return self.__pool__.getByName(item)
+
+    def __getitem__(self, item):
+        return self.__pool__.getByName(item)
+
+    def __repr__(self):
+        return 'paya.runtime.'.format(self.__pool__.shortName())
+
+
 class ClassPool:
+
+    """
+    Abstract base class for collections of custom Paya classes.
+    """
 
     __unsupported_lookups__ = []
     __singular__ = None # e.g. 'node'
@@ -55,6 +80,13 @@ class ClassPool:
 
     def __init__(self):
         self._cache = {}
+
+    def browse(self):
+        """
+        :return: A browser object for this pool.
+        :rtype: :class:`ClassPoolBrowser`.
+        """
+        return ClassPoolBrowser(self)
 
     #------------------------------------------------------------|    Basic inspections
 
@@ -82,6 +114,9 @@ class ClassPool:
     #------------------------------------------------------------|    Purgings
 
     def purge(self):
+        """
+        Purges cached information.
+        """
         self._cache.clear()
 
         searchString = 'paya.'+self.longName()
@@ -249,28 +284,10 @@ class ClassPool:
 
         return cls
 
-    def __getitem__(self, clsname):
-        """
-        Keyed access using :meth:`getByName`.
-        """
-        return self.getByName(clsname)
-
-    def __getattr__(self, clsname):
-        """
-        Dotted access uing :meth:`getByName`.
-        """
-        try:
-            return self.getByName(clsname)
-
-        except:
-            raise AttributeError(
-                "Couldn't find attribute or class '{}'.".format(clsname)
-            )
-
     #------------------------------------------------------------|    Repr
 
     def __repr__(self):
-        return 'paya.runtime.'+self.__plural__
+        return "{}()".format(self.__class__.__name__)
 
 
 class ShadowPool(ClassPool):
@@ -312,7 +329,7 @@ class ShadowPool(ClassPool):
                            and previous.__name__ == member.__name__):
 
                         try:
-                            subclass = pool[member.__name__]
+                            subclass = pool.getByName(member.__name__)
                             outmro.append(subclass)
 
                         except UnsupportedLookupError:
@@ -357,6 +374,10 @@ class ShadowPool(ClassPool):
     #------------------------------------------------------------|    Retrieval
 
     def getFromPyMELInstance(self, inst):
+        """
+        Given a PyMEL instance, returns an appropriate Paya class for
+        reassignment.
+        """
         lookup = inst.__class__.__name__
         return self.getByName(lookup)
 
@@ -374,6 +395,16 @@ class ShadowPool(ClassPool):
         return bases, dct
 
     def conformDict(self, clsname, dct):
+        """
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+        """
         dct = super().conformDict(clsname, dct).copy()
         pmbase = self.getPmBase(clsname)
 
@@ -474,6 +505,10 @@ class ShadowPool(ClassPool):
 
 
 class NodeClassPool(ShadowPool):
+    """
+    Administers custom Paya classes for nodes. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.nodes``.
+    """
 
     __singular__ = 'node'
     __plural__ = 'nodes'
@@ -484,6 +519,10 @@ nodes = NodeClassPool()
 
 
 class CompClassPool(ShadowPool):
+    """
+    Administers custom Paya classes for components. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.comps``.
+    """
     __singular__ = 'comp'
     __plural__ = 'comps'
     __pm_mod__ = pymel.core.general
@@ -494,13 +533,21 @@ comps = CompClassPool()
 
 
 class PlugClassPool(ShadowPool):
-
+    """
+    Administers custom Paya classes for plugs (attributes). Relies on
+    :mod:`~paya.plugtree`. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.plugs``.
+    """
     __singular__ = 'plug'
     __plural__ = 'plugs'
     __pm_mod__ = pymel.core.general
     __roots__ = [pymel.core.general.Attribute]
 
     def getFromPyMELInstance(self, inst):
+        """
+        Given a PyMEL instance, returns an appropriate Paya class for
+        reassignment.
+        """
         mplug = inst.__apimplug__()
         lookup = _pt.getTypeFromMPlug(mplug)
         return self.getByName(lookup)
@@ -538,10 +585,10 @@ class PlugClassPool(ShadowPool):
             requiredBase = pymel.core.general.Attribute
 
         elif ln is 2:
-            requiredBase = self['Attribute']
+            requiredBase = self.getByName('Attribute')
 
         else:
-            requiredBase = self[ptPath[-2]]
+            requiredBase = self.getByName(ptPath[-2])
 
         if not any([issubclass(
                 base, requiredBase) for base in bases]):
@@ -553,6 +600,9 @@ class PlugClassPool(ShadowPool):
 plugs = PlugClassPool()
 
 def getRootDataClasses():
+    """
+    :return: Terminating classes detected from :mod:`pymel.core.datatypes`.
+    """
     classes = [pair[1] for pair in \
            inspect.getmembers(pymel.core.datatypes, inspect.isclass)]
 
@@ -575,6 +625,10 @@ def getRootDataClasses():
 
 
 class DataClassPool(ShadowPool):
+    """
+    Administers custom Paya classes for data types (e.g. vectors). An instance
+    of this pool can be accessed on :mod:`paya.runtime` as ``.data``.
+    """
 
     __singular__ = __plural__ = 'data'
     __roots__ = getRootDataClasses()
@@ -586,7 +640,10 @@ data = DataClassPool()
 
 
 class ParsedSubtypePool(ShadowPool):
-
+    """
+    Abstract base class for node subtypes based on a
+    parsed ``payaSubtype`` string attribute.
+    """
     __pm_mod__ = pymel.core.nodetypes
     __roots__ = [pymel.core.nodetypes.Network]
 
@@ -599,12 +656,24 @@ class ParsedSubtypePool(ShadowPool):
     __meta_base__ = ParsedSubtypePoolMeta
 
     def getFromPyMELInstance(self, inst):
+        """
+        :raises NotImplementedError: Not supported on parsed-subtype pools.
+        """
         raise NotImplementedError
 
     def getCrossPoolRoot(self):
+        """
+        :raises NotImplementedError: Not implemented on the base class.
+        """
         raise NotImplementedError
 
     def tagCrossPoolRoot(self):
+        """
+        Tags the associated node class so that node methods like
+        :meth:`~paya.runtime.nodes.DependNode.expandClass` and
+        :meth:`~paya.runtime.nodes.DependNode.createNode` can run
+        fast configuration checks.
+        """
         cls = self.getCrossPoolRoot()
         cls.__supports_parsed_subtypes__ = True
         cls.__subtype_pool__ = self
@@ -614,10 +683,23 @@ class ParsedSubtypePool(ShadowPool):
         self.tagCrossPoolRoot()
 
     def purge(self):
+        """
+        Purges cached information.
+        """
         super().purge()
         self.tagCrossPoolRoot()
 
     def conformBases(self, clsname, bases):
+        """
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+        """
         bases = [b for b in bases if b is not object]
         root = self.getCrossPoolRoot()
 
@@ -627,6 +709,16 @@ class ParsedSubtypePool(ShadowPool):
         return tuple(bases)
 
     def conformDict(self, clsname, dct):
+        """
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+        """
         dct = ClassPool.conformDict(self, clsname, dct).copy()
 
         if '__new__' in dct:
@@ -671,17 +763,29 @@ class ParsedSubtypePool(ShadowPool):
         return ourMeta
 
     def inventBasesDict(self, clsname):
+        """
+        :raises NotImplementedError: Not supported on parsed-subtype pools.
+        """
         raise NotImplementedError(
             "Invention is not implemented for this pool.")
 
 
 class NetworkSubtypesPool(ParsedSubtypePool):
+    """
+    Administers custom classes for :class:`~paya.runtime.nodes.Network` nodes
+    tagged with a ``payaSubtype`` string attribute. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.networks``.
+    """
 
     __singular__ = 'network'
     __plural__ = 'networks'
 
     def getCrossPoolRoot(self):
-        return nodes['Network']
+        """
+        :return: The node pool class that all parsed
+            subtypes served by this pool inherit from.
+        """
+        return nodes.getByName('Network')
 
 
 networks = NetworkSubtypesPool()
