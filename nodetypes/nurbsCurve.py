@@ -441,15 +441,12 @@ class NurbsCurve:
     def pointAtParam(self, param, plug=False):
         """
         :param param: the parameter at which to sample
-        :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: A world-space point at the specified parameter.
         :type: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
         """
-        param = _nu.conformUParamArg(param)
-
         if plug:
             return self.attr('worldSpace').pointAtParam(param)
 
@@ -505,7 +502,7 @@ class NurbsCurve:
     #-----------------------------------------------------|    Param sampling
 
     @short(asComponent='ac', plug='p')
-    def paramAtPoint(self, point, asComponent=True, plug=False):
+    def paramAtPoint(self, point, asComponent=False, plug=False):
         """
         Returns the parameter at the given point. This is a 'forgiving'
         implementation; a closest param will still be returned if the
@@ -518,7 +515,7 @@ class NurbsCurve:
         :param bool plug/p: force a dynamic output; defaults to False
         :param bool asComponent/ac: return an instance of
             :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
-            a float; defaults to True
+            a float; defaults to False
         :return: The sampled parameter.
         :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
@@ -555,14 +552,14 @@ class NurbsCurve:
         return self.fractionAtParam(param, p=plug)
 
     @short(asComponent='ac', plug='p')
-    def paramAtFraction(self, fraction, asComponent=True, plug=False):
+    def paramAtFraction(self, fraction, asComponent=False, plug=False):
         """
         :param fraction: the length fraction at which to sample
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :param bool asComponent/ac: return an instance of
             :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
-            a float; defaults to True
+            a float; defaults to False
         :return: The parameter at the given length fraction.
         :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
@@ -584,14 +581,14 @@ class NurbsCurve:
         return param
 
     @short(asComponent='ac', plug='p')
-    def paramAtLength(self, length, asComponent=True, plug=False):
+    def paramAtLength(self, length, asComponent=False, plug=False):
         """
         :param length: the length at which to sample
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :param bool asComponent/ac: return an instance of
             :class:`~paya.runtime.comps.NurbsCurveParameter` rather than
-            a float; defaults to True
+            a float; defaults to False
         :return: The parameter at the given length.
         :rtype: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
             :class:`~paya.runtime.plugs.Math1D`
@@ -636,14 +633,11 @@ class NurbsCurve:
     def lengthAtParam(self, param, plug=False):
         """
         :param param: the parameter
-        :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: The curve length at the given parameter.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
         """
-        param = _nu.conformUParamArg(param)
-
         if plug:
             return self.attr('worldSpace').lengthAtParam()
 
@@ -705,14 +699,11 @@ class NurbsCurve:
     def fractionAtParam(self, param, plug=False):
         """
         :param param: the parameter at which to sample a fraction
-        :type param: float, :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :return: The length fraction at the given parameter
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
         """
-        param = _nu.conformUParamArg(param)
-
         if plug:
             return self.attr('worldSpace').fractionAtParam(param)
 
@@ -782,7 +773,6 @@ class NurbsCurve:
             and tangent.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        param = _nu.conformUParamArg(param)
         p, pdim, pisplug = _mo.info(param)
 
         plug = plug or pisplug
@@ -867,9 +857,7 @@ class NurbsCurve:
         :param paramOrFraction: a parameter of length fraction at which
             to sample the matrix
         :type paramOrFraction:
-            float, str,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
+            float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :param str tangentAxis: the axis to map to the curve tangent,
             e.g. '-y'
@@ -916,7 +904,7 @@ class NurbsCurve:
             param = paramOrFraction
 
         point, tangent, derivative = \
-            self.getDerivativesAtParm(float(param), space='world')
+            self.getDerivativesAtParm(param, space='world')
 
         if not upVector:
             if aimCurve:
@@ -961,9 +949,7 @@ class NurbsCurve:
             ):
         """
         :param param: the parameter at which to sample the matrix
-        :type param: float, str,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
+        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: force a dynamic output; defaults to False
         :param str tangentAxis: the axis to map to the curve tangent,
             e.g. '-y'
@@ -1191,23 +1177,16 @@ class NurbsCurve:
         return [self.pointAtFraction(
             fraction, p=plug) for fraction in fractions]
 
-    @short(
-        plug='p',
-        asComponents='ac'
-    )
-    def distributeParams(
-            self,
-            numberOrFractions,
-            plug=False,
-            asComponent=True
-    ):
+    @short(plug='p', asComponents='ac')
+    def distributeParams(self, numberOrFractions,
+                    plug=False, asComponent=False):
         """
         :param numberOrFractions: this can either be a list of length
             fractions, or a number
         :type numberOrFractions: tuple, list or int
         :param bool asComponent/ac: if parameter values are returned, use
             :class:`~paya.runtime.comps.NurbsCurveParameter` instances instead
-            of floats; defaults to True
+            of floats; defaults to False
         :param bool plug/p: force a dynamic output; defaults to False
         :return: Parameters distributed along the length of the curve.
         :rtype: [float], [:class:`~paya.runtime.comps.NurbsCurveParameter`],
@@ -1557,6 +1536,40 @@ class NurbsCurve:
             plug=False,
             under=None
     ):
+        """
+        Fits a chain to this curve.
+
+        :param numberOrFractions: this can either be a number of uniform
+            fractions to generate, or an explicit list of fractions
+        :param str aimAxis: the matrix axis to map to the aim vectors,
+            for example '-y'
+        :param str upAxis: the matrix axis to align to the resolved up vector, for
+            example 'x'
+        :param upVector/upv: if provided, should be either a single up vector or a
+            a list of up vectors (one per fraction); defaults to None
+        :type upVector/upv:
+            None,
+            list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`,
+            [list, tuple, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`]
+        :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
+            ``curveWarp``; defaults to None
+        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.plugs.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from the aim curve by
+            proximity rather than matched parameter; defaults to True
+        :param bool squashStretch/ss: allow squash and stretch on the aim
+            vectors; defaults to False
+        :param bool plug/p: force a dynamic output; defaults to False
+        :param globalScale/gs: ignored if not a plug; a baseline scaling
+            factor (will be normalized); defaults to None
+        :param under/u: an optional destination parent for the chain;
+            defaults to None
+        :return: The chain.
+        :rtype: :class:`~paya.lib.skel.Chain`
+        """
         matrices = self.distributeAimingMatrices(
             numberOrFractions,
             aimAxis, upAxis,
@@ -1565,7 +1578,7 @@ class NurbsCurve:
             ss=squashStretch, p=plug
         )
 
-        if plug:
+        if plug or any((_mo.isPlug(m) for m in matrices)):
             _matrices = [matrix.get() for matrix in matrices]
 
         else:
