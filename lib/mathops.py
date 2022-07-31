@@ -57,6 +57,28 @@ def isVectorValueOrPlug(item):
 #--------------------------------------------------------------|    Unit conversion
 #--------------------------------------------------------------|
 
+def onCm():
+    """
+    :return: ``True`` if Maya is set to centimetres, otherwise ``False``.
+    :rtype: bool
+    """
+    return om.MDistance.uiUnit() == om.MDistance.kCentimeters
+
+def onRad():
+    """
+    :return: ``True`` if Maya is set to radians, otherwise ``False``.
+    :rtype: bool
+    """
+    return om.MAngle.uiUnit() == om.MAngle.kRadians
+
+def onNative():
+    """
+    :return: ``True`` if Maya is set to centimetres and radians, otherwise
+        ``False``.
+    :rtype: bool
+    """
+    return onCm() and onRad()
+
 class NativeUnits:
     """
     Context manager. Switches Maya to centimetres and radians. New-scene /
@@ -1086,10 +1108,12 @@ def getChainedAimMatrices(
 
     return matrices
 
+@nativeUnits
 def parallelTransport(normal, tangents):
     """
     Implements **parallel transport** as described in the
-    `Houdini demonstration by Manuel Casasola Merkle <https://www.sidefx.com/tutorials/parallel-transport/>`_
+    `Houdini demonstration by Manuel Casasola Merkle
+    <https://www.sidefx.com/tutorials/parallel-transport/>`_
     based on the `paper by Hanson and Ma
     <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.65.7632&rep=rep1&type=pdf>`_.
 
@@ -1178,6 +1202,7 @@ def parallelTransport(normal, tangents):
             outNormals.append(nextNormal)
 
     return outNormals
+
 
 def bidirectionalParallelTransport(
         startNormal,
