@@ -742,6 +742,32 @@ class NurbsCurve:
         param = self.paramAtPoint(point)
         return self.fractionAtParam(param)
 
+    #-----------------------------------------------------|    Tangent sampling
+
+    @short(normalize='nr', plug='p')
+    def tangentAtParam(self, param, normalize=False, plug=False):
+        """
+        :param param: The parameter at which to sample the tangent.
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output; defaults to False
+        :param bool normalize/nr: Normalize the tangent; defaults to False
+        :return: The curve tangent at the given parameter.
+        """
+        if plug:
+            return self.attr('worldSpace').tangentAtParam(param, nr=normalize)
+
+        param, pdim, pisplug = _mo.info(param)
+
+        if pisplug:
+            return self.attr('worldSpace').tangentAtParam(param, nr=normalize)
+
+        tangent = self.getDerivativesAtParm(float(param), space='world')[1]
+
+        if normalize:
+            tangent = tangent.normal()
+
+        return tangent
+
     #-----------------------------------------------------|    Up vector sampling
 
     @short(plug='p')
