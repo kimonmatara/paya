@@ -752,6 +752,8 @@ class NurbsCurve:
         :param bool plug/p: force a dynamic output; defaults to False
         :param bool normalize/nr: Normalize the tangent; defaults to False
         :return: The curve tangent at the given parameter.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
         if plug:
             return self.attr('worldSpace').tangentAtParam(param, nr=normalize)
