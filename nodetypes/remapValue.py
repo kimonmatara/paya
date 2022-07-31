@@ -31,7 +31,7 @@ class RemapValue:
         :param values: the values to set; must be the same number as
             *positions*
         :type values:  [float, :class:`~paya.runtime.plugs.Math1D`]
-        :param interpolation: this can be either one enum key or index
+        :param interpolation/i: this can be either one enum key or index
             for the value interpolation, or a list of them. The enums
             are:
 
@@ -137,7 +137,7 @@ class RemapValue:
         :type colors:  [list, tuple, str,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`]
-        :param interpolation: this can be either one enum key or index
+        :param interpolation/i: this can be either one enum key or index
             for the color interpolation, or a list of them. The enums
             are:
             -   0: 'None'
