@@ -147,6 +147,7 @@ class RemapValue:
         :return: ``self``
         :rtype: :class:`RemapColor`
         """
+        positionColorPairs = list(positionColorPairs)
         number = len(positionColorPairs)
 
         if isinstance(interpolation, (tuple, list)):
