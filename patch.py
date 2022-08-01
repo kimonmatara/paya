@@ -30,7 +30,7 @@ pyMELIsPatched = False
 # instantiations
 
 poolsToPatch = [pool for pool in _pl.pools \
-    if not isinstance(pool, _pl.ParsedSubtypePool)]
+    if not isinstance(pool, _pl.ParsedSubtypeClassPool)]
 
 
 def patchPyMEL(quiet=False):

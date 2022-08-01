@@ -86,12 +86,19 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
         remulted = segmentResolution * numSegments
 
         if remulted < resolution:
-            # Add one more sample to start
             segmentResolutions[0] += 1
 
         elif remulted > resolution:
-            # Remove one sample from end
             segmentResolutions[-1] -= 1
+
+        if any([segmentResolution < 3 for \
+                segmentResolution in segmentResolutions]):
+            minResolution = 3 * numSegments
+
+            raise ValueError(
+                ("For {} segments, resolution must be at"+
+                 " least {}.").format(numSegments, minResolution)
+            )
 
         #------------------------------------------------|    Build
 

@@ -21,14 +21,15 @@ class Runtime:
     """
 
     def __init__(self):
-
-        from paya import patch
-        self._pt = patch
-
         import paya.config as config
+        import paya.startstop as _ss
+        self._ss = _ss
+
+        self.start = _ss.start
+        self.stop = _ss.stop
 
         if config['patchOnLoad']:
-            self.start()
+            _ss.start()
 
         self.config = config
 
@@ -53,18 +54,6 @@ class Runtime:
         for pool in self._pools:
             pool.purge()
 
-    def start(self):
-        """
-        Patches PyMEL to return custom paya types.
-        """
-        self._pt.patchPyMEL()
-
-    def stop(self):
-        """
-        Restores PyMEL to its 'factory' state.
-        """
-        self._pt.unpatchPyMEL()
-
     @property
     def createControl(self):
         return self.nodes.Transform.createControl
@@ -73,8 +62,8 @@ class Runtime:
         return getattr(self.cmds, item)
 
     def __repr__(self):
-        return "<paya runtime: {}>".format(
-            'active' if self._pt.pyMELIsPatched else 'inactive')
+        state = 'active' if self._ss.running else 'inactive'
+        return "<paya runtime: {}>".format(state)
 
 inst = Runtime()
 

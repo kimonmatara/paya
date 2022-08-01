@@ -9,11 +9,12 @@ import pymel.core.general
 import pymel.core.datatypes
 
 import paya
-from paya.util import path_to_dotpath
+import paya.config as config
+from paya.util import path_to_dotpath, LazyModule
+from paya.nativeunits import nativeUnits
 import paya.plugtree as _pt
 
 payaroot = os.path.dirname(paya.__file__)
-
 
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    Errors
@@ -40,6 +41,28 @@ class UnsupportedLookupError(RuntimeError):
     """
     The class pool does not allow lookups for the attempted name.
     """
+
+#----------------------------------------------------------------|
+#----------------------------------------------------------------|    Tools
+#----------------------------------------------------------------|
+
+def addNativeUnitsToEveryMethod(dct):
+    """
+    Adds the `@nativeUnits<:func:paya.lib.mathops.nativeUnits>` decorator to
+    every method in a Paya class dictionary. This is an in-place operation.
+
+    :param dct: the class dictionary
+    """
+    for k, v in dct.items():
+        typ = type(v)
+
+        if typ in (staticmethod, classmethod):
+            f = v.__func__
+            f = nativeUnits(f)
+            dct[k] = typ(f)
+
+        elif inspect.isfunction(v):
+            dct[k] = nativeUnits(v)
 
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    ABC
@@ -113,7 +136,7 @@ class ClassPool:
 
     #------------------------------------------------------------|    Purgings
 
-    def purge(self):
+    def purge(self, quiet=False):
         """
         Purges cached information.
         """
@@ -125,7 +148,8 @@ class ClassPool:
         for modToDelete in modsToDelete:
             del(sys.modules[modToDelete])
 
-        print("Purged class pool {}.".format(self))
+        if not quiet:
+            print("Purged class pool {}.".format(self))
 
     #------------------------------------------------------------|    Retrieval
 
@@ -176,6 +200,9 @@ class ClassPool:
         dct['__module__'] = 'paya.{}.{}'.format(
             self.longName(), clsname[0].lower()+clsname[1:])
         dct['__paya_pool__'] = self
+
+        if not config['ignoreUnits']:
+            addNativeUnitsToEveryMethod(dct)
 
         return dct
 
@@ -303,7 +330,6 @@ class ShadowPool(ClassPool):
         """
         Base metaclass for PyMEL-shadowing Paya classes.
         """
-
         def mro(cls):
             """
             Defines the method resolution order
@@ -639,7 +665,7 @@ class DataClassPool(ShadowPool):
 data = DataClassPool()
 
 
-class ParsedSubtypePool(ShadowPool):
+class ParsedSubtypeClassPool(ShadowPool):
     """
     Abstract base class for node subtypes based on a
     parsed ``payaSubtype`` string attribute.
@@ -647,13 +673,13 @@ class ParsedSubtypePool(ShadowPool):
     __pm_mod__ = pymel.core.nodetypes
     __roots__ = [pymel.core.nodetypes.Network]
 
-    class ParsedSubtypePoolMeta(type):
+    class ParsedSubtypeClassPoolMeta(type):
         """
         Base metaclass for PyMEL-shadowing Paya classes.
         """
         pass
 
-    __meta_base__ = ParsedSubtypePoolMeta
+    __meta_base__ = ParsedSubtypeClassPoolMeta
 
     def getFromPyMELInstance(self, inst):
         """
@@ -682,11 +708,11 @@ class ParsedSubtypePool(ShadowPool):
         super().__init__()
         self.tagCrossPoolRoot()
 
-    def purge(self):
+    def purge(self, quiet=False):
         """
         Purges cached information.
         """
-        super().purge()
+        super().purge(quiet=quiet)
         self.tagCrossPoolRoot()
 
     def conformBases(self, clsname, bases):
@@ -770,7 +796,7 @@ class ParsedSubtypePool(ShadowPool):
             "Invention is not implemented for this pool.")
 
 
-class NetworkSubtypesPool(ParsedSubtypePool):
+class NetworkClassPool(ParsedSubtypeClassPool):
     """
     Administers custom classes for :class:`~paya.runtime.nodes.Network` nodes
     tagged with a ``payaSubtype`` string attribute. A browser for this pool can
@@ -788,7 +814,7 @@ class NetworkSubtypesPool(ParsedSubtypePool):
         return nodes.getByName('Network')
 
 
-networks = NetworkSubtypesPool()
+networks = NetworkClassPool()
 
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    REGISTRY

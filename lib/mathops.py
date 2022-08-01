@@ -4,6 +4,7 @@ from collections import UserDict
 import maya.cmds as m
 import maya.OpenMaya as om
 
+from paya.nativeunits import nativeUnits
 from paya.lib.plugops import *
 import pymel.util as _pu
 from paya.util import conditionalExpandArgs
@@ -54,135 +55,6 @@ def isVectorValueOrPlug(item):
 
     return issubclass(cls, r.plugs.Math3D
         ) and not issubclass(cls, r.plugs.EulerRotation)
-
-#--------------------------------------------------------------|
-#--------------------------------------------------------------|    Unit conversion
-#--------------------------------------------------------------|
-
-def onCm():
-    """
-    :return: ``True`` if Maya is set to centimetres, otherwise ``False``.
-    :rtype: bool
-    """
-    return om.MDistance.uiUnit() == om.MDistance.kCentimeters
-
-def onRad():
-    """
-    :return: ``True`` if Maya is set to radians, otherwise ``False``.
-    :rtype: bool
-    """
-    return om.MAngle.uiUnit() == om.MAngle.kRadians
-
-def onNative():
-    """
-    :return: ``True`` if Maya is set to centimetres and radians, otherwise
-        ``False``.
-    :rtype: bool
-    """
-    return onCm() and onRad()
-
-class NativeUnits:
-    """
-    Context manager. Switches Maya to centimetres and radians. New-scene /
-    open-scene / save-scene events are compensated for with API callbacks.
-    """
-    __instance__ = None
-    __depth__ = 0
-
-    def __new__(cls, *args, **kwargs):
-        if cls.__instance__ is None:
-            cls.__instance__ = object.__new__(cls)
-
-        return cls.__instance__
-
-    def __enter__(self):
-        if NativeUnits.__depth__ is 0:
-            self._captureUserUnits()
-            self._applyNativeUnits()
-            self._addCallbacks()
-
-            if self._userUnits['angle'] != 'rad':
-                r.warning("Switching Maya to rad.")
-
-            if self._userUnits['linear'] != 'cm':
-                r.warning('Switching Maya to cm.')
-
-        NativeUnits.__depth__ += 1
-
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        NativeUnits.__depth__ -= 1
-
-        if NativeUnits.__depth__ is 0:
-            self._removeCallbacks()
-            self._applyUserUnits()
-
-            if self._userUnits['angle'] != 'rad':
-                r.warning("Switching Maya back to {}.".format(self._userUnits['angle']))
-
-            if self._userUnits['linear'] != 'cm':
-                r.warning("Switching Maya back to {}.".format(self._userUnits['linear']))
-
-        return False
-
-    def _captureUserUnits(self):
-        self._userUnits = {
-            'linear': m.currentUnit(q=True, linear=True),
-            'angle': m.currentUnit(q=True, angle=True)
-        }
-
-    def _applyNativeUnits(self):
-        m.currentUnit(linear='cm')
-        m.currentUnit(angle='rad')
-
-    def _applyUserUnits(self):
-        m.currentUnit(linear=self._userUnits['linear'])
-        m.currentUnit(angle=self._userUnits['angle'])
-
-    def _addCallbacks(self):
-        self.afterNewCb = om.MSceneMessage.addCallback(
-            om.MSceneMessage.kAfterNew, self._afterNew)
-
-        self.afterOpenCb = om.MSceneMessage.addCallback(
-            om.MSceneMessage.kAfterOpen, self._afterOpen)
-
-        self.beforeSaveCb = om.MSceneMessage.addCallback(
-            om.MSceneMessage.kBeforeSave, self._beforeSave)
-
-        self.afterSaveCb = om.MSceneMessage.addCallback(
-            om.MSceneMessage.kAfterSave, self._afterSave)
-
-    def _removeCallbacks(self):
-        om.MMessage.removeCallback(self.afterNewCb)
-        om.MMessage.removeCallback(self.afterOpenCb)
-        om.MMessage.removeCallback(self.beforeSaveCb)
-        om.MSceneMessage.removeCallback(self.afterSaveCb)
-
-    def _afterNew(self, *args):
-        self._applyNativeUnits()
-
-    def _afterOpen(self, *args):
-        self._captureUserUnits()
-        self._applyNativeUnits()
-
-    def _beforeSave(self, *args):
-        self._applyUserUnits()
-
-    def _afterSave(self, *args):
-        self._applyNativeUnits()
-
-def nativeUnits(f):
-    """
-    Decorator version of :class:`NativeUnits`.
-    """
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        with NativeUnits():
-            result = f(*args, **kwargs)
-        return result
-
-    return wrapper
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Soft interpolation utilities
@@ -1356,6 +1228,7 @@ def blendCurveNormalSets(normalsA, normalsB,
 
     return out
 
+@nativeUnits
 @short(ratios='rat', unwindSwitch='uws')
 def blendBetweenCurveNormals(startNormal,
         endNormal, tangents, ratios=None, unwindSwitch=0):

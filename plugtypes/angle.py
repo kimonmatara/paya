@@ -4,7 +4,6 @@ import pymel.core.datatypes as _dt
 from paya.util import short
 import paya.runtime as r
 
-
 class Angle:
 
     @short(plug='p')

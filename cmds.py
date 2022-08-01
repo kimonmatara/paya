@@ -26,11 +26,11 @@ from pymel.core import *
 from paya.util import toOs
 from paya.lib.names import Name
 from paya.lib.mathops import createMatrix, \
-    createScaleMatrix, cm, csm, NativeUnits, \
-    onRad, onCm, onNative
-
+    createScaleMatrix, cm, csm
+from paya.nativeunits import NativeUnits, nativeUnits
 from paya.lib.skel import Chain
 from paya.lib.controlshapes import controlShapes
+
 
 def saveScriptEditor():
     """
