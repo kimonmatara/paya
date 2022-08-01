@@ -12,15 +12,9 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
     """
 
     @classmethod
-    @short(
-        unwindSwitch='uws',
-        interpolation='i'
-    )
-    def create(
-            cls, curve, paramNormalKeys,
-            resolution, unwindSwitch=0,
-            interpolation=3 # Spline
-    ):
+    @short(unwindSwitch='uws', interpolation='i')
+    def create(cls, curve, paramNormalKeys,
+               resolution, unwindSwitch=0, interpolation=3):
         """
         :param curve: the curve associated with this system
         :type curve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
@@ -31,11 +25,36 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
             float | :class:`~paya.runtime.plugs.Math1D`,
             tuple | list | :class:`~paya.runtime.data.Vector` | :class:`~paya.runtime.plugs.Vector`
             )]
-        :param resolution:
-        :param unwindSwitch:
-        :return:
-        """
+        :param int resolution: the number of parallel-transport solution points
+            along the curve; more solutions yields more accuracy at the cost
+            of interaction speed (start with something like 16 and test)
+        :param unwindSwitch/uws: an integer value or plug to define the
+            unwinding mode:
 
+            - 0 (shortest, the default)
+            - 1 (positive)
+            - 2 (negative)
+
+            This can also be a list of values or attributes, in which case it
+            should be of length paramNormalKeys-1
+        :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`,
+            [int, :class:`~paya.runtime.plugs.Math1D`]
+        :param interpolation/i: an integer plug or value defining which type
+            of interpolation should be applied to any later sampled values;
+            this tallies with the color interpolation enums on a
+            :class:`remapValue <paya.runtime.nodes.RemapValue>` node, which
+            are:
+
+            - 0 ('None', you wouldn't usually want this)
+            - 1 ('Linear')
+            - 2 ('Smooth')
+            - 3 ('Spline')
+
+            The default is 3 ('Spline').
+        :type interpolation/i: int, :class:`~paya.runtime.plugs.Math1D`
+        :return: The network node.
+        :rtype: :class:`~paya.runtime.nodes.Network`
+        """
         #------------------------------------------------|    Prep
 
         paramNormalKeys = list(paramNormalKeys)
