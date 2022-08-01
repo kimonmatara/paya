@@ -20,14 +20,19 @@ class CurveLinearUpGenerator(r.networks.CurveUpGenerator):
         :param paramUpVectorKeys: zipped param: upVector pairs, defining
             'known' up vectors at specific parameters between which to
             interpolate
-        :param interpolation/i: this can be either one enum key or index
-            for the value interpolation, or a list of them
-            (one per key: value pair) The enums are:
+        :param interpolation/i: an integer plug or value defining which type
+            of interpolation should be applied to any later sampled values;
+            this tallies with the color interpolation enums on a
+            :class:`remapValue <paya.runtime.nodes.RemapValue>` node, which
+            are:
 
-            -   0: 'None'
-            -   1: 'Linear' (the default)
-            -   2: 'Smooth'
-            -   3: 'Spline'(the default)
+            - 0 ('None', you wouldn't usually want this)
+            - 1 ('Linear')
+            - 2 ('Smooth')
+            - 3 ('Spline')
+
+            The default is 3 ('Spline').
+        :type interpolation/i: int, :class:`~paya.runtime.plugs.Math1D`
         :return: The network node.
         :rtype: :class:`~paya.runtime.nodes.Network`
         """
