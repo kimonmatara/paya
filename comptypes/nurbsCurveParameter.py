@@ -130,6 +130,17 @@ class NurbsCurveParameter:
         """
         return self.node().lengthAtParam(float(self), p=plug)
 
+    @short(normalize='nr')
+    def tangent(self, plug=False, normalize=False):
+        """
+        :param bool plug/p: force a dynamic output; defaults to False
+        :param bool normalize/nr: normalize the tangent; defaults to False
+        :return: The curve tangent at this parameter.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        """
+        return self.node().tangentAtParam(float(self), p=plug, nr=normalize)
+
     #-----------------------------------------------------|    Edits
 
     def detach(self):
