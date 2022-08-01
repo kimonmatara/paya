@@ -11,7 +11,7 @@ class CurveLinearUpGenerator(r.networks.CurveUpGenerator):
 
     @classmethod
     @short(interpolation='i')
-    def create(cls, curve, paramUpVectorKeys, interpolation='Linear'):
+    def create(cls, curve, paramUpVectorKeys, interpolation=3):
         """
         :param curve: the main curve
         :type curve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
@@ -27,8 +27,9 @@ class CurveLinearUpGenerator(r.networks.CurveUpGenerator):
             -   0: 'None'
             -   1: 'Linear' (the default)
             -   2: 'Smooth'
-            -   3: 'Spline'
-        :return:
+            -   3: 'Spline'(the default)
+        :return: The network node.
+        :rtype: :class:`~paya.runtime.nodes.Network`
         """
         curve = _po.asGeoPlug(curve, ws=True)
 

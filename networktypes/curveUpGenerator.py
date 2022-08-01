@@ -11,7 +11,7 @@ class CurveUpGenerator:
         """
         :param parameter: the parameter at which to sample the up
             vector
-        :type parameter: float, str, :class:`~paya.runtime.
+        :type parameter: float, str, :class:`~paya.runtime.plugs.Math1D`
         :return: An up vector sampled at the specified parameter.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
