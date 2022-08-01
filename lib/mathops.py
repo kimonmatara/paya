@@ -1181,21 +1181,22 @@ def parallelTransport(normal, tangents):
                 tangents.append(tangent)
 
         for i, thisTangent in enumerate(tangents[:-1]):
-            nextTangent = tangents[i+1]
-            dot = thisTangent.dot(nextTangent, nr=True)
+            with r.Name('solve', i+1, padding=2):
+                nextTangent = tangents[i+1]
+                dot = thisTangent.dot(nextTangent, nr=True)
 
-            inline = dot.ge(1.0-1e-7)
+                inline = dot.ge(1.0-1e-7)
 
-            binormal = thisTangent.cross(nextTangent, nr=True)
-            theta = dot.acos()
+                binormal = thisTangent.cross(nextTangent, nr=True)
+                theta = dot.acos()
 
-            thisNormal = outNormals[i]
-            nextNormal = inline.ifElse(
-                thisNormal,
-                thisNormal.rotateByAxisAngle(binormal, theta)
-            )
+                thisNormal = outNormals[i]
+                nextNormal = inline.ifElse(
+                    thisNormal,
+                    thisNormal.rotateByAxisAngle(binormal, theta)
+                )
 
-            outNormals.append(nextNormal)
+                outNormals.append(nextNormal)
 
     else:
         # Soft implementation
@@ -1280,10 +1281,11 @@ def blendCurveNormalSets(normalsA, normalsB,
     :type ratios/rat: None, [float, :class:`~paya.runtime.plugs.Math1D`]
     :param unwindSwitch/uws: an integer value or attribute to pick between:
 
-        0 - shortest angle unwinding (the default)
-        1 - positive angle unwinding
-        2 - negative angle unwinding
+        - 0 for shortest angle unwinding (the default)
+        - 1 for positive angle unwinding
+        - 2 for negative angle unwinding
 
+    :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
     :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
     :raises ValueError: Unequal argument lengths.
     :return: The blended set of curve normals.
@@ -1322,7 +1324,7 @@ def blendCurveNormalSets(normalsA, normalsB,
     normalsB = [normalBInfo[0] for normalBInfo in normalBInfos]
 
     ratioInfos = [info(ratio) for ratio in ratios]
-    ratios = [ratioInfo[0] for ratio in ratios]
+    ratios = [ratioInfo[0] for ratioInfo in ratioInfos]
 
     uwInfo = info(unwindSwitch)
     unwindSwitch = uwInfo[0]
@@ -1342,11 +1344,13 @@ def blendCurveNormalSets(normalsA, normalsB,
 
     out = []
 
-    for tangent, normalA, normalB, ratio in zip(
-        tangents, normalsA, normalsB, ratios
+    for i, tangent, normalA, normalB, ratio in zip(
+        range(numRatios), tangents, normalsA,
+        normalsB, ratios
     ):
-        blended = normalA.blend(normalB,
-            clockNormal=tangent, unwindSwitch=unwindSwitch)
+        with r.Name('blend', i+1):
+            blended = normalA.blend(normalB,
+                clockNormal=tangent, unwindSwitch=unwindSwitch, weight=ratio)
 
         out.append(blended)
 
@@ -1357,7 +1361,7 @@ def blendBetweenCurveNormals(startNormal,
         endNormal, tangents, ratios=None, unwindSwitch=0):
     """
     Blends between a forward and backward parallel-transport solution. If
-    either of *startNormal* or *endNormal* are ``None``, the solution will
+    either *startNormal* or *endNormal* are ``None``, the solution will
     only be performed in one direction and returned on its own.
 
     :param startNormal: the normal at the start of the blend range
@@ -1376,14 +1380,16 @@ def blendBetweenCurveNormals(startNormal,
     :type ratios: None, [float, :class:`~paya.runtime.plugs.Math1D`]
     :param unwindSwitch/uws: an integer value or attribute to pick between:
 
-        0 - shortest angle unwinding (the default)
-        1 - positive angle unwinding
-        2 - negative angle unwinding
+        - 0 for shortest angle unwinding (the default)
+        - 1 for positive angle unwinding
+        - 2 for negative angle unwinding
 
     :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
     :raises ValueError: One of:
+
         - Unequal numbers of tangents and ratios (if provided)
         - Both *startNormal* and *endNormal* are ``None``
+
     :return: The normals.
     :rtype: [:class:`~paya.runtime.plugs.Vector`]
     """
@@ -1398,10 +1404,14 @@ def blendBetweenCurveNormals(startNormal,
     fwds = bwds = None
 
     if startNormal:
-        fwds = parallelTransport(startNormal, tangents)
+        with r.Name('ptFromStart'):
+            fwds = parallelTransport(startNormal, tangents)
 
     if endNormal:
-        bwds = parallelTransport(endNormal, tangents[::-1])[::-1]
+        with r.Name('ptFromEnd'):
+            bwds = parallelTransport(endNormal, tangents[::-1])[::-1]
+
+    points = [tangent.node().position for tangent in tangents]
 
     if fwds:
         if bwds:
