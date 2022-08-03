@@ -4,6 +4,55 @@ from paya.util import LazyModule, short
 
 r = LazyModule('paya.runtime')
 
+
+def sameValueInput(plugA, plugB):
+    """
+    Returns ``True`` if either of the following:
+
+    -   *plugA* and *plugB* have the same input
+    -   Neither *plugA* nor *plugB* have an input, but they hav the same
+        value
+
+    :param plugA: the first attribute to inspect
+    :type plugA: :class:`~paya.runtime.plugs.Attribute`
+    :param plugB: the second attribute to inspect
+    :type plugB: :class:`~paya.runtime.plugs.Attribute`
+    :return: The comparison result.
+    :rtype: bool
+    """
+    if not isinstance(plugA, r.Attribute):
+        plugA = r.Attribute(plugA)
+
+    if not isinstance(plugB, r.Attribute):
+        plugB = r.Attribute(plugB)
+
+    inputsA = plugA.inputs(plugs=True)
+    inputsB = plugB.inputs(plugs=True)
+
+    if inputsA and inputsB:
+        return inputsA[0] == inputsB[0]
+
+    elif (not inputsA) and (not inputsB):
+        return plugA.get() == plugB.get()
+
+    return False
+
+def getInputOrValue(plug):
+    """
+    :param plug: the plug to inspect
+    :type plug: :class:`~paya.runtime.plugs.Attribute`
+    :return: If the plug has an input, its input; otherwise, its value.
+    """
+    if not isinstance(plug, r.Attribute):
+        plug = r.Attribute(plug)
+
+    inputs = plug.inputs(plugs=True)
+
+    if inputs:
+        return inputs[0]
+
+    return plug.get()
+
 def isPlug(item):
     """
     :param item: the item to inspect
@@ -100,46 +149,98 @@ def info(item, angle=False):
     raise TypeError("Can't parse type: {}".format(type(item)))
 
 @short(worldSpace='ws')
-def asGeoPlug(item, worldSpace=False):
+def asGeoPlug(item, worldSpace=None):
     """
-    :param item: a geometry node or plug
-    :type item: str, :class:`~paya.runtime.nodes.DagNode`,
-        :class:`~paya.runtime.plugs.DagNode`
-    :param bool worldSpace/ws: if *item* is a node, pull its world-
-        space geometry output; defaults to ``False``
-    :raises RuntimeError: Could not derive a geometry output.
-    :return: A geometry output.
+    Attempts to extract a geometry output plug from *item*.
+
+    :param item: the item to inspect
+    :type item: str, :class:`~paya.runtime.plugs.Geometry`,
+        :class:`~paya.runtime.nodes.Shape`,
+        :class:`~paya.runtime.nodes.Transform`,
+    :param bool worldSpace/ws: ignored if *item* is a plug; specifies
+        whether to pull the world-space or local-space output of a
+        geometry shape or transform; if omitted, defaults to ``False``
+        if *item* is a shape, and ``True`` if it's a transform
+    :raises TypeError: Can't extract a geo plug from *item*.
+    :return: The geometry output.
+    :rtype: :class:`~paya.runtime.plugs.Geometry`
     """
-    if isinstance(item, p.Attribute):
-        if isinstance(item, r.plugs.Geometry):
-            return item
+    plug = None
+    xform = None
+    shape = None
 
-        raise RuntimeError(
-            "Couldn't extract a geometry plug from: {}".format(item)
-        )
+    if isinstance(item, r.PyNode):
+        if isinstance(item, r.Attribute):
+            plug = item
 
-    if isinstance(item, str):
+        elif isinstance(item, r.nodetypes.Shape):
+            shape = item
+
+        elif isinstance(item, r.nodetypes.Transform):
+            xform = item
+
+        else:
+            raise TypeError(
+                "Not an attribute, transform or shape: {}".format(item)
+            )
+
+    elif isinstance(item, str):
         try:
-            return p.Attribute(item)
+            plug = r.Attribute(item)
 
         except:
+            plug = None
+
+        if plug is None:
             try:
-                node = p.PyNode(item)
-
-                if worldSpace:
-                    return node.worldGeoOutput
-
-                return node.localGeoOutput
+                node = r.PyNode(item)
 
             except:
-                pass
+                raise TypeError(
+                    "Can't interpret as Attribute or PyNode: {}".format(item)
+                )
 
-    if isinstance(item, p.nodetypes.DagNode):
-        return item.worldGeoOutput if worldSpace else item.localGeoOutput
+            if isinstance(node, r.nodetypes.Transform):
+                xform = node
 
-    raise RuntimeError(
-        "Couldn't extract a geometry plug from: {}".format(item)
-    )
+            elif isinstance(node, r.nodetypes.Shape):
+                shape = node
+
+            else:
+                raise TypeError(
+                    "Not a transform or shape: {}".format(item)
+            )
+
+    else:
+        raise TypeError(
+            "Not a string, PyNode or Attribute: {}".format(item)
+        )
+
+    if plug:
+        if isinstance(plug, r.plugs.Geometry):
+            return plug
+
+        else:
+            typ = plug.type()
+
+            if typ in ['TdataCompound', 'Tdata']:
+                return plug
+
+            else:
+                raise TypeError(
+                    "Not sure this is a geometry plug: {}".format(plug)
+                )
+
+    elif shape:
+        if worldSpace is None:
+            return shape.localGeoOutput
+
+        return shape.worldGeoOutput if worldSpace else shape.localGeoOutput
+
+    if worldSpace is None:
+        return xform.worldGeoOutput
+
+    return xform.worldGeoOutput if worldSpace else xform.localGeoOutput
 
 def asValue(item):
     """
