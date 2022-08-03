@@ -10,24 +10,72 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
     If more than one vector key is defined, the blending can be governed by
     per-segment user-switchable unwinding modes.
     """
+    @classmethod
+    def _resolvePerSegmentResolutions(cls, numSegments, resolution):
+        # Formula is:
+        # resolution = (resPerSegment * numSegments) - (numSegments-1)
+        # hence:
+        # resPerSegment = (resolution + (numSegments-1)) / numSegments
+
+        # Assume that a minimum 'good' total resolution for any kind of
+        # curve is 9, and a minimum functioning value for 'resPerSegment'
+        # is 3
+
+        minimumPerSegmentResolution = 3
+        minimumTotalResolution = 9
+        minimumResolutionForThisCurve = max([
+            (minimumPerSegmentResolution * numSegments) - (numSegments-1),
+            minimumTotalResolution
+        ])
+
+        if resolution is None:
+            resolution = 3 * numSegments
+
+        elif resolution < minimumResolutionForThisCurve:
+            r.warning(("Requested resolution ({}) is too low for this"+
+                " curve; raising to {}.").format(resolution,
+                minimumResolutionForThisCurve))
+
+            resolution = minimumResolutionForThisCurve
+
+        # Derive per-segment resolution
+        perSegmentResolution = (resolution + (numSegments-1)) / numSegments
+        perSegmentResolution = int(round(perSegmentResolution))
+
+        resolutions = [perSegmentResolution] * numSegments
+        retotalled = (perSegmentResolution * numSegments) - (numSegments-1)
+
+        # Correct rounding errors
+        if retotalled < resolution:
+            resolutions[0] += 1
+
+        elif retotalled > resolution:
+            resolutions[-1] -= 1
+
+        return resolutions
 
     @classmethod
-    @short(unwindSwitch='uws', interpolation='i')
-    def create(cls, curve, paramNormalKeys,
-               resolution, unwindSwitch=0, interpolation=3):
+    @short(unwindSwitch='uws', interpolation='i', resolution='res')
+    def create(cls, curve, paramVectorKeys,
+               resolution=None, unwindSwitch=0, interpolation=1):
         """
         :param curve: the curve associated with this system
         :type curve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`
-        :param paramNormalKeys: a zipped mapping of *parameter: normal*,
-            defining normal 'keys' along the curve
-        :type paramNormalKeys: [(
-            float | :class:`~paya.runtime.plugs.Math1D`,
-            tuple | list | :class:`~paya.runtime.data.Vector` | :class:`~paya.runtime.plugs.Vector`
-            )]
-        :param int resolution: the number of parallel-transport solution points
-            along the curve; more solutions yields more accuracy at the cost
-            of interaction speed (start with something like 16 and test)
+        :param paramVectorKeys:
+            zipped *parameter, vector* pairs defining known up vectors between
+            which to blend; this should include entries for the minimum and
+            maximum parameters in the curve U domain, otherwise you may get
+            unexpected results; defaults to None
+        :type paramVectorKeys/pvk:
+            [(float | :class:`~paya.runtime.plugs.Math1D`,
+                list | tuple | :class:`~paya.runtime.data.Vector` |
+                :class:`~paya.runtime.plugs.Vector`)]
+        :param int resolution/res: the number of parallel-transport solution
+            points along the curve; more solutions yield more accuracy at the
+            cost of interaction speed; if omitted, defaults to
+            ``3 * (len(paramVectorKeys)-1)``, i.e. three samples per key
+            segment
         :param unwindSwitch/uws: an integer value or plug to define the
             unwinding mode:
 
@@ -36,36 +84,42 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
             - 2 (negative)
 
             This can also be a list of values or attributes, in which case it
-            should be of length paramNormalKeys-1
+            should be of length paramVectorKeys-1
         :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`,
             [int, :class:`~paya.runtime.plugs.Math1D`]
         :param interpolation/i: an integer plug or value defining which type
-            of interpolation should be applied to any later sampled values;
-            this tallies with the color interpolation enums on a
+            of interpolation should be applied to any subsequently sampled
+            values; this tallies with the color interpolation enums on a
             :class:`remapValue <paya.runtime.nodes.RemapValue>` node, which
             are:
 
             - 0 ('None', you wouldn't usually want this)
-            - 1 ('Linear')
+            - 1 ('Linear') (the default)
             - 2 ('Smooth')
             - 3 ('Spline')
 
-            The default is 3 ('Spline').
         :type interpolation/i: int, :class:`~paya.runtime.plugs.Math1D`
         :return: The network node.
-        :rtype: :class:`~paya.runtime.nodes.Network`
+        :rtype: :class:`~paya.runtime.networks.CurveAngleUpGenerator`
         """
+
         #------------------------------------------------|    Prep
 
-        paramNormalKeys = list(paramNormalKeys)
-        numKeys = len(paramNormalKeys)
+        paramVectorKeys = list(paramVectorKeys)
+        numKeys = len(paramVectorKeys)
 
         if numKeys < 2:
-            raise ValueError("Need at least two keys.")
+            raise ValueError("Need at least two vector keys.")
 
         numSegments = numKeys-1
 
         # Wrangle args
+        if interpolation is None:
+            interpolation = 1
+
+        if unwindSwitch is None:
+            unwindSwitch = 0
+
         if isinstance(unwindSwitch, (tuple, list)):
             if len(unwindSwitch) is not numSegments:
                 raise ValueError(
@@ -78,27 +132,10 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
         else:
             unwindSwitches = [unwindSwitch] * numSegments
 
-        curve = _po.asGeoPlug(curve, worldSpace=True)
-
-        # Create per-segment resolutions with corrected rounding
-        segmentResolution = round(resolution / numSegments)
-        segmentResolutions = [segmentResolution] * numSegments
-        remulted = segmentResolution * numSegments
-
-        if remulted < resolution:
-            segmentResolutions[0] += 1
-
-        elif remulted > resolution:
-            segmentResolutions[-1] -= 1
-
-        if any([segmentResolution < 3 for \
-                segmentResolution in segmentResolutions]):
-            minResolution = 3 * numSegments
-
-            raise ValueError(
-                ("For {} segments, resolution must be at"+
-                 " least {}.").format(numSegments, minResolution)
-            )
+        curve = _po.asGeoPlug(curve)
+        segmentResolutions = cls._resolvePerSegmentResolutions(
+            numSegments, resolution
+        )
 
         #------------------------------------------------|    Build
 
@@ -114,7 +151,7 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
 
             #--------------------------------------------|    Solve
 
-            params, normals = zip(*paramNormalKeys)
+            params, normals = zip(*paramVectorKeys)
 
             # Init per-segment info bundles
             infoPacks = []
@@ -150,9 +187,12 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
 
                     infoPack['tangents'] = tangents = []
 
-                    for x, tangentSampleParam in enumerate(tangentSampleParams):
+                    for x, tangentSampleParam in enumerate(
+                            tangentSampleParams):
                         with r.Name('tangent', x+1):
-                            tangents.append(curve.tangentAtParam(tangentSampleParam))
+                            tangents.append(
+                                curve.tangentAtParam(tangentSampleParam)
+                            )
 
                     if inner:
                         tangents.insert(0, infoPacks[i-1]['tangents'][-1])
@@ -188,7 +228,6 @@ class CurveAngleUpGenerator(r.networks.CurveUpGenerator):
             # Use them to set keys on the remap value node
             rv.setColors(zip(outParams, outNormals), i=interpolation)
 
-        # Done. Return network
         return node
 
     def _sampleAt(self, parameter):

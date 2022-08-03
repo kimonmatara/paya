@@ -11,32 +11,33 @@ class CurveLinearUpGenerator(r.networks.CurveUpGenerator):
 
     @classmethod
     @short(interpolation='i')
-    def create(cls, curve, paramUpVectorKeys, interpolation=3):
+    def create(cls, curve, paramVectorKeys, interpolation=1):
         """
         :param curve: the main curve
         :type curve: str, :class:`~paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.plugs.NurbsCurve`,
             :class:`~paya.runtime.nodes.Transform`
-        :param paramUpVectorKeys: zipped param: upVector pairs, defining
-            'known' up vectors at specific parameters between which to
-            interpolate
+        :param paramVectorKeys:
+            zipped *parameter, vector* pairs defining known up vectors between
+            which to blend; this should include entries for the minimum and
+            maximum parameters in the curve U domain, otherwise you may get
+            unexpected results; defaults to None
         :param interpolation/i: an integer plug or value defining which type
-            of interpolation should be applied to any later sampled values;
-            this tallies with the color interpolation enums on a
+            of interpolation should be applied to any subsequently sampled
+            values; this tallies with the color interpolation enums on a
             :class:`remapValue <paya.runtime.nodes.RemapValue>` node, which
             are:
 
             - 0 ('None', you wouldn't usually want this)
-            - 1 ('Linear')
+            - 1 ('Linear') (the default)
             - 2 ('Smooth')
             - 3 ('Spline')
 
-            The default is 3 ('Spline').
         :type interpolation/i: int, :class:`~paya.runtime.plugs.Math1D`
         :return: The network node.
-        :rtype: :class:`~paya.runtime.nodes.Network`
+        :rtype: :class:`~paya.runtime.networks.CurveLinearUpGenerator`
         """
-        curve = _po.asGeoPlug(curve, ws=True)
+        curve = _po.asGeoPlug(curve)
 
         with r.Name(curve.node().basename(sts=True), 'linear_up_gen'):
             node = cls.createNode()
@@ -44,7 +45,7 @@ class CurveLinearUpGenerator(r.networks.CurveUpGenerator):
 
             rv = r.nodes.RemapValue.createNode()
             rv.attr('message') >> node.addAttr('remapValue', at='message')
-            rv.setColors(paramUpVectorKeys, i=interpolation)
+            rv.setColors(paramVectorKeys, i=interpolation)
 
             node._addSamplesAttr()
 
