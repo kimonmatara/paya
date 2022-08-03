@@ -252,6 +252,32 @@ class Math1D:
         mdl.attr('input2').set(-1.0)
         return mdl.attr('output')
 
+    def normal(self, scalar=True):
+        """
+        :param bool scalar/s: if this is ``True``, normalization will
+            be performed as ``self / self.get()``; if it's ``False``,
+            ``self - self.get()`` will be performed instead; defaults
+            to True
+        :return: A normalized output for this plug. Normalization will be
+            skipped, and ``self`` will be returned, if the currrent value
+            of this plug is already 1.0 (for *scalar*) or 0.0.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        _self = self.get()
+
+        if scalar:
+            if _self == 1.0:
+                out = self
+            else:
+                out = self / _self
+        else:
+            if _self == 0.0:
+                out = self
+            else:
+                out = self - _self
+
+        return out
+
     #-----------------------------------------------------------------|    Sign
 
     def setSign(self, positive):
