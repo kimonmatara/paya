@@ -98,6 +98,7 @@ class ClassPool:
     __singular__ = None # e.g. 'node'
     __plural__ = None # e.g. 'nodes'
     __meta_base__ = type
+    __doctitle__ = None # e.g. 'Plug (Attribute) Types'
 
     #------------------------------------------------------------|    Init
 
@@ -149,7 +150,7 @@ class ClassPool:
             del(sys.modules[modToDelete])
 
         if not quiet:
-            print("Purged class pool {}.".format(self))
+            print("Purged {} classes.".format(self.__singular__))
 
     #------------------------------------------------------------|    Retrieval
 
@@ -540,6 +541,7 @@ class NodeClassPool(ShadowPool):
     __plural__ = 'nodes'
     __pm_mod__ = pymel.core.nodetypes
     __roots__ = [pymel.core.nodetypes.DependNode]
+    __doctitle__ ='Node Types'
 
 nodes = NodeClassPool()
 
@@ -553,6 +555,7 @@ class CompClassPool(ShadowPool):
     __plural__ = 'comps'
     __pm_mod__ = pymel.core.general
     __roots__ = [pymel.core.general.Component]
+    __doctitle__ ='Component Types'
 
 
 comps = CompClassPool()
@@ -568,6 +571,7 @@ class PlugClassPool(ShadowPool):
     __plural__ = 'plugs'
     __pm_mod__ = pymel.core.general
     __roots__ = [pymel.core.general.Attribute]
+    __doctitle__ ='Plug (Attribute) Types'
 
     def getFromPyMELInstance(self, inst):
         """
@@ -660,6 +664,7 @@ class DataClassPool(ShadowPool):
     __roots__ = getRootDataClasses()
     __pm_mod__ = pymel.core.datatypes
     __unsupported_lookups__ = ['VectorN', 'MatrixN', 'Array']
+    __doctitle__ ='Data Types'
 
 
 data = DataClassPool()
@@ -802,9 +807,9 @@ class NetworkClassPool(ParsedSubtypeClassPool):
     tagged with a ``payaSubtype`` string attribute. A browser for this pool can
     be accessed on :mod:`paya.runtime` as ``.networks``.
     """
-
     __singular__ = 'network'
     __plural__ = 'networks'
+    __doctitle__ ='Network Types'
 
     def getCrossPoolRoot(self):
         """
@@ -820,6 +825,6 @@ networks = NetworkClassPool()
 #----------------------------------------------------------------|    REGISTRY
 #----------------------------------------------------------------|
 
-pools = [nodes, comps, plugs, data, networks] # order matters
+pools = [nodes, comps, plugs, data, networks]
 poolsByShortName = {pool.shortName(): pool for pool in pools}
 poolsByLongName = {pool.longName():pool for pool in pools}
