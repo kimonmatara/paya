@@ -96,3 +96,54 @@ class MotionPath:
         self.attr('inverseUp').set('-' in axis)
         return self
 
+    def getFrontAxis(self):
+        """
+        Note that this doesn't check whether 'follow' is actually active
+        on the node.
+
+        :return: The signed front axis, for example '-x'.
+        :rtype: str
+        """
+        ax = self.attr('frontAxis').get(asString=True).lower()
+        if self.attr('inverseFront').get():
+            ax = '-' + ax
+
+        return ax
+
+    def getUpAxis(self):
+        """
+        Note that this doesn't check whether 'follow' is actually active
+        on the node.
+
+        :return: The signed up axis, for example '-z'.
+        :rtype: str
+        """
+        ax = self.attr('upAxis').get(asString=True).lower()
+        if self.attr('inverseUp').get():
+            ax = '-' + ax
+
+        return ax
+
+    #--------------------------------------------|    Sampling routines
+
+    # Properties to mimic a pointOnCurveInfo node
+
+    @property
+    def normal(self):
+        return self.attr('orientMatrix').getAxis(self.getUpAxis())
+
+    @property
+    def normalizedNormal(self):
+        return self.normal.normal()
+
+    @property
+    def tangent(self):
+        return self.attr('orientMatirx').getAxis(self.getFrontAxis())
+
+    @property
+    def normalizedTangent(self):
+        return self.tangent.normal()
+
+    @property
+    def position(self):
+        return self.attr('allCoordinates')
