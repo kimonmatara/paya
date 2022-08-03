@@ -92,7 +92,7 @@ class Shape:
 
     def conformName(self):
         """
-        Conforms this shape's name to a Maya-standard name derived from the
+        Conforms this shape's name to a Maya-standard format derived from the
         transform parent.
 
         :return: ``self``
