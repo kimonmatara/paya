@@ -110,7 +110,7 @@ class CurveWarp:
 
         # Config
         if aimCurve:
-            aimCurve = _po.asGeoPlug(aimCurve, ws=True)
+            aimCurve = _po.asGeoPlug(aimCurve)
             aimCurve >> node.attr('aimCurve')
             node.attr('aimMode').set(3)
 
