@@ -1,14 +1,3 @@
-"""
-Internal. Implements the geometry loopbacks.
-"""
-
-import inspect
-from functools import wraps
-
-from paya.util import short
-import paya.runtime as r
-
-
 class Loopback:
     """
     Used to reappropriate geometry plug methods as shape methods. The plug
@@ -25,6 +14,10 @@ class Loopback:
             attach = Loopback()
             detach = Loopback()
     """
+    # Note to self (in case you get the same idea again)--loopbacks don't
+    # require world-space vs local-space management because they only
+    # concern editing methods, which always run on the history input and
+    # are therefore by definition local-space.
 
     def __set_name__(self, cls, name):
         self.name = name
@@ -54,7 +47,6 @@ class Loopback:
                 )
 
             # Create the wrapper
-
             @wraps(f)
             def wrapper(self, *args, **kwargs):
                 workingPlug = self.getHistoryPlug(create=True)
