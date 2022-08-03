@@ -8,7 +8,7 @@ class Mesh:
 
     @property
     def worldGeoOutput(self):
-        return self.attr('worldMesh')
+        return self.attr('worldMesh')[0]
 
     @property
     def localGeoOutput(self):
