@@ -1029,28 +1029,12 @@ def parallelTransport(normal, tangents):
         allTangentsArePlugs = False
 
     hasPlugs = hasTangentPlugs or normalIsPlug
-
     outNormals = [normal]
 
     if hasPlugs:
-        if not allTangentsArePlugs:
-            # Conform all to plugs to simplify operations
-            pb = r.nodes.Network.createNode()
-            multi = pb.addVectorAttr('conformed', multi=True)
-            index = 0
-
-            tangents = []
-
-            for tangentInfo in tangentInfos:
-                if tangentInfo[2]:
-                    tangent = tangentInfo[0]
-
-                else:
-                    multi[index].set(tangentInfo[0])
-                    tangent = multi[index]
-                    index += 1
-
-                tangents.append(tangent)
+        # Force everything to plugs for simplicity
+        tangents = forceVectorsAsPlugs(tangents)
+        outNormals[0] = normal = forceVectorsAsPlugs([normal])[0]
 
         for i, thisTangent in enumerate(tangents[:-1]):
             with r.Name('solve', i+1, padding=2):
@@ -1063,6 +1047,7 @@ def parallelTransport(normal, tangents):
                 theta = dot.acos()
 
                 thisNormal = outNormals[i]
+
                 nextNormal = inline.ifElse(
                     thisNormal,
                     thisNormal.rotateByAxisAngle(binormal, theta)
@@ -1296,4 +1281,3 @@ def blendBetweenCurveNormals(startNormal,
         return fwds
 
     return bwds
-
