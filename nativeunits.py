@@ -123,7 +123,6 @@ class NativeUnits:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-
         if not config['ignoreUnits']:
             NativeUnits.__depth__ -= 1
 
@@ -139,8 +138,12 @@ class NativeUnits:
 
 def nativeUnits(f):
     """
-    Decorator version of :class:`NativeUnits`.
+    Decorator version of :class:`NativeUnits`. The function will be passed-
+    through if *ignoreUnits* is ``True`` in :mod:`paya.config`.
     """
+    if config['ignoreUnits']:
+        return f
+
     @wraps(f)
     def wrapper(*args, **kwargs):
         with NativeUnits():
