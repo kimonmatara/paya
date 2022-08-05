@@ -1,3 +1,9 @@
+import inspect
+from functools import wraps
+from paya.util import LazyModule
+r = LazyModule('paya.runtime')
+
+
 class Loopback:
     """
     Used to reappropriate geometry plug methods as shape methods. The plug
