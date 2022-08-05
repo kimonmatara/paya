@@ -29,7 +29,7 @@ class Vector:
         if plug:
             return self
 
-        result = r.plugs.Attribute.get(self, **kwargs)
+        result = r.plugs.Math3D.get(self, **kwargs)
 
         if isinstance(result, _dt.Vector):
             if self.isTranslateChannel():
