@@ -62,15 +62,26 @@ def isVectorValueOrPlug(item):
 
 def floatRange(start, end, numValues):
     """
-    A variant of Python's :class:`range` for floats.
+    A variant of Python's :class:`range` for floats and float plugs.
 
-    :param float start: the minimum value
-    :param float end: the maximum value
+    :param start: the minimum value
+    :type start: float, :class:`~paya.runtime.plugs.Math1D`
+    :param end: the maximum value
+    :type end: float, :class:`~paya.runtime.plugs.Math1D`
     :param int numValues: the number of values to generate
     :return: A list of float values between ``start`` and ``end``,
         inclusively.
-    :rtype: list
+    :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
     """
+    start, startDim, startIsPlug = info(start)
+    end, endDim, endIsPlug = info(end)
+
+    hasPlugs = startIsPlug or endIsPlug
+
+    if hasPlugs:
+        ratios = floatRange(0, 1, numValues)
+        return [blendScalars(start, end, w=ratio) for ratio in ratios]
+
     grain = 1.0 / (numValues-1)
     ratios = [grain * x for x in range(numValues)]
     return [_pu.blend(start, end, weight=ratio) for ratio in ratios]
@@ -233,6 +244,38 @@ def blendNones(source, ratios=None):
         return resolved
 
     return []
+
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Blending
+#--------------------------------------------------------------|
+
+@short(weight='w')
+def blendScalars(scalarA, scalarB, weight=0.5):
+    """
+    Blends between two scalar values or plugs.
+
+    :param scalarA: the first scalar
+    :type scalarA: float, str, :class:`~paya.runtime.plugs.Math1D`
+    :param scalarB: the second scalar
+    :type scalarB: float, str, :class:`~paya.runtime.plugs.Math1D`
+    :param weight/w: the weight; when this is at 1.0, *scalarB*
+        will have fully taken over; defaults to 0.t
+    :type weight/w: float, str, :class:`~paya.runtime.plugs.Math1D`
+    :return:
+    """
+    scalarA, dimA, isPlugA = info(scalarA)
+    scalarB, dimB, isPlugB = info(scalarB)
+    weight, weightDim, weightIsPlug = info(weight)
+
+    if isPlugA or isPlugB or weightIsPlug:
+        node = r.nodes.BlendTwoAttr.createNode()
+        node.attr('input')[0].put(scalarA, p=isPlugA)
+        node.attr('input')[1].put(scalarB, p=isPlugB)
+        node.attr('attributesBlender').put(weight, p=weightIsPlug)
+
+        return node.attr('output')
+
+    return _pu.blend(scalarA, scalarB, weight=weight)
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Arg wrangling
@@ -995,7 +1038,8 @@ def getChainedAimMatrices(
     return matrices
 
 @nativeUnits
-def parallelTransport(normal, tangents):
+@short(fromEnd='fe')
+def parallelTransport(normal, tangents, fromEnd=False):
     """
     Implements **parallel transport** as described in the
     `Houdini demonstration by Manuel Casasola Merkle
@@ -1012,13 +1056,24 @@ def parallelTransport(normal, tangents):
     :param tangents: the tangent samples along the curve
     :type tangents: [list, tuple, :class:`~paya.runtime.data.Vector`,
         :class:`~paya.runtime.plugs.Vector`]
+    :param bool fromEnd/fe: indicate that *normal* is at the end, not the
+        start, of the sequence, and solve accordingly; defaults to False
     :return: The resolved normals / up vectors.
     :rtype: [:class:`paya.runtime.data.Vector`],
         [:class:`paya.runtime.plugs.Vector`]
     """
+    tangents = list(tangents)
+
+    if fromEnd:
+        tangents = tangents[::-1]
+
     normal, normalDim, normalIsPlug = info(normal)
     tangentInfos = [info(tangent) for tangent in tangents]
     tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
+
+    normal = normal.rejectFrom(tangents[0]) # perpendicularise, otherwise
+                                            # whole calc goes wonky
+
     tangentPlugStates = [tangentInfo[2] for tangentInfo in tangentInfos]
     hasTangentPlugs = any(tangentPlugStates)
 
@@ -1034,7 +1089,9 @@ def parallelTransport(normal, tangents):
     if hasPlugs:
         # Force everything to plugs for simplicity
         tangents = forceVectorsAsPlugs(tangents)
-        outNormals[0] = normal = forceVectorsAsPlugs([normal])[0]
+
+        normal = forceVectorsAsPlugs([normal])[0]
+        outNormals[0] = normal
 
         for i, thisTangent in enumerate(tangents[:-1]):
             with r.Name('solve', i+1, padding=2):
@@ -1073,7 +1130,57 @@ def parallelTransport(normal, tangents):
 
             outNormals.append(nextNormal)
 
+    if fromEnd:
+        outNormals = outNormals[::-1]
+
     return outNormals
+
+def _resolvePerSegResForBlendedParallelTransport(numSegments, resolution):
+    """
+    Utility method, used by methods such as
+    :meth:`paya.runtime.plugs.NurbsCurve.solveUpVectorsKeyedParallelTransport`.
+    """
+    # Formula is:
+    # resolution = (resPerSegment * numSegments) - (numSegments-1)
+    # hence:
+    # resPerSegment = (resolution + (numSegments-1)) / numSegments
+
+    # Assume that a minimum 'good' total resolution for any kind of
+    # curve is 9, and a minimum functioning value for 'resPerSegment'
+    # is 3
+
+    minimumPerSegmentResolution = 3
+    minimumTotalResolution = 9
+    minimumResolutionForThisCurve = max([
+        (minimumPerSegmentResolution * numSegments) - (numSegments-1),
+        minimumTotalResolution
+    ])
+
+    if resolution is None:
+        resolution = 3 * numSegments
+
+    elif resolution < minimumResolutionForThisCurve:
+        r.warning(("Requested resolution ({}) is too low for this"+
+            " curve; raising to {}.").format(resolution,
+            minimumResolutionForThisCurve))
+
+        resolution = minimumResolutionForThisCurve
+
+    # Derive per-segment resolution
+    perSegmentResolution = (resolution + (numSegments-1)) / numSegments
+    perSegmentResolution = int(round(perSegmentResolution))
+
+    resolutions = [perSegmentResolution] * numSegments
+    retotalled = (perSegmentResolution * numSegments) - (numSegments-1)
+
+    # Correct rounding errors
+    if retotalled < resolution:
+        resolutions[0] += 1
+
+    elif retotalled > resolution:
+        resolutions[-1] -= 1
+
+    return resolutions
 
 def forceVectorsAsPlugs(vectors):
     """
@@ -1268,8 +1375,6 @@ def blendBetweenCurveNormals(startNormal,
     if endNormal:
         with r.Name('ptFromEnd'):
             bwds = parallelTransport(endNormal, tangents[::-1])[::-1]
-
-    points = [tangent.node().position for tangent in tangents]
 
     if fwds:
         if bwds:
