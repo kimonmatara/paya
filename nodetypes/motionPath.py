@@ -138,7 +138,7 @@ class MotionPath:
 
     @property
     def tangent(self):
-        return self.attr('orientMatirx').getAxis(self.getFrontAxis())
+        return self.attr('orientMatrix').getAxis(self.getFrontAxis())
 
     @property
     def normalizedTangent(self):
