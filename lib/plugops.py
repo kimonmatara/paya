@@ -1,9 +1,17 @@
 import maya.cmds as m
+import pymel.core.datatypes as _dt
 import pymel.core as p
 from paya.util import LazyModule, short
 
 r = LazyModule('paya.runtime')
 
+def isPyMELObject(item):
+    """
+    :param item: the item to inspect
+    :return: True if *item* is an instance of a PyMEl class, otherwise FAlse
+    :rtype: bool
+    """
+    return isinstance(item, (r.PyNode, _dt.Array, _dt.Unit))
 
 def sameValueInput(plugA, plugB):
     """
