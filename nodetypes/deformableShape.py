@@ -18,6 +18,51 @@ class DeformableShape:
     def localGeoOutput(self):
         raise NotImplementedError
 
+    def getGeoInput(self):
+        """
+        Matched counterpart for :meth:`getGeoOutput`. Equivalent to
+        ``self.geoInput``.
+
+        :return: The shape input, for example ``inMesh`` on a mesh node.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+        """
+        return self.geoInput
+
+    @short(worldSpace='ws')
+    def getGeoOutput(self, worldSpace=False):
+        """
+        Convenience method; allows you to pick between the world- and local-
+        space abstract outputs using a keyword argument:
+
+        .. code-block:: python
+
+            def someMethod(self, worldSpace=False):
+
+                # This
+                output = self.getGeoOutput(ws=worldSpace)
+                output.doSomething()
+
+                # Instead of this
+                if worldSpace:
+                    output = self.worldGeoOutput
+
+                else:
+                    output = self.localGeoOutput
+
+                output.doSomething()
+
+
+        :param bool worldSpace/ws: return the world-space geometry output;
+            defaults to False
+        :return: The geometry output plug, for example ``outMesh`` on a mesh
+            shape.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+        """
+        if worldSpace:
+            return self.worldGeoOutput
+
+        return self.localGeoOutput
+
     #--------------------------------------------------------|    Plug interops
 
     @classmethod
