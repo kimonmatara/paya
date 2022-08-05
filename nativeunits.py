@@ -141,6 +141,10 @@ def nativeUnits(f):
     Decorator version of :class:`NativeUnits`. The function will be passed-
     through if *ignoreUnits* is ``True`` in :mod:`paya.config`.
     """
+    if hasattr(f, '__nativeunits__'):
+        # Don't re-wrap
+        return f
+
     if config['ignoreUnits']:
         return f
 
@@ -150,5 +154,7 @@ def nativeUnits(f):
             result = f(*args, **kwargs)
 
         return result
+
+    wrapper.__nativeunits__ = True
 
     return wrapper
