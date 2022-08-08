@@ -1,3 +1,4 @@
+import inspect
 from functools import wraps
 
 
@@ -6,7 +7,7 @@ class short:
     Decorator with keyword arguments, used to mimic Maya's 'shorthand'
     flags.
 
-    Example:
+    :Example:
 
         .. code-block:: python
 
@@ -115,3 +116,55 @@ def conditionalExpandArgs(*args, gate=None):
     expand(args)
 
     return out
+
+def sigCollectsKwargs(signature):
+    """
+    :param signature: the signature object
+    :type signature: :class:`inspect.Signature`
+    :return: ``True`` if the signature object collects keyword arguments,
+        otherwise ``False``.
+    """
+    for param in signature.parameters.values():
+        if param.kind == inspect.Parameter.VAR_KEYWORD:
+            return True
+
+    return False
+
+def sigWithAddedKwargs(signature, **kwargs):
+    """
+    :param signature: the original signature object
+    :type signature: :class:`inspect.Signature`
+    :param \*\*kwargs: defines keywords arguments, with defaults, to add to
+        the signature copy.
+    :return: A copy of *signature* with the passed keyword arguments mixed-in.
+    """
+    existingParams = list(signature.parameters.values())
+
+    newParams = []
+
+    for k, v in kwargs.items():
+        newParam = inspect.Parameter(
+            k, inspect.Parameter.POSITIONAL_OR_KEYWORD,
+            default=v)
+
+        newParams.append(newParam)
+
+    # Add new parameters, but only before any **kwargs collection
+
+    kwargsIndex = None
+
+    for i, param in enumerate(existingParams):
+        if param.kind == inspect.Parameter.VAR_KEYWORD:
+            kwargsIndex = i
+            break
+
+    if kwargsIndex is None:
+        existingParams += newParams
+
+    else:
+        existingParams = \
+            existingParams[:kwargsIndex] \
+            + [newParams] + existingParams[kwargsIndex:]
+
+    newsig = signature.replace(parameters=existingParams)
+    return newsig
