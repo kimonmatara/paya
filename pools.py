@@ -48,7 +48,7 @@ class UnsupportedLookupError(RuntimeError):
 
 def addNativeUnitsToEveryMethod(dct):
     """
-    Adds the `@nativeUnits<:func:paya.lib.mathops.nativeUnits>` decorator to
+    Adds the :func:`@nativeUnits <paya.nativeunits.nativeUnits>` decorator to
     every method in a Paya class dictionary. This is an in-place operation.
 
     :param dct: the class dictionary
@@ -67,7 +67,6 @@ def addNativeUnitsToEveryMethod(dct):
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    ABC
 #----------------------------------------------------------------|
-
 
 class ClassPoolBrowser:
     """
@@ -89,7 +88,6 @@ class ClassPoolBrowser:
 
 
 class ClassPool:
-
     """
     Abstract base class for collections of custom Paya classes.
     """
@@ -377,6 +375,8 @@ class ShadowPool(ClassPool):
 
             return outmro
 
+        # The following never gets called for shadowed nodes, but it does get
+        # called for parsed subtypes
         def __new__(meta, clsname, bases, dct):
             modname = dct['__module__']
             longPoolName = re.match(
@@ -438,6 +438,7 @@ class ShadowPool(ClassPool):
         if '__new__' in dct:
             raise RuntimeError("Can't override __new__ on Paya classes.")
 
+        # Prevent Paya shadow classes from ever instantiating
         def __new__(cls, *args, **kwargs):
             inst = pmbase.__new__(pmbase, *args, **kwargs)
             inst.__class__ = cls
@@ -445,6 +446,7 @@ class ShadowPool(ClassPool):
             return inst
 
         dct['__new__'] = __new__
+
         return dct
 
 
