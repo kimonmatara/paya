@@ -101,8 +101,8 @@ class RemapValue:
 
             r.removeMultiInstance(plug, b=True)
 
-    @short(reuse='re', once='o')
-    def sampleValue(self, position, reuse=True, once=False):
+    @short(reuse='re', plug='p')
+    def sampleValue(self, position, reuse=True, plug=True):
         """
         Samples an interpolated value at the specified position.
 
@@ -110,8 +110,7 @@ class RemapValue:
         :type position: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool reuse/re: look for an existing sample for the same
             position value or plug; defaults to True
-        :param bool once/o: return just a value, and don't add new
-            sample outputs; defaults to False
+        :param bool plug/p: return a plug, not just a value; defaults to True
         :return: The value sample output.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
@@ -119,28 +118,28 @@ class RemapValue:
             try:
                 output = self.findCloneWithPosition(position).attr('outValue')
 
-                if once:
-                    return output.get()
+                if plug:
+                    return output
 
-                return output
+                return output.get()
 
             except NoCloneForPositionError:
                 pass
 
-        if once:
-            if self.attr('inputValue').inputs() \
-                    or self.attr('inputValue').isLocked():
-                raise RuntimeError(
-                    "Can't perform a one-off sample because the "+
-                    "inputValue attribute is occupied or locked.")
+        if plug:
+            clone = self.createClone()
+            clone.attr('inputValue').release()
+            position >> clone.attr('inputValue')
+            return clone.attr('outValue')
 
-            self.attr('inputValue').set(position)
-            return self.attr('outValue').get()
+        if self.attr('inputValue').inputs() \
+                or self.attr('inputValue').isLocked():
+            raise RuntimeError(
+                "Can't perform a one-off sample because the "+
+                "inputValue attribute is occupied or locked.")
 
-        clone = self.createClone()
-        clone.attr('inputValue').release()
-        position >> clone.attr('inputValue')
-        return clone.attr('outValue')
+        self.attr('inputValue').set(position)
+        return self.attr('outValue').get()
 
     #-------------------------------------------------------|    Color management
     
@@ -228,8 +227,8 @@ class RemapValue:
 
             r.removeMultiInstance(plug, b=True)
 
-    @short(once='o', reuse='re')
-    def sampleColor(self, position, once=False, reuse=True):
+    @short(plug='p', reuse='re')
+    def sampleColor(self, position, plug=True, reuse=True):
         """
         Samples an interpolated color at the specified position.
 
@@ -237,6 +236,7 @@ class RemapValue:
         :type position: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool reuse/re: look for an existing sample for the same
             position value or plug; defaults to True
+        :param bool plug/p: return a plug, not just a value; defaults to True
         :return: The color sample output.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
@@ -244,29 +244,29 @@ class RemapValue:
             try:
                 output = self.findCloneWithPosition(position).attr('outColor')
 
-                if once:
-                    return r.data.Vector(output.get())
+                if plug:
+                    return output
 
-                return output
+                return r.data.Vector(output.get())
 
             except NoCloneForPositionError:
                 pass
 
-        if once:
-            if self.attr('inputValue').inputs() \
-                    or self.attr('inputValue').isLocked():
-                raise RuntimeError(
-                    "Can't perform a one-off sample because the "+
-                    "inputValue attribute is occupied or locked.")
+        if plug:
+            clone = self.createClone()
+            clone.attr('inputValue').release()
+            position >> clone.attr('inputValue')
+            return clone.attr('outColor')
 
-            self.attr('inputValue').set(position)
-            out = self.attr('outColor').get()
-            return out
+        if self.attr('inputValue').inputs() \
+                or self.attr('inputValue').isLocked():
+            raise RuntimeError(
+                "Can't perform a one-off sample because the "+
+                "inputValue attribute is occupied or locked.")
 
-        clone = self.createClone()
-        clone.attr('inputValue').release()
-        position >> clone.attr('inputValue')
-        return clone.attr('outColor')
+        self.attr('inputValue').set(position)
+        out = self.attr('outColor').get()
+        return out
 
     #-------------------------------------------------------|    State management
 
