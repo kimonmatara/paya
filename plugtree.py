@@ -245,6 +245,94 @@ def expandTree():
 
 expandTree()
 
+def subtree(name, dct=None):
+    """
+    :param str name: the root node name
+    :raises KeyError: *name* was not found in the tree.
+    :param dict dct: the dictionary to start scanning from; defaults to
+        the global tree if omitted
+    :return: A sub-section of the tree, from the first encountered
+        occurence of *name*. The root itself won't be included.
+    :rtype: dict
+    """
+    found = []
+
+    if dct is None:
+        global tree
+        dct = tree
+
+    def walk(d, path):
+        if found:
+            return
+
+        for k, v in d.items():
+            if k == name:
+                found.append(v)
+                break
+
+            else:
+                path.append(k)
+                walk(v, path)
+
+    walk(dct, [])
+
+    if found:
+        return found[0]
+
+    raise KeyError("Couldn't find key '{}'.".format(name))
+
+def flatKeys(*subtree):
+    """
+    :param dct \*subtree: an optional subtree dictionary to process;
+        if omitted, defaults to the global tree
+    :return: All keys in the tree, recursively, with duplicates removed.
+    :rtype: [:class:`str`]
+    """
+    if subtree:
+        subtree = subtree[0]
+
+    else:
+        global tree
+        subtree = tree
+
+    out = []
+
+    def walk(d):
+        for k, v in d.items():
+            out.append(k)
+
+            walk(v)
+
+    walk(subtree)
+
+    _out = []
+
+    for k in out:
+        if k not in _out:
+            _out.append(k)
+
+    return _out
+
+def getParent(key):
+    """
+    :param str key: The type to inspect.
+    :return: The parent type.
+    :rtype: :class:`str`
+    """
+    path = getPath(key)
+
+    if len(path) > 1:
+        return path[-2]
+
+def geoTypes():
+    """
+    :return: A flat list of all 'Geometry' children (recursively).
+    :rtype: [:class:`str`]
+    """
+    global tree
+    st = subtree('Geometry')
+    return flatKeys(st)
+
 #-----------------------------------------------------------|
 #-----------------------------------------------------------|    MPlug analysis
 #-----------------------------------------------------------|
