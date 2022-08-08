@@ -1,11 +1,11 @@
 """
-Decorators and descriptors for use in geometry shape classes
+Decorators, descriptors and a metaclass for use in geometry shape classes
 (e.g. :class:`paya.runtime.nodes.NurbsCurve`) to help adapt and install
 functionality from plug counterparts
 (e.g. :class:`paya.runtime.plugs.NurbsCurve`).
 
-See :func:`addPlugToSampler`, :class:`editorFromPlug` and
-:class:`samplerFromPlug`.
+See :func:`addPlugToSampler`, :class:`editorFromPlug`,
+:class:`samplerFromPlug` and :class:`ShapeExtendMeta`.
 """
 import inspect, re
 from functools import wraps
@@ -15,7 +15,8 @@ from paya.util import short, \
 import maya.cmds as m
 import pymel.core as p
 
-pools = LazyModule('paya.pools')
+import paya.plugtree as pt
+import paya.pools as pools
 
 #------------------------------------------|    User-facing
 
@@ -27,20 +28,18 @@ def addPlugToSampler(f):
     :class:`nodes <paya.pools.NodeClassPool>` pool, a :term:`dynamic` version of
     the method is sourced from the namesake plug class, and used to add
     a *plug/p=False* option to shape method.
+
+    The shape template class must have :class:`ShapeExtendMeta` assigned as the
+    metaclass.
     """
     f.__add_plug_to_sampler__ = True
     return f
 
-class _StandinFromPlug:
-    __instance__ = None
-
+class _StandinMarker:
     def __new__(cls):
-        if cls.__instance__ is None:
-            cls.__instance__ = object.__new__(cls)
+        raise RuntimeError("This class can't be instantiated.")
 
-        return cls.__instance__
-
-class samplerFromPlug(_StandinFromPlug):
+class samplerFromPlug(_StandinMarker):
     """
     Stand-in marker object. If encountered when the class is being rebuilt by
     the :class:`nodes <paya.pools.NodeClassPool>` pool, the following happens:
@@ -65,7 +64,7 @@ class samplerFromPlug(_StandinFromPlug):
 
                 def normal(self, parameter):
                     '''
-                    Hook up pointOnCurveInfo, return its outpu
+                    Hook up pointOnCurveInfo, return its output
                     '''
 
         And an entry in the shape class that looks like this:
@@ -74,7 +73,7 @@ class samplerFromPlug(_StandinFromPlug):
 
             class NurbsCurve: # shape class
 
-                normal = samplerFromPlug()
+                normal = samplerFromPlug
 
         The entry is then resolved to:
 
@@ -97,10 +96,11 @@ class samplerFromPlug(_StandinFromPlug):
         replace the method (or vice versa) in the dictionary. In this case
         use :func:`addPlugToSampler` instead.
 
+    The shape template class must have :class:`ShapeExtendMeta` assigned as the
+    metaclass.
     """
-    __instance__ = None
 
-class editorFromPlug(_StandinFromPlug):
+class editorFromPlug(_StandinMarker):
     """
     Stand-in marker object. If encountered when the class is being rebuilt by
     :class:`nodes <paya.pools.NodeClassPool>`, the following happens:
@@ -113,8 +113,45 @@ class editorFromPlug(_StandinFromPlug):
             :meth:`history input <paya.runtime.nodes.DeformableShape.getHistoryPlug>`
             and to return shapes instead of plugs, mimicking the behaviour of
             standard Maya modelling commands with construction history on.
+
+    :Example:
+
+        Given a plug method that looks like this:
+
+        .. code-block:: python
+
+            class NurbsCurve: # plug class
+
+                def detach(self, parameter):
+                    '''
+                    Hook up detachCurve, return its output(s)
+                    '''
+
+        And an entry in the shape class that looks like this:
+
+        .. code-block:: python
+
+            class NurbsCurve: # shape class
+
+                detach = editorFromPlug
+
+        The entry is then resolved to:
+
+        .. code-block:: python
+
+            class NurbsCurve: # shape class
+
+                def detach(self, parameter):
+                    '''
+                    Although the signature is the same, the internal
+                    implementation is adapted to work off of node
+                    history, and returns one or more shapes instead
+                    of plugs.
+                    '''
+
+    The shape template class must have :class:`ShapeExtendMeta` assigned as the
+    metaclass.
     """
-    __instance__ = None
 
 #------------------------------------------|    Utilities
 
@@ -125,7 +162,7 @@ def getFuncRst(f):
         pass
 
     mod = inspect.getmodule(f).__name__
-    mt = re.match(r"^paya.hybridgeotypes\.(?:.*)$", mod)
+    mt = re.match(r"^paya.hybridgeotypes\..*$", mod)
 
     if mt:
         mod = 'paya.runtime.hybridgeos'
@@ -224,18 +261,10 @@ def _deriveShapeEditorFromPlugEditor(plugFunc, clsname):
     wrapper.__doc__ = makeDoc([plugFunc], notes)
     return wrapper
 
-def _addPlugToSampler(methodName, shapeFunc, clsname):
+def _addPlugToSampler(plugFunc, shapeFunc):
+
     # Gather information
-
-    plugcls = pools.plugs.getByName(clsname)
-
-    try:
-        plugFunc = findKeyInClassDicts(methodName, plugcls)
-
-    except KeyError:
-        raise RuntimeError(("{}: No plug counterpart found for static "+
-                            "sampler {}().").format(methodName, clsname))
-
+    methodName = shapeFunc.__name__
     shapeFuncSig = inspect.signature(shapeFunc)
     shapeFuncExpectsSpace = 'space' in shapeFuncSig.parameters
     shapeFuncExpectsWorldSpace = 'worldSpace' in shapeFuncSig.parameters
@@ -352,39 +381,67 @@ def _addPlugToSampler(methodName, shapeFunc, clsname):
 
     return wrapper
 
-#------------------------------------------|    Class expansion callable
 
-def expandShapeClass(cls):
-    # Called by the nodes pool to extend geometry shape classes.
-    clsname = cls.__name__
-    plugcls = None
+geoTypes = pt.geoTypes()
 
-    for k, v in cls.__dict__.items():
-        if inspect.isfunction(v):
-            if getattr(v, '__add_plug_to_sampler__', False):
-                setattr(cls, k, _addPlugToSampler(k, v, clsname))
 
-        elif isinstance(v, samplerFromPlug):
-            # Find inherited sampler implementation
+class ShapeExtendMeta(type):
+    """
+    This metaclass must be assigned to the shape class for
+    :func:`addPlugToSampler`, :class:`editorFromPlug` and
+    :class:`samplerFromPlug` to work properly.
+    """
 
-            try:
-                shapeFunc = findKeyInClassDicts(k, cls, start=1)
+    def __new__(meta, clsname, bases, dct):
 
-            except:
-                raise RuntimeError(
-                    ("{}: Couldn't find an inherited implementation for "+
-                     "shape sampler '{}'.").format(clsname, k))
+        if clsname not in geoTypes:
+            raise RuntimeError(
+                "'{}' is not a geometry type.".format(clsname)
+            )
 
-            setattr(cls, k, _addPlugToSampler(k, shapeFunc, clsname))
+        samplerFromPlugEntries = {}
+        editorFromPlugEntries = {}
+        addPlugToSamplerEntries = {}
+        plugcls = pools.plugs.getByName(clsname)
 
-        elif isinstance(v, editorFromPlug):
-            if plugcls is None:
-                plugcls = pools.plugs.getByName(clsname)
+        for k, v in dct.items():
+            if inspect.isfunction(v):
+                if getattr(v, '__add_plug_to_sampler__', False):
+                    addPlugToSamplerEntries[k] = v
 
-            # Get function directly by attr access (Python 3.x--
-            # in 2.7 would need to retrieve from dict)
+            elif v is editorFromPlug:
+                editorFromPlugEntries[k] = v
 
+            elif v is samplerFromPlug:
+                samplerFromPlugEntries[k] = v
+
+        if samplerFromPlugEntries:
+            geoParentKey = pt.getParent(clsname)
+
+            if geoParentKey == 'Geometry':
+                ancestor = getattr(p.nodetypes, clsname)
+
+            else:
+                ancestor = pools.nodes.getByName(geoParentKey)
+
+            for k, v in samplerFromPlugEntries.items():
+                try:
+                    shapeFunc = findKeyInClassDicts(k, ancestor)
+
+                except:
+                    raise RuntimeError(
+                        ("{}: Couldn't find an inherited implementation for "+
+                         "shape sampler '{}'.").format(clsname, k))
+
+                plugFunc = getattr(plugcls, k)
+                dct[k] = _addPlugToSampler(plugFunc, shapeFunc)
+
+        for k, v in editorFromPlugEntries.items():
             plugFunc = getattr(plugcls, k)
+            dct[k] = _deriveShapeEditorFromPlugEditor(plugFunc, clsname)
 
-            setattr(cls, k,
-                    _deriveShapeEditorFromPlugEditor(plugFunc, clsname))
+        for k, v in addPlugToSamplerEntries.items():
+            plugFunc = getattr(plugcls, k)
+            dct[k] = _addPlugToSampler(plugFunc, shapeFunc)
+
+        return super().__new__(meta, clsname, bases, dct)
