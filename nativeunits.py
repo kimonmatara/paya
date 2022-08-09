@@ -103,7 +103,7 @@ class NativeUnits:
             warned = True
 
         if warned:
-            msg = ("If you get a lot of unit warnings, edit preferences"+
+            msg = ("If you get a lot of unit warnings, edit your preferences"+
                    " or apply NativeUnits() at a higher level.")
 
             print(msg)
