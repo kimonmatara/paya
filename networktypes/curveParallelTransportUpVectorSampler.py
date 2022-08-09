@@ -4,13 +4,19 @@ from paya.util import short
 import paya.runtime as r
 
 
-class CurveParallelTransportUpVectorSampler(r.networks.CurveUpVectorSamplerRemap):
+class CurveParallelTransportUpVectorSampler(
+    r.networks.CurveUpVectorSamplerRemap):
+
+    """
+    Up vector sampler for curves. Runs a parallel-transport solution off of
+    a starting normal. Use :meth:`sampleAtParam` to sample vectors by
+    parameter.
+    """
 
     @classmethod
     @short(interpolation='i', resolution='res')
     def create(cls, curve, normal, resolution=9, interpolation='Linear'):
         """
-
         :param curve: the curve associated with this system
         :type curve: str, :class:`~paya.runtime.nodes.NurbsCurve` ,
             :class:`~paya.runtime.plugs.NurbsCurve`,
