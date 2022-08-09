@@ -1,23 +1,36 @@
+from paya.util import short
 import paya.runtime as r
 
 
+
 class CurveUpVectorSamplerRemap(r.networks.CurveUpVectorSampler):
+    """
+    Abstract base class for curve samplers that use a
+    :class:`remapValue <paya.runtime.nodes.RemapValue>` node.
+    """
 
     #----------------------------------------------------------|
     #----------------------------------------------------------|    CONSTRUCTOR
     #----------------------------------------------------------|
 
     @classmethod
-    def create(cls, curve, paramVectorKeys):
-        node = super(cls, cls).create(curve)
-        node._initRemapValue(node, paramVectorKeys)
+    @short(interpolation='i')
+    def create(cls, curve, paramVectorKeys, interpolation='Linear'):
+        node = r.networks.CurveUpVectorSampler.create(curve)
+        node.attr('payaSubtype').set(cls.__name__)
+        node.__class__ = cls
+
+        cls._initRemapValue(node, paramVectorKeys,
+                            interpolation=interpolation)
         return node
 
     @classmethod
-    def _initRemapValue(cls, network, paramVectorKeys):
+    def _initRemapValue(cls, network,
+                        paramVectorKeys,
+                        interpolation='Linear'):
         rv = r.nodes.RemapValue.createNode()
         rv.attr('message') >> network.addAttr('remapValue', at='message')
-        rv.setColors(paramVectorKeys)
+        rv.setColors(paramVectorKeys, interpolation=interpolation)
         return rv
 
     #----------------------------------------------------------|
