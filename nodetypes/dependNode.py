@@ -2,8 +2,10 @@ import pymel.util as _pu
 import paya.lib.names as _nm
 import paya.lib.attrs as _atr
 from paya.util import short, resolveFlags, LazyModule
+import paya.pools as _pl
 import paya.lib.names as _nm
-# import paya.runtime as r
+import maya.cmds as m
+import maya.OpenMaya as om
 
 r = LazyModule('paya.runtime')
 
@@ -11,8 +13,8 @@ r = LazyModule('paya.runtime')
 class MakeName(object):
 
     def __get__(self, inst, instype):
-        @short(name='n', control='ct')
-        def makeName(*elems, name=None, control=False):
+        @short(name='n', control='ct', inheritNames='inh')
+        def makeName(*elems, name=None, control=False, inheritNames=True):
             """
             Generates a context-appropriate Maya name. Results will vary
             depending on whether this method is called on a class or on a
@@ -32,7 +34,7 @@ class MakeName(object):
             :return: The node name.
             :rtype: str
             """
-            kwargs = {}
+            kwargs = {'inheritNames': inheritNames}
 
             if control:
                 kwargs['control'] = True
@@ -57,7 +59,44 @@ class DependNode:
     __supports_parsed_subtypes__ = False
     __subtype_pool__ = None
 
-    def expandClass(self):
+    @classmethod
+    def getParsedSubclassForNode(cls, node):
+        """
+        :raises :class:`paya.pools.MissingTemplateError`: No template was
+            found for the parsed class name.
+
+        The return will be ``None`` if the node has no ``payaSubtype`` attribute.
+        """
+        # Attribute inspection must be done using API; using DependencyNode-
+        # derived methods will lead to cycles as they call PyNode.__new__
+        # and this method is itself called in Paya's __new__ hook
+        pool = cls.__subtype_pool__
+        nodeMObj = node.__apimobject__()
+        nodeMFn = om.MFnDependencyNode(nodeMObj)
+
+        try:
+            tagMObj = nodeMFn.attribute('payaSubtype')
+
+        except RuntimeError:
+            # No tag plug, rturn None
+            return
+
+        tagMPlug = om.MPlug(nodeMObj, tagMObj)
+        clsname = tagMPlug.asString()
+        try:
+            subtypeCls = pool.getByName(clsname)
+
+        except _pl.MissingTemplateError:
+            m.warning(
+                "Couldn't source parsed {} subclass {}, skipping reassignment.".format(
+                node.__class__.__name__, clsname
+                )
+            )
+            return
+
+        return subtypeCls
+
+    def expandClass(self, init=True):
         """
         If this node type supports parsed subtypes, reads the
         subtype attribute (if available) and attempts to source
@@ -68,22 +107,18 @@ class DependNode:
 
         :return: ``self``
         """
-        if self.__supports_parsed_subtypes__:
-            pool = self.__subtype_pool__
+        subtype = self.getParsedSubclassForNode(self)
 
-            if self.hasAttr('payaSubtype'):
-                attr = self.attr('payaSubtype')
-                clsname = attr.get()
-                clsname = clsname[0].upper()+clsname[1:]
+        if subtype is not None:
+            self.__class__ = subtype
 
-                try:
-                    self.__class__ = pool.getByName(clsname)
-
-                except:
-                    r.warning(("Subtype '{}' could "+
-                        "not be retrieved.").format(clsname))
+            if init:
+                self.__paya_subtype_init__()
 
         return self
+
+    def __paya_subtype_init__(self):
+        pass
 
     #-----------------------------------------------------------|    Name management
 
@@ -162,8 +197,23 @@ class DependNode:
         if cls.__is_parsed_subtype__:
             attr = out.addAttr('payaSubtype', dt='string')
             clsname = cls.__name__
-            typename = clsname[0].lower()+clsname[1:]
-            attr.set(typename)
+            attr.set(clsname)
+
+            subtypePool = cls.__subtype_pool__
+
+            try:
+                subtypeClass = subtypePool.getByName(clsname)
+                out.__class__ = subtypeClass
+                success = True
+
+            except:
+                success = False
+                r.warning("Could not apply parsed subtype"+
+                    " '{}' to {}, skipping.".format(clsname, out))
+
+            if success:
+                out.__paya_subtype_init__()
+
             out.__class__ = cls.__subtype_pool__.getByName(clsname)
 
         return out
