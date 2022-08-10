@@ -8,6 +8,7 @@ from paya.nativeunits import nativeUnits
 from paya.lib.plugops import *
 import pymel.util as _pu
 from paya.util import conditionalExpandArgs
+import pymel.core as p
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Constants
@@ -44,17 +45,25 @@ def isVectorValueOrPlug(item):
         False
     :rtype: bool
     """
-    if isinstance(item, p.datatypes.Vector):
+    if isinstance(item, (p.datatypes.Vector, p.datatypes.Point)) \
+        or (isinstance(item, r.plugs.Math3D)
+            and not isinstance(item, r.plugs.EulerRotation)):
         return True
 
-    if isinstance(item, (tuple, list)):
-        return len(item) is 3 and all(
-            [isScalarValue(member) for member in item])
+    if isinstance(item, str):
+        try:
+            plug = p.Attribute(item)
 
-    cls = type(item)
+        except:
+            return False
 
-    return issubclass(cls, r.plugs.Math3D
-        ) and not issubclass(cls, r.plugs.EulerRotation)
+        return (isinstance(plug, r.plugs.Math3D)
+            and not isinstance(plug, r.plugs.EulerRotation))
+
+    if hasattr(item, '__iter__'):
+        return len(item) is 3 and all(map(isScalarValue, item))
+
+    return False
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Soft interpolation utilities
@@ -344,6 +353,24 @@ def conformVectorArg(arg, listLength=None):
         "multiplied to the required length "+
         "of {}.".format(listLength)
     )
+
+def parseUpVectorArg(upVector):
+    out = {}
+
+    if isinstance(upVector, zip):
+        out['keys'] = list(upVector)
+
+    elif isVectorValueOrPlug(upVector):
+        out['single'] = upVector
+
+    elif hasattr(upVector, '__iter__'):
+        if all((isVectorValueOrPlug(member) for member in upVector)):
+            out['multi'] = list(upVector)
+
+    else:
+        raise RuntimeError("Couldn't parse up vector argument.")
+
+    return out
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Matrix construction
@@ -1135,10 +1162,150 @@ def parallelTransport(normal, tangents, fromEnd=False):
 
     return outNormals
 
+# @nativeUnits
+# @short(unwindSwitch='uws', resolution='res')
+# def parallelTransportWithKeyVectors(paramVectorKeys,
+#                                     resolution=9, unwindSwitch=0):
+#     """
+#     Given a list of *param, vector* pairs indicating known vectors, performs
+#     forward and backward parallel transport for each segment, blending between
+#     solutions by angle. Good for systems like bezier spines where up vectors
+#     are defined by anchor controls.
+#
+#     The first member of each pair doesn't have to represent a NURBS curve
+#     parameter; it can be any kind of scalar, like a length fraction. The
+#     distinction only becomes relevant downstream of this function.
+#
+#     The number of returned solve pairs is determined by *resolution*. These
+#     can be combined with calls to
+#     :meth:`~paya.runtime.nodes.RemapValue.setColors` and
+#     :meth:`~paya.runtime.node.RemapValue.sampleColor` on a
+#     :class:`remapValue <paya.runtime.nodes.RemapValue>` node to get more
+#     values via interpolation.
+#
+#     :param paramVectorKeys: zipped *param, vector* pairs indicating known
+#         vectors; at least two pairs (start / end) are needed
+#     :param resolution/res: the number of output solve pairs to generate;
+#         higher numbers improve accuracy but impact performance; defaults to 9
+#     :param unwindSwitch/uws: an integer, or list of integers, specifying how
+#         to blend the bidirectional solutions:
+#
+#             - 0 (shortest, the default)
+#             - 1 (positive)
+#             - 2 (negative)
+#
+#         If this is a list, it should be one less than the number
+#         of *param, vector* pairs passed through *upVector*.
+#     :return: Solved *param: vector* pairs.
+#     :rtype: [[:class:`float` | :class:`~paya.runtime.plugs.Math1D`,
+#         :class:`~paya.runtime.data.Vector |
+#         :class:`~paya.runtime.plugs.Vector`]]
+#     """
+#     paramVectorKeys = list(paramVectorKeys)
+#     numKeys = len(paramVectorKeys)
+#
+#     if numKeys < 2:
+#         raise ValueError("Need at least two keys (start / end).")
+#
+#     numSegments = numKeys-1
+#
+#     if isinstance(unwindSwitch, (tuple, list)):
+#         if len(unwindSwitch) is not numSegments:
+#             raise ValueError(
+#                 "If 'unwindSwitch' is a list, it "+
+#                 "should be of length "+
+#                 "paramUpVectorKeys-1.")
+#
+#         unwindSwitches = unwindSwitch
+#
+#     else:
+#         unwindSwitches = [unwindSwitch] * numSegments
+#
+#     segmentResolutions = resolvePerSegResForBlendedParallelTransport(
+#         numSegments, resolution
+#     )
+#
+#     params, normals = zip(*paramVectorKeys)
+#
+#     # Init per-segment info bundles
+#     infoPacks = []
+#
+#     for i, param, normal, segmentResolution in zip(
+#         range(numSegments),
+#         params[:-1],
+#         normals[:-1],
+#         segmentResolutions
+#     ):
+#         infoPack = {
+#             'startParam': param,
+#             'nextParam': params[i+1],
+#             'startNormal': normals[i],
+#             'endNormal': normals[i+1],
+#             'unwindSwitch': unwindSwitches[i],
+#             'tangentSampleParams': floatRange(
+#                 param, params[i+1],
+#                 segmentResolution)
+#         }
+#
+#         infoPacks.append(infoPack)
+#
+#     # Add tangent samples to each bundle, taking care not to
+#     # replicate overlapping samples
+#     for i, infoPack in enumerate(infoPacks):
+#         with r.Name('segment', i+1, padding=2):
+#             inner = i > 0
+#             tangentSampleParams = infoPack['tangentSampleParams'][:]
+#
+#             if inner:
+#                 del(tangentSampleParams[i])
+#
+#             infoPack['tangents'] = tangents = []
+#
+#             for x, tangentSampleParam in enumerate(
+#                     tangentSampleParams):
+#                 with r.Name('tangent', x+1):
+#                     tangents.append(
+#                         self.tangentAtParam(tangentSampleParam)
+#                     )
+#
+#             if inner:
+#                 tangents.insert(0, infoPacks[i-1]['tangents'][-1])
+#
+#     # Run the parallel transport per-segment
+#     for i, infoPack in enumerate(infoPacks):
+#         with r.Name('segment', i+1, padding=2):
+#             infoPack['normals'] = blendBetweenCurveNormals(
+#                 infoPack['startNormal'],
+#                 infoPack['endNormal'],
+#                 infoPack['tangents'],
+#                 uws=infoPack['unwindSwitch']
+#             )
+#
+#     # Get flat params, normals for the whole system
+#     outParams = []
+#     outNormals = []
+#
+#     for i, infoPack in enumerate(infoPacks):
+#         lastIndex = len(infoPack['tangents'])
+#
+#         if i < numSegments-1:
+#             lastIndex -= 1
+#
+#         last = i == numSegments-1
+#
+#         theseParams = infoPack['tangentSampleParams'][:lastIndex]
+#         theseNormals = infoPack['normals'][:lastIndex]
+#
+#         outParams += theseParams
+#         outNormals += theseNormals
+#
+#     return list(zip(outParams, outNormals))
+
+
 def _resolvePerSegResForBlendedParallelTransport(numSegments, resolution):
     """
-    Utility method, used by methods such as
-    :meth:`paya.runtime.plugs.NurbsCurve.solveUpVectorsKeyedParallelTransport`.
+    Used to resolve per-segment resolutions for segmented parallel-transport
+    implementations.
     """
     # Formula is:
     # resolution = (resPerSegment * numSegments) - (numSegments-1)
@@ -1378,10 +1545,8 @@ def blendBetweenCurveNormals(startNormal,
 
     if fwds:
         if bwds:
-            return blendCurveNormalSets(
-                fwds, bwds, tangents,
-                rat=ratios, uws=unwindSwitch
-            )
+            return blendCurveNormalSets(fwds, bwds, tangents,
+                                        rat=ratios, uws=unwindSwitch)
 
         return fwds
 
