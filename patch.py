@@ -10,8 +10,10 @@ import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
 import pymel.core.general as _gen
 import paya.pools as _pl
+import paya.config as config
 
 import maya.cmds as m
+import maya.OpenMaya as om
 
 #------------------------------------------------------------|    Gather information
 
@@ -25,8 +27,7 @@ for clsname, cls in inspect.getmembers(_dt,inspect.isclass):
 
 pyMELIsPatched = False
 
-
-# Parsed types should not receive a patch otherwise they'll hijack
+# Parsed subtypes should not receive a patch otherwise they'll hijack
 # instantiations
 
 poolsToPatch = [pool for pool in _pl.pools \
@@ -50,8 +51,8 @@ def patchPyMEL(quiet=False):
         # Patch instantiators
         def __new__(cls,*args,**kwargs):
             instance = cls.__old_new__(cls,*args,**kwargs)
-            pmcls = type(instance)
 
+            pmcls = type(instance)
             pool = pmcls.__paya_pool__
 
             try:
@@ -59,6 +60,17 @@ def patchPyMEL(quiet=False):
 
             except _pl.UnsupportedLookupError:
                 return instance
+
+            if config['autoExpandSubtypes']:
+                if issubclass(pmcls, _nt.DependNode):
+                    if customCls.__supports_parsed_subtypes__:
+                        parsedSubcls = \
+                            customCls.getParsedSubclassForNode(instance)
+
+                        if parsedSubcls is not None:
+                            instance.__class__ = parsedSubcls
+                            instance.__paya_subtype_init__()
+                            return instance
 
             instance.__class__ = customCls
 
