@@ -1,14 +1,17 @@
-import maya.OpenMaya as om
-
+from paya.shapext import copyToShapeAsEditor, copyToShapeAsSampler, copyToShape
 from paya.util import short
-import paya.lib.mathops as _mo
-import paya.runtime as r
 import paya.lib.nurbsutil as _nu
+import maya.OpenMaya as om
+import paya.runtime as r
 
 
 class BezierCurve:
 
-    #----------------------------------------------------|    Analysis
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    MFn
+    #---------------------------------------------------------------|
+
+    # Necessary otherwise will look up MFnBezierCurve, which doesn't exist
 
     def getShapeMFn(self):
         """
@@ -18,30 +21,41 @@ class BezierCurve:
         without creating a shape.
 
         :return: The function set.
-        :rtype: :class:`~maya.OpenMaya.MFnDagNode`
+        :rtype: :class:`~maya.OpenMaya.MFnNurbsCurve`
         """
-        # This will crash if called on a root array mplug, so force an index
+        try:
+            return getattr(self, '_shapeMFn')
 
-        if self.isArray():
-            plug = self[0]
+        except AttributeError:
+            # This will crash if called on a root array mplug, so force an
+            # index
 
-        else:
-            plug = self
+            if self.isArray():
+                plug = self[0]
 
-        plug.evaluate()
-        mplug = plug.__apimplug__()
-        handle = mplug.asMDataHandle()
-        mobj = handle.data()
+            else:
+                plug = self
 
-        return om.MFnNurbsCurve(mobj)
+            plug.evaluate()
+            mplug = plug.__apimplug__()
+            handle = mplug.asMDataHandle()
+            mobj = handle.data()
 
+            self._shapeMFn = out = om.MFnNurbsCurve(mobj)
+
+            return out
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    SPOT INSPECTIONS
+    #---------------------------------------------------------------|
+
+    @copyToShape()
     def numAnchors(self):
         """
-        :return: The number of anchors on this bezier curve.
-        :rtype: int
+        :return: The number of anchors on this Bezier curve.
+        :rtype: :class:`int`
         """
-        mfn = self.getShapeMFn()
-        numCVs = mfn.numCVs()
+        numCVs = self.numCVs()
         out = (numCVs+2) / 3
 
         if not out.is_integer():
@@ -49,145 +63,187 @@ class BezierCurve:
 
         return int(out)
 
+    @copyToShape()
     def paramAtAnchor(self, anchorIndex):
         """
-        This is a fixed calculation, since anchors always 'touch' the curve at
-        same parameter.
+        This is a fixed / static-only calculation, since anchors always
+        'touch' the curve at the same parameter.
 
         :param int anchorIndex: the anchor index
         :return: The U parameter.
         """
-        umin, umax = self.getKnotDomain()
+        umin, umax = self.getKnotDomain(plug=False)
         numAnchors = self.numAnchors()
         grain = (umax-umin) / (numAnchors-1)
         return grain * anchorIndex
 
-    #----------------------------------------------------|    Sampling
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    SAMPLING
+    #---------------------------------------------------------------|
 
-    @short(anchors='a')
-    def getControlPoints(self, anchors=False):
+    #---------------------------------------------------|    Points
+
+    @copyToShapeAsSampler()
+    @short(asPoints='ap',
+           asIndices='ai',
+           plug='p')
+    def getCVsAtAnchor(self,
+                       anchorIndex,
+                       asPoints=None,
+                       asIndices=None,
+                       plug=True):
         """
-        Overloads :meth:`paya.runtime.plugs.NurbsCurve.getControlPoints` to
-        add the *anchors* / *a* option.
+        :param int anchorIndex: the index of the anchor to inspect
+        :param bool asPoints/ap: return CV point positions (the default)
+        :param bool asIndices/ai: return CV indices; indices are always
+            returned as values, not scalar outputs, even if *plug* is
+            ``True``
+        :param plug/p: if *asPoints* is requested, return point outputs, not
+            just values; defaults to ``True``
+        :return: The CV indices or positions.
+        :rtype: [:class:`int`] | [:class:`paya.runtime.plugs.Vector`] |
+            [:class:`paya.runtime.data.Point`]
+        """
+        if (asPoints is None) and (asIndices is None):
+            asPoints, asIndices = True, False
 
+        elif (asPoints is None) and (asIndices is not None):
+            asPoints = not asIndices
+
+        elif (asPoints is not None) and (asIndices is None):
+            asIndices = not asPoints
+
+        allIndices = range(self.numCVs())
+        anchor = _nu.itemsAsBezierAnchors(allIndices)[anchorIndex]
+
+        if asPoints:
+            for key, index in anchor.items():
+                value = self.pointAtCV(index, p=plug)
+                anchor[key] = value
+
+        return list(anchor.values())
+
+    @copyToShapeAsSampler()
+    @short(plug='p', anchors='a')
+    def getCVs(self, plug=True, anchors=False):
+        """
+        :param bool plug/p: return plugs rather than values;
+            defaults to ``True``
         :param bool anchors/a: organise the return into bezier anchor groups;
             see :func:`paya.lib.nurbsutil.itemsAsBezierAnchors`; defaults to
-            False
-        :return: The control points.
-        :rtype: [:class:`~paya.runtime.plugs.Vector`], [dict]
+            ``False``
+        :return: The members of the ``controlPoints`` info array for this
+            curve.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`],
+            [:class:`~paya.runtime.data.Point`]
         """
-        result = r.plugs.NurbsCurve.getControlPoints(self)
+        out = super(r.plugs.BezierCurve, self).getCVs(p=plug)
 
         if anchors:
-            result = _nu.itemsAsBezierAnchors(result)
+            out = _nu.itemsAsBezierAnchors(out)
 
-        return result
+        return out
 
-    @short(
-        upVector='upv',
-        aimCurve='aic',
-        closestPoint='cp',
-        globalScale='gs',
-        squashStretch='ss'
-    )
-    def matrixAtAnchor(
-            self,
-            anchorIndex,
-            tangentAxis,
-            upAxis,
-            upVector=None,
-            aimCurve=None,
-            closestPoint=True,
-            globalScale=None,
-            squashStretch=False
-    ):
+    #---------------------------------------------------|    Matrices
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(upVector='uvp',
+           upObject='uo',
+           aimCurve='aic',
+           closestPoint='cp',
+           upVectorSampler='ups',
+           defaultToNormal='dtn',
+           globalScale='gs',
+           squashStretch='ss',
+           plug='p')
+    def matrixAtAnchor(self,
+                      anchorIndex,
+
+                      primaryAxis,
+                      secondaryAxis,
+
+                      upVector=None,
+                      upObject=None,
+
+                      aimCurve=None,
+                      closestPoint=True,
+
+                      upVectorSampler=None,
+                      defaultToNormal=None,
+
+                      globalScale=None,
+                      squashStretch=False,
+
+                      plug=True):
         """
-        :param int anchorIndex: the anchor index
-        :param str tangentAxis: the axis to map to the anchor tangent,
-            for example '-y'
-        :param str upAxis: the axis to map to the resolve up vector,
-            for example 'x'
-        :param upVector/upv: an explicit up vector; defaults to None
-        :type upVector/upv: None, tuple, list, str,
+        :param int anchorIndex: the index of the anchor at which to
+            construct a matrix
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param upVector/upv: if provided on its own, used directly; if combined
+            with *upObject*, multiplied by the object's world matrix, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: None, str, tuple, list,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an aim curve to derive up vectors from;
-            defaults to None
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool closestPoint/cp: pull points from the aim curve based on
-            proximity, not matched parameter; defaults to True
-        :param globalScale/gs: ignored if not a plug; a baseline scalar;
-            defaults to None
-        :type globalScale/gs: None, str, float,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow squash-and-stretch on the tangent
-            vector; defaults to False
+        :param upObject/uo: similar to :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes, if provided on its own,
+            used as an aiming interest ('Object Up' mode); if combined with
+            *upVector*, the up vector is multiplied by the object's world
+            matrix ('Object Rotation Up' mode); defaults to ``None``
+        :type upObject/uo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on
+            :class:`curveWarp <paya.runtime.nodes.CurveWarp>` nodes; defaults
+            to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool plug/p: return a plug rather than a value (note that, if this
+            is ``False``, *globalScale* and *squashAndStretch* are ignored);
+            defaults to ``True``
         :return: A matrix at the specified anchor.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
+        :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
         """
-        anchor = self.getControlPoints(anchors=True)[anchorIndex]
-        points = list(anchor.values())
-        tangent = points[-1]-points[0]
-        point = anchor['root']
+        return self.matrixAtParam(
+            self.paramAtAnchor(anchorIndex),
 
-        if globalScale is None:
-            globalScale = 1.0
-            gsIsPlug = False
+            primaryAxis,
+            secondaryAxis,
 
-        else:
-            globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
+            upVector=upVector,
+            upObject=upObject,
 
-            if gsIsPlug:
-                _globalScale = globalScale.get()
+            aimCurve=aimCurve,
+            closestPoint=closestPoint,
 
-                if _globalScale != 1.0:
-                    globalScale /= _globalScale
+            upVectorSampler=upVectorSampler,
+            defaultToNormal=defaultToNormal,
 
-            else: # discard
-                globalScale = 1.0
+            globalScale=globalScale,
+            squashStretch=squashStretch,
 
-        if upVector:
-            upVector = _mo.info(upVector)[0]
-
-        else:
-            if aimCurve:
-                aimCurve = _mo.asGeoPlug(aimCurve, worldSpace=True)
-
-                if closestPoint:
-                    interest = aimCurve.closestPoint(anchor['root'])
-
-                else:
-                    param = self.paramAtAnchor(anchorIndex)
-                    interest = aimCurve.pointAtParam(param)
-
-                upVector = interest-anchor['root']
-
-            else:
-                param = self.paramAtAnchor(anchorIndex)
-                upVector = self.infoAtParam(param).attr('normal')
-
-        matrix = r.createMatrix(
-            tangentAxis, tangent,
-            upAxis, upVector,
-            t=anchor['root']
-        ).pick(translate=True, rotate=True)
-
-        if gsIsPlug or squashStretch:
-            factors = [globalScale] * 3
-
-            if squashStretch:
-                tangentLength = tangent.length()
-                _tangentLength = tangentLength.get()
-
-                if _tangentLength != 1.0:
-                    tangentLength /= _tangentLength
-
-                tangentIndex = 'xyz'.index(tangentAxis.strip('-'))
-                factors[tangentIndex] = tangentLength
-
-                smtx = r.createScaleMatrix(*factors)
-                matrix = smtx * matrix
-
-        return matrix
+            plug=plug
+        )

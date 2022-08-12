@@ -1,18 +1,19 @@
-from warnings import warn
-
 import maya.OpenMaya as om
 import paya.lib.mathops as _mo
 import paya.lib.plugops as _po
 import paya.lib.nurbsutil as _nu
+from paya.shapext import copyToShapeAsEditor, copyToShapeAsSampler
 from paya.util import short
+import pymel.util as _pu
+import maya.cmds as m
 import paya.runtime as r
 
 
 class NurbsCurve:
 
-    #-------------------------------------------------------|
-    #-------------------------------------------------------|    Constructors
-    #-------------------------------------------------------|
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    CONSTRUCTORS
+    #---------------------------------------------------------------|
 
     @classmethod
     @short(
@@ -187,95 +188,62 @@ class NurbsCurve:
 
         return output.transform(matrix)
 
-    #-------------------------------------------------------|
-    #-------------------------------------------------------|    Sampling
-    #-------------------------------------------------------|
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    CODE UTILITIES
+    #---------------------------------------------------------------|
 
-    #--------------------------------------------------|    Curve-level
-
-    @short(parametric='par', uniform='uni')
-    def _resolveNumberOrValues(self,
-                               numberOrValues, parametric=False,
-                               uniform=False):
+    @short(parametric='par',
+           uniform='uni')
+    def _resolveNumberFractionsOrParams(self,
+                                        numberFractionsOrParams,
+                                        parametric=False,
+                                        uniform=False):
         """
-        Utility method. If *numberOrValues* is a tuple or list, it's passed-
-        through as-is. If it's a number:
+        Utility method. Resolves the *numberFractionsOrParams* argument on
+        distribution methods into a list of fractions or parameters.
 
-        -   If *parametric*:
+        If *numberFractionsOrParams* is a list, it will merely be conformed
+        and passed back. Otherwise, the return will always be values, not
+        plugs.
 
-            -   If *uniform*, return a list of (umin -> umax) values
-                spaced by length
+        :param numberFractionsOrParams: one of:
 
-            -   Otherwise, return a list of (umin -> umax) values in
-                parametric space (there will be bunching)
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
 
-        -   Otherwise, return a list of 0 -> 1 fractions.
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+
+        :type numberFractionsOrParams: :class:`float`,
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :return: A list of scalars (fractions or parameters).
+        :rtype: [:class:`float`, :class:`~paya.runtime.plugs.Math1D`]
         """
-        if isinstance(numberOrValues, (tuple, list)):
-            return numberOrValues
-
-        if parametric:
-            if uniform:
-                fractions = _mo.floatRange(0, 1, numberOrValues)
-                mfn = self.getShapeMFn()
-                length = mfn.length()
-
-                values = [mfn.findParamFromLength(
-                    length * f) for f in fractions]
-
-            else:
-                umin, umax = self.getKnotDomain(p=False)
-                values = _mo.floatRange(umin, umax, numberOrValues)
+        if hasattr(numberFractionsOrParams, '__iter__'):
+            return [_mo.info(x)[0] for x in numberFractionsOrParams]
 
         else:
-            values = _mo.floatRange(0, 1, numberOrValues)
+            number = numberFractionsOrParams
 
-        return values
+            if parametric:
+                if uniform:
+                    fractions = _mo.floatRange(0, 1, number)
+                    return [self.paramAtFraction(
+                        fraction, p=False) for fraction in fractions]
 
-    @short(reuse='re')
-    def info(self, reuse=True):
-        """
-        :param bool reuse/re: where available, retrieve an already-connected
-            node; defaults to True
-        :return: A ``curveInfo`` node configured for this curve output.
-        """
-        if reuse:
-            existing = self.outputs(type='curveInfo')
+                umin, umax = self.getKnotDomain(p=False)
+                return _mo.floatRange(umin, umax, number)
 
-            if existing:
-                return existing[0]
+            else:
+                return _mo.floatRange(0, 1, number)
 
-        node = r.nodes.CurveInfo.createNode()
-        self >> node.attr('inputCurve')
-
-        return node
-
-    def length(self):
-        """
-        :return: The length of this curve.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-        """
-        return self.info(re=True).attr('arcLength')
-
-    def motionPath(self, **config):
-        """
-        Creates a ``motionPath`` node and connects it to this curve. All other
-        configuration is performed via *\*\*config*.
-
-        :param \*\*config: a *source: plug* mapping to configure the node's
-            attributes; sources can be plugs or values
-        :return: The ``motionPath`` node.
-        :rtype: :class:`~paya.runtime.nodes.MotionPath`
-        """
-        node = r.nodes.MotionPath.createNode()
-        self >> node.attr('geometryPath')
-
-        for k, v in config.items():
-            v >> node.attr(k)
-
-        return node
-
-    #--------------------------------------------------|    Get info bundles
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    INIT UTIL NODES
+    #---------------------------------------------------------------|
 
     @short(reuse='re')
     def initNearestPointOnCurve(self, point, reuse=True):
@@ -313,6 +281,142 @@ class NurbsCurve:
 
         return node
 
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    SPOT INSPECTIONS
+    #---------------------------------------------------------------|
+
+    def numCVs(self):
+        """
+        :return: The number of CVs on this curve.
+        :rtype: :class:`int`
+        """
+        mfn = self.getShapeMFn()
+        return mfn.numCVs()
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    CURVE-LEVEL SAMPLING
+    #---------------------------------------------------------------|
+
+    def findExistingInfoNode(self):
+        """
+        :return: The first :class:`curveInfo <paya.runtime.nodes.CurveInfo>`
+            node connected to this curve, or ``None``.
+        :rtype: ``None`` | :class:`paya.runtime.nodes.CurveInfo`
+        """
+        existing = self.outputs(type='curveInfo')
+
+        if existing:
+            return existing[0]
+
+    @copyToShapeAsSampler()
+    @short(reuse='re', plug='p')
+    def info(self, reuse=True, plug=True):
+        """
+        :param bool reuse/re: where available, retrieve an already-connected
+            node; defaults to True
+        :param bool plug/p: return a :class:`curveInfo <paya.runtime.nodes.CurveInfo>`
+            node rather than information in a dict; defaults to ``True``
+        :return: If *plug* is ``True``, a
+            :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node;
+            otherwise, a dictionary with the following keys: ``'arcLength'``,
+            ``'controlPoints'``, ``'knots'``
+        :rtype: :class:`dict` | :class:`paya.runtime.nodes.CurveInfo`
+        """
+        if plug:
+            if reuse:
+                existing = self.findExistingInfoNode()
+
+                if existing:
+                    return existing
+
+            node = r.nodes.CurveInfo.createNode()
+            self >> node.attr('inputCurve')
+
+            return node
+
+        return {
+            'arcLength': self.length(p=False),
+            'knots': self.getKnots(p=False),
+            'controlPoints': self.getCVs(p=False)
+        }
+
+    @short(plug='p')
+    def length(self, plug=True, useMFn=True):
+        """
+        If *plug* is False, a temporary
+        :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node will be used
+        instead of :meth:`maya.OpenMaya.MFnNurbsCurve.length` to ensure
+        correct space management.
+
+        This method will *always* use a
+        :param bool plug/p: return a plug, not just a value; defaults
+            to ``True``
+        :return: The length of this curve.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+        """
+        existing = self.findExistingInfoNode()
+
+        if plug:
+            if existing:
+                return existing.attr('arcLength')
+
+            else:
+                return self.info(plug=True, re=False).attr('arcLength')
+
+        else:
+            if existing:
+                return existing.attr('arcLength').get()
+
+            node = self.info(plug=True, re=False)
+            length = node.attr('arcLength').get()
+            r.delete(node)
+            return length
+
+    @short(plug='p')
+    def getKnots(self, plug=True):
+        """
+        :param plug/p: return the ``knots`` array of a
+            :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node, not just
+            a list of values; defaults to ``True``
+        :return: [:class:`int`] | [:class:`paya.runtime.plugs.Math1D`]
+        """
+        if plug:
+            out = self.info(plug=True).attr('knots')
+            out.evaluate()
+            return out
+
+        else:
+            mfn = self.getShapeMFn()
+            arr = om.MDoubleArray()
+            mfn.getKnots(arr)
+            return [arr[i] for i in range(arr.length())]
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    LOCAL-LEVEL SAMPLING
+    #---------------------------------------------------------------|
+
+    #-----------------------------------------------|    Motion paths
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    def motionPath(self, **config):
+        """
+        Creates a ``motionPath`` node and connects it to this curve. All other
+        configuration is performed via *config*.
+
+        :param \*\*config: a *source: plug* mapping to configure the node's
+            attributes; sources can be plugs or values
+        :return: The ``motionPath`` node.
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+        """
+        node = r.nodes.MotionPath.createNode()
+        self >> node.attr('geometryPath')
+
+        for k, v in config.items():
+            v >> node.attr(k)
+
+        return node
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
     @short(fractionMode='fr', uValue='u')
     def motionPathAtParam(self, param, **config):
         """
@@ -332,6 +436,7 @@ class NurbsCurve:
 
         return self.motionPath(**config)
 
+    @copyToShapeAsSampler(worldSpaceOnly=True)
     @short(fractionMode='fr', uValue='u')
     def motionPathAtFraction(self, fraction, **config):
         """
@@ -352,168 +457,321 @@ class NurbsCurve:
 
         return self.motionPath(**config)
 
-    @short(reuse='re', turnOnPercentage='top')
-    def infoAtParam(self, param, reuse=True, turnOnPercentage=False):
-        """
-        Configures a ``pointOnCurveInfo`` node at the specified parameter.
+    #-----------------------------------------------|    PointOnCurveInfo
 
-        :param param: the parameter to sample
-        :rtype param: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool reuse/re: where available, retrieve an already-connected
-            node with the same configuration; defaults to True
-        :param bool turnOnPercentage/top: sets the 'turnOnPercentage'
-            attribute on the node; defaults to ``False``
-        :return: The ``pointOnCurveInfo`` node.
-        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
-        """
+    def _findExistingInfoAtParam(self, param, turnOnPercentage=False):
         param, paramDim, paramIsPlug = _mo.info(param)
         turnOnPercentage, topDim, topIsPlug = _mo.info(turnOnPercentage)
+        existingNodes = self.outputs(type='pointOnCurveInfo')
 
-        if reuse:
-            existingNodes = self.outputs(type='pointOnCurveInfo')
+        for existingNode in existingNodes:
+            paramOnNode = existingNode.attr('parameter')
+            paramOnNodeInputs = paramOnNode.inputs(plugs=True)
 
-            for existingNode in existingNodes:
-                paramOnNode = existingNode.attr('parameter')
-                paramOnNodeInputs = paramOnNode.inputs(plugs=True)
+            if paramIsPlug and paramOnNodeInputs:
+                paramsMatch = param == paramOnNodeInputs[0]
 
-                if paramIsPlug and paramOnNodeInputs:
-                    paramsMatch = param == paramOnNodeInputs[0]
+            elif (not paramIsPlug) and (not paramOnNodeInputs):
+                paramsMatch = param == paramOnNode.get()
 
-                elif (not paramIsPlug) and (not paramOnNodeInputs):
-                    paramsMatch = param == paramOnNode.get()
+            else:
+                paramsMatch = False
 
-                else:
-                    paramsMatch = False
+            if paramsMatch:
+                topOnNode = existingNode.attr('turnOnPercentage')
+                topOnNodeInputs = topOnNode.inputs(plugs=True)
 
-                if paramsMatch:
-                    topOnNode = existingNode.attr('turnOnPercentage')
-                    topOnNodeInputs = topOnNode.inputs(plugs=True)
+                if topIsPlug and topOnNodeInputs:
+                    if turnOnPercentage == topOnNodeInputs[0]:
+                        return existingNode
 
-                    if topIsPlug and topOnNodeInputs:
-                        if turnOnPercentage == topOnNodeInputs[0]:
-                            return existingNode
+                elif (not topIsPlug) and (not topOnNodeInputs):
+                    if turnOnPercentage == topOnNode.get():
+                        return existingNode
 
-                    elif (not topIsPlug) and (not topOnNodeInputs):
-                        if turnOnPercentage == topOnNode.get():
-                            return existingNode
-
-        node = r.nodes.PointOnCurveInfo.createNode()
-        self >> node.attr('inputCurve')
-        node.attr('parameter').put(param, p=paramIsPlug)
-        node.attr('turnOnPercentage').put(turnOnPercentage, p=topIsPlug)
-
-        return node
-
-    #--------------------------------------------------|    Get points
-
-    def getCVs(self):
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(reuse='re', plug='p',
+           turnOnPercentage='top')
+    def infoAtParam(self, param, reuse=True,
+                    plug=True, turnOnPercentage=False):
         """
-        :return: The ``controlPoints`` info array for this curve. In Paya this
-            can be iterated-over, or flattened into a list with
-            :class:`list() <list>`.
-        :rtype: [:class:`~paya.runtime.plugs.Vector`]
+        :param param: the curve parameter to inspect
+        :type param: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param bool turnOnPercentage/top: per the namesake attribute on
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>`,
+            interpret *param* a percentage ratio within parametric space
+            (note that this is not the same as ``fractionMode`` on
+            motion paths; defaults to ``False``
+        :param bool reuse/re: if *plug* is ``True``, reuse any matching
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>` nodes;
+            defaults to ``True``
+        :param bool plug/p: return a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>`
+            node rather than a dictonary of values; defaults to ``True``
+        :return: If *plug* is ``True``, a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>` node;
+            otherwise, a dictionary with the followingk keys: ``'position'``,
+            ``'tangent'``, ``'normalizedTangent'``, ``'normal'``,
+            ``'normalizedNormal'``
+        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`, :class:`dict`
         """
-        out = self.info().attr('controlPoints')
-        out.evaluate()
-        return out
+        if plug:
+            if reuse:
+                existing = self._findExistingInfoAtParam(
+                param, turnOnPercentage=turnOnPercentage)
 
-    def pointAtCV(self, cvIndex):
-        """
-        :param int cvIndex: the index of the control vertex to sample
-        :return: The position of the specified control vertex.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-        """
-        return self.getCVs()[cvIndex]
+                if existing is not None:
+                    return existing
 
-    def pointAtParam(self, param):
+            node = r.nodes.PointOnCurveInfo.createNode()
+            self >> node.attr('inputCurve')
+            param >> node.attr('parameter')
+            turnOnPercentage >> node.attr('turnOnPercentage')
+
+            return node
+
+        if turnOnPercentage:
+            umin, umax = self.getKnotDomain(p=False)
+            param = _pu.blend(umin, umax, weight=param)
+
+        tangent = self.tangentAtParam(param, p=False)
+        normalizedTangent = tangent.normal()
+        normal = self.normalAtParam(param, p=False)
+        normalizedNormal = normal.normal()
+        position = self.pointAtParam(param, p=False)
+
+        return {
+            'position': position,
+            'tangent': tangent,
+            'normalizedTangent': normalizedTangent,
+            'normal': normal,
+            'normalizedNormal': normalizedNormal
+        }
+
+    #-----------------------------------------------|    CV
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def getCVs(self, plug=True):
         """
-        :alias: ``getPointAtParam``
+        :param bool plug/p: return plugs rather than values;
+            defaults to ``True``
+        :return: The members of the ``controlPoints`` info array for this
+            curve.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`],
+            [:class:`~paya.runtime.data.Point`]
+        """
+        if plug:
+            out = self.info(plug=True).attr('controlPoints')
+            out.evaluate()
+            return list(out)
+
+        mfn = self.getShapeMFn()
+        arr = om.MPointArray()
+        mfn.getCVs(arr, om.MSpace.kWorld)
+
+        return [r.data.Point(arr[x]) for x in range(arr.length())]
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def getCV(self, cvIndex, plug=True):
+        """
+        :alias: ``pointAtCV``
+        :param int cvIndex: the index of the CV to inspect
+        :param bool plug/p: return a plug, not just a value; defaults
+            to ``True``
+        :return: The position of the specified CV.
+        """
+        if plug:
+            return self.getCVs(plug=True)[cvIndex]
+
+        mfn = self.getShapeMFn()
+        point = om.MPoint()
+        mfn.getCV(cvIndex, point, om.MSpace.kWorld)
+        return r.data.Point(point)
+
+    pointAtCV = getCV
+
+    #-----------------------------------------------|    Point
+
+    @copyToShapeAsSampler()
+    @short(parametric='par', plug='p')
+    def pointAt(self, paramOrFraction, parametric=True, plug=True):
+        """
+        Dispatches :meth:`pointAtParam` if ``parametric=True``, otherwise
+        :meth:`pointAtFraction`.
+
+        :param bool parametric/par: interpret *paramOrFraction* as a U
+            parameter rather than a length fraction; defaults to ``True``
+        """
+        if parametric:
+            return self.pointAtParam(paramOrFraction, p=plug)
+
+        return self.pointAtFraction(paramOrFraction, p=plug)
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def pointAtParam(self, param, plug=True):
+        """
         :param param: the parameter to sample
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *param* must be a value; defaults to ``True``
         :return: A point at the specified parameter.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
         """
-        node = self.infoAtParam(param)
-        return node.attr('position')
+        if plug:
+            node = self.infoAtParam(param, plug=True)
+            return node.attr('position')
+
+        mfn = self.getShapeMFn()
+        pt = om.MPoint()
+        mfn.getPointAtParam(param, pt, om.MSpace.kWorld)
+        return r.data.Point(pt)
 
     getPointAtParam = pointAtParam
 
-    def pointAtFraction(self, fraction):
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def pointAtLength(self, length, plug=True):
         """
-        :param param: the fraction to sample
-        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: A point at the specified fraction.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-        """
-        return self.motionPathAtFraction(fraction).attr('allCoordinates')
-
-    def pointAtLength(self, length):
-        """
-        :param param: the length to sample
+        :param length: the length to sample
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *param* must be a value; defaults to ``True``
         :return: A point at the specified length.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        return self.pointAtFraction(length / self.length())
+        if plug:
+            fraction = length / self.length(p=True)
+            return self.pointAtFraction(fraction, p=True)
 
-    def closestPoint(self, refPoint):
+        return self.pointAtParam(
+            self.paramAtLength(length, p=False), p=False)
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def pointAtFraction(self, fraction, plug=True):
+        """
+        :param fraction: the fraction to sample
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *param* must be a value; defaults to ``True``
+        :return: A point at the specified fraction.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+        """
+        if plug:
+            return self.motionPathAtFraction(fraction).attr('allCoordinates')
+
+        targetLength = self.length(p=False) * fraction
+        param = self.paramAtLength(targetLength, plug=False)
+        point = self.pointAtParam(param, p=False)
+        return point
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def closestPoint(self, refPoint, plug=True):
         """
         :param refPoint: the reference point
         :type refPoint: tuple, list, str, :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *param* must be a value; defaults to ``True``
         :return: The closest point on this curve to *refPoint*.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        return self.initNearestPointOnCurve(refPoint).attr('position')
+        if plug:
+            return self.initNearestPointOnCurve(refPoint).attr('position')
 
-    @short(parametric='par', uniform='uni')
-    def distributePoints(self, numberOrValues, parametric=False, uniform=False):
+        mfn = self.getShapeMFn()
+
+        paramUtill = om.MScriptUtil()
+        paramPtr = paramUtill.asDoublePtr()
+
+        point = mfn.closestPoint(om.MPoint(refPoint),
+                                 paramPtr, 0.001, om.MSpace.kWorld)
+
+        return r.data.Point(point)
+
+    @copyToShapeAsSampler()
+    @short(plug='p',
+           parametric='par',
+           uniform='uni')
+    def distributePoints(self,
+                         numberFractionsOrParams,
+                         parametric=False,
+                         uniform=False,
+                         plug=True):
         """
-        :param numberOrValues: this can be either a single scalar or
-            a list of scalars, indicating how many points to generate
-            or at which fractions or parameters to generate them, respectively
-        :type numberOrValues: int, :class:`~paya.runtime.plugs.Math1D`,
-            [int, :class:`~paya.runtime.plugs.Math1D`]
-        :param bool parametric/par: generate points at parameters, not
-            fractions; defaults to False
-        :param bool uniform/uni: if *parametric* is ``True`` and
-            *numberOrValues* is a number, generate parameters initially
-            distributed by length, not parametric space; defaults to
-            False
-        :return: Points, distributed along this curve.
-        :rtype: [:class:`~paya.runtime.plugs.Vector`]
+        :param numberFractionsOrParams: one of:
+
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
+
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :param bool plug/p: return plugs, not values; defaults to ``True``
+        :return: A list of point values or plugs.
+        :rtype: [:class:`~paya.runtime.data.Point`
+            | :class:`~paya.runtime.plugs.Vector`]
         """
-        values = self._resolveNumberOrValues(numberOrValues,
-                                             parametric=parametric,
-                                             uniform=uniform)
+        fractionsOrParams = \
+            self._resolveNumberFractionsOrParams(numberFractionsOrParams,
+                                                 par=parametric,
+                                                 uni=uniform)
 
-        if parametric:
-            meth = self.pointAtParam
+        meth = self.pointAtParam if parametric else self.pointAtFraction
 
-        else:
-            meth = self.pointAtFraction
+        return [meth(fractionOrParam,
+                     p=plug) for fractionOrParam in fractionsOrParams]
 
-        for i, value in enumerate(values):
-            with r.Name(i+1, padding=3):
-                out.append(meth(value))
+    #-----------------------------------------------|    Param
 
-        return out
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def paramAtStart(self, plug=True):
+        """
+        :param bool plug/p: return plugs, not values; defaults to True
+        :return: The parameter at the start of this curve.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        """
+        if plug:
+            return self.paramAtLength(0.0, p=True)
 
-    #--------------------------------------------------|    Get params
+        return self.getKnotDomain(plug=False)[0]
 
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def paramAtEnd(self, plug=True):
+        """
+        :param bool plug/p: return plugs, not values; defaults to True
+        :return: The parameter at the end of this curve.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        """
+        if plug:
+            return self.paramAtFraction(1.0, p=True)
+
+        return self.getKnotDomain(plug=False)[1]
+
+    @copyToShapeAsSampler()
     @short(plug='p')
     def getKnotDomain(self, plug=True):
         """
-        :param bool plug/p: return plugs, not values; defaults to True
-        :param bool plug/p: indicate that one or more arguments are
-            passed as arguments, and therefore a plug output is required,
-            or force a plug output in every case; defaults to False
+        :param bool plug/p: return plugs, not values; defaults to ``True``
         :return: The min and max U parameters on this curve.
         :rtype: (:class:`float` | :class:`~paya.runtime.plugs.Math1D`,
             :class:`float` | :class:`~paya.runtime.plugs.Math1D`)
         """
         if plug:
-            return self.paramAtLength(0.0), self.paramAtFraction(1.0)
+            return self.paramAtLength(0.0, p=True), \
+                   self.paramAtFraction(1.0, p=True)
 
+        self.evaluate()
         mfn = self.getShapeMFn()
         minPtr = om.MScriptUtil().asDoublePtr()
         maxPtr = om.MScriptUtil().asDoublePtr()
@@ -525,31 +783,9 @@ class NurbsCurve:
             om.MScriptUtil(maxPtr).asDouble(),
         )
 
+    @copyToShapeAsSampler()
     @short(plug='p')
-    def paramAtStart(self, plug=True):
-        """
-        :param bool plug/p: return plugs, not values; defaults to True
-        :return: The parameter at the start of this curve.
-        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
-        """
-        if plug:
-            return self.paramAtLength(0.0)
-
-        return self.getKnotDomain(p=False)[0]
-
-    @short(plug='p')
-    def paramAtEnd(self, plug=True):
-        """
-        :param bool plug/p: return plugs, not values; defaults to True
-        :return: The parameter at the end of this curve.
-        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
-        """
-        if plug:
-            return self.paramAtFraction(1.0)
-
-        return self.getKnotDomain(p=False)[1]
-
-    def paramAtPoint(self, point):
+    def paramAtPoint(self, point, plug=True):
         """
         This is a 'forgiving' implementation, and uses the closest point.
 
@@ -557,13 +793,26 @@ class NurbsCurve:
         :param point: the reference point
         :type point: tuple, list, str, :class:`~paya.runtime.plugs.Vector`,
             :class:`~paya.runtime.data.Point`
+        :param bool plug/p: indicate that one or more arguments are
+            passed as arguments, and therefore a plug output is required,
+            or force a plug output in every case; defaults to ``True``
         :return: The nearest parameter to the reference point.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
         """
-        return self.initNearestPointOnCurve(point).attr('parameter')
+        if plug:
+            return self.initNearestPointOnCurve(point).attr('parameter')
+
+        point = om.MPoint(point)
+        mfn = self.getShapeMFn()
+        paramUtil = om.MScriptUtil()
+        paramPtr = paramUtil.asDoublePtr()
+        mfn.closestPoint(point, paramPtr, 0.001, om.MSpace.kWorld)
+
+        return paramUtil.getDouble(paramPtr)
 
     closestParam = getParamAtPoint = paramAtPoint
 
+    @copyToShapeAsSampler()
     @short(plug='p')
     def paramAtFraction(self, fraction, plug=True):
         """
@@ -571,14 +820,15 @@ class NurbsCurve:
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: indicate that one or more arguments are
             passed as arguments, and therefore a plug output is required,
-            or force a plug output in every case; defaults to False
+            or force a plug output in every case; defaults to ``True``
         :return: The parameter at the given fraction.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
         """
         if plug:
-            point = self.pointAtFraction(fraction)
-            out = self.paramAtPoint(point)
+            point = self.pointAtFraction(fraction, plug=True)
+            out = self.paramAtPoint(point, plug=True)
         else:
+            # Length space doesn't matter for this calculation
             mfn = self.getShapeMFn()
             length = mfn.length()
             targetLength = length * fraction
@@ -586,95 +836,221 @@ class NurbsCurve:
 
         return out
 
-    def paramAtLength(self, length):
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def paramAtLength(self, length, plug=True):
         """
         :alias: ``findParamFromLength``
         :param length: the length at which to sample a parameter
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, not a value; if *length* is a
+            plug, this must also be a plug; defaults to ``True``
         :return: The parameter at the given length.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
         """
-        fraction = length / self.length()
-        return self.paramAtFraction(fraction)
+        fraction = length / self.length(p=plug)
+        return self.paramAtFraction(fraction, p=plug)
 
     findParamFromLength = paramAtLength
 
-    @short(parametric='par', uniform='uni')
-    def distributeParams(self, numberOrValues,
-                         parametric=False, uniform=False):
+    @copyToShapeAsSampler()
+    @short(parametric='par', uniform='uni', plug='p')
+    def distributeParams(self, numberFractionsOrParams,
+                         parametric=False, uniform=False,
+                         plug=True):
         """
-        If *parametric* is True, the return will be values, not plugs.
+        :param numberFractionsOrParams: one of:
 
-        :param numberOrValues: this can be either a single scalar or
-            a list of scalars, indicating how many parameters to generate
-            or at which fractions or parameters to generate them, respectively
-        :type numberOrValues: int, :class:`~paya.runtime.plugs.Math1D`,
-            [int, :class:`~paya.runtime.plugs.Math1D`]
-        :param bool parametric/par: don't use length fractions; defaults to
-            False
-        :param bool uniform/uni: if *parametric* is ``True`` and
-            *numberOrValues* is a number, generate parameters initially
-            distributed by length, not parametric space; defaults to
-            False
-        :return: Parameters, distributed along this curve.
-        :rtype: [float, :class:`~paya.runtime.plugs.Math1D`]
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
+
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+
+        :type numberFractionsOrParams: :class:`float`,
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :param bool plug/p: return scalar plugs, not values; defaults
+            to ``True``
+        :return: A list of parameter plugs or values.
+        :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
         """
-        values = self._resolveNumberOrValues(numberOrValues,
-                                             parametric=parametric,
-                                             uniform=uniform)
+        fractionsOrParams = \
+            self._resolveNumberFractionsOrParams(
+                numberFractionsOrParams,
+                par=parametric,
+                uni=uniform
+            )
 
         if parametric:
-            return values
+            params = fractionsOrParams
 
-        out = []
+        else:
+            params = [self.paramAtFraction(f,
+                        p=plug) for f in fractionsOrParams]
 
-        for i, value in enumerate(values):
-            with r.Name(i+1, padding=3):
-                out.append(self.paramAtFraction(value))
+        return params
 
-        return out
-    #--------------------------------------------------|    Get lengths
+    #-----------------------------------------------|    Length
 
-    def lengthAtFraction(self, fraction):
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def lengthAtFraction(self, fraction, plug=True):
         """
         :param fraction: the fraction to inspect
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: indicate that *fraction* is a plug, and therefore
+             a plug return is required, or force a plug return regardless;
+             defaults to ``True``
         :return: The curve length at the specified fraction.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
-        return self.length() * fraction
+        return self.length(plug=plug) * fraction
 
-    def lengthAtParam(self, param):
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def lengthAtParam(self, param, plug=True):
         """
-        :alias: ``findLengthFromParam``
+        Differs from the PyMEl / API
+        :meth:`~pymel.core.nodetypes.NurbsCurve.findLengthFromParam` in that
+        it returns properly-spaced curve lengths.
+
         :param param: the parameter to inspect
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: indicate that *param* is a plug, and therefore
+             a plug return is required, or force a plug return regardless;
+             defaults to ``True``
         :return: The curve length at the specified parameter.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        return self.detach(param, select=0)[0].length()
+        if plug:
+            return self.detach(param, select=0)[0].length(plug=True)
 
-    findLengthFromParam = lengthAtParam
+        else:
+            # Use nodes instead of MFn to get a properly spaced reading
+            output = self.detach(param, select=0)[0]
+            length = output.length(p=False)
 
-    def lengthAtPoint(self, point):
+            _node = str(output.node())
+
+            m.evalDeferred(
+                "import maya.cmds as m\nif m.objExists('{}'):\n\tm.delete('{}')".format(
+                    _node, _node)
+            )
+
+            return length
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def lengthAtPoint(self, point, plug=True):
         """
         This is a 'forgiving' implementation, and uses the closest point.
 
         :param point: the point to inspect
         :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: indicate that *point* is a plug, and therefore
+             a plug return is required, or force a plug return regardless;
+             defaults to ``True``
         :return: The curve length at the specified point.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        param = self.paramAtPoint(point)
-        return self.lengthAtParam(param)
+        param = self.paramAtPoint(point, p=plug)
+        return self.lengthAtParam(param, p=plug)
 
-    #--------------------------------------------------|    Get fractions
+    @copyToShapeAsSampler()
+    @short(parametric='par',
+           uniform='uni', plug='p')
+    def distributeLengths(self,
+                          numberFractionsOrParams,
+                          parametric=False,
+                          uniform=False, plug=True):
+        """
+        :param numberFractionsOrParams: one of:
 
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
+
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+
+        :type numberFractionsOrParams: :class:`float`,
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :param bool plug/p: return scalar plugs, not values; defaults to
+            ``True``
+        :return: A list of lengths.
+        :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        """
+        fractionsOrParams = self._resolveNumberFractionsOrParams(
+            numberFractionsOrParams,
+            par=parametric,
+            uni=uniform
+        )
+
+        meth = self.lengthAtParam if parametric else self.lengthAtFraction
+
+        return [meth(fractionOrParam,
+                     p=plug) for fractionOrParam in fractionsOrParams]
+
+    #-----------------------------------------------|    Fraction
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def fractionAtPoint(self, point, plug=True):
+        """
+        This is a 'forgiving' implementation, and uses the closest point.
+
+        :param point: the point at which to sample a fraction
+        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: indicate that *point* is a plug, and therefore
+             a plug return is required, or force a plug return regardless;
+             defaults to ``True``
+        :return: The length fraction at the specified point.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+        """
+        return self.lengthAtPoint(point, p=plug) / self.length(p=plug)
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def fractionAtParam(self, param, plug=True):
+        """
+        :param param: the parameter at which to sample a fraction
+        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: indicate that *param* is a plug, and therefore
+             a plug return is required, or force a plug return regardless;
+             defaults to ``True``
+        :return: The length fraction at the specified parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+        """
+        return self.lengthAtParam(param, p=plug) / self.length(p=plug)
+
+    @copyToShapeAsSampler()
+    @short(plug='p')
+    def fractionAtLength(self, length, plug=True):
+        """
+        :param length: the length at which to sample a fraction
+        :type length: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: indicate that *length* is a plug, and therefore
+             a plug return is required, or force a plug return regardless;
+             defaults to ``True``
+        :return: The length fraction at the specified length.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+        """
+        return length / self.length(p=plug)
+
+    @copyToShapeAsSampler()
     def distributeFractions(self, number):
         """
         Convenience method. Equivalent to
-        :meth:`floatRange(0, 1, number) <paya.lib.mathops.floatRange>`.
+        :func:`floatRange(0, 1, number) <paya.lib.mathops.floatRange>`.
 
         :param int number: the number of fractions to generate
         :return: A uniform list of fractions.
@@ -682,95 +1058,88 @@ class NurbsCurve:
         """
         return _mo.floatRange(0, 1, number)
 
-    def fractionAtPoint(self, point):
-        """
-        This is a 'forgiving' implementation, and uses the closest point.
+    #-----------------------------------------------|    Normal
 
-        :param point: the point at which to sample a fraction
-        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
-            :class:`~paya.runtime.plugs.Vector`
-        :return: The length fraction at the specified point.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def normalAtParam(self, param, normalize=False, plug=True):
         """
-        return self.lengthAtPoint(point) / self.length()
-
-    def fractionAtParam(self, param):
-        """
-        :param param: the parameter at which to sample a fraction
-        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :return: The length fraction at the specified parameter.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-        """
-        return self.lengthAtParam(param) / self.length()
-
-    def fractionAtLength(self, length):
-        """
-        :param length: the length at which to sample a fraction
-        :type length: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :return: The length fraction at the specified length.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-        """
-        return length / self.length()
-
-    #--------------------------------------------------|    Get normals
-
-    @short(normalize='nr')
-    def normal(self, param, normalize=False):
-        """
-        .. note::
-
-            Even though the Maya docs for the API method state that the vector
-            is normalized, in practice this is only the case when *space* is
-            'world'. Since spaces are irrelevant within the plug context, this
-            method defaults to a non-normalized output.
-
-        :alias: ``normalAtParam``
+        :alias: ``normal`` (for API parity)
         :param param: the parameter at which to sample the normal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *param* must be a value; defaults to ``True``
         :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
-        return self.infoAtParam(param).attr(
-            'normalizedNormal' if normalize else 'normal'
-        )
+        if plug:
+            return self.infoAtParam(param, plug=True).attr(
+                'normalizedNormal' if normalize else 'normal'
+            )
 
-    normalAtParam = normal
+        if normalize:
+            mfn = self.getShapeMFn()
+            normal = r.data.Vector(mfn.normal(param, om.MSpace.kWorld))
 
-    @short(normalize='nr')
-    def normalAtFraction(self, fraction, normalize=False):
+        else:
+            node = self.infoAtParam(param, plug=True, reuse=False)
+            normal = node.attr('normal').get()
+
+        return normal
+
+    normal = normalAtParam
+
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def normalAtFraction(self, fraction, normalize=False, plug=True):
         """
         :param fraction: the fraction at which to sample the normal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *fraction* must be a value; defaults to ``True``
         :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
-        mp = self.motionPathAtFraction(fraction)
-        mp.configFollow('y', 'x')
+        if plug:
+            mp = self.motionPathAtFraction(fraction)
+            mp.configFollow('y', 'x')
 
-        if normalize:
-            return mp.normalizedNormal
+            normal = mp.attr('orientMatrix').getAxis('x')
 
-        return mp.normal
+            if normalize:
+                normal = normal.normal()
 
-    @short(normalize='nr')
-    def normalAtLength(self, length, normalize=False):
+            return normal
+
+        param = self.paramAtFraction(fraction, p=False)
+        return self.normalAtParam(param, p=False)
+
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def normalAtLength(self, length, normalize=False, plug=True):
         """
         :param length: the length at which to sample the normal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *length* must be a value; defaults to ``True``
         :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
-        fraction = length / self.length()
-        return self.normalAtFraction(fraction, nr=normalize)
+        fraction = length / self.length(p=plug)
+        return self.normalAtFraction(fraction, nr=normalize, p=plug)
 
-    @short(normalize='nr')
-    def normalAtPoint(self, point, normalize=False):
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def normalAtPoint(self, point, normalize=False, plug=True):
         """
         :param point: the point at which to sample the normal
         :type point: tuple, list, str,
@@ -778,1004 +1147,1331 @@ class NurbsCurve:
             :class:`~paya.runtime.data.Point`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *point* must be a value; defaults to ``True``
         :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
-        param = self.paramAtPoint(point)
-        return self.normalAtParam(param, nr=normalize)
+        param = self.paramAtPoint(point, p=plug)
+        return self.normalAtParam(param, nr=normalize, p=plug)
 
-    #--------------------------------------------------|    Get tangents
+    #-----------------------------------------------|    Tangent
 
-    @short(normalize='nr')
-    def tangent(self, param, normalize=False):
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def tangentAtParam(self, param, normalize=False, plug=True):
         """
-        .. note::
-
-            Even though the Maya docs for the API method state that the vector
-            is normalized, in practice this is only the case when *space* is
-            'world'. Since spaces are irrelevant within the plug context, this
-            method defaults to a non-normalized output.
-
-        :alias: ``tangentAtParam``
+        :alias: ``tangent`` (for API parity)
         :param param: the parameter at which to sample the tangent
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized tangent;
             defaults to False
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *param* must be a value; defaults to ``True``
         :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
-        return self.infoAtParam(param).attr(
-            'normalizedTangent' if normalize else 'tangent'
-        )
+        if plug:
+            return self.infoAtParam(param, p=True).attr(
+                'normalizedTangent' if normalize else 'tangent'
+            )
 
-    tangentAtParam = tangent
+        else:
+            if normalize:
+                mfn = self.getShapeMFn()
+                tangent = r.data.Vector(mfn.tangent(param, om.MSpace.kWorld))
 
-    @short(normalize='nr')
-    def tangentAtFraction(self, fraction, normalize=False):
+            else:
+                info = self.infoAtParam(param, p=True, re=False)
+                tangent = info.attr('tangent').get()
+                r.delete(info)
+
+            return tangent
+
+    tangent = tangentAtParam
+
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def tangentAtFraction(self, fraction, normalize=False, plug=True):
         """
         :param fraction: the fraction at which to sample the tangent
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *fraction* must be a value; defaults to ``True``
         :param bool normalize/nr: normalize the output vector; defaults to
             False
         :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
         """
-        mp = self.motionPathAtFraction(fraction)
-        mp.configFollow('y', 'x')
-        return getattr(mp, 'normalizedTangent' if normalize else 'tangent')
+        if plug:
+            mp = self.motionPathAtFraction(fraction)
+            mp.configFollow('y', 'x')
+            tangent = mp.attr('orientMatrix').getAxis('y')
 
-    @short(normalize='nr')
-    def tangentAtPoint(self, point, normalize=False):
+            if normalize:
+                tangent = tangent.normal()
+
+            return tangent
+
+        param = self.paramAtFraction(fraction, p=False)
+        return self.tangentAtParam(param, p=False)
+
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def tangentAtLength(self, length, normalize=False, plug=True):
+        """
+        :param length: the length at which to sample the tangent
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *length* must be a value; defaults to ``True``
+        :param bool normalize/nr: normalize the output vector; defaults to
+            False
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        """
+        fraction = length / self.length(p=plug)
+        return self.tangentAtFraction(fraction, nr=normalize, p=plug)
+
+    @copyToShapeAsSampler()
+    @short(normalize='nr', plug='p')
+    def tangentAtPoint(self, point, normalize=False, plug=True):
         """
         :param point: the point at which to sample the normals
         :type point: list, tuple, str, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
         :param bool normalize/nr: normalize the output vector; defaults to
             False
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *point* must be a value; defaults to ``True``
         :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-        """
-        param = self.paramAtPoint(point)
-        return self.tangentAtParam(param, nr=normalize)
-
-    @short(normalize='nr')
-    def tangentAtLength(self, length, normalize=False):
-        """
-        :param length: the length at which to sample the tangent
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool normalize/nr: normalize the output vector; defaults to
-            False
-        :return: The sampled vector.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-        """
-        fraction = length / self.length()
-        return self.tangentAtFraction(fraction, nr=normalize)
-
-    #--------------------------------------------------|    Get up vectors
-
-    @short(interpolation='i',
-           resolution='res',
-           fromEnd='fe',
-           asRemapValue='arv')
-    def solveUpVectorsByParallelTransport(self,
-                                          normal,
-                                          resolution=9,
-                                          fromEnd=False,
-                                          asRemapValue=False,
-                                          interpolation='Linear'
-                                          ):
-        """
-        :param normal: the starting normal
-        :type normal: :class:`~paya.runtime.data.Vector`,
+        :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param int resolution/res: the number of solutions to perform;
-            higher values improve accuracy at the cost of performance;
-            defaults to 9
-        :param bool fromEnd/fe: indicate that *normal* is at the end of the
-            curve, and solve from there instead; defaults to False
-        :param bool asRemapValue/arv: return an already-configured
-            `remapValue <paya.runtime.nodes.RemapValue>` node; defaults to
-            False
-        :param interpolation/i: an integer plug or value defining which type
-            of interpolation should be applied to any subsequently sampled
-            values; this tallies with the color interpolation enums on a
-            :class:`remapValue <paya.runtime.nodes.RemapValue>` node, which
-            are:
-
-            - 0 ('None', you wouldn't usually want this)
-            - 1 ('Linear') (the default)
-            - 2 ('Smooth')
-            - 3 ('Spline')
-
-        :type interpolation/i: int, :class:`~paya.runtime.plugs.Math1D`
-        :return: If *asRemapValue*, a configured
-            `remapValue <paya.runtime.nodes.RemapValue>` node; otherwise,
-            zipped pairs of *parameter: vector*
-        :rtype: :class:`~paya.runtime.nodes.RemapValue` |
-            [(:class:`~paya.runtime.plugs.Math1D`,
-            :class:`~paya.runtime.plugs.Vector`)]
         """
+        param = self.paramAtPoint(point, plug=plug)
+        return self.tangentAtParam(param, nr=normalize, p=plug)
 
-        umin, umax = self.getKnotDomain(p=False)
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    UP VECTORS
+    #---------------------------------------------------------------|
 
-        # Get params, but initially uniform
-        fractions = _mo.floatRange(0, 1, resolution)
-        params = [self.paramAtFraction(f, p=False) for f in fractions]
-
-        tangents = [self.tangentAtParam(p) for p in params]
-
-        # Solve
-        upVectors = _mo.parallelTransport(normal, tangents, fe=fromEnd)
-        out = list(zip(params, upVectors))
-
-        if asRemapValue:
-            out = self.getRemapValueFromVectorKeys(out, i=interpolation)
-
-        return out
-
-    @short(interpolation='i')
-    def getRemapValueFromVectorKeys(self, keymap, interpolation='Linear'):
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(plug='p', sampler='sam')
+    def upVectorAtParam(self, param, sampler=None, plug=True):
         """
-        :param keymap: zipped pairs of *param, up vector*, indicating known
-            vectors between which to interpolate
-        :param interpolation/i: an integer plug or value defining which type
-            of interpolation should be applied to any subsequently sampled
-            values; this tallies with the color interpolation enums on a
-            :class:`remapValue <paya.runtime.nodes.RemapValue>` node, which
-            are:
-
-            - 0 ('None', you wouldn't usually want this)
-            - 1 ('Linear') (the default)
-            - 2 ('Smooth')
-            - 3 ('Spline')
-
-        :return: A :class:`remapValue <paya.runtime.nodes.RemapValue>` node,
-            with a ``color`` attribute configured using *param, vector* pairs
-            returned by a method such as
-            :meth:`solveUpVectorsByParallelTransport`.
-        :rtype: :class:`~paya.runtime.nodes.RemapValue`
+        :param param: the parameter at which to sample the up vector
+        :type param: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, and not a value; if *param*
+            is a plug, this must be ``True``; defaults to ``True``
+        :param sampler/sam: an up vector sampler to use; sampler can be
+            created using :meth:`createUpVectorSampler`; if this is omitted,
+            then the last sampler created using
+            ``createUpVectorSampler(setAsDefault=True)`` will be retrieved;
+            defaults to ``None``
+        :type sampler/sam: :class:`str`, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :raises RuntimeError: No default up vector sampler has been configured
+            on this curve output.
+        :return: An up vector at the specified parameter. A default up vector
+            sampler must have been configured on this curve using
+            :meth:`createUpVectorSampler`.
+        :rtype: :class:`~paya.runtime.networks.CurveUpVectorSampler`
         """
-        rv = r.nodes.RemapValue.createNode()
-        rv.setColors(keymap, i=interpolation)
-        return rv
+        if sampler is None:
+            sampler = self.getDefaultUpVectorSampler()
 
-    @short(interpolation='i',
-           asRemapValue='arv')
-    def solveUpVectorsKeyedLinear(self,
-                                  paramVectorKeys,
-                                  interpolation='Linear',
-                                  asRemapValue=False):
-        """
-        This mostly just passes *paramVectorKeys* through, since there's
-        no 'solving' to be done.
-
-        :param keymap: zipped pairs of *param, up vector*, indicating known
-            vectors between which to interpolate
-        :param bool asRemapValue/arv: pass the output along to
-            :meth:`getRemapValueFromVectorKeys` and return the node; defaults
-            to False
-        :param interpolation/i: passed along to
-            :meth:`getRemapValueFromVectorKeys` if *asRemapValue* was
-            requested
-        :return: If *asRemapValue*, the
-            :class:`remapValue <paya.runtime.nodes.RemapValue>` node;
-            otherwise, zipped *param, up vector* pairs
-        :rtype: [:class:`int` | :class:`~paya.runtime.plugs.Math1D`,
-             :class:`~paya.runtime.data.Vector` |
-             :class:`~paya.runtime.plugs.Vector`]
-        """
-        out = list(paramVectorKeys)
-
-        if len(out) < 2:
-            raise ValueError("Need at least two keys (start / end).")
-
-        if asRemapValue:
-            out = self.getRemapValueFromVectorKeys(out, i=interpolation)
-
-        return out
-
-    @short(interpolation='i',
-           resolution='res',
-           unwindSwitch='uws',
-           asRemapValue='arv'
-           )
-    def solveUpVectorsKeyedParallelTransport(self,
-                                             paramVectorKeys,
-                                             interpolation='Linear',
-                                             resolution=9,
-                                             unwindSwitch=0,
-                                             asRemapValue=False):
-        """
-        Generates bidirectional parallel transport solutions between
-        known up vectors, and blends between them by angle.
-
-        :param paramVectorKeys: zipped pairs of *param, up vector*,
-            indicating known vectors between which to interpolate
-        :param int resolution/res: the number of parallel-transport solutions
-            to generate across the curve; higher values improve accuracy
-            at the cost of performance; defaults to 9
-        :param unwindSwitch/uws: an integer, or list of integers, to control
-            how the parallel transport solutions will be blended:
-
-            - 0 (shortest, the default)
-            - 1 (positive)
-            - 2 (negative)
-
-            If this is a list, it should be one less than the number
-            of *param, vector* pairs passed through *paramVectorKeys*.
-
-        :param bool asRemapValue/arv: pass the output along to
-            :meth:`getRemapValueFromVectorKeys` and return the node; defaults
-            to False
-        :param interpolation/i: passed along to
-            :meth:`getRemapValueFromVectorKeys` if *asRemapValue* was
-            requested
-        :return: If *asRemapValue*, the
-            :class:`remapValue <paya.runtime.nodes.RemapValue>` node;
-            otherwise, zipped *param, up vector* pairs
-        :rtype: [:class:`int` | :class:`~paya.runtime.plugs.Math1D`,
-             :class:`~paya.runtime.data.Vector` |
-             :class:`~paya.runtime.plugs.Vector`]
-        """
-
-        paramVectorKeys = list(paramVectorKeys)
-        numKeys = len(paramVectorKeys)
-
-        if numKeys < 2:
-            raise ValueError("Need at least two keys (start / end).")
-
-        numSegments = numKeys-1
-
-        if isinstance(unwindSwitch, (tuple, list)):
-            if len(unwindSwitch) is not numSegments:
-                raise ValueError(
-                    "If 'unwindSwitch' is a list, it "+
-                    "should be of length "+
-                    "paramUpVectorKeys-1.")
-
-            unwindSwitches = unwindSwitch
-
-        else:
-            unwindSwitches = [unwindSwitch] * numSegments
-
-        segmentResolutions = _mo._resolvePerSegResForBlendedParallelTransport(
-            numSegments, resolution
-        )
-
-        params, normals = zip(*paramVectorKeys)
-
-        # Init per-segment info bundles
-        infoPacks = []
-
-        for i, param, normal, segmentResolution in zip(
-            range(numSegments),
-            params[:-1],
-            normals[:-1],
-            segmentResolutions
-        ):
-            infoPack = {
-                'startParam': param,
-                'nextParam': params[i+1],
-                'startNormal': normals[i],
-                'endNormal': normals[i+1],
-                'unwindSwitch': unwindSwitches[i],
-                'tangentSampleParams': _mo.floatRange(
-                    param, params[i+1],
-                    segmentResolution)
-            }
-
-            infoPacks.append(infoPack)
-
-        # Add tangent samples to each bundle, taking care not to
-        # replicate overlapping samples
-        for i, infoPack in enumerate(infoPacks):
-            with r.Name('segment', i+1, padding=2):
-                inner = i > 0
-                tangentSampleParams = infoPack['tangentSampleParams'][:]
-
-                if inner:
-                    del(tangentSampleParams[i])
-
-                infoPack['tangents'] = tangents = []
-
-                for x, tangentSampleParam in enumerate(
-                        tangentSampleParams):
-                    with r.Name('tangent', x+1):
-                        tangents.append(
-                            self.tangentAtParam(tangentSampleParam)
-                        )
-
-                if inner:
-                    tangents.insert(0, infoPacks[i-1]['tangents'][-1])
-
-        # Run the parallel transport per-segment
-        for i, infoPack in enumerate(infoPacks):
-            with r.Name('segment', i+1, padding=2):
-                infoPack['normals'] = _mo.blendBetweenCurveNormals(
-                    infoPack['startNormal'],
-                    infoPack['endNormal'],
-                    infoPack['tangents'],
-                    uws=infoPack['unwindSwitch']
+            if sampler is None:
+                raise RuntimeError(
+                    "No default up vector sampler has "+
+                    "been configured on this curve output."
                 )
 
-        # Get flat params, normals for the whole system
-        outParams = []
-        outNormals = []
-
-        for i, infoPack in enumerate(infoPacks):
-            lastIndex = len(infoPack['tangents'])
-
-            if i < numSegments-1:
-                lastIndex -= 1
-
-            last = i == numSegments-1
-
-            theseParams = infoPack['tangentSampleParams'][:lastIndex]
-            theseNormals = infoPack['normals'][:lastIndex]
-
-            outParams += theseParams
-            outNormals += theseNormals
-
-        out = list(zip(outParams, outNormals))
-
-        if asRemapValue:
-            out = self.getRemapValueFromVectorKeys(out, i=interpolation)
-
-        return out
-
-    #--------------------------------------------------|    Get matrices
-
-    @short(upVector='upv',
-           upObject='uo',
-           aimCurve='aic',
-           closestPoint='cp',
-           globalScale='gs',
-           squashStretch='ss')
-    def matrixAtParam(self,
-                      param,
-                      primaryAxis,
-                      secondaryAxis,
-
-                      upVector=None,
-                      upObject=None,
-                      aimCurve=None,
-                      closestPoint=True,
-
-                      globalScale=None,
-                      squashStretch=False):
-        """
-        If no up vector information is provided, the curve normal will be used
-        (not usually advisable).
-
-        :param param: the parameter at which to sample the matrix
-        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :param str primaryAxis: the primary (aim / tangent) axis for the matrix,
-            e.g. '-y'
-        :param str secondaryAxis: the secondary (up / normal) axis for the
-            matrix, e.g. 'x'
-        :param upVector/upv: if this is provided then it will be used
-            directly; if *upObject* has also been provided, this vector
-            will be multiplied by the object's matrix; defaults to None
-        :type upVector/upv: None, list, tuple, str,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param upObject/uo: if *aimUpVector* has been provided, it will
-            be multiplied by this object's world matrix (similar to
-            'Object Rotation Up' on ``motionPath``); otherwise, this object
-            will be used as a single aim interest (similar to 'Object Up' on
-            ``motionPath``); defaults to None
-        :type upObject/uo: None, str, :class:``paya.runtime.nodes.Transform`
-        :param aimCurve/aic: a curve to pull aiming interest points from,
-            similar to a ``curveWarp`` setup; defaults to None
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
-            not matched parameter; defaults to True
-        :param globalScale/gs: a base scaling factor; this must be a plug;
-            values are ignored; defaults to None
-        :type globalScale/gs: None, :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow tangent scaling; defaults to False
-        :raises ValueError: misconfigured argument(s)
-        :return: A matrix at the specified parameter.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-        """
-        #---------------------------------------|    Prep
-
-        if upVector and aimCurve:
-            raise ValueError("Unsupported combo: up vector and aim curve")
-
-        if upObject and aimCurve:
-            raise ValueError("Unsupported combo: up object and aim curve")
-
-        if upVector:
-            upVector = _mo.conformVectorArg(upVector)
-
-        if upObject:
-            upObject = r.PyNode(upObject)
-
-        if aimCurve:
-            aimCurve = _po.asGeoPlug(aimCurve)
-
-        if globalScale is None:
-            gsIsPlug = False
-            globalScale = 1.0
-
         else:
-            globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
+            sampler = r.PyNode(sampler).expandClass()
 
-            if gsIsPlug:
-                globalScale = globalScale.normal()
+        return sampler.sampleAtParam(param, plug=plug)
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(plug='p')
+    def upVectorAtFraction(self, fraction, plug=True, **kwargs):
+        """
+        Converts *fraction* into a parameter and defers to
+        :meth:`upVectorAtParam`.
+
+        :param bool plug/p: return a plug, and not a value; if *fraction*
+            is a plug, this must be ``True``; defaults to ``True``
+        :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
+        """
+        param = self.paramAtFraction(fraction, p=plug)
+        return self.upVectorAtParam(param, p=plug, **kwargs)
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(plug='p')
+    def upVectorAtLength(self, length, plug=True, **kwargs):
+        """
+        Finds the parameter at the specified length and defers to
+        :meth:`upVectorAtParam`.
+
+        :param bool plug/p: return a plug, and not a value; if *length*
+            is a plug, this must be ``True``; defaults to ``True``
+        :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
+        """
+        param = self.paramAtLength(length, p=plug)
+        return self.upVectorAtParam(param, p=plug, **kwargs)
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(plug='p')
+    def upVectorAtPoint(self, point, plug=True, **kwargs):
+        """
+        Finds the closest parameter to the specified point and defers to
+        :meth:`upVectorAtParam`.
+
+        :param bool plug/p: return a plug, and not a value; if *point*
+            is a plug, this must be ``True``; defaults to ``True``
+        :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
+        """
+        param = self.paramAtPoint(point, p=plug)
+        return self.upVectorAtParam(param, p=plug, **kwargs)
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(resolution='res',
+           unwindSwitch='uws',
+           interpolation='i',
+           aimCurve='aic',
+           upObject='uo',
+           upVector='upv',
+           parallelTransport='pt',
+           setAsDefault='sad',
+           closestPoint='cp'
+           )
+    def createUpVectorSampler(self,
+                            resolution=9,
+                            unwindSwitch=0,
+                            interpolation='Linear',
+                            aimCurve=None,
+                            closestPoint=True,
+                            upObject=None,
+                            upVector=None,
+                            parallelTransport=False,
+                            setAsDefault=True
+                            ):
+        """
+        Depending on options, returns one of the following up-vector samplers:
+
+        -   :class:`~paya.runtime.networks.CurveUpVectorAimCurveSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorIkSplineStyleSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorMpStyleSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorPtSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorPtKeysSampler`
+
+        Not all options can be combined. If all options are omitted, an
+        optimised curve normal sampler will be returned.
+
+        Use :meth:`~paya.runtime.networks.CurveUpVectorSampler.sampleAtParam`
+        on the returned object to pull up vectors.
+
+        :param upVector/upv: this can be a single up vector, or zipped pairs
+            of *parameter: vector*, indicating known up vectors at specific
+            points; if a single up vector is provided then, if it's combined
+            with *upObject*, the vector is multiplied by the object's world
+            matrix (similar to 'Object Rotation Up' on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes);
+            otherwise, the vector is used on its own; if pairs are provided
+            then they will be blended using parallel-transport or linearly
+            (similar to IK spline twist); defaults to ``None``
+        :type upVector/upv: :class:`None`, :class:`zip`, :class:`list`,
+            :class:`tuple`, :class:`str`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`,
+            [[:class:`float` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`],
+            [:class:`tuple` | :class:`list`,
+            :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`]]
+        :param upObject/uo: if provided on its own, works as an aiming interest
+            (similar to 'Object Up' mode on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes);
+            if combined with *upVector*, the object's world matrix is used to
+            multiply the up vector; defaults to ``None``
+        :type upObject/uo: str, :class:`~paya.runtime.nodes.Transform`
+        :param int resolution/res: if using parallel transport, the number of
+            solutions to generate; higher values improve accuracy at the
+            expense of interactivity; defaults to 9
+        :param unwindSwitch/uws: an integer value or plug, or a list of integer
+            values or plugs (one per segment, i.e.
+            ``len(paramVectorKeys)-1``) specifying how to resolve angle-
+            blending edge cases in per-segment parallel transport:
+
+            -   ``0`` (shortest, the default)
+            -   ``1`` (positive)
+            -   ``2`` (negative)
+
+        :type unwindSwitch/uws: :class:`int`, :class:`str`,
+            :class:`~paya.runtime.plugs.Math1D`,
+            [:class:`int` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`]
+        :param interpolation/i:: defines how to interpolate values from the
+            sparse parallel-transport solutions:
+
+            -   ``0`` (``'None'``) (you wouldn't normally want this)
+            -   ``1`` (``'Linear'``) (the default)
+            -   ``2`` (``'Smooth'``)
+            -   ``3`` (``'Spline'``)
+
+        :type interpolation/i: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool parallelTransport/pt: use parallel-transport;
+            defaults to False
+        :param aimCurve: an aim-curve from which to pull aiming interest
+            points, similarly to the option on
+            :class:`curveWarp <paya.runtime.nodes.CurveWarp>` nodes; defaults
+            to None
+        :type aimCurve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity
+            rather than matched parameter; defaults to ``True``
+        :param bool setAsDefault/sad: make this the default fallback up vector
+            source for other sampling operations; defaults to ``True``
+        :raises NotImplementedError: The requested options can't be combined.
+        :return: The sampler system.
+        :rtype: :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        """
+        with r.Name('upVecSampler'):
+            if upVector is not None:
+                if aimCurve:
+                    raise NotImplementedError(
+                        "Unsupported combo: up vector and aim curve")
+
+                upvType, upvContent = _mo.describeAndConformVectorArg(upVector)
+
+                if upvType == 'keys':
+                    # Create a spline-style or parallel-transport segments system
+                    if parallelTransport:
+                        sampler = r.networks.CurveUpVectorPtKeysSampler.create(
+                            self,
+                            upvContent,
+                            resolution=resolution,
+                            interpolation=interpolation
+                        )
+
+                    else:
+                        sampler = r.networks.CurveUpVectorIkSplineStyleSampler.create(
+                            self,
+                            upvContent,
+                            interpolation=interpolation
+                        )
+
+                elif upvType == 'single':
+                    # Create either a parallel-transport solution, or a motion-
+                    # path style set up
+                    if parallelTransport:
+                        if upObject is not None:
+                            raise NotImplementedError(
+                                "Unsupported combo: up vector and up object")
+
+                        sampler = r.networks.CurveUpVectorPtSampler.create(
+                            self,
+                            upvContent,
+                            resolution=resolution,
+                            interpolation=interpolation
+                        )
+
+                    else:
+                        sampler = r.networks.CurveUpVectorMpStyleSampler.create(
+                            self, uo=upObject, upv=upVector)
+
+                else: # 'multi'
+                    raise ValueError(
+                        "upVector/upv should be a single up vector, or (param, "+
+                        "vector) pairs")
+
+            elif upObject is not None:
+                if aimCurve:
+                    raise NotImplementedError(
+                        "Unsupported combo: up object and aim curve")
+
+                sampler = r.networks.CurveUpVectorMpStyleSampler.create(
+                    self, uo=upObject, upv=upVector)
+
+            elif aimCurve is not None:
+                # Create an aim curve setup
+                sampler = r.networks.CurveUpVectorAimCurveSampler.create(
+                    self,
+                    aimCurve,
+                    closestPoint=closestPoint
+                )
 
             else:
-                # Ignore any non-plug values, since scale will be
-                # normalized
-                globalScale = 1.0
-                gsIsPlug = False
+                sampler = r.networks.CurveUpVectorMpStyleSampler.create(self)
 
-        info = self.infoAtParam(param)
-        position = info.attr('position')
-        tangent = info.attr('tangent')
+            if setAsDefault:
+                sampler.setAsDefault()
 
-        #---------------------------------------|    Resolve up vector
+        return sampler
 
-        if upVector:
-            if upObject:
-                upVector *= upObject.attr('wm')
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    def getUpVectorSamplers(self):
+        """
+        :return: All :meth:`up vector samplers <createUpVectorSampler>`
+            created on this curve output.
+        :rtype: [:class:`~paya.runtime.networks.CurveUpVectorSampler`]
+        """
+        nodes = [output.node().expandClass() \
+                 for output in self.outputs(type='network', plugs=True)]
+
+        return [node for node in nodes \
+                if isinstance(node, r.networks.CurveUpVectorSampler)]
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    def getDefaultUpVectorSampler(self):
+        """
+        :return: The last :meth:`up vector sampler <createUpVectorSampler>`
+            that was created on this curve with ``setAsDefault=True``.
+        :rtype: :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        """
+        for output in self.outputs(type='network', plugs=True):
+            if output.attrName() == 'defaultFor':
+                return output.node()
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    def clearUpVectorSamplers(self):
+        """
+        Removes all up vector samplers and their dependencies.
+
+        .. warning::
+
+            This *will* break any rigging that hangs off one or more of the
+            samplers.
+        """
+        for sampler in self.getUpVectorSamplers():
+            sampler.remove()
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    MATRICES
+    #---------------------------------------------------------------|
+
+    def _softMatrixAt(
+            self,
+            paramOrFraction,
+            primaryAxis,
+            secondaryAxis,
+            upVector=None,
+            upObject=None,
+            aimCurve=None,
+            closestPoint=True,
+            upVectorSampler=None,
+            defaultToNormal=None,
+            parametric=True
+    ):
+        if parametric:
+            param = paramOrFraction
+
+        else:
+            param = self.paramAtFraction(paramOrFraction, p=False)
+
+        point = self.pointAtParam(param, p=False)
+        tangent = self.tangentAtParam(param, p=False)
+
+        if upVector is not None:
+            upVector = r.data.Vector(upVector)
+
+            if upObject is not None:
+                upObject = r.PyNode(upObject)
+                upVector *= upObject.getMatrix(worldSpace=True)
+
+        elif upObject is not None:
+            upObject = r.PyNode(upObject)
+            upVector = upObject.getWorldPosition() - point
 
         elif aimCurve:
+            aimCurve = _po.asGeoPlug(aimCurve, ws=True)
+
             if closestPoint:
-                interest = aimCurve.closestPoint(position)
+                interest = aimCurve.closestPoint(point, p=False)
 
             else:
-                interest = aimCurve.pointAtParam(param)
+                interest = aimCurve.pointAtParam(param, p=False)
 
-            upVector = interest-position
-
-        elif upObject:
-            upVector = upObject.getWorldPosition(p=True)-position
+            upVector = interest-point
 
         else:
-            upVector = info.attr('normal')
+            if upVectorSampler:
+                upVectorSampler = r.PyNode(upVectorSampler).expandClass()
 
-        #---------------------------------------|    Build matrix
+            elif not defaultToNormal:
+                upVectorSampler = self.getDefaultUpVectorSampler()
+
+            if upVectorSampler is None:
+                upVector = self.normalAtParam(param, p=False)
+
+            else:
+                upVector = upVectorSampler.sampleAtParam(param, p=False)
 
         matrix = r.createMatrix(
             primaryAxis, tangent,
             secondaryAxis, upVector,
-            t=position
-        ).pk(t=True, r=True)
-
-        if gsIsPlug or squashStretch:
-            factors = [globalScale] * 3
-
-            if squashStretch:
-                tanScale = tangent.length().normal()
-                tanIndex = 'xyz'.index(primaryAxis.strip('-'))
-                factors[tanIndex] = tanScale
-
-            smtx = r.createScaleMatrix(*factors)
-            matrix = smtx * matrix
+            t=point).pick(t=True, r=True)
 
         return matrix
 
-    @short(upVector='upv',
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(upVector='uvp',
            upObject='uo',
            aimCurve='aic',
            closestPoint='cp',
+           upVectorSampler='ups',
+           defaultToNormal='dtn',
            globalScale='gs',
-           squashStretch='ss')
-    def matrixAtFraction(self,
-                      fraction,
+           squashStretch='ss',
+           plug='p')
+    def matrixAtParam(self,
+                      param,
+
                       primaryAxis,
                       secondaryAxis,
 
                       upVector=None,
                       upObject=None,
+
                       aimCurve=None,
                       closestPoint=True,
 
-                      globalScale=None,
-                      squashStretch=False):
-        """
-        Unlike :meth:`matrixAtParam`, builds from a ``motionPath`` instead
-        a ``pointOnCurveInfo`` node, although any performance improvement
-        will be negated if an aim curve is used with *closestPoint* set to
-        ``False``. If no up vector arguments are provided, the curve normal
-        will be used (not usually advisable).
+                      upVectorSampler=None,
+                      defaultToNormal=None,
 
-        :param fraction: the fraction at which to sample the matrix
-        :type fraction: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :param str primaryAxis: the primary (aim / tangent) axis for the matrix,
-            e.g. '-y'
-        :param str secondaryAxis: the secondary (up / normal) axis for the
-            matrix, e.g. 'x'
-        :param upVector/upv: if this is provided then it will be used
-            directly; if *upObject* has also been provided, this vector
-            will be multiplied by the object's matrix; defaults to None
-        :type upVector/upv: None, list, tuple, str,
+                      globalScale=None,
+                      squashStretch=False,
+
+                      plug=True):
+        """
+        .. note::
+            Unlike :meth:`matrixAtFraction`, which uses a
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` node, this
+            builds off of a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>`.
+
+        :param param: the parameter at which to construct the matrix
+        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param upVector/upv: if provided on its own, used directly; if combined
+            with *upObject*, multiplied by the object's world matrix, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: None, str, tuple, list,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
-        :param upObject/uo: if *aimUpVector* has been provided, it will
-            be multiplied by this object's world matrix (similar to
-            'Object Rotation Up' on ``motionPath``); otherwise, this object
-            will be used as a single aim interest (similar to 'Object Up' on
-            ``motionPath``); defaults to None
-        :type upObject/uo: None, str, :class:``paya.runtime.nodes.Transform`
-        :param aimCurve/aic: a curve to pull aiming interest points from,
-            similar to a ``curveWarp`` setup; defaults to None
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param upObject/uo: similar to :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes, if provided on its own,
+            used as an aiming interest ('Object Up' mode); if combined with
+            *upVector*, the up vector is multiplied by the object's world
+            matrix ('Object Rotation Up' mode); defaults to ``None``
+        :type upObject/uo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on
+            :class:`curveWarp <paya.runtime.nodes.CurveWarp>` nodes; defaults
+            to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.nodes.Transform`
         :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
-            not matched parameter; defaults to True
-        :param globalScale/gs: a base scaling factor; this must be a plug;
-            values are ignored; defaults to None
-        :type globalScale/gs: None, :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow tangent scaling; defaults to False
-        :raises ValueError: misconfigured argument(s)
-        :return: A matrix at the specified fraction.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool plug/p: return a plug rather than a value (note that, if this
+            is ``False``, *globalScale* and *squashAndStretch* are ignored);
+            defaults to ``True``
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
         """
-        #---------------------------------------|    Prep
+        if plug:
+            if globalScale is not None:
+                globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
 
-        if upVector and aimCurve:
-            raise ValueError("Unsupported combo: up vector and aim curve")
+                if gsIsPlug:
+                    globalScale = globalScale.normal()
 
-        if upObject and aimCurve:
-            raise ValueError("Unsupported combo: up object and aim curve")
-
-        if upVector:
-            upVector = _mo.conformVectorArg(upVector)
-
-        if upObject:
-            upObject = r.PyNode(upObject)
-
-        if aimCurve:
-            aimCurve = _po.asGeoPlug(aimCurve)
-
-        if globalScale is None:
-            gsIsPlug = False
-            globalScale = 1.0
-
-        else:
-            globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
-
-            if gsIsPlug:
-                globalScale = globalScale.normal()
-
+                else:
+                    globalScale = 1.0
             else:
-                # Ignore any non-plug values, since scale will be
-                # normalized
                 globalScale = 1.0
                 gsIsPlug = False
 
-        mp = self.motionPathAtFraction(fraction)
-        position = mp.attr('allCoordinates')
+            poci = self.infoAtParam(param, p=True)
+            point = poci.attr('position')
+            tangent = poci.attr('tangent')
 
-        #---------------------------------------|    Resolve up vector
-
-        mpKwargs = {}
-
-        if upVector:
-            mpKwargs['worldUpVector'] = upVector
-
-            if upObject:
-                mpKwargs['worldUpObject'] = upObject
-
-        elif aimCurve:
-            if closestPoint:
-                interest = aimCurve.closestPoint(position)
-
-            else:
-                param = self.paramAtPoint(position)
-                interest = aimCurve.pointAtParam(param)
-
-            mpKwargs['worldUpVector'] = interest-position
-
-        elif upObject:
-            mpKwargs['worldUpObject'] = upObject
-
-        mp.configFollow(primaryAxis, secondaryAxis, **mpKwargs)
-
-        #---------------------------------------|    Build matrix
-
-        orimtx = mp.attr('orientMatrix')
-        tmtx = position.asTranslateMatrix()
-        matrix = orimtx.pk(r=True) * tmtx
-
-        if gsIsPlug or squashStretch:
-            factors = [globalScale] * 3
-
-            if squashStretch:
-                tangent = orimtx.getAxis(primaryAxis)
-                tanScale = tangent.length().normal()
-                tanIndex = 'xyz'.index(primaryAxis.strip('-'))
-                factors[tanIndex] = tanScale
-
-            smtx = r.createScaleMatrix(*factors)
-            matrix = smtx * matrix
-
-        return matrix
-
-    def matrixAtLength(self, length, *args, **kwargs):
-        """
-        Converts *length* to a fraction and defers to
-        :meth:`matrixAtFraction`.
-        """
-        fraction = self.fractionAtLength(length)
-        return self.matrixAtFraction(fraction, *args, **kwargs)
-
-    def matrixAtPoint(self, point, *args, **kwargs):
-        """
-        Finds the closest parameter to *point* and defers to
-        :meth:`matrixAtParam`.
-        """
-        param = self.paramAtPoint(point, *args, **kwargs)
-
-    @r.nativeUnits
-    @short(
-        parametric='par',
-        uniform='uni',
-
-        upVector='upv',
-        upObject='uo',
-        aimCurve='aic',
-        closestPoint='cp',
-
-        globalScale='gs',
-        squashStretch='ss',
-
-        interpolation='i',
-        parallelTransport='pt',
-        unwindSwitch='uws',
-        resolution='res'
-    )
-    def distributeMatrices(self,
-                           numberOrValues,
-                           primaryAxis,
-                           secondaryAxis,
-
-                           parametric=False,
-                           uniform=False,
-
-                           upVector=None,
-                           upObject=None,
-                           aimCurve=None,
-                           closestPoint=True,
-
-                           globalScale=None,
-                           squashStretch=False,
-
-                           interpolation='Linear',
-                           parallelTransport=False,
-                           unwindSwitch=0,
-                           resolution=9
-                           ):
-        """
-        :param numberOrValues: an integer indicating how many fractions
-            (or parameters, if *parametric* is ``True``) to sample across
-            the curve, or an explicit list of fractions or parameters
-        :type paramOrValues: int,
-            [int | str | :class:`~paya.runtime.plugs.Math1D`]
-        :param str primaryAxis: the primary (aim / tangent) axis for the
-            matrix, e.g. '-y'
-        :param str secondaryAxis: the secondary (up / normal) axis for the
-            matrix, e.g. 'x'
-        :param bool parametric/par: if *numberOrValues* is a number, generate
-            U values and not fractions; if it's a list, interpret its members
-            as parameters and not fractions; defaults to False
-        :param bool uniform/uni: if *numberOrValues* is a number, and *parametric*
-            is ``True``, initialised parameter values should be distributed
-            by length, not U space; defaults to False
-        :param upVector/upv: this can be:
-
-            -   a single up vector
-            -   a list of up vectors (one per resolved sample point as
-                indicated by *numberOrValues*)
-            -   a list of pairs of *parameter, up vector*, indicating known
-                up vectors between which to interpolate; note that the keys
-                must always be parameters, even if *parametric* is ``False``
-            -   None (defer to other up vector clues)
-
-        :type upVector/uv:
-            :class:`tuple`, :class:`list`, :class:`str`, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`,
-            [:class:`tuple`, :class:`list`, :class:`str`, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`],
-            [[float | :class:`~paya.runtime.plugs.Math1D`,
-                :class:`tuple` | :class:`list` | :class:`str` |
-                :class:`~paya.runtime.data.Vector`,
-                :class:`~paya.runtime.plugs.Vector`]]
-        :param upObject/uo: a single transform, or a list of transforms, used
-            in the same way as in motion paths: if combined with *upVector*,
-            creates an 'Object Rotation Up' setup; otherwise, works as an aim
-            interest for the up vector; defaults to None
-        :type upObject/uo: None, str, :class:`~paya.runtime.nodes.Transform`,
-            [str, :class:`~paya.runtime.nodes.Transform`]
-        :param aimCurve/aic: used to pull up vector interest points, similar
-            to :class:`curveWarp <paya.runtime.nodes.CurveWarp`
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool closestPoint/cp: pull points from *aimCurve* by proximity, not
-            matched parameter; defaults to True
-        :param globalScale/gs: a baseline scaling factor; since output matrices
-            are always normalized for scale, if this is not a plug it will
-            effectively be replaced with 1.0; defaults to None
-        :type globalScale/gs: None, int, :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow tangent scaling; defaults to False
-        :param interpolation: an integer plug or value specifying which type
-            of interpolation to use when *upVector* has been provided as
-            *param, vector* pairs; tallies with the color interpolation enums
-            on a :class:`remapValue <paya.runtime.nodes.RemapValue>` node, which
-            are:
-
-            - 0 ('None', you wouldn't usually want this)
-            - 1 ('Linear') (the default)
-            - 2 ('Smooth')
-            - 3 ('Spline')
-
-        :type interpolation/i: int, :class:`~paya.runtime.plugs.Math1D`
-        :param bool parallelTransport/pt: if a single up vector hint is
-            passed, either through *upVector* or *upObject*, propagate
-            it across the curve using parallel transport; alternatively,
-            if *upVector* was passed as *param, vector* keys, run
-            parallel transport bidirectionally on each segment; defaults to
-            False
-        :param int resolution/res: the number of parallel transport solutions
-            to perform; higher numbers improve accuracy at the cost of
-            performance; defaults to 9
-        :param unwindSwitch/uws: used if *upVector* was passed as *param,
-            vector* pairs and *parallelTransport* was requested; an integer,
-            or list of integers, to control how the parallel transport
-            solutions will be blended:
-
-            - 0 (shortest, the default)
-            - 1 (positive)
-            - 2 (negative)
-
-            If this is a list, it should be one less than the number
-            of *param, vector* pairs passed through *upVector*.
-        :type unwindSwitch/uwd: int, :class:`~paya.runtime.plugs.Math1D`
-        :return: The generated matrices.
-        :rtype: [:class:`~paya.runtime.plugs.Matrix`]
-        """
-
-        #-------------------------------------|    Analyse args
-
-        vals = self._resolveNumberOrValues(numberOrValues,
-                                           parametric=parametric,
-                                           uniform=uniform)
-        number = len(vals)
-
-        # Get info on upObject
-        singleUpObject = False
-        multiUpObjects = False
-
-        if upObject:
-            if hasattr(upObject, '__iter__') and not (
-                    _po.isPyMELObject(upObject) or isinstance(upObject, str)):
-
-                upObject = [r.PyNode(member) for member in upObject]
-                multiUpObjects = True
-
-            else:
-                upObject = r.PyNode(upObject)
-                singleUpObject = True
-
-        # Get info on upVector
-        singleUpVector = False
-        multiUpVectors = False
-        keyedUpVectors = False
-
-        if upVector:
-            if _mo.isVectorValueOrPlug(upVector):
-                singleUpVector = True
+            if upVector is not None:
                 upVector = _mo.conformVectorArg(upVector)
 
-            elif hasattr(upVector, '__iter__'): # iterable, but not a single vector
-                members = list(upVector)
-                upVector = members
+                if upObject is not None:
+                    upObject = r.PyNode(upObject)
+                    upVector *= upObject.attr('wm')
 
-                if all((_mo.isVectorValueOrPlug(
-                        member) for member in members)):
+            elif upObject is not None:
+                upObject = r.PyNode(upObject)
+                interest = upObject.getWorldPosition(plug=True)
+                upVector = interest-point
 
-                    if len(members) is not number:
-                        raise ValueError("Wrong number of up vector members.")
+            elif aimCurve is not None:
+                aimCurve = _po.asGeoPlug(aimCurve, ws=True)
 
-                    multiUpVectors = True
-
-                elif ((hasattr(member, '__iter__') \
-                       and len(member) is 2 for member in members)):
-
-                    if len(members) < 2:
-                        raise ValueError("Need at least two vector keys (start / end).")
-
-                    keyedUpVectors = True
+                if closestPoint:
+                    interest = aimCurve.closestPoint(point, p=True)
 
                 else:
-                    raise ValueError(
-                        "Couldn't interpret the 'upVector' argument.")
+                    param = self.paramAtPoint(point, p=True)
+                    interest = aimCurve.pointAtParam(param, p=True)
 
-        #-------------------------------------|    Expand to dicts
+                upVector = interest-point
 
-        # One per call to matrixAt~
+            else:
+                if upVectorSampler is not None:
+                    upVectorSampler = r.PyNode(upVectorSampler).expandClass()
 
-        basedict = {'globalScale': globalScale, 'squashStretch': squashStretch}
-        kwdicts = []
+                elif not defaultToNormal:
+                    upVectorSampler = self.getDefaultUpVectorSampler()
 
-        for i in range(number):
-            kwdicts.append(basedict.copy())
-
-        def distribute(key, vals):
-            for kwdict, val in zip(kwdicts, vals):
-                kwdict[key] = val
-
-        def replicate(key, val):
-            for kwdict in kwdicts:
-                kwdict[key] = val
-
-        if upVector:
-            if aimCurve:
-                raise ValueError("Unsupported combo: up vector and aim curve")
-
-            if singleUpVector:
-                if upObject:
-                    if singleUpObject:
-                        upVector *= upObject.attr('wm')
-
-                        if parallelTransport:
-                            rv = self.solveUpVectorsByParallelTransport(
-                                upVector, res=resolution, arv=True, i=interpolation)
-
-                            if parametric:
-                                sampleParams = vals
-
-                            else:
-                                sampleParams = [self.paramAtFraction(f) for f in vals]
-
-                            upVectors = [rv.sampleColor(p) for p in sampleParams]
-                            distribute('upVector', upVectors)
-
-                        else:
-                            replicate('upVector', upVector)
-
-                    else: # multiple up objects
-                        if parallelTransport:
-                            raise ValueError(
-                                "Unsupported combo: multiple up objects, "+
-                                "single up vector and parallel transport."
-                            )
-
-                        upVectors = [upVector \
-                                     * upObj.attr('wm') for upObj in upObject]
-
-                        distribute('upVector', upVectors)
+                if upVectorSampler is not None:
+                    param = self.paramAtFraction(fraction, p=True)
+                    upVector = upVectorSampler.sampleAtParam(param, p=True)
 
                 else:
-                    if parallelTransport:
-                        rv = self.solveUpVectorsByParallelTransport(
-                            upVector, res=resolution, arv=True, i=interpolation)
+                    upVector = poci.attr('normal')
 
-                        if parametric:
-                            sampleParams = vals
+            matrix = r.createMatrix(primaryAxis,
+                                    tangent,
+                                    secondaryAxis,
+                                    upVector,
+                                    t=point
+                                    ).pick(t=True, r=True)
 
-                        else:
-                            sampleParams = [self.paramAtFraction(f) for f in vals]
+            if gsIsPlug or squashStretch:
+                factors = [globalScale] * 3
 
-                        upVectors = [rv.sampleColor(p) for p in sampleParams]
-                        distribute('upVector', upVectors)
+                if squashStretch:
+                    tangentScale = tangent.length().normal()
+                    tangentAxisIndex = 'xyz'.index(primaryAxis.strip('-'))
+                    factors[tangentAxisIndex] = tangentScale
 
-                    else:
-                        replicate('upVector', upVector)
+                smtx = r.createScaleMatrix(*factors)
+                matrix = smtx * matrix
 
-            elif multiUpVectors:
-                upVectors = upVector
+            return matrix
 
-                if parallelTransport:
-                    raise ValueError(
-                        "Unsupported combo: multiple up "+
-                        "vectors and parallel transport."
-                    )
+        return self._softMatrixAt(
+            param,
+            primaryAxis,
+            secondaryAxis,
+            upVector=upVector,
+            upObject=upObject,
+            aimCurve=aimCurve,
+            closestPoint=closestPoint,
+            upVectorSampler=upVectorSampler,
+            defaultToNormal=defaultToNormal,
+            parametric=True
+        )
 
-                if upObject:
-                    if singleUpObject:
-                        upVectors = [upVector \
-                                     * upObject.attr('wm') \
-                                     for upVector in upVectors]
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(upVector='uvp',
+           upObject='uo',
+           aimCurve='aic',
+           closestPoint='cp',
+           upVectorSampler='ups',
+           defaultToNormal='dtn',
+           globalScale='gs',
+           squashStretch='ss',
+           plug='p')
+    def matrixAtFraction(self,
+                         fraction,
 
-                    else:
-                        upObjects = upObject
-                        upVectors = [upVector * upObject.attr('wm') \
-                                     for upVector, upObject in \
-                                     zip(upVectors, upObjects)]
+                         primaryAxis,
+                         secondaryAxis,
 
-                distribute('upVector', upVectors)
+                         upVector=None,
+                         upObject=None,
 
-            else: # only remaining option is keyed up vectors
-                keymap = upVector
+                         aimCurve=None,
+                         closestPoint=True,
 
-                if upObject:
-                    positions, upVectors = zip(*keymap)
+                         upVectorSampler=None,
+                         defaultToNormal=None,
 
-                    if singleUpObject:
-                        upVectors = [upVector * \
-                                     upObject.attr('wm') \
-                                     for upVector in upVectors]
+                         globalScale=None,
+                         squashStretch=False,
+                         plug=True):
+        """
+        .. note::
+            Unlike :meth:`matrixAtParam`, which uses a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo` node,
+            this builds off of a
+            :class:`motionPath <paya.runtime.nodes.MotionPath>`.
 
-                    else: # multi
-                        if len(upObject) is not len(upVectors):
-                            raise ValueError(
-                                "Unequal numbers of up "+
-                                "objects and up vector keys."
-                            )
+        :param fraction: the fraction at which to construct the matrix
+        :type fraction: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param upVector/upv: if provided on its own, used directly; if combined
+            with *upObject*, multiplied by the object's world matrix, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: None, str, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upObject/uo: similar to :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes, if provided on its own,
+            used as an aiming interest ('Object Up' mode); if combined with
+            *upVector*, the up vector is multiplied by the object's world
+            matrix ('Object Rotation Up' mode); defaults to ``None``
+        :type upObject/uo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on :class:`curveWarp <paya.runtime.nodes.CurveWarp>`
+            nodes; defaults to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool plug/p: return a plug rather than a value (note that, if this
+            is ``False``, *globalScale* and *squashAndStretch* are ignored);
+            defaults to ``True``
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
+        """
+        if plug:
+            if globalScale is not None:
+                globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
 
-                        upVectors = [upVector * upObj.attr('wm') \
-                                     for upVector, upObj \
-                                     in zip(upVectors, upObject)]
-
-                    keymap = zip(positions, upVectors)
-
-                # Solve
-                if parallelTransport:
-                    rv = self.solveUpVectorsKeyedParallelTransport(
-                        keymap, i=interpolation, res=resolution,
-                        uws=unwindSwitch, arv=True
-                    )
+                if gsIsPlug:
+                    globalScale = globalScale.normal()
 
                 else:
-                    rv = self.solveUpVectorsKeyedLinear(
-                        keymap, i=interpolation, arv=True)
+                    globalScale = 1.0
+            else:
+                globalScale = 1.0
+                gsIsPlug = False
 
-                # The rv setup expects parameters, not fractions
-                if parametric:
-                    sampleParams = vals
+            mp = self.motionPathAtFraction(fraction)
+            point = mp.attr('allCoordinates')
+            configKw = {}
+
+            if upVector is not None:
+                configKw['worldUpVector'] = upVector
+                configKw['worldUpObject'] = upObject
+
+            elif upObject is not None:
+                configKw['worldUpObject'] = upObject
+
+            elif aimCurve is not None:
+                aimCurve = _po.asGeoPlug(aimCurve, ws=True)
+
+                if closestPoint:
+                    interest = aimCurve.closestPoint(point, p=True)
 
                 else:
-                    sampleParams = [self.paramAtFraction(f) for f in vals]
+                    param = self.paramAtPoint(point, p=True)
+                    interest = aimCurve.pointAtParam(param, p=True)
 
-                upVectors = [rv.sampleColor(p) for p in sampleParams]
-                distribute('upVector', upVectors)
+                configKw['worldUpVector'] = interest-point
+
+            else:
+                if upVectorSampler is not None:
+                    upVectorSampler = r.PyNode(upVectorSampler).expandClass()
+
+                elif not defaultToNormal:
+                    upVectorSampler = self.getDefaultUpVectorSampler()
+
+                if upVectorSampler is not None:
+                    param = self.paramAtFraction(fraction, p=True)
+                    configKw['worldUpVector'
+                        ] = upVectorSampler.sampleAtParam(param, p=True)
+
+                # In all other cases, just leave it to configFollow() to
+                # default to the normal
+
+            mp.configFollow(primaryAxis, secondaryAxis, **configKw)
+
+            rsmatrix = mp.attr('orientMatrix')
+
+            if gsIsPlug or squashStretch:
+                factors = [globalScale] * 3
+
+                if squashStretch:
+                    tangent = rsmatrix.getAxis(primaryAxis)
+                    tangentScale = tangent.length().normal()
+                    tangentAxisIndex = 'xyz'.index(primaryAxis.strip('-'))
+                    factors[tangentAxisIndex] = tangentScale
+
+                smtx = r.createScaleMatrix(*factors)
+                rsmatrix = smtx * rsmatrix.pick(r=True)
+
+            else:
+                rsmatrix = rsmatrix.pick(r=True)
+
+            tmtx = point.asTranslateMatrix()
+            return rsmatrix * tmtx
+
+        return self._softMatrixAt(
+            fraction,
+            primaryAxis,
+            secondaryAxis,
+            upVector=upVector,
+            upObject=upObject,
+            aimCurve=aimCurve,
+            closestPoint=closestPoint,
+            upVectorSampler=upVectorSampler,
+            defaultToNormal=defaultToNormal,
+            parametric=False
+        )
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(parametric='par',
+           plug='p')
+    def matrixAt(self,
+                 paramOrFraction,
+                 primaryAxis,
+                 secondaryAxis,
+                 parametric=True,
+                 plug=True,
+                 **kwargs):
+        """
+        Dispatches :meth:`matrixAtParam` or :meth:`matrixAtFraction`. See
+        either of those for full parameter information.
+
+        :param paramOrFraction: the parameter or fraction at which
+            to construct a matrix
+        :type paramOrFraction: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool parametric: interpret *paramOrFraction* as a U parameter
+            rather than a length fraction; defaults to ``True``
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``True``
+        :param \*\*kwargs: forwarded to :meth:`matrixAtParam` or
+            :meth:`matrixAtFraction
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
+        """
+        meth = self.matrixAtParam if parametric else self.matrixAtFraction
+
+        return meth(paramOrFraction,
+                    primaryAxis,
+                    secondaryAxis,
+                    p=plug, **kwargs)
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(plug='p')
+    def matrixAtPoint(self, point,
+                      primaryAxis, secondaryAxis,
+                      plug=True, **kwargs):
+        """
+        Finds the closest parameter to *point* and dispatches
+        :meth:`matrixAtParam`. See that method for full parameter information.
+
+        :param point: the reference point
+        :type point: tuple, list, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``True``
+        :param \*\*kwargs: forwarded to :meth:`matrixAtParam`
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
+        """
+        param = self.paramAtPoint(point, p=plug)
+
+        return self.matrixAtParam(param, primaryAxis,
+                                  secondaryAxis, p=plug, **kwargs)
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(plug='p')
+    def matrixAtLength(self, length,
+                      primaryAxis, secondaryAxis,
+                      plug=True, **kwargs):
+        """
+        Finds the parameter at *length* and dispatches
+        :meth:`matrixAtParam`. See that method for full parameter information.
+
+        :param length: the partial length at which to construct the matrix
+        :type length: tuple, list, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``True``
+        :param \*\*kwargs: forwarded to :meth:`matrixAtParam`
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
+        """
+        param = self.paramAtLength(length, p=plug)
+
+        return self.matrixAtParam(param, primaryAxis,
+                                  secondaryAxis, p=plug, **kwargs)
+
+    def _distributeMatrices(
+            self,
+            numberFractionsOrParams,
+            primaryAxis,
+            secondaryAxis,
+
+            parametric=False,
+            uniform=False,
+
+            upVector=None,
+            upObject=None,
+
+            aimCurve=None,
+            closestPoint=True,
+
+            upVectorSampler=None,
+            defaultToNormal=None,
+
+            globalScale=None,
+            squashStretch=False,
+
+            plug=True):
+
+        #--------------------------------|    Resolve params / fractions
+
+        fractionsOrParams = self._resolveNumberFractionsOrParams(
+            numberFractionsOrParams,
+            parametric=parametric,
+            uniform=uniform
+        )
+
+        num = len(fractionsOrParams)
+
+        #--------------------------------|    Resolve multi args
+
+        if upObject is None:
+            upObjects = [None] * num
+
+        elif isinstance(upObject, (tuple, list)):
+            if len(upObject) is not num:
+                raise ValueError("Incorrect number of up objects.")
+
+            upObjects = [r.PyNode(x) for x in upObject]
+
+        if upVector is None:
+            upVectors = [None] * num
 
         else:
-            if aimCurve:
-                if upObject:
-                    raise ValueError("Unsupported "+
-                                     "combo: aim curve and up object.")
+            descr, upVector = _mo.describeAndConformVectorArg(upVector)
 
-                replicate('aimCurve', aimCurve)
-                replicate('closestPoint', closestPoint)
+            if descr == 'multi':
+                upVectors = upVector
+                if len(upVector) is not num:
+                    raise ValueError("Incorrect number of up vectors.")
 
-            elif upObject:
-                if multiUpObjects:
-                    distribute('upObject', upObject)
+                upVectors = upVector
 
-                else:
-                    replicate('upObject', upObject)
+            elif descr == 'single':
+                upVectors = [_mo.conformVectorArg(upVector)] * num
 
-            elif parallelTransport:
+            else:
                 raise ValueError(
-                    "Parallel transport needs vector "+
-                    "keys or a starting vector.")
+                    "Up vector argument was neither a "+
+                    "single vector nor a list of vectors.")
+
+        #--------------------------------|    Dispatch
 
         out = []
 
         meth = self.matrixAtParam if parametric else self.matrixAtFraction
 
-        for i, kwdict in enumerate(kwdicts):
-            with r.Name(i+1, padding=3):
-                matrix = meth(vals[i], primaryAxis, secondaryAxis, **kwdict)
-            out.append(matrix)
+        for i, fractionOrParam, upVector, upObject in zip(
+            range(num), fractionsOrParams, upVectors, upObjects
+        ):
+            with r.Name(i+1):
+                matrix = meth(
+                    fractionOrParam,
+                    primaryAxis,
+                    secondaryAxis,
+                    upVector=upVector,
+                    upObject=upObject,
+                    aimCurve=aimCurve,
+                    closestPoint=closestPoint,
+                    upVectorSampler=upVectorSampler,
+                    defaultToNormal=defaultToNormal,
+                    globalScale=globalScale,
+                    squashStretch=squashStretch,
+                    plug=plug)
+
+                out.append(matrix)
 
         return out
 
-    #-------------------------------------------------------|
-    #-------------------------------------------------------|    Editing
-    #-------------------------------------------------------|
+    def _distributeAimingMatrices(
+            self,
+            numberFractionsOrParams,
+            primaryAxis,
+            secondaryAxis,
 
-    #--------------------------------------------------|    Conversions
+            parametric=False,
+            uniform=False,
 
+            upVector=None,
+            upObject=None,
+
+            aimCurve=None,
+            closestPoint=True,
+
+            upVectorSampler=None,
+            defaultToNormal=None,
+
+            globalScale=None,
+            squashStretch=False,
+
+            plug=True):
+
+        fractionsOrParams = self._resolveNumberFractionsOrParams(
+            numberFractionsOrParams,
+            par=parametric,
+            uni=uniform)
+
+        number = len(fractionsOrParams)
+
+        # Convert to params and go from there
+        if parametric:
+            params = fractionsOrParams
+
+        else:
+            params = [self.paramAtFraction(f,
+                    p=plug) for f in fractionsOrParams]
+
+        points = [self.pointAtParam(param, p=plug) for param in params]
+
+        aimVectors = [nextPoint-thisPoint for \
+                      thisPoint, nextPoint in zip(points, points[1:])]
+
+        aimVectors.append(aimVectors[-1])
+
+        # Analyse up vector / up object
+
+        if upVector is not None:
+            upVecType, upVector = _mo.describeAndConformVectorArg(upVector)
+
+            if upVecType == 'multi':
+                if len(upVector) is not number:
+                    raise ValueError("Wrong number of up vectors.")
+
+                multiUpVector = True
+
+            else:
+                multiUpVector = False
+
+        if upObject is not None:
+            if hasattr(upObject, '__iter__') \
+                    and not isinstance(upObject, r.PyNode):
+                if len(upObject) is not number:
+                    raise ValueError("Wrong number of up objects.")
+
+                upObject = list(map(r.PyNode, upObject))
+                multiUpObject = True
+
+            else:
+                upObject = r.PyNode(upObject)
+                multiUpObject = False
+
+        if (upVector is not None) or (upObject is not None):
+            if upVector is not None:
+                if multiUpVector:
+                    upVectors = upVector
+
+                    if upObject is not None:
+                        if multiUpObject:
+                            upObjects = upObject
+                            upVectors = [upVector \
+                                         * upObject.attr('wm').get(p=plug) \
+                                         for upVector, upObject \
+                                         in zip(upVectors, upObjects)]
+
+                        else:
+                            upVectors = [upVector \
+                                         * upObject.attr('wm').get(p=plug) \
+                                         for upVector in upVectors]
+
+                else:
+                    if upObject is not None:
+                        if multiUpObject:
+                            upObjects = upObject
+                            upVectors = [upVector \
+                                         * upObject.attr('wm').get(p=plug) \
+                                         for upObject in upObjects]
+                        else:
+                            upVector *= upObject.attr('wm').get(p=plug)
+                            upVectors = [upVector] * number
+
+                    else:
+                        upVectors = [upVector] * number
+
+            else: # up object only
+                if multiUpObject:
+                    upObjects = upObject
+                    interests = [upObject.getWorldPosition(p=plug) \
+                                 for upObject in upObjects]
+
+                    upVectors = [interest-point for interest, point \
+                                 in zip(interests, points)]
+
+                else:
+                    interest = upObject.getWorldPosition(p=plug)
+                    upVectors = [interest-point for point in points]
+
+        elif aimCurve:
+            if closestPoint:
+                interests = [aimCurve.closestPoint(
+                    point, p=plug) for point in points]
+
+            else:
+                interests = [aimCurve.pointAtParam(
+                    param, p=plug) for param in params]
+
+            upVectors = [interest-point for \
+                         interest, point in zip(interests, points)]
+
+        else:
+            if upVectorSampler is not None:
+                upVectorSampler = r.PyNode(upVectorSampler).expandClass()
+
+            elif not defaultToNormal:
+                upVectorSampler = self.getDefaultUpVectorSampler()
+
+            if upVectorSampler is None:
+                upVectors = [self.normalAtParam(
+                    param, p=plug) for param in params]
+
+            else:
+                upVectors = [upVectorSampler.sampleAtParam(
+                        param, p=plug) for param in params]
+
+        if plug:
+            if globalScale is None:
+                globalScale = 1.0
+                gsIsPlug = False
+
+            else:
+                globalScale, gsDim, gsIsPlug = _mo.info(globalScales)
+
+            if squashStretch:
+                aimIndex = 'xyz'.index(primaryAxis.strip('-'))
+
+        matrices = []
+
+        for aimVector, upVector, point in zip(
+            aimVectors, upVectors, points
+        ):
+            matrix = r.createMatrix(
+                primaryAxis, aimVector,
+                secondaryAxis, upVector,
+                t=point
+            ).pick(t=True, r=True)
+
+            if plug and (gsIsPlug or squashStretch):
+                factors = [globalScale] * 3
+
+                if squashStretch:
+                    factors[aimIndex] = aimVector.length().normal()
+
+                smtx = r.createScaleMatrix(*factors)
+                matrix = smtx * matrix
+
+            matrices.append(matrix)
+
+        return matrices
+
+    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @short(parametric='par',
+           uniform='uni',
+           chain='cha',
+           upVector='upv',
+           upObject='uo',
+           aimCurve='aic',
+           closestPoint='cp',
+           upVectorSampler='ups',
+           defaultToNormal='dtn',
+           globalScale='gs',
+           squashStretch='ss',
+           plug='p')
+    def distributeMatrices(
+            self,
+
+            numberFractionsOrParams,
+
+            primaryAxis,
+            secondaryAxis,
+
+            parametric=False,
+            uniform=False,
+
+            chain=False,
+
+            upVector=None,
+            upObject=None,
+
+            aimCurve=None,
+            closestPoint=True,
+
+            upVectorSampler=None,
+            defaultToNormal=None,
+
+            globalScale=None,
+            squashStretch=False,
+
+            plug=True):
+        """
+        :param numberFractionsOrParams: this should either be
+
+            -   A number of fractions or parameters to generate along the curve,
+                or
+            -   An explicit list of fractions or parameters at which to construct
+                the matrices
+
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool parametric/par: interpret *numberOrFractions* as
+            parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if *parametric* is ``True``, and
+            *numberFractionsOrParams* is a number, initial parameters should
+            be distributed by length, not parametric space; defaults to
+            ``False``
+        :param bool chain/cha: aim each matrix towards the next in the
+            series, similar to chain joints; defaults to ``False``
+        :param upVector/upv: either
+
+            -   A single up vector, or
+            -   A list of up vectors (one per matrix)
+
+            If up vectors are provided on their own, they are used directly;
+            if they are combined with 'up objects' (*upObject*), they are
+            multiplied by the objects' world matrices, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: :class:`None`, :class:`str`, :class:`tuple`, :class:`list`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`,
+            [:class:`None` | :class:`str` | :class:`tuple` | :class:`list` |
+            :class:`~paya.runtime.data.Vector` |
+            :class:`~paya.runtime.plugs.Vector`]
+        :param upObject/uo: this can be a single transform, or a list of
+            transforms (one per sample point); if provided on its own, used
+            as an aiming interest (similar to 'Object Up' mode on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes); if
+            combined with *upVector*, the vector will be multiplied with the
+            object's matrix (similar to 'Object Rotation Up'); defaults to
+            ``None``
+        :type upObject/uo: ``None``, :class:`str`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on :class:`curveWarp <paya.runtime.nodes.CurveWarp>`
+            nodes; defaults to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool plug/p: return matrix plugs rather than a values (note
+            that, if this is ``False``, *globalScale* and *squashAndStretch*
+            are ignored); defaults to ``True``
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
+        """
+        if chain:
+            meth = self._distributeAimingMatrices
+
+        else:
+            meth = self._distributeMatrices
+
+        return meth(
+            numberFractionsOrParams,
+            primaryAxis, secondaryAxis,
+            parametric=parametric,
+            uniform=uniform,
+            upVector=upVector,
+            upObject=upObject,
+            aimCurve=aimCurve,
+            closestPoint=closestPoint,
+            upVectorSampler=upVectorSampler,
+            defaultToNormal=defaultToNormal,
+            globalScale=globalScale,
+            squashStretch=squashStretch,
+            plug=plug
+        )
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    EDITING
+    #---------------------------------------------------------------|
+
+    #-----------------------------------------------|    Conversions
+
+    @copyToShapeAsEditor()
     @short(force='f')
     def toBezier(self, force=False):
         """
@@ -1795,6 +2491,7 @@ class NurbsCurve:
         self >> node.attr('inputCurve')
         return node.attr('outputCurve')
 
+    @copyToShapeAsEditor()
     @short(force='f')
     def toNurbs(self, force=False):
         """
@@ -1814,6 +2511,7 @@ class NurbsCurve:
         self >> node.attr('inputCurve')
         return node.attr('outputCurve')
 
+    @copyToShapeAsEditor()
     @short(tolerance='tol', keepRange='kr')
     def bSpline(self, tolerance=0.001, keepRange=1):
         """
@@ -1837,201 +2535,15 @@ class NurbsCurve:
 
         return node.attr('outputCurve')
 
-    @short(
-        spans='s',
-        degree='d',
-        keepRange='kr',
-        endKnots='end',
-        keepEndPoints='kep',
-        keepTangents='kt',
-        keepControlPoints='kcp',
-        tolerance='tol',
-        rebuildType='rt',
-        matchCurve='mc'
-    )
-    def rebuild(self, spans=None, degree=None, keepRange=1,
-            endKnots=0, keepEndPoints=True, keepTangents=True,
-            keepControlPoints=False, tolerance=0.01,
-            rebuildType=0, matchCurve=None):
-        """
-        Same signature as the API method. If any arguments are omitted, they
-        are derived from the curve's current state.
+    #-----------------------------------------------|    Attach / detach
 
-        :param spans/s: the target number of spans; defaults to the current
-            number of spans
-        :type spans: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param degree/d: the target degree, one of 1, 2, 3, 5 or 7; defaults
-            to the current degree
-        :type degree/d: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param keepRange/kr: an integer or label for the enumerator on
-            ``rebuildCurve``, namely:
-
-            - 0 ('0 to 1')
-            - 1 ('Original') (the default)
-            - 2 ('0 to #spans')
-
-        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param endKnots/end: an integer or label for the enumerator on
-            ``rebuildCurve``, namely:
-
-            - 0 ('Non Multiple end knots')
-            - 1 ('Multiple end knots')
-
-        :type endKnots/end: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param keepEndPoints/kep: keep end points; defaults to True
-        :type keepEndPoints/kep: bool, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param keepTangents/kt: keep tangents; defaults to True
-        :type keepTangents/kt: bool, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param keepControlPoints/kcp: keep control points; defaults to False
-        :type keepControlPoints/kcp: bool, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param tolerance/tol: the rebuild tolerance; defaults to 0.01
-        :type tolerance/tol: float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param matchCurve/mc: a curve shape or input for the 'Match Knots'
-            mode; if provided, *rebuildType* will be overriden to 2;
-            defaults to None
-        :type matchCurve/mc: str, :class:`~paya.runtime.plugs.NurbsCurve`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param rebuildType/rt: an integer or label for the enumerator on
-            ``rebuildCurve``, namely:
-
-            - 0 ('Uniform') (the default)
-            - 1 ('Reduce Spans')
-            - 2 ('Match Knots')
-            - 3 ('Remove Multiple Knots')
-            - 4 ('Curvature')
-            - 5 ('End Conditions')
-            - 6 ('Clean')
-
-        :type rebuildType/rt: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :return: The rebuilt curve.
-        """
-        #--------------------------------------|    Wrangle args
-
-        if matchCurve:
-            rebuildType = 2
-            matchCurve = _po.asGeoPlug(matchCurve)
-
-        mfn = self.getShapeMFn()
-
-        if spans is None:
-            spans = mfn.numSpans()
-
-        if degree is None:
-            degree = mfn.degree()
-
-        #--------------------------------------|    Configure node
-
-        node = r.nodes.RebuildCurve.createNode()
-        self >> node.attr('inputCurve')
-
-        if matchCurve:
-            matchCurve >> node.attr('matchCurve')
-
-        for source, attrName in zip(
-            [spans, degree, keepRange, endKnots,
-             keepEndPoints, keepTangents,
-             keepControlPoints, tolerance,
-             rebuildType],
-            ['spans', 'degree', 'keepRange', 'endKnots',
-             'keepEndPoints', 'keepTangents',
-             'keepControlPoints', 'tolerance',
-             'rebuildType']
-        ):
-            source >> node.attr(attrName)
-
-        return node.attr('outputCurve')
-
-    #--------------------------------------------------|    Rebuilds
-
-    @short(
-        degree='d',
-        endKnots='end',
-        keepRange='kr',
-        keepEndPoints='kep',
-        keepTangents='kt'
-    )
-    def cvRebuild(
-            self,
-            numCVs,
-            degree=None,
-            endKnots='Multiple end knots',
-            keepRange='Original',
-            keepControlPoints=False,
-            keepEndPoints=True,
-            keepTangents=False
-    ):
-        """
-        Rebuilds this curve to the specified number of CVs.
-
-        :param int degree/d: the degree to build to; defaults to this curve's
-            (current) degree if omitted
-        :param endKnots/end: An enum index or label:
-
-            - 0: 'Non Multiple end knots'
-            - 1: 'Multiple end knots' (the default)
-        :type endKnots: int, str
-        :param keepRange/kr: An enum index or label:
-
-            - 0: '0 to 1'
-            - 1: 'Original' (the default)
-            - 2: '0 to #spans'
-
-        :type keepRange/kr: int, str
-        :param bool keepEndPoints/kep: keep end points; defaults to True
-        :param bool keepTangents/kt: keep tangents; defaults to False
-        :return: The rebuilt curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        if degree is None:
-            degree = self.getShapeMFn().degree()
-
-        minNumCVs = degree+1
-
-        if numCVs < minNumCVs:
-            raise RuntimeError(
-                "At least {} CVs required for degree {}.".format(
-                    minNumCVs,
-                    degree
-                )
-            )
-
-        return self.rebuild(
-            s=numCVs-degree,
-            d=degree,
-            end=endKnots,
-            kr=keepRange,
-            kep=keepEndPoints,
-            kt=keepTangents
-        )
-
-    def cageRebuild(self):
-        """
-        :return: A linear curve with the same CVs as this one.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        return self.rebuild(degree=1, keepControlPoints=True)
-
-    def reverse(self):
-        """
-        :return: The reversed curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        node = r.nodes.ReverseCurve.createNode()
-        self >> node.attr('inputCurve')
-        return node.attr('outputCurve')
-
-    #--------------------------------------------------|    Retractions
-
+    @copyToShapeAsEditor()
     @short(relative='r')
     def subCurve(self, minValue, maxValue, relative=False):
         """
         Connects and configures a ``subCurve`` node and returns its output.
 
+        :alias: ``sub``
         :param minValue: a source for the ``minValue`` attribute
         :type minValue: float, :class:`~paya.runtime.plugs.Math1D`
         :param maxValue: a source for the ``maxValue`` attribute
@@ -2048,6 +2560,84 @@ class NurbsCurve:
 
         return node.attr('outputCurve').setClass(type(self))
 
+    sub = subCurve
+
+    @copyToShapeAsEditor()
+    @short(
+        blend='bl',
+        blendBias='bb',
+        parameter='p',
+        blendKnotInsertion='bki',
+        reverse1='rv1',
+        reverse2='rv2',
+        multipleKnots='mul'
+    )
+    def attach(
+            self,
+            *curves,
+            blend=False,
+            blendBias=0.5,
+            parameter=0.1,
+            blendKnotInsertion=False,
+            reverse1=False,
+            reverse2=False,
+            multipleKnots=True
+    ):
+        """
+        .. note::
+
+            If more than one curves are passed-in, the result may
+            be different from calling :meth:`detach` per pair, because
+            the ``inputCurves`` array will be used on the node.
+
+        :param \*curves: one or more curves to attach to this one
+        :type \*curves: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param bool blend: use blended attachments; defaults to False
+        :param blendBias/bb: ignored if more than two curves are
+            involved; the bias for blended attachments; defaults to 0.5
+        :type blendBias/bb: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool blendKnotInsertion: ignored if more than two curves
+            are involved; add a blend knot; defaults to False
+        :param float parameter/p: ignored if more than two curves are
+            involved or *blendKnotInsertion* is False; the parameter for
+            the blend knot; defaults to 0.1
+        :param bool reverse1/rv1: ignored if more than two curves are
+            involved; reverse the first curve; defaults to False
+        :param bool reverse2/rv2: ignored if more than two curves are
+            involved; reverse the second curve; defaults to False
+        :param bool multipleKnots: keep multiple knots; defaults to True
+        :return: The combined curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        curves = [_po.asGeoPlug(curve) for curve in _pu.expandArgs(*curves)]
+        num = len(curves)
+
+        if not num:
+            raise ValueError("No curves were specified to attach to.")
+
+        node = r.nodes.AttachCurve.createNode()
+
+        if num > 1:
+            allCurves = [self] + curves
+
+            for i, curve in enumerate(allCurves):
+                curve >> node.attr('inputCurves')[i]
+
+        else:
+            self >> node.attr('inputCurve1')
+            curves[0] >> node.attr('inputCurve2')
+
+        node.attr('method').set(1 if blend else 0)
+        node.attr('blendKnotInsertion').set(blendKnotInsertion)
+        blendBias >> node.attr('blendBias')
+        parameter >> node.attr('parameter')
+        node.attr('reverse1').set(reverse1)
+        node.attr('reverse2').set(reverse2)
+        node.attr('keepMultipleKnots').set(multipleKnots)
+
+        return node.attr('outputCurve')
+
+    @copyToShapeAsEditor()
     @short(select='sel')
     def detach(self, *parameters, select=None):
         """
@@ -2089,110 +2679,7 @@ class NurbsCurve:
 
         return out
 
-    @short(atStart='ats', atBothEnds='abe')
-    def retract(self, length, atStart=None, atBothEnds=None):
-        """
-        Retracts this curve.
-
-        :param length: the retraction length
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool atStart/ats: retract at the start of the curve instead
-            of the end; defaults to False
-        :param atBothEnds: retract at both ends of the curve; defaults to
-            False
-        :return: The modified curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        cutLength, cutLengthDim, cutLengthIsPlug = _mo.info(length)
-
-        if atStart:
-            cutLengths = [cutLength]
-            select = 1
-
-        elif atBothEnds:
-            cutLength *= 0.5
-            cutLengths = [cutLength, self.length()-cutLength]
-            select = 1
-
-        else:
-            cutLengths = [self.length()-cutLength]
-            select = 0
-
-        params = [self.paramAtLength(cutLength) for cutLength in cutLengths]
-
-        return self.detach(*params, select=select)[0]
-
-    #--------------------------------------------------|    Extensions
-
-    @short(
-        blend='bl',
-        blendBias='bb',
-        parameter='p',
-        blendKnotInsertion='bki',
-        reverse1='rv1',
-        reverse2='rv2',
-        multipleKnots='mul'
-    )
-    def attach(
-            self,
-            *curves,
-            blend=False,
-            blendBias=0.5,
-            parameter=0.1,
-            blendKnotInsertion=False,
-            reverse1=False,
-            reverse2=False,
-            multipleKnots=True
-    ):
-        """
-        Attaches one or more curves to this one.
-
-        :param \*curves: one or more curves to attach to this one
-        :type \*curves: str, :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool blend: use blended attachments; defaults to False
-        :param blendBias/bb: ignored if more than two curves are
-            involved; the bias for blended attachments; defaults to 0.5
-        :type blendBias/bb: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool blendKnotInsertion: ignored if more than two curves
-            are involved; add a blend knot; defaults to False
-        :param float parameter/p: ignored if more than two curves are
-            involved or *blendKnotInsertion* is False; the parameter for
-            the blend knot; defaults to 0.1
-        :param bool reverse1/rv1: ignored if more than two curves are
-            involved; reverse the first curve; defaults to False
-        :param bool reverse2/rv2: ignored if more than two curves are
-            involved; reverse the second curve; defaults to False
-        :param bool multipleKnots: keep multiple knots; defaults to True
-        :return: The combined curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        curves = list(_pu.expandArgs(*curves))
-        num = len(curves)
-
-        if not num:
-            raise ValueError("No curves were specified to attach to.")
-
-        node = r.nodes.AttachCurve.createNode()
-
-        if num > 1:
-            allCurves = [self] + curves
-
-            for i, curve in enumerate(allCurves):
-                curve >> node.attr('inputCurves')[i]
-
-        else:
-            self >> node.attr('inputCurve1')
-            curves[0] >> node.attr('inputCurve2')
-
-        node.attr('method').set(1 if blend else 0)
-        node.attr('blendKnotInsertion').set(blendKnotInsertion)
-        blendBias >> node.attr('blendBias')
-        parameter >> node.attr('parameter')
-        node.attr('reverse1').set(reverse1)
-        node.attr('reverse2').set(reverse2)
-        node.attr('keepMultipleKnots').set(multipleKnots)
-
-        return node.attr('outputCurve')
+    #-----------------------------------------------|    Length editing
 
     def initExtendCurve(self, **config):
         """
@@ -2211,6 +2698,7 @@ class NurbsCurve:
 
         return node
 
+    @copyToShapeAsEditor()
     @short(
         multipleKnots='mul',
         atStart='ats',
@@ -2237,7 +2725,7 @@ class NurbsCurve:
         :return: This curve, extended along the specified vector.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        points = self.getCVs()
+        points = self.getCVs(p=True)
         startPoint = points[0 if atStart else -1]
         endPoint = startPoint + vector
 
@@ -2259,6 +2747,7 @@ class NurbsCurve:
             removeMultipleKnots=not multipleKnots
         ).attr('outputCurve')
 
+    @copyToShapeAsEditor()
     @short(
         multipleKnots='mul',
         atStart='ats',
@@ -2286,7 +2775,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
         if useSegment:
-            allPoints = self.getCVs()
+            allPoints = self.getCVs(p=True)
             startPoint = allPoints[0 if atStart else -1]
             segment = self.createLine(startPoint, point)
 
@@ -2305,6 +2794,7 @@ class NurbsCurve:
             removeMultipleKnots=not multipleKnots
         ).attr('outputCurve')
 
+    @copyToShapeAsEditor()
     @short(
         atStart='ats',
         atBothEnds='abe',
@@ -2371,6 +2861,7 @@ class NurbsCurve:
             start=start
         ).attr('outputCurve')
 
+    @copyToShapeAsEditor()
     @short(
         atStart='ats',
         atBothEnds='abe',
@@ -2483,33 +2974,42 @@ class NurbsCurve:
             "Not a 1D or 3D numerical type: {}".format(lenPointOrVec)
         )
 
-    #--------------------------------------------------|    Misc
-
-    @short(weight='w')
-    def blend(self, otherCurve, weight=0.5):
+    @copyToShapeAsEditor()
+    @short(atStart='ats', atBothEnds='abe')
+    def retract(self, length, atStart=None, atBothEnds=None):
         """
-        Blends this curve output towards *otherCurve* via an ``avgCurves``
-        node. You may get unexpected results if the curves don't match
-        in terms of spans, degree etc.
+        Retracts this curve.
 
-        :param otherCurve: the curve to blend towards
-        :type otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
-        :param weight/w: the blend weight; the other curve will take over
-            fully at 1.0; defaults to 0.5
-        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The blended curve.
+        :param length: the retraction length
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool atStart/ats: retract at the start of the curve instead
+            of the end; defaults to False
+        :param atBothEnds: retract at both ends of the curve; defaults to
+            False
+        :return: The modified curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        node = r.nodes.AvgCurves.createNode()
-        node.attr('automaticWeight').set(False)
-        node.attr('normalizeWeights').set(False)
-        self >> node.attr('inputCurve1')
-        otherCurve >> node.attr('inputCurve2')
-        weight >> node.attr('weight2')
-        (1-node.attr('weight2')) >> node.attr('weight1')
+        cutLength, cutLengthDim, cutLengthIsPlug = _mo.info(length)
 
-        return node.attr('outputCurve')
+        if atStart:
+            cutLengths = [cutLength]
+            select = 1
 
+        elif atBothEnds:
+            cutLength *= 0.5
+            cutLengths = [cutLength, self.length(p=True)-cutLength]
+            select = 1
+
+        else:
+            cutLengths = [self.length(p=True)-cutLength]
+            select = 0
+
+        params = [self.paramAtLength(cutLength,
+                                     p=True) for cutLength in cutLengths]
+
+        return self.detach(*params, select=select)[0]
+
+    @copyToShapeAsEditor()
     @short(
         atStart='ats',
         vector='v',
@@ -2553,7 +3053,7 @@ class NurbsCurve:
         :param bool multipleKnots: keep multiple knots; defaults to True
         :return:
         """
-        baseLength = self.length()
+        baseLength = self.length(p=True)
 
         retractLength = baseLength-targetLength
         retractLength = retractLength.minClamp(0.0)
@@ -2586,3 +3086,224 @@ class NurbsCurve:
         retraction = self.retract(retractLength, ats=atStart)
 
         return baseLength.ge(targetLength).ifElse(retraction, extension)
+
+    @copyToShapeAsEditor()
+    @short(
+        spans='s',
+        degree='d',
+        keepRange='kr',
+        endKnots='end',
+        keepEndPoints='kep',
+        keepTangents='kt',
+        keepControlPoints='kcp',
+        tolerance='tol',
+        rebuildType='rt',
+        matchCurve='mc'
+    )
+    def rebuild(self, spans=None, degree=None, keepRange=1,
+            endKnots=0, keepEndPoints=True, keepTangents=True,
+            keepControlPoints=False, tolerance=0.01,
+            rebuildType=0, matchCurve=None):
+        """
+        Same signature as the API method. If any arguments are omitted, they
+        are derived from the curve's current state.
+
+        :param spans/s: the target number of spans; defaults to the current
+            number of spans
+        :type spans: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param degree/d: the target degree, one of 1, 2, 3, 5 or 7; defaults
+            to the current degree
+        :type degree/d: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param keepRange/kr: an integer or label for the enumerator on
+            ``rebuildCurve``, namely:
+
+            - 0 ('0 to 1')
+            - 1 ('Original') (the default)
+            - 2 ('0 to #spans')
+
+        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param endKnots/end: an integer or label for the enumerator on
+            ``rebuildCurve``, namely:
+
+            - 0 ('Non Multiple end knots')
+            - 1 ('Multiple end knots')
+
+        :type endKnots/end: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param keepEndPoints/kep: keep end points; defaults to True
+        :type keepEndPoints/kep: bool, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param keepTangents/kt: keep tangents; defaults to True
+        :type keepTangents/kt: bool, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param keepControlPoints/kcp: keep control points; defaults to False
+        :type keepControlPoints/kcp: bool, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param tolerance/tol: the rebuild tolerance; defaults to 0.01
+        :type tolerance/tol: float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param matchCurve/mc: a curve shape or input for the 'Match Knots'
+            mode; if provided, *rebuildType* will be overriden to 2;
+            defaults to None
+        :type matchCurve/mc: str, :class:`~paya.runtime.plugs.NurbsCurve`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param rebuildType/rt: an integer or label for the enumerator on
+            ``rebuildCurve``, namely:
+
+            - 0 ('Uniform') (the default)
+            - 1 ('Reduce Spans')
+            - 2 ('Match Knots')
+            - 3 ('Remove Multiple Knots')
+            - 4 ('Curvature')
+            - 5 ('End Conditions')
+            - 6 ('Clean')
+
+        :type rebuildType/rt: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :return: The rebuilt curve.
+        """
+        #--------------------------------------|    Wrangle args
+
+        if matchCurve:
+            rebuildType = 2
+            matchCurve = _po.asGeoPlug(matchCurve)
+
+        mfn = self.getShapeMFn()
+
+        if spans is None:
+            spans = mfn.numSpans()
+
+        if degree is None:
+            degree = mfn.degree()
+
+        #--------------------------------------|    Configure node
+
+        node = r.nodes.RebuildCurve.createNode()
+        self >> node.attr('inputCurve')
+
+        if matchCurve:
+            matchCurve >> node.attr('matchCurve')
+
+        for source, attrName in zip(
+            [spans, degree, keepRange, endKnots,
+             keepEndPoints, keepTangents,
+             keepControlPoints, tolerance,
+             rebuildType],
+            ['spans', 'degree', 'keepRange', 'endKnots',
+             'keepEndPoints', 'keepTangents',
+             'keepControlPoints', 'tolerance',
+             'rebuildType']
+        ):
+            source >> node.attr(attrName)
+
+        return node.attr('outputCurve')
+
+    @copyToShapeAsEditor()
+    @short(
+        degree='d',
+        endKnots='end',
+        keepRange='kr',
+        keepEndPoints='kep',
+        keepTangents='kt'
+    )
+    def cvRebuild(
+            self,
+            numCVs,
+            degree=None,
+            endKnots='Multiple end knots',
+            keepRange='Original',
+            keepControlPoints=False,
+            keepEndPoints=True,
+            keepTangents=False
+    ):
+        """
+        Rebuilds this curve to the specified number of CVs.
+
+        :param int degree/d: the degree to build to; defaults to this curve's
+            (current) degree if omitted
+        :param endKnots/end: An enum index or label:
+
+            - 0: 'Non Multiple end knots'
+            - 1: 'Multiple end knots' (the default)
+        :type endKnots: int, str
+        :param keepRange/kr: An enum index or label:
+
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+
+        :type keepRange/kr: int, str
+        :param bool keepEndPoints/kep: keep end points; defaults to True
+        :param bool keepTangents/kt: keep tangents; defaults to False
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        if degree is None:
+            degree = self.getShapeMFn().degree()
+
+        minNumCVs = degree+1
+
+        if numCVs < minNumCVs:
+            raise RuntimeError(
+                "At least {} CVs required for degree {}.".format(
+                    minNumCVs,
+                    degree
+                )
+            )
+
+        return self.rebuild(
+            s=numCVs-degree,
+            d=degree,
+            end=endKnots,
+            kr=keepRange,
+            kep=keepEndPoints,
+            kt=keepTangents
+        )
+
+    @copyToShapeAsEditor()
+    def cageRebuild(self):
+        """
+        :return: A linear curve with the same CVs as this one.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        return self.rebuild(degree=1, keepControlPoints=True)
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    MISC
+    #---------------------------------------------------------------|
+
+    @copyToShapeAsEditor()
+    def reverse(self):
+        """
+        :return: The reversed curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        node = r.nodes.ReverseCurve.createNode()
+        self >> node.attr('inputCurve')
+        return node.attr('outputCurve')
+
+    @copyToShapeAsEditor()
+    @short(weight='w')
+    def blend(self, otherCurve, weight=0.5):
+        """
+        Blends this curve output towards *otherCurve* via an ``avgCurves``
+        node. You may get unexpected results if the curves don't match
+        in terms of spans, degree etc.
+
+        :param otherCurve: the curve to blend towards
+        :type otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param weight/w: the blend weight; the other curve will take over
+            fully at 1.0; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The blended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+        """
+        otherCurve = _po.asGeoPlug(otherCurve)
+        node = r.nodes.AvgCurves.createNode()
+        node.attr('automaticWeight').set(False)
+        node.attr('normalizeWeights').set(False)
+        self >> node.attr('inputCurve1')
+        otherCurve >> node.attr('inputCurve2')
+        weight >> node.attr('weight2')
+        (1-node.attr('weight2')) >> node.attr('weight1')
+
+        return node.attr('outputCurve')
