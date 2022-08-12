@@ -8,7 +8,7 @@ class NurbsSurface:
 
     @property
     def worldGeoOutput(self):
-        return self.attr('worldSpace')[0]
+        return self.attr('worldSpace')
 
     @property
     def localGeoOutput(self):
