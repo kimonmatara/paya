@@ -62,10 +62,14 @@ class DependNode:
     @classmethod
     def getParsedSubclassForNode(cls, node):
         """
-        :raises :class:`paya.pools.MissingTemplateError`: No template was
-            found for the parsed class name.
+        :class:`~paya.pools.MissingTemplateError` will be raised if *node*
+        has a defined subtype which couldn't be sourced. Other failures,
+        for example an empty ``payaSubtype`` attribute, will merely issue
+        warnings.
 
-        The return will be ``None`` if the node has no ``payaSubtype`` attribute.
+        :param node: the node for which to retrieve a parsed subtype class
+        :type node: :class:`~pymel.core.general.PyNode`
+        :return: The custom class, or ``None`` if one couldn't be retrieved.
         """
         # Attribute inspection must be done using API; using DependencyNode-
         # derived methods will lead to cycles as they call PyNode.__new__
@@ -83,27 +87,33 @@ class DependNode:
 
         tagMPlug = om.MPlug(nodeMObj, tagMObj)
         clsname = tagMPlug.asString()
-        try:
-            subtypeCls = pool.getByName(clsname)
 
-        except _pl.MissingTemplateError:
-            m.warning(
-                "Couldn't source parsed {} subclass {}, skipping reassignment.".format(
-                node.__class__.__name__, clsname
+        if clsname:
+            try:
+                subtypeCls = pool.getByName(clsname)
+
+            except _pl.MissingTemplateError:
+                m.warning(
+                    "Couldn't source parsed {} subclass {}, skipping reassignment.".format(
+                    node.__class__.__name__, clsname
+                    )
                 )
+                return
+
+        else:
+            m.warning(
+                "Empty Paya subtype, skipping reassignment for object of type {}".format(node.__class__)
             )
+
             return
 
         return subtypeCls
 
     def expandClass(self, init=True):
         """
-        If this node type supports parsed subtypes, reads the
-        subtype attribute (if available) and attempts to source
-        and assign the class to the instance.
-
-        If this is not possible, a warning is issued and no
-        reassignment is performed.
+        If this node type supports parsed subtypes, reads the subtype
+        attribute (if available) and attempts to source and assign the class
+        to the instance. See also :meth:`getParsedSubclassForNode`.
 
         :return: ``self``
         """
@@ -192,31 +202,14 @@ class DependNode:
         :rtype: :class:`~pymel.core.general.PyNode`
         """
         name = cls.makeName(name)
-        out = r.createNode(cls.__melnode__, n=name)
+        out = m.createNode(cls.__melnode__, n=name)
 
         if cls.__is_parsed_subtype__:
-            attr = out.addAttr('payaSubtype', dt='string')
+            m.addAttr(out, ln='payaSubtype', dt='string')
             clsname = cls.__name__
-            attr.set(clsname)
+            m.setAttr('{}.payaSubtype'.format(out), clsname, type='string')
 
-            subtypePool = cls.__subtype_pool__
-
-            try:
-                subtypeClass = subtypePool.getByName(clsname)
-                out.__class__ = subtypeClass
-                success = True
-
-            except:
-                success = False
-                r.warning("Could not apply parsed subtype"+
-                    " '{}' to {}, skipping.".format(clsname, out))
-
-            if success:
-                out.__paya_subtype_init__()
-
-            out.__class__ = cls.__subtype_pool__.getByName(clsname)
-
-        return out
+        return r.PyNode(out)
 
     @classmethod
     def createFromMacro(cls, macro, **overrides):
