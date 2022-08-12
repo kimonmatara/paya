@@ -9,46 +9,81 @@ class Joint:
     #------------------------------------------------------------|    Constructor
 
     @classmethod
-    @short(
-        displayLocalAxis='dla',
-        worldMatrix='wm',
-        under='u',
-        name='n'
-    )
-    def create(
-            cls,
-            displayLocalAxis=True,
-            worldMatrix=None,
-            under=None,
-            name=None
-    ):
+    @short(displayLocalAxis='dla',
+           worldMatrix='wm',
+           under='u',
+           name='n',
+           freeze='fr',
+           decompose='dec',
+           rotateOrder='ro',
+           radius='rad')
+    def create(cls,
+               displayLocalAxis=True,
+               worldMatrix=None,
+               under=None,
+               name=None,
+               freeze=True,
+               decompose=True,
+               rotateOrder='xyz',
+               radius=1.0):
         """
-        Creates a joint.
-
-        :param bool displayLocalAxis/dla: display local axis; defaults to True
-        :param worldMatrix/wm: an optional world matrix for the joint;
-            defaults to None
-        :type worldMatrix/wm: None, list,
-            :class:`~paya.runtime.data.Matrix`
-        :param under/u: an optional parent for the joint; defaults to None
-        :type under/u: None, str, :class:`~pymel.core.general.PyNode`
-        :param name/n: one or more name elements for the joint; defaults to
-            None
-        :type name/n: None, str, list or tuple
+        :param bool displayLocalAxis/dla: display the local matrix
+            axes; defaults to ``True``
+        :param worldMatrix/wm: defines the joint's default pose; defaults
+            to ``None``
+        :type worldMatrix/wm: None, tuple, list, str,
+            :class:`~paya.runtime.data.Matrix`,
+            :class:`~paya.runtime.plugs.Matrix`
+        :param under/u: an optional destination parent for the joint
+        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param name/n: one or more name elements; defaults to ``None``
+        :type name/n: ``None``, :class:`str`, :class:`int`,
+            [``None`` | :class:`str` | :class:`int`]
+        :param bool freeze/fr: zero-out transformations (except translate)
+            at the initial pose; defaults to ``True``
+        :param bool decompose/dec: if ``False``, connect to
+            ``offsetParentMatrix`` instead of driving the joint's SRT
+            channels; note that, if *freeze* is requested, the initial matrix
+             will *always* be applied via decomposition and then frozen;
+             defaults to ``True``
+        :param rotateOrder/ro: the rotate order for the joint; defaults
+            to ``'xyz'``
+        :type rotateOrder/ro: ``None``, :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param float radius/rad: the joint display radius; defaults to 1.0
         :return: The joint.
         :rtype: :class:`~paya.runtime.nodes.Joint`
         """
+        # Draw the joint, perform basic configurations
         joint = cls.createNode(n=name)
+        joint.attr('displayLocalAxis').set(displayLocalAxis)
+        joint.attr('radius').set(radius)
+        rotateOrder >> joint.attr('rotateOrder')
 
-        if under:
+        if under is not None:
             joint.setParent(under)
 
-        if worldMatrix:
-            joint.setMatrix(worldMatrix, worldSpace=True)
-            r.makeIdentity(joint, apply=True, r=True, jo=False, s=True)
+        # Manage matrix
+        if worldMatrix is not None:
+            worldMatrix, wmDim, wmIsPlug = _mo.info(worldMatrix)
 
-        if displayLocalAxis:
-            joint.attr('dla').set(True)
+            if freeze:
+                if wmIsPlug:
+                    _worldMatrix = worldMatrix.get()
+
+                else:
+                    _worldMatrix = worldMatrix
+
+                _worldMatrix = _worldMatrix.pick(t=True, r=True)
+                joint.setMatrix(_worldMatrix, worldSpace=True)
+
+                r.makeIdentity(joint, apply=True, r=True, s=True, jo=False)
+
+            if decompose:
+                worldMatrix.decomposeAndApply(joint, worldSpace=True)
+
+            else:
+                worldMatrix.applyViaOpm(joint, worldSpace=True)
 
         return joint
 
@@ -64,14 +99,11 @@ class Joint:
         :return: The cube transform.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        cube = r.polyCube(
-            ch=False,
-            w=size, h=size, d=size,
-            n=r.nodes.Mesh.makeName('{}_test_cube'.format(self.basename())),
-            sd=2,
-            sh=2,
-            sw=2
-        )[0]
+        cube = r.polyCube(ch=False, w=size,
+                          h=size, d=size,
+                          n=r.nodes.Mesh.makeName(
+                              '{}_test_cube'.format(self.basename())),
+                          sd=2, sh=2, sw=2)[0]
 
         r.parent(cube, self)
         cube.setMatrix(r.data.Matrix())
