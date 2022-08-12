@@ -1,64 +1,87 @@
-from paya.util import short
 import paya.lib.plugops as _po
 import paya.lib.mathops as _mo
+from paya.util import short
 import paya.runtime as r
 
 
-class CurvePtSegmentsUpVectorSampler(r.networks.CurveUpVectorSamplerRemap):
+class CurveUpVectorPtKeysSampler(r.networks.CurveUpVectorRemapSampler):
     """
-    Up vector sampler for curves. Given known up vectors at specified
-    parameters, runs bidirectional parallel-transport for each segment,
-    with the directed solutions blended by angle.
+    Solves for parallel transport in both directions for each key segment,
+    and blends between the solutions by angle, with unwinding options.
+
+    Works similarly to
+    :class:`~paya.runtime.networks.CurveUpVectorIkSplineStyleSampler`, but
+    with properly-localised twist.
     """
 
+    #-------------------------------------------------------|    Constructor
+
     @classmethod
-    @short(resolution='res',
-           interpolation='i',
+    @short(interpolation='i',
+           resolution='res',
            unwindSwitch='uws')
     def create(cls,
                curve,
                paramVectorKeys,
-               resolution=9,
                interpolation='Linear',
+               resolution=9,
                unwindSwitch=0):
         """
-        :param curve: the curve associated with this system
-        :type curve: str, :class:`~paya.runtime.nodes.NurbsCurve` ,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param paramVectorKeys: a list of two-member lists, where each sublist
-            comprises *parameter: vector*, specifying known up vectors
+        :param curve: the curve on which to create the sampler
+        :type curve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param paramVectorKeys: zipped *parameter, vector* pairs, indicating
+            known up vectors along the curve; at least two such keys are
+            needed
         :type paramVectorKeys:
-            [[:class:`float` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`,
-            :class:`list` | :class:`tuple` | :class:`str` | :class:`~paya.runtime.data.Vector` |
-            :class:`~paya.runtime.plugs.Vector`]]
-        :param int resolution/res: the number of parallel transport solutions to
-            generate; higher numbers improve accuracy at the cost of rig
-            performance; defaults to 9
-        :param interpolation/i: an integer or string for the interpolation
-            enumerator on the :class:`remapValue <paya.runtime.nodes.RemapValue>`
-            node, namely:
+            [[:class:`float` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`],
+            [:class:`tuple` | :class:`list`,
+            :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`]]
+        :param interpolation/i: a string label or integer value or plug
+            specifying how to interpolate between the keyed pairs, namely:
 
-            -   0 / 'None' (you wouldn't normally want this)
-            -   1 / 'Linear' (the default)
-            -   2 / 'Smooth'
-            -   3 / 'Spline'
+            -   ``0`` (``'None'``) (you wouldn't normally want this)
+            -   ``1`` (``'Linear'``) (the default)
+            -   ``2`` (``'Smooth'``)
+            -   ``3`` (``'Spline'``)
 
-        :type interpolation/i: str, int
-        :param unwindSwitch/uws: and integer value or plug, or a list of integer
+        :type interpolation/i: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param int resolution/res: the number of parallel-transport solutions to
+            generate along the curve; higher numbers improve accuracy at the
+            expense of performance; defaults to 9
+        :param unwindSwitch/uws: an integer value or plug, or a list of integer
             values or plugs (one per segment, i.e.
-            ``len(paramVectorKeys)-1``), specifying how the angle blending
-            should be performed:
+            ``len(paramVectorKeys)-1``) specifying how to resolve angle-
+            blending edge cases:
 
-            -   0 (shortest, the default)
-            -   1 (positive)
-            -   2 (negative)
+            -   ``0`` (shortest, the default)
+            -   ``1`` (positive)
+            -   ``2`` (negative)
 
-        :type unwindSwitch/uws: int, str, :class:`~paya.runtime.plugs.Math1D`,
-            [int, str, :class:`~paya.runtime.plugs.Math1D`]
+        :type unwindSwitch/uws: :class:`int`, :class:`str`,
+            :class:`~paya.runtime.plugs.Math1D`,
+        [:class:`int` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`]
         :return: The network system.
-        :rtype: :class:`CurvePtSegmentsUpVectorSampler`
+        :rtype: :class:`CurveUpVectorPtKeysSampler`
         """
+        with r.NodeTracker() as track:
+            node = cls._create(curve, paramVectorKeys,
+                               interpolation=interpolation,
+                               resolution=resolution,
+                               unwindSwitch=unwindSwitch)
+
+        node._tagDependencies(track.getNodes())
+        return node
+
+    @classmethod
+    def _create(cls,
+               curve,
+               paramVectorKeys,
+               interpolation='Linear',
+               resolution=9,
+               unwindSwitch=0):
 
         #-----------------------------------------|    Prep
 
@@ -167,16 +190,12 @@ class CurvePtSegmentsUpVectorSampler(r.networks.CurveUpVectorSamplerRemap):
 
         #-----------------------------------------|    Create interpolator system
 
-        nw = r.networks.CurveUpVectorSamplerRemap.create(
-            curve,
-            list(zip(outParams, outNormals)),
-            i=interpolation
+        keymap = list(zip(outParams, outNormals))
+
+        return super(r.networks.CurveUpVectorPtKeysSampler, cls)._create(
+            curve, keymap, interpolation=interpolation
         )
 
-        nw.attr('payaSubtype').set(cls.__name__)
-        nw.__class__ = cls
-
-        return nw
 
     @classmethod
     def _resolvePerSegmentResolutions(cls, numSegments, resolution):
@@ -221,4 +240,3 @@ class CurvePtSegmentsUpVectorSampler(r.networks.CurveUpVectorSamplerRemap):
             resolutions[-1] -= 1
 
         return resolutions
-
