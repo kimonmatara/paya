@@ -224,7 +224,7 @@ def asGeoPlug(item, worldSpace=None):
             "Not a string, PyNode or Attribute: {}".format(item)
         )
 
-    if plug:
+    if plug is not None:
         if isinstance(plug, r.plugs.Geometry):
             return plug
 
@@ -239,7 +239,7 @@ def asGeoPlug(item, worldSpace=None):
                     "Not sure this is a geometry plug: {}".format(plug)
                 )
 
-    elif shape:
+    elif shape is not None:
         if worldSpace is None:
             return shape.localGeoOutput
 
