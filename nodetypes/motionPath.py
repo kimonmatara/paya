@@ -123,27 +123,3 @@ class MotionPath:
             ax = '-' + ax
 
         return ax
-
-    #--------------------------------------------|    Sampling routines
-
-    # Properties to mimic a pointOnCurveInfo node
-
-    @property
-    def normal(self):
-        return self.attr('orientMatrix').getAxis(self.getUpAxis())
-
-    @property
-    def normalizedNormal(self):
-        return self.normal.normal()
-
-    @property
-    def tangent(self):
-        return self.attr('orientMatrix').getAxis(self.getFrontAxis())
-
-    @property
-    def normalizedTangent(self):
-        return self.tangent.normal()
-
-    @property
-    def position(self):
-        return self.attr('allCoordinates')
