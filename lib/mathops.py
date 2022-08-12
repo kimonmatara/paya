@@ -38,6 +38,31 @@ class NoInterpolationKeysError(RuntimeError):
 #--------------------------------------------------------------|    Supplemental type analysis
 #--------------------------------------------------------------|
 
+def isScalarValueOrPlug(item):
+    """
+    :param item: the item to inspect
+    :return: ``True`` if *item* is a scalar value or attribute, otherwise
+        False
+    :rtype: bool
+    """
+    passthroughs = (
+        bool, int, float, r.plugs.Math1D, p.datatypes.Unit
+    )
+
+    if isinstance(item, passthroughs):
+        return True
+
+    if isinstance(item, str):
+        try:
+            plug = r.Attribute(item)
+
+        except:
+            return False
+
+        return isinstance(plug, r.plugs.Math1D)
+
+    return False
+
 def isVectorValueOrPlug(item):
     """
     :param item: the item to inspect
@@ -61,7 +86,7 @@ def isVectorValueOrPlug(item):
             and not isinstance(plug, r.plugs.EulerRotation))
 
     if hasattr(item, '__iter__'):
-        return len(item) is 3 and all(map(isScalarValue, item))
+        return len(list(item)) is 3 and all(map(isScalarValue, item))
 
     return False
 
@@ -354,23 +379,60 @@ def conformVectorArg(arg, listLength=None):
         "of {}.".format(listLength)
     )
 
-def parseUpVectorArg(upVector):
-    out = {}
+def isParamVectorPair(item):
+    """
+    :param item: the item to inspect
+    :return: ``True`` if *item* is a pair of *scalar: vector*, otherwise
+        ``False``
+    """
+    if hasattr(item, '__iter__'):
+        members = list(item)
 
-    if isinstance(upVector, zip):
-        out['keys'] = list(upVector)
+        if len(members) is 2:
+            return isScalarValueOrPlug(
+                members[0]) and isVectorValueOrPlug(members[1])
 
-    elif isVectorValueOrPlug(upVector):
-        out['single'] = upVector
+    return False
 
-    elif hasattr(upVector, '__iter__'):
-        if all((isVectorValueOrPlug(member) for member in upVector)):
-            out['multi'] = list(upVector)
+def describeAndConformVectorArg(vector):
+    """
+    Used by methods that receive multiple forms of up vector hints in a
+    single argument.
 
-    else:
-        raise RuntimeError("Couldn't parse up vector argument.")
+    :param vector: the argument to inspect
+    :raises RuntimeError: Couldn't parse the argument.
+    :return: One of:
 
-    return out
+            - tuple of ``'single'``, conformed vector value or plug
+            - tuple of ``'keys'``, list of conformed *param, vector* pairs
+            - tuple of ``'multi'``, list of conformed vectors
+    :rtype: One of:
+
+            - (:class:`str`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`)
+            - (:class:`str`, [(:class:`int` | :class:`float` | :class:`~paya.runtime.plugs.Math1D`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`))]
+            - (:class:`str`, [:class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`])
+    """
+    if isVectorValueOrPlug(vector):
+        return ('single', conformVectorArg(vector))
+
+    if hasattr(vector, '__iter__'):
+        vector = list(vector)
+
+        if all(map(isParamVectorPair, vector)):
+            outDescr = 'keys'
+            params = [info(pair[0])[0] for pair in vector]
+            vectors = [conformVectorArg(pair[1]) for pair in vector]
+            outContent = list(zip(params, vectors))
+
+            return outDescr, outContent
+
+        elif all(map(isVectorValueOrPlug, vector)):
+            return ('multi', [conformVectorArg(member) for member in vector])
+
+        else:
+            raise RuntimeError(
+                "Couldn't parse up vector argument: {}".format(vector)
+            )
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Matrix construction
