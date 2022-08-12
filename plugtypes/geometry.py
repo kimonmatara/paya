@@ -72,21 +72,28 @@ class Geometry:
         :return: The function set.
         :rtype: :class:`~maya.OpenMaya.MFnDagNode`
         """
-        # This will crash if called on a root array mplug, so force an index
+        try:
+            return getattr(self, '_shapeMFn')
 
-        if self.isArray():
-            plug = self[0]
+        except AttributeError:
+            # This will crash if called on a root array mplug, so force an
+            # index
 
-        else:
-            plug = self
+            if self.isArray():
+                plug = self[0]
 
-        plug.evaluate()
-        mplug = plug.__apimplug__()
-        handle = mplug.asMDataHandle()
-        mobj = handle.data()
+            else:
+                plug = self
 
-        mfnClass = getattr(om, 'MFn'+self.__class__.__name__)
-        return mfnClass(mobj)
+            plug.evaluate()
+            mplug = plug.__apimplug__()
+            handle = mplug.asMDataHandle()
+            mobj = handle.data()
+
+            mfnClass = getattr(om, 'MFn'+self.__class__.__name__)
+            self._shapeMFn = out = mfnClass(mobj)
+
+            return out
 
     #---------------------------------------------------------|    Geometry filtering
 
