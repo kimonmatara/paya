@@ -1,4 +1,4 @@
-from paya.shapext import copyToShapeAsEditor, copyToShapeAsSampler, copyToShape
+from paya.geoshapext import copyToShape
 from paya.util import short
 import paya.lib.nurbsutil as _nu
 import maya.OpenMaya as om
@@ -83,7 +83,7 @@ class BezierCurve:
 
     #---------------------------------------------------|    Points
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(asPoints='ap',
            asIndices='ai',
            plug='p')
@@ -123,7 +123,7 @@ class BezierCurve:
 
         return list(anchor.values())
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p', anchors='a')
     def getCVs(self, plug=True, anchors=False):
         """
@@ -146,7 +146,7 @@ class BezierCurve:
 
     #---------------------------------------------------|    Matrices
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(upVector='uvp',
            upObject='uo',
            aimCurve='aic',

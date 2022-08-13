@@ -2,7 +2,7 @@ import maya.OpenMaya as om
 import paya.lib.mathops as _mo
 import paya.lib.plugops as _po
 import paya.lib.nurbsutil as _nu
-from paya.shapext import copyToShapeAsEditor, copyToShapeAsSampler
+from paya.geoshapext import copyToShape
 from paya.util import short
 import pymel.util as _pu
 import maya.cmds as m
@@ -308,7 +308,7 @@ class NurbsCurve:
         if existing:
             return existing[0]
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(reuse='re', plug='p')
     def info(self, reuse=True, plug=True):
         """
@@ -397,7 +397,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Motion paths
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     def motionPath(self, **config):
         """
         Creates a ``motionPath`` node and connects it to this curve. All other
@@ -416,7 +416,7 @@ class NurbsCurve:
 
         return node
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(fractionMode='fr', uValue='u')
     def motionPathAtParam(self, param, **config):
         """
@@ -436,7 +436,7 @@ class NurbsCurve:
 
         return self.motionPath(**config)
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(fractionMode='fr', uValue='u')
     def motionPathAtFraction(self, fraction, **config):
         """
@@ -489,7 +489,7 @@ class NurbsCurve:
                     if turnOnPercentage == topOnNode.get():
                         return existingNode
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(reuse='re', plug='p',
            turnOnPercentage='top')
     def infoAtParam(self, param, reuse=True,
@@ -550,7 +550,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    CV
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def getCVs(self, plug=True):
         """
@@ -572,7 +572,7 @@ class NurbsCurve:
 
         return [r.data.Point(arr[x]) for x in range(arr.length())]
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def getCV(self, cvIndex, plug=True):
         """
@@ -594,7 +594,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Point
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(parametric='par', plug='p')
     def pointAt(self, paramOrFraction, parametric=True, plug=True):
         """
@@ -609,7 +609,7 @@ class NurbsCurve:
 
         return self.pointAtFraction(paramOrFraction, p=plug)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def pointAtParam(self, param, plug=True):
         """
@@ -632,7 +632,7 @@ class NurbsCurve:
 
     getPointAtParam = pointAtParam
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def pointAtLength(self, length, plug=True):
         """
@@ -650,7 +650,7 @@ class NurbsCurve:
         return self.pointAtParam(
             self.paramAtLength(length, p=False), p=False)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def pointAtFraction(self, fraction, plug=True):
         """
@@ -669,7 +669,7 @@ class NurbsCurve:
         point = self.pointAtParam(param, p=False)
         return point
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def closestPoint(self, refPoint, plug=True):
         """
@@ -693,7 +693,7 @@ class NurbsCurve:
 
         return r.data.Point(point)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p',
            parametric='par',
            uniform='uni')
@@ -732,7 +732,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Param
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def paramAtStart(self, plug=True):
         """
@@ -745,7 +745,7 @@ class NurbsCurve:
 
         return self.getKnotDomain(plug=False)[0]
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def paramAtEnd(self, plug=True):
         """
@@ -758,7 +758,7 @@ class NurbsCurve:
 
         return self.getKnotDomain(plug=False)[1]
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def getKnotDomain(self, plug=True):
         """
@@ -783,7 +783,7 @@ class NurbsCurve:
             om.MScriptUtil(maxPtr).asDouble(),
         )
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def paramAtPoint(self, point, plug=True):
         """
@@ -812,7 +812,7 @@ class NurbsCurve:
 
     closestParam = getParamAtPoint = paramAtPoint
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def paramAtFraction(self, fraction, plug=True):
         """
@@ -836,7 +836,7 @@ class NurbsCurve:
 
         return out
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def paramAtLength(self, length, plug=True):
         """
@@ -853,7 +853,7 @@ class NurbsCurve:
 
     findParamFromLength = paramAtLength
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(parametric='par', uniform='uni', plug='p')
     def distributeParams(self, numberFractionsOrParams,
                          parametric=False, uniform=False,
@@ -896,7 +896,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Length
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def lengthAtFraction(self, fraction, plug=True):
         """
@@ -910,7 +910,7 @@ class NurbsCurve:
         """
         return self.length(plug=plug) * fraction
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def lengthAtParam(self, param, plug=True):
         """
@@ -943,7 +943,7 @@ class NurbsCurve:
 
             return length
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def lengthAtPoint(self, point, plug=True):
         """
@@ -961,7 +961,7 @@ class NurbsCurve:
         param = self.paramAtPoint(point, p=plug)
         return self.lengthAtParam(param, p=plug)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(parametric='par',
            uniform='uni', plug='p')
     def distributeLengths(self,
@@ -1001,7 +1001,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Fraction
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def fractionAtPoint(self, point, plug=True):
         """
@@ -1018,7 +1018,7 @@ class NurbsCurve:
         """
         return self.lengthAtPoint(point, p=plug) / self.length(p=plug)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def fractionAtParam(self, param, plug=True):
         """
@@ -1032,7 +1032,7 @@ class NurbsCurve:
         """
         return self.lengthAtParam(param, p=plug) / self.length(p=plug)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(plug='p')
     def fractionAtLength(self, length, plug=True):
         """
@@ -1046,7 +1046,7 @@ class NurbsCurve:
         """
         return length / self.length(p=plug)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     def distributeFractions(self, number):
         """
         Convenience method. Equivalent to
@@ -1060,7 +1060,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Normal
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def normalAtParam(self, param, normalize=False, plug=True):
         """
@@ -1092,7 +1092,7 @@ class NurbsCurve:
 
     normal = normalAtParam
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def normalAtFraction(self, fraction, normalize=False, plug=True):
         """
@@ -1120,7 +1120,7 @@ class NurbsCurve:
         param = self.paramAtFraction(fraction, p=False)
         return self.normalAtParam(param, p=False)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def normalAtLength(self, length, normalize=False, plug=True):
         """
@@ -1137,7 +1137,7 @@ class NurbsCurve:
         fraction = length / self.length(p=plug)
         return self.normalAtFraction(fraction, nr=normalize, p=plug)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def normalAtPoint(self, point, normalize=False, plug=True):
         """
@@ -1158,7 +1158,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Tangent
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def tangentAtParam(self, param, normalize=False, plug=True):
         """
@@ -1192,7 +1192,7 @@ class NurbsCurve:
 
     tangent = tangentAtParam
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def tangentAtFraction(self, fraction, normalize=False, plug=True):
         """
@@ -1219,7 +1219,7 @@ class NurbsCurve:
         param = self.paramAtFraction(fraction, p=False)
         return self.tangentAtParam(param, p=False)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def tangentAtLength(self, length, normalize=False, plug=True):
         """
@@ -1236,7 +1236,7 @@ class NurbsCurve:
         fraction = length / self.length(p=plug)
         return self.tangentAtFraction(fraction, nr=normalize, p=plug)
 
-    @copyToShapeAsSampler()
+    @copyToShape()
     @short(normalize='nr', plug='p')
     def tangentAtPoint(self, point, normalize=False, plug=True):
         """
@@ -1258,7 +1258,7 @@ class NurbsCurve:
     #---------------------------------------------------------------|    UP VECTORS
     #---------------------------------------------------------------|
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(plug='p', sampler='sam')
     def upVectorAtParam(self, param, sampler=None, plug=True):
         """
@@ -1294,7 +1294,7 @@ class NurbsCurve:
 
         return sampler.sampleAtParam(param, plug=plug)
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
     def upVectorAtFraction(self, fraction, plug=True, **kwargs):
         """
@@ -1308,7 +1308,7 @@ class NurbsCurve:
         param = self.paramAtFraction(fraction, p=plug)
         return self.upVectorAtParam(param, p=plug, **kwargs)
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
     def upVectorAtLength(self, length, plug=True, **kwargs):
         """
@@ -1322,7 +1322,7 @@ class NurbsCurve:
         param = self.paramAtLength(length, p=plug)
         return self.upVectorAtParam(param, p=plug, **kwargs)
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
     def upVectorAtPoint(self, point, plug=True, **kwargs):
         """
@@ -1336,7 +1336,7 @@ class NurbsCurve:
         param = self.paramAtPoint(point, p=plug)
         return self.upVectorAtParam(param, p=plug, **kwargs)
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(resolution='res',
            unwindSwitch='uws',
            interpolation='i',
@@ -1510,7 +1510,7 @@ class NurbsCurve:
 
         return sampler
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     def getUpVectorSamplers(self):
         """
         :return: All :meth:`up vector samplers <createUpVectorSampler>`
@@ -1523,7 +1523,7 @@ class NurbsCurve:
         return [node for node in nodes \
                 if isinstance(node, r.networks.CurveUpVectorSampler)]
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     def getDefaultUpVectorSampler(self):
         """
         :return: The last :meth:`up vector sampler <createUpVectorSampler>`
@@ -1534,7 +1534,7 @@ class NurbsCurve:
             if output.attrName() == 'defaultFor':
                 return output.node()
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     def clearUpVectorSamplers(self):
         """
         Removes all up vector samplers and their dependencies.
@@ -1615,7 +1615,7 @@ class NurbsCurve:
 
         return matrix
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(upVector='uvp',
            upObject='uo',
            aimCurve='aic',
@@ -1790,7 +1790,7 @@ class NurbsCurve:
             parametric=True
         )
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(upVector='uvp',
            upObject='uo',
            aimCurve='aic',
@@ -1961,7 +1961,7 @@ class NurbsCurve:
             parametric=False
         )
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(parametric='par',
            plug='p')
     def matrixAt(self,
@@ -1999,7 +1999,7 @@ class NurbsCurve:
                     secondaryAxis,
                     p=plug, **kwargs)
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
     def matrixAtPoint(self, point,
                       primaryAxis, secondaryAxis,
@@ -2027,7 +2027,7 @@ class NurbsCurve:
         return self.matrixAtParam(param, primaryAxis,
                                   secondaryAxis, p=plug, **kwargs)
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
     def matrixAtLength(self, length,
                       primaryAxis, secondaryAxis,
@@ -2327,7 +2327,7 @@ class NurbsCurve:
 
         return matrices
 
-    @copyToShapeAsSampler(worldSpaceOnly=True)
+    @copyToShape(worldSpaceOnly=True)
     @short(parametric='par',
            uniform='uni',
            chain='cha',
@@ -2471,7 +2471,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Conversions
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(force='f')
     def toBezier(self, force=False):
         """
@@ -2491,7 +2491,7 @@ class NurbsCurve:
         self >> node.attr('inputCurve')
         return node.attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(force='f')
     def toNurbs(self, force=False):
         """
@@ -2511,7 +2511,7 @@ class NurbsCurve:
         self >> node.attr('inputCurve')
         return node.attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(tolerance='tol', keepRange='kr')
     def bSpline(self, tolerance=0.001, keepRange=1):
         """
@@ -2537,7 +2537,7 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Attach / detach
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(relative='r')
     def subCurve(self, minValue, maxValue, relative=False):
         """
@@ -2562,7 +2562,7 @@ class NurbsCurve:
 
     sub = subCurve
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         blend='bl',
         blendBias='bb',
@@ -2637,7 +2637,7 @@ class NurbsCurve:
 
         return node.attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(select='sel')
     def detach(self, *parameters, select=None):
         """
@@ -2698,7 +2698,7 @@ class NurbsCurve:
 
         return node
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         multipleKnots='mul',
         atStart='ats',
@@ -2747,7 +2747,7 @@ class NurbsCurve:
             removeMultipleKnots=not multipleKnots
         ).attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         multipleKnots='mul',
         atStart='ats',
@@ -2794,7 +2794,7 @@ class NurbsCurve:
             removeMultipleKnots=not multipleKnots
         ).attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         atStart='ats',
         atBothEnds='abe',
@@ -2861,7 +2861,7 @@ class NurbsCurve:
             start=start
         ).attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         atStart='ats',
         atBothEnds='abe',
@@ -2974,7 +2974,7 @@ class NurbsCurve:
             "Not a 1D or 3D numerical type: {}".format(lenPointOrVec)
         )
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(atStart='ats', atBothEnds='abe')
     def retract(self, length, atStart=None, atBothEnds=None):
         """
@@ -3009,7 +3009,7 @@ class NurbsCurve:
 
         return self.detach(*params, select=select)[0]
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         atStart='ats',
         vector='v',
@@ -3087,7 +3087,7 @@ class NurbsCurve:
 
         return baseLength.ge(targetLength).ifElse(retraction, extension)
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         spans='s',
         degree='d',
@@ -3197,7 +3197,7 @@ class NurbsCurve:
 
         return node.attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(
         degree='d',
         endKnots='end',
@@ -3259,7 +3259,7 @@ class NurbsCurve:
             kt=keepTangents
         )
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     def cageRebuild(self):
         """
         :return: A linear curve with the same CVs as this one.
@@ -3271,7 +3271,7 @@ class NurbsCurve:
     #---------------------------------------------------------------|    MISC
     #---------------------------------------------------------------|
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     def reverse(self):
         """
         :return: The reversed curve.
@@ -3281,7 +3281,7 @@ class NurbsCurve:
         self >> node.attr('inputCurve')
         return node.attr('outputCurve')
 
-    @copyToShapeAsEditor()
+    @copyToShape(editsHistory=True)
     @short(weight='w')
     def blend(self, otherCurve, weight=0.5):
         """

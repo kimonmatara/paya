@@ -2,7 +2,7 @@ import maya.OpenMaya as om
 import pymel.util as _pu
 import pymel.core.nodetypes as _nt
 
-from paya.shapext import ShapeExtensionMeta
+from paya.geoshapext import ShapeExtensionMeta
 import paya.lib.nurbsutil as _nu
 from paya.lib.loopback import Loopback
 import paya.lib.nurbsutil as _nu

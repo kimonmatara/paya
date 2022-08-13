@@ -1,4 +1,4 @@
-from paya.shapext import ShapeExtensionMeta
+from paya.geoshapext import ShapeExtensionMeta
 import paya.lib.mathops as _mo
 from paya.util import short
 import paya.runtime as r
