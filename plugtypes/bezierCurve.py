@@ -66,16 +66,29 @@ class BezierCurve:
     @copyToShape()
     def paramAtAnchor(self, anchorIndex):
         """
-        This is a fixed / static-only calculation, since anchors always
-        'touch' the curve at the same parameter.
+        This is a fixed / static-only calculation.
 
         :param int anchorIndex: the anchor index
         :return: The U parameter.
         """
-        umin, umax = self.getKnotDomain(plug=False)
-        numAnchors = self.numAnchors()
-        grain = (umax-umin) / (numAnchors-1)
-        return grain * anchorIndex
+        point = self.pointAtAnchor(anchorIndex, p=False)
+        return self.paramAtPoint(point, p=False)
+
+    @copyToShape()
+    def paramsAtAnchors(self):
+        """
+        This is a fixed / static-only calculation. It evaluates slightly more
+        quickly than repeated calls to :meth:`paramAtAnchor`.
+
+        :return: The U parameters at each Bezier anchor root.
+        :rtype: [:class:`int`]
+        """
+        allIndices = range(self.numCVs())
+        anchorGroups = _nu.itemsAsBezierAnchors(allIndices)
+
+        return [self.paramAtPoint(
+            self.pointAtCV(anchorGroup['root'], p=False
+            ), p=False) for anchorGroup in anchorGroups]
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    SAMPLING
@@ -84,39 +97,84 @@ class BezierCurve:
     #---------------------------------------------------|    Points
 
     @copyToShape()
-    @short(asPoints='ap',
-           asIndices='ai',
+    @short(asPoint='ap', asIndex='ai', plug='p')
+    def getCVAtAnchor(self, anchorIndex,
+                      asPoint=None, asIndex=None, plug=True):
+        """
+        :param int anchorIndex: the index of the Bezier anchor to inspect
+        :param bool asPoint/ap: return a CV point position (the default)
+        :param bool asIndex/ai: return a CV index; this will always be a
+            value, even if *plug* is ``True``
+        :param plug/p: if *asPoint* is requested, return a plug, not just
+            a value; defaults to ``True``
+        :return: The point at the root CV of the specified anchor.
+        :rtype: :class:`int` | :class:`~paya.runtime.data.Point`
+            | :class:`~paya.runtime.plugs.Vector`
+        """
+        allIndices = range(self.numCVs())
+        anchorGroup = _nu.itemsAsBezierAnchors(allIndices)[anchorIndex]
+        cvIndex = anchorGroup['root']
+
+        if (asPoint is None) and (asIndex is None):
+            asPoint, asIndex = True, False
+
+        elif (asPoint is None) and (asIndex is not None):
+            asPoint = not asIndex
+
+        elif (asPoint is not None) and (asIndex is None):
+            asIndex = not asPoint
+
+        if asIndex:
+            return cvIndex
+
+        return self.pointAtCV(cvIndex, p=plug)
+
+    @copyToShape()
+    @short(plug='p')
+    def pointAtAnchor(self, anchorIndex, plug=True):
+        """
+        :param int anchorIndex: the index of the Bezier anchor to inspect
+        :param bool plug/p: return an attribute, not just a value; defaults
+            to ``True``
+        :return: The position of the root CV at the specified anchor.
+        :rtype: :class:`~paya.runtime.data.Point` | :class:`~paya.runtime.plugs.Vector`
+        """
+        return self.getCVAtAnchor(anchorIndex, asPoint=True, p=plug)
+
+    @copyToShape()
+    @short(asPoint='ap',
+           asIndex='ai',
            plug='p')
     def getCVsAtAnchor(self,
                        anchorIndex,
-                       asPoints=None,
-                       asIndices=None,
+                       asPoint=None,
+                       asIndex=None,
                        plug=True):
         """
         :param int anchorIndex: the index of the anchor to inspect
-        :param bool asPoints/ap: return CV point positions (the default)
-        :param bool asIndices/ai: return CV indices; indices are always
+        :param bool asPoint/ap: return CV point positions (the default)
+        :param bool asIndex/ai: return CV indices; indices are always
             returned as values, not scalar outputs, even if *plug* is
             ``True``
-        :param plug/p: if *asPoints* is requested, return point outputs, not
+        :param plug/p: if *asPoint* is requested, return point outputs, not
             just values; defaults to ``True``
         :return: The CV indices or positions.
         :rtype: [:class:`int`] | [:class:`paya.runtime.plugs.Vector`] |
             [:class:`paya.runtime.data.Point`]
         """
-        if (asPoints is None) and (asIndices is None):
-            asPoints, asIndices = True, False
+        if (asPoint is None) and (asIndex is None):
+            asPoint, asIndex = True, False
 
-        elif (asPoints is None) and (asIndices is not None):
-            asPoints = not asIndices
+        elif (asPoint is None) and (asIndex is not None):
+            asPoint = not asIndex
 
-        elif (asPoints is not None) and (asIndices is None):
-            asIndices = not asPoints
+        elif (asPoint is not None) and (asIndex is None):
+            asIndex = not asPoint
 
         allIndices = range(self.numCVs())
         anchor = _nu.itemsAsBezierAnchors(allIndices)[anchorIndex]
 
-        if asPoints:
+        if asPoint:
             for key, index in anchor.items():
                 value = self.pointAtCV(index, p=plug)
                 anchor[key] = value
@@ -125,7 +183,7 @@ class BezierCurve:
 
     @copyToShape()
     @short(plug='p', anchors='a')
-    def getCVs(self, plug=True, anchors=False):
+    def getControlVerts(self, plug=True, anchors=False):
         """
         :param bool plug/p: return plugs rather than values;
             defaults to ``True``
@@ -137,7 +195,7 @@ class BezierCurve:
         :rtype: [:class:`~paya.runtime.plugs.Vector`],
             [:class:`~paya.runtime.data.Point`]
         """
-        out = super(r.plugs.BezierCurve, self).getCVs(p=plug)
+        out = super(r.plugs.BezierCurve, self).getControlVerts(p=plug)
 
         if anchors:
             out = _nu.itemsAsBezierAnchors(out)
@@ -247,3 +305,38 @@ class BezierCurve:
 
             plug=plug
         )
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    Editing
+    #---------------------------------------------------------------|
+
+    @copyToShape(editsHistory=True)
+    @short(numTweens='num')
+    def inbetweenAnchors(self, numTweens=1):
+        """
+        :param int numTweens/num: the number of anchors to insert between each
+            pair of existing anchors; defaults to ``1``
+        :return: The edited Bezier curve.
+        :rtype: :class:`~paya.runtime.plugs.BezierCurve`
+        """
+        params = self.paramsAtAnchors()
+        return self.insertKnot(params, ib=numTweens)
+
+    @copyToShape(editsHistory=True)
+    @short(subdivisions='sub')
+    def subdivideAnchors(self, subdivisions=1):
+        """
+        Subdivides this Bezier curve by recursively adding knots between its
+        anchors.
+
+        :param int subdivisions/sub: the number of times to subdivide; defaults
+            to 1
+        :return: The edited Bezier curve.
+        :rtype: :class:`~paya.runtime.plugs.BezierCurve`
+        """
+        numSplits = 0
+
+        for i in range(subdivisions):
+            numSplits = (numSplits * 2) + 1
+
+        return self.inbetweenAnchors(numSplits)

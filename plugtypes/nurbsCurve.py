@@ -1,11 +1,13 @@
 import maya.OpenMaya as om
+import maya.cmds as m
+import pymel.util as _pu
+
+from paya.lib.typeman import plugCheck
 import paya.lib.mathops as _mo
 import paya.lib.plugops as _po
 import paya.lib.nurbsutil as _nu
 from paya.geoshapext import copyToShape
 from paya.util import short
-import pymel.util as _pu
-import maya.cmds as m
 import paya.runtime as r
 
 
@@ -83,7 +85,7 @@ class NurbsCurve:
             sections >> node.attr('sections')
             radius >> node.attr('radius')
 
-            return node.attr('outputCurve').setClass(r.plugs.NurbsCurve)
+            return node.attr('outputCurve').setClass(type(self))
 
         elif num is 3:
             if guard is None:
@@ -235,7 +237,7 @@ class NurbsCurve:
                     return [self.paramAtFraction(
                         fraction, p=False) for fraction in fractions]
 
-                umin, umax = self.getKnotDomain(p=False)
+                umin, umax = self.knotDomain(p=False)
                 return _mo.floatRange(umin, umax, number)
 
             else:
@@ -287,11 +289,23 @@ class NurbsCurve:
 
     def numCVs(self):
         """
+        This is a :term:`static`-only operation.
+
         :return: The number of CVs on this curve.
         :rtype: :class:`int`
         """
         mfn = self.getShapeMFn()
         return mfn.numCVs()
+
+    def numSpans(self):
+        """
+        This is a :term:`static`-only operation.
+
+        :return: The number of spans on this curve.
+        :rtype: :class:`int`
+        """
+        mfn = self.getShapeMFn()
+        return mfn.numSpans()
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    CURVE-LEVEL SAMPLING
@@ -310,12 +324,12 @@ class NurbsCurve:
 
     @copyToShape()
     @short(reuse='re', plug='p')
-    def info(self, reuse=True, plug=True):
+    def info(self, reuse=True, plug=False):
         """
         :param bool reuse/re: where available, retrieve an already-connected
             node; defaults to True
         :param bool plug/p: return a :class:`curveInfo <paya.runtime.nodes.CurveInfo>`
-            node rather than information in a dict; defaults to ``True``
+            node rather than information in a dict; defaults to ``False``
         :return: If *plug* is ``True``, a
             :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node;
             otherwise, a dictionary with the following keys: ``'arcLength'``,
@@ -337,11 +351,11 @@ class NurbsCurve:
         return {
             'arcLength': self.length(p=False),
             'knots': self.getKnots(p=False),
-            'controlPoints': self.getCVs(p=False)
+            'controlPoints': self.getControlVerts(p=False)
         }
 
     @short(plug='p')
-    def length(self, plug=True, useMFn=True):
+    def length(self, plug=False):
         """
         If *plug* is False, a temporary
         :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node will be used
@@ -350,7 +364,7 @@ class NurbsCurve:
 
         This method will *always* use a
         :param bool plug/p: return a plug, not just a value; defaults
-            to ``True``
+            to ``False``
         :return: The length of this curve.
         :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
@@ -373,11 +387,11 @@ class NurbsCurve:
             return length
 
     @short(plug='p')
-    def getKnots(self, plug=True):
+    def getKnots(self, plug=False):
         """
         :param plug/p: return the ``knots`` array of a
             :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node, not just
-            a list of values; defaults to ``True``
+            a list of values; defaults to ``False``
         :return: [:class:`int`] | [:class:`paya.runtime.plugs.Math1D`]
         """
         if plug:
@@ -490,10 +504,15 @@ class NurbsCurve:
                         return existingNode
 
     @copyToShape(worldSpaceOnly=True)
-    @short(reuse='re', plug='p',
+    @short(reuse='re',
+           plug='p',
            turnOnPercentage='top')
-    def infoAtParam(self, param, reuse=True,
-                    plug=True, turnOnPercentage=False):
+    @plugCheck('param')
+    def infoAtParam(self,
+                    param,
+                    reuse=True,
+                    plug=None,
+                    turnOnPercentage=False):
         """
         :param param: the curve parameter to inspect
         :type param: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
@@ -505,9 +524,13 @@ class NurbsCurve:
         :param bool reuse/re: if *plug* is ``True``, reuse any matching
             :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>` nodes;
             defaults to ``True``
-        :param bool plug/p: return a
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        return a
             :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>`
-            node rather than a dictonary of values; defaults to ``True``
+            node rather than a dictonary of values; default is auto-configured
+            based on arguments
         :return: If *plug* is ``True``, a
             :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>` node;
             otherwise, a dictionary with the followingk keys: ``'position'``,
@@ -531,7 +554,7 @@ class NurbsCurve:
             return node
 
         if turnOnPercentage:
-            umin, umax = self.getKnotDomain(p=False)
+            umin, umax = self.knotDomain(p=False)
             param = _pu.blend(umin, umax, weight=param)
 
         tangent = self.tangentAtParam(param, p=False)
@@ -552,10 +575,10 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def getCVs(self, plug=True):
+    def getControlVerts(self, plug=False):
         """
         :param bool plug/p: return plugs rather than values;
-            defaults to ``True``
+            defaults to ``False``
         :return: The members of the ``controlPoints`` info array for this
             curve.
         :rtype: [:class:`~paya.runtime.plugs.Vector`],
@@ -574,35 +597,35 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def getCV(self, cvIndex, plug=True):
+    def getControlVert(self, cvIndex, plug=False):
         """
         :alias: ``pointAtCV``
         :param int cvIndex: the index of the CV to inspect
         :param bool plug/p: return a plug, not just a value; defaults
-            to ``True``
+            to ``False``
         :return: The position of the specified CV.
         """
         if plug:
-            return self.getCVs(plug=True)[cvIndex]
+            return self.getControlVerts(plug=True)[cvIndex]
 
         mfn = self.getShapeMFn()
         point = om.MPoint()
         mfn.getCV(cvIndex, point, om.MSpace.kWorld)
         return r.data.Point(point)
 
-    pointAtCV = getCV
+    pointAtCV = getControlVert
 
     #-----------------------------------------------|    Point
 
     @copyToShape()
     @short(parametric='par', plug='p')
-    def pointAt(self, paramOrFraction, parametric=True, plug=True):
+    def pointAt(self, paramOrFraction, parametric=True, plug=None):
         """
         Dispatches :meth:`pointAtParam` if ``parametric=True``, otherwise
         :meth:`pointAtFraction`.
 
         :param bool parametric/par: interpret *paramOrFraction* as a U
-            parameter rather than a length fraction; defaults to ``True``
+            parameter rather than a length fraction; defaults to ``False``
         """
         if parametric:
             return self.pointAtParam(paramOrFraction, p=plug)
@@ -611,12 +634,14 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def pointAtParam(self, param, plug=True):
+    @plugCheck('param')
+    def pointAtParam(self, param, plug=None):
         """
         :param param: the parameter to sample
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *param* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A point at the specified parameter.
         :rtype: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
@@ -630,16 +655,15 @@ class NurbsCurve:
         mfn.getPointAtParam(param, pt, om.MSpace.kWorld)
         return r.data.Point(pt)
 
-    getPointAtParam = pointAtParam
-
     @copyToShape()
     @short(plug='p')
-    def pointAtLength(self, length, plug=True):
+    @plugCheck('length')
+    def pointAtLength(self, length, plug=None):
         """
         :param length: the length to sample
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool plug/p: return a plug, not a value; if ``False``,
-            *param* must be a value; defaults to ``True``
+            *param* must be a value; defaults to ``False``
         :return: A point at the specified length.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
@@ -652,12 +676,14 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def pointAtFraction(self, fraction, plug=True):
+    @plugCheck('fraction')
+    def pointAtFraction(self, fraction, plug=None):
         """
         :param fraction: the fraction to sample
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *param* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A point at the specified fraction.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
@@ -671,12 +697,14 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def closestPoint(self, refPoint, plug=True):
+    @plugCheck('refPoint')
+    def nearestPoint(self, refPoint, plug=None):
         """
         :param refPoint: the reference point
         :type refPoint: tuple, list, str, :class:`~paya.runtime.plugs.Vector`
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *param* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The closest point on this curve to *refPoint*.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
@@ -697,11 +725,12 @@ class NurbsCurve:
     @short(plug='p',
            parametric='par',
            uniform='uni')
+    @plugCheck('numberFractionsOrParams')
     def distributePoints(self,
                          numberFractionsOrParams,
                          parametric=False,
                          uniform=False,
-                         plug=True):
+                         plug=None):
         """
         :param numberFractionsOrParams: one of:
 
@@ -715,7 +744,9 @@ class NurbsCurve:
             generate parameters, not fractions; defaults to ``False``
         :param bool uniform/uni: if generating parameters, distribute them
             by length, not parametric space; defaults to ``False``
-        :param bool plug/p: return plugs, not values; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A list of point values or plugs.
         :rtype: [:class:`~paya.runtime.data.Point`
             | :class:`~paya.runtime.plugs.Vector`]
@@ -734,35 +765,35 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def paramAtStart(self, plug=True):
+    def paramAtStart(self, plug=False):
         """
-        :param bool plug/p: return plugs, not values; defaults to True
+        :param bool plug/p: return plugs, not values; defaults to False
         :return: The parameter at the start of this curve.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
         """
         if plug:
             return self.paramAtLength(0.0, p=True)
 
-        return self.getKnotDomain(plug=False)[0]
+        return self.knotDomain(plug=False)[0]
 
     @copyToShape()
     @short(plug='p')
-    def paramAtEnd(self, plug=True):
+    def paramAtEnd(self, plug=False):
         """
-        :param bool plug/p: return plugs, not values; defaults to True
+        :param bool plug/p: return plugs, not values; defaults to False
         :return: The parameter at the end of this curve.
         :rtype: float, :class:`~paya.runtime.plugs.Math1D`
         """
         if plug:
             return self.paramAtFraction(1.0, p=True)
 
-        return self.getKnotDomain(plug=False)[1]
+        return self.knotDomain(plug=False)[1]
 
     @copyToShape()
     @short(plug='p')
-    def getKnotDomain(self, plug=True):
+    def knotDomain(self, plug=False):
         """
-        :param bool plug/p: return plugs, not values; defaults to ``True``
+        :param bool plug/p: return plugs, not values; defaults to ``False``
         :return: The min and max U parameters on this curve.
         :rtype: (:class:`float` | :class:`~paya.runtime.plugs.Math1D`,
             :class:`float` | :class:`~paya.runtime.plugs.Math1D`)
@@ -785,17 +816,18 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def paramAtPoint(self, point, plug=True):
+    @plugCheck('point')
+    def paramAtPoint(self, point, plug=None):
         """
         This is a 'forgiving' implementation, and uses the closest point.
 
-        :alias: ``closestParam`` ``getParamAtPoint``
+        :alias: ``nearestParam``
         :param point: the reference point
         :type point: tuple, list, str, :class:`~paya.runtime.plugs.Vector`,
             :class:`~paya.runtime.data.Point`
-        :param bool plug/p: indicate that one or more arguments are
-            passed as arguments, and therefore a plug output is required,
-            or force a plug output in every case; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The nearest parameter to the reference point.
         :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
         """
@@ -810,17 +842,18 @@ class NurbsCurve:
 
         return paramUtil.getDouble(paramPtr)
 
-    closestParam = getParamAtPoint = paramAtPoint
+    nearestParam = paramAtPoint
 
     @copyToShape()
     @short(plug='p')
-    def paramAtFraction(self, fraction, plug=True):
+    @plugCheck('fraction')
+    def paramAtFraction(self, fraction, plug=None):
         """
         :param fraction: the fraction to sample
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: indicate that one or more arguments are
-            passed as arguments, and therefore a plug output is required,
-            or force a plug output in every case; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The parameter at the given fraction.
         :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
         """
@@ -838,26 +871,30 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def paramAtLength(self, length, plug=True):
+    @plugCheck('length')
+    def paramAtLength(self, length, plug=None):
         """
-        :alias: ``findParamFromLength``
         :param length: the length at which to sample a parameter
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: return a plug, not a value; if *length* is a
-            plug, this must also be a plug; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The parameter at the given length.
         :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
         """
         fraction = length / self.length(p=plug)
         return self.paramAtFraction(fraction, p=plug)
 
-    findParamFromLength = paramAtLength
-
     @copyToShape()
-    @short(parametric='par', uniform='uni', plug='p')
-    def distributeParams(self, numberFractionsOrParams,
-                         parametric=False, uniform=False,
-                         plug=True):
+    @short(parametric='par',
+           uniform='uni',
+           plug='p')
+    @plugCheck('numberFractionsOrParams')
+    def distributeParams(self,
+                         numberFractionsOrParams,
+                         parametric=False,
+                         uniform=False,
+                         plug=None):
         """
         :param numberFractionsOrParams: one of:
 
@@ -873,8 +910,9 @@ class NurbsCurve:
             generate parameters, not fractions; defaults to ``False``
         :param bool uniform/uni: if generating parameters, distribute them
             by length, not parametric space; defaults to ``False``
-        :param bool plug/p: return scalar plugs, not values; defaults
-            to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A list of parameter plugs or values.
         :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
         """
@@ -898,13 +936,14 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def lengthAtFraction(self, fraction, plug=True):
+    @plugCheck('fraction')
+    def lengthAtFraction(self, fraction, plug=None):
         """
         :param fraction: the fraction to inspect
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: indicate that *fraction* is a plug, and therefore
-             a plug return is required, or force a plug return regardless;
-             defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The curve length at the specified fraction.
         :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
@@ -912,7 +951,8 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def lengthAtParam(self, param, plug=True):
+    @plugCheck('param')
+    def lengthAtParam(self, param, plug=None):
         """
         Differs from the PyMEl / API
         :meth:`~pymel.core.nodetypes.NurbsCurve.findLengthFromParam` in that
@@ -920,9 +960,9 @@ class NurbsCurve:
 
         :param param: the parameter to inspect
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: indicate that *param* is a plug, and therefore
-             a plug return is required, or force a plug return regardless;
-             defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The curve length at the specified parameter.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
@@ -945,16 +985,16 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def lengthAtPoint(self, point, plug=True):
+    def lengthAtPoint(self, point, plug=None):
         """
         This is a 'forgiving' implementation, and uses the closest point.
 
         :param point: the point to inspect
         :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
-        :param bool plug/p: indicate that *point* is a plug, and therefore
-             a plug return is required, or force a plug return regardless;
-             defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The curve length at the specified point.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
@@ -963,11 +1003,13 @@ class NurbsCurve:
 
     @copyToShape()
     @short(parametric='par',
-           uniform='uni', plug='p')
+           uniform='uni',
+           plug='p')
+    @plugCheck('numberFractionsOrParams')
     def distributeLengths(self,
                           numberFractionsOrParams,
                           parametric=False,
-                          uniform=False, plug=True):
+                          uniform=False, plug=None):
         """
         :param numberFractionsOrParams: one of:
 
@@ -983,16 +1025,16 @@ class NurbsCurve:
             generate parameters, not fractions; defaults to ``False``
         :param bool uniform/uni: if generating parameters, distribute them
             by length, not parametric space; defaults to ``False``
-        :param bool plug/p: return scalar plugs, not values; defaults to
-            ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A list of lengths.
         :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
         """
         fractionsOrParams = self._resolveNumberFractionsOrParams(
             numberFractionsOrParams,
             par=parametric,
-            uni=uniform
-        )
+            uni=uniform)
 
         meth = self.lengthAtParam if parametric else self.lengthAtFraction
 
@@ -1003,16 +1045,17 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def fractionAtPoint(self, point, plug=True):
+    @plugCheck('point')
+    def fractionAtPoint(self, point, plug=None):
         """
         This is a 'forgiving' implementation, and uses the closest point.
 
         :param point: the point at which to sample a fraction
         :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
-        :param bool plug/p: indicate that *point* is a plug, and therefore
-             a plug return is required, or force a plug return regardless;
-             defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The length fraction at the specified point.
         :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
@@ -1020,13 +1063,14 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def fractionAtParam(self, param, plug=True):
+    @plugCheck('param')
+    def fractionAtParam(self, param, plug=None):
         """
         :param param: the parameter at which to sample a fraction
         :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: indicate that *param* is a plug, and therefore
-             a plug return is required, or force a plug return regardless;
-             defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The length fraction at the specified parameter.
         :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
@@ -1034,13 +1078,14 @@ class NurbsCurve:
 
     @copyToShape()
     @short(plug='p')
-    def fractionAtLength(self, length, plug=True):
+    @plugCheck('length')
+    def fractionAtLength(self, length, plug=None):
         """
         :param length: the length at which to sample a fraction
         :type length: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: indicate that *length* is a plug, and therefore
-             a plug return is required, or force a plug return regardless;
-             defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The length fraction at the specified length.
         :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
@@ -1062,15 +1107,16 @@ class NurbsCurve:
 
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def normalAtParam(self, param, normalize=False, plug=True):
+    @plugCheck('param')
+    def normalAtParam(self, param, normalize=False, plug=None):
         """
-        :alias: ``normal`` (for API parity)
         :param param: the parameter at which to sample the normal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *param* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
@@ -1090,18 +1136,18 @@ class NurbsCurve:
 
         return normal
 
-    normal = normalAtParam
-
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def normalAtFraction(self, fraction, normalize=False, plug=True):
+    @plugCheck('fraction')
+    def normalAtFraction(self, fraction, normalize=False, plug=None):
         """
         :param fraction: the fraction at which to sample the normal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *fraction* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
@@ -1122,14 +1168,16 @@ class NurbsCurve:
 
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def normalAtLength(self, length, normalize=False, plug=True):
+    @plugCheck('length')
+    def normalAtLength(self, length, normalize=False, plug=None):
         """
         :param length: the length at which to sample the normal
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *length* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
@@ -1139,7 +1187,8 @@ class NurbsCurve:
 
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def normalAtPoint(self, point, normalize=False, plug=True):
+    @plugCheck('point')
+    def normalAtPoint(self, point, normalize=False, plug=None):
         """
         :param point: the point at which to sample the normal
         :type point: tuple, list, str,
@@ -1147,8 +1196,9 @@ class NurbsCurve:
             :class:`~paya.runtime.data.Point`
         :param bool normalize/nr: return the normalized normal;
             defaults to False
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *point* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
@@ -1160,15 +1210,16 @@ class NurbsCurve:
 
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def tangentAtParam(self, param, normalize=False, plug=True):
+    @plugCheck('param')
+    def tangentAtParam(self, param, normalize=False, plug=None):
         """
-        :alias: ``tangent`` (for API parity)
         :param param: the parameter at which to sample the tangent
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool normalize/nr: return the normalized tangent;
             defaults to False
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *param* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
@@ -1190,16 +1241,16 @@ class NurbsCurve:
 
             return tangent
 
-    tangent = tangentAtParam
-
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def tangentAtFraction(self, fraction, normalize=False, plug=True):
+    @plugCheck('fraction')
+    def tangentAtFraction(self, fraction, normalize=False, plug=None):
         """
         :param fraction: the fraction at which to sample the tangent
         :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *fraction* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param bool normalize/nr: normalize the output vector; defaults to
             False
         :return: The sampled vector.
@@ -1221,12 +1272,14 @@ class NurbsCurve:
 
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def tangentAtLength(self, length, normalize=False, plug=True):
+    @plugCheck('param')
+    def tangentAtLength(self, length, normalize=False, plug=None):
         """
         :param length: the length at which to sample the tangent
         :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *length* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param bool normalize/nr: normalize the output vector; defaults to
             False
         :return: The sampled vector.
@@ -1238,15 +1291,16 @@ class NurbsCurve:
 
     @copyToShape()
     @short(normalize='nr', plug='p')
-    def tangentAtPoint(self, point, normalize=False, plug=True):
+    def tangentAtPoint(self, point, normalize=False, plug=None):
         """
         :param point: the point at which to sample the normals
         :type point: list, tuple, str, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
         :param bool normalize/nr: normalize the output vector; defaults to
             False
-        :param bool plug/p: return a plug, not a value; if ``False``,
-            *point* must be a value; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
@@ -1260,12 +1314,13 @@ class NurbsCurve:
 
     @copyToShape(worldSpaceOnly=True)
     @short(plug='p', sampler='sam')
-    def upVectorAtParam(self, param, sampler=None, plug=True):
+    def upVectorAtParam(self, param, sampler=None, plug=None):
         """
         :param param: the parameter at which to sample the up vector
         :type param: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: return a plug, and not a value; if *param*
-            is a plug, this must be ``True``; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param sampler/sam: an up vector sampler to use; sampler can be
             created using :meth:`createUpVectorSampler`; if this is omitted,
             then the last sampler created using
@@ -1296,13 +1351,14 @@ class NurbsCurve:
 
     @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
-    def upVectorAtFraction(self, fraction, plug=True, **kwargs):
+    def upVectorAtFraction(self, fraction, plug=None, **kwargs):
         """
         Converts *fraction* into a parameter and defers to
         :meth:`upVectorAtParam`.
 
-        :param bool plug/p: return a plug, and not a value; if *fraction*
-            is a plug, this must be ``True``; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
         """
         param = self.paramAtFraction(fraction, p=plug)
@@ -1310,13 +1366,14 @@ class NurbsCurve:
 
     @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
-    def upVectorAtLength(self, length, plug=True, **kwargs):
+    def upVectorAtLength(self, length, plug=None, **kwargs):
         """
         Finds the parameter at the specified length and defers to
         :meth:`upVectorAtParam`.
 
-        :param bool plug/p: return a plug, and not a value; if *length*
-            is a plug, this must be ``True``; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
         """
         param = self.paramAtLength(length, p=plug)
@@ -1324,13 +1381,14 @@ class NurbsCurve:
 
     @copyToShape(worldSpaceOnly=True)
     @short(plug='p')
-    def upVectorAtPoint(self, point, plug=True, **kwargs):
+    def upVectorAtPoint(self, point, plug=None, **kwargs):
         """
         Finds the closest parameter to the specified point and defers to
         :meth:`upVectorAtParam`.
 
-        :param bool plug/p: return a plug, and not a value; if *point*
-            is a plug, this must be ``True``; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
         """
         param = self.paramAtPoint(point, p=plug)
@@ -1588,7 +1646,7 @@ class NurbsCurve:
             aimCurve = _po.asGeoPlug(aimCurve, ws=True)
 
             if closestPoint:
-                interest = aimCurve.closestPoint(point, p=False)
+                interest = aimCurve.nearestPoint(point, p=False)
 
             else:
                 interest = aimCurve.pointAtParam(param, p=False)
@@ -1625,6 +1683,9 @@ class NurbsCurve:
            globalScale='gs',
            squashStretch='ss',
            plug='p')
+    @plugCheck('param',
+               'upVector',
+               'globalScale')
     def matrixAtParam(self,
                       param,
 
@@ -1643,7 +1704,7 @@ class NurbsCurve:
                       globalScale=None,
                       squashStretch=False,
 
-                      plug=True):
+                      plug=None):
         """
         .. note::
             Unlike :meth:`matrixAtFraction`, which uses a
@@ -1696,9 +1757,9 @@ class NurbsCurve:
         :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool squashStretch/ss: allow squashing and stretching of the
             *primaryAxis* on the output matrix; defaults to ``False``
-        :param bool plug/p: return a plug rather than a value (note that, if this
-            is ``False``, *globalScale* and *squashAndStretch* are ignored);
-            defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A matrix at the specified position.
         :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
         """
@@ -1735,7 +1796,7 @@ class NurbsCurve:
                 aimCurve = _po.asGeoPlug(aimCurve, ws=True)
 
                 if closestPoint:
-                    interest = aimCurve.closestPoint(point, p=True)
+                    interest = aimCurve.nearestPoint(point, p=True)
 
                 else:
                     param = self.paramAtPoint(point, p=True)
@@ -1800,6 +1861,9 @@ class NurbsCurve:
            globalScale='gs',
            squashStretch='ss',
            plug='p')
+    @plugCheck('fraction',
+               'upVector',
+               'globalScale')
     def matrixAtFraction(self,
                          fraction,
 
@@ -1817,7 +1881,7 @@ class NurbsCurve:
 
                          globalScale=None,
                          squashStretch=False,
-                         plug=True):
+                         plug=None):
         """
         .. note::
             Unlike :meth:`matrixAtParam`, which uses a
@@ -1869,9 +1933,9 @@ class NurbsCurve:
         :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool squashStretch/ss: allow squashing and stretching of the
             *primaryAxis* on the output matrix; defaults to ``False``
-        :param bool plug/p: return a plug rather than a value (note that, if this
-            is ``False``, *globalScale* and *squashAndStretch* are ignored);
-            defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A matrix at the specified position.
         :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
         """
@@ -1903,7 +1967,7 @@ class NurbsCurve:
                 aimCurve = _po.asGeoPlug(aimCurve, ws=True)
 
                 if closestPoint:
-                    interest = aimCurve.closestPoint(point, p=True)
+                    interest = aimCurve.nearestPoint(point, p=True)
 
                 else:
                     param = self.paramAtPoint(point, p=True)
@@ -1964,12 +2028,12 @@ class NurbsCurve:
     @copyToShape(worldSpaceOnly=True)
     @short(parametric='par',
            plug='p')
-    def matrixAt(self,
+    def matrixAtParamOrFraction(self,
                  paramOrFraction,
                  primaryAxis,
                  secondaryAxis,
                  parametric=True,
-                 plug=True,
+                 plug=None,
                  **kwargs):
         """
         Dispatches :meth:`matrixAtParam` or :meth:`matrixAtFraction`. See
@@ -1984,8 +2048,9 @@ class NurbsCurve:
             'x'
         :param bool parametric: interpret *paramOrFraction* as a U parameter
             rather than a length fraction; defaults to ``True``
-        :param bool plug/p: return a plug rather than a value; defaults to
-            ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param \*\*kwargs: forwarded to :meth:`matrixAtParam` or
             :meth:`matrixAtFraction
         :return: A matrix at the specified position.
@@ -2003,7 +2068,7 @@ class NurbsCurve:
     @short(plug='p')
     def matrixAtPoint(self, point,
                       primaryAxis, secondaryAxis,
-                      plug=True, **kwargs):
+                      plug=None, **kwargs):
         """
         Finds the closest parameter to *point* and dispatches
         :meth:`matrixAtParam`. See that method for full parameter information.
@@ -2015,8 +2080,9 @@ class NurbsCurve:
             '-y'
         :param str secondaryAxis: the secondary (up) matrix axis, for example
             'x'
-        :param bool plug/p: return a plug rather than a value; defaults to
-            ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param \*\*kwargs: forwarded to :meth:`matrixAtParam`
         :return: A matrix at the specified position.
         :rtype: :class:`paya.runtime.data.Matrix`,
@@ -2031,7 +2097,7 @@ class NurbsCurve:
     @short(plug='p')
     def matrixAtLength(self, length,
                       primaryAxis, secondaryAxis,
-                      plug=True, **kwargs):
+                      plug=None, **kwargs):
         """
         Finds the parameter at *length* and dispatches
         :meth:`matrixAtParam`. See that method for full parameter information.
@@ -2043,8 +2109,9 @@ class NurbsCurve:
             '-y'
         :param str secondaryAxis: the secondary (up) matrix axis, for example
             'x'
-        :param bool plug/p: return a plug rather than a value; defaults to
-            ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :param \*\*kwargs: forwarded to :meth:`matrixAtParam`
         :return: A matrix at the specified position.
         :rtype: :class:`paya.runtime.data.Matrix`,
@@ -2267,7 +2334,7 @@ class NurbsCurve:
 
         elif aimCurve:
             if closestPoint:
-                interests = [aimCurve.closestPoint(
+                interests = [aimCurve.nearestPoint(
                     point, p=plug) for point in points]
 
             else:
@@ -2340,6 +2407,9 @@ class NurbsCurve:
            globalScale='gs',
            squashStretch='ss',
            plug='p')
+    @plugCheck('numberFractionsOrParams',
+               'upVector',
+               'globalScale')
     def distributeMatrices(
             self,
 
@@ -2365,7 +2435,7 @@ class NurbsCurve:
             globalScale=None,
             squashStretch=False,
 
-            plug=True):
+            plug=None):
         """
         :param numberFractionsOrParams: this should either be
 
@@ -2436,9 +2506,9 @@ class NurbsCurve:
         :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool squashStretch/ss: allow squashing and stretching of the
             *primaryAxis* on the output matrix; defaults to ``False``
-        :param bool plug/p: return matrix plugs rather than a values (note
-            that, if this is ``False``, *globalScale* and *squashAndStretch*
-            are ignored); defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A matrix at the specified position.
         :rtype: :class:`paya.runtime.data.Matrix`,
             :class:`paya.runtime.plugs.Matrix`
@@ -2471,7 +2541,8 @@ class NurbsCurve:
 
     #-----------------------------------------------|    Conversions
 
-    @copyToShape(editsHistory=True)
+    @copyToShape(editsHistory=True,
+                 bezierInterop=False)
     @short(force='f')
     def toBezier(self, force=False):
         """
@@ -2491,7 +2562,8 @@ class NurbsCurve:
         self >> node.attr('inputCurve')
         return node.attr('outputCurve')
 
-    @copyToShape(editsHistory=True)
+    @copyToShape(editsHistory=True,
+                 bezierInterop=False)
     @short(force='f')
     def toNurbs(self, force=False):
         """
@@ -2558,7 +2630,7 @@ class NurbsCurve:
         maxValue >> node.attr('maxValue')
         node.attr('relative').set(relative)
 
-        return node.attr('outputCurve').setClass(type(self))
+        return node.attr('outputCurve')
 
     sub = subCurve
 
@@ -2725,7 +2797,7 @@ class NurbsCurve:
         :return: This curve, extended along the specified vector.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        points = self.getCVs(p=True)
+        points = self.getControlVerts(p=True)
         startPoint = points[0 if atStart else -1]
         endPoint = startPoint + vector
 
@@ -2775,7 +2847,7 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
         if useSegment:
-            allPoints = self.getCVs(p=True)
+            allPoints = self.getControlVerts(p=True)
             startPoint = allPoints[0 if atStart else -1]
             segment = self.createLine(startPoint, point)
 
@@ -3305,5 +3377,55 @@ class NurbsCurve:
         otherCurve >> node.attr('inputCurve2')
         weight >> node.attr('weight2')
         (1-node.attr('weight2')) >> node.attr('weight1')
+
+        return node.attr('outputCurve')
+
+    @copyToShape(editsHistory=True)
+    @short(insertBetween='ib')
+    def insertKnot(self, *parameters, insertBetween=None):
+        """
+        :param \*parameters: the parameters at, or between, which to add
+            knots
+        :type \*parameters: :class:`float` |
+            :class:`~paya.runtime.plugs.Math1D` |
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool insertBetween/ib: if this is specified, cuts won't
+            be performed at the specified parameters, but rather between
+            them; this should be a scalar, or a list of scalars
+            (one per internal segment, i.e. ``len(parameters)-1``),
+            specifying the number(s) of cuts; defaults to ``None``
+        :return: The edited curve.
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
+        """
+        parameters = _pu.expandArgs(*parameters)
+        numParams = len(parameters)
+
+        if insertBetween:
+            if numParams < 2:
+                raise ValueError("Need two or more "+
+                                 "parameters between which to insert.")
+
+            cutsPerSegment = list(_pu.expandArgs(insertBetween))
+            lnCutsPerSegment = len(cutsPerSegment)
+
+            if lnCutsPerSegment is 1:
+                cutsPerSegment *= (numParams-1)
+
+            elif lnCutsPerSegment is not numParams-1:
+                raise ValueError(
+                    "Specify a single number of inbetweens, or one number "+
+                    "per internal segment (i.e. len(parameters)-1).")
+
+        node = r.nodes.InsertKnotCurve.createNode()
+        self >> node.attr('inputCurve')
+
+        for i, parameter in enumerate(parameters):
+            parameter >> node.attr('parameter')[i]
+
+        if insertBetween:
+            node.attr('insertBetween').set(True)
+
+            for i, numCuts in enumerate(cutsPerSegment):
+                numCuts >> node.attr('numberOfKnots')[i]
 
         return node.attr('outputCurve')
