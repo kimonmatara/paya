@@ -1,3 +1,4 @@
+from paya.lib.typeman import plugCheck
 import paya.lib.mathops as _mo
 from paya.util import short
 import paya.runtime as r
@@ -102,7 +103,8 @@ class RemapValue:
             r.removeMultiInstance(plug, b=True)
 
     @short(reuse='re', plug='p')
-    def sampleValue(self, position, reuse=True, plug=True):
+    @plugCheck('position')
+    def sampleValue(self, position, reuse=True, plug=None):
         """
         Samples an interpolated value at the specified position.
 
@@ -110,7 +112,9 @@ class RemapValue:
         :type position: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool reuse/re: look for an existing sample for the same
             position value or plug; defaults to True
-        :param bool plug/p: return a plug, not just a value; defaults to True
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The value sample output.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
@@ -228,7 +232,8 @@ class RemapValue:
             r.removeMultiInstance(plug, b=True)
 
     @short(plug='p', reuse='re')
-    def sampleColor(self, position, plug=True, reuse=True):
+    @plugCheck('position')
+    def sampleColor(self, position, plug=None, reuse=True):
         """
         Samples an interpolated color at the specified position.
 
@@ -236,7 +241,9 @@ class RemapValue:
         :type position: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool reuse/re: look for an existing sample for the same
             position value or plug; defaults to True
-        :param bool plug/p: return a plug, not just a value; defaults to True
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: The color sample output.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
