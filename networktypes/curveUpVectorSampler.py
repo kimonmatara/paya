@@ -1,3 +1,4 @@
+from paya.lib.typeman import plugCheck
 import paya.lib.mathops as _mo
 import paya.lib.plugops as _po
 from paya.util import short
@@ -172,13 +173,15 @@ class CurveUpVectorSampler:
             "No matching sample found for parameter {}.".format(param))
 
     @short(plug='p')
+    @plugCheck('param')
     def sampleAtParam(self, param, plug=True):
         """
         :param param: the parameter to sample; if *plug* is ``False``, this
             must be a value
         :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
-        :param bool plug/p: return a live plug output, not just a value;
-            defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A vector output or value for the specified parameter.
         :rtype: :class:`paya.runtime.data.Vector`,
             :class:`paya.runtime.plugs.Vector`

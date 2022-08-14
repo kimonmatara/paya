@@ -99,7 +99,7 @@ class CurveUpVectorAimCurveSampler(r.networks.CurveUpVectorSampler):
         refPoint = curve.pointAtParam(param, p=plug)
 
         if self.byClosestPoint():
-            interest = curve.closestPoint(refPoint, p=plug)
+            interest = curve.nearestPoint(refPoint, p=plug)
 
         else:
             interest = curve.pointAtParam(param, p=plug)
