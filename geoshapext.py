@@ -1,3 +1,8 @@
+"""
+Tools for adapting and copying functionality on geo plug classes over to
+their shape counterparts.
+"""
+
 import re
 import inspect
 from functools import wraps
@@ -81,13 +86,21 @@ class copyToShape:
         f.__copy_to_shape__ = self.copyToShapeKwargs
         return f
 
-@short(worldSpaceOnly='wso', editsHistory='eh')
+@short(
+    worldSpaceOnly='wso',
+    editsHistory='eh',
+    bezierInterop='bio',
+    replace='rep'
+)
 def copyPlugFuncToShapeClassDict(plugFunc,
                                  dictKeys,
                                  className,
                                  shapeClassDict,
                                  editsHistory=False,
-                                 worldSpaceOnly=False):
+                                 worldSpaceOnly=False,
+                                 bezierInterop=True,
+                                 replace=False
+                                 ):
     """
     Copies a plug function (method) to the dictionary of an under-construction
     shape class, with appropriate modifications.
@@ -102,9 +115,13 @@ def copyPlugFuncToShapeClassDict(plugFunc,
     :param bool editsHistory/eh: indicates that the plug function should be
         wrapped to use the shape's history input and return shapes; defaults to
         ``False``
-    :param worldSpaceOnly/wso: don't add any *worldSpace/ws* keyword argument;
+    :param bool worldSpaceOnly/wso: don't add any *worldSpace/ws* keyword argument;
         always run the method on the shape's world-space geo output; defaults
         to ``False``
+    :param bool bezierInterop/bio: ignored if *editsHistory* is ``False``;
+        consider NURBS and Bezier types to be interoperable (i.e. connect
+        a NURBS output directly to a hero shape and vice versa, without
+        swapping the shape)
     """
 
     if editsHistory: # skip all other checks and just implement a loopback
@@ -138,7 +155,14 @@ def copyPlugFuncToShapeClassDict(plugFunc,
             # will be obsolete, and should be replaced with the caught
             # shape return.
 
-            if type(heroPlug).__name__ == className:
+            heroPlugCls = type(heroPlug)
+            workingPlugCls = type(workingPlug)
+
+            passthrough = (heroPlugCls is workingPlugCls) or (
+                    bezierInterop and {heroPlugCls, workingPlugCls
+                    } == {r.plugs.BezierCurve, r.plugs.NurbsCurve})
+
+            if passthrough:
                 heroPlug >> callingShape.geoInput
                 outShapes.append(callingShape)
 
@@ -175,9 +199,7 @@ def copyPlugFuncToShapeClassDict(plugFunc,
         wrapper.__doc__ = makeDoc([plugFunc], notes)
 
     else:
-        # For everything non-editor related, checks must be more thorough;
-        # First, look for a namesake in the shape class dict, or across the
-        # PM base and its ancestors
+        # Look for namesake implementation on PM base or shape dict
 
         pmBaseCls = getattr(p.nodetypes, className)
         shapeFunc = None
@@ -210,183 +232,20 @@ def copyPlugFuncToShapeClassDict(plugFunc,
                 if found:
                     break
 
-        # Prelim info on plug func
-        plugFuncSig = inspect.signature(plugFunc)
-        plugFuncTakesPlug = 'plug' in plugFuncSig.parameters
+        if shapeFunc is None:
+            # We're copying a function for which there's no existing namesake;
+            # wrap with an added worldSpace=False kwarg, unless worldSpaceOnly
 
-        # If a shape func was found, get signature information and construct
-        # an adjusted wrapper
-
-        if shapeFunc is not None:
-
-
-            shapeFuncSig = inspect.signature(shapeFunc)
-            shapeFuncTakesSpace = 'space' in shapeFuncSig.parameters
-
-            if shapeFuncTakesSpace:
-                if worldSpaceOnly:
-                    raise RuntimeError(
-                        ("Can't apply 'worldSpaceOnly' "+
-                        "because {} shape method {}() takes 'space'.").format(
-                        className, shapeFunc.__name__())
-                    )
-
-                spaceDefault = shapeFuncSig.parameters['space'].default
-
-            if worldSpaceOnly:
-                addWorldSpace = False
-
-            else:
-                addWorldSpace = True
-
-                if shapeFuncTakesSpace:
-                    worldSpaceDefault = None
-
-                else:
-                    worldSpaceDefault = False
-
-            #------------------------------------------------|    Define wrapper
-
-            def wrapper(callingShape, *args, **kwargs):
-                plug = kwargs.pop('plug', False)
-
-                if addWorldSpace:
-                    worldSpace = kwargs.pop('worldSpace', worldSpaceDefault)
-
-                if shapeFuncTakesSpace:
-                    space = kwargs.pop('space', spaceDefault)
-
-                    # We will have added worldSpace in this case, so
-                    # apply override
-
-                    if worldSpace is not None:
-                        space = 'world' if worldSpace else 'preTransform'
-
-                if plug:
-                    # Determine which output to use
-
-                    if shapeFuncTakesSpace:
-                        if space in ('preTransform', 'object', 'world'):
-                            useWorld = space == 'world'
-
-                        else:
-                            raise NotImplementedError(
-                                ("Plug output is only available for "+
-                                 "these spaces: 'preTransform', 'object', 'world'.")
-                            )
-
-                    elif worldSpaceOnly:
-                        useWorld = True
-
-                    else:
-                        if worldSpace is not None:
-                            useWorld = worldSpace
-
-                        else:
-                            useWorld = False
-
-                    output = callingShape.getGeoOutput(ws=useWorld)
-
-                    if plugFuncTakesPlug:
-                        kwargs['plug'] = plug
-
-                    return plugFunc(output, *args, **kwargs)
-
-                if shapeFuncTakesSpace:
-                    kwargs['space'] = space
-
-                return shapeFunc(callingShape, *args, **kwargs)
-
-            #------------------------------------------------|    Edit signature / doc
-
-            # Signature should be:
-            # basics taken from shape func; plug/p added in all cases;
-            # worldSpace/ws added conditionally
-
-            wrapper.__name__ = shapeFunc.__name__
-
-            shorts = {'plug':'p'}
-
-            addedKwargs = {'plug': False}
-
-            if addWorldSpace:
-                addedKwargs['worldSpace'] = worldSpaceDefault
-                shorts['worldSpace'] = 'ws'
-
-            wrapper.__signature__ = \
-                sigWithAddedKwargs(shapeFuncSig, **addedKwargs)
-
-            wrapper = short(**shorts)(wrapper)
-
-            # Edit doc
-            notes = \
-            """
-            Overloads the shape method with functionality from the plug class.
-            The original has been modified in these ways:
-            """
-
-            notes = inspect.cleandoc(notes)
-
-            bullets = [
-                "A *plug/p* keyword argument has been added with a "+
-                "default of ``False``. Pass ``True`` to invoke "+
-                "the plug method."
-            ]
-
-            if addWorldSpace:
-                if shapeFuncTakesSpace:
-                    bullets.append(
-                        "A *worldSpace/ws* keyword argument has been "+
-                        "added, with a default of ``None``. If specified, "+
-                        "this will override *space* to "+
-                        "``'preTransform'`` or ``'world'``. Plug "+
-                        "output is only available for the "+
-                        "``'preTransform'``, ``'object'`` and "+
-                        "``'world'`` enumerators; other modes will "+
-                        "throw :class:`NotImplementedError`."
-                    )
-
-                else:
-                    bullets.append(
-                        "A *worldSpace/ws* keyword has been added, "+
-                        "with a default of ``False``. This will determine "+
-                        "which geometry output will be used for the plug"+
-                        " implementation."
-                    )
-
-            bullets = ['- '+bullet for bullet in bullets]
-            bullets = '\n'.join(bullets)
-            notes = '\n\n'.join([notes, bullets])
-            wrapper.__doc__ = makeDoc([shapeFunc, plugFunc], notes=notes)
-
-        else:
-            # If we're here, we're copying a non-editor method that has no
-            # namesake in the shape class or PM mro
-
-            # Signature is taken from plug func, with the following changes:
-            # if plug func implements plug/p, override it to False
-            # if not worldSpaceOnly, add a worldSpace/ws option, defaulting to
-            # False
-
+            plugFuncSig = inspect.signature(plugFunc)
             addWorldSpace = not worldSpaceOnly
 
             def wrapper(callingShape, *args, **kwargs):
-                if plugFuncTakesPlug:
-                    # Enforce default
-                    kwargs.setdefault('plug', False)
-
-                # Determine which output to call on
-
                 if addWorldSpace:
                     worldSpace = kwargs.pop('worldSpace', False)
-
                     useWorld = worldSpace
 
-                elif worldSpaceOnly:
-                    useWorld = True
-
                 else:
-                    useWorld = False
+                    useWorld = worldSpaceOnly
 
                 output = callingShape.getGeoOutput(ws=useWorld)
                 return plugFunc(output, *args, **kwargs)
@@ -396,34 +255,48 @@ def copyPlugFuncToShapeClassDict(plugFunc,
             if addWorldSpace:
                 sig = sigWithAddedKwargs(sig, worldSpace=False)
 
+            wrapper.__wrapped__ = plugFunc
             wrapper.__signature__ = sig
             wrapper.__name__ = plugFunc.__name__
+
+            notes = None
+
+            if worldSpaceOnly:
+                notes = \
+                """
+                Added from a plug method; only runs in world-space.
+                """
 
             if addWorldSpace:
                 wrapper = short(worldSpace='ws')(wrapper)
 
-            notes = None
+                notes = \
+                """
+                Added from a plug method; a *worldSpace/ws* keyword argument
+                has been added, defaulting to ``False``.
+                """
 
-            if addWorldSpace or plugFuncTakesPlug:
-                notes = "Adapted from a plug method."
-
-                if addWorldSpace:
-                    notes += " A *worldSpace/ws* keyword argument has been "+\
-                        "added, defaulting to ``False``."
-
-                if plugFuncTakesPlug:
-                    notes += " The *plug/p* keyword argument has been "+\
-                        "overriden to a default of ``False``."
-
-                notes = textwrap.fill(notes, width=60)
-
-            doc = makeDoc([plugFunc], notes=notes)
+            notes = textwrap.fill(inspect.cleandoc(notes), width=60)
             wrapper.__doc__ = makeDoc([plugFunc], notes=notes)
+
+        else:
+            raise RuntimeError(
+                ("Can't copy {}() to shape class as one or more of the "+
+                 "dictionary names are in use."
+                 ).format(shapeFunc.__name__))
 
     for key in dictKeys:
         shapeClassDict[key] = wrapper
 
 def expandShapeClassDict(clsname, classDict):
+    """
+    Expands the dictionary of an under-construction shape class with any
+    methods in the namesake plugs class that have been decorated with
+    :class:`@copyToShape <copyToShape>`.
+
+    :param str clsname: the name of the shape class
+    :param classDict: the dictionary of the shape class
+    """
     plugClass = pools.plugs.getByName(clsname)
 
     toProcess = {}  # where: {plugFuncName:
