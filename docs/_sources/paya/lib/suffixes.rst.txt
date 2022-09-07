@@ -4,42 +4,24 @@ paya.lib.suffixes
 
 .. py:module:: paya.lib.suffixes
 
-Administers type suffixes of the kind typically found in Maya pipelines. These
-are defined inside ``paya/lib/suffixes.json``, and are derived from the 'tags'
-in the `Maya Module Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_.
+.. py:function:: isTypeSuffix(string)
 
-Suffixes are applied according to this rule:
-
--   If the node is a transform, then:
-
-    -   If the node has a shape, the lookup is the shape's node type
-    -   Otherwise, the lookup is the transform's node type
-
--   Otherwise:
-
-    -   If the node is a shape, no suffix is applied
-    -   Otherwise, the lookup is the shape's node type
-
-Once read, suffixes are held in the ``suffixes`` global variable of this
-module.
-
-.. py:function:: getKeyFromNode(node)
-
-    Given a Maya node, returns the appropriate key to use for suffix lookups.
+    Checks if 'string' looks like a type suffix, i.e. it's a group of
+    uppercase letters starting with a non-number, or is a value inside
+    :attr:`paya.lib.suffixes.suffixes`.
     
-    If the node is a (strict) transform then:
-    -   If it has a controller tag, then 'payaControl' is returned
-    -   Otherwise, if it has a shape, the shape's node type is returned
-    -   Otherwise, 'transform' is returned
+    :param string: The string to inspect
+    :return: ``True`` if 'string' looks like a type suffix, otherwise
+        ``False``.
+    :rtype: bool
+
+.. py:function:: getFromName(name)
+
+    Extracts a type suffix from a node name.
     
-    Otherwise:
-    -   If the node is a shape, None is returned
-    -   Otherwise, the node's type is returned
-    
-    :param node: the node to inspect
-    :type node: PyNode or str
-    :return: The suffix lookup.
-    :rtype: str
+    :param str name: the name to inspect
+    :return: The extracted suffix, if any.
+    :rtype: :class:`str`, ``None``
 
 .. py:function:: load()
 
@@ -63,13 +45,6 @@ module.
     To make changes permanent, call :func:`dump` afterwards.
     
     :param str htmlpath: the path to the saved html file
-
-.. py:function:: getFromName(name)
-
-    Extracts a type suffix from a node name.
-    
-    :param str name: the name to inspect
-    :return: The extracted suffix, if any.
 
 .. py:function:: learnFromScene()
 

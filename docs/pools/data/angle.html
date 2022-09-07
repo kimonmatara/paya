@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.runtime.data.Angle &mdash; paya 0.9 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.runtime.data.EulerRotation" href="eulerRotation.html" />
+    <link rel="prev" title="Data Types" href="../data_index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Node Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../data_index.html">Data Types</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Angle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quaternion.html">Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../types_index.html">Types</a> &raquo;</li>
+          <li><a href="../data_index.html">Data Types</a> &raquo;</li>
+      <li>paya.runtime.data.Angle</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/pools/data/angle.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="paya-runtime-data-angle">
+<h1>paya.runtime.data.Angle<a class="headerlink" href="#paya-runtime-data-angle" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.runtime.data.Angle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Angle" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Angle.html#pymel.core.datatypes.Angle" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Unit.html#pymel.core.datatypes.Unit" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.Angle.unwindPositive">
+<span class="sig-name descname"><span class="pre">unwindPositive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Angle.unwindPositive" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The unwound positive form of the angle.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.Angle.unwindNegative">
+<span class="sig-name descname"><span class="pre">unwindNegative</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Angle.unwindNegative" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The unwound negative form of the angle.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.Angle.unwind">
+<span class="sig-name descname"><span class="pre">unwind</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Angle.unwind" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>This angle, unwound, and with the sign preserved.</p>
+</dd>
+</dl>
+<p><a class="reference internal" href="#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.Angle.unwindShortest">
+<span class="sig-name descname"><span class="pre">unwindShortest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Angle.unwindShortest" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>This angle, unwound and, if less than -180 or greater than
+180, flipped.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.data.Angle.unwindSwitch">
+<span class="sig-name descname"><span class="pre">unwindSwitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">switchSource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shortestIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positiveIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negativeIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.Angle.unwindSwitch" title="Permalink to this definition"></a></dt>
+<dd><p>Unwinds this angle using a mode picked using an integer value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>switchSource</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – an integer value to pick an implementation</p></li>
+<li><p><strong>shortestIndex/si</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the integer value that should pick
+<a class="reference internal" href="#paya.runtime.data.Angle.unwindShortest" title="paya.runtime.data.Angle.unwindShortest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unwindShortest()</span></code></a>; defaults to 0</p></li>
+<li><p><strong>positiveIndex/pi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the integer value that should pick
+<a class="reference internal" href="#paya.runtime.data.Angle.unwindPositive" title="paya.runtime.data.Angle.unwindPositive"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unwindPositive()</span></code></a>; defaults to 1</p></li>
+<li><p><strong>negativeIndex/ni</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the integer value that should pick
+<a class="reference internal" href="#paya.runtime.data.Angle.unwindNegative" title="paya.runtime.data.Angle.unwindNegative"><code class="xref py py-meth docutils literal notranslate"><span class="pre">unwindNegative()</span></code></a>; defaults to 2</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The switched output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../data_index.html" class="btn btn-neutral float-left" title="Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="eulerRotation.html" class="btn btn-neutral float-right" title="paya.runtime.data.EulerRotation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

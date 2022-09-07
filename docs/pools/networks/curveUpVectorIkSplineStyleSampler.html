@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.runtime.networks.CurveUpVectorIkSplineStyleSampler &mdash; paya 0.9 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.runtime.networks.CurveUpVectorMpStyleSampler" href="curveUpVectorMpStyleSampler.html" />
+    <link rel="prev" title="paya.runtime.networks.CurveUpVectorAimCurveSampler" href="curveUpVectorAimCurveSampler.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Node Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data Types</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../networks_index.html">Network Subtypes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CurveUpVectorIkSplineStyleSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorPtKeysSampler.html">CurveUpVectorPtKeysSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorPtSampler.html">CurveUpVectorPtSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorRemapSampler.html">CurveUpVectorRemapSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../types_index.html">Types</a> &raquo;</li>
+          <li><a href="../networks_index.html">Network Subtypes</a> &raquo;</li>
+      <li>paya.runtime.networks.CurveUpVectorIkSplineStyleSampler</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/pools/networks/curveUpVectorIkSplineStyleSampler.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="paya-runtime-networks-curveupvectoriksplinestylesampler">
+<h1>paya.runtime.networks.CurveUpVectorIkSplineStyleSampler<a class="headerlink" href="#paya-runtime-networks-curveupvectoriksplinestylesampler" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.runtime.networks.CurveUpVectorIkSplineStyleSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CurveUpVectorIkSplineStyleSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.networks.CurveUpVectorIkSplineStyleSampler" title="Permalink to this definition"></a></dt>
+<dd><p>Works similarly to IK spline handle twist, but supports multiple twist
+points.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Returned vectors won’t be perpendicular to curve tangents, with the
+expectation that they will be perpendicularized during subsequent
+matrix construction.</p>
+</div>
+<p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="curveUpVectorRemapSampler.html#paya.runtime.networks.CurveUpVectorRemapSampler" title="paya.runtime.networks.CurveUpVectorRemapSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">CurveUpVectorRemapSampler</span></code></a> <a class="reference internal" href="curveUpVectorSampler.html#paya.runtime.networks.CurveUpVectorSampler" title="paya.runtime.networks.CurveUpVectorSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">CurveUpVectorSampler</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Network.html#pymel.core.nodetypes.Network" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a> <a class="reference internal" href="../nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.networks.CurveUpVectorIkSplineStyleSampler.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curve</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paramVectorKeys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Linear'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.networks.CurveUpVectorIkSplineStyleSampler.create" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>curve</strong> (str, <a class="reference internal" href="../nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.nodes.NurbsCurve</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.nodes.Transform</span></code></a>,
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve</span></code></a>) – the curve on which to create the sampler</p></li>
+<li><p><strong>paramVectorKeys</strong> ([[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>],
+[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>,
+<a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a>,
+<a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>]]) – zipped <em>parameter, vector</em> pairs, indicating
+known up vectors along the curve; at least two such keys are
+needed</p></li>
+<li><p><strong>interpolation/i</strong> (int, str, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – <p>a string label or integer value or plug
+specifying how to interpolate between the keyed pairs, namely:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> (<code class="docutils literal notranslate"><span class="pre">'None'</span></code>) (you wouldn’t normally want this)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code> (<code class="docutils literal notranslate"><span class="pre">'Linear'</span></code>) (the default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code> (<code class="docutils literal notranslate"><span class="pre">'Smooth'</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">3</span></code> (<code class="docutils literal notranslate"><span class="pre">'Spline'</span></code>)</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The network system.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.networks.CurveUpVectorIkSplineStyleSampler" title="paya.runtime.networks.CurveUpVectorIkSplineStyleSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">CurveUpVectorIkSplineStyleSampler</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="curveUpVectorAimCurveSampler.html" class="btn btn-neutral float-left" title="paya.runtime.networks.CurveUpVectorAimCurveSampler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="curveUpVectorMpStyleSampler.html" class="btn btn-neutral float-right" title="paya.runtime.networks.CurveUpVectorMpStyleSampler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

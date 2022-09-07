@@ -6,10 +6,15 @@ paya.runtime.nodes.IkHandle
 
 .. py:class:: IkHandle(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.IkHandle` :class:`~paya.runtime.nodes.Transform` :class:`~pymel.core.nodetypes.Transform` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:classmethod:: create(name=None, **mayaOptions)
     
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, or list
+        :param str name/n: a name for the node; defaults to ``None``
         :param \*\*mayaOptions: all overflow keyword arguments are forwarded
             to :func:`~pymel.core.animation.ikHandle`
         :return: The constructed node.

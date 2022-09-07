@@ -6,13 +6,20 @@ paya.runtime.data.Matrix
 
 .. py:class:: Matrix(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.datatypes.Matrix` :class:`~pymel.util.arrays.MatrixN` :class:`~pymel.util.arrays.Array` :class:`~maya.OpenMaya.MMatrix`
+
     .. py:method:: createLocator(size=1.0, name=None)
     
         Creates a locator and drives its SRT channels using this matrix.
         
         :shorthand: ``cl``
         
-        :param str name/n: one or more name elements; defaults to None
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
         :param float size/siz: the locator display scale; defaults to 1.0
         :return: The locator.
         :rtype: :class:`~paya.runtime.nodes.Transform`

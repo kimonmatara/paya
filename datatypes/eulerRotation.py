@@ -1,6 +1,6 @@
 from paya.util import short
 import pymel.core.datatypes as _dt
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import paya.runtime as r
 
 
@@ -13,13 +13,16 @@ class EulerRotation:
         """
         :shorthand: ``cl``
 
-        :param name/n: one or more optional name elements; defaults to None
-        :rtype name/n: None, list, int, str
+        :param str name/n: an optional name for the locator transform; defaults
+            to a contextual name
         :return: A locator with this euler rotation piped into its
             ``rotate`` channels.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        loc = r.nodes.Locator.createNode(n=name).getParent()
+        if name is None:
+            name = r.Name.make(nt='locator', xf=True)
+
+        loc = r.spaceLocator(n=name)
         loc.attr('ro').set(self.order.lower())
         loc.attr('r').set(self)
         return loc
@@ -35,7 +38,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__add__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -64,7 +67,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__radd__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -94,7 +97,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__sub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -124,7 +127,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rsub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -156,7 +159,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__mul__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -184,7 +187,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rmul__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -214,7 +217,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__truediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -243,7 +246,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rtruediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -274,7 +277,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__pow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -303,7 +306,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rpow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):

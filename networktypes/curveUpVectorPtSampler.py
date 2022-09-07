@@ -1,4 +1,3 @@
-import paya.lib.plugops as _po
 import paya.lib.mathops as _mo
 import paya.runtime as r
 from paya.util import short
@@ -50,10 +49,10 @@ class CurveUpVectorPtSampler(r.networks.CurveUpVectorRemapSampler):
     @classmethod
     def _create(cls, curve, upVector, resolution=9, interpolation='Linear'):
         # Solve parallel transport
-        curve = _po.asGeoPlug(curve, worldSpace=True)
+        curve = _tm.asGeoPlug(curve, worldSpace=True)
         fractions = _mo.floatRange(0, 1, resolution)
         params = [curve.paramAtFraction(f, p=False) for f in fractions]
-        tangents = [curve.tangentAtParam(param) for param in params]
+        tangents = [curve.tangentAtParam(param, p=True) for param in params]
 
         # Build up keymap, pass along to CurveUpVectorRemapSampler
         upVectors = _mo.parallelTransport(upVector, tangents)

@@ -1,4 +1,5 @@
 from collections import UserList
+import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
 from paya.util import short, LazyModule
 import pymel.util as _pu
@@ -16,7 +17,7 @@ def _applyJointSettings(settings, joint):
         joint.attr(attrName).set(value)
 
 
-class Chain(object):
+class Chain:
 
     #------------------------------------------------------------|    Type management
 
@@ -86,14 +87,14 @@ class Chain(object):
     #------------------------------------------------------------|    Construction
 
     @classmethod
-    @short(under='u')
-    def createFromMatrices(cls, matrices, under=None):
+    @short(parent='p')
+    def createFromMatrices(cls, matrices, parent=None):
         """
         Creates a chain from matrices. The joints will match the matrices
         exactly; no attempt is made to orient the chain.
 
         :param matrices: the matrices to use
-        :param under/u: an optional parent for the chain; defaults to None
+        :param parent/p: an optional parent for the chain; defaults to None
         :return: :class:`Chain`
         """
         joints = []
@@ -101,7 +102,7 @@ class Chain(object):
         for i, matrix in enumerate(matrices):
             joint = r.nodes.Joint.create(
                 wm=matrix, n=i+1,
-                under=joints[-1] if joints else under
+                p=joints[-1] if joints else parent
             )
 
             joints.append(joint)
@@ -109,17 +110,15 @@ class Chain(object):
         return cls(joints)
 
     @classmethod
-    @short(
-        under='u',
-        tolerance='tol'
-    )
+    @short(parent='p',
+           tolerance='tol')
     def createFromPoints(
             cls,
             points,
             downAxis,
             upAxis,
             upVector,
-            under=None,
+            parent=None,
             tolerance=1e-7
     ):
         """
@@ -135,7 +134,7 @@ class Chain(object):
         :param upVector: one up vector hint, or one vector per point
         :type upVector: tuple, list, :class:`~paya.runtime.data.Vector`,
             [tuple, list, :class:`~paya.runtime.data.Vector`]
-        :param under/u: an optional parent for the chain; defaults to None
+        :param parent/p: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: The constructed chain.
@@ -150,7 +149,7 @@ class Chain(object):
             fra=True
         )
 
-        return cls.createFromMatrices(matrices, u=under)
+        return cls.createFromMatrices(matrices, p=parent)
 
     @classmethod
     @short(tolerance='tol')
@@ -500,7 +499,7 @@ class Chain(object):
 
                 for cut in cuts:
                     joint = r.nodes.Joint.create(
-                        under=self[i], n=('insertion', count+1))
+                        p=self[i], n=('insertion', count+1))
                     _applyJointSettings(settings, joint)
                     mtx = baseMtx.copy()
                     mtx.t = _pu.blend(startPoint, endPoint, weight=cut)
@@ -557,16 +556,16 @@ class Chain(object):
 
         return self.insertJoints(ratios)
 
-    @short(name='n', start='sn')
-    def duplicate(self, name=None, startNumber=1):
+    @short(startNumber='sn')
+    def duplicate(self, startNumber=1):
         """
-        Duplicates this chain, with smart reparenting if it's not contiguous.
+        Duplicates this chain. Joints will be renamed with contextual. Use
+        :class:`~paya.lib.names.Name` blocks to modify.
 
-        :param name/n: one or more name elements
-        :type name/n: list, str, int
-        :param int startNumber/sn: the number to start from; defaults to 1
-        :return: The chain duplicate.
-        :rtype: :class:`~paya.lib.skel.Chain`
+        :param int startNumber/sn: the starting number for the joint renumbering;
+            defaults to ``1``
+        :return: The duplicated chain.
+        :rtype: :class:`Chain`
         """
         parents = []
 
@@ -585,7 +584,8 @@ class Chain(object):
         copies = []
 
         for i, joint in enumerate(self):
-            _name = r.nodes.Joint.makeName(name, i+startNumber)
+            with r.Name(i+startNumber):
+                _name = r.nodes.Joint.makeName()
             copy = joint.duplicate(n=_name, po=True)[0].releaseSRT()
             copies.append(copy)
 
@@ -598,18 +598,19 @@ class Chain(object):
         return Chain(copies)
 
     @short(startNumber='sn')
-    def rename(self, *elems, startNumber=1):
+    def rename(self, startNumber=1):
         """
-        Renames this chain. Numbers will be added before the suffix.
+        Renames this chain contextually. Use :class:`~paya.lib.names.Name`
+        blocks to modify.
 
-        :param \*elems: one or more name elements
-        :type \*elems: list, str, int
-        :param int startNumber/sn: the number to start from; defaults to 1
+        :param int startNumber/sn: the start number for the chain renumbering;
+            defaults to ``1``
         :return: ``self``
+        :rtype: :class:`Chain`
         """
         for i, joint in enumerate(self):
-            name = r.nodes.Joint.makeName(*elems, i+startNumber)
-            joint.rename(name)
+            with r.Name(i+startNumber):
+                joint.rename()
 
         return self
 
@@ -1032,7 +1033,7 @@ class Bone(Chain):
         if numSlaves < 2:
             raise RuntimeError("Need two or more joints on the twist chain.")
 
-        globalScale = _mo.info(globalScale)[0]
+        globalScale = _tm.mathInfo(globalScale)[0]
 
         if downAxis is None:
             downAxis = self.downAxis()
@@ -1047,7 +1048,7 @@ class Bone(Chain):
             startUpVector = self[0].attr('wm').getAxis(upAxis)
 
         else:
-            startUpMatrix = _mo.info(startUpMatrix)[0]
+            startUpMatrix = _tm.mathInfo(startUpMatrix)[0]
             startUpVector = self[0].getMatrix(worldSpace=True).getAxis(upAxis)
             startUpVector *= startUpMatrix.asOffset()
             startUpVector.rejectFrom(downVector)
@@ -1087,7 +1088,7 @@ class Bone(Chain):
                 endUpMatrix = self[1].attr('wm')
 
             else:
-                endUpMatrix = _mo.info(endUpMatrix)[0]
+                endUpMatrix = _tm.mathInfo(endUpMatrix)[0]
 
             endUpVector = startUpVector.get() * endUpMatrix.asOffset()
             endUpVector = endUpVector.rejectFrom(downVector)

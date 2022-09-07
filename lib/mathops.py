@@ -1,13 +1,7 @@
-from functools import wraps
 from collections import UserDict
 
-import maya.cmds as m
-import maya.OpenMaya as om
-
-from paya.nativeunits import nativeUnits
-from paya.lib.plugops import *
+from paya.lib.typeman import *
 import pymel.util as _pu
-from paya.util import conditionalExpandArgs
 import pymel.core as p
 
 #--------------------------------------------------------------|
@@ -35,62 +29,6 @@ class NoInterpolationKeysError(RuntimeError):
     """
 
 #--------------------------------------------------------------|
-#--------------------------------------------------------------|    Supplemental type analysis
-#--------------------------------------------------------------|
-
-def isScalarValueOrPlug(item):
-    """
-    :param item: the item to inspect
-    :return: ``True`` if *item* is a scalar value or attribute, otherwise
-        False
-    :rtype: bool
-    """
-    passthroughs = (
-        bool, int, float, r.plugs.Math1D, p.datatypes.Unit
-    )
-
-    if isinstance(item, passthroughs):
-        return True
-
-    if isinstance(item, str):
-        try:
-            plug = r.Attribute(item)
-
-        except:
-            return False
-
-        return isinstance(plug, r.plugs.Math1D)
-
-    return False
-
-def isVectorValueOrPlug(item):
-    """
-    :param item: the item to inspect
-    :return: ``True`` if *item* is a vector value or attribute, otherwise
-        False
-    :rtype: bool
-    """
-    if isinstance(item, (p.datatypes.Vector, p.datatypes.Point)) \
-        or (isinstance(item, r.plugs.Math3D)
-            and not isinstance(item, r.plugs.EulerRotation)):
-        return True
-
-    if isinstance(item, str):
-        try:
-            plug = p.Attribute(item)
-
-        except:
-            return False
-
-        return (isinstance(plug, r.plugs.Math3D)
-            and not isinstance(plug, r.plugs.EulerRotation))
-
-    if hasattr(item, '__iter__'):
-        return len(list(item)) is 3 and all(map(isScalarValue, item))
-
-    return False
-
-#--------------------------------------------------------------|
 #--------------------------------------------------------------|    Soft interpolation utilities
 #--------------------------------------------------------------|
 
@@ -107,8 +45,8 @@ def floatRange(start, end, numValues):
         inclusively.
     :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
     """
-    start, startDim, startIsPlug = info(start)
-    end, endDim, endIsPlug = info(end)
+    start, startDim, startIsPlug = mathInfo(start)
+    end, endDim, endIsPlug = mathInfo(end)
 
     hasPlugs = startIsPlug or endIsPlug
 
@@ -297,9 +235,9 @@ def blendScalars(scalarA, scalarB, weight=0.5):
     :type weight/w: float, str, :class:`~paya.runtime.plugs.Math1D`
     :return:
     """
-    scalarA, dimA, isPlugA = info(scalarA)
-    scalarB, dimB, isPlugB = info(scalarB)
-    weight, weightDim, weightIsPlug = info(weight)
+    scalarA, dimA, isPlugA = mathInfo(scalarA)
+    scalarB, dimB, isPlugB = mathInfo(scalarB)
+    weight, weightDim, weightIsPlug = mathInfo(weight)
 
     if isPlugA or isPlugB or weightIsPlug:
         node = r.nodes.BlendTwoAttr.createNode()
@@ -310,129 +248,6 @@ def blendScalars(scalarA, scalarB, weight=0.5):
         return node.attr('output')
 
     return _pu.blend(scalarA, scalarB, weight=weight)
-
-#--------------------------------------------------------------|
-#--------------------------------------------------------------|    Arg wrangling
-#--------------------------------------------------------------|
-
-def resolveNumberOrFractionsArg(arg):
-    """
-    Loosely conforms a ``numberOrFractions`` user argument. If the
-    argument is an integer, a range of floats is returned. Otherwise,
-    the argument is passed through without further checking.
-    """
-    if isinstance(arg, int):
-        return floatRange(0, 1, arg)
-
-    return [info(x)[0] for x in arg]
-
-def expandVectorArgs(*args):
-    """
-    Expands *args*, stopping at anything that looks like a vector value
-    or plug.
-
-    :param \*args: the arguments to expand
-    :return: The expanded arguments.
-    """
-    return conditionalExpandArgs(
-        *args, gate=lambda x: not isVectorValueOrPlug(x))
-
-@short(listLength='ll')
-def conformVectorArg(arg, listLength=None):
-    """
-    Conforms *arg* into a single vector value or plug, or to a list of vectors
-    of the required length (to assign, say, a reference vector to every point
-    in a chaining operation).
-
-    This is loosely checked. Edge cases, like the user passing non-vector
-    values, aren't caught.
-
-    :param arg: the user vector argument to wrangle
-    :type arg: tuple, list, str, :class:`~paya.runtime.plugs.Vector`,
-        :class:`~paya.runtime.data.Vector`
-    :param listLength/ll: if this is specified, then the argument will be
-        conformed, by iterable multiplication, to a list of this length;
-        if it's omitted, a single vector will be returned; defaults to None
-    :return: The conformed vector argument.
-    :rtype: list, :class:`~paya.runtime.plugs.Vector`,
-        :class:`~paya.runtime.data.Vector`
-    """
-    arg = conditionalExpandArgs(
-        arg, gate=lambda x: not isVectorValueOrPlug(x))
-
-    arg = [info(x)[0] for x in arg]
-
-    if listLength is None:
-        return arg[0]
-
-    ln = len(arg)
-
-    if ln is listLength:
-        return arg
-
-    if ln is 1:
-        return arg * listLength
-
-    raise ValueError(
-        "The resolved vector list can't be "+
-        "multiplied to the required length "+
-        "of {}.".format(listLength)
-    )
-
-def isParamVectorPair(item):
-    """
-    :param item: the item to inspect
-    :return: ``True`` if *item* is a pair of *scalar: vector*, otherwise
-        ``False``
-    """
-    if hasattr(item, '__iter__'):
-        members = list(item)
-
-        if len(members) is 2:
-            return isScalarValueOrPlug(
-                members[0]) and isVectorValueOrPlug(members[1])
-
-    return False
-
-def describeAndConformVectorArg(vector):
-    """
-    Used by methods that receive multiple forms of up vector hints in a
-    single argument.
-
-    :param vector: the argument to inspect
-    :raises RuntimeError: Couldn't parse the argument.
-    :return: One of:
-
-            - tuple of ``'single'``, conformed vector value or plug
-            - tuple of ``'keys'``, list of conformed *param, vector* pairs
-            - tuple of ``'multi'``, list of conformed vectors
-    :rtype: One of:
-
-            - (:class:`str`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`)
-            - (:class:`str`, [(:class:`int` | :class:`float` | :class:`~paya.runtime.plugs.Math1D`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`))]
-            - (:class:`str`, [:class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`])
-    """
-    if isVectorValueOrPlug(vector):
-        return ('single', conformVectorArg(vector))
-
-    if hasattr(vector, '__iter__'):
-        vector = list(vector)
-
-        if all(map(isParamVectorPair, vector)):
-            outDescr = 'keys'
-            params = [info(pair[0])[0] for pair in vector]
-            vectors = [conformVectorArg(pair[1]) for pair in vector]
-            outContent = list(zip(params, vectors))
-
-            return outDescr, outContent
-
-        elif all(map(isVectorValueOrPlug, vector)):
-            return ('multi', [conformVectorArg(member) for member in vector])
-
-        else:
-            raise RuntimeError(
-                "Couldn't parse up vector argument: {}".format(vector)
-            )
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Matrix construction
@@ -456,7 +271,7 @@ def multMatrices(*matrices):
     plugStates = []
 
     for matrix in matrices:
-        matrix, dim, isplug = info(matrix)
+        matrix, dim, isplug = mathInfo(matrix)
 
         if not isplug:
             if outElems:
@@ -591,7 +406,7 @@ def createMatrix(
     #-------------------------------------------------------------|    Gather info
 
     if translate is not None:
-        translate, translateDim, translateIsPlug = info(translate)
+        translate, translateDim, translateIsPlug = mathInfo(translate)
 
         if plug is None and translateIsPlug:
             plug = True
@@ -601,7 +416,7 @@ def createMatrix(
 
     else:
         thirdLengthIsDefined = True
-        thirdLength, thirdLengthDim, thirdLengthIsPlug = info(thirdLength)
+        thirdLength, thirdLengthDim, thirdLengthIsPlug = mathInfo(thirdLength)
 
         if plug is None and thirdLengthIsPlug:
             plug = True
@@ -616,7 +431,7 @@ def createMatrix(
             )
 
         axes = rowHints[::2]
-        vectorInfos = list(map(info, rowHints[1::2]))
+        vectorInfos = list(map(mathInfo, rowHints[1::2]))
         vectors = [vectorInfo[0] for vectorInfo in vectorInfos]
 
         ortho = ln is 4
@@ -857,7 +672,7 @@ def getAimVectors(points):
         will always be one member shorter than the input list.
     """
     if len(points) > 1:
-        points = [info(point)[0] for point in points]
+        points = [mathInfo(point)[0] for point in points]
 
         out = []
 
@@ -1033,7 +848,7 @@ def getChainedAimMatrices(
         or control hierarchies.
     :rtype: [:class:`~paya.runtime.plugs.Matrix`]
     """
-    pointInfos = [info(point) for point in points]
+    pointInfos = [mathInfo(point) for point in points]
     points = [pointInfo[0] for pointInfo in pointInfos]
     num = len(points)
 
@@ -1042,7 +857,7 @@ def getChainedAimMatrices(
         gsIsPlug = False
 
     else:
-        globalScale, gsDim, gsIsPlug = info(globalScale)
+        globalScale, gsDim, gsIsPlug = mathInfo(globalScale)
 
     upVectors = conformVectorArg(upVector, ll=num)
 
@@ -1126,7 +941,6 @@ def getChainedAimMatrices(
 
     return matrices
 
-@nativeUnits
 @short(fromEnd='fe')
 def parallelTransport(normal, tangents, fromEnd=False):
     """
@@ -1156,8 +970,8 @@ def parallelTransport(normal, tangents, fromEnd=False):
     if fromEnd:
         tangents = tangents[::-1]
 
-    normal, normalDim, normalIsPlug = info(normal)
-    tangentInfos = [info(tangent) for tangent in tangents]
+    normal, normalDim, normalIsPlug = mathInfo(normal)
+    tangentInfos = [mathInfo(tangent) for tangent in tangents]
     tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
 
     normal = normal.rejectFrom(tangents[0]) # perpendicularise, otherwise
@@ -1183,15 +997,16 @@ def parallelTransport(normal, tangents, fromEnd=False):
         outNormals[0] = normal
 
         for i, thisTangent in enumerate(tangents[:-1]):
-            with r.Name('solve', i+1, padding=2):
+            with r.Name('solve', i+1, padding=3):
                 nextTangent = tangents[i+1]
+
                 dot = thisTangent.dot(nextTangent, nr=True)
+                inline = dot.abs().ge(1.0-1e-7)
 
-                inline = dot.ge(1.0-1e-7)
+                binormal = thisTangent.cross(
+                    nextTangent, nr=True, ig=inline)
 
-                binormal = thisTangent.cross(nextTangent, nr=True)
                 theta = dot.acos()
-
                 thisNormal = outNormals[i]
 
                 nextNormal = inline.ifElse(
@@ -1224,231 +1039,6 @@ def parallelTransport(normal, tangents, fromEnd=False):
 
     return outNormals
 
-# @nativeUnits
-# @short(unwindSwitch='uws', resolution='res')
-# def parallelTransportWithKeyVectors(paramVectorKeys,
-#                                     resolution=9, unwindSwitch=0):
-#     """
-#     Given a list of *param, vector* pairs indicating known vectors, performs
-#     forward and backward parallel transport for each segment, blending between
-#     solutions by angle. Good for systems like bezier spines where up vectors
-#     are defined by anchor controls.
-#
-#     The first member of each pair doesn't have to represent a NURBS curve
-#     parameter; it can be any kind of scalar, like a length fraction. The
-#     distinction only becomes relevant downstream of this function.
-#
-#     The number of returned solve pairs is determined by *resolution*. These
-#     can be combined with calls to
-#     :meth:`~paya.runtime.nodes.RemapValue.setColors` and
-#     :meth:`~paya.runtime.node.RemapValue.sampleColor` on a
-#     :class:`remapValue <paya.runtime.nodes.RemapValue>` node to get more
-#     values via interpolation.
-#
-#     :param paramVectorKeys: zipped *param, vector* pairs indicating known
-#         vectors; at least two pairs (start / end) are needed
-#     :param resolution/res: the number of output solve pairs to generate;
-#         higher numbers improve accuracy but impact performance; defaults to 9
-#     :param unwindSwitch/uws: an integer, or list of integers, specifying how
-#         to blend the bidirectional solutions:
-#
-#             - 0 (shortest, the default)
-#             - 1 (positive)
-#             - 2 (negative)
-#
-#         If this is a list, it should be one less than the number
-#         of *param, vector* pairs passed through *upVector*.
-#     :return: Solved *param: vector* pairs.
-#     :rtype: [[:class:`float` | :class:`~paya.runtime.plugs.Math1D`,
-#         :class:`~paya.runtime.data.Vector |
-#         :class:`~paya.runtime.plugs.Vector`]]
-#     """
-#     paramVectorKeys = list(paramVectorKeys)
-#     numKeys = len(paramVectorKeys)
-#
-#     if numKeys < 2:
-#         raise ValueError("Need at least two keys (start / end).")
-#
-#     numSegments = numKeys-1
-#
-#     if isinstance(unwindSwitch, (tuple, list)):
-#         if len(unwindSwitch) is not numSegments:
-#             raise ValueError(
-#                 "If 'unwindSwitch' is a list, it "+
-#                 "should be of length "+
-#                 "paramUpVectorKeys-1.")
-#
-#         unwindSwitches = unwindSwitch
-#
-#     else:
-#         unwindSwitches = [unwindSwitch] * numSegments
-#
-#     segmentResolutions = resolvePerSegResForBlendedParallelTransport(
-#         numSegments, resolution
-#     )
-#
-#     params, normals = zip(*paramVectorKeys)
-#
-#     # Init per-segment info bundles
-#     infoPacks = []
-#
-#     for i, param, normal, segmentResolution in zip(
-#         range(numSegments),
-#         params[:-1],
-#         normals[:-1],
-#         segmentResolutions
-#     ):
-#         infoPack = {
-#             'startParam': param,
-#             'nextParam': params[i+1],
-#             'startNormal': normals[i],
-#             'endNormal': normals[i+1],
-#             'unwindSwitch': unwindSwitches[i],
-#             'tangentSampleParams': floatRange(
-#                 param, params[i+1],
-#                 segmentResolution)
-#         }
-#
-#         infoPacks.append(infoPack)
-#
-#     # Add tangent samples to each bundle, taking care not to
-#     # replicate overlapping samples
-#     for i, infoPack in enumerate(infoPacks):
-#         with r.Name('segment', i+1, padding=2):
-#             inner = i > 0
-#             tangentSampleParams = infoPack['tangentSampleParams'][:]
-#
-#             if inner:
-#                 del(tangentSampleParams[i])
-#
-#             infoPack['tangents'] = tangents = []
-#
-#             for x, tangentSampleParam in enumerate(
-#                     tangentSampleParams):
-#                 with r.Name('tangent', x+1):
-#                     tangents.append(
-#                         self.tangentAtParam(tangentSampleParam)
-#                     )
-#
-#             if inner:
-#                 tangents.insert(0, infoPacks[i-1]['tangents'][-1])
-#
-#     # Run the parallel transport per-segment
-#     for i, infoPack in enumerate(infoPacks):
-#         with r.Name('segment', i+1, padding=2):
-#             infoPack['normals'] = blendBetweenCurveNormals(
-#                 infoPack['startNormal'],
-#                 infoPack['endNormal'],
-#                 infoPack['tangents'],
-#                 uws=infoPack['unwindSwitch']
-#             )
-#
-#     # Get flat params, normals for the whole system
-#     outParams = []
-#     outNormals = []
-#
-#     for i, infoPack in enumerate(infoPacks):
-#         lastIndex = len(infoPack['tangents'])
-#
-#         if i < numSegments-1:
-#             lastIndex -= 1
-#
-#         last = i == numSegments-1
-#
-#         theseParams = infoPack['tangentSampleParams'][:lastIndex]
-#         theseNormals = infoPack['normals'][:lastIndex]
-#
-#         outParams += theseParams
-#         outNormals += theseNormals
-#
-#     return list(zip(outParams, outNormals))
-
-
-def _resolvePerSegResForBlendedParallelTransport(numSegments, resolution):
-    """
-    Used to resolve per-segment resolutions for segmented parallel-transport
-    implementations.
-    """
-    # Formula is:
-    # resolution = (resPerSegment * numSegments) - (numSegments-1)
-    # hence:
-    # resPerSegment = (resolution + (numSegments-1)) / numSegments
-
-    # Assume that a minimum 'good' total resolution for any kind of
-    # curve is 9, and a minimum functioning value for 'resPerSegment'
-    # is 3
-
-    minimumPerSegmentResolution = 3
-    minimumTotalResolution = 9
-    minimumResolutionForThisCurve = max([
-        (minimumPerSegmentResolution * numSegments) - (numSegments-1),
-        minimumTotalResolution
-    ])
-
-    if resolution is None:
-        resolution = 3 * numSegments
-
-    elif resolution < minimumResolutionForThisCurve:
-        r.warning(("Requested resolution ({}) is too low for this"+
-            " curve; raising to {}.").format(resolution,
-            minimumResolutionForThisCurve))
-
-        resolution = minimumResolutionForThisCurve
-
-    # Derive per-segment resolution
-    perSegmentResolution = (resolution + (numSegments-1)) / numSegments
-    perSegmentResolution = int(round(perSegmentResolution))
-
-    resolutions = [perSegmentResolution] * numSegments
-    retotalled = (perSegmentResolution * numSegments) - (numSegments-1)
-
-    # Correct rounding errors
-    if retotalled < resolution:
-        resolutions[0] += 1
-
-    elif retotalled > resolution:
-        resolutions[-1] -= 1
-
-    return resolutions
-
-def forceVectorsAsPlugs(vectors):
-    """
-    If any of the provided vectors are plugs, they are passed-through
-    as-is; those that aren't are used as values for array attributes
-    on a utility node, which are passed along instead.
-
-    :param vectors: the vectors to inspect
-    :type vectors: [list, tuple,
-        :class:`~paya.runtime.data.Vector`,
-        :class:`~paya.runtime.plugs.Vector`]
-    :return: The conformed vector outputs.
-    :rtype: [:class:`~paya.runtime.plugs.Vector`]
-    """
-
-    vectorInfos = [info(vector) for vector in vectors]
-    plugStates = [vectorInfo[2] for vectorInfo in vectorInfos]
-
-    if all(plugStates):
-        return [vectorInfo[0] for vectorInfo in vectorInfos]
-
-    nd = r.nodes.Network.createNode(n='vecs_as_plugs')
-    array = nd.addVectorAttr('vector', multi=True)
-
-    out = []
-    index = 0
-
-    for vectorInfo in vectorInfos:
-        if vectorInfo[2]:
-            out.append(vectorInfo[0])
-
-        else:
-            array[index].set(vectorInfo[0])
-            out.append(array[index])
-            index += 1
-
-    return out
-
-@nativeUnits
 @short(ratios='rat', unwindSwitch='uws')
 def blendCurveNormalSets(normalsA, normalsB,
             tangents, ratios=None, unwindSwitch=0):
@@ -1507,19 +1097,19 @@ def blendCurveNormalSets(normalsA, normalsB,
     else:
         raise ValueError("Unequal argment lengths.")
 
-    tangentInfos = [info(tangent) for tangent in tangents]
+    tangentInfos = [mathInfo(tangent) for tangent in tangents]
     tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
     
-    normalAInfos = [info(normalA) for normalA in normalsA]
+    normalAInfos = [mathInfo(normalA) for normalA in normalsA]
     normalsA = [normalAInfo[0] for normalAInfo in normalAInfos]
     
-    normalBInfos = [info(normalB) for normalB in normalsB]
+    normalBInfos = [mathInfo(normalB) for normalB in normalsB]
     normalsB = [normalBInfo[0] for normalBInfo in normalBInfos]
 
-    ratioInfos = [info(ratio) for ratio in ratios]
+    ratioInfos = [mathInfo(ratio) for ratio in ratios]
     ratios = [ratioInfo[0] for ratioInfo in ratioInfos]
 
-    uwInfo = info(unwindSwitch)
+    uwInfo = mathInfo(unwindSwitch)
     unwindSwitch = uwInfo[0]
 
     hasPlugs = uwInfo[2] \
@@ -1541,18 +1131,20 @@ def blendCurveNormalSets(normalsA, normalsB,
         range(numRatios), tangents, normalsA,
         normalsB, ratios
     ):
-        with r.Name('blend', i+1):
-            blended = normalA.blend(normalB,
-                clockNormal=tangent, unwindSwitch=unwindSwitch, weight=ratio)
-
+        blended = normalA.blend(normalB,
+                                clockNormal=tangent,
+                                unwindSwitch=unwindSwitch,
+                                weight=ratio)
         out.append(blended)
 
     return out
 
-@nativeUnits
 @short(ratios='rat', unwindSwitch='uws')
 def blendBetweenCurveNormals(startNormal,
-        endNormal, tangents, ratios=None, unwindSwitch=0):
+                             endNormal,
+                             tangents,
+                             ratios=None,
+                             unwindSwitch=0):
     """
     Blends between a forward and backward parallel-transport solution. If
     either *startNormal* or *endNormal* are ``None``, the solution will
@@ -1598,18 +1190,14 @@ def blendBetweenCurveNormals(startNormal,
     fwds = bwds = None
 
     if startNormal:
-        with r.Name('ptFromStart'):
-            fwds = parallelTransport(startNormal, tangents)
+        fwds = parallelTransport(startNormal, tangents)
 
     if endNormal:
-        with r.Name('ptFromEnd'):
-            bwds = parallelTransport(endNormal, tangents[::-1])[::-1]
+        bwds = parallelTransport(endNormal, tangents[::-1])[::-1]
 
     if fwds:
         if bwds:
             return blendCurveNormalSets(fwds, bwds, tangents,
                                         rat=ratios, uws=unwindSwitch)
-
         return fwds
-
     return bwds

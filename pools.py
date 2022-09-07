@@ -4,6 +4,7 @@ import os
 import re
 import sys
 
+import maya.cmds as m
 import pymel.core.nodetypes
 import pymel.core.general
 import pymel.core.datatypes
@@ -11,7 +12,6 @@ import pymel.core.datatypes
 import paya
 import paya.config as config
 from paya.util import path_to_dotpath, LazyModule
-from paya.nativeunits import nativeUnits
 import paya.plugtree as _pt
 
 payaroot = os.path.dirname(paya.__file__)
@@ -43,28 +43,6 @@ class UnsupportedLookupError(RuntimeError):
     """
 
 #----------------------------------------------------------------|
-#----------------------------------------------------------------|    Tools
-#----------------------------------------------------------------|
-
-def addNativeUnitsToEveryMethod(dct):
-    """
-    Adds the :func:`@nativeUnits <paya.nativeunits.nativeUnits>` decorator to
-    every method in a Paya class dictionary. This is an in-place operation.
-
-    :param dct: the class dictionary
-    """
-    for k, v in dct.items():
-        typ = type(v)
-
-        if typ in (staticmethod, classmethod):
-            f = v.__func__
-            f = nativeUnits(f)
-            dct[k] = typ(f)
-
-        elif inspect.isfunction(v):
-            dct[k] = nativeUnits(v)
-
-#----------------------------------------------------------------|
 #----------------------------------------------------------------|    ABC
 #----------------------------------------------------------------|
 
@@ -84,7 +62,7 @@ class ClassPoolBrowser:
         return self.__pool__.getByName(item)
 
     def __repr__(self):
-        return 'paya.runtime.'.format(self.__pool__.shortName())
+        return 'paya.runtime.{}'.format(self.__pool__.shortName())
 
 
 class ClassPool:
@@ -199,9 +177,6 @@ class ClassPool:
         dct['__module__'] = 'paya.{}.{}'.format(
             self.longName(), clsname[0].lower()+clsname[1:])
         dct['__paya_pool__'] = self
-
-        if not config['ignoreUnits']:
-            addNativeUnitsToEveryMethod(dct)
 
         return dct
 
@@ -446,7 +421,6 @@ class ShadowPool(ClassPool):
             return inst
 
         dct['__new__'] = __new__
-
         return dct
 
 
@@ -544,6 +518,11 @@ class NodeClassPool(ShadowPool):
     __pm_mod__ = pymel.core.nodetypes
     __roots__ = [pymel.core.nodetypes.DependNode]
     __doctitle__ ='Node Types'
+
+    def conformDict(self, clsname, dct):
+        dct = super().conformDict(clsname, dct)
+        dct['__is_subtype__'] = False
+        return dct
 
 nodes = NodeClassPool()
 
@@ -668,132 +647,32 @@ class DataClassPool(ShadowPool):
     __unsupported_lookups__ = ['VectorN', 'MatrixN', 'Array']
     __doctitle__ ='Data Types'
 
-
 data = DataClassPool()
 
+#----------------------------------------------------------------|
+#----------------------------------------------------------------|    TENTATIVE PARSED SUBTYPES ALTERNATIVE
+#----------------------------------------------------------------|
 
-class ParsedSubtypeClassPool(ShadowPool):
-    """
-    Abstract base class for node subtypes based on a
-    parsed ``payaSubtype`` string attribute.
-    """
-    __pm_mod__ = pymel.core.nodetypes
-    __roots__ = [pymel.core.nodetypes.Network]
+class ParsedNodeSubtypePoolMeta(type):
+    def __new__(meta, clsname, bases, dct):
+        if clsname != 'ParsedNodeSubtypePool':
+            baseclsname = re.match(r"^Parsed(.*?)SubtypePool$", clsname).groups()[0]
+            dct['__nodeType__'] = \
+                nodeType = baseclsname[0].lower()+baseclsname[1:]
 
-    class ParsedSubtypeClassPoolMeta(type):
-        """
-        Base metaclass for PyMEL-shadowing Paya classes.
-        """
-        pass
+            dct['__singular__'] = nodeType
+            dct['__plural__'] = nodeType+'s'
+            dct['__pm_mod__'] = pymel.core.nodetypes
 
-    __meta_base__ = ParsedSubtypeClassPoolMeta
+            pmbase = getattr(pymel.core.nodetypes, baseclsname)
 
-    def getFromPyMELInstance(self, inst):
-        """
-        :raises NotImplementedError: Not supported on parsed-subtype pools.
-        """
-        raise NotImplementedError
+            dct['__roots__'] = [pmbase]
+            dct['__doctitle__'] = '{} Subtypes'.format(baseclsname)
 
-    def getCrossPoolRoot(self):
-        """
-        :raises NotImplementedError: Not implemented on the base class.
-        """
-        raise NotImplementedError
+        return super().__new__(meta, clsname, bases, dct)
 
-    def tagCrossPoolRoot(self):
-        """
-        Tags the associated node class so that node methods like
-        :meth:`~paya.runtime.nodes.DependNode.expandClass` and
-        :meth:`~paya.runtime.nodes.DependNode.createNode` can run
-        fast configuration checks.
-        """
-        cls = self.getCrossPoolRoot()
-        cls.__supports_parsed_subtypes__ = True
-        cls.__subtype_pool__ = self
-
-    def __init__(self):
-        super().__init__()
-        self.tagCrossPoolRoot()
-
-    def purge(self, quiet=False):
-        """
-        Purges cached information.
-        """
-        super().purge(quiet=quiet)
-        self.tagCrossPoolRoot()
-
-    def conformBases(self, clsname, bases):
-        """
-        Given a tuple of bases, returns a modified, where necessary,
-        version that can be used to construct a final class.
-
-        :param str clsname: the name of the class being retrieved
-        :param tuple bases: either an empty tuple, or bases retrieved from a
-            template class
-        :return: The bases.
-        :rtype: (type,)
-        """
-        bases = [b for b in bases if b is not object]
-        root = self.getCrossPoolRoot()
-
-        if not any([issubclass(b, root) for b in bases]):
-            bases.append(root)
-
-        return tuple(bases)
-
-    def conformDict(self, clsname, dct):
-        """
-        Given a class dictionary, returns a modified, where necessary,
-        version that can be used to construct a final class.
-
-        :param str clsname: the name of the class being retrieved
-        :param dict dct: either an empty dictionary, or the dictionary of
-            a template class
-        :return: The dictionary.
-        :rtype: dict
-        """
-        dct = ClassPool.conformDict(self, clsname, dct).copy()
-
-        if '__new__' in dct:
-            raise RuntimeError("Can't override __new__ on Paya classes.")
-
-        dct['__is_parsed_subtype__'] = True
-
-        return dct
-
-    def getMeta(self, clsname):
-        """
-        :param str clsname: the name of the class being retrieved
-        :return: An appropriate metaclass for the requested class.
-        :rtype: type
-        """
-        root = self.getCrossPoolRoot()
-        baseMeta = type(root)
-
-        try:
-            ourMeta = self.metacache[baseMeta]
-
-        except KeyError:
-            ourMeta = self.__meta_base__
-
-            if not issubclass(ourMeta, baseMeta):
-                # Dynamically construct a new meta to dodge compatibility
-                # issues
-
-                if ourMeta is type:
-                    # This pool has no defined metaclass, default to the
-                    # base metaclass
-                    ourMeta = baseMeta
-
-                else:
-                    metaname = baseMeta.__name__+'PayaShadow'
-                    metabases = (ourMeta, baseMeta)
-                    metadict = dict(ourMeta.__dict__)
-                    ourMeta = type(metaname, metabases, metadict)
-
-                self.metacache[baseMeta] = ourMeta
-
-        return ourMeta
+class ParsedNodeSubtypePool(NodeClassPool,
+                           metaclass=ParsedNodeSubtypePoolMeta):
 
     def inventBasesDict(self, clsname):
         """
@@ -802,31 +681,54 @@ class ParsedSubtypeClassPool(ShadowPool):
         raise NotImplementedError(
             "Invention is not implemented for this pool.")
 
-
-class NetworkClassPool(ParsedSubtypeClassPool):
-    """
-    Administers custom classes for :class:`~paya.runtime.nodes.Network` nodes
-    tagged with a ``payaSubtype`` string attribute. A browser for this pool can
-    be accessed on :mod:`paya.runtime` as ``.networks``.
-    """
-    __singular__ = 'network'
-    __plural__ = 'networks'
-    __doctitle__ ='Network Types'
-
     def getCrossPoolRoot(self):
-        """
-        :return: The node pool class that all parsed
-            subtypes served by this pool inherit from.
-        """
-        return nodes.getByName('Network')
+        nodeType = self.__nodeType__
 
+        return nodes.getByName(nodeType[0].upper()+nodeType[1:])
 
-networks = NetworkClassPool()
+    def attrName(self):
+        return '{}Type'.format(self.__nodeType__)
+
+    def buildClass(self, clsname):
+        bases, dct = self.getBasesDictFromTemplate(clsname)
+        cls = type(clsname, bases, dct)
+        cls.__module__ = 'paya.runtime.'+self.shortName()
+
+        return cls
+
+    def conformDict(self, clsname, dct):
+        dct = ClassPool.conformDict(self, clsname, dct)
+        dct['__is_subtype__'] = True
+
+        return dct
+
+    def conformBases(self, clsname, bases):
+        bases = [b for b in bases if b is not object]
+        requiredBase = self.getCrossPoolRoot()
+
+        if not any([issubclass(base, requiredBase) for base in bases]):
+            bases.append(requiredBase)
+
+        return tuple(bases)
+
+class ParsedNetworkSubtypePool(ParsedNodeSubtypePool):
+    """
+    Administers subtypes for 'network' nodes.
+    """
+
+networks = ParsedNetworkSubtypePool()
+
+class ParsedContainerSubtypePool(ParsedNodeSubtypePool):
+    """
+    Administers subtypes for 'container' nodes.
+    """
+
+containers = ParsedContainerSubtypePool()
 
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    REGISTRY
 #----------------------------------------------------------------|
 
-pools = [nodes, comps, plugs, data, networks]
+pools = [nodes, comps, plugs, data, networks, containers]
 poolsByShortName = {pool.shortName(): pool for pool in pools}
 poolsByLongName = {pool.longName():pool for pool in pools}

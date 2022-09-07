@@ -1,160 +1,130 @@
-from functools import wraps
-
-import maya.cmds as m
 import maya.OpenMaya as om
-import paya.config as config
-
-
-linearNames = ['inches', 'feet', 'yards', 'miles',
-    'millimeters', 'centimeters', 'kilometers', 'meters']
-
-angleNames = ['invalid', 'radians',
-    'degrees', 'angle minutes', 'angle seconds']
-
+import maya.cmds as m
 
 class NativeUnits:
     """
-    Context manager. Switches Maya to centimeters and radians for the
-    enclosing block. New scene, open scene and save scene events are
-    dodged with API callbacks created on Paya startup.
+    Imposes native units, but restores them around scene-save operations so
+    that user settings are saved to file.
     """
-    #----------------------------------------|    Instantiation
+    callbacks = []
+    userLinear = None
+    userAngular = None
+    track = True
 
-    __instance__ = None
+    #--------------------------------------------------|    Set
 
-    def __new__(cls, *args, **kwargs):
-        if NativeUnits.__instance__ is None:
-            NativeUnits.__instance__ = inst = object.__new__(cls)
-            inst._userState = {}
+    @classmethod
+    def setLinear(cls, setting):
+        cls.track = False
+        om.MDistance.setUIUnit(setting)
+        cls.track = True
 
-        return NativeUnits.__instance__
+    @classmethod
+    def setAngular(cls, setting):
+        cls.track = False
+        om.MAngle.setUIUnit(setting)
+        cls.track = True
 
-    #----------------------------------------|    Event management
+    @classmethod
+    def getLinear(cls):
+        return om.MDistance.uiUnit()
 
-    __callbacks__ = []
+    @classmethod
+    def getAngular(cls):
+        return om.MAngle.uiUnit()
 
-    def addCallbacks(self):
-        """
-        Creates API callbacks to manage unit settings around new scene, open
-        scene and save scene events.
-        """
-        NativeUnits.__callbacks__ = [
-            om.MSceneMessage.addCallback(om.MSceneMessage.kAfterNew, self.afterNewCb),
-            om.MSceneMessage.addCallback(om.MSceneMessage.kAfterOpen, self.afterOpenCb),
-            om.MSceneMessage.addCallback(om.MSceneMessage.kBeforeSave, self.beforeSaveCb),
-            om.MSceneMessage.addCallback(om.MSceneMessage.kAfterSave, self.afterSaveCb)
-        ]
+    @classmethod
+    def applyUserLinear(cls):
+        if cls.userLinear != cls.getLinear():
+            cls.setLinear(cls.userLinear)
+            m.warning("Paya: Restored user linear unit.")
 
-    def removeCallbacks(self):
-        """
-        Removes callbacks created by :meth:`addCallbacks`.
-        """
-        for callback in NativeUnits.__callbacks__:
-            om.MMessage.removeCallback(callback)
+    @classmethod
+    def applyUserAngular(cls):
+        if cls.userAngular != cls.getAngular():
+            cls.setAngular(cls.userAngular)
+            m.warning("Paya: Restored user angular unit.")
 
-        NativeUnits.__callbacks__ = []
+    @classmethod
+    def applyNativeLinear(cls):
+        if cls.userLinear != om.MDistance.kCentimeters:
+            cls.setLinear(om.MDistance.kCentimeters)
+            m.warning("Paya: Switched Maya to centimeters.")
 
-    def afterNewCb(self, *args):
-        if NativeUnits.__depth__ > 0:
-            self.captureUserUnits()
-            self.applyNativeUnits()
+    @classmethod
+    def applyNativeAngular(cls):
+        if cls.userAngular != om.MAngle.kRadians:
+            cls.setAngular(om.MAngle.kRadians)
+            m.warning("Paya: Switched Maya to radians.")
 
-    def afterOpenCb(self, *args):
-        if NativeUnits.__depth__ > 0:
-            self.captureUserUnits()
-            self.applyNativeUnits()
+    #--------------------------------------------------|    Capture
 
-    def beforeSaveCb(self, *args):
-        if NativeUnits.__depth__ > 0:
-            self.restoreUserUnits()
+    @classmethod
+    def captureUserLinear(cls):
+        cls.userLinear = om.MDistance.uiUnit()
 
-    def afterSaveCb(self, *args):
-        if NativeUnits.__depth__ > 0:
-            self.applyNativeUnits()
+    @classmethod
+    def captureUserAngular(cls):
+        cls.userAngular = om.MAngle.uiUnit()
 
-    #----------------------------------------|    Setting management
+    #--------------------------------------------------|    Callbacks
 
-    def captureUserUnits(self):
-        self._userState['angle'] = om.MAngle.uiUnit()
-        self._userState['linear'] = om.MDistance.uiUnit()
+    @classmethod
+    def linearUnitChangedCb(cls, *args):
+       cls.captureUserLinear()
+       cls.applyNativeLinear()
 
-    def applyNativeUnits(self):
-        om.MAngle.setUIUnit(om.MAngle.kRadians)
-        om.MDistance.setUIUnit(om.MDistance.kCentimeters)
+    @classmethod
+    def angularUnitChangedCb(cls, *args):
+        cls.captureUserAngular()
+        cls.applyNativeAngular()
 
-        if self._userState['angle'] != om.MAngle.kRadians:
-            m.warning("Switched Maya to {}.".format(angleNames[om.MAngle.kRadians]))
+    @classmethod
+    def beforeSaveCb(cls, *args):
+        cls.applyUserLinear()
+        cls.applyUserAngular()
 
-        if self._userState['linear'] != om.MDistance.kCentimeters:
-            m.warning("Switched Maya to {}.".format(linearNames[om.MDistance.kCentimeters]))
+    @classmethod
+    def afterSaveCb(cls, *args):
+        cls.applyNativeLinear()
+        cls.applyNativeAngular()
+        
+    #--------------------------------------------------|    Start / stop
+    
+    @classmethod
+    def start(cls):
+        if not cls.callbacks:
+            cls.captureUserLinear()
+            cls.applyNativeLinear()
+            
+            cls.captureUserAngular()
+            cls.applyNativeAngular()
+            
+            cls.callbacks = [
+                om.MEventMessage.addEventCallback(
+                    'linearUnitChanged', cls.linearUnitChangedCb),
+                om.MEventMessage.addEventCallback(
+                    'angularUnitChanged', cls.angularUnitChangedCb),
+                om.MSceneMessage.addCallback(
+                    om.MSceneMessage.kBeforeSave,
+                    cls.beforeSaveCb
+                ),
+                om.MSceneMessage.addCallback(
+                    om.MSceneMessage.kAfterSave,
+                    cls.afterSaveCb
+                )
+            ]
+            
+    @classmethod
+    def stop(cls):
+        if cls.callbacks:
+            for callback in cls.callbacks:
+                om.MMessage.removeCallback(callback)
 
-    def restoreUserUnits(self):
-        om.MAngle.setUIUnit(self._userState['angle'])
-        om.MDistance.setUIUnit(self._userState['linear'])
+            cls.callbacks = []
 
-        warned = False
-
-        if self._userState['angle'] != om.MAngle.kRadians:
-            m.warning("Switched Maya back to {}.".format(angleNames[self._userState['angle']]))
-            warned = True
-
-        if self._userState['linear'] != om.MDistance.kCentimeters:
-            m.warning("Switched Maya back to {}.".format(linearNames[self._userState['linear']]))
-            warned = True
-
-        if warned:
-            msg = ("If you get a lot of unit warnings, edit your preferences"+
-                   " or apply NativeUnits() at a higher level.")
-
-            print(msg)
-
-    #----------------------------------------|    Enter / Exit
-
-    __depth__ = 0
-
-    def __enter__(self):
-        if not config['ignoreUnits']:
-            if NativeUnits.__depth__ is 0:
-                self.captureUserUnits()
-                self.applyNativeUnits()
-
-            NativeUnits.__depth__ += 1
-
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if not config['ignoreUnits']:
-            NativeUnits.__depth__ -= 1
-
-            if NativeUnits.__depth__ is 0:
-                self.restoreUserUnits()
-
-        return False
-
-    #----------------------------------------|    Repr
-
-    def __repr__(self):
-        return "{}()".format(self.__class__.__name__)
-
-def nativeUnits(f):
-    """
-    Decorator version of :class:`NativeUnits`. The function will be passed-
-    through if *ignoreUnits* is ``True`` in :mod:`paya.config`.
-    """
-    if hasattr(f, '__nativeunits__'):
-        # Don't re-wrap
-        return f
-
-    if config['ignoreUnits']:
-        return f
-
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        with NativeUnits():
-            result = f(*args, **kwargs)
-
-        return result
-
-    wrapper.__nativeunits__ = True
-
-    return wrapper
+            om.MDistance.setUIUnit(cls.userLinear)
+            om.MAngle.setUIUnit(cls.userAngular)
+            cls.userLinear = cls.userAngular = None
+            
+            

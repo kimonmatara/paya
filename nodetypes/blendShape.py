@@ -65,8 +65,7 @@ class BlendShape:
         deformation options.
 
         :param \*args: forwarded to :func:`~pymel.core.animation.blendShape`
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: int, str, None, list, tuple
+        :param str name/n: a name for the blendShape node; defaults to ``None``
         :param bool post: if True, set all deformation flags for post-
             deformation; defaults to False
         :param bool pre: if True, set all deformation flags for pre-
@@ -115,8 +114,7 @@ class BlendShape:
         )
 
         kwargs.update(deformOrderFlags)
-        name = cls.makeName(name)
-        kwargs['name'] = name
+        kwargs['name'] = name if name else cls.makeName()
 
         return r.blendShape(*args, **kwargs)[0]
 

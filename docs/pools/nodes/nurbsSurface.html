@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.nodes.NurbsSurface &mdash; paya 0.8.4 documentation</title>
+  <title>paya.runtime.nodes.NurbsSurface &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,30 +44,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Node Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
@@ -88,22 +72,22 @@
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="remapValue.html">RemapValue</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -137,7 +121,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.runtime.nodes.NurbsSurface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NurbsSurface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsSurface" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsSurface.html#pymel.core.nodetypes.NurbsSurface" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsSurface</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">SurfaceShape</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.SurfaceShape.html#pymel.core.nodetypes.SurfaceShape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SurfaceShape</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">ControlPoint</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.ControlPoint.html#pymel.core.nodetypes.ControlPoint" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlPoint</span></code></a> <a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape" title="paya.runtime.nodes.DeformableShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DeformableShape.html#pymel.core.nodetypes.DeformableShape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryShape</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.GeometryShape.html#pymel.core.nodetypes.GeometryShape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryShape</span></code></a> <a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Shape.html#pymel.core.nodetypes.Shape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> <a class="reference internal" href="dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DagNode.html#pymel.core.nodetypes.DagNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Entity.html#pymel.core.nodetypes.Entity" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.ContainerBase.html#pymel.core.nodetypes.ContainerBase" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code></a> <a class="reference internal" href="dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+</dd></dl>
 
 </section>
 

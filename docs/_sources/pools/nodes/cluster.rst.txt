@@ -6,12 +6,17 @@ paya.runtime.nodes.Cluster
 
 .. py:class:: Cluster(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.Cluster` :class:`~paya.runtime.nodes.WeightGeometryFilter` :class:`~pymel.core.nodetypes.WeightGeometryFilter` :class:`~paya.runtime.nodes.GeometryFilter` :class:`~pymel.core.nodetypes.GeometryFilter` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:classmethod:: create(*geos, geometry=None, handle=None, maintainOffset=None, conformShapeName=False, resetVisualOrigin=True, intermediateShape=None, worldMatrix=None, freeze=True, name=None, **mayaKwargs)
     
         Cluster constructor.
         
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, tuple, list, str, int
+        :param str name/n: a name for the cluster node; defaults to ``None``
         :param \*geos: one or more geometries to bind
         :type \*geos: None, str, tuple, list,
             :class:`~paya.runtime.nodes.DeformableShape`,
@@ -87,16 +92,11 @@ paya.runtime.nodes.Cluster
         :return: ``self``
         :rtype: :class:`Cluster`
     
-    .. py:method:: renameSystem(*elems, managedNames=True)
+    .. py:method:: renameSystem(*name)
     
-        Renames the entire cluster system, including the weighted node,
-        cluster handle shape and the cluster node itself.
+        Renames the cluster node, cluster handle shape and weighted node.
         
-        :param \*elems: one or more name elements
-        :type \*elems: None, tuple, list, int, str
-        :param bool managedNames/mn: inherit from
-            :class:`~paya.lib.names.Name` blocks and apply type suffixes;
-            defaults to True
+        :param str \*name: if omitted, defaults to contextual naming
         :return: ``self``
         :rtype: `Cluster`
     

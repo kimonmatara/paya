@@ -7,9 +7,61 @@ from functools import wraps
 import inspect
 import maya.cmds as m
 import pymel.core as p
-from paya.util import short, LazyModule
+from paya.util import short, LazyModule, conditionalExpandArgs
 
 r = LazyModule('paya.runtime')
+
+@short(angle='a')
+def mathInfo(item, angle=False):
+    """
+    :param item: a value or plug (simple or PyMEL type)
+    :param bool angle/a: unless already typed, instantiate using
+        angle / Euler rotation types; defaults to ``False``
+    :return: A tuple of: conformed item, item maths dimension (or None),
+        item is a plug
+    """
+    if isinstance(item, (float, int, bool)):
+        if angle:
+            item = r.data.Angle(item)
+
+        return item, 1, False
+
+    if isinstance(item, p.datatypes.Unit):
+        return item, 1, False
+
+    if isinstance(item, p.datatypes.Array):
+        return item, len(item), False
+
+    if isinstance(item, p.Attribute):
+        return item, item.__math_dimension__, True
+
+    if isinstance(item, str):
+        try:
+            item = p.Attribute(item)
+            return item, item.__math_dimension__, True
+        except:
+            return item, None, False
+
+    if hasattr(item, '__iter__'):
+        members = list(item)
+
+        if all((isScalarValue(member) for member in members)):
+            ln = len(members)
+
+            try:
+                cls = {
+                    3: p.datatypes.EulerRotation \
+                        if angle else p.datatypes.Vector,
+                    4: p.datatypes.Quaternion,
+                    16: p.datatypes.Matrix
+                }[ln]
+
+            except KeyError:
+                raise TypeError("Can't parse maths item: {}".format(item))
+
+            return cls(item), ln, False
+
+    raise TypeError("Can't parse maths item: {}".format(item))
 
 def isPyMELObject(item):
     """
@@ -72,6 +124,48 @@ def isScalarValueOrPlug(item):
     :rtype: :class:`bool`
     """
     return isScalarValue(item) or isScalarPlug(item)
+
+def isVectorValueOrPlug(item):
+    """
+    :param item: the item to inspect
+    :return: ``True`` if *item* is a vector value or attribute, otherwise
+        False
+    :rtype: bool
+    """
+    if isinstance(item, (p.datatypes.Vector, p.datatypes.Point)) \
+        or (isinstance(item, r.plugs.Math3D)
+            and not isinstance(item, r.plugs.EulerRotation)):
+        return True
+
+    if isinstance(item, str):
+        try:
+            plug = p.Attribute(item)
+
+        except:
+            return False
+
+        return (isinstance(plug, r.plugs.Math3D)
+            and not isinstance(plug, r.plugs.EulerRotation))
+
+    if hasattr(item, '__iter__'):
+        return len(list(item)) is 3 and all(map(isScalarValue, item))
+
+    return False
+
+def isParamVectorPair(item):
+    """
+    :param item: the item to inspect
+    :return: ``True`` if *item* is a pair of *scalar: vector*, otherwise
+        ``False``
+    """
+    if hasattr(item, '__iter__'):
+        members = list(item)
+
+        if len(members) is 2:
+            return isScalarValueOrPlug(
+                members[0]) and isVectorValueOrPlug(members[1])
+
+    return False
 
 def isTripleScalarValueOrPlug(item):
     """
@@ -182,57 +276,67 @@ def conformVectorArg(arg, listLength=None):
     else:
         raise ValueError("Nested vectors.")
 
-@short(angle='a')
-def mathInfo(item, angle=False):
+def describeAndConformVectorArg(vector):
     """
-    :param item: a value or plug (simple or PyMEL type)
-    :param bool angle/a: unless already typed, instantiate using
-        angle / Euler rotation types; defaults to ``False``
-    :return: A tuple of: conformed item, item maths dimension (or None),
-        item is a plug
+    Used by methods that receive multiple forms of up vector hints in a
+    single argument.
+
+    :param vector: the argument to inspect
+    :raises RuntimeError: Couldn't parse the argument.
+    :return: One of:
+
+            - tuple of ``'single'``, conformed vector value or plug
+            - tuple of ``'keys'``, list of conformed *param, vector* pairs
+            - tuple of ``'multi'``, list of conformed vectors
+    :rtype: One of:
+
+            - (:class:`str`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`)
+            - (:class:`str`, [(:class:`int` | :class:`float` | :class:`~paya.runtime.plugs.Math1D`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`))]
+            - (:class:`str`, [:class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`])
     """
-    if isinstance(item, (float, int, bool)):
-        if angle:
-            item = r.data.Angle(item)
+    if isVectorValueOrPlug(vector):
+        return ('single', conformVectorArg(vector))
 
-        return item, 1, False
+    if hasattr(vector, '__iter__'):
+        vector = list(vector)
 
-    if isinstance(item, p.datatypes.Unit):
-        return item, 1, False
+        if all(map(isParamVectorPair, vector)):
+            outDescr = 'keys'
+            params = [mathInfo(pair[0])[0] for pair in vector]
+            vectors = [conformVectorArg(pair[1]) for pair in vector]
+            outContent = list(zip(params, vectors))
 
-    if isinstance(item, p.datatypes.Array):
-        return item, len(item), False
+            return outDescr, outContent
 
-    if isinstance(item, p.Attribute):
-        return item, item.__math_dimension__, True
+        elif all(map(isVectorValueOrPlug, vector)):
+            return ('multi', [conformVectorArg(member) for member in vector])
 
-    if isinstance(item, str):
-        try:
-            item = p.Attribute(item)
-            return item, item.__math_dimension__, True
-        except:
-            return item, None, False
+        else:
+            raise RuntimeError(
+                "Couldn't parse up vector argument: {}".format(vector)
+            )
 
-    if hasattr(item, '__iter__'):
-        members = list(item)
+def resolveNumberOrFractionsArg(arg):
+    """
+    Loosely conforms a ``numberOrFractions`` user argument. If the
+    argument is an integer, a range of floats is returned. Otherwise,
+    the argument is passed through without further checking.
+    """
+    if isinstance(arg, int):
+        return floatRange(0, 1, arg)
 
-        if all((isScalarValue(member) for member in members)):
-            ln = len(members)
+    return [mathInfo(x)[0] for x in arg]
 
-            try:
-                cls = {
-                    3: p.datatypes.EulerRotation \
-                        if angle else p.datatypes.Vector,
-                    4: p.datatypes.Quaternion,
-                    16: p.datatypes.Matrix
-                }[ln]
+def expandVectorArgs(*args):
+    """
+    Expands *args*, stopping at anything that looks like a vector value
+    or plug.
 
-            except KeyError:
-                raise TypeError("Can't parse maths item: {}".format(item))
-
-            return cls(item), ln, False
-
-    raise TypeError("Can't parse maths item: {}".format(item))
+    :param \*args: the arguments to expand
+    :return: The expanded arguments.
+    """
+    return conditionalExpandArgs(
+        *args, gate=lambda x: not isVectorValueOrPlug(x))
 
 def asPlug(item, quiet=False):
     """
@@ -415,28 +519,67 @@ def conformPlugsInArg(arg):
     d = {'found': False}
 
     def conform(item):
-        if isinstance(arg, p.Attribute):
+        if isinstance(item, p.Attribute):
             d['found'] = True
-            return arg
+            return item
 
-        if isinstance(arg, str):
+        if isinstance(item, str):
             try:
-                out = p.Attribute(arg)
+                out = p.Attribute(item)
                 d['found'] = True
                 return out
 
             except:
-                return arg
+                return item
 
-        elif hasattr(arg, '__iter__'
-            ) and not isinstance(arg, (p.datatypes.Array, p.PyNode)):
-            return [conform(member) for member in arg]
+        if hasattr(item, '__iter__'
+            ) and not isinstance(item, (p.datatypes.Array, p.PyNode)):
+            return [conform(member) for member in item]
+
+        return item
 
     arg = conform(arg)
     return arg, d['found']
 
+def forceVectorsAsPlugs(vectors):
+    """
+    If any of the provided vectors are plugs, they are passed-through
+    as-is; those that aren't are used as values for array attributes
+    on a utility node, which are passed along instead.
 
-class autoPlug:
+    :param vectors: the vectors to inspect
+    :type vectors: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :return: The conformed vector outputs.
+    :rtype: [:class:`~paya.runtime.plugs.Vector`]
+    """
+
+    vectorInfos = [mathInfo(vector) for vector in vectors]
+    plugStates = [vectorInfo[2] for vectorInfo in vectorInfos]
+
+    if all(plugStates):
+        return [vectorInfo[0] for vectorInfo in vectorInfos]
+
+    nd = r.nodes.Network.createNode(n='vecs_as_plugs')
+    array = nd.addVectorAttr('vector', multi=True)
+
+    out = []
+    index = 0
+
+    for vectorInfo in vectorInfos:
+        if vectorInfo[2]:
+            out.append(vectorInfo[0])
+
+        else:
+            array[index].set(vectorInfo[0])
+            out.append(array[index])
+            index += 1
+
+    return out
+
+
+class plugCheck:
     """
     Decorator-with-arguments for methods that take a *plug* keyword argument
     which defaults to ``None``, meaning its behaviour will depend on whether

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.nodes.DependNode &mdash; paya 0.8.4 documentation</title>
+  <title>paya.runtime.nodes.DependNode &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,30 +44,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Node Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
@@ -88,22 +72,22 @@
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="remapValue.html">RemapValue</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -137,31 +121,137 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.runtime.nodes.DependNode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DependNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.setSubtype">
+<span class="sig-name descname"><span class="pre">setSubtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.setSubtype" title="Permalink to this definition"></a></dt>
+<dd><p>Initialises and populates the <code class="docutils literal notranslate"><span class="pre">payaSubtype</span></code> attribute.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This does not modify class assignment. To switch to the specified
+type, follow this up with <a class="reference internal" href="#paya.runtime.nodes.DependNode.asSubtype" title="paya.runtime.nodes.DependNode.asSubtype"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asSubtype()</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the subtype class name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.getSubtype">
+<span class="sig-name descname"><span class="pre">getSubtype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.getSubtype" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The contents of the <code class="docutils literal notranslate"><span class="pre">payaSubtype</span></code> attribute, if present and
+populated, otherwise <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.getSubtypeClass">
+<span class="sig-name descname"><span class="pre">getSubtypeClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.getSubtypeClass" title="Permalink to this definition"></a></dt>
+<dd><p>If this node has a configured <code class="docutils literal notranslate"><span class="pre">payaSubtype</span></code> attribute, and a
+subtypes pool is defined for this node type, attempts to retrieve
+the class.</p>
+<p>If the operation fails, explanatory warnings are issued and <code class="docutils literal notranslate"><span class="pre">None</span></code>
+is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an optional override for the class name; if
+provided, no attempt will be made to access the <code class="docutils literal notranslate"><span class="pre">payaSubtype</span></code>
+attribute</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The custom class, if one could be retrieved.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.asSubtype">
+<span class="sig-name descname"><span class="pre">asSubtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.asSubtype" title="Permalink to this definition"></a></dt>
+<dd><p>If this node has a configured <code class="docutils literal notranslate"><span class="pre">payaSubtype</span></code> attribute, and a
+subtypes pool is defined for this node type, attempts to retrieve
+the class and assign it to this instance.</p>
+<p>This is an in-place operation, but <code class="docutils literal notranslate"><span class="pre">self</span></code> is returned for
+convenience. If the operation fails, explanatory warnings are issued
+and reassignment is skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an optional override for the class name; if
+provided, no attempt will be made to access the <code class="docutils literal notranslate"><span class="pre">payaSubtype</span></code>
+attribute</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.makeName">
-<span class="sig-name descname"><span class="pre">makeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.makeName" title="Permalink to this definition"></a></dt>
-<dd><p>Generates a context-appropriate Maya name. Results will vary
-depending on whether this method is called on a class or on a
-node instance.</p>
-<p>Construction is determined by the following keys inside
-<a class="reference internal" href="../../paya/config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a>: <code class="docutils literal notranslate"><span class="pre">inheritNames</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>,
-<code class="docutils literal notranslate"><span class="pre">suffixNodes</span></code>. Use the context manager functionality of
-<a class="reference internal" href="../../paya/config.html#module-paya.config" title="paya.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.config</span></code></a> to override for specific blocks.</p>
+<span class="sig-name descname"><span class="pre">makeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inherit=&lt;paya.util.functions.Undefined</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x0000011ED2B41688&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding=&lt;paya.util.functions.Undefined</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x0000011ED2B41688&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix=&lt;paya.util.functions.Undefined</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x0000011ED2B41688&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.makeName" title="Permalink to this definition"></a></dt>
+<dd><p>Constructs a node name based on <a class="reference internal" href="../../paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a>
+contexts. Results will vary depending on whether this method is
+called on:</p>
+<ul class="simple">
+<li><p>A class</p></li>
+<li><p>A transform instance with a controller tag</p></li>
+<li><p>A transform instance with shapes</p></li>
+<li><p>A transform instance without shapes</p></li>
+<li><p>A shape instance</p></li>
+<li><p>Any other kind of node instance</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Alias</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">mn</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The constructed node name.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.rename">
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.rename" title="Permalink to this definition"></a></dt>
+<dd><p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode.rename" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.nodetypes.DependNode.rename()</span></code></a> to
+turn <em>name</em> into an optional argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>*elems</strong> – one or more name elements</p></li>
-<li><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – elements contributed via <code class="docutils literal notranslate"><span class="pre">name</span></code> keyword
-arguments; these will always be prepended; defaults to None</p></li>
-<li><p><strong>control/ct</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – use the Paya suffix for controls;
-defaults to False</p></li>
+<li><p><strong>*name</strong> – the name to use; if omitted, defaults to a contextual
+name</p></li>
+<li><p><strong>**kwargs</strong> – forwarded to
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode.rename" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.nodetypes.DependNode.rename()</span></code></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The node name.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -189,33 +279,23 @@ suffix; defaults to False</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.rename">
-<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreShape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">managedNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.rename" title="Permalink to this definition"></a></dt>
-<dd><p>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.rename.html#pymel.core.general.rename" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.rename()</span></code></a> to add the following:</p>
-<ul class="simple">
-<li><p>multiple name elements</p></li>
-<li><p>optional name management</p></li>
-</ul>
+<dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.duplicate">
+<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.duplicate" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Overloads <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode.duplicate" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.nodetypes.DependNode.duplicate()</span></code></a> to add a</dt><dd><p>contextual default to <em>name/n</em>.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>*elems</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – one or more name elements; these will be strung
-together with underscores; ignored if <em>uuid</em> is True</p></li>
-<li><p><strong>ignoreShape</strong> – indicates that renaming of shape nodes below
-transform nodes should be prevented; defaults to False</p></li>
-<li><p><strong>uuid</strong> – Indicates that the new name is actually a UUID, and that
-the command should change the node?s UUID (In which case its name
-remains unchanged); defaults to False</p></li>
-<li><p><strong>managedNames/mn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – <p>perform Paya name management, i.e.:</p>
-<ul>
-<li><p>inherit prefixes from <a class="reference internal" href="../../paya/lib/names.html#paya.lib.names.Name" title="paya.lib.names.Name"><code class="xref py py-class docutils literal notranslate"><span class="pre">Name</span></code></a> blocks</p></li>
-<li><p>apply the type suffix</p></li>
-</ul>
-</p></li>
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – a name for the duplicate; defaults to a contextual
+name</p></li>
+<li><p><strong>**kwargs</strong> – forwarded to
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode.duplicate" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.nodetypes.DependNode.duplicate()</span></code></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+<dd class="field-even"><p>The duplicate node.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
@@ -225,18 +305,21 @@ remains unchanged); defaults to False</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.createNode">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.createNode" title="Permalink to this definition"></a></dt>
-<dd><p>Object-oriented version of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a> with
-managed naming.</p>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.createNode" title="Permalink to this definition"></a></dt>
+<dd><p>Object-oriented version of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – one or more name elements; defaults to None</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – a name for the new node; defaults to a contextual
+name</p></li>
+<li><p><strong>*kwargs</strong> – forwarded to <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a></p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The constructed node.</p>
+<dd class="field-even"><p>The node.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -298,7 +381,7 @@ DAG nodes.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.addVectorAttr">
-<span class="sig-name descname"><span class="pre">addVectorAttr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channelBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.addVectorAttr" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">addVectorAttr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channelBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.addVectorAttr" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -306,7 +389,10 @@ DAG nodes.</p>
 <li><p><strong>keyable/k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – make the attribute keyable; defaults to True</p></li>
 <li><p><strong>channelBox/cb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – make the attribute settable; defaults to
 False</p></li>
-<li><p><strong>input/i</strong> (str, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – an optional input for the attribute</p></li>
+<li><p><strong>multi/m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – create a multi (array) attribute; defaults to
+False</p></li>
+<li><p><strong>input/i</strong> (str, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – an optional input for the attribute, if it’s not a
+multi</p></li>
 <li><p><strong>defaultValue/dv</strong> (list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
 <a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>) – an optional default value for the attribute;
 defaults to [0.0, 0.0, 0.0]</p></li>
@@ -325,13 +411,15 @@ defaults to [0.0, 0.0, 0.0]</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.DependNode.addEulerAttr">
-<span class="sig-name descname"><span class="pre">addEulerAttr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channelBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.addEulerAttr" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">addEulerAttr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channelBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.DependNode.addEulerAttr" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> – the attribute name</p></li>
 <li><p><strong>keyable/k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – make the attribute keyable; defaults to True</p></li>
 <li><p><strong>channelBox/cb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – make the attribute settable; defaults to
+False</p></li>
+<li><p><strong>multi/m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – create a multi (array) attribute; defaults to
 False</p></li>
 <li><p><strong>input/i</strong> (str, <a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – an optional input for the attribute</p></li>
 <li><p><strong>defaultValue/dv</strong> (list, tuple,

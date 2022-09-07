@@ -6,25 +6,90 @@ paya.runtime.nodes.DependNode
 
 .. py:class:: DependNode(*args, **kwargs)
 
-    .. py:method:: makeName(*elems, name=None, control=False)
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    .. py:method:: setSubtype(clsname)
     
-        Generates a context-appropriate Maya name. Results will vary
-        depending on whether this method is called on a class or on a
-        node instance.
+        Initialises and populates the ``payaSubtype`` attribute.
         
-        Construction is determined by the following keys inside
-        :mod:`paya.config`: ``inheritNames``, ``padding``,
-        ``suffixNodes``. Use the context manager functionality of
-        :mod:`paya.config` to override for specific blocks.
+        .. note::
         
-        :param \*elems: one or more name elements
-        :param name/n: elements contributed via ``name`` keyword
-            arguments; these will always be prepended; defaults to None
-        :type name/n: None, str, int, or list
-        :param bool control/ct: use the Paya suffix for controls;
-            defaults to False
-        :return: The node name.
-        :rtype: str
+            This does not modify class assignment. To switch to the specified
+            type, follow this up with :meth:`asSubtype`.
+        
+        :param str clsname: the subtype class name
+        :return: ``self``
+        :rtype: :class:`DependNode`
+    
+    .. py:method:: getSubtype()
+    
+        :return: The contents of the ``payaSubtype`` attribute, if present and
+            populated, otherwise ``None``.
+        :rtype: :class:`str`, ``None``
+    
+    .. py:method:: getSubtypeClass(*name)
+    
+        If this node has a configured ``payaSubtype`` attribute, and a
+        subtypes pool is defined for this node type, attempts to retrieve
+        the class.
+        
+        If the operation fails, explanatory warnings are issued and ``None``
+        is returned.
+        
+        :param str \*name: an optional override for the class name; if
+            provided, no attempt will be made to access the ``payaSubtype``
+            attribute
+        :return: The custom class, if one could be retrieved.
+        :rtype: :class:`type`, ``None``
+    
+    .. py:method:: asSubtype(*name)
+    
+        If this node has a configured ``payaSubtype`` attribute, and a
+        subtypes pool is defined for this node type, attempts to retrieve
+        the class and assign it to this instance.
+        
+        This is an in-place operation, but ``self`` is returned for
+        convenience. If the operation fails, explanatory warnings are issued
+        and reassignment is skipped.
+        
+        :param str \*name: an optional override for the class name; if
+            provided, no attempt will be made to access the ``payaSubtype``
+            attribute
+        :return: ``self``
+        :rtype: :class:`DependNode`
+    
+    .. py:method:: makeName(*elems, inherit=<paya.util.functions.Undefined object at 0x0000011ED2B41688>, padding=<paya.util.functions.Undefined object at 0x0000011ED2B41688>, suffix=<paya.util.functions.Undefined object at 0x0000011ED2B41688>)
+    
+        Constructs a node name based on :class:`~paya.lib.names.Name`
+        contexts. Results will vary depending on whether this method is
+        called on:
+        
+        -  A class
+        -  A transform instance with a controller tag
+        -  A transform instance with shapes
+        -  A transform instance without shapes
+        -  A shape instance
+        -  Any other kind of node instance
+        
+        :alias: ``mn``
+        :return: The constructed node name.
+        :rtype: :class:`str`
+    
+    .. py:method:: rename(*name, **kwargs)
+    
+        Overloads :meth:`pymel.core.nodetypes.DependNode.rename` to
+        turn *name* into an optional argument.
+        
+        :param \*name: the name to use; if omitted, defaults to a contextual
+            name
+        :param \*\*kwargs: forwarded to
+            :meth:`pymel.core.nodetypes.DependNode.rename`
+        :return: ``self``
+        :rtype: :class:`DependNode`
     
     .. py:method:: basename(stripNamespace=False, stripTypeSuffix=False)
     
@@ -37,37 +102,27 @@ paya.runtime.nodes.DependNode
         :return: the modified name
         :rtype: str
     
-    .. py:method:: rename(*elems, ignoreShape=False, uuid=False, managedNames=False)
+    .. py:method:: duplicate(name=None, **kwargs)
     
-        Overloads :func:`pymel.core.general.rename` to add the following:
+        Overloads :meth:`pymel.core.nodetypes.DependNode.duplicate` to add a
+            contextual default to *name/n*.
         
-        -   multiple name elements
-        -   optional name management
-        
-        :param \*elems: one or more name elements; these will be strung
-            together with underscores; ignored if *uuid* is True
-        :type \*elems: None, str, int, tuple, list
-        :param ignoreShape: indicates that renaming of shape nodes below
-            transform nodes should be prevented; defaults to False
-        :param uuid: Indicates that the new name is actually a UUID, and that
-            the command should change the node’s UUID (In which case its name
-            remains unchanged); defaults to False
-        :param bool managedNames/mn: perform Paya name management, i.e.:
-        
-            - inherit prefixes from :class:`~paya.lib.names.Name` blocks
-            - apply the type suffix
-        :return: ``self``
-        :rtype: :class:`~paya.runtime.nodes.DependNode`
+        :param str name/n: a name for the duplicate; defaults to a contextual
+            name
+        :param \*\*kwargs: forwarded to
+            :meth:`pymel.core.nodetypes.DependNode.duplicate`
+        :return: The duplicate node.
+        :rtype: :class:`DependNode`
     
-    .. py:classmethod:: createNode(name=None)
+    .. py:classmethod:: createNode(name=None, **kwargs)
     
-        Object-oriented version of :func:`pymel.core.general.createNode` with
-        managed naming.
+        Object-oriented version of :func:`pymel.core.general.createNode`.
         
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, or list
-        :return: The constructed node.
-        :rtype: :class:`~pymel.core.general.PyNode`
+        :param str name/n: a name for the new node; defaults to a contextual
+            name
+        :param \*kwargs: forwarded to :func:`pymel.core.general.createNode`
+        :return: The node.
+        :rtype: :class:`DependNode`
     
     .. py:classmethod:: createFromMacro(macro, **overrides)
     
@@ -96,13 +151,16 @@ paya.runtime.nodes.DependNode
             DAG nodes.
         :return: bool or None
     
-    .. py:method:: addVectorAttr(name, keyable=None, channelBox=None, input=None, defaultValue=None, lock=False)
+    .. py:method:: addVectorAttr(name, keyable=None, channelBox=None, input=None, defaultValue=None, lock=False, multi=False)
     
         :param name: the attribute name
         :param bool keyable/k: make the attribute keyable; defaults to True
         :param bool channelBox/cb: make the attribute settable; defaults to
             False
-        :param input/i: an optional input for the attribute
+        :param bool multi/m: create a multi (array) attribute; defaults to
+            False
+        :param input/i: an optional input for the attribute, if it's not a
+            multi
         :type input/i: str, :class:`~paya.runtime.plugs.Vector`
         :param defaultValue/dv: an optional default value for the attribute;
             defaults to [0.0, 0.0, 0.0]
@@ -113,11 +171,13 @@ paya.runtime.nodes.DependNode
             ``double3`` with children of type ``double``).
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: addEulerAttr(name, keyable=None, channelBox=None, input=None, defaultValue=None, lock=False)
+    .. py:method:: addEulerAttr(name, keyable=None, channelBox=None, input=None, defaultValue=None, lock=False, multi=False)
     
         :param name: the attribute name
         :param bool keyable/k: make the attribute keyable; defaults to True
         :param bool channelBox/cb: make the attribute settable; defaults to
+            False
+        :param bool multi/m: create a multi (array) attribute; defaults to
             False
         :param input/i: an optional input for the attribute
         :type input/i: str, :class:`~paya.runtime.plugs.Vector`

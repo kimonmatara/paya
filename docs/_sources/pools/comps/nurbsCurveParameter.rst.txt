@@ -6,10 +6,22 @@ paya.runtime.comps.NurbsCurveParameter
 
 .. py:class:: NurbsCurveParameter(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.general.NurbsCurveParameter` :class:`~paya.runtime.comps.Component1DFloat` :class:`~pymel.core.general.Component1DFloat` :class:`~paya.runtime.comps.ContinuousComponent` :class:`~pymel.core.general.ContinuousComponent` :class:`~paya.runtime.comps.DimensionedComponent` :class:`~pymel.core.general.DimensionedComponent` :class:`~paya.runtime.comps.Component` :class:`~pymel.core.general.Component` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:method:: isRange()
     
         :return: True if this component represents a range.
         :rtype: bool
+    
+    .. py:method:: index()
+    
+        :return: The U value at this parameter. If this is a range, only
+            the start of the range will be returned.
+        :rtype: :class:`float`
     
     .. py:method:: indices()
     
@@ -24,64 +36,62 @@ paya.runtime.comps.NurbsCurveParameter
             instance represents a range.
         :rtype: :class:`float`
     
-    .. py:method:: point(plug=False)
+    .. py:method:: point(worldSpace=False, plug=False)
     
-        :alias: ``getWorldPosition`` / ``gwp``
-        :param bool plug/p: return a plug, not value; defaults to False
-        :return: A world position at this parameter.
-    
-    .. py:method:: matrix(tangentAxis, upAxis, squashStretch=False, upVector=None, aimCurve=None, globalScale=None, closestPoint=True, plug=False)
-    
-        :param str tangentAxis: the axis to align to the curve tangent
-        :param str upAxis: the axis to align to the resolved up vector
-        :param bool squashStretch/ss: incorporate tangent stretching
-            (dynamic only); defaults to False
-        :param upVector/upv: used as an up vector on its own, or extracted from
-            *upObject*; defaults to None
-        :type upVector/upv: None, list, tuple, str,
-            :class:`~paya.runtime.data.Vector`,
+        :param bool worldSpace/ws: return a world-space position;
+            defaults to ``False``
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: A point position at this parameter.
+        :rtype: :class:`~paya.runtime.data.Point` |
             :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an up curve; defaults to None
-        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param globalScale/gs: used to drive scaling on dynamic matrices only;
-            the scale will be normalised; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool closestPoint/mc: pull points from *aimCurve* based on
-            proximity rather than matched parameter; defaults to True
-        :param bool plug/p: force a dynamic output; defaults to False
-        :return: A matrix at the specified parameter, constructed using the
-            most efficient DG configuration for the given options.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`,
-            :class:`~paya.runtime.data.Matrix`
+    
+    .. py:method:: getWorldPosition(plug=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: A world-space position at this parameter.
+        :rtype: :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.plugs.Vector`
     
     .. py:method:: fraction(plug=False)
     
-        :param bool plug/p: force a dynamic output; defaults to False
-        :return: The length fraction at the given parameter
-        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: The curve length fraction at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: length(param, plug=False)
+    .. py:method:: length(plug=False)
     
-        :param bool plug/p: force a dynamic output; defaults to False
-        :return: The curve length at the given parameter.
-        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: The curve length at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: tangent(plug=False, normalize=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :param bool normalize/nr: return the normalized tangent;
+            defaults to ``False``
+        :return: The curve tangent at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: normal(plug=False, normalize=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :param bool normalize/nr: return the normalized normal;
+            defaults to ``False``
+        :return: The curve normal at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
     
     .. py:method:: detach()
     
         :return: The resulting shape segments.
         :rtype: [:class:`~paya.runtime.nodes.NurbsCurve`]
     
-    .. py:method:: subCurve(*toParameter)
+    .. py:method:: subCurve(toParameter=None)
     
-        Returns a sub-curve (via a ``subCurve`` node). If this is a ranged
-        parameter, its range is used. Otherwise, *toParameter* is used for
-        the end.
-        
-        :param \*toParameter: the end parameter for the segment if this
-            parameter is not ranged.
-        :type \*toParameter: float, string,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`
-            :class:`~paya.runtime.plugs.Math1D`
-        :return: The resulting shape.
+        :param toParameter:
+        :return:

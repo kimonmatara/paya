@@ -6,6 +6,12 @@ paya.runtime.plugs.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.plugs.Geometry` :class:`~paya.runtime.plugs.Data` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:classmethod:: createArc(*points, directionVector=None, radius=1.0, toggleArc=False, sections=8, degree=3, guard=None)
     
         :param points: two or three points, packed or unpacked
@@ -50,461 +56,1105 @@ paya.runtime.plugs.NurbsCurve
         :return: A curve output for a straight line.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
     
-    .. py:method:: getKnotDomain()
+    .. py:method:: createShape(dispCV=True, **kwargs)
     
-        :return: The current knot domain for the curve.
-        :rtype: (float, float)
-    
-    .. py:method:: info(reuse=True)
-    
-        :param bool reuse/re: Reuse any previously-connected ``curveInfo``
-            node; defaults to True
-        :return: A ``curveInfo`` node connected to this curve output.
-        :rtype: :class:`~paya.runtime.nodes.CurveInfo`
-    
-    .. py:method:: length()
-    
-        :return: The arc length of this curve output.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: getControlPoints()
-    
-        :return: The ``.controlPoints`` multi-attribute of a connected
-            ``curveInfo`` node.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-    
-    .. py:method:: initMotionPath(**config)
-    
-        Connects and configures a ``motionPath`` node.
+        Overloads :meth:`paya.runtime.plugs.Geometry.createShape` to add the
+        *dispCV/dcv* argument.
         
-        :param uValue: an optional value or input for the ``uValue`` attribute
-        :type uValue: float, :class:`~paya.runtime.plugs.Math1D`
-        :param \*\*config: an unpacked mapping of *attrName: attrSource*;
-            sources can be values or plugs
-        :return: The ``motionPath`` node.
-        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+        :param bool dispCV/dcv: display CVs on the curve shape; defaults to
+            ``True``
+        :param \*\*kwargs: forwarded to
+            :meth:`paya.runtime.plugs.Geometry.createShape`
+        :return: The generated shape.
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
     
-    .. py:method:: infoAtParam(param)
+    .. py:method:: _resolveNumberFractionsOrParams(numberFractionsOrParams, parametric=False, uniform=False)
     
-        :param point: the sample parameter
-        :return: A ``pointOnCurveInfo`` node configured for the specified
-            parameter.
-        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
+        Utility method. Resolves the *numberFractionsOrParams* argument on
+        distribution methods into a list of fractions or parameters.
+        
+        If *numberFractionsOrParams* is a list, it will merely be conformed
+        and passed back. Otherwise, the return will always be values, not
+        plugs.
+        
+        :param numberFractionsOrParams: one of:
+        
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
+        
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+        
+        :type numberFractionsOrParams: :class:`float`,
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :return: A list of scalars (fractions or parameters).
+        :rtype: [:class:`float`, :class:`~paya.runtime.plugs.Math1D`]
     
-    .. py:method:: infoAtPoint(point)
+    .. py:method:: initNearestPointOnCurve(point, reuse=True)
     
-        :param point: the sample point
-        :return: A ``pointOnCurveInfo`` node configured for the specified
-            point.
-        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
-    
-    .. py:method:: infoAtFraction(fraction)
-    
-        :param fraction: the length fraction to sample at
-        :return: A ``pointOnCurveInfo`` node configured for the specified
-            length fraction.
-        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
-    
-    .. py:method:: infoAtLength(length)
-    
-        :param fraction: the length to sample at
-        :return: A ``pointOnCurveInfo`` node configured for the specified
-            length.
-        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`
-    
-    .. py:method:: initNearestPointOnCurve(point)
-    
-        Connects and configures a ``nearestPointOnCurve`` node.
+        Initialises a ``nearestPointOnCurve`` node.
         
         :param point: the reference point
+        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool reuse/re: where available, retrieve any already-connected
+            node with the same configuration; defaults to True
         :return: The ``nearestPointOnCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
     
-    .. py:method:: pointAtCV(cv)
+    .. py:method:: numCVs()
     
-        :param cv: the CV to sample
-        :type cv: int, :class:`~paya.runtime.comps.NurbsCurveCV`
-        :return: A point position at the specified CV.
+        This is a :term:`static`-only operation.
+        
+        :return: The number of CVs on this curve.
+        :rtype: :class:`int`
     
-    .. py:method:: pointAtParam(param)
+    .. py:method:: numSpans()
+    
+        This is a :term:`static`-only operation.
+        
+        :return: The number of spans on this curve.
+        :rtype: :class:`int`
+    
+    .. py:method:: findExistingInfoNode()
+    
+        :return: The first :class:`curveInfo <paya.runtime.nodes.CurveInfo>`
+            node connected to this curve, or ``None``.
+        :rtype: ``None`` | :class:`paya.runtime.nodes.CurveInfo`
+    
+    .. py:method:: info(reuse=True, plug=False)
+    
+        :param bool reuse/re: where available, retrieve an already-connected
+            node; defaults to True
+        :param bool plug/p: return a :class:`curveInfo <paya.runtime.nodes.CurveInfo>`
+            node rather than information in a dict; defaults to ``False``
+        :return: If *plug* is ``True``, a
+            :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node;
+            otherwise, a dictionary with the following keys: ``'arcLength'``,
+            ``'controlPoints'``, ``'knots'``
+        :rtype: :class:`dict` | :class:`paya.runtime.nodes.CurveInfo`
+    
+    .. py:method:: length(plug=False)
+    
+        If *plug* is False, a temporary
+        :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node will be used
+        instead of :meth:`maya.OpenMaya.MFnNurbsCurve.length` to ensure
+        correct space management.
+        
+        This method will *always* use a
+        :param bool plug/p: return a plug, not just a value; defaults
+            to ``False``
+        :return: The length of this curve.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: getKnots(plug=False)
+    
+        :param plug/p: return the ``knots`` array of a
+            :class:`curveInfo <paya.runtime.nodes.CurveInfo>` node, not just
+            a list of values; defaults to ``False``
+        :return: [:class:`int`] | [:class:`paya.runtime.plugs.Math1D`]
+    
+    .. py:method:: motionPath(**config)
+    
+        Creates a ``motionPath`` node and connects it to this curve. All other
+        configuration is performed via *config*.
+        
+        :param \*\*config: a *source: plug* mapping to configure the node's
+            attributes; sources can be plugs or values
+        :return: The ``motionPath`` node.
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+    
+    .. py:method:: motionPathAtParam(param, **config)
+    
+        Creates a ``motionPath`` and hooks it up to the specified parameter.
+        All other configuration is performed via \*\*config*. Flags *uValue*
+        and *fractionMode* will always be overriden.
+        
+        :param param: the parameter at which to create the ``motionPath`` node
+        :rtype param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param \*\*config: a *source: plug* mapping to configure the node's
+            attributes; sources can be plugs or values
+        :return: The ``motionPath`` node.
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+    
+    .. py:method:: motionPathAtFraction(fraction, **config)
+    
+        Creates a ``motionPath`` and hooks it up to the specified fraction.
+        All other configuration is performed via \*\*config*. Flags *uValue*
+        and *fractionMode* will always be overriden.
+        
+        :param fraction: the fraction at which to create the ``motionPath``
+            node
+        :rtype fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param \*\*config: a *source: plug* mapping to configure the node's
+            attributes; sources can be plugs or values
+        :return: The ``motionPath`` node.
+        :rtype: :class:`~paya.runtime.nodes.MotionPath`
+    
+    .. py:method:: infoAtParam(param, reuse=True, plug=None, turnOnPercentage=False)
+    
+        :param param: the curve parameter to inspect
+        :type param: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param bool turnOnPercentage/top: per the namesake attribute on
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>`,
+            interpret *param* a percentage ratio within parametric space
+            (note that this is not the same as ``fractionMode`` on
+            motion paths; defaults to ``False``
+        :param bool reuse/re: if *plug* is ``True``, reuse any matching
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>` nodes;
+            defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        return a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>`
+            node rather than a dictonary of values; default is auto-configured
+            based on arguments
+        :return: If *plug* is ``True``, a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>` node;
+            otherwise, a dictionary with the followingk keys: ``'position'``,
+            ``'tangent'``, ``'normalizedTangent'``, ``'normal'``,
+            ``'normalizedNormal'``
+        :rtype: :class:`~paya.runtime.nodes.PointOnCurveInfo`, :class:`dict`
+    
+    .. py:method:: getControlVerts(plug=False)
+    
+        :param bool plug/p: return plugs rather than values;
+            defaults to ``False``
+        :return: The members of the ``controlPoints`` info array for this
+            curve.
+        :rtype: [:class:`~paya.runtime.plugs.Vector`],
+            [:class:`~paya.runtime.data.Point`]
+    
+    .. py:method:: getControlVert(cvIndex, plug=False)
+    
+        :alias: ``pointAtCV``
+        :param int cvIndex: the index of the CV to inspect
+        :param bool plug/p: return a plug, not just a value; defaults
+            to ``False``
+        :return: The position of the specified CV.
+    
+    .. py:method:: pointAt(paramOrFraction, parametric=True, plug=None)
+    
+        Dispatches :meth:`pointAtParam` if ``parametric=True``, otherwise
+        :meth:`pointAtFraction`.
+        
+        :param bool parametric/par: interpret *paramOrFraction* as a U
+            parameter rather than a length fraction; defaults to ``False``
+    
+    .. py:method:: pointAtParam(param, plug=None)
     
         :param param: the parameter to sample
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: A point at the given parameter.
-    
-    .. py:method:: pointAtFraction(fraction)
-    
-        :param fraction: the length fraction at which to sample a point
-        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: A point at the specified length fraction.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-    
-    .. py:method:: pointAtLength(length)
-    
-        :param length: the length
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: A point at the given length.
-    
-    .. py:method:: closestPoint(point)
-    
-        :param point: the reference point
-        :type point: list, tuple, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.data.Point`,
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A point at the specified parameter.
+        :rtype: :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
-        :return: The closest point to the given reference point.
+    
+    .. py:method:: pointAtLength(length, plug=None)
+    
+        :param length: the length to sample
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug, not a value; if ``False``,
+            *param* must be a value; defaults to ``False``
+        :return: A point at the specified length.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: closestFraction(point)
+    .. py:method:: pointAtFraction(fraction, plug=None)
     
+        :param fraction: the fraction to sample
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A point at the specified fraction.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: nearestPoint(refPoint, plug=None)
+    
+        :param refPoint: the reference point
+        :type refPoint: tuple, list, str, :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The closest point on this curve to *refPoint*.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: distributePoints(numberFractionsOrParams, parametric=False, uniform=False, plug=None)
+    
+        :param numberFractionsOrParams: one of:
+        
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
+        
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+        
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A list of point values or plugs.
+        :rtype: [:class:`~paya.runtime.data.Point`
+            | :class:`~paya.runtime.plugs.Vector`]
+    
+    .. py:method:: paramAtStart(plug=False)
+    
+        :param bool plug/p: return plugs, not values; defaults to False
+        :return: The parameter at the start of this curve.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: paramAtEnd(plug=False)
+    
+        :param bool plug/p: return plugs, not values; defaults to False
+        :return: The parameter at the end of this curve.
+        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: knotDomain(plug=False)
+    
+        :param bool plug/p: return plugs, not values; defaults to ``False``
+        :return: The min and max U parameters on this curve.
+        :rtype: (:class:`float` | :class:`~paya.runtime.plugs.Math1D`,
+            :class:`float` | :class:`~paya.runtime.plugs.Math1D`)
+    
+    .. py:method:: paramAtPoint(point, plug=None)
+    
+        This is a 'forgiving' implementation, and uses the closest point.
+        
+        :alias: ``nearestParam``
+        :param point: the reference point
+        :type point: tuple, list, str, :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.data.Point`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The nearest parameter to the reference point.
+        :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: paramAtFraction(fraction, plug=None)
+    
+        :param fraction: the fraction to sample
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The parameter at the given fraction.
+        :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: paramAtLength(length, plug=None)
+    
+        :param length: the length at which to sample a parameter
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The parameter at the given length.
+        :rtype: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: distributeParams(numberFractionsOrParams, parametric=False, uniform=False, plug=None)
+    
+        :param numberFractionsOrParams: one of:
+        
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
+        
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+        
+        :type numberFractionsOrParams: :class:`float`,
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A list of parameter plugs or values.
+        :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+    
+    .. py:method:: lengthAtFraction(fraction, plug=None)
+    
+        :param fraction: the fraction to inspect
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The curve length at the specified fraction.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: lengthAtParam(param, plug=None)
+    
+        Differs from the PyMEl / API
+        :meth:`~pymel.core.nodetypes.NurbsCurve.findLengthFromParam` in that
+        it returns properly-spaced curve lengths.
+        
+        :param param: the parameter to inspect
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The curve length at the specified parameter.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: lengthAtPoint(point, plug=None)
+    
+        This is a 'forgiving' implementation, and uses the closest point.
+        
+        :param point: the point to inspect
+        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The curve length at the specified point.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: distributeLengths(numberFractionsOrParams, parametric=False, uniform=False, plug=None)
+    
+        :param numberFractionsOrParams: one of:
+        
+            -   a single integer value, specifying how many fraction or
+                parameter values to return, or
+        
+            -   a user list of fractions or parameters, which can be values
+                or plugs
+        
+        :type numberFractionsOrParams: :class:`float`,
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool parametric/par: if *numberFractionsOrParams* is a number,
+            generate parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if generating parameters, distribute them
+            by length, not parametric space; defaults to ``False``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A list of lengths.
+        :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+    
+    .. py:method:: fractionAtPoint(point, plug=None)
+    
+        This is a 'forgiving' implementation, and uses the closest point.
+        
+        :param point: the point at which to sample a fraction
+        :type point: tuple, list, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The length fraction at the specified point.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: fractionAtParam(param, plug=None)
+    
+        :param param: the parameter at which to sample a fraction
+        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The length fraction at the specified parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: fractionAtLength(length, plug=None)
+    
+        :param length: the length at which to sample a fraction
+        :type length: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The length fraction at the specified length.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: distributeFractions(number)
+    
+        Convenience method. Equivalent to
+        :func:`floatRange(0, 1, number) <paya.lib.mathops.floatRange>`.
+        
+        :param int number: the number of fractions to generate
+        :return: A uniform list of fractions.
+        :rtype: [float]
+    
+    .. py:method:: normalAtParam(param, normalize=False, plug=None)
+    
+        :param param: the parameter at which to sample the normal
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool normalize/nr: return the normalized normal;
+            defaults to False
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: normalAtFraction(fraction, normalize=False, plug=None)
+    
+        :param fraction: the fraction at which to sample the normal
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool normalize/nr: return the normalized normal;
+            defaults to False
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: normalAtLength(length, normalize=False, plug=None)
+    
+        :param length: the length at which to sample the normal
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool normalize/nr: return the normalized normal;
+            defaults to False
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: normalAtPoint(point, normalize=False, plug=None)
+    
+        :param point: the point at which to sample the normal
+        :type point: tuple, list, str,
+            :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.data.Point`
+        :param bool normalize/nr: return the normalized normal;
+            defaults to False
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: tangentAtParam(param, normalize=False, plug=None)
+    
+        :param param: the parameter at which to sample the tangent
+        :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool normalize/nr: return the normalized tangent;
+            defaults to False
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: tangentAtFraction(fraction, normalize=False, plug=None)
+    
+        :param fraction: the fraction at which to sample the tangent
+        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param bool normalize/nr: normalize the output vector; defaults to
+            False
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: tangentAtLength(length, normalize=False, plug=None)
+    
+        :param length: the length at which to sample the tangent
+        :type length: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param bool normalize/nr: normalize the output vector; defaults to
+            False
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: tangentAtPoint(point, normalize=False, plug=None)
+    
+        :param point: the point at which to sample the normals
+        :type point: list, tuple, str, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool normalize/nr: normalize the output vector; defaults to
+            False
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: The sampled vector.
+        :rtype: :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: upVectorAtParam(param, sampler=None, plug=None)
+    
+        :param param: the parameter at which to sample the up vector
+        :type param: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param sampler/sam: an up vector sampler to use; sampler can be
+            created using :meth:`createUpVectorSampler`; if this is omitted,
+            then the last sampler created using
+            ``createUpVectorSampler(setAsDefault=True)`` will be retrieved;
+            defaults to ``None``
+        :type sampler/sam: :class:`str`, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :raises RuntimeError: No default up vector sampler has been configured
+            on this curve output.
+        :return: An up vector at the specified parameter. A default up vector
+            sampler must have been configured on this curve using
+            :meth:`createUpVectorSampler`.
+        :rtype: :class:`~paya.runtime.networks.CurveUpVectorSampler`
+    
+    .. py:method:: upVectorAtFraction(fraction, plug=None, **kwargs)
+    
+        Converts *fraction* into a parameter and defers to
+        :meth:`upVectorAtParam`.
+        
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
+    
+    .. py:method:: upVectorAtLength(length, plug=None, **kwargs)
+    
+        Finds the parameter at the specified length and defers to
+        :meth:`upVectorAtParam`.
+        
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
+    
+    .. py:method:: upVectorAtPoint(point, plug=None, **kwargs)
+    
+        Finds the closest parameter to the specified point and defers to
+        :meth:`upVectorAtParam`.
+        
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param \*\*kwargs: forwarded to :meth:`upVectorAtParam`
+    
+    .. py:method:: createUpVectorSampler(resolution=9, unwindSwitch=0, interpolation='Linear', aimCurve=None, closestPoint=True, upObject=None, upVector=None, parallelTransport=False, setAsDefault=True)
+    
+        Depending on options, returns one of the following up-vector samplers:
+        
+        -   :class:`~paya.runtime.networks.CurveUpVectorAimCurveSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorIkSplineStyleSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorMpStyleSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorPtSampler`
+        -   :class:`~paya.runtime.networks.CurveUpVectorPtKeysSampler`
+        
+        Not all options can be combined. If all options are omitted, an
+        optimised curve normal sampler will be returned.
+        
+        Use :meth:`~paya.runtime.networks.CurveUpVectorSampler.sampleAtParam`
+        on the returned object to pull up vectors.
+        
+        :param upVector/upv: this can be a single up vector, or zipped pairs
+            of *parameter: vector*, indicating known up vectors at specific
+            points; if a single up vector is provided then, if it's combined
+            with *upObject*, the vector is multiplied by the object's world
+            matrix (similar to 'Object Rotation Up' on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes);
+            otherwise, the vector is used on its own; if pairs are provided
+            then they will be blended using parallel-transport or linearly
+            (similar to IK spline twist); defaults to ``None``
+        :type upVector/upv: :class:`None`, :class:`zip`, :class:`list`,
+            :class:`tuple`, :class:`str`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`,
+            [[:class:`float` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`],
+            [:class:`tuple` | :class:`list`,
+            :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`]]
+        :param upObject/uo: if provided on its own, works as an aiming interest
+            (similar to 'Object Up' mode on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes);
+            if combined with *upVector*, the object's world matrix is used to
+            multiply the up vector; defaults to ``None``
+        :type upObject/uo: str, :class:`~paya.runtime.nodes.Transform`
+        :param int resolution/res: if using parallel transport, the number of
+            solutions to generate; higher values improve accuracy at the
+            expense of interactivity; defaults to 9
+        :param unwindSwitch/uws: an integer value or plug, or a list of integer
+            values or plugs (one per segment, i.e.
+            ``len(paramVectorKeys)-1``) specifying how to resolve angle-
+            blending edge cases in per-segment parallel transport:
+        
+            -   ``0`` (shortest, the default)
+            -   ``1`` (positive)
+            -   ``2`` (negative)
+        
+        :type unwindSwitch/uws: :class:`int`, :class:`str`,
+            :class:`~paya.runtime.plugs.Math1D`,
+            [:class:`int` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`]
+        :param interpolation/i:: defines how to interpolate values from the
+            sparse parallel-transport solutions:
+        
+            -   ``0`` (``'None'``) (you wouldn't normally want this)
+            -   ``1`` (``'Linear'``) (the default)
+            -   ``2`` (``'Smooth'``)
+            -   ``3`` (``'Spline'``)
+        
+        :type interpolation/i: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool parallelTransport/pt: use parallel-transport;
+            defaults to False
+        :param aimCurve: an aim-curve from which to pull aiming interest
+            points, similarly to the option on
+            :class:`curveWarp <paya.runtime.nodes.CurveWarp>` nodes; defaults
+            to None
+        :type aimCurve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity
+            rather than matched parameter; defaults to ``True``
+        :param bool setAsDefault/sad: make this the default fallback up vector
+            source for other sampling operations; defaults to ``True``
+        :raises NotImplementedError: The requested options can't be combined.
+        :return: The sampler system.
+        :rtype: :class:`~paya.runtime.networks.CurveUpVectorSampler`
+    
+    .. py:method:: getUpVectorSamplers()
+    
+        :return: All :meth:`up vector samplers <createUpVectorSampler>`
+            created on this curve output.
+        :rtype: [:class:`~paya.runtime.networks.CurveUpVectorSampler`]
+    
+    .. py:method:: getDefaultUpVectorSampler()
+    
+        :return: The last :meth:`up vector sampler <createUpVectorSampler>`
+            that was created on this curve with ``setAsDefault=True``.
+        :rtype: :class:`~paya.runtime.networks.CurveUpVectorSampler`
+    
+    .. py:method:: clearUpVectorSamplers()
+    
+        Removes all up vector samplers and their dependencies.
+        
+        .. warning::
+        
+            This *will* break any rigging that hangs off one or more of the
+            samplers.
+    
+    .. py:method:: matrixAtParam(param, primaryAxis, secondaryAxis, upVector=None, upObject=None, aimCurve=None, closestPoint=True, upVectorSampler=None, defaultToNormal=None, globalScale=None, squashStretch=False, plug=None)
+    
+        .. note::
+            Unlike :meth:`matrixAtFraction`, which uses a
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` node, this
+            builds off of a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo>`.
+        
+        :param param: the parameter at which to construct the matrix
+        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param upVector/upv: if provided on its own, used directly; if combined
+            with *upObject*, multiplied by the object's world matrix, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: None, str, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upObject/uo: similar to :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes, if provided on its own,
+            used as an aiming interest ('Object Up' mode); if combined with
+            *upVector*, the up vector is multiplied by the object's world
+            matrix ('Object Rotation Up' mode); defaults to ``None``
+        :type upObject/uo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on
+            :class:`curveWarp <paya.runtime.nodes.CurveWarp>` nodes; defaults
+            to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtFraction(fraction, primaryAxis, secondaryAxis, upVector=None, upObject=None, aimCurve=None, closestPoint=True, upVectorSampler=None, defaultToNormal=None, globalScale=None, squashStretch=False, plug=None)
+    
+        .. note::
+            Unlike :meth:`matrixAtParam`, which uses a
+            :class:`pointOnCurveInfo <paya.runtime.nodes.PointOnCurveInfo` node,
+            this builds off of a
+            :class:`motionPath <paya.runtime.nodes.MotionPath>`.
+        
+        :param fraction: the fraction at which to construct the matrix
+        :type fraction: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param upVector/upv: if provided on its own, used directly; if combined
+            with *upObject*, multiplied by the object's world matrix, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: None, str, tuple, list,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param upObject/uo: similar to :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes, if provided on its own,
+            used as an aiming interest ('Object Up' mode); if combined with
+            *upVector*, the up vector is multiplied by the object's world
+            matrix ('Object Rotation Up' mode); defaults to ``None``
+        :type upObject/uo: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on :class:`curveWarp <paya.runtime.nodes.CurveWarp>`
+            nodes; defaults to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtParamOrFraction(paramOrFraction, primaryAxis, secondaryAxis, parametric=True, plug=None, **kwargs)
+    
+        Dispatches :meth:`matrixAtParam` or :meth:`matrixAtFraction`. See
+        either of those for full parameter information.
+        
+        :param paramOrFraction: the parameter or fraction at which
+            to construct a matrix
+        :type paramOrFraction: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool parametric: interpret *paramOrFraction* as a U parameter
+            rather than a length fraction; defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param \*\*kwargs: forwarded to :meth:`matrixAtParam` or
+            :meth:`matrixAtFraction
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
+    
+    .. py:method:: matrixAtPoint(point, primaryAxis, secondaryAxis, plug=None, **kwargs)
+    
+        Finds the closest parameter to *point* and dispatches
+        :meth:`matrixAtParam`. See that method for full parameter information.
+        
         :param point: the reference point
         :type point: tuple, list, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
-        :return: The closest length fraction to the given point.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param \*\*kwargs: forwarded to :meth:`matrixAtParam`
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
     
-    .. py:method:: paramAtPoint(point)
+    .. py:method:: matrixAtLength(length, primaryAxis, secondaryAxis, plug=None, **kwargs)
     
-        This is a 'forgiving' implementation; a closest param will still be
-        returned if the point is not on the curve.
+        Finds the parameter at *length* and dispatches
+        :meth:`matrixAtParam`. See that method for full parameter information.
         
-        :alias: ``closestParam``
-        :param point: the reference point
-        :type point: list, tuple, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.data.Point`,
+        :param length: the partial length at which to construct the matrix
+        :type length: tuple, list, :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
-        :return: The closest parameter to the given point.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :param \*\*kwargs: forwarded to :meth:`matrixAtParam`
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
     
-    .. py:method:: paramAtFraction(fraction)
+    .. py:method:: distributeMatrices(numberFractionsOrParams, primaryAxis, secondaryAxis, parametric=False, uniform=False, chain=False, upVector=None, upObject=None, aimCurve=None, closestPoint=True, upVectorSampler=None, defaultToNormal=None, globalScale=None, squashStretch=False, plug=None)
     
-        :param fraction: the length fraction
-        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The parameter at the given length fraction.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: paramAtLength(length)
-    
-        :param length: the length to sample at.
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The parameter at the given length.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: lengthAtFraction(fraction)
-    
-        :param fraction: the length fraction
-        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The length at the given fraction.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: lengthAtParam(param)
-    
-        :param param: the parameter
-        :type param: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The length at the given parameter.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: lengthAtPoint(point)
-    
-        :param point: the point
-        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
-             :class:`~paya.runtime.plugs.Vector`
-        :return: The length at the given point.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: fractionAtParam(param)
-    
-        :param param: the parameter
-        :type param: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The length fraction at the given parameter.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: fractionAtPoint(point)
-    
-        :param point: the point
-        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
-            :class:`~paya.runtime.plugs.Point`
-        :return: The length fraction at the given point.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: fractionAtLength(length)
-    
-        :param length: the reference length
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The length fraction at the given length.
-        :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: binormalAtParam(param)
-    
-        :param param: the parameter at which to sample the binormal
-        :type param: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: A vector that's perpendicular to both the curve normal
-            and tangent.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-    
-    .. py:method:: binormalAtFraction(fraction)
-    
-        :param fraction: the fraction at which to sample the binormal
-        :type fraction: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: A vector that's perpendicular to both the curve normal
-            and tangent.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-    
-    .. py:method:: binormalAtLength(length)
-    
-        :param length: the length at which to sample the binormal
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: A vector that's perpendicular to both the curve normal
-            and tangent.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-    
-    .. py:method:: binormalAtPoint(point)
-    
-        :param point: the point at which to sample the binormal
-        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
+        :param numberFractionsOrParams: this should either be
+        
+            -   A number of fractions or parameters to generate along the curve,
+                or
+            -   An explicit list of fractions or parameters at which to construct
+                the matrices
+        
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool parametric/par: interpret *numberOrFractions* as
+            parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if *parametric* is ``True``, and
+            *numberFractionsOrParams* is a number, initial parameters should
+            be distributed by length, not parametric space; defaults to
+            ``False``
+        :param bool chain/cha: aim each matrix towards the next in the
+            series, similar to chain joints; defaults to ``False``
+        :param upVector/upv: either
+        
+            -   A single up vector, or
+            -   A list of up vectors (one per matrix)
+        
+            If up vectors are provided on their own, they are used directly;
+            if they are combined with 'up objects' (*upObject*), they are
+            multiplied by the objects' world matrices, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: :class:`None`, :class:`str`, :class:`tuple`, :class:`list`,
+            :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`,
-        :return: A vector that's perpendicular to both the curve normal
-            and tangent.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-    
-    .. py:method:: matrixAtParamOrFraction(paramOrFraction, tangentAxis, upAxis, upVector=None, aimCurve=None, closestPoint=True, globalScale=None, squashStretch=False, fraction=False)
-    
-        Base curve framing implementation. Uses ``motionPath`` and / or
-        ``pointOnCurveInfo`` nodes.
-        
-        :param paramOrFraction: a parameter of length fraction at which
-            to sample the matrix
-        :type paramOrFraction:
-            float, str,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param str tangentAxis: the axis to map to the curve tangent,
-            e.g. '-y'
-        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
-        :param upVector/upv: an explicit up vector; defaults to None
-        :type upVector/upv: None, str, tuple, list,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
-            the ``curveWarp`` deformer; defaults to False
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool closestPoint/cp: sample points on the aim-curve by
-            proximity rather than matched parameter; defaults to True
-        :param globalScale/gs: ignored if not a plug; a baseline scale (will
-            be normalized); defaults to None
-        :type globalScale/gs: None, float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow the tangent vector to squash and
-            stretch; defaults to False
-        :param bool fraction/fr: interpret *paramOrFraction* as a length
-            fraction rather than a parameter; defaults to False
-        :return: The constructed matrix.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: matrixAtPoint(point, tangentAxis, upAxis, upVector=None, aimCurve=None, closestPoint=True, globalScale=None, squashStretch=False)
-    
-        :param point: the point at which to sample the matrix
-        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
-        :param upVector/upv: an explicit up vector; defaults to None
-        :type upVector/upv: None, str, tuple, list,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
-            the ``curveWarp`` deformer; defaults to False
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool closestPoint/cp: sample points on the aim-curve by
-            proximity rather than matched parameter; defaults to True
-        :param globalScale/gs: ignored if not a plug; a baseline scale (will
-            be normalized); defaults to None
-        :type globalScale/gs: None, float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow the tangent vector to squash and
-            stretch; defaults to False
-        :return: The constructed matrix.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: matrixAtParam(param, tangentAxis, upAxis, upVector=None, aimCurve=None, closestPoint=True, globalScale=None, squashStretch=False)
-    
-        :param param: the parameter at which to sample the matrix
-        :type param: float, str,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param str tangentAxis: the axis to map to the curve tangent,
-            e.g. '-y'
-        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
-        :param upVector/upv: an explicit up vector; defaults to None
-        :type upVector/upv: None, str, tuple, list,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
-            the ``curveWarp`` deformer; defaults to False
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool closestPoint/cp: sample points on the aim-curve by
-            proximity rather than matched parameter; defaults to True
-        :param globalScale/gs: ignored if not a plug; a baseline scale (will
-            be normalized); defaults to None
-        :type globalScale/gs: None, float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow the tangent vector to squash and
-            stretch; defaults to False
-        :return: The constructed matrix.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: matrixAtFraction(fraction, tangentAxis, upAxis, upVector=None, aimCurve=None, closestPoint=True, globalScale=None, squashStretch=False)
-    
-        :param fraction: the fraction at which to sample the matrix
-        :type fraction: float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param str tangentAxis: the axis to map to the curve tangent,
-            e.g. '-y'
-        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
-        :param upVector/upv: an explicit up vector; defaults to None
-        :type upVector/upv: None, str, tuple, list,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
-            the ``curveWarp`` deformer; defaults to False
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool closestPoint/cp: sample points on the aim-curve by
-            proximity rather than matched parameter; defaults to True
-        :param globalScale/gs: ignored if not a plug; a baseline scale (will
-            be normalized); defaults to None
-        :type globalScale/gs: None, float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow the tangent vector to squash and
-            stretch; defaults to False
-        :return: The constructed matrix.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: matrixAtLength(length, tangentAxis, upAxis, upVector=None, aimCurve=None, closestPoint=True, globalScale=None, squashStretch=False)
-    
-        :param length: the length at which to sample the matrix
-        :type length: float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param str tangentAxis: the axis to map to the curve tangent,
-            e.g. '-y'
-        :param str upAxis: the axis to map to the resolved up vector, e.g. 'x'
-        :param upVector/upv: an explicit up vector; defaults to None
-        :type upVector/upv: None, str, tuple, list,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an 'aim' curve for the up vector, similar to
-            the ``curveWarp`` deformer; defaults to False
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param bool closestPoint/cp: sample points on the aim-curve by
-            proximity rather than matched parameter; defaults to True
-        :param globalScale/gs: ignored if not a plug; a baseline scale (will
-            be normalized); defaults to None
-        :type globalScale/gs: None, float, str,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow the tangent vector to squash and
-            stretch; defaults to False
-        :return: The constructed matrix.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`
-    
-    .. py:method:: distributePoints(numberOrFractions)
-    
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :return: World-space points distributed along the length of the curve.
-        :rtype: [:class:`~paya.runtime.plugs.Vector`]
-    
-    .. py:method:: distributeParams(numberOrFractions)
-    
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :return: Parameters distributed along the length of the curve.
-        :rtype: [:class:`~paya.runtime.plugs.Math1D`]
-    
-    .. py:method:: distributeLengths(numberOrFractions)
-    
-        :param numberOrFractions: this can either be a list of length
-            fractions, or a number
-        :type numberOrFractions: tuple, list or int
-        :return: Fractional lengths along the curve.
-        :rtype: [:class:`~paya.runtime.plugs.Math1D`]
-    
-    .. py:method:: distributeMatrices(numberOrFractions, tangentAxis, upAxis, upVector=None, aimCurve=None, squashStretch=None, closestPoint=True, globalScale=None)
-    
-        :param numberOrFractions: this can either be a number of uniform
-            fractions to generate, or an explicit list of fractions
-        :type numberOrFractions: float, [float],
-            :class:`~paya.runtime.plugs.Math1D`,
-            [:class:`~paya.runtime.plugs.Math1D`]
-        :param str tangentAxis: the matrix axis to map to the curve tangent,
-            for example '-y'
-        :param str upAxis: the matrix axis to align to the resolved up vector, for
-            example 'x'
-        :param upVector/upv: if provided, should be either a single up vector or a
-            a list of up vectors (one per fraction); defaults to None
-        :type upVector/upv:
-            None,
-            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
-            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
-        :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
-            ``curveWarp``; defaults to None
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
+            [:class:`None` | :class:`str` | :class:`tuple` | :class:`list` |
+            :class:`~paya.runtime.data.Vector` |
+            :class:`~paya.runtime.plugs.Vector`]
+        :param upObject/uo: this can be a single transform, or a list of
+            transforms (one per sample point); if provided on its own, used
+            as an aiming interest (similar to 'Object Up' mode on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes); if
+            combined with *upVector*, the vector will be multiplied with the
+            object's matrix (similar to 'Object Rotation Up'); defaults to
+            ``None``
+        :type upObject/uo: ``None``, :class:`str`,
             :class:`~paya.runtime.nodes.Transform`
-        :param bool closestPoint/cp: pull points from the aim curve by
-            proximity rather than matched parameter; defaults to True
-        :param bool squashStretch/ss: allow squash and stretch on the tangent
-            vectors; defaults to False
-        :param globalScale/gs: ignored if not a plug; a baseline scaling
-            factor (will be normalized); defaults to None
-        :return: Matrices, distributed uniformly (by length) along this curve.
-        :rtype: [:class:`~paya.runtime.plugs.Matrix`]
-    
-    .. py:method:: distributeAimingMatrices(numberOrFractions, aimAxis, upAxis, upVector=None, aimCurve=None, squashStretch=None, closestPoint=True, globalScale=None)
-    
-        Similar to :meth:`distributeMatrices`, but here the matrices aim at
-        each other for a 'chained' effect.
-        
-        :param numberOrFractions: this can either be a number of uniform
-            fractions to generate, or an explicit list of fractions
-        :type numberOrFractions: float, [float],
-            :class:`~paya.runtime.plugs.Math1D`,
-            [:class:`~paya.runtime.plugs.Math1D`]
-        :param str aimAxis: the matrix axis to map to the aim vectors,
-            for example '-y'
-        :param str upAxis: the matrix axis to align to the resolved up vector, for
-            example 'x'
-        :param upVector/upv: if provided, should be either a single up vector or a
-            a list of up vectors (one per fraction); defaults to None
-        :type upVector/upv:
-            None,
-            list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`,
-            [list, tuple, :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.plugs.Vector`]
-        :param aimCurve/aic: an 'up' curve, as seen for example on Maya's
-            ``curveWarp``; defaults to None
-        :type aimCurve/aic: None, str, :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`,
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on :class:`curveWarp <paya.runtime.nodes.CurveWarp>`
+            nodes; defaults to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
             :class:`~paya.runtime.nodes.Transform`
-        :param bool closestPoint/cp: pull points from the aim curve by
-            proximity rather than matched parameter; defaults to True
-        :param bool squashStretch/ss: allow squash and stretch on the aim
-            vectors; defaults to False
-        :param globalScale/gs: ignored if not a plug; a baseline scaling
-            factor (will be normalized); defaults to None
-        :return: Matrices, distributed uniformly (by length) along this curve.
-        :rtype: [:class:`~paya.runtime.plugs.Matrix`]
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str, :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A matrix at the specified position.
+        :rtype: :class:`paya.runtime.data.Matrix`,
+            :class:`paya.runtime.plugs.Matrix`
+    
+    .. py:method:: distributeJoints(numberFractionsOrParams, primaryAxis, secondaryAxis, parametric=False, uniform=False, upVector=None, upObject=None, aimCurve=None, closestPoint=True, upVectorSampler=None, defaultToNormal=None, globalScale=None, squashStretch=False, chain=False, displayLocalAxis=True, radius=1.0, rotateOrder='xyz', parent=None, freeze=True, decompose=True, plug=False)
+    
+        Distributes joints along this curve. Pass *plug/p=True* for live
+        connections.
+        
+        :param numberFractionsOrParams: this should either be
+        
+            -   A number of fractions or parameters to generate along the curve,
+                or
+            -   An explicit list of fractions or parameters at which to construct
+                the matrices
+        
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool parametric/par: interpret *numberOrFractions* as
+            parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if *parametric* is ``True``, and
+            *numberFractionsOrParams* is a number, initial parameters should
+            be distributed by length, not parametric space; defaults to
+            ``False``
+        :param upVector/upv: either
+        
+            -   A single up vector, or
+            -   A list of up vectors (one per matrix)
+        
+            If up vectors are provided on their own, they are used directly;
+            if they are combined with 'up objects' (*upObject*), they are
+            multiplied by the objects' world matrices, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: :class:`None`, :class:`str`, :class:`tuple`, :class:`list`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`,
+            [:class:`None` | :class:`str` | :class:`tuple` | :class:`list` |
+            :class:`~paya.runtime.data.Vector` |
+            :class:`~paya.runtime.plugs.Vector`]
+        :param upObject/uo: this can be a single transform, or a list of
+            transforms (one per sample point); if provided on its own, used
+            as an aiming interest (similar to 'Object Up' mode on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes); if
+            combined with *upVector*, the vector will be multiplied with the
+            object's matrix (similar to 'Object Rotation Up'); defaults to
+            ``None``
+        :type upObject/uo: ``None``, :class:`str`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on
+            :class:`curveWarp <paya.runtime.nodes.CurveWarp>`
+            nodes; defaults to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str,
+            :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(
+                setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool chain/cha: create the joints as a contiguous chain with
+            aimed, rather than tangent-based, matrix orientation; defaults to
+            ``False``
+        :param bool displayLocalAxis/dla: display the local matrix
+            axes; defaults to ``True``
+        :param float radius/rad: the joint display radius; defaults to 1.0
+        :param rotateOrder/ro: the rotate order for the joint; defaults
+            to ``'xyz'``
+        :type rotateOrder/ro: ``None``, :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param parent/p: an optional destination parent for the joints
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool freeze/fr: zero-out transformations (except translate)
+            at the initial pose; defaults to ``True``
+        :param bool decompose/dec: if ``False``, connect to
+            ``offsetParentMatrix`` instead of driving the joint's SRT
+            channels; note that, if *freeze* is requested, the initial matrix
+             will *always* be applied via decomposition and then frozen;
+             defaults to ``True``
+        :param bool plug/p: drive the joints dynamically; defaults to
+            ``False``
+        :return: The individual joints or a chain (if *chain* was requested).
+        :rtype: [:class:`~paya.runtime.nodes.Joint`] |
+            :class:`~paya.lib.skel.Chain`
+    
+    .. py:method:: toBezier(force=False)
+    
+        Converts this NURBS curve to a Bezier curve.
+        
+        :param bool force/f: when this is ``False``, this plug will be
+            passed through as-is if it's already a Bezier curve;
+            defaults to False
+        :return: The bezier curve.
+        :rtype: :class:`~paya.runtime.plugs.BezierCurve`
+    
+    .. py:method:: toNurbs(force=False)
+    
+        Converts this Bezier curve to a NURBS curve.
+        
+        :param bool force/f: when this is ``False``, this plug will be
+            passed through as-is if it's already a Bezier curve;
+            defaults to False
+        :return: The NURBS curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: bSpline(tolerance=0.001, keepRange=1)
+    
+        :param keepRange/kr: An index or enum key for the node's
+            `keepRange`` enumerator:
+        
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        
+        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param tolerance/tol: the fit tolerance; defaults to 0.001
+        :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The B-spline.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: subCurve(minValue, maxValue, relative=False)
+    
+        Connects and configures a ``subCurve`` node and returns its output.
+        
+        :alias: ``sub``
+        :param minValue: a source for the ``minValue`` attribute
+        :type minValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param maxValue: a source for the ``maxValue`` attribute
+        :type maxValue: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool relative/r: set the node to 'relative'; defaults to False
+        :return: The sub-curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
     
     .. py:method:: attach(*curves, blend=False, blendBias=0.5, parameter=0.1, blendKnotInsertion=False, reverse1=False, reverse2=False, multipleKnots=True)
     
-        Attaches one or more curves to this one.
+        .. note::
+        
+            If more than one curves are passed-in, the result may
+            be different from calling :meth:`detach` per pair, because
+            the ``inputCurves`` array will be used on the node.
         
         :param \*curves: one or more curves to attach to this one
         :type \*curves: str, :class:`~paya.runtime.plugs.NurbsCurve`
@@ -524,6 +1174,16 @@ paya.runtime.plugs.NurbsCurve
         :param bool multipleKnots: keep multiple knots; defaults to True
         :return: The combined curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: detach(*parameters, select=None)
+    
+        Detaches this curve at the specified parameter(s).
+        
+        :param \*parameters: the parameter(s) at which to 'cut' the curve
+        :type \*parameters: float, :class:`~paya.runtime.plugs.Math1D`
+        :param select/sel: a subset of output indices to include in the
+            return; ``keep`` attributes will configured accordingly
+        :return: [:class:`~paya.runtime.plugs.NurbsCurve`]
     
     .. py:method:: initExtendCurve(**config)
     
@@ -614,28 +1274,6 @@ paya.runtime.plugs.NurbsCurve
         :return: The extended curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
     
-    .. py:method:: subCurve(minValue, maxValue, relative=False)
-    
-        Connects and configures a ``subCurve`` node and returns its output.
-        
-        :param minValue: a source for the ``minValue`` attribute
-        :type minValue: float, :class:`~paya.runtime.plugs.Math1D`
-        :param maxValue: a source for the ``maxValue`` attribute
-        :type maxValue: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool relative/r: set the node to 'relative'; defaults to False
-        :return: The sub-curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: detach(*parameters, select=None)
-    
-        Detaches this curve at the specified parameter(s).
-        
-        :param \*parameters: the parameter(s) at which to 'cut' the curve
-        :type \*parameters: float, :class:`~paya.runtime.plugs.Math1D`
-        :param select/sel: a subset of output indices to include in the
-            return; ``keep`` attributes will configured accordingly
-        :return: [:class:`~paya.runtime.plugs.NurbsCurve`]
-    
     .. py:method:: retract(length, atStart=None, atBothEnds=None)
     
         Retracts this curve.
@@ -647,134 +1285,6 @@ paya.runtime.plugs.NurbsCurve
         :param atBothEnds: retract at both ends of the curve; defaults to
             False
         :return: The modified curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: reverse()
-    
-        :return: The reversed curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: toBezier(economy=True)
-    
-        Converts this NURBS curve to a Bezier curve.
-        
-        :param bool economy/eco: just return ``self`` if this is already
-            a Bezier curve; defaults to True
-        :return: The bezier curve.
-        :rtype: :class:`~paya.runtime.plugs.BezierCurve`
-    
-    .. py:method:: toNurbs(economy=True)
-    
-        Converts this Bezier curve to a NURBS curve.
-        
-        :param bool economy/eco: just return ``self`` if this is already
-            a NURBS curve; defaults to True
-        :return: The NURBS curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: bSpline(tolerance=0.001, keepRange=1)
-    
-        :param keepRange/kr: An index or enum key for the ``.keepRange``
-            mode:
-        
-            - 0: '0 to 1'
-            - 1: 'Original' (the default)
-            - 2: '0 to #spans'
-        
-        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param tolerance/tol: the fit tolerance; defaults to 0.001
-        :type tolerance/tol: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The B-spline.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: initRebuild(**config)
-    
-        Connects and configures a ``rebuildCurve`` node.
-        
-        :param \*\*config: an unpacked mapping of *attrName: attrSource*;
-            sources can be values or plugs
-        :return: The ``rebuildCurve`` node.
-        :rtype: :class:`~paya.runtime.nodes.RebuildCurve`
-    
-    .. py:method:: cvRebuild(numCVs, degree=None, endKnots='Multiple end knots', keepRange='Original', keepControlPoints=False, keepEndPoints=True, keepTangents=False)
-    
-        Rebuilds this curve to the specified number of CVs.
-        
-        :param int degree/d: the degree to build to; defaults to this curve's
-            (current) degree if omitted
-        :param endKnots/end: An enum index or label:
-        
-            - 0: 'Non Multiple end knots'
-            - 1: 'Multiple end knots' (the default)
-        :type endKnots: int, str
-        :param keepRange/kr: An enum index or label:
-        
-            - 0: '0 to 1'
-            - 1: 'Original' (the default)
-            - 2: '0 to #spans'
-        :type keepRange/kr: int, str
-        :param bool keepEndPoints/kep: keep end points; defaults to True
-        :param bool keepTangents/kt: keep tangents; defaults to False
-        :return: The rebuilt curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: rebuild(rebuildType='Uniform', spans=None, degree=None, tolerance=0.01, smooth=-3, endKnots='Multiple end knots', keepRange='Original', keepControlPoints=False, keepEndPoints=True, keepTangents=False, matchCurve=None)
-    
-        :param rebuildType/rt: An enum index or label:
-        
-            - 0: 'Uniform' (the default)
-            - 1: 'Reduce Spans'
-            - 2: 'Match Knots'
-            - 3: 'No Mults'
-            - 4: 'Curvature'
-            - 5: 'End Conditions'
-            - 6: 'Clean'
-        :type rebuildType/rt: int, str
-        :param spans/s: the number of spans to build to; defaults to this
-            curve's (current) number of spans if omitted
-        :type spans/s: int, :class:`~paya.runtime.plugs.Math1D`
-        :param int degree/d: the degree to build to; defaults to this curve's
-            (current) degree if omitted
-        :param float tolerance/tol: the fit tolerance; defaults to 0.01
-        :param float smooth/sm: the 'smoothing' factor; defaults to -3.0
-        :param endKnots/end: An enum index or label:
-        
-            - 0: 'Non Multiple end knots'
-            - 1: 'Multiple end knots' (the default)
-        :type endKnots: int, str
-        :param keepRange/kr: An enum index or label:
-        
-            - 0: '0 to 1'
-            - 1: 'Original' (the default)
-            - 2: '0 to #spans'
-        :type keepRange/kr: int, str
-        :param bool keepControlPoints/kcp: keep control points; defaults to
-            False
-        :param bool keepEndPoints/kep: keep end points; defaults to True
-        :param bool keepTangents/kt: keep tangents; defaults to False
-        :param matchCurve/mc: ignored if *rebuildType* is not 2 or 'Match Knots`;
-            a NURBS curve attribute whose knots to match; defaults to None
-        :type matchCurve/mc: None, str, :class:`~paya.runtime.plugs.NurbsCurve`
-        :return: The rebuilt curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: cageRebuild()
-    
-        :return: A linear curve with the same CVs as this one.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: blend(otherCurve, weight=0.5)
-    
-        Blends this curve output towards *otherCurve* via an ``avgCurves``
-        node. You may get unexpected results if the curves don't match
-        in terms of spans, degree etc.
-        
-        :param otherCurve: the curve to blend towards
-        :type otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
-        :param weight/w: the blend weight; the other curve will take over
-            fully at 1.0; defaults to 0.5
-        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
-        :return: The blended curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
     
     .. py:method:: setLength(targetLength, atStart=False, vector=None, linear=None, circular=None, extrapolate=None, multipleKnots=True)
@@ -802,3 +1312,123 @@ paya.runtime.plugs.NurbsCurve
             to True
         :param bool multipleKnots: keep multiple knots; defaults to True
         :return:
+    
+    .. py:method:: rebuild(spans=None, degree=None, keepRange=1, endKnots=0, keepEndPoints=True, keepTangents=True, keepControlPoints=False, tolerance=0.01, rebuildType=0, matchCurve=None)
+    
+        Same signature as the API method. If any arguments are omitted, they
+        are derived from the curve's current state.
+        
+        :param spans/s: the target number of spans; defaults to the current
+            number of spans
+        :type spans: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param degree/d: the target degree, one of 1, 2, 3, 5 or 7; defaults
+            to the current degree
+        :type degree/d: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param keepRange/kr: an integer or label for the enumerator on
+            ``rebuildCurve``, namely:
+        
+            - 0 ('0 to 1')
+            - 1 ('Original') (the default)
+            - 2 ('0 to #spans')
+        
+        :type keepRange/kr: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param endKnots/end: an integer or label for the enumerator on
+            ``rebuildCurve``, namely:
+        
+            - 0 ('Non Multiple end knots')
+            - 1 ('Multiple end knots')
+        
+        :type endKnots/end: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :param keepEndPoints/kep: keep end points; defaults to True
+        :type keepEndPoints/kep: bool, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param keepTangents/kt: keep tangents; defaults to True
+        :type keepTangents/kt: bool, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param keepControlPoints/kcp: keep control points; defaults to False
+        :type keepControlPoints/kcp: bool, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param tolerance/tol: the rebuild tolerance; defaults to 0.01
+        :type tolerance/tol: float, str,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param matchCurve/mc: a curve shape or input for the 'Match Knots'
+            mode; if provided, *rebuildType* will be overriden to 2;
+            defaults to None
+        :type matchCurve/mc: str, :class:`~paya.runtime.plugs.NurbsCurve`,
+            :class:`~paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param rebuildType/rt: an integer or label for the enumerator on
+            ``rebuildCurve``, namely:
+        
+            - 0 ('Uniform') (the default)
+            - 1 ('Reduce Spans')
+            - 2 ('Match Knots')
+            - 3 ('Remove Multiple Knots')
+            - 4 ('Curvature')
+            - 5 ('End Conditions')
+            - 6 ('Clean')
+        
+        :type rebuildType/rt: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :return: The rebuilt curve.
+    
+    .. py:method:: cvRebuild(numCVs, degree=None, endKnots='Multiple end knots', keepRange='Original', keepControlPoints=False, keepEndPoints=True, keepTangents=False)
+    
+        Rebuilds this curve to the specified number of CVs.
+        
+        :param int degree/d: the degree to build to; defaults to this curve's
+            (current) degree if omitted
+        :param endKnots/end: An enum index or label:
+        
+            - 0: 'Non Multiple end knots'
+            - 1: 'Multiple end knots' (the default)
+        :type endKnots: int, str
+        :param keepRange/kr: An enum index or label:
+        
+            - 0: '0 to 1'
+            - 1: 'Original' (the default)
+            - 2: '0 to #spans'
+        
+        :type keepRange/kr: int, str
+        :param bool keepEndPoints/kep: keep end points; defaults to True
+        :param bool keepTangents/kt: keep tangents; defaults to False
+        :return: The rebuilt curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: cageRebuild()
+    
+        :return: A linear curve with the same CVs as this one.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: reverse()
+    
+        :return: The reversed curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: blend(otherCurve, weight=0.5)
+    
+        Blends this curve output towards *otherCurve* via an ``avgCurves``
+        node. You may get unexpected results if the curves don't match
+        in terms of spans, degree etc.
+        
+        :param otherCurve: the curve to blend towards
+        :type otherCurve: str, :class:`~paya.runtime.plugs.NurbsCurve`
+        :param weight/w: the blend weight; the other curve will take over
+            fully at 1.0; defaults to 0.5
+        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
+        :return: The blended curve.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: insertKnot(*parameters, insertBetween=None)
+    
+        :param \*parameters: the parameters at, or between, which to add
+            knots
+        :type \*parameters: :class:`float` |
+            :class:`~paya.runtime.plugs.Math1D` |
+            [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
+        :param bool insertBetween/ib: if this is specified, cuts won't
+            be performed at the specified parameters, but rather between
+            them; this should be a scalar, or a list of scalars
+            (one per internal segment, i.e. ``len(parameters)-1``),
+            specifying the number(s) of cuts; defaults to ``None``
+        :return: The edited curve.
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`

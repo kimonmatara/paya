@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.mathops &mdash; paya 0.8.4 documentation</title>
+  <title>paya.lib.mathops &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.lib.names" href="names.html" />
-    <link rel="prev" title="paya.lib.loopback" href="loopback.html" /> 
+    <link rel="prev" title="paya.lib.controlshapes" href="controlshapes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,25 +44,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
@@ -72,33 +56,30 @@
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html">paya.examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geoshapext.html">paya.geoshapext</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="loopback.html">paya.lib.loopback</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugops.html">paya.lib.plugops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="typeman.html">paya.lib.typeman</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xmlweights.html">paya.lib.xmlweights</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../nativeunits.html">paya.nativeunits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../test.html">paya.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../startstop.html">paya.startstop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -130,50 +111,14 @@
   <section id="module-paya.lib.mathops">
 <span id="paya-lib-mathops"></span><h1>paya.lib.mathops<a class="headerlink" href="#module-paya.lib.mathops" title="Permalink to this headline"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.isVectorValueOrPlug">
-<span class="sig-name descname"><span class="pre">isVectorValueOrPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.isVectorValueOrPlug" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> is a vector value or attribute, otherwise
-False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="paya.lib.mathops.NativeUnits">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NativeUnits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.NativeUnits" title="Permalink to this definition"></a></dt>
-<dd><p>Context manager. Switches Maya to centimetres and radians. New-scene /
-open-scene / save-scene events are compensated for with API callbacks.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.mathops.NativeUnits.__new__">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.NativeUnits.__new__" title="Permalink to this definition"></a></dt>
-<dd><p>Create and return a new object.  See help(type) for accurate signature.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.nativeUnits">
-<span class="sig-name descname"><span class="pre">nativeUnits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.nativeUnits" title="Permalink to this definition"></a></dt>
-<dd><p>Decorator version of <a class="reference internal" href="#paya.lib.mathops.NativeUnits" title="paya.lib.mathops.NativeUnits"><code class="xref py py-class docutils literal notranslate"><span class="pre">NativeUnits</span></code></a>.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.mathops.floatRange">
 <span class="sig-name descname"><span class="pre">floatRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numValues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.floatRange" title="Permalink to this definition"></a></dt>
-<dd><p>A variant of Python’s <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> for floats.</p>
+<dd><p>A variant of Python’s <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> for floats and float plugs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the minimum value</p></li>
-<li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the maximum value</p></li>
+<li><p><strong>start</strong> (float, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the minimum value</p></li>
+<li><p><strong>end</strong> (float, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the maximum value</p></li>
 <li><p><strong>numValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of values to generate</p></li>
 </ul>
 </dd>
@@ -182,7 +127,7 @@ open-scene / save-scene events are compensated for with API callbacks.</p>
 inclusively.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -204,6 +149,8 @@ animation curve in Maya. Works with any value type that can be handled by
 </div>
 </dd>
 </dl>
+<p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserDict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Collection" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sized" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sized</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Container" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></a></p>
 </dd></dl>
 
 <dl class="py function">
@@ -248,52 +195,20 @@ autogenerated using <a class="reference internal" href="#paya.lib.mathops.floatR
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.resolveNumberOrFractionsArg">
-<span class="sig-name descname"><span class="pre">resolveNumberOrFractionsArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.resolveNumberOrFractionsArg" title="Permalink to this definition"></a></dt>
-<dd><p>Loosely conforms a <code class="docutils literal notranslate"><span class="pre">numberOrFractions</span></code> user argument. If the
-argument is an integer, a range of floats is returned. Otherwise,
-the argument is passed through without further checking.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.expandVectorArgs">
-<span class="sig-name descname"><span class="pre">expandVectorArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.expandVectorArgs" title="Permalink to this definition"></a></dt>
-<dd><p>Expands <em>args</em>, stopping at anything that looks like a vector value
-or plug.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>*args</strong> – the arguments to expand</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The expanded arguments.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.conformVectorArg">
-<span class="sig-name descname"><span class="pre">conformVectorArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.conformVectorArg" title="Permalink to this definition"></a></dt>
-<dd><p>Conforms <em>arg</em> into a single vector value or plug, or to a list of vectors
-of the required length (to assign, say, a reference vector to every point
-in a chaining operation).</p>
-<p>This is loosely checked. Edge cases, like the user passing non-vector
-values, aren’t caught.</p>
+<dt class="sig sig-object py" id="paya.lib.mathops.blendScalars">
+<span class="sig-name descname"><span class="pre">blendScalars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scalarA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalarB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.blendScalars" title="Permalink to this definition"></a></dt>
+<dd><p>Blends between two scalar values or plugs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>arg</strong> (tuple, list, str, <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the user vector argument to wrangle</p></li>
-<li><p><strong>listLength/ll</strong> – if this is specified, then the argument will be
-conformed, by iterable multiplication, to a list of this length;
-if it’s omitted, a single vector will be returned; defaults to None</p></li>
+<li><p><strong>scalarA</strong> (float, str, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the first scalar</p></li>
+<li><p><strong>scalarB</strong> (float, str, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the second scalar</p></li>
+<li><p><strong>weight/w</strong> (float, str, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the weight; when this is at 1.0, <em>scalarB</em>
+will have fully taken over; defaults to 0.t</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The conformed vector argument.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list, <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+<dd class="field-even"><p></p>
 </dd>
 </dl>
 </dd></dl>
@@ -524,13 +439,131 @@ or control hierarchies.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.parallelTransport">
+<span class="sig-name descname"><span class="pre">parallelTransport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.parallelTransport" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <strong>parallel transport</strong> as described in the
+<a class="reference external" href="https://www.sidefx.com/tutorials/parallel-transport/">Houdini demonstration by Manuel Casasola Merkle</a>
+based on the <a class="reference external" href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.65.7632&amp;rep=rep1&amp;type=pdf">paper by Hanson and Ma</a>.</p>
+<p>If any of the arguments are plugs, the outputs will be plugs as well. The
+first output normal is a pass-through of the <em>normal</em> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>normal</strong> (list, tuple, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the starting normal (or up vector)</p></li>
+<li><p><strong>tangents</strong> ([list, tuple, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the tangent samples along the curve</p></li>
+<li><p><strong>fromEnd/fe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – indicate that <em>normal</em> is at the end, not the
+start, of the sequence, and solve accordingly; defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The resolved normals / up vectors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a>],
+[<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.blendCurveNormalSets">
+<span class="sig-name descname"><span class="pre">blendCurveNormalSets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalsA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalsB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwindSwitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.blendCurveNormalSets" title="Permalink to this definition"></a></dt>
+<dd><p>Blends between two sets of normals along a curve. The number of
+tangents, normalsA, normalsB and ratios must be the same. If any inputs
+are plugs then the outputs will also be plugs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>normalsA</strong> ([list, tuple,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the first set of normals</p></li>
+<li><p><strong>normalsB</strong> ([list, tuple,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the first set of normals</p></li>
+<li><p><strong>tangents</strong> ([list, tuple,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the curve tangents around which to rotate the normals</p></li>
+<li><p><strong>ratios/rat</strong> (None, [float, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>]) – per-normal blend ratios; if omitted, a uniform range of
+floats will be generated automatically; defaults to None</p></li>
+<li><p><strong>unwindSwitch/uws</strong> (int, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – <p>an integer value or attribute to pick between:</p>
+<ul>
+<li><p>0 for shortest angle unwinding (the default)</p></li>
+<li><p>1 for positive angle unwinding</p></li>
+<li><p>2 for negative angle unwinding</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – Unequal argument lengths.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The blended set of curve normals.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.blendBetweenCurveNormals">
+<span class="sig-name descname"><span class="pre">blendBetweenCurveNormals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startNormal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endNormal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwindSwitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.blendBetweenCurveNormals" title="Permalink to this definition"></a></dt>
+<dd><p>Blends between a forward and backward parallel-transport solution. If
+either <em>startNormal</em> or <em>endNormal</em> are <code class="docutils literal notranslate"><span class="pre">None</span></code>, the solution will
+only be performed in one direction and returned on its own.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>startNormal</strong> (list, tuple,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the normal at the start of the blend range</p></li>
+<li><p><strong>endNormal</strong> – list, tuple,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p></li>
+<li><p><strong>tangents</strong> – tangents along the blend range; one normal will
+be generated per tangent; the more tangents, the higher the
+accurace of the parallel transport solve</p></li>
+<li><p><strong>ratios</strong> (None, [float, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>]) – if provided, should be a list of float values or plugs
+(one per tangent); if omitted, a uniform float range will be generated
+automatically; defaults to None</p></li>
+<li><p><strong>unwindSwitch/uws</strong> (int, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – <p>an integer value or attribute to pick between:</p>
+<ul>
+<li><p>0 for shortest angle unwinding (the default)</p></li>
+<li><p>1 for positive angle unwinding</p></li>
+<li><p>2 for negative angle unwinding</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – <p>One of:</p>
+<ul class="simple">
+<li><p>Unequal numbers of tangents and ratios (if provided)</p></li>
+<li><p>Both <em>startNormal</em> and <em>endNormal</em> are <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The normals.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="loopback.html" class="btn btn-neutral float-left" title="paya.lib.loopback" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="controlshapes.html" class="btn btn-neutral float-left" title="paya.lib.controlshapes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="names.html" class="btn btn-neutral float-right" title="paya.lib.names" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

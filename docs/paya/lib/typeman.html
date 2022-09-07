@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.lib.typeman &mdash; paya 0.9 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="paya.lib.xmlweights" href="xmlweights.html" />
+    <link rel="prev" title="paya.lib.symmetry" href="symmetry.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../types_index.html">Types</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../paya.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html">paya.examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geoshapext.html">paya.geoshapext</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.typeman</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xmlweights.html">paya.lib.xmlweights</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../startstop.html">paya.startstop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../paya.html">paya</a> &raquo;</li>
+          <li><a href="../lib.html">paya.lib</a> &raquo;</li>
+      <li>paya.lib.typeman</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/paya/lib/typeman.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-paya.lib.typeman">
+<span id="paya-lib-typeman"></span><h1>paya.lib.typeman<a class="headerlink" href="#module-paya.lib.typeman" title="Permalink to this headline"></a></h1>
+<p>WIP – unified type-checking methods for hybrid plug / value workflows.</p>
+<p>Functions in this module expect patched PyMEL.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.mathInfo">
+<span class="sig-name descname"><span class="pre">mathInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.mathInfo" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – a value or plug (simple or PyMEL type)</p></li>
+<li><p><strong>angle/a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – unless already typed, instantiate using
+angle / Euler rotation types; defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of: conformed item, item maths dimension (or None),
+item is a plug</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isPyMELObject">
+<span class="sig-name descname"><span class="pre">isPyMELObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isPyMELObject" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if <em>item</em> is an instance of a PyMEl class, otherwise False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isPlug">
+<span class="sig-name descname"><span class="pre">isPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isPlug" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> represents an attribute, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isScalarValue">
+<span class="sig-name descname"><span class="pre">isScalarValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isScalarValue" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – the value to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>value</em> is an instance of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> or
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Unit.html#pymel.core.datatypes.Unit" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unit</span></code></a></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isScalarPlug">
+<span class="sig-name descname"><span class="pre">isScalarPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isScalarPlug" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> is an <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>
+instance, or a string representations of a scalar (1D) Maya
+attribute, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isScalarValueOrPlug">
+<span class="sig-name descname"><span class="pre">isScalarValueOrPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isScalarValueOrPlug" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> represents a scalar value or plug,
+otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isVectorValueOrPlug">
+<span class="sig-name descname"><span class="pre">isVectorValueOrPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isVectorValueOrPlug" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> is a vector value or attribute, otherwise
+False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isParamVectorPair">
+<span class="sig-name descname"><span class="pre">isParamVectorPair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isParamVectorPair" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> is a pair of <em>scalar: vector</em>, otherwise
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.isTripleScalarValueOrPlug">
+<span class="sig-name descname"><span class="pre">isTripleScalarValueOrPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isTripleScalarValueOrPlug" title="Permalink to this definition"></a></dt>
+<dd><p>Three scalar plugs in a list will not return <code class="docutils literal notranslate"><span class="pre">True</span></code>; they must be
+delivered as a numeric compound instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>item</em> represents a 3D vector or Euler rotation plug
+or value, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.conformVectorArg">
+<span class="sig-name descname"><span class="pre">conformVectorArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.conformVectorArg" title="Permalink to this definition"></a></dt>
+<dd><p>For methods that expect a vector argument which may also be a multi
+(for example <em>upVector</em> on
+<a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeMatrices" title="paya.runtime.plugs.NurbsCurve.distributeMatrices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">distributeMatrices()</span></code></a>). Attributes
+are conformed but not checked for type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a> | <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>,
+[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a> | <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>]) – strictly a single vector or a list of vectors; deeper nesting
+will throw an error</p></li>
+<li><p><strong>listLength/ll</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> | <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – the preferred output length; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A conformed vector, or list of conformed vectors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a> | <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a> |
+[<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a> | <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.describeAndConformVectorArg">
+<span class="sig-name descname"><span class="pre">describeAndConformVectorArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.describeAndConformVectorArg" title="Permalink to this definition"></a></dt>
+<dd><p>Used by methods that receive multiple forms of up vector hints in a
+single argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vector</strong> – the argument to inspect</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – Couldn’t parse the argument.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>One of:</p>
+<ul class="simple">
+<li><p>tuple of <code class="docutils literal notranslate"><span class="pre">'single'</span></code>, conformed vector value or plug</p></li>
+<li><p>tuple of <code class="docutils literal notranslate"><span class="pre">'keys'</span></code>, list of conformed <em>param, vector</em> pairs</p></li>
+<li><p>tuple of <code class="docutils literal notranslate"><span class="pre">'multi'</span></code>, list of conformed vectors</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><p>One of:</p>
+<ul class="simple">
+<li><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a> | <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>)</p></li>
+<li><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, [(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a> | <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>))]</p></li>
+<li><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, [<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Vector</span></code></a> | <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>])</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.resolveNumberOrFractionsArg">
+<span class="sig-name descname"><span class="pre">resolveNumberOrFractionsArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.resolveNumberOrFractionsArg" title="Permalink to this definition"></a></dt>
+<dd><p>Loosely conforms a <code class="docutils literal notranslate"><span class="pre">numberOrFractions</span></code> user argument. If the
+argument is an integer, a range of floats is returned. Otherwise,
+the argument is passed through without further checking.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.expandVectorArgs">
+<span class="sig-name descname"><span class="pre">expandVectorArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.expandVectorArgs" title="Permalink to this definition"></a></dt>
+<dd><p>Expands <em>args</em>, stopping at anything that looks like a vector value
+or plug.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*args</strong> – the arguments to expand</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The expanded arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.asPlug">
+<span class="sig-name descname"><span class="pre">asPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.asPlug" title="Permalink to this definition"></a></dt>
+<dd><p>If <em>item</em> is already an instance of
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>, it is passed through; otherwise,
+it’s used to create an instance of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>.
+The advantage of checking first is that custom class assignments are
+preserved.</p>
+<p>Use this form to check whether an attribute exists:
+<code class="docutils literal notranslate"><span class="pre">bool(asPlug(item,</span> <span class="pre">quiet=True))</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a>) – the attribute instance or string</p></li>
+<li><p><strong>quiet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – catch any errors raised when attempting to instantiate
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> and return <code class="docutils literal notranslate"><span class="pre">None</span></code>; defaults
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The attribute instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.asGeoPlug">
+<span class="sig-name descname"><span class="pre">asGeoPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.asGeoPlug" title="Permalink to this definition"></a></dt>
+<dd><p>Attempts to extract a geometry output plug from <em>item</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> (str, <a class="reference internal" href="../../pools/plugs/geometry.html#paya.runtime.plugs.Geometry" title="paya.runtime.plugs.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a>,
+<a class="reference internal" href="../../pools/nodes/shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>,
+<a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,) – the item to inspect</p></li>
+<li><p><strong>worldSpace/ws</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>item</em> is a plug; specifies
+whether to pull the world-space or local-space output of a
+geometry shape or transform; if omitted, defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>
+if <em>item</em> is a shape, and <code class="docutils literal notranslate"><span class="pre">True</span></code> if it’s a transform</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – Can’t extract a geo plug from <em>item</em>.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The geometry output.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../../pools/plugs/geometry.html#paya.runtime.plugs.Geometry" title="paya.runtime.plugs.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.asValue">
+<span class="sig-name descname"><span class="pre">asValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.asValue" title="Permalink to this definition"></a></dt>
+<dd><p>Equivalent to <a class="reference internal" href="#paya.lib.typeman.asPlug" title="paya.lib.typeman.asPlug"><code class="xref py py-func docutils literal notranslate"><span class="pre">asPlug(item).get()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.asCompIndexOrPlug">
+<span class="sig-name descname"><span class="pre">asCompIndexOrPlug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.asCompIndexOrPlug" title="Permalink to this definition"></a></dt>
+<dd><p>Used by methods which accept component arguments as indices
+(integers or floats) or scalar plugs (for example, NURBS curve parameter
+drivers), but not as instances of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Component.html#pymel.core.general.Component" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a>.</p>
+<p>If <em>item</em> is a simple scalar type, it’s passed-through as-is. Otherwise,
+if it describes a Maya component, its first index is returned as a float
+or integer. Otherwise, an attempt is made to return it as an
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> instance. The attribute is not
+checked for type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method relies on the relevant Paya component type implementing
+<code class="docutils literal notranslate"><span class="pre">index()</span></code>, which may not always be the case.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> – the item to conform</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – Can’t parse specified item.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A scalar index / parameter value or an attribute.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> |
+<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.conformPlugsInArg">
+<span class="sig-name descname"><span class="pre">conformPlugsInArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.conformPlugsInArg" title="Permalink to this definition"></a></dt>
+<dd><p>Used by <a class="reference internal" href="#paya.lib.typeman.plugCheck" title="paya.lib.typeman.plugCheck"><code class="xref py py-class docutils literal notranslate"><span class="pre">plugCheck</span></code></a>. Looks for plugs recursively in an argument
+received by a Paya method; if any are found, they are conformed to
+<a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>arg</strong> – an argument received by a Paya method</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>tuple of:</p>
+<ul class="simple">
+<li><p>the original argument, with conformed plug members,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if plugs were found, <code class="docutils literal notranslate"><span class="pre">False</span></code> if they weren’t</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.forceVectorsAsPlugs">
+<span class="sig-name descname"><span class="pre">forceVectorsAsPlugs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.forceVectorsAsPlugs" title="Permalink to this definition"></a></dt>
+<dd><p>If any of the provided vectors are plugs, they are passed-through
+as-is; those that aren’t are used as values for array attributes
+on a utility node, which are passed along instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vectors</strong> ([list, tuple,
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the vectors to inspect</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The conformed vector outputs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.lib.typeman.plugCheck">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plugCheck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">argNames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.plugCheck" title="Permalink to this definition"></a></dt>
+<dd><p>Decorator-with-arguments for methods that take a <em>plug</em> keyword argument
+which defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, meaning its behaviour will depend on whether
+any incoming arguments are plugs.</p>
+<p>Instantiate it with a list of argument names; when the function is called,
+if <em>plug</em> still resolves as <code class="docutils literal notranslate"><span class="pre">None</span></code>, the arguments will be checked for
+plugs, and the <em>plug</em> keyword overriden to <code class="docutils literal notranslate"><span class="pre">True</span></code> where necessary before
+delegating to the original function. As a bonus, any plug arguments will
+be conformed to <a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> instances.</p>
+<p>If the plug is passed specifically by the user as <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+the function will be called immediately–in essence the user becomes
+responsible for any errors thence.</p>
+<dl class="field-list">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@plugCheck</span><span class="p">(</span><span class="s1">&#39;param&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">tangentAtParam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">plug</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># At this point, if plug was passed-through as None, the</span>
+    <span class="c1"># decorator will have resolved it to True / False</span>
+
+    <span class="k">if</span> <span class="n">plug</span><span class="p">:</span>
+        <span class="c1"># Run the &#39;hard&#39; implementation</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Run the &#39;soft&#39; implementation</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.typeman.plugCheck.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.plugCheck.__call__" title="Permalink to this definition"></a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="symmetry.html" class="btn btn-neutral float-left" title="paya.lib.symmetry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="xmlweights.html" class="btn btn-neutral float-right" title="paya.lib.xmlweights" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

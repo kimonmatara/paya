@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.plugs.BezierCurve &mdash; paya 0.8.4 documentation</title>
+  <title>paya.runtime.plugs.BezierCurve &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,31 +44,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Nodes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Node Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="attribute.html">Attribute</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">BezierCurve</a></li>
@@ -81,20 +66,18 @@
 <li class="toctree-l3"><a class="reference internal" href="math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="string.html">String</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -128,7 +111,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BezierCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a> <a class="reference internal" href="geometry.html#paya.runtime.plugs.Geometry" title="paya.runtime.plugs.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code> <a class="reference internal" href="attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.getShapeMFn">
 <span class="sig-name descname"><span class="pre">getShapeMFn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.getShapeMFn" title="Permalink to this definition"></a></dt>
 <dd><p>Returns an API function set for the shape type associated with this
@@ -140,7 +125,7 @@ without creating a shape.</p>
 <dd class="field-odd"><p>The function set.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MFnDagNode</span></code></p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MFnNurbsCurve</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -150,10 +135,10 @@ without creating a shape.</p>
 <span class="sig-name descname"><span class="pre">numAnchors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.numAnchors" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The number of anchors on this bezier curve.</p>
+<dd class="field-odd"><p>The number of anchors on this Bezier curve.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -161,8 +146,7 @@ without creating a shape.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.paramAtAnchor">
 <span class="sig-name descname"><span class="pre">paramAtAnchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.paramAtAnchor" title="Permalink to this definition"></a></dt>
-<dd><p>This is a fixed calculation, since anchors always ‘touch’ the curve at
-same parameter.</p>
+<dd><p>This is a fixed / static-only calculation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>anchorIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the anchor index</p>
@@ -174,57 +158,212 @@ same parameter.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.getControlPoints">
-<span class="sig-name descname"><span class="pre">getControlPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.getControlPoints" title="Permalink to this definition"></a></dt>
-<dd><p>Overloads <a class="reference internal" href="nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getControlPoints" title="paya.runtime.plugs.NurbsCurve.getControlPoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getControlPoints()</span></code></a> to
-add the <em>anchors</em> / <em>a</em> option.</p>
+<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.paramsAtAnchors">
+<span class="sig-name descname"><span class="pre">paramsAtAnchors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.paramsAtAnchors" title="Permalink to this definition"></a></dt>
+<dd><p>This is a fixed / static-only calculation. It evaluates slightly more
+quickly than repeated calls to <a class="reference internal" href="#paya.runtime.plugs.BezierCurve.paramAtAnchor" title="paya.runtime.plugs.BezierCurve.paramAtAnchor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtAnchor()</span></code></a>.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The U parameters at each Bezier anchor root.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.getCVAtAnchor">
+<span class="sig-name descname"><span class="pre">getCVAtAnchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.getCVAtAnchor" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>anchors/a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – organise the return into bezier anchor groups;
-see <a class="reference internal" href="../../paya/lib/nurbsutil.html#paya.lib.nurbsutil.itemsAsBezierAnchors" title="paya.lib.nurbsutil.itemsAsBezierAnchors"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.nurbsutil.itemsAsBezierAnchors()</span></code></a>; defaults to
-False</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anchorIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the index of the Bezier anchor to inspect</p></li>
+<li><p><strong>asPoint/ap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return a CV point position (the default)</p></li>
+<li><p><strong>asIndex/ai</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return a CV index; this will always be a
+value, even if <em>plug</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>plug/p</strong> – if <em>asPoint</em> is requested, return a plug, not just
+a value; defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The control points.</p>
+<dd class="field-even"><p>The point at the root CV of the specified anchor.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[<a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>], [dict]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>
+| <a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.pointAtAnchor">
+<span class="sig-name descname"><span class="pre">pointAtAnchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.pointAtAnchor" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anchorIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the index of the Bezier anchor to inspect</p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return an attribute, not just a value; defaults
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The position of the root CV at the specified anchor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a> | <a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.getCVsAtAnchor">
+<span class="sig-name descname"><span class="pre">getCVsAtAnchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asDict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.getCVsAtAnchor" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anchorIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the index of the anchor to inspect</p></li>
+<li><p><strong>asPoint/ap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return CV point positions (the default)</p></li>
+<li><p><strong>asIndex/ai</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return CV indices; indices are always
+returned as values, not scalar outputs, even if <em>plug</em> is
+<code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>plug/p</strong> – if <em>asPoint</em> is requested, return point outputs, not
+just values; defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>asDict/ad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – <p>returns the information in a
+dictionary with the following keys:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'in'</span></code>: the in-tangent point or index (may be omitted)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'root'</span></code>: the point or index for the main anchor CV</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'out'</span></code>: the out-tangent point or index (may be omitted)</p></li>
+</ul>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The CV indices or positions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>] | [<a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a>] |
+[<a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Point</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.getControlVerts">
+<span class="sig-name descname"><span class="pre">getControlVerts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.getControlVerts" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – return plugs rather than values;
+defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>anchors/a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – organise the return into bezier anchor groups;
+see <a class="reference internal" href="../../paya/lib/nurbsutil.html#paya.lib.nurbsutil.itemsAsBezierAnchors" title="paya.lib.nurbsutil.itemsAsBezierAnchors"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.nurbsutil.itemsAsBezierAnchors()</span></code></a>; defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The members of the <code class="docutils literal notranslate"><span class="pre">controlPoints</span></code> info array for this
+curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>],
+[<a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.matrixAtAnchor">
-<span class="sig-name descname"><span class="pre">matrixAtAnchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangentAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.matrixAtAnchor" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">matrixAtAnchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upObject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVectorSampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultToNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.matrixAtAnchor" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>anchorIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the anchor index</p></li>
-<li><p><strong>tangentAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to map to the anchor tangent,
-for example ‘-y’</p></li>
-<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the axis to map to the resolve up vector,
-for example ‘x’</p></li>
-<li><p><strong>upVector/upv</strong> (None, tuple, list, str,
+<li><p><strong>anchorIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the index of the anchor at which to
+construct a matrix</p></li>
+<li><p><strong>primaryAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the primary (aim) matrix axis, for example
+‘-y’</p></li>
+<li><p><strong>secondaryAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the secondary (up) matrix axis, for example
+‘x’</p></li>
+<li><p><strong>upVector/upv</strong> (None, str, tuple, list,
 <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – an explicit up vector; defaults to None</p></li>
-<li><p><strong>aimCurve/aic</strong> (None, str, <a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,
-<a class="reference internal" href="../nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>,
-<a class="reference internal" href="nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>) – an aim curve to derive up vectors from;
-defaults to None</p></li>
-<li><p><strong>closestPoint/cp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – pull points from the aim curve based on
-proximity, not matched parameter; defaults to True</p></li>
-<li><p><strong>globalScale/gs</strong> (None, str, float,
-<a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – ignored if not a plug; a baseline scalar;
-defaults to None</p></li>
-<li><p><strong>squashStretch/ss</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow squash-and-stretch on the tangent
-vector; defaults to False</p></li>
+<a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – if provided on its own, used directly; if combined
+with <em>upObject</em>, multiplied by the object’s world matrix, similar
+to the ‘Object Rotation Up’ mode on <a class="reference internal" href="../nodes/motionPath.html#paya.runtime.nodes.MotionPath" title="paya.runtime.nodes.MotionPath"><code class="xref py py-class docutils literal notranslate"><span class="pre">motion</span> <span class="pre">path</span></code></a> nodes; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>upObject/uo</strong> (None, str, <a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – similar to <a class="reference internal" href="../nodes/motionPath.html#paya.runtime.nodes.MotionPath" title="paya.runtime.nodes.MotionPath"><code class="xref py py-class docutils literal notranslate"><span class="pre">motion</span> <span class="pre">path</span></code></a> nodes, if provided on its own,
+used as an aiming interest (‘Object Up’ mode); if combined with
+<em>upVector</em>, the up vector is multiplied by the object’s world
+matrix (‘Object Rotation Up’ mode); defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>aimCurve/aic</strong> (None, str,
+<a class="reference internal" href="nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve</span></code></a>,
+<a class="reference internal" href="../nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.nodes.NurbsCurve</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – a curve from which to pull aiming interests,
+similar to the option on
+<a class="reference internal" href="../nodes/curveWarp.html#paya.runtime.nodes.CurveWarp" title="paya.runtime.nodes.CurveWarp"><code class="xref py py-class docutils literal notranslate"><span class="pre">curveWarp</span></code></a> nodes; defaults
+to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>closestPoint/cp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – pull points from <em>aimCurve</em> by proximity,
+not matched parameters; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>upVectorSampler/ups</strong> (None, str, <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code>,
+<a class="reference internal" href="../networks/curveUpVectorSampler.html#paya.runtime.networks.CurveUpVectorSampler" title="paya.runtime.networks.CurveUpVectorSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">CurveUpVectorSampler</span></code></a>) – an up vector sampler created using
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">createUpVectorSampler()</span></code>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>defaultToNormal/dtn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – when all other up vector options are
+exhausted, don’t fall back to any ‘default’ up vector sampler
+previously created using
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">createUpVectorSampler(setAsDefault=True)</span></code>;
+instead, use the curve normal (the curve normal will be used anyway
+if no default sampler is defined); defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>globalScale/gs</strong> (None, float, str, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – a baseline scaling factor; note that scale will
+be normalized in all cases, so if this is value rather than a plug,
+it will have no practical effect; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>squashStretch/ss</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow squashing and stretching of the
+<em>primaryAxis</em> on the output matrix; defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – force a dynamic output, or indicate that one or
+more of the arguments are plugs to skip checks; defaults to
+<code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A matrix at the specified anchor.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a>, <a class="reference internal" href="matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.inbetweenAnchors">
+<span class="sig-name descname"><span class="pre">inbetweenAnchors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numTweens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.inbetweenAnchors" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>numTweens/num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of anchors to insert between each
+pair of existing anchors; defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The edited Bezier curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.BezierCurve" title="paya.runtime.plugs.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.BezierCurve.subdivideAnchors">
+<span class="sig-name descname"><span class="pre">subdivideAnchors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subdivisions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.BezierCurve.subdivideAnchors" title="Permalink to this definition"></a></dt>
+<dd><p>Subdivides this Bezier curve by recursively adding knots between its
+anchors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subdivisions/sub</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of times to subdivide; defaults
+to 1</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The edited Bezier curve.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.BezierCurve" title="paya.runtime.plugs.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

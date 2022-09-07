@@ -1,6 +1,11 @@
 import inspect
 from functools import wraps
 
+class Undefined:
+    def __bool__(self):
+        return False
+
+undefined = Undefined()
 
 class short:
     """

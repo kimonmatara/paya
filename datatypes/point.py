@@ -1,6 +1,6 @@
 import pymel.core.datatypes as _dt
 from paya.util import short
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import paya.runtime as r
 
 
@@ -15,7 +15,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__add__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -44,7 +44,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__radd__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -75,7 +75,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__sub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -105,7 +105,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__rsub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -137,7 +137,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__mul__` to add
         support for 1D, 3D and 16D (matrix) plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -173,7 +173,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__rmul__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -211,7 +211,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__truediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -240,7 +240,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__rtruediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -270,7 +270,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__pow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -299,7 +299,7 @@ class Point:
         Overloads :meth:`pymel.core.datatypes.Point.__rpow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):

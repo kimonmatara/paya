@@ -1,7 +1,7 @@
 import pymel.util as _pu
 import paya.lib.names as _nm
 import paya.lib.attrs as _atr
-from paya.util import short, resolveFlags, LazyModule
+from paya.util import short, resolveFlags, LazyModule, undefined
 import paya.pools as _pl
 import paya.lib.names as _nm
 import maya.cmds as m
@@ -9,44 +9,59 @@ import maya.OpenMaya as om
 
 r = LazyModule('paya.runtime')
 
-
-class MakeName(object):
+class MakeName:
 
     def __get__(self, inst, instype):
-        @short(name='n', control='ct', inheritNames='inh')
-        def makeName(*elems, name=None, control=False, inheritNames=True):
+
+        @short(inherit='i',
+               padding='pad',
+               suffix='suf')
+        def makeName(*elems,
+                     inherit=undefined,
+                     padding=undefined,
+                     suffix=undefined):
             """
-            Generates a context-appropriate Maya name. Results will vary
-            depending on whether this method is called on a class or on a
-            node instance.
+            Constructs a node name based on :class:`~paya.lib.names.Name`
+            contexts. Results will vary depending on whether this method is
+            called on:
 
-            Construction is determined by the following keys inside
-            :mod:`paya.config`: ``inheritNames``, ``padding``,
-            ``suffixNodes``. Use the context manager functionality of
-            :mod:`paya.config` to override for specific blocks.
+            -  A class
+            -  A transform instance with a controller tag
+            -  A transform instance with shapes
+            -  A transform instance without shapes
+            -  A shape instance
+            -  Any other kind of node instance
 
-            :param \*elems: one or more name elements
-            :param name/n: elements contributed via ``name`` keyword
-                arguments; these will always be prepended; defaults to None
-            :type name/n: None, str, int, or list
-            :param bool control/ct: use the Paya suffix for controls;
-                defaults to False
-            :return: The node name.
-            :rtype: str
+            :alias: ``mn``
+            :return: The constructed node name.
+            :rtype: :class:`str`
             """
-            kwargs = {'inheritNames': inheritNames}
+            kw = {'padding': padding, 'inherit': inherit, 'suffix': suffix}
 
-            if control:
-                kwargs['control'] = True
+            if inst is None:
+                kw['nodeType'] = instype.__melnode__
 
             else:
-                if inst:
-                    kwargs['node'] = inst
+                nts = inst.nodeType(i=True)
+
+                if 'transform' in nts:
+                    if inst.isControl():
+                        kw['control'] = True
+
+                    else:
+                        shapes = inst.getShapes()
+
+                        if shapes:
+                            kw['nodeType'] = shapes[0].nodeType()
+                            kw['transform'] = True
+
+                        else:
+                            kw['nodeType'] = nts[-1]
 
                 else:
-                    kwargs['nodeType'] = instype.__melnode__
+                    kw['nodeType'] = nts[-1]
 
-            return _nm.make(name, *elems, **kwargs)
+            return _nm.Name.make(*elems, **kw)
 
         return makeName
 
@@ -55,84 +70,133 @@ class DependNode:
 
     #-----------------------------------------------------------|    Subtype management
 
-    __is_parsed_subtype__ = False
-    __supports_parsed_subtypes__ = False
-    __subtype_pool__ = None
-
     @classmethod
-    def getParsedSubclassForNode(cls, node):
-        """
-        :class:`~paya.pools.MissingTemplateError` will be raised if *node*
-        has a defined subtype which couldn't be sourced. Other failures,
-        for example an empty ``payaSubtype`` attribute, will merely issue
-        warnings.
-
-        :param node: the node for which to retrieve a parsed subtype class
-        :type node: :class:`~pymel.core.general.PyNode`
-        :return: The custom class, or ``None`` if one couldn't be retrieved.
-        """
-        # Attribute inspection must be done using API; using DependencyNode-
-        # derived methods will lead to cycles as they call PyNode.__new__
-        # and this method is itself called in Paya's __new__ hook
-        pool = cls.__subtype_pool__
-        nodeMObj = node.__apimobject__()
-        nodeMFn = om.MFnDependencyNode(nodeMObj)
-
+    def getSubtypePool(cls):
         try:
-            tagMObj = nodeMFn.attribute('payaSubtype')
+            return _pl.poolsByLongName[cls.__melnode__+'types']
 
-        except RuntimeError:
-            # No tag plug, rturn None
-            return
+        except KeyError:
+            pass
 
-        tagMPlug = om.MPlug(nodeMObj, tagMObj)
-        clsname = tagMPlug.asString()
-
-        if clsname:
-            try:
-                subtypeCls = pool.getByName(clsname)
-
-            except _pl.MissingTemplateError:
-                m.warning(
-                    "Couldn't source parsed {} subclass {}, skipping reassignment.".format(
-                    node.__class__.__name__, clsname
-                    )
-                )
-                return
-
-        else:
-            m.warning(
-                "Empty Paya subtype, skipping reassignment for object of type {}".format(node.__class__)
-            )
-
-            return
-
-        return subtypeCls
-
-    def expandClass(self, init=True):
+    def setSubtype(self, clsname):
         """
-        If this node type supports parsed subtypes, reads the subtype
-        attribute (if available) and attempts to source and assign the class
-        to the instance. See also :meth:`getParsedSubclassForNode`.
+        Initialises and populates the ``payaSubtype`` attribute.
 
+        .. note::
+
+            This does not modify class assignment. To switch to the specified
+            type, follow this up with :meth:`asSubtype`.
+
+        :param str clsname: the subtype class name
         :return: ``self``
+        :rtype: :class:`DependNode`
         """
-        subtype = self.getParsedSubclassForNode(self)
+        if not self.hasAttr('payaSubtype'):
+            self.addAttr('payaSubtype', dt='string')
 
-        if subtype is not None:
-            self.__class__ = subtype
-
-            if init:
-                self.__paya_subtype_init__()
+        attr = self.attr('payaSubtype')
+        attr.set(clsname)
 
         return self
 
-    def __paya_subtype_init__(self):
-        pass
+    def getSubtype(self):
+        """
+        :return: The contents of the ``payaSubtype`` attribute, if present and
+            populated, otherwise ``None``.
+        :rtype: :class:`str`, ``None``
+        """
+        if self.hasAttr('payaSubtype'):
+            attr = self.attr('payaSubtype')
+            out = attr.get()
+
+            if out:
+                return out
+
+    def getSubtypeClass(self, *name):
+        """
+        If this node has a configured ``payaSubtype`` attribute, and a
+        subtypes pool is defined for this node type, attempts to retrieve
+        the class.
+
+        If the operation fails, explanatory warnings are issued and ``None``
+        is returned.
+
+        :param str \*name: an optional override for the class name; if
+            provided, no attempt will be made to access the ``payaSubtype``
+            attribute
+        :return: The custom class, if one could be retrieved.
+        :rtype: :class:`type`, ``None``
+        """
+        pool = self.getSubtypePool()
+
+        if pool is None:
+            m.warning(("Subclassing {}: No subtypes pool for node type '{}'."
+                       ).format(self, self.__melnode__))
+
+            return
+
+        if name:
+            clsname = name[0]
+
+        else:
+            clsname = self.getSubtype()
+
+        if clsname is None:
+            m.warning("Subclassing {}: Undefined subtype.".format(self))
+
+        try:
+            return pool.getByName(clsname)
+
+        except _pl.MissingTemplateError:
+            m.warning(("Subclassing {}: Class '{}' could not be retrieved."
+                       ).format(self, clsname))
+
+    def asSubtype(self, *name):
+        """
+        If this node has a configured ``payaSubtype`` attribute, and a
+        subtypes pool is defined for this node type, attempts to retrieve
+        the class and assign it to this instance.
+
+        This is an in-place operation, but ``self`` is returned for
+        convenience. If the operation fails, explanatory warnings are issued
+        and reassignment is skipped.
+
+        :param str \*name: an optional override for the class name; if
+            provided, no attempt will be made to access the ``payaSubtype``
+            attribute
+        :return: ``self``
+        :rtype: :class:`DependNode`
+        """
+        cls = self.getSubtypeClass(*name)
+
+        if cls is not None:
+            self.__class__ = cls
+
+        return self
 
     #-----------------------------------------------------------|    Name management
 
-    makeName = MakeName()
+    makeName = mn = MakeName()
+
+    def rename(self, *name, **kwargs):
+        """
+        Overloads :meth:`pymel.core.nodetypes.DependNode.rename` to
+        turn *name* into an optional argument.
+
+        :param \*name: the name to use; if omitted, defaults to a contextual
+            name
+        :param \*\*kwargs: forwarded to
+            :meth:`pymel.core.nodetypes.DependNode.rename`
+        :return: ``self``
+        :rtype: :class:`DependNode`
+        """
+        if name:
+            name = name[0]
+
+        if not name:
+            name = self.makeName()
+
+        result = super(r.nodes.DependNode, self).rename(name, **kwargs)
 
     @short(stripNamespace='sns', stripTypeSuffix='sts')
     def basename(self, stripNamespace=False, stripTypeSuffix=False):
@@ -150,66 +214,50 @@ class DependNode:
 
     bn = basename
 
-    @short(uuid='uid', managedNames='mn')
-    def rename(self, *elems, ignoreShape=False,
-               uuid=False, managedNames=False):
+    #-----------------------------------------------------------|    Duplication
+
+    @short(name='n')
+    def duplicate(self, name=None, **kwargs):
         """
-        Overloads :func:`pymel.core.general.rename` to add the following:
+        Overloads :meth:`pymel.core.nodetypes.DependNode.duplicate` to add a
+            contextual default to *name/n*.
 
-        -   multiple name elements
-        -   optional name management
-
-        :param \*elems: one or more name elements; these will be strung
-            together with underscores; ignored if *uuid* is True
-        :type \*elems: None, str, int, tuple, list
-        :param ignoreShape: indicates that renaming of shape nodes below
-            transform nodes should be prevented; defaults to False
-        :param uuid: Indicates that the new name is actually a UUID, and that
-            the command should change the node’s UUID (In which case its name
-            remains unchanged); defaults to False
-        :param bool managedNames/mn: perform Paya name management, i.e.:
-
-            - inherit prefixes from :class:`~paya.lib.names.Name` blocks
-            - apply the type suffix
-        :return: ``self``
-        :rtype: :class:`~paya.runtime.nodes.DependNode`
+        :param str name/n: a name for the duplicate; defaults to a contextual
+            name
+        :param \*\*kwargs: forwarded to
+            :meth:`pymel.core.nodetypes.DependNode.duplicate`
+        :return: The duplicate node.
+        :rtype: :class:`DependNode`
         """
-        if uuid:
-            # Bail
-            return r.nodetypes.DependNode.rename(self, uuid=True)
+        if not name:
+            name = self.makeName()
 
-        if managedNames:
-            name = self.makeName(*elems)
-
-        else:
-            name = _nm.make(*elems, control=self.isControl(), inh=False)
-
-        r.nodetypes.DependNode.rename(self, name, ignoreShape=ignoreShape)
-        return self
+        return super(r.nodes.DependNode, self).duplicate(n=name, **kwargs)
 
     #-----------------------------------------------------------|    Constructors
 
     @classmethod
     @short(name='n')
-    def createNode(cls, name=None):
+    def createNode(cls, name=None, **kwargs):
         """
-        Object-oriented version of :func:`pymel.core.general.createNode` with
-        managed naming.
+        Object-oriented version of :func:`pymel.core.general.createNode`.
 
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, or list
-        :return: The constructed node.
-        :rtype: :class:`~pymel.core.general.PyNode`
+        :param str name/n: a name for the new node; defaults to a contextual
+            name
+        :param \*kwargs: forwarded to :func:`pymel.core.general.createNode`
+        :return: The node.
+        :rtype: :class:`DependNode`
         """
-        name = cls.makeName(name)
-        out = m.createNode(cls.__melnode__, n=name)
+        node = r.createNode(
+            cls.__melnode__,
+            name=name if name else cls.makeName(),
+            **kwargs)
 
-        if cls.__is_parsed_subtype__:
-            m.addAttr(out, ln='payaSubtype', dt='string')
-            clsname = cls.__name__
-            m.setAttr('{}.payaSubtype'.format(out), clsname, type='string')
+        if cls.__is_subtype__:
+            node.setSubtype(cls.__name__)
+            node.asSubtype(cls.__name__)
 
-        return r.PyNode(out)
+        return node
 
     @classmethod
     def createFromMacro(cls, macro, **overrides):

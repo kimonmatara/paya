@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.patch &mdash; paya 0.8.4 documentation</title>
+  <title>paya.patch &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="paya.plugtree" href="plugtree.html" />
-    <link rel="prev" title="paya.lib.xmlweights" href="lib/xmlweights.html" /> 
+    <link rel="prev" title="paya.nativeunits" href="nativeunits.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <img src="../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -44,25 +44,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
@@ -72,19 +56,17 @@
 <li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="environment.html">paya.environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">paya.examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoshapext.html">paya.geoshapext</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nativeunits.html">paya.nativeunits</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="runtime.html">paya.runtime</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test.html">paya.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startstop.html">paya.startstop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">paya.util</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -120,7 +102,7 @@
 <dt class="sig sig-object py" id="paya.patch.patchPyMEL">
 <span class="sig-name descname"><span class="pre">patchPyMEL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.patch.patchPyMEL" title="Permalink to this definition"></a></dt>
 <dd><p>Patches PyMEL so that it will return custom paya classes instead of
-its own. Called by <a class="reference internal" href="runtime.html#paya.runtime.Runtime.start" title="paya.runtime.Runtime.start"><code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code></a>.</p>
+its own. Called by <code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>quiet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – don’t print status messages; defaults to False</p>
@@ -132,7 +114,7 @@ its own. Called by <a class="reference internal" href="runtime.html#paya.runtime
 <dt class="sig sig-object py" id="paya.patch.unpatchPyMEL">
 <span class="sig-name descname"><span class="pre">unpatchPyMEL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.patch.unpatchPyMEL" title="Permalink to this definition"></a></dt>
 <dd><p>Reverts PyMEL to its ‘factory’ state. Called by
-<a class="reference internal" href="runtime.html#paya.runtime.Runtime.stop" title="paya.runtime.Runtime.stop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code></a>.</p>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>quiet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – don’t print status messages; defaults to False</p>
@@ -146,7 +128,7 @@ its own. Called by <a class="reference internal" href="runtime.html#paya.runtime
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="lib/xmlweights.html" class="btn btn-neutral float-left" title="paya.lib.xmlweights" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nativeunits.html" class="btn btn-neutral float-left" title="paya.nativeunits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="plugtree.html" class="btn btn-neutral float-right" title="paya.plugtree" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

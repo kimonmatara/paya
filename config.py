@@ -26,13 +26,6 @@ class Config(UserDict):
     """
     class Overrides:
         def __init__(self, inst, **overrides):
-            for key in overrides:
-                if key in inst['lockedFlags']:
-                    raise RuntimeError((
-                        "Configuration flag '{}' "+
-                        "can't be overriden.").format(key)
-                    )
-
             self.inst = inst
             self.overrides = overrides
 

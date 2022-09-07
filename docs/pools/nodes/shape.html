@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.nodes.Shape &mdash; paya 0.8.4 documentation</title>
+  <title>paya.runtime.nodes.Shape &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.runtime.nodes.SkinCluster" href="skinCluster.html" />
-    <link rel="prev" title="paya.runtime.nodes.PointOnCurveInfo" href="pointOnCurveInfo.html" /> 
+    <link rel="prev" title="paya.runtime.nodes.RemapValue" href="remapValue.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,30 +44,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Nodes</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../nodes_index.html">Node Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
@@ -88,22 +72,22 @@
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="remapValue.html">RemapValue</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -137,17 +121,20 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Shape">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Shape" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Shape.html#pymel.core.nodetypes.Shape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> <a class="reference internal" href="dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DagNode.html#pymel.core.nodetypes.DagNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Entity.html#pymel.core.nodetypes.Entity" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.ContainerBase.html#pymel.core.nodetypes.ContainerBase" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code></a> <a class="reference internal" href="dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Shape.createShape">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conformShapeName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intermediate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Shape.createShape" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conformShapeName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intermediate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Shape.createShape" title="Permalink to this definition"></a></dt>
 <dd><p>Basic shape constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – one or more name elements; defaults to None</p></li>
-<li><p><strong>under/u</strong> (None, str, <a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – a custom destination parent; defaults to None</p></li>
-<li><p><strong>conformShapeName/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>under</em> was omitted;
-rename the shape after it is reparented; defaults to True</p></li>
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the shape name; defaults to a contextual name</p></li>
+<li><p><strong>parent/p</strong> (None, str, <a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – a custom destination parent; defaults to None</p></li>
+<li><p><strong>conformShapeName/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>parent</em> was omitted;
+rename the shape after it is reparented; defaults to True if
+<em>parent</em> was provided, otherwise False</p></li>
 <li><p><strong>intermediate/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – create the shape as an intermediate
 object; defaults to False</p></li>
 </ul>
@@ -157,24 +144,6 @@ object; defaults to False</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.nodes.Shape.createNode">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Shape.createNode" title="Permalink to this definition"></a></dt>
-<dd><p>Object-oriented version of <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.general/pymel.core.general.createNode.html#pymel.core.general.createNode" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.core.general.createNode()</span></code></a> with
-managed naming.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name/n</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – one or more name elements; defaults to None</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The constructed node.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -212,7 +181,7 @@ itself.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.Shape.conformName">
 <span class="sig-name descname"><span class="pre">conformName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Shape.conformName" title="Permalink to this definition"></a></dt>
-<dd><p>Conforms this shape’s name to a Maya-standard name derived from the
+<dd><p>Conforms this shape’s name to a Maya-standard format derived from the
 transform parent.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -232,7 +201,7 @@ transform parent.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pointOnCurveInfo.html" class="btn btn-neutral float-left" title="paya.runtime.nodes.PointOnCurveInfo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="remapValue.html" class="btn btn-neutral float-left" title="paya.runtime.nodes.RemapValue" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="skinCluster.html" class="btn btn-neutral float-right" title="paya.runtime.nodes.SkinCluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

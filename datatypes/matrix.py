@@ -3,6 +3,7 @@ from functools import reduce
 import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
 
+import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
 import paya.runtime as r
 from paya.util import short, resolveFlags
@@ -26,12 +27,16 @@ class Matrix:
 
         :shorthand: ``cl``
 
-        :param str name/n: one or more name elements; defaults to None
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
         :param float size/siz: the locator display scale; defaults to 1.0
         :return: The locator.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        loc = r.nodes.Locator.createNode(n=name).getParent()
+        if not name:
+            name = r.Name.make(nt='locator', xf=True)
+
+        loc = r.spaceLocator(n=name)
         loc.attr('displayLocalAxis').set(True)
         loc.attr('localScale').set([size] * 3)
 
@@ -153,7 +158,7 @@ class Matrix:
         #-------------------------------------|    Fast bail
 
         if fast:
-            decomposition = self.decompose(
+            decomposition = matrix.decompose(
                 ro=xf.attr('ro').get(asString=True))
 
             for channel, state in zip(
@@ -171,8 +176,6 @@ class Matrix:
             return self
 
         #-------------------------------------|    Main implementation
-
-        matrix = self
 
         #-------------------------|    Disassemble
 
@@ -303,7 +306,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__add__` to add
         support for 16D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim is 16:
@@ -325,7 +328,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__add__` to add
         support for 16D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
 
@@ -350,7 +353,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__mul__` to add
         support for 16D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim is 16:
@@ -372,7 +375,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__rmul__` to add
         support for 3D and 16D plugs as well as simple types.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim is 3:
@@ -409,7 +412,7 @@ class Matrix:
         Uses the exclusive-or operator (``^``) to implement
         **point-matrix multiplication** for 3D values and plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 3:
             if isplug:
@@ -513,7 +516,7 @@ class Matrix:
             return self.hold()
 
         if default:
-            default = _mo.info(default)[0]
+            default = _tm.mathInfo(default)[0]
 
         if not any([translate, rotate, scale, shear]):
             return (default if default else self).hold()

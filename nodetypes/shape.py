@@ -9,62 +9,49 @@ class Shape:
     @classmethod
     @short(
         name='n',
-        under='u',
+        parent='p',
         conformShapeName='csn',
         intermediate='i'
     )
     def createShape(
             cls,
             name=None,
-            under=None,
-            conformShapeName=True,
+            parent=None,
+            conformShapeName=None,
             intermediate=False
     ):
         """
         Basic shape constructor.
 
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, tuple, list, str, int
-        :param under/u: a custom destination parent; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool conformShapeName/csn: ignored if *under* was omitted;
-            rename the shape after it is reparented; defaults to True
+        :param str name/n: the shape name; defaults to a contextual name
+        :param parent/p: a custom destination parent; defaults to None
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool conformShapeName/csn: ignored if *parent* was omitted;
+            rename the shape after it is reparented; defaults to True if
+            *parent* was provided, otherwise False
         :param bool intermediate/i: create the shape as an intermediate
             object; defaults to False
         :return: The shape node.
         :rtype: :class:`Shape`
         """
-        shape = cls.createNode(n=name)
-        parent = shape.getParent()
+        kwargs = {'ss': True}
 
-        if under:
-            newParent = r.PyNode(under)
-            r.parent(shape, newParent, r=True, shape=True)
-            r.delete(parent)
+        if parent:
+            kwargs['parent'] = parent
 
-            if conformShapeName:
-                shape.conformName()
+        if name is None:
+            if parent and conformShapeName:
+                name = str(parent).split('|')[-1]+'Shape'
+
+            else:
+                name = cls.makeName()
+
+        kwargs['name'] = name
+
+        shape = cls.createNode(**kwargs)
 
         if intermediate:
             shape.attr('intermediateObject').set(True)
-
-        return shape
-
-    @classmethod
-    @short(name='n')
-    def createNode(cls, name=None):
-        """
-        Object-oriented version of :func:`pymel.core.general.createNode` with
-        managed naming.
-
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, or list
-        :return: The constructed node.
-        :rtype: :class:`~pymel.core.general.PyNode`
-        """
-        shape = r.createNode(cls.__melnode__)
-        xf = shape.getParent()
-        xf.rename(cls.makeName(name))
 
         return shape
 
@@ -98,7 +85,6 @@ class Shape:
         :return: ``self``
         :rtype: :class:`Shape`
         """
-
         # Pseudo:
         #     If this shape is intermediate:
         #         give it lowest priority and derive a name from the xform

@@ -40,8 +40,7 @@ class Cluster:
         """
         Cluster constructor.
 
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, tuple, list, str, int
+        :param str name/n: a name for the cluster node; defaults to ``None``
         :param \*geos: one or more geometries to bind
         :type \*geos: None, str, tuple, list,
             :class:`~paya.runtime.nodes.DeformableShape`,
@@ -113,9 +112,14 @@ class Cluster:
             pass
 
         # Run
+        if name:
+            mayaKwargs['name'] = name
+
         result = r.cluster(*allGeos, **mayaKwargs)
         newNode = r.PyNode(result[0])
-        newNode.renameSystem(name)
+
+        if not name:
+            newNode.renameSystem()
 
         if newWeightedNode:
             customMatrix = False
@@ -239,17 +243,11 @@ class Cluster:
 
     #------------------------------------------------|    Name management
 
-    @short(managedNames='mn')
-    def renameSystem(self, *elems, managedNames=True):
+    def renameSystem(self, *name):
         """
-        Renames the entire cluster system, including the weighted node,
-        cluster handle shape and the cluster node itself.
+        Renames the cluster node, cluster handle shape and weighted node.
 
-        :param \*elems: one or more name elements
-        :type \*elems: None, tuple, list, int, str
-        :param bool managedNames/mn: inherit from
-            :class:`~paya.lib.names.Name` blocks and apply type suffixes;
-            defaults to True
+        :param str \*name: if omitted, defaults to contextual naming
         :return: ``self``
         :rtype: `Cluster`
         """
@@ -257,33 +255,19 @@ class Cluster:
         clusterHandleShape = self.getHandleShape()
         clusterHandle = self.getHandle()
 
-        # Rename the cluster handle
-        kw = {}
+        if name:
+            clusterName = name[0]
+            clusterHandleName = clusterName+'Handle'
+            clusterHandleShapeName = clusterHandleName+'Shape'
 
-        if managedNames:
-            kw['inh'] = True
+        else:
+            clusterName = self.makeName()
+            clusterHandleName = r.Name.make(nt='clusterHandle', xf=True)
+            clusterHandleShapeName = r.Name.make(nt='clusterHandle')
 
-            if clusterHandle.isControl():
-                kw['control'] = True
-
-            else:
-                kw['node'] = clusterHandle
-
-        clusterHandleName = _nm.make(*elems, **kw)
+        cluster.rename(clusterName)
+        clusterHandleShape.rename(clusterHandleShapeName)
         clusterHandle.rename(clusterHandleName)
-
-        # Rename the cluster handle shape
-        clusterHandleShape.conformName()
-
-        # Rename the cluster node itself
-        kw = {}
-
-        if managedNames:
-            kw['inh'] = True
-            kw['node'] = self
-
-        name = _nm.make(*elems, **kw)
-        self.rename(name)
 
         return self
 

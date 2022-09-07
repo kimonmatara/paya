@@ -6,28 +6,45 @@ paya.runtime.nodes.Joint
 
 .. py:class:: Joint(*args, **kwargs)
 
-    .. py:classmethod:: create(displayLocalAxis=True, worldMatrix=None, under=None, name=None)
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.Joint` :class:`~paya.runtime.nodes.Transform` :class:`~pymel.core.nodetypes.Transform` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    .. py:classmethod:: create(displayLocalAxis=True, worldMatrix=None, parent=None, name=None, freeze=True, decompose=True, rotateOrder='xyz', radius=1.0)
     
-        Creates a joint.
-        
-        :param bool displayLocalAxis/dla: display local axis; defaults to True
-        :param worldMatrix/wm: an optional world matrix for the joint;
-            defaults to None
-        :type worldMatrix/wm: None, list,
-            :class:`~paya.runtime.data.Matrix`
-        :param under/u: an optional parent for the joint; defaults to None
-        :type under/u: None, str, :class:`~pymel.core.general.PyNode`
-        :param name/n: one or more name elements for the joint; defaults to
-            None
-        :type name/n: None, str, list or tuple
+        :param bool displayLocalAxis/dla: display the local matrix
+            axes; defaults to ``True``
+        :param worldMatrix/wm: defines the joint's default pose; defaults
+            to ``None``
+        :type worldMatrix/wm: None, tuple, list, str,
+            :class:`~paya.runtime.data.Matrix`,
+            :class:`~paya.runtime.plugs.Matrix`
+        :param parent/p: an optional destination parent for the joint
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param str name/n: a name for the joint; defaults to ``None``
+        :param bool freeze/fr: zero-out transformations (except translate)
+            at the initial pose; defaults to ``True``
+        :param bool decompose/dec: if ``False``, connect to
+            ``offsetParentMatrix`` instead of driving the joint's SRT
+            channels; note that, if *freeze* is requested, the initial matrix
+             will *always* be applied via decomposition and then frozen;
+             defaults to ``True``
+        :param rotateOrder/ro: the rotate order for the joint; defaults
+            to ``'xyz'``
+        :type rotateOrder/ro: ``None``, :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param float radius/rad: the joint display radius; defaults to 1.0
         :return: The joint.
         :rtype: :class:`~paya.runtime.nodes.Joint`
     
-    .. py:method:: insertCube(size=1.0)
+    .. py:method:: insertCube(size=1.0, name=None)
     
         Inserts a poly cube under (including transform) under the joint
         to help test transformations visually.
         
+        :param str name/n: a name for the cube; defaults to ``None``
         :param float size/siz: a single scalar for the cube's width, height
             and depth; defaults to 1.0
         :return: The cube transform.

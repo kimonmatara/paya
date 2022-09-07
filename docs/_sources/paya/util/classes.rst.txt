@@ -1,0 +1,17 @@
+=================
+paya.util.classes
+=================
+
+.. py:module:: paya.util.classes
+
+.. py:function:: findKeyInClassDicts(key, cls, start=0)
+
+    Looks across every dict in the class MRO for the requested key and
+    retrieves the fist available value.
+    
+    :param str key: the key to look up
+    :param type cls: the class to inspect
+    :param int start: the start index on the MRO to start scanning from;
+        defaults to 0
+    :raises KeyError: The key wasn't found in any of the MRO dicts.
+    :return: The retrieved value.

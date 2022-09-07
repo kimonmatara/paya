@@ -6,6 +6,12 @@ paya.runtime.plugs.Vector
 
 .. py:class:: Vector(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.plugs.Math3D` :class:`~paya.runtime.plugs.Compound` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:method:: isTranslateChannel()
     
         :return: True if this is the ``translate`` channel of a transform
@@ -33,7 +39,7 @@ paya.runtime.plugs.Vector
         
         :param other: a matrix value or plug
     
-    .. py:method:: blend(other, weight=0.5, swap=False, includeLength=False, byVectorAngle=False)
+    .. py:method:: blend(other, weight=0.5, swap=False, byVectorAngle=None, includeLength=False, clockNormal=None, unwindSwitch=None)
     
         :param other: the vector that will be fully active when 'weight'
             is 1.0 (or 0.0, if 'swap' is True)
@@ -44,9 +50,23 @@ paya.runtime.plugs.Vector
         :param bool swap/sw: swap operands around; defaults to False
         :param bool byVectorAngle/bva: blend by rotating one vector towards
             the other, rather than via linear value interpolation; defaults
-            to False
-        :param bool includeLength/ilg: ignored if 'byVectorAngle' is False;
-            blend vector lengths (magnitudes) as well; defaults to False
+            to ``True`` if *clockNormal* is provided, otherwise ``False``
+        :param bool includeLength/ilg: blend vector lengths (magnitudes)
+            as well; defaults to False
+        :param clockNormal/cn: an optional winding vector; providing this
+            will enable the unwinding options when blending by angle;
+            defaults to None
+        :type clockNormal/cn: None, tuple, list, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param unwindSwitch/uws: ignored if *clockNormal* was omitted; an
+            integer value or plug to pick an angle unwinding mode:
+        
+            - ``0`` for shortest (the default)
+            - ``1`` for positive
+            - ``2`` for negative
+        
+        :type unwindSwitch/uws: int, str, :class:`~paya.runtime.plugs.Math1D`
         :return: The blended vector.
         :rtype: :class:`paya.runtime.plugs.Vector`
     
@@ -83,14 +103,24 @@ paya.runtime.plugs.Vector
         :return: This vector, normalized.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
-    .. py:method:: cross(other, normalize=False)
+    .. py:method:: cross(other, normalize=False, guard=False, inlineGate=None)
     
-        Returns the cross product of ``self`` and ``other``.
-        
         :param other: the other vector
-        :type other: :class:`list`, :class:`tuple`, :class:`~paya.runtime.plugs.Math3D`
-        :param bool normalize/nr: normalize the output; defaults to False
-        :return: :class:`paya.runtime.plugs.Vector`
+        :type other: :class:`tuple`, :class:`list`,
+            :class:`str`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool normalize/nr: normalize the output; defaults to
+            ``False``
+        :param bool guard/g: switch the node to 'No Operation' when the
+            input vectors are aligned in either direction; defaults to
+            ``False``
+        :param bool inlineGate/ig: if you have a precooked gate for alignment
+            (typically the output of a comparison operation), provide it here
+            to prevent redundant checks; if provided, will override *guard*
+            to ``True``; defaults to ``None``
+        :return: The cross product.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
     
     .. py:method:: angle(other, clockNormal=None)
     

@@ -15,6 +15,20 @@ class NurbsCurveParameter:
         """
         return len(self.indices()) > 1
 
+    def index(self):
+        """
+        :return: The U value at this parameter. If this is a range, only
+            the start of the range will be returned.
+        :rtype: :class:`float`
+        """
+        pat = r"^.*?\.u\[(.*?)\]$"
+        st = str(self)
+
+        content = re.match(pat, st).groups()[0]
+        elems = content.split(':')
+
+        return float(elems)[0]
+
     def indices(self):
         """
         :return: A tuple of either one or two indices
@@ -42,134 +56,111 @@ class NurbsCurveParameter:
 
     #-----------------------------------------------------|    Sampling
 
-    @short(plug='p')
-    def point(self, plug=False):
+    @short(worldSpace='ws', plug='p')
+    def point(self, worldSpace=False, plug=False):
         """
-        :alias: ``getWorldPosition`` / ``gwp``
-        :param bool plug/p: return a plug, not value; defaults to False
-        :return: A world position at this parameter.
-        """
-        return self.node().pointAtParam(float(self), p=plug)
-
-    gwp = getWorldPosition = point
-
-    @short(
-        squashStretch='ss',
-        upVector='upv',
-        upObject='upo',
-        aimCurve='aic',
-        globalScale='gs',
-        closestPoint='cp',
-        plug='p'
-    )
-    def matrix(
-            self,
-            tangentAxis,
-            upAxis,
-            squashStretch=False,
-            upVector=None,
-            aimCurve=None,
-            globalScale=None,
-            closestPoint=True,
-            plug=False
-    ):
-        """
-        :param str tangentAxis: the axis to align to the curve tangent
-        :param str upAxis: the axis to align to the resolved up vector
-        :param bool squashStretch/ss: incorporate tangent stretching
-            (dynamic only); defaults to False
-        :param upVector/upv: used as an up vector on its own, or extracted from
-            *upObject*; defaults to None
-        :type upVector/upv: None, list, tuple, str,
-            :class:`~paya.runtime.data.Vector`,
+        :param bool worldSpace/ws: return a world-space position;
+            defaults to ``False``
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: A point position at this parameter.
+        :rtype: :class:`~paya.runtime.data.Point` |
             :class:`~paya.runtime.plugs.Vector`
-        :param aimCurve/aic: an up curve; defaults to None
-        :type aimCurve/aic: str, :class:`~paya.runtime.nodes.Transform`,
-            :class:`~paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.plugs.NurbsCurve`
-        :param globalScale/gs: used to drive scaling on dynamic matrices only;
-            the scale will be normalised; defaults to None
-        :type globalScale/gs: None, float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool closestPoint/mc: pull points from *aimCurve* based on
-            proximity rather than matched parameter; defaults to True
-        :param bool plug/p: force a dynamic output; defaults to False
-        :return: A matrix at the specified parameter, constructed using the
-            most efficient DG configuration for the given options.
-        :rtype: :class:`~paya.runtime.plugs.Matrix`,
-            :class:`~paya.runtime.data.Matrix`
         """
-        return self.node().matrixAtParam(
-            float(self),
-            tangentAxis,
-            upAxis,
-            ss=squashStretch,
-            upv=upVector,
-            aic=aimCurve,
-            gs=globalScale,
-            cp=closestPoint,
-            p=plug
-        )
+        return self.node().pointAtParam(
+            float(self), p=plug, ws=worldSpace)
 
-    gwm = getWorldMatrix = matrix
+    @short(plug='p')
+    def getWorldPosition(self, plug=False):
+        """
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: A world-space position at this parameter.
+        :rtype: :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.plugs.Vector`
+        """
+        return self.point(ws=True, p=plug)
 
     @short(plug='p')
     def fraction(self, plug=False):
         """
-        :param bool plug/p: force a dynamic output; defaults to False
-        :return: The length fraction at the given parameter
-        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: The curve length fraction at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
         return self.node().fractionAtParam(float(self), p=plug)
 
     @short(plug='p')
-    def length(self, param, plug=False):
+    def length(self, plug=False):
         """
-        :param bool plug/p: force a dynamic output; defaults to False
-        :return: The curve length at the given parameter.
-        :rtype: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: The curve length at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
         return self.node().lengthAtParam(float(self), p=plug)
 
-    @short(normalize='nr')
+    @short(plug='p', normalize='nr')
     def tangent(self, plug=False, normalize=False):
         """
-        :param bool plug/p: force a dynamic output; defaults to False
-        :param bool normalize/nr: normalize the tangent; defaults to False
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :param bool normalize/nr: return the normalized tangent;
+            defaults to ``False``
         :return: The curve tangent at this parameter.
-        :rtype: :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
         """
-        return self.node().tangentAtParam(float(self), p=plug, nr=normalize)
+        return self.node().tangentAtParam(float(self), nr=normalize, p=plug)
+
+    @short(plug='p', normalize='nr')
+    def normal(self, plug=False, normalize=False):
+        """
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :param bool normalize/nr: return the normalized normal;
+            defaults to ``False``
+        :return: The curve normal at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+        """
+        return self.node().normalAtParam(float(self), nr=normalize, p=plug)
 
     #-----------------------------------------------------|    Edits
 
+    @short(plug='p')
     def detach(self):
         """
         :return: The resulting shape segments.
         :rtype: [:class:`~paya.runtime.nodes.NurbsCurve`]
         """
-        return self.node().detach(self)
+        return self.node().detach(float(self))
 
-    def subCurve(self, *toParameter):
+    @short(toParameter='tp')
+    def subCurve(self, toParameter=None):
         """
-        Returns a sub-curve (via a ``subCurve`` node). If this is a ranged
-        parameter, its range is used. Otherwise, *toParameter* is used for
-        the end.
-
-        :param \*toParameter: the end parameter for the segment if this
-            parameter is not ranged.
-        :type \*toParameter: float, string,
-            :class:`~paya.runtime.comps.NurbsCurveParameter`
-            :class:`~paya.runtime.plugs.Math1D`
-        :return: The resulting shape.
+        :param toParameter:
+        :return:
         """
-        indices = list(self.indices())
+        if toParameter is None:
+            params = self.indices()
 
-        if len(indices) < 2:
-            if toParameter:
-                indices.append(toParameter[0])
+            if len(params) is not 2:
+                raise ValueError(
+                    "Please specify 'toParameter', or "+
+                    "call subCurve() on a ranged component."
+                )
 
-            else:
-                raise RuntimeError("Need an end parameter.")
+        else:
+            if isinstance(toParameter, str):
+                try:
+                    toParameter = r.Attribute(toParameter)
 
-        return self.node().subCurve(*indices)
+                except:
+                    try:
+                        toParameter = float(r.Component(toParameter))
+                    except:
+                        raise TypeError("Can't parse {}".format(toParameter))
+
+            params = [float(self), toParameter]
+
+        return self.node().subCurve(*params)

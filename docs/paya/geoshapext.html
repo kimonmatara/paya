@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>paya.geoshapext &mdash; paya 0.9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="paya.lib" href="lib.html" />
+    <link rel="prev" title="paya.examples.worm_rig" href="examples/worm_rig.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/basics.html">Basics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../types_index.html">Types</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../paya.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environment.html">paya.environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">paya.examples</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">paya.geoshapext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools.html">paya.pools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startstop.html">paya.startstop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html">paya.util</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../paya.html">paya</a> &raquo;</li>
+      <li>paya.geoshapext</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/paya/geoshapext.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-paya.geoshapext">
+<span id="paya-geoshapext"></span><h1>paya.geoshapext<a class="headerlink" href="#module-paya.geoshapext" title="Permalink to this headline"></a></h1>
+<p>Tools for adapting and copying functionality on geo plug classes over to
+their shape counterparts.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.geoshapext.makeDoc">
+<span class="sig-name descname"><span class="pre">makeDoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.geoshapext.makeDoc" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sources</strong> ([<code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionType</span></code>]) – the functions to inspect for docstrings, in
+order of preference</p></li>
+<li><p><strong>notes</strong> – optional notes to prepend; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The constructed docstring.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.geoshapext.copyToShape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">copyToShape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">copyToShapeKwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.geoshapext.copyToShape" title="Permalink to this definition"></a></dt>
+<dd><p>Decorator-with-arguments. Use it on plug functions to signal that they
+should be copied over to the shape class. Any keyword arguments
+captured by <code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code> are forwarded to
+<a class="reference internal" href="#paya.geoshapext.copyPlugFuncToShapeClassDict" title="paya.geoshapext.copyPlugFuncToShapeClassDict"><code class="xref py py-func docutils literal notranslate"><span class="pre">copyPlugFuncToShapeClassDict()</span></code></a>.</p>
+<p>Note that the shape classes won’t pick up these ‘sends’ unless they
+are themselves built, or rebuilt, using <a class="reference internal" href="#paya.geoshapext.ShapeExtensionMeta" title="paya.geoshapext.ShapeExtensionMeta"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeExtensionMeta</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.geoshapext.copyToShape.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.geoshapext.copyToShape.__call__" title="Permalink to this definition"></a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.geoshapext.copyPlugFuncToShapeClassDict">
+<span class="sig-name descname"><span class="pre">copyPlugFuncToShapeClassDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plugFunc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictKeys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">className</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapeClassDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editsHistory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpaceOnly</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bezierInterop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.geoshapext.copyPlugFuncToShapeClassDict" title="Permalink to this definition"></a></dt>
+<dd><p>Copies a plug function (method) to the dictionary of an under-construction
+shape class, with appropriate modifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plugFunc</strong> – the function (method) on the plug class</p></li>
+<li><p><strong>dictKeys</strong> ([<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – all the dictionary keys under which the function appears
+(there may be several if ‘aliases’ are used)</p></li>
+<li><p><strong>className</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the shared name of the shape and plug classes</p></li>
+<li><p><strong>shapeClassDict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – the dictionary of the shape class being
+constructed</p></li>
+<li><p><strong>editsHistory/eh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – indicates that the plug function should be
+wrapped to use the shape’s history input and return shapes; defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>worldSpaceOnly/wso</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – don’t add any <em>worldSpace/ws</em> keyword argument;
+always run the method on the shape’s world-space geo output; defaults
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>bezierInterop/bio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>editsHistory</em> is <code class="docutils literal notranslate"><span class="pre">False</span></code>;
+consider NURBS and Bezier types to be interoperable (i.e. connect
+a NURBS output directly to a hero shape and vice versa, without
+swapping the shape)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.geoshapext.expandShapeClassDict">
+<span class="sig-name descname"><span class="pre">expandShapeClassDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.geoshapext.expandShapeClassDict" title="Permalink to this definition"></a></dt>
+<dd><p>Expands the dictionary of an under-construction shape class with any
+methods in the namesake plugs class that have been decorated with
+<a class="reference internal" href="#paya.geoshapext.copyToShape" title="paya.geoshapext.copyToShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">&#64;copyToShape</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the shape class</p></li>
+<li><p><strong>classDict</strong> – the dictionary of the shape class</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.geoshapext.ShapeExtensionMeta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ShapeExtensionMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dct</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.geoshapext.ShapeExtensionMeta" title="Permalink to this definition"></a></dt>
+<dd><p>When this metaclass is assigned to, or used to rebuild, a template class
+for a geometry shape, it will look in the matching plug class for any
+methods decorated with <a class="reference internal" href="#paya.geoshapext.copyToShape" title="paya.geoshapext.copyToShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">&#64;copyToShape</span></code></a> and copy them
+over.</p>
+<p class="rubric">Inheritance</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples/worm_rig.html" class="btn btn-neutral float-left" title="paya.examples.worm_rig" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lib.html" class="btn btn-neutral float-right" title="paya.lib" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.lib.nurbsutil &mdash; paya 0.8.4 documentation</title>
+  <title>paya.lib.nurbsutil &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,7 +20,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="paya.lib.plugops" href="plugops.html" />
+    <link rel="next" title="paya.lib.skel" href="skel.html" />
     <link rel="prev" title="paya.lib.names" href="names.html" /> 
 </head>
 
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,25 +44,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
@@ -72,33 +56,30 @@
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html">paya.examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geoshapext.html">paya.geoshapext</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../lib.html">paya.lib</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="loopback.html">paya.lib.loopback</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.lib.nurbsutil</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plugops.html">paya.lib.plugops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="typeman.html">paya.lib.typeman</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xmlweights.html">paya.lib.xmlweights</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../nativeunits.html">paya.nativeunits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../test.html">paya.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../startstop.html">paya.startstop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util.html">paya.util</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -131,7 +112,7 @@
 <span id="paya-lib-nurbsutil"></span><h1>paya.lib.nurbsutil<a class="headerlink" href="#module-paya.lib.nurbsutil" title="Permalink to this headline"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.nurbsutil.getKnotList">
-<span class="sig-name descname"><span class="pre">getKnotList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numCVs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.nurbsutil.getKnotList" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getKnotList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numCVs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bezier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.nurbsutil.getKnotList" title="Permalink to this definition"></a></dt>
 <dd><p>Given a number of CVs and a degree, returns a knot list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -145,23 +126,6 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.nurbsutil.conformUParamArg">
-<span class="sig-name descname"><span class="pre">conformUParamArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uParam</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.nurbsutil.conformUParamArg" title="Permalink to this definition"></a></dt>
-<dd><p>If <em>uParam</em> is a component, returns its float form; otherwise returns
-an attribute instance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>uParam</strong> (float, str,
-<a class="reference internal" href="../../pools/comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a>,
-<a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the U curve parameter argument to conform</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The conformed parameter.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,7 +177,7 @@ bezier curve, otherwise False.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="names.html" class="btn btn-neutral float-left" title="paya.lib.names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="plugops.html" class="btn btn-neutral float-right" title="paya.lib.plugops" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="skel.html" class="btn btn-neutral float-right" title="paya.lib.skel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,7 +1,7 @@
 import pymel.core.datatypes as _dt
 import pymel.util as _pu
 from paya.util import short, LazyModule
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 
 r = LazyModule('paya.runtime')
 
@@ -15,15 +15,18 @@ class Vector:
         """
         :shorthand: ``cl``
 
-        :param name/n: one or more optional name elements; defaults to None
-        :rtype name/n: None, list, int, str
+        :param str name/n: an optional name for the locator transform; defaults to
+            a contextual name
         :param float size/siz: a single scalar for the locator's
             ``localScale`` channels; defaults to 1.0
         :return: A locator with this 3D compound piped into its
             ``translate`` channel.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        locShape = r.nodes.Locator.createNode(n=name)
+        if not name:
+            name = r.Name.make(nt='locator', xf=True)
+
+        locShape = r.spaceLocator(n=name)
         locShape.attr("localScale").set([size] * 3)
         loc = locShape.getParent()
         loc.attr('t').set(self)
@@ -40,7 +43,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__add__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -69,7 +72,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__radd__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -100,7 +103,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__sub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -130,7 +133,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__rsub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -162,7 +165,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__mul__` to add
         support for 1D, 3D and 16D (matrix) plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -198,7 +201,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__rmul__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -228,7 +231,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__truediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -257,7 +260,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__rtruediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -288,7 +291,7 @@ class Vector:
         :param other: a matrix plug or value
         :type other: list, :class:`~paya.runtime.data.Matrix`, :class:`~paya.runtime.plugs.Matrix`
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 16:
             if isplug:
@@ -311,7 +314,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__pow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -340,7 +343,7 @@ class Vector:
         Overloads :meth:`pymel.core.datatypes.Vector.__rpow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 3):
@@ -424,15 +427,15 @@ class Vector:
                 "A clock normal is required to perform angle unwinding."
             )
 
-        other, otherDim, otherIsPlug = _mo.info(other)
+        other, otherDim, otherIsPlug = _tm.mathInfo(other)
 
         if clockNormal:
-            clockNormal, cnDim, cnIsPlug = _mo.info(clockNormal)
+            clockNormal, cnDim, cnIsPlug = _tm.mathInfo(clockNormal)
 
         else:
             cnIsPlug = False
 
-        weight, weightDim, weightIsPlug = _mo.info(weight)
+        weight, weightDim, weightIsPlug = _tm.mathInfo(weight)
 
         if swap:
             first, second = other, self
@@ -503,8 +506,8 @@ class Vector:
             ``angle``.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        axisVector, axisVectorDim, axisVectorIsPlug = _mo.info(axisVector)
-        angle, angleDim, angleIsPlug = _mo.info(angle)
+        axisVector, axisVectorDim, axisVectorIsPlug = _tm.mathInfo(axisVector)
+        angle, angleDim, angleIsPlug = _tm.mathInfo(angle)
 
         hasPlugs = axisVectorIsPlug or angleIsPlug
 
@@ -538,7 +541,7 @@ class Vector:
         :return: The dot product.
         :rtype: :class:`Vector` or :class:`~paya.runtime.plugs.Math1D`
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             node = r.nodes.VectorProduct.createNode()
@@ -558,36 +561,64 @@ class Vector:
 
         return out
 
-    @short(normalize='nr')
-    def cross(self, other, normalize=False):
+    @short(normalize='nr', guard='g', inlineGate='ig')
+    def cross(self, other, normalize=False, inlineGate=None, guard=False):
         """
         Returns the cross product of this vector and 'other'.
-
-        Extends the base PyMEL method in these ways:
-
-        -   Adds the 'normalize' keyword argument
-        -   Works with plugs as well as values (if 'other' is a plug,
-            the output will also be a plug)
 
         :param other: the other vector
         :type other: :class:`~paya.runtime.plugs.Math3D`, :class:`Vector`,
             :class:`Point`, list, str
         :param bool normalize/nr: normalize the output; defaults to False
+        :param bool guard/g: if the two vectors are in-line, then:
+
+            -   if *other* is a plug, switch the
+                :class:`vectorProduct <paya.runtime.nodes.VectorProduct>`
+                to 'No Operation'
+
+            -   if *other* is a value, return ``self``
+
+            Defaults to ``False``.
+        :param inlineGate/ig: if you already have a boolean gate or
+            value state to indicate whether the vectors are in-line,
+            provide it here to prevent redundant checks; if this is
+            provided, *guard/g* will be overriden to ``True``; defaults
+            to ``None``
+        :type inlineGate/ig: :class:`bool`, :class:`str`,
+            :class:`~paya.runtime.plugs.Math1D`
         :return: The cross product.
         :rtype: :class:`Vector` or :class:`~paya.runtime.plugs.Math3D`
         """
-        other, dim, isplug = _mo.info(other)
+        hasPlugs = False
+        other, otherDim, otherIsPlug = _tm.mathInfo(other)
 
-        if isplug:
-            node = r.nodes.VectorProduct.createNode()
-            node.attr('operation').set(2)
-            node.attr('input1').set(self)
-            node.attr('input2').put(other, p=isplug)
+        if otherIsPlug:
+            hasPlugs = True
 
-            if normalize:
-                node.attr('normalizeOutput').set(True)
+        if inlineGate is not None:
+            guard = None
+            inlineGate, igDim, igIsPlug = _tm.mathInfo(other)
 
-            return node.attr('output')
+            if igIsPlug:
+                hasPlugs = True
+
+        if hasPlugs:
+            return r.nodes.VectorProduct.createAsCross(
+                self, other, nr=normalize, ig=inlineGate,
+                g=guard
+            )
+
+        if guard:
+            dot = abs(self.dot(other))
+            inline = dot.ge(1.0-1e-7)
+
+            if inline:
+                out = self
+
+                if normalize:
+                    out = self.normal()
+
+                return out
 
         out = _dt.Vector.cross(self, other)
 
@@ -612,7 +643,7 @@ class Vector:
         :rtype: :class:`~paya.runtime.plugs.Angle` or
             :class:`~paya.runtime.data.Angle`
         """
-        other, otherDim, otherIsPlug  = _mo.info(other)
+        other, otherDim, otherIsPlug  = _tm.mathInfo(other)
 
         if clockNormal is None:
             complete = False
@@ -620,7 +651,7 @@ class Vector:
 
         else:
             complete = True
-            clockNormal, cnDim, cnIsPlug = _mo.info(clockNormal)
+            clockNormal, cnDim, cnIsPlug = _tm.mathInfo(clockNormal)
             hasPlugs = cnIsPlug or otherIsPlug
 
         if complete:
@@ -663,7 +694,7 @@ class Vector:
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
         """
-        other = _mo.info(other)[0]
+        other = _tm.mathInfo(other)[0]
         return (self.dot(other) / other.dot(other)) * other
 
     def rejectFrom(self, other):
@@ -678,7 +709,7 @@ class Vector:
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
         """
-        other = _mo.info(other)[0]
+        other = _tm.mathInfo(other)[0]
         cosTheta = self.dot(other, nr=True)
         rejection = self - (self.length() * cosTheta) * other.normal()
         return rejection

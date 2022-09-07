@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.data.EulerRotation &mdash; paya 0.8.4 documentation</title>
+  <title>paya.runtime.data.EulerRotation &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.runtime.data.Matrix" href="matrix.html" />
-    <link rel="prev" title="Data Types" href="../data_index.html" /> 
+    <link rel="prev" title="paya.runtime.data.Angle" href="angle.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,33 +44,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../data_index.html">Data</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Node Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../data_index.html">Data Types</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="point.html">Point</a></li>
@@ -78,13 +63,11 @@
 <li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -118,7 +101,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.runtime.data.EulerRotation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EulerRotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.EulerRotation" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.EulerRotation.html#pymel.core.datatypes.EulerRotation" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.arrays/pymel.util.arrays.Array.html#pymel.util.arrays.Array" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">MEulerRotation</span></code></p>
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.data.EulerRotation.createLocator">
 <span class="sig-name descname"><span class="pre">createLocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.data.EulerRotation.createLocator" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -126,17 +111,15 @@
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">cl</span></code></p>
 </dd>
 <dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>name/n</strong> – one or more optional name elements; defaults to None</p>
+<dd class="field-even"><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – an optional name for the locator transform; defaults
+to a contextual name</p>
 </dd>
-<dt class="field-odd">Rtype name/n</dt>
-<dd class="field-odd"><p>None, list, int, str</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A locator with this euler rotation piped into its
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A locator with this euler rotation piped into its
 <code class="docutils literal notranslate"><span class="pre">rotate</span></code> channels.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -262,7 +245,7 @@ include rotation order.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../data_index.html" class="btn btn-neutral float-left" title="Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="angle.html" class="btn btn-neutral float-left" title="paya.runtime.data.Angle" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="matrix.html" class="btn btn-neutral float-right" title="paya.runtime.data.Matrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

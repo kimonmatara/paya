@@ -1,4 +1,4 @@
-import paya.lib.plugops as _po
+import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
 from paya.util import short
 import paya.runtime as r
@@ -100,12 +100,12 @@ class CurveUpVectorPtKeysSampler(r.networks.CurveUpVectorRemapSampler):
                     "should be of length "+
                     "paramUpVectorKeys-1.")
 
-            unwindSwitches = [_mo.info(x)[0] for x in unwindSwitch]
+            unwindSwitches = [_tm.mathInfo(x)[0] for x in unwindSwitch]
 
         else:
             unwindSwitches = [unwindSwitch] * numSegments
 
-        curve = _po.asGeoPlug(curve)
+        curve = _tm.asGeoPlug(curve)
         segmentResolutions = cls._resolvePerSegmentResolutions(
             numSegments, resolution
         )
@@ -153,7 +153,7 @@ class CurveUpVectorPtKeysSampler(r.networks.CurveUpVectorRemapSampler):
                         tangentSampleParams):
                     with r.Name('tangent', x+1):
                         tangents.append(
-                            curve.tangentAtParam(tangentSampleParam)
+                            curve.tangentAtParam(tangentSampleParam, p=True)
                         )
 
                 if inner:

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discovering Functionality &mdash; paya 0.9 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Types" href="../../types_index.html" />
+    <link rel="prev" title="Recommended Workflow" href="recommended_workflow.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../basics.html">Basics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="importing_and_patching.html">Importing and Patching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nativeunits.html">Native Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recommended_workflow.html">Recommended Workflow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Discovering Functionality</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../basics.html">Basics</a> &raquo;</li>
+      <li>Discovering Functionality</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/basics/discovering_functionality.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="discovering-functionality">
+<h1>Discovering Functionality<a class="headerlink" href="#discovering-functionality" title="Permalink to this headline"></a></h1>
+<p>For a semi-structured introduction to Paya, visit the <em>Rigging</em> sections of this documentation in-order. For a flat
+reference of every Paya class, see <a class="reference internal" href="../../types_index.html"><span class="doc">Types</span></a>. Inside Maya, call <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> on any class or method to
+print information from <a class="reference internal" href="../../types_index.html"><span class="doc">Types</span></a>, or use <a class="reference external" href="https://docs.python.org/3/library/functions.html#dir" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">dir()</span></code></a> for name lookups:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">paya.runtime</span> <span class="k">as</span> <span class="nn">r</span>
+
+<span class="k">with</span> <span class="n">r</span><span class="p">:</span>
+    <span class="c1"># Get full class documentation</span>
+    <span class="n">loc</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+    <span class="bp">cls</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="vm">__class__</span>
+    <span class="n">help</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="c1"># prints information on paya.runtime.nodes.Transform</span>
+
+    <span class="c1"># Get information on a specific method</span>
+    <span class="n">help</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">createOffsetGroups</span><span class="p">)</span>
+
+    <span class="c1"># Look for a method based on a hunch</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">loc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;offsetGroup&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># Result: createOffsetGroups</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="recommended_workflow.html" class="btn btn-neutral float-left" title="Recommended Workflow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../types_index.html" class="btn btn-neutral float-right" title="Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 import paya.runtime as r
 
-def getKnotList(numCVs, degree):
+def getKnotList(numCVs, degree, bezier=False):
     """
     Given a number of CVs and a degree, returns a knot list.
 
@@ -9,10 +9,25 @@ def getKnotList(numCVs, degree):
     :return: The knot list.
     :rtype: [int]
     """
-    numbers = list(range(numCVs-(degree-1)))
-    head = [numbers[0]] * degree
-    tail = [numbers[-1]] * degree
-    return head + numbers[1:-1] + tail
+    if bezier:
+        if legalNumCVsForBezier(numCVs) and degree is 3:
+            numAnchors = int((numCVs + 2) / 3)
+            out = []
+
+            for i in range(numAnchors):
+                out += [i] * 3
+
+            return out
+
+        raise RuntimeError(
+            "Invalid number of CVs for bezier, or degree is not 3."
+        )
+
+    else:
+        numbers = list(range(numCVs-(degree-1)))
+        head = [numbers[0]] * degree
+        tail = [numbers[-1]] * degree
+        return head + numbers[1:-1] + tail
 
 def itemsAsBezierAnchors(items):
     """

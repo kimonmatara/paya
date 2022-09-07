@@ -1,3 +1,4 @@
+import re
 import maya.cmds as m
 from paya.util import short
 import pymel.util as _pu
@@ -19,7 +20,6 @@ class SkinCluster:
         skinMethod='sm',
         toSelectedBones='tsb',
         weightDistribution='wd',
-        nameFromGeo='nfg',
         geometry='g',
         influence='inf',
         replace='rep'
@@ -36,7 +36,6 @@ class SkinCluster:
             skinMethod=0, # linear
             toSelectedBones=True,
             weightDistribution=0, # distance
-            nameFromGeo=False,
             geometry=None,
             influence=None,
             multi=False,
@@ -52,7 +51,6 @@ class SkinCluster:
             'influence' keyword arguments used instead on creation
         -   A select subset of flags are pre-loaded with common defaults (see
             below)
-        -   Added 'nameFromGeo / nag' option
         -   Added 'multi' option
         -   Added 'replace' option
 
@@ -61,9 +59,8 @@ class SkinCluster:
         :param float dropoffRate/dr: see Maya help; defaults to 4.5
         :param maximumInfluences/mi: see Maya help; defaults to None
         :type maximumInfluences/mi: None, int
-        :param name/n: one or more name elements for the deformer; ignored if
-            'nameFromGeo' is True; defaults to None
-        :type name/n: list, tuple, None, str, int
+        :param str name/n: a name for the skinCluster node; defaults to
+            ``None``
         :param int normalizeWeights/nw: see Maya help; defaults to 1
             (interactive)
         :param bool obeyMaximumInfluences/omi: see Maya help; defaults to
@@ -72,8 +69,6 @@ class SkinCluster:
         :param bool toSelectedBones/tsb: see Maya help; defaults to True
         :param int weightDistribution/wd: see Maya help; defaults to 0
             (distance)
-        :param bool nameFromGeo/nfg: derive deformer names from geometry
-            names; defaults to False
         :param geometry/g: the geometry to bind to; defaults to None
         :type geometry/g: list, tuple,
             :class:`~paya.runtime.nodes.DeformableShape`,
@@ -106,6 +101,7 @@ class SkinCluster:
             raise RuntimeError("No influences specified.")
 
         buildKwargs = {
+            'n': name if name else cls.makeName(),
             'bm': bindMethod,
             'dr': dropoffRate,
             'nw': normalizeWeights,
@@ -128,7 +124,6 @@ class SkinCluster:
                     result = cls.create(
                         inf=infls,
                         g=geo,
-                        nfg=nameFromGeo,
                         n=name,
                         rep=replace,
                         **buildKwargs
@@ -151,19 +146,6 @@ class SkinCluster:
 
             if existing:
                 r.delete(existing)
-
-        # Resolve name
-
-        if nameFromGeo:
-            geoBasename = geos[0
-                ].toTransform().basename(sts=True, sns=True)
-
-            name = cls.makeName(geoBasename)
-
-        else:
-            name = cls.makeName(name)
-
-        buildKwargs['n'] = name
 
         # Exec
         buildArgs = infls + geos
@@ -318,9 +300,8 @@ class SkinCluster:
 
         :param geo: the geometry to copy to
         :type geo: str, :class:`~paya.runtime.nodes.DagNode`
-        :param name/n: one or more name elements for the new skinCluster;
-            defaults to None
-        :type name/n: None, str, int, list, tuple
+        :param str name/n: a name for the new skinCluster; defaults to
+            ``None``
         :param bool replace/rep: if the destination geometry already has a
             skinCluster, remove it; defaults to True
         :param bool weights/w: copy weights too; defaults to True
@@ -358,10 +339,9 @@ class SkinCluster:
         macro['geometry'] = [geoShape]
 
         if not name:
-            geoXf = geoShape.getParent()
-            name = geoXf.basename(sns=True)
+            name = str(self)+'_copy'
 
-        macro['name'] = self.makeName(name)
+        macro['name'] = name
 
         newSkin = self.createFromMacro(macro)
 
@@ -464,21 +444,36 @@ class SkinCluster:
         a reversed geometry suitable for use as a pre-deformation blend shape
         target.
 
-        :param correctiveShape: the corrective shape
-        :type correctiveShape: str,
-            :class:`~paya.runtime.nodes.GeometryShape`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param name/n: one or more name elements for the new geometry;
-            these will be applied to its transform; defaults to None
-        :type name/n: None, str, int, tuple, list
+        :param correctiveShape: the corrective (sculpt) shape
+        :type correctiveShape: :class:`str`,
+            :class:`~pymel.core.general.Shape`,
+            :class:`~pymel.core.general.Transform`
+        :param str name/n: a name for the inverted shape node; defaults to
+            ``None``
         :return: The pre-deformation target.
         :rtype: :class:`~paya.runtime.nodes.GeometryShape`
         """
-        corShape = r.PyNode(correctiveShape).toShape()
-        corXf = corShape.getParent()
-        posedGeo = r.deformer(self, q=True, g=True)[0].getParent()
-        outShape = r.PyNode(r.invertShape(posedGeo, corXf)).getShape()
-        name = outShape.__class__.makeName(n=name)
-        outShape.getParent().rename(name)
+        correctiveShape = r.PyNode(correctiveShape).toShape()
+        correctiveXf = correctiveShape.getParent()
 
-        return outShape
+        posedGeoXf = r.deformer(self, q=True, g=True)[0].getParent()
+
+        outGeoXf = r.PyNode(r.invertShape(posedGeoXf, correctiveXf))
+        outGeoShape = outGeoXf.getShape()
+
+        if not name:
+            name = outGeoShape.makeName()
+
+        outGeoShape.rename(name)
+
+        mt = re.match(r"^(.*?)Shape$", name)
+
+        if mt:
+            outGeoXf.rename(mt.groups()[0])
+
+        else:
+            outGeoXf.rename(
+                r.Name.make(nt=outGeoShape.nodeType(), xf=True)
+            )
+
+        return outGeoXf

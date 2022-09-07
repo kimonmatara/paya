@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.plugtree &mdash; paya 0.8.4 documentation</title>
+  <title>paya.plugtree &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
@@ -33,7 +33,7 @@
             <img src="../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -44,25 +44,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
@@ -72,19 +56,17 @@
 <li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="environment.html">paya.environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">paya.examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoshapext.html">paya.geoshapext</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lib.html">paya.lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nativeunits.html">paya.nativeunits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="runtime.html">paya.runtime</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test.html">paya.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startstop.html">paya.startstop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="util.html">paya.util</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -183,6 +165,76 @@ similarly to <code class="docutils literal notranslate"><span class="pre">nodeTy
 <dt class="sig sig-object py" id="paya.plugtree.expandTree">
 <span class="sig-name descname"><span class="pre">expandTree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.expandTree" title="Permalink to this definition"></a></dt>
 <dd><p>Called on import to expand the explicit <code class="docutils literal notranslate"><span class="pre">tree</span></code> dictionary procedurally.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.subtree">
+<span class="sig-name descname"><span class="pre">subtree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.subtree" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the root node name</p></li>
+<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – the dictionary to start scanning from; defaults to
+the global tree if omitted</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.10)"><strong>KeyError</strong></a> – <em>name</em> was not found in the tree.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A sub-section of the tree, from the first encountered
+occurence of <em>name</em>. The root itself won’t be included.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.flatKeys">
+<span class="sig-name descname"><span class="pre">flatKeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">subtree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.flatKeys" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*subtree</strong> (<em>dct</em>) – an optional subtree dictionary to process;
+if omitted, defaults to the global tree</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>All keys in the tree, recursively, with duplicates removed.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.getParent">
+<span class="sig-name descname"><span class="pre">getParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.getParent" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The type to inspect.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The parent type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.plugtree.geoTypes">
+<span class="sig-name descname"><span class="pre">geoTypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.plugtree.geoTypes" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A flat list of all ‘Geometry’ children (recursively).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

@@ -6,12 +6,18 @@ paya.runtime.data.EulerRotation
 
 .. py:class:: EulerRotation(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.datatypes.EulerRotation` :class:`~pymel.util.arrays.Array` :class:`~maya.OpenMaya.MEulerRotation`
+
     .. py:method:: createLocator(name=None)
     
         :shorthand: ``cl``
         
-        :param name/n: one or more optional name elements; defaults to None
-        :rtype name/n: None, list, int, str
+        :param str name/n: an optional name for the locator transform; defaults
+            to a contextual name
         :return: A locator with this euler rotation piped into its
             ``rotate`` channels.
         :rtype: :class:`~paya.runtime.nodes.Transform`

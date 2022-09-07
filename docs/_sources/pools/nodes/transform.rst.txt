@@ -6,7 +6,13 @@ paya.runtime.nodes.Transform
 
 .. py:class:: Transform(*args, **kwargs)
 
-    .. py:classmethod:: create(dagPath=None, name=None, under=None, displayLocalAxis=False, rotateOrder='xyz', worldMatrix=None)
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.Transform` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    .. py:classmethod:: create(dagPath=None, name=None, parent=None, displayLocalAxis=False, rotateOrder='xyz', worldMatrix=None)
     
         Creates transform nodes.
         
@@ -16,13 +22,11 @@ paya.runtime.nodes.Transform
             ``worldMatrix`` will only be applied to the last (innermost)
             group; defaults to None
         :type dagPath/dp: None, str
-        :param name/n: one or more name elements; ignored if ``dagPath`` is
-            provided; defaults to None
-        :type name/n: int, str, list, tuple or None
-        :param under/u: an optional parent for the transform; if this is
+        :param str name/n: the node name; defaults to ``None``
+        :param parent/p: an optional parent for the transform; if this is
             combined with ``dagPath``, then this node's DAG path will be
             prepended; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool displayLocalAxis/dla: display the transform's local axes;
             defaults to False
         :param rotateOrder/ro: the transform's rotate order; defaults to 'xyz'
@@ -34,14 +38,14 @@ paya.runtime.nodes.Transform
         :return: The transform.
         :rtype: :class:`~paya.runtime.nodes.Transform`
     
-    .. py:classmethod:: createControl(name=None, under=None, shape='cube', size=1.0, color=None, worldMatrix=None, keyable=None, channelBox=None, rotateOrder='xyz', asControl=True, offsetGroups='offset', pickWalkParent=None, lineWidth=None)
+    .. py:classmethod:: createControl(name=None, parent=None, shape='cube', size=1.0, color=None, worldMatrix=None, keyable=None, channelBox=None, rotateOrder='xyz', asControl=True, offsetGroups='offset', pickWalkParent=None, lineWidth=None)
     
         Creates rig controls. Also available directly on :mod:`paya.runtime`.
         
-        :param name/n: one or more name elements
-        :type name/n: None, str, int, list
-        :param under/u: an optional parent for the control; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param str name/n: an optional explicit name for the control; defaults
+            to a contextual name
+        :param parent/p: an optional parent for the control; defaults to None
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
         :param str shape/sh: the name of a library shape to apply to the control;
             defaults to 'cube'
         :param color/col: an optional override color index for the control;
@@ -50,7 +54,7 @@ paya.runtime.nodes.Transform
         :param float size: a uniform scaling factor for the control shape;
             defaults to 1.0
         :param worldMatrix/wm: the world matrix for the control; if this is
-            omitted then, if ``under`` is provided, the matrix is copied from the
+            omitted then, if *parent* is provided, the matrix is copied from the
             destination parent; otherwise, it defaults to the identity matrix
         :type worldMatrix/wm: list, :class:`~paya.runtime.data.Matrix`, None
         :param list keyable/k: a list of channels to set to keyable on the
@@ -72,18 +76,6 @@ paya.runtime.nodes.Transform
             width; defaults to None
         :return: The generated control.
         :rtype: :class:`~paya.runtime.nodes.Transform`
-    
-    .. py:method:: duplicate(name=None, managedNames=False)
-    
-        Overloads the base PyMEL method for added naming options.
-        
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, tuple, list
-        :param bool managedNames/mn: inherit name elements from
-            :class:`~paya.lib.names.Name` blocks and apply type suffixes;
-            defaults to False
-        :return: The duplicated objects.
-        :rtype: [:class:`~paya.runtime.nodes.Transform`]
     
     .. py:method:: toShape()
     
@@ -157,14 +149,15 @@ paya.runtime.nodes.Transform
         :return: ``self``
         :rtype: :class:`~paya.runtime.nodes.Transform`
     
-    .. py:method:: createOffsetGroups(*suffixes)
+    .. py:method:: createOffsetGroups(*descriptors)
     
-        :param \*suffixes: one or more offset group suffixes; defaults to
-            'offset'
-        :type \*suffixes: list, tuple, str
-        :return: One or more transformationally-matched offset groups for this
-            transform, in order of innermost to outermost.
-        :type: list of :class:`~paya.runtime.nodes.Transform`
+        Creates transformationally-matched offset ('zero') groups.
+        
+        :param \*descriptors: base names for the offset groups, from
+            innermost to outermost; if omitted, defaults to ``'offset'``
+        :type \*descriptors: :class:`str`, [:class:`str`]
+        :return: The offset groups, from innermost to outermost.
+        :rtype: [:class:`Transform`]
     
     .. py:method:: conformShapeNames(includeIntermediateShapes=False, shapeList=None)
     

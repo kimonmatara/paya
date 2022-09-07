@@ -2,46 +2,26 @@ Paya: PyMEL for Riggers
 =======================
 
 Paya is an object-oriented toolkit for Maya riggers. Unlike other libraries, it doesn't re-wrap ``maya.cmds`` or the
-OpenMaya API. Instead, it adds functionality to PyMEL types at runtime for an integrated and familiar experience.
+`OpenMaya <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=Maya_SDK_Maya_Python_API_html>`_ API. Instead, it adds
+functionality to `PyMEL <https://help.autodesk.com/view/MAYAUL/2022/ENU/?guid=__PyMel_index_html>`_ types at runtime
+for an integrated and familiar experience.
 
-Included is the most comprehensive, and intuitive, implementation of maths rigging using Python operators available
-anywhere, with over 100 methods for linear algebra, trigonometry and more.
+Included is the most comprehensive, and intuitive, implementation of :doc:`maths rigging using Python operators
+<maths_rigging>` available anywhere, with over 100 methods for linear algebra, trigonometry and more.
 
 Customisation is easy, and goes far beyond PyMEL's
 `virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
 for attribute (including subtype), component and data types with true inheritance for the first time.
 
-.. admonition:: New in version 0.8
+.. admonition:: New in version 0.9
 
-    .. rubric:: Total Curve Madness
+    *   Configure up vectors on NURBS and Bezier curves once, and have the information picked up automatically
+        by methods such as ``matrixAtParam`` or
+        ``fitChain``
+    *   Brand new implementations for
+        `parallel transport <https://www.semanticscholar.org/paper/Parallel-Transport-Approach-to-Curve-Framing-Hanson-Ma/ed416d01742e5e704357538c6817312ca6d8cb38?p2df>`_
+    *   This version introduces a few **breaking changes** to streamline the codebase. See the
+        release notes  for the full lowdown.
 
-    *   Extensive sampling and editing methods on NURBS and Bezier curve shapes, plugs and components
-        curves.
-    *   Complete curve framing: extract dynamic and static matrices from any point, parameter,
-        length or fraction of a NURBS or Bezier curve.
-    *   Distribute joints and drive chains with ease; control up vectors explicitly or with
-        aim curves.
-    *   True, evaluated curve length locking.
-    *   Use plug methods to work fully procedurally in the DG and only create shapes
-        where you need them.
-    *   Create two- and three-point circular arcs that won't disappear with an error when the input points
-        are in-line.
-    *   Use ``clusterAll()`` to cluster-up curves with automatic merging of overlapping
-        CVs.
-    *   Options to manage line widths added to the control shape methods and elsewhere.
-
-    .. rubric:: Across the Board
-
-    *   A standard constructor and smart editing methods for cluster deformers.
-    *   A standard constructor for curveWarp deformers.
-    *   New ``maintainOffset/mo`` and ``worldSpace`` options for ``decomposeAndApply()``,
-        and a dedicated ``applyViaOpm()`` method
-    *   New methods to manage procedural history edits  in Maya-standard ways:
-        ``getOrigPlug()``,
-        ``getHistoryPlug()``,
-        ``deleteHistory()`` and
-        ``getShapeMFn()``
-    *   New maths methods: ``gatedClamp()`` and ``asShearMatrix()``
-    *   And more!
 
 Full documentation can be found `here <https://kimonmatara.github.io/paya/>`_.

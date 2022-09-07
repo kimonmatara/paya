@@ -6,10 +6,8 @@ paya.lib.skel
 
 .. py:class:: Chain(*joints)
 
-    .. py:staticmethod:: __new__(*joints)
-    
-        Create and return a new object.  See help(type) for accurate signature.
-    
+
+
     .. py:classmethod:: getFromStartEnd(startJoint, endJoint)
     
         :param startJoint: the root joint for the chain
@@ -27,16 +25,16 @@ paya.lib.skel
             terminate before the first branch.
         :rtype: :class:`Chain`
     
-    .. py:classmethod:: createFromMatrices(matrices, under=None)
+    .. py:classmethod:: createFromMatrices(matrices, parent=None)
     
         Creates a chain from matrices. The joints will match the matrices
         exactly; no attempt is made to orient the chain.
         
         :param matrices: the matrices to use
-        :param under/u: an optional parent for the chain; defaults to None
+        :param parent/p: an optional parent for the chain; defaults to None
         :return: :class:`Chain`
     
-    .. py:classmethod:: createFromPoints(points, downAxis, upAxis, upVector, under=None, tolerance=1e-07)
+    .. py:classmethod:: createFromPoints(points, downAxis, upAxis, upVector, parent=None, tolerance=1e-07)
     
         Builds a chain from points. The side ('up') axis will be calculated
         using cross products, but those will be biased towards the reference
@@ -50,7 +48,7 @@ paya.lib.skel
         :param upVector: one up vector hint, or one vector per point
         :type upVector: tuple, list, :class:`~paya.runtime.data.Vector`,
             [tuple, list, :class:`~paya.runtime.data.Vector`]
-        :param under/u: an optional parent for the chain; defaults to None
+        :param parent/p: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getChainedAimMatrices`
         :return: The constructed chain.
@@ -168,24 +166,25 @@ paya.lib.skel
         :return: The newly-generated joints.
         :rtype: list of :class:`~paya.runtime.nodes.Joint`
     
-    .. py:method:: duplicate(name=None, startNumber=1)
+    .. py:method:: duplicate(startNumber=1)
     
-        Duplicates this chain, with smart reparenting if it's not contiguous.
+        Duplicates this chain. Joints will be renamed with contextual. Use
+        :class:`~paya.lib.names.Name` blocks to modify.
         
-        :param name/n: one or more name elements
-        :type name/n: list, str, int
-        :param int startNumber/sn: the number to start from; defaults to 1
-        :return: The chain duplicate.
-        :rtype: :class:`~paya.lib.skel.Chain`
+        :param int startNumber/sn: the starting number for the joint renumbering;
+            defaults to ``1``
+        :return: The duplicated chain.
+        :rtype: :class:`Chain`
     
-    .. py:method:: rename(*elems, startNumber=1)
+    .. py:method:: rename(startNumber=1)
     
-        Renames this chain. Numbers will be added before the suffix.
+        Renames this chain contextually. Use :class:`~paya.lib.names.Name`
+        blocks to modify.
         
-        :param \*elems: one or more name elements
-        :type \*elems: list, str, int
-        :param int startNumber/sn: the number to start from; defaults to 1
+        :param int startNumber/sn: the start number for the chain renumbering;
+            defaults to ``1``
         :return: ``self``
+        :rtype: :class:`Chain`
     
     .. py:method:: compose()
     
@@ -305,6 +304,12 @@ paya.lib.skel
         :param bool skipEnd/ske: don't drive the end joint; defaults to False
 
 .. py:class:: Bone(*joints)
+
+
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.lib.skel.Chain`
 
     .. py:method:: bones()
     

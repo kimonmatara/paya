@@ -6,6 +6,12 @@ paya.runtime.plugs.Math1D
 
 .. py:class:: Math1D(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:method:: __add__(other, swap=False)
     
         Implements **addition** (``+``).
@@ -66,6 +72,17 @@ paya.runtime.plugs.Math1D
     
         Implements unary negation (``-``).
         :return: ``self * -1.0``
+    
+    .. py:method:: normal(scalar=True)
+    
+        :param bool scalar/s: if this is ``True``, normalization will
+            be performed as ``self / self.get()``; if it's ``False``,
+            ``self - self.get()`` will be performed instead; defaults
+            to True
+        :return: A normalized output for this plug. Normalization will be
+            skipped, and ``self`` will be returned, if the currrent value
+            of this plug is already 1.0 (for *scalar*) or 0.0.
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
     
     .. py:method:: setSign(positive)
     
@@ -299,7 +316,7 @@ paya.runtime.plugs.Math1D
         :return: The selected output.
         :rtype: :class:`Attribute`
     
-    .. py:method:: blend(other, weight=0.5)
+    .. py:method:: blend(other, weight=0.5, swap=False)
     
         Blends this output towards ``other``.
         
@@ -307,6 +324,7 @@ paya.runtime.plugs.Math1D
         :type other: 1D value type, or :class:`Math1D`
         :param weight/w: 'other' will be fully active at 1.0; defaults to 0.5
         :type weight/w: 1D value type or :class:`Math1D`
+        :param bool swap/sw: swap operands; defaults to False
         :return: The blended output.
         :rtype: :class:`Math1D`
     

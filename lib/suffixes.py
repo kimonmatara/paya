@@ -1,24 +1,3 @@
-"""
-Administers type suffixes of the kind typically found in Maya pipelines. These
-are defined inside ``paya/lib/suffixes.json``, and are derived from the 'tags'
-in the `Maya Module Index <https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=__Nodes_index_html>`_.
-
-Suffixes are applied according to this rule:
-
--   If the node is a transform, then:
-
-    -   If the node has a shape, the lookup is the shape's node type
-    -   Otherwise, the lookup is the transform's node type
-
--   Otherwise:
-
-    -   If the node is a shape, no suffix is applied
-    -   Otherwise, the lookup is the shape's node type
-
-Once read, suffixes are held in the ``suffixes`` global variable of this
-module.
-"""
-
 import os
 import re
 import json
@@ -35,35 +14,49 @@ filepath = os.path.join(
 global suffixes
 suffixes = {}
 
+#-------------------------------------------------------------------|    Analysis / extractions
+
+def isTypeSuffix(string):
+    """
+    Checks if 'string' looks like a type suffix, i.e. it's a group of
+    uppercase letters starting with a non-number, or is a value inside
+    :attr:`paya.lib.suffixes.suffixes`.
+
+    :param string: The string to inspect
+    :return: ``True`` if 'string' looks like a type suffix, otherwise
+        ``False``.
+    :rtype: bool
+    """
+    if re.match(r"^[A-Z][A-Z0-9]*$", string):
+        return True
+
+    global suffixes
+    return string in suffixes.values()
+
+def getFromName(name):
+    """
+    Extracts a type suffix from a node name.
+
+    :param str name: the name to inspect
+    :return: The extracted suffix, if any.
+    :rtype: :class:`str`, ``None``
+    """
+    name = str(name).split('|')[-1].split(':')[-1]
+    last = name.split('_')[-1]
+
+    if isTypeSuffix(last):
+        return last
+
 #-------------------------------------------------------------------|    Node inspection
 
 def getKeyFromNode(node):
-    """
-    Given a Maya node, returns the appropriate key to use for suffix lookups.
-
-    If the node is a (strict) transform then:
-    -   If it has a controller tag, then 'payaControl' is returned
-    -   Otherwise, if it has a shape, the shape's node type is returned
-    -   Otherwise, 'transform' is returned
-
-    Otherwise:
-    -   If the node is a shape, None is returned
-    -   Otherwise, the node's type is returned
-
-    :param node: the node to inspect
-    :type node: PyNode or str
-    :return: The suffix lookup.
-    :rtype: str
-    """
     node = str(node)
 
     nts = m.nodeType(node, i=True)
     nt = nts[-1]
 
     if nt == 'transform':
-        tag = m.controller(node, q=True)
-
-        if tag:
+        if m.controller(node, q=True):
             return 'payaControl'
 
         shapes = m.listRelatives(node, shapes=True)
@@ -154,21 +147,6 @@ def learnFromHelp(htmlpath):
     suffixes.update(out)
 
     print("Learned {} suffix(es).".format(count))
-
-def getFromName(name):
-    """
-    Extracts a type suffix from a node name.
-
-    :param str name: the name to inspect
-    :return: The extracted suffix, if any.
-    """
-    pat = r"^(.*?_)?([A-Z]+)$"
-
-    name = name.split('|')[-1].split(':')[-1]
-    mt = re.match(pat, name)
-
-    if mt:
-        return mt.groups()[-1]
 
 def learnFromScene():
     """

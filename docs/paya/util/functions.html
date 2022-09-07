@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.util.functions &mdash; paya 0.8.4 documentation</title>
+  <title>paya.util.functions &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="paya.util.iterables" href="iterables.html" />
-    <link rel="prev" title="paya.util.accessor" href="accessor.html" /> 
+    <link rel="prev" title="paya.util.classes" href="classes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,25 +44,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
@@ -72,14 +56,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../environment.html">paya.environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html">paya.examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geoshapext.html">paya.geoshapext</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lib.html">paya.lib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nativeunits.html">paya.nativeunits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../test.html">paya.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../startstop.html">paya.startstop</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../util.html">paya.util</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="accessor.html">paya.util.accessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="classes.html">paya.util.classes</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">paya.util.functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="iterables.html">paya.util.iterables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules.html">paya.util.modules</a></li>
@@ -89,10 +76,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -124,13 +107,18 @@
   <section id="module-paya.util.functions">
 <span id="paya-util-functions"></span><h1>paya.util.functions<a class="headerlink" href="#module-paya.util.functions" title="Permalink to this headline"></a></h1>
 <dl class="py class">
+<dt class="sig sig-object py" id="paya.util.functions.Undefined">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Undefined</span></span><a class="headerlink" href="#paya.util.functions.Undefined" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="paya.util.functions.short">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">short</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short" title="Permalink to this definition"></a></dt>
 <dd><p>Decorator with keyword arguments, used to mimic Maya’s ‘shorthand’
 flags.</p>
-<p>Example:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@short</span><span class="p">(</span><span class="n">numJoints</span><span class="o">=</span><span class="s1">&#39;nj&#39;</span><span class="p">)</span>
+<dl class="field-list">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@short</span><span class="p">(</span><span class="n">numJoints</span><span class="o">=</span><span class="s1">&#39;nj&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">makeJoints</span><span class="p">(</span><span class="n">numJoints</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
     <span class="p">[</span><span class="o">...</span><span class="p">]</span>
 
@@ -138,7 +126,8 @@ flags.</p>
 <span class="n">makeJoints</span><span class="p">(</span><span class="n">nj</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-</div></blockquote>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.util.functions.short.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.short.__call__" title="Permalink to this definition"></a></dt>
@@ -199,13 +188,44 @@ only be used for tuples and lists; defaults to None</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.util.functions.sigCollectsKwargs">
+<span class="sig-name descname"><span class="pre">sigCollectsKwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.sigCollectsKwargs" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.Signature" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">inspect.Signature</span></code></a>) – the signature object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the signature object collects keyword arguments,
+otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.util.functions.sigWithAddedKwargs">
+<span class="sig-name descname"><span class="pre">sigWithAddedKwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signature</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.util.functions.sigWithAddedKwargs" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signature</strong> (<a class="reference external" href="https://docs.python.org/3/library/inspect.html#inspect.Signature" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">inspect.Signature</span></code></a>) – the original signature object</p></li>
+<li><p><strong>**kwargs</strong> – defines keywords arguments, with defaults, to add to
+the signature copy.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A copy of <em>signature</em> with the passed keyword arguments mixed-in.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="accessor.html" class="btn btn-neutral float-left" title="paya.util.accessor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="classes.html" class="btn btn-neutral float-left" title="paya.util.classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="iterables.html" class="btn btn-neutral float-right" title="paya.util.iterables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

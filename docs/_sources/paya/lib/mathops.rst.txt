@@ -4,36 +4,18 @@ paya.lib.mathops
 
 .. py:module:: paya.lib.mathops
 
-.. py:function:: isVectorValueOrPlug(item)
-
-    :param item: the item to inspect
-    :return: ``True`` if *item* is a vector value or attribute, otherwise
-        False
-    :rtype: bool
-
-.. py:class:: NativeUnits(*args, **kwargs)
-
-    Context manager. Switches Maya to centimetres and radians. New-scene /
-    open-scene / save-scene events are compensated for with API callbacks.
-
-    .. py:staticmethod:: __new__(*args, **kwargs)
-    
-        Create and return a new object.  See help(type) for accurate signature.
-
-.. py:function:: nativeUnits(f)
-
-    Decorator version of :class:`NativeUnits`.
-
 .. py:function:: floatRange(start, end, numValues)
 
-    A variant of Python's :class:`range` for floats.
+    A variant of Python's :class:`range` for floats and float plugs.
     
-    :param float start: the minimum value
-    :param float end: the maximum value
+    :param start: the minimum value
+    :type start: float, :class:`~paya.runtime.plugs.Math1D`
+    :param end: the maximum value
+    :type end: float, :class:`~paya.runtime.plugs.Math1D`
     :param int numValues: the number of values to generate
     :return: A list of float values between ``start`` and ``end``,
         inclusively.
-    :rtype: list
+    :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
 
 .. py:class:: LinearInterpolator(*args, **kwargs)
 
@@ -50,6 +32,10 @@ paya.lib.mathops
             interp[20] = 40
             print(interp[11])
             # Result: 31.0
+
+    .. rubric:: Inheritance
+
+    :class:`~collections.UserDict` :class:`~collections.abc.MutableMapping` :class:`~collections.abc.Mapping` :class:`~collections.abc.Collection` :class:`~collections.abc.Sized` :class:`~collections.abc.Iterable` :class:`~collections.abc.Container`
 
 .. py:function:: chaseNones(source)
 
@@ -72,38 +58,18 @@ paya.lib.mathops
     :return: A list with no ``None`` members.
     :rtype: list
 
-.. py:function:: resolveNumberOrFractionsArg(arg)
+.. py:function:: blendScalars(scalarA, scalarB, weight=0.5)
 
-    Loosely conforms a ``numberOrFractions`` user argument. If the
-    argument is an integer, a range of floats is returned. Otherwise,
-    the argument is passed through without further checking.
-
-.. py:function:: expandVectorArgs(*args)
-
-    Expands *args*, stopping at anything that looks like a vector value
-    or plug.
+    Blends between two scalar values or plugs.
     
-    :param \*args: the arguments to expand
-    :return: The expanded arguments.
-
-.. py:function:: conformVectorArg(arg, listLength=None)
-
-    Conforms *arg* into a single vector value or plug, or to a list of vectors
-    of the required length (to assign, say, a reference vector to every point
-    in a chaining operation).
-    
-    This is loosely checked. Edge cases, like the user passing non-vector
-    values, aren't caught.
-    
-    :param arg: the user vector argument to wrangle
-    :type arg: tuple, list, str, :class:`~paya.runtime.plugs.Vector`,
-        :class:`~paya.runtime.data.Vector`
-    :param listLength/ll: if this is specified, then the argument will be
-        conformed, by iterable multiplication, to a list of this length;
-        if it's omitted, a single vector will be returned; defaults to None
-    :return: The conformed vector argument.
-    :rtype: list, :class:`~paya.runtime.plugs.Vector`,
-        :class:`~paya.runtime.data.Vector`
+    :param scalarA: the first scalar
+    :type scalarA: float, str, :class:`~paya.runtime.plugs.Math1D`
+    :param scalarB: the second scalar
+    :type scalarB: float, str, :class:`~paya.runtime.plugs.Math1D`
+    :param weight/w: the weight; when this is at 1.0, *scalarB*
+        will have fully taken over; defaults to 0.t
+    :type weight/w: float, str, :class:`~paya.runtime.plugs.Math1D`
+    :return:
 
 .. py:function:: multMatrices(*matrices)
 
@@ -262,3 +228,95 @@ paya.lib.mathops
     :return: Chained-aiming matrices, suitable for drawing or driving chains
         or control hierarchies.
     :rtype: [:class:`~paya.runtime.plugs.Matrix`]
+
+.. py:function:: parallelTransport(normal, tangents, fromEnd=False)
+
+    Implements **parallel transport** as described in the
+    `Houdini demonstration by Manuel Casasola Merkle
+    <https://www.sidefx.com/tutorials/parallel-transport/>`_
+    based on the `paper by Hanson and Ma
+    <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.65.7632&rep=rep1&type=pdf>`_.
+    
+    If any of the arguments are plugs, the outputs will be plugs as well. The
+    first output normal is a pass-through of the *normal* argument.
+    
+    :param normal: the starting normal (or up vector)
+    :type normal: list, tuple, :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+    :param tangents: the tangent samples along the curve
+    :type tangents: [list, tuple, :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param bool fromEnd/fe: indicate that *normal* is at the end, not the
+        start, of the sequence, and solve accordingly; defaults to False
+    :return: The resolved normals / up vectors.
+    :rtype: [:class:`paya.runtime.data.Vector`],
+        [:class:`paya.runtime.plugs.Vector`]
+
+.. py:function:: blendCurveNormalSets(normalsA, normalsB, tangents, ratios=None, unwindSwitch=0)
+
+    Blends between two sets of normals along a curve. The number of
+    tangents, normalsA, normalsB and ratios must be the same. If any inputs
+    are plugs then the outputs will also be plugs.
+    
+    :param normalsA: the first set of normals
+    :type normalsA: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param normalsB: the first set of normals
+    :type normalsB: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param tangents: the curve tangents around which to rotate the normals
+    :type tangents: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param ratios/rat: per-normal blend ratios; if omitted, a uniform range of
+        floats will be generated automatically; defaults to None
+    :type ratios/rat: None, [float, :class:`~paya.runtime.plugs.Math1D`]
+    :param unwindSwitch/uws: an integer value or attribute to pick between:
+    
+        - 0 for shortest angle unwinding (the default)
+        - 1 for positive angle unwinding
+        - 2 for negative angle unwinding
+    
+    :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
+    :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
+    :raises ValueError: Unequal argument lengths.
+    :return: The blended set of curve normals.
+    :rtype: :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+
+.. py:function:: blendBetweenCurveNormals(startNormal, endNormal, tangents, ratios=None, unwindSwitch=0)
+
+    Blends between a forward and backward parallel-transport solution. If
+    either *startNormal* or *endNormal* are ``None``, the solution will
+    only be performed in one direction and returned on its own.
+    
+    :param startNormal: the normal at the start of the blend range
+    :type startNormal: list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+    :param endNormal: list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`
+    :param tangents: tangents along the blend range; one normal will
+        be generated per tangent; the more tangents, the higher the
+        accurace of the parallel transport solve
+    :param ratios: if provided, should be a list of float values or plugs
+        (one per tangent); if omitted, a uniform float range will be generated
+        automatically; defaults to None
+    :type ratios: None, [float, :class:`~paya.runtime.plugs.Math1D`]
+    :param unwindSwitch/uws: an integer value or attribute to pick between:
+    
+        - 0 for shortest angle unwinding (the default)
+        - 1 for positive angle unwinding
+        - 2 for negative angle unwinding
+    
+    :type unwindSwitch/uws: int, :class:`~paya.runtime.plugs.Math1D`
+    :raises ValueError: One of:
+    
+        - Unequal numbers of tangents and ratios (if provided)
+        - Both *startNormal* and *endNormal* are ``None``
+    
+    :return: The normals.
+    :rtype: [:class:`~paya.runtime.plugs.Vector`]

@@ -1,4 +1,4 @@
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 from paya.util import short
 import paya.runtime as r
 
@@ -33,7 +33,7 @@ class Quaternion:
 
         :param other: a value or plug of dimension 1 or 4
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 4):
             node = r.nodes.QuatAdd.createNode()
@@ -70,7 +70,7 @@ class Quaternion:
 
         :param other: a value or plug of dimension 1 or 4
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 4):
             node = r.nodes.QuatSub.createNode()
@@ -107,7 +107,7 @@ class Quaternion:
 
         :param other: a value or plug of dimension 1 or 4
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 4):
             node = r.nodes.QuatProd.createNode()

@@ -27,10 +27,8 @@ from paya.util import toOs
 from paya.lib.names import Name
 from paya.lib.mathops import createMatrix, \
     createScaleMatrix, cm, csm
-from paya.nativeunits import NativeUnits, nativeUnits
 from paya.lib.skel import Chain
 from paya.lib.controlshapes import controlShapes
-
 
 def saveScriptEditor():
     """
@@ -63,3 +61,4 @@ def findMelProc(procName):
     raise RuntimeError("Not a MEL procedure.")
 
 pn = PyNode
+

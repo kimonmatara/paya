@@ -1,0 +1,1116 @@
+*********************
+Pre-0.9 Release Notes
+*********************
+
+=============
+Version 0.8.4
+=============
+
+Bugs Fixed
+----------
+
+*   Unary :meth:`paya.runtime.plugs.Vector.__neg__` returns an incorrect output
+
+Additions & Changes to Plug Types
+---------------------------------
+
+*   On :class:`~paya.runtime.plugs.Math1D`: Changed all expressions to evaluate on-demand rather than always; added
+    :meth:`~paya.runtime.plugs.Math1D.inRange`
+
+*   On :class:`~paya.runtime.plugs.Angle`: :meth:`~paya.runtime.plugs.Angle.unwind`
+    :meth:`~paya.runtime.plugs.Angle.unwindPositive` :meth:`~paya.runtime.plugs.Angle.unwindNegative`,
+    :meth:`~paya.runtime.plugs.Angle.unwindShortest` :meth:`~paya.runtime.plugs.Angle.unwindSwitch`
+
+--------
+
+=============
+Version 0.8.3
+=============
+
+Additions to Plug Types
+-----------------------
+
+*   On :class:`~paya.runtime.plugs.Math1D`:
+    :meth:`~paya.runtime.plugs.Math1D.setSign`
+    :meth:`~paya.runtime.plugs.Math1D.copySignFrom`
+    :meth:`~paya.runtime.plugs.Math1D.trunc`
+
+Bugs Fixed
+----------
+
+*   :class:`~paya.lib.mathops.NativeUnits` does not properly discard 'New Scene' callback on exit
+
+-------
+
+=============
+Version 0.8.2
+=============
+
+Bugs Fixed
+----------
+
+*   :meth:`paya.runtime.data.Vector.angle` and :meth:`paya.runtime.plugs.Vector.angle` do not return an instance of
+    :class:`~paya.runtime.plugs.Angle` when dynamic
+
+*   :class:`~paya.lib.mathops.NativeUnits` is defeated by new-scene / open-scene / save-scene events (fix: added
+    API callbacks and changed the class to a singleton that will ignore nested calls, to cut down on callback
+    maintenance)
+
+------
+
+=============
+Version 0.8.1
+=============
+
+Changes to Plug Types
+---------------------
+
+*   On :class:`~paya.runtime.plugs.Vector`:
+    :meth:`~paya.runtime.plugs.Vector.makePerpendicularTo` replaced with
+    :meth:`~paya.runtime.plugs.Vector.rejectFrom`; added
+    :meth:`~paya.runtime.plugs.Vector.projectOnto`
+
+Changes to Data Types
+---------------------
+
+*   On :class:`~paya.runtime.data.Vector`:
+    :meth:`~paya.runtime.data.Vector.makePerpendicularTo` replaced with
+    :meth:`~paya.runtime.data.Vector.rejectFrom`; added
+    :meth:`~paya.runtime.data.Vector.projectOnto`
+
+Bugs Fixed
+----------
+
+*   Up vectors are not properly iterated inside
+    :meth:`paya.runtime.nodes.NurbsCurve.distributeMatrices`
+
+---------
+
+===========
+Version 0.8
+===========
+
+Additions to Examples
+---------------------
+
+*   :func:`paya.examples.worm_rig.createWormRig`;
+    layout scene at ``/examples/worm_rig_layout.ma``
+
+
+Additions & Changes to Modules
+------------------------------
+
+*   On :mod:`paya.lib.controlshapes`: Added line-width management
+
+*   On :mod:`paya.lib.mathops`:
+    :func:`paya.lib.mathops.getAimVectors`
+    :func:`paya.lib.mathops.getFramedAimAndUpVectors`
+    :func:`paya.lib.mathops.getChainedAimMatrices`
+
+*   On :mod:`paya.lib.names`:
+    :func:`~paya.lib.names.make` (new *inheritNames*/*inh* keyword)
+
+*   On :mod:`paya.lib.nurbsutil`:
+    :func:`~paya.lib.nurbsutil.conformUParamArg`
+    :func:`~paya.lib.nurbsutil.legalNumCVsForBezier`
+    :func:`~paya.lib.nurbsutil.itemsAsBezierAnchors`
+
+Additions & Changes to Node Types
+---------------------------------
+
+*   On :class:`~paya.runtime.nodes.BezierCurve`:
+    :meth:`~paya.runtime.nodes.BezierCurve.create`
+    :meth:`~paya.runtime.nodes.BezierCurve.numAnchors`
+    :meth:`~paya.runtime.nodes.BezierCurve.paramAtAnchor`
+    :meth:`~paya.runtime.nodes.BezierCurve.getCVsAtAnchor`
+    :meth:`~paya.runtime.nodes.BezierCurve.getControlPoints` (overload)
+    :meth:`~paya.runtime.nodes.BezierCurve.matrixAtAnchor`
+    :meth:`~paya.runtime.nodes.BezierCurve.clusterAll` (overload)
+
+
+*   On :class:`~paya.runtime.nodes.Cluster`:
+    :meth:`~paya.runtime.nodes.Cluster.create`
+    :meth:`~paya.runtime.nodes.Cluster.getHandle`
+    :meth:`~paya.runtime.nodes.Cluster.setHandle`
+    ``handle`` (property)
+    :meth:`~paya.runtime.nodes.Cluster.renameSystem`
+    :meth:`~paya.runtime.nodes.Cluster.getHandleShape`
+    ``handleShape`` (property)
+    :meth:`~paya.runtime.nodes.Cluster.normalize`
+
+*   On :class:`~paya.runtime.nodes.ClusterHandle`:
+    :meth:`~paya.runtime.nodes.ClusterHandle.getClusterNode`
+    :class:`~paya.runtime.nodes.ClusterHandle.resetVisualOrigin`
+
+*   On :class:`~paya.runtime.nodes.CurveWarp`:
+    :meth:`~paya.runtime.nodes.CurveWarp.create`
+
+*   On :class:`~paya.runtime.nodes.DeformableShape`:
+    :meth:`~paya.runtime.nodes.DeformableShape.deleteHistory`
+    :meth:`~paya.runtime.nodes.DeformableShape.hasHistory`
+    :meth:`~paya.runtime.nodes.DeformableShape.getOrigPlug`
+    :meth:`~paya.runtime.nodes.DeformableShape.getHistoryPlug`
+
+*   On :class:`~paya.runtime.nodes.DependNode`:
+    :meth:`~paya.runtime.nodes.DependNode.rename` (new *managedNames* option)
+    :meth:`~paya.runtime.nodes.DependNode.addVectorAttr`
+    :meth:`~paya.runtime.nodes.DependNode.addEulerAttr`
+
+*   On :class:`~paya.runtime.nodes.Joint`:
+    :meth:`~paya.runtime.nodes.Joint.insertCube`
+
+*   On :class:`~paya.runtime.nodes.Locator`:
+    :meth:`~paya.runtime.nodes.Locator.create`
+
+*   On :class:`~paya.runtime.nodes.MakeThreePointCircularArc`:
+    :meth:`~paya.runtime.nodes.MakeThreePointCircularArc.getCompensatedOutputCurve`
+
+*   On :class:`~paya.runtime.nodes.MotionPath`:
+    :meth:`~paya.runtime.nodes.MotionPath.configFollow`
+    :meth:`~paya.runtime.nodes.MotionPath.setFrontAxis`
+    :meth:`~paya.runtime.nodes.MotionPath.setUpAxis`
+
+*   On :class:`~paya.runtime.nodes.NurbsCurve`:
+    :meth:`~paya.runtime.nodes.NurbsCurve.create` (more options, dynamic building)
+    :meth:`~paya.runtime.nodes.NurbsCurve.subCurve`
+    :meth:`~paya.runtime.nodes.NurbsCurve.detach`
+    :meth:`~paya.runtime.nodes.NurbsCurve.retract`
+    :meth:`~paya.runtime.nodes.NurbsCurve.reverse`
+    :meth:`~paya.runtime.nodes.NurbsCurve.toBezier`
+    :meth:`~paya.runtime.nodes.NurbsCurve.toNurbs`
+    :meth:`~paya.runtime.nodes.NurbsCurve.bSpline`
+    :meth:`~paya.runtime.nodes.NurbsCurve.cvRebuild`
+    :meth:`~paya.runtime.nodes.NurbsCurve.rebuild`
+    :meth:`~paya.runtime.nodes.NurbsCurve.cageRebuild`
+    :meth:`~paya.runtime.nodes.NurbsCurve.blend`
+    :meth:`~paya.runtime.nodes.NurbsCurve.setLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.initCurveInfo`
+    :meth:`~paya.runtime.nodes.NurbsCurve.length`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestPoint_`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestPoint_`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.closestParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtCV`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.pointAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.paramAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.paramAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.paramAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.lengthAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.lengthAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.lengthAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fractionAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fractionAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fractionAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.binormalAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtLength`
+    :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributePoints`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeParams`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeLengths`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeMatrices`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeAimingMatrices`
+    :meth:`~paya.runtime.nodes.NurbsCurve.fitChain`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributeJoints`
+    :meth:`~paya.runtime.nodes.NurbsCurve.getCollocatedCVGroups`
+    :meth:`~paya.runtime.nodes.NurbsCurve.clusterAll`
+
+*   On :class:`~paya.runtime.nodes.PointOnCurveInfo`:
+    :meth:`~paya.runtime.nodes.PointOnCurveInfo.getBinormal`
+
+*   On :class:`~paya.runtime.nodes.Shape`:
+    :meth:`~paya.runtime.nodes.Shape.createShape`
+
+*   On :class:`~paya.runtime.nodes.Transform`:
+    :meth:`~paya.runtime.nodes.Transform.getCtShapesLineWidth`
+    :meth:`~paya.runtime.nodes.Transform.setCtShapesLineWidth`
+    :meth:`~paya.runtime.nodes.Transform.createControl` (added line width option)
+    :meth:`~paya.runtime.nodes.Transform.makeIdentity`
+
+Additions & Changes to Plug (Attribute) Types
+---------------------------------------------
+
+*   On :class:`~paya.runtime.plugs.Attribute`:
+    :meth:`~paya.runtime.plugs.Attribute.getNextArrayIndex`
+
+*   On :class:`~paya.runtime.plugs.BezierCurve`:
+    :meth:`~paya.runtime.plugs.BezierCurve.getShapeMFn`
+    :meth:`~paya.runtime.plugs.BezierCurve.numAnchors`
+    :meth:`~paya.runtime.plugs.BezierCurve.paramAtAnchor`
+    :meth:`~paya.runtime.plugs.BezierCurve.getControlPoints` (overload)
+    :meth:`~paya.runtime.plugs.BezierCurve.matrixAtAnchor`
+
+*   On :class:`~paya.runtime.plugs.Geometry`:
+    :meth:`~paya.runtime.plugs.Geometry.createShape`
+    :meth:`~paya.runtime.plugs.Geometry.getShapeMFn`
+    :meth:`~paya.runtime.plugs.Geometry.transform`
+
+*   On :class:`~paya.runtime.plugs.Math1D`:
+    :meth:`~paya.runtime.plugs.Math1D.gatedClamp`
+
+*   On :class:`~paya.runtime.plugs.Matrix`:
+    :meth:`~paya.runtime.plugs.Matrix.decomposeAndApply` (added *maintainOffset* and *worldSpace* options)
+    :meth:`~paya.runtime.plugs.Matrix.applyViaOpm`
+
+*   On :class:`~paya.runtime.plugs.NurbsCurve`:
+    :meth:`~paya.runtime.plugs.NurbsCurve.createArc`
+    :meth:`~paya.runtime.plugs.NurbsCurve.createLine`
+    :meth:`~paya.runtime.plugs.NurbsCurve.info`
+    :meth:`~paya.runtime.plugs.NurbsCurve.length`
+    :meth:`~paya.runtime.plugs.NurbsCurve.getCVs`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initMotionPath`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.infoAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initNearestPointOnCurve`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtCV`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.pointAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.closestPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.closestFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.closestParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.paramAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.paramAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.paramAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.lengthAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.fractionAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.binormalAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtParam`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtFraction`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.matrixAtPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributePoints`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeParams`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeLengths`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeMatrices`
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeAimingMatrices`
+    :meth:`~paya.runtime.plugs.NurbsCurve.attach`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initExtendCurve`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extendByVector`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extendToPoint`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extendByLength`
+    :meth:`~paya.runtime.plugs.NurbsCurve.extend`
+    :meth:`~paya.runtime.plugs.NurbsCurve.subCurve`
+    :meth:`~paya.runtime.plugs.NurbsCurve.detach`
+    :meth:`~paya.runtime.plugs.NurbsCurve.retract`
+    :meth:`~paya.runtime.plugs.NurbsCurve.reverse`
+    :meth:`~paya.runtime.plugs.NurbsCurve.toBezier`
+    :meth:`~paya.runtime.plugs.NurbsCurve.toNurbs`
+    :meth:`~paya.runtime.plugs.NurbsCurve.bSpline`
+    :meth:`~paya.runtime.plugs.NurbsCurve.initRebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.cvRebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.rebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.cageRebuild`
+    :meth:`~paya.runtime.plugs.NurbsCurve.blend`
+    :meth:`~paya.runtime.plugs.NurbsCurve.setLength`
+
+*   On :class:`~paya.runtime.plugs.Vector`:
+    :meth:`~paya.runtime.plugs.Vector.asShearMatrix`
+
+
+Bugs Fixed
+----------
+
+*   :meth:`paya.runtime.nodes.SkinCluster.create` does not parse influences / geometries
+    correctly
+
+*   Issues with rotation order propagation on the following:
+
+    *   :meth:`paya.runtime.plugs.EulerRotation.get`
+    *   :meth:`~paya.runtime.plugs.Matrix.asEulerRotation`
+    *   :meth:`paya.runtime.plugs.EulerRotation.asRotateMatrix`
+
+------
+
+=============
+Version 0.7.2
+=============
+
+Bugs Fixed
+----------
+
+*   The abstract plug tree doesn't wrangle certain types of generic or
+    typed attribute correctly
+
+------
+
+=============
+Version 0.7.1
+=============
+
+Additions to paya.runtime
+-------------------------
+
+*   :func:`~paya.cmds.saveScriptEditor`
+
+
+Additions & Changes to Node Types
+---------------------------------
+
+*   On :class:`~paya.runtime.nodes.BlendShape`:
+    :meth:`~paya.runtime.nodes.BlendShape.exportTargets`
+    :meth:`~paya.runtime.nodes.BlendShape.importTargets`
+
+    *   On :class:`~paya.lib.bsnboltons.Targets`:
+        :meth:`~paya.lib.bsnboltons.Targets.add` (new ``connect`` option)
+
+    *   On :class:`~paya.lib.bsnboltons.Target`:
+        :meth:`~paya.lib.bsnboltons.Target.resetDelta`
+        :meth:`~paya.lib.bsnboltons.Target.copyDeltaFrom`
+        :meth:`~paya.lib.bsnboltons.Target.export`
+        :meth:`~paya.lib.bsnboltons.Target.add` (new ``connect`` option)
+
+    *   On :class:`~paya.lib.bsnboltons.Subtarget`:
+        :meth:`~paya.lib.bsnboltons.Subtarget.disconnectShape`
+
+------
+
+===========
+Version 0.7
+===========
+
+Additions to paya.runtime
+-------------------------
+
+*   :func:`~paya.runtime.findMelProc`
+
+Additions to Modules
+--------------------
+
+*   On :mod:`paya.lib.symmetry`:
+    :class:`~paya.lib.symmetry.SymmetricModelling`
+
+Additions to Node Types
+-----------------------
+
+*   On :class:`~paya.runtime.nodes.BlendShape`:
+
+    :meth:`~paya.runtime.nodes.BlendShape.create`
+    :meth:`~paya.runtime.nodes.BlendShape.getIndexFromAlias`
+    :meth:`~paya.runtime.nodes.BlendShape.inPostMode`
+
+    :class:`.targets <paya.lib.bsnboltons.Targets>` / ``.t``, comprising:
+
+        :class:`~paya.lib.bsnboltons.Targets`
+            :meth:`~paya.lib.bsnboltons.Targets.node`
+            :meth:`~paya.lib.bsnboltons.Targets.getLogicalIndexFromAlias`
+            :meth:`~paya.lib.bsnboltons.Targets.getLogicalFromPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getPhysicalFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getAliasFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getByAlias`
+            :meth:`~paya.lib.bsnboltons.Targets.getByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.getByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.aliases`
+            :meth:`~paya.lib.bsnboltons.Targets.indices`
+            :meth:`~paya.lib.bsnboltons.Targets.__getitem__`
+            :meth:`~paya.lib.bsnboltons.Targets.__len__`
+            :meth:`~paya.lib.bsnboltons.Targets.__iter__`
+            :meth:`~paya.lib.bsnboltons.Targets.add`
+            :meth:`~paya.lib.bsnboltons.Targets.__setitem__`
+            :meth:`~paya.lib.bsnboltons.Targets.removeByAlias`
+            :meth:`~paya.lib.bsnboltons.Targets.removeByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.removeByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Targets.remove`
+            :meth:`~paya.lib.bsnboltons.Targets.__delitem__`
+            :meth:`~paya.lib.bsnboltons.Targets.clear`
+            :meth:`~paya.lib.bsnboltons.Targets.__repr__`
+
+        :class:`~paya.lib.bsnboltons.Target`
+            :meth:`~paya.lib.bsnboltons.Target.index`
+            :obj:`~paya.lib.bsnboltons.Target.owner`
+            :meth:`~paya.lib.bsnboltons.Target.node`
+            :obj:`~paya.lib.bsnboltons.Target.weight`
+            :obj:`~paya.lib.bsnboltons.Target.inputTargetGroup` / ``itg``
+            :obj:`~paya.lib.bsnboltons.Target.inputTargetItem` / ``iti``
+            :meth:`~paya.lib.bsnboltons.Target.isTransformSpace`
+            :meth:`~paya.lib.bsnboltons.Target.isTangentSpace`
+            :meth:`~paya.lib.bsnboltons.Target.inPostMode`
+            :obj:`~paya.lib.bsnboltons.Target.targetMatrix`
+            :meth:`~paya.lib.bsnboltons.Target.getTransform`
+            :meth:`~paya.lib.bsnboltons.Target.setTransform`
+            :meth:`~paya.lib.bsnboltons.Target.clearTransform`
+            :obj:`~paya.lib.bsnboltons.Target.transform`
+            :meth:`~paya.lib.bsnboltons.Target.getNormalizationId`
+            :meth:`~paya.lib.bsnboltons.Target.setNormalizationId`
+            :meth:`~paya.lib.bsnboltons.Target.clearNormalizationId`
+            :obj:`~paya.lib.bsnboltons.Target.normalizationId` / ``nid``
+            :meth:`~paya.lib.bsnboltons.Target.getAlias`
+            :meth:`~paya.lib.bsnboltons.Target.setAlias`
+            :meth:`~paya.lib.bsnboltons.Target.clearAlias`
+            :obj:`~paya.lib.bsnboltons.Target.alias`
+            :meth:`~paya.lib.bsnboltons.Target.getLogicalFromPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getPhysicalFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getLogicalIndexFromValue`
+            :meth:`~paya.lib.bsnboltons.Target.getValueFromLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.values`
+            :meth:`~paya.lib.bsnboltons.Target.indices`
+            :meth:`~paya.lib.bsnboltons.Target.getByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.getByValue`
+            :meth:`~paya.lib.bsnboltons.Target.__len__`
+            :meth:`~paya.lib.bsnboltons.Target.__iter__`
+            :meth:`~paya.lib.bsnboltons.Target.__getitem__`
+            :meth:`~paya.lib.bsnboltons.Target.__setitem__`
+            :meth:`~paya.lib.bsnboltons.Target.remove`
+            :meth:`~paya.lib.bsnboltons.Target.removeByLogicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.removeByPhysicalIndex`
+            :meth:`~paya.lib.bsnboltons.Target.removeByValue`
+            :meth:`~paya.lib.bsnboltons.Target.clearInbetweens`
+            :meth:`~paya.lib.bsnboltons.Target.__delitem__`
+            :meth:`~paya.lib.bsnboltons.Target.__int__`
+            :meth:`~paya.lib.bsnboltons.Target.flip`
+
+        :class:`~paya.lib.bsnboltons.Subtarget`
+            :meth:`~paya.lib.bsnboltons.Subtarget.index`
+            :obj:`~paya.lib.bsnboltons.Subtarget.owner`
+            :meth:`~paya.lib.bsnboltons.Subtarget.node`
+            :meth:`~paya.lib.bsnboltons.Subtarget.values`
+            :obj:`~paya.lib.bsnboltons.Subtarget.inputTargetItem` / ``iti``
+            :obj:`~paya.lib.bsnboltons.Subtarget.geoInput`
+            :meth:`~paya.lib.bsnboltons.Subtarget.getShape`
+            :meth:`~paya.lib.bsnboltons.Subtarget.setShape`
+            :meth:`~paya.lib.bsnboltons.Subtarget.__int__`
+            :meth:`~paya.lib.bsnboltons.Subtarget.__float__`
+
+*   On :class:`~paya.runtime.nodes.SkinCluster`:
+    :meth:`~paya.runtime.nodes.SkinCluster.invertShape`
+
+*   On :class:`~paya.runtime.nodes.Lattice`:
+    :obj:`~paya.runtime.nodes.Lattice.geoInput`
+    :obj:`~paya.runtime.nodes.Lattice.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.Lattice.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.Mesh`:
+    :obj:`~paya.runtime.nodes.Mesh.geoInput`
+    :obj:`~paya.runtime.nodes.Mesh.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.Mesh.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.NurbsCurve`:
+    :obj:`~paya.runtime.nodes.NurbsCurve.geoInput`
+    :obj:`~paya.runtime.nodes.NurbsCurve.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.NurbsCurve.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.NurbsSurface`:
+    :obj:`~paya.runtime.nodes.NurbsSurface.geoInput`
+    :obj:`~paya.runtime.nodes.NurbsSurface.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.NurbsSurface.localGeoOutput`
+
+*   On :class:`~paya.runtime.nodes.Subdiv`:
+    :obj:`~paya.runtime.nodes.Subdiv.geoInput`
+    :obj:`~paya.runtime.nodes.Subdiv.worldGeoOutput`
+    :obj:`~paya.runtime.nodes.Subdiv.localGeoOutput`
+
+Additions to Attribute (Plug) Types
+-----------------------------------
+
+*   On :class:`~paya.runtime.plugs.Attribute`:
+    :meth:`~paya.runtime.plugs.Attribute.getNextArrayIndex`
+
+*   On :class:`~paya.runtime.plugs.Math1D`:
+    :meth:`~paya.runtime.plugs.Math1D.combine`
+
+Bug Fixes
+---------
+
+*   :meth:`paya.runtime.plugs.Math1D.atTime` calls ``getInfo()``
+    instead of :func:`~paya.lib.mathops.info`
+
+------
+
+===========
+Version 0.6
+===========
+
+Additions to paya.runtime
+-------------------------
+
+*   :func:`~paya.lib.mathops.createScaleMatrix`
+
+Additions to Modules
+--------------------
+
+*   On :mod:`paya.lib.xmlweights`:
+    :meth:`~paya.lib.xmlweights.dump`
+    :meth:`~paya.lib.xmlweights.load`
+
+Additions to General Classes
+----------------------------
+
+*   On :class:`~paya.lib.skel.Chain`:
+    :meth:`~paya.lib.skel.Chain.bones`
+    :meth:`~paya.lib.skel.Chain.ratios`
+    :meth:`~paya.lib.skel.Chain.insertJoints`
+    :meth:`~paya.lib.skel.Chain.subdivide`
+    :meth:`~paya.lib.skel.Chain.driveTwistChain`
+
+Additions to Node Types
+-----------------------
+
+*   On :class:`~paya.runtime.nodes.GeometryFilter`:
+    :meth:`~paya.runtime.nodes.GeometryFilter.getFromGeo`
+    :meth:`~paya.runtime.nodes.GeometryFilter.getShapes`
+    :meth:`~paya.runtime.nodes.GeometryFilter.dumpWeights`
+    :meth:`~paya.runtime.nodes.GeometryFilter.loadWeights`
+    :meth:`~paya.runtime.nodes.GeometryFilter.copyWeightsFrom`
+
+*   On :class:`~paya.runtime.nodes.SkinCluster`:
+    :meth:`~paya.runtime.nodes.SkinCluster.create`
+    :meth:`~paya.runtime.nodes.SkinCluster.macro`
+    :meth:`~paya.runtime.nodes.SkinCluster.createFromMacro`
+    :meth:`~paya.runtime.nodes.SkinCluster.dumpWeights`
+
+*   On :class:`~paya.runtime.nodes.DependNode`:
+    :meth:`~paya.runtime.nodes.DependNode.macro`
+    :meth:`~paya.runtime.nodes.DependNode.createFromMacro`
+
+*   On :class:`~paya.runtime.nodes.Shape`:
+    :meth:`~paya.runtime.nodes.Shape.toShape`
+    :meth:`~paya.runtime.nodes.Shape.toTransform`
+
+*   On :class:`~paya.runtime.nodes.Transform`:
+    :meth:`~paya.runtime.nodes.Transform.toShape`
+    :meth:`~paya.runtime.nodes.Transform.toTransform`
+    :meth:`~paya.runtime.nodes.Transform.closestOf`
+
+Additions to Data Types
+-----------------------
+
+*   On :class:`paya.runtime.data.Vector`:
+    :meth:`~paya.runtime.data.Vector.angle` (new 'clockNormal' option)
+    :meth:`~paya.runtime.data.Vector.makePerpendicularTo`
+    :meth:`~paya.runtime.data.Vector.blend` (new options)
+    :meth:`~paya.runtime.data.Vector.rotateByAxisAngle`
+
+Additions to Plug Types
+-----------------------
+
+*   On :class:`paya.runtime.plugs.Vector`:
+    :meth:`~paya.runtime.plugs.Vector.angle` (new 'clockNormal' option)
+    :meth:`~paya.runtime.plugs.Vector.makePerpendicularTo`
+    :meth:`~paya.runtime.plugs.Vector.blend` (new options)
+    :meth:`~paya.runtime.plugs.Vector.rotateByAxisAngle`
+
+--------
+
+=============
+Version 0.5.2
+=============
+
+=   Added ``clockNormal`` option to :meth:`data.Vector.angle() <paya.runtime.data.Vector.angle>` and
+    :meth:`plugs.Vector.angle() <paya.runtime.plugs.Vector.angle>` for 360 angle calcs
+=   =Removed= ``axisAngle`` / ``euler`` options from :meth:`plugs.Vector.angle() <paya.runtime.plugs.Vector.angle>` for
+    simplicity and parity with the data version
+=   Fixed a bug on :meth:`plugs.Vector.dot() <paya.runtime.plugs.Vector.dot>` when called with ``normalize=True``
+=   Documentation refactored to rationalise class links; many broken links fixed
+
+
+------
+
+=============
+Version 0.5.1
+=============
+
+General Changes
+---------------
+
+In deference to the Python tenet of `Flat is Better than Nested <https://peps.python.org/pep-0020/>`_, the
+``ControlShapesManager`` class has been removed, and the ``controlShapes`` attribute on
+:class:`~paya.runtime.nodes.Transform` nodes replaced by regular methods such as
+:meth:`Transform.setCtShapes() <paya.runtime.nodes.Transform.setCtShapes>`. See :doc:`Controls <controls>` for
+updated information.
+
+------
+
+===========
+Version 0.5
+===========
+
+Additions to paya.runtime
+-------------------------
+
+*   ``controlShapesLibrary`` (instance of :class:`~paya.lib.controls.ControlShapesLibrary`)
+*   :func:`~paya.lib.controls.createControl`
+
+Additions to Node Types
+-----------------------
+
+*   On :class:`~paya.runtime.nodes.DependNode`:
+
+    :meth:`~paya.runtime.nodes.DependNode.basename`
+    :attr:`~paya.runtime.nodes.DependNode.attrSections`
+    :meth:`~paya.runtime.nodes.DependNode.addAttr` (overload)
+    :meth:`~paya.runtime.nodes.DependNode.maskAnimAttrs`
+    :meth:`~paya.runtime.nodes.DependNode.reorderAttrs`
+    :meth:`~paya.runtime.nodes.DependNode.getReorderableAttrs`
+    :meth:`~paya.runtime.nodes.DependNode.getReorderableAttrNames`
+    :meth:`~paya.runtime.nodes.DependNode.addSectionAttr`
+    :meth:`~paya.runtime.nodes.DependNode.getSectionAttrs`
+    :meth:`~paya.runtime.nodes.DependNode.getAttrSectionMembership`
+
+*   On :class:`~paya.runtime.nodes.DagNode`:
+
+    :meth:`~paya.runtime.nodes.DagNode.getWorldMatrix`
+    :meth:`~paya.runtime.nodes.DagNode.getWorldPosition`
+    :meth:`~paya.runtime.nodes.DagNode.basename`
+    :meth:`~paya.runtime.nodes.DagNode.isControl`
+    :meth:`~paya.runtime.nodes.DagNode.setPickWalkParent`
+    :meth:`~paya.runtime.nodes.DagNode.getPickWalkParent`
+
+*   On :class:`~paya.runtime.nodes.Transform`:
+    :meth:`~paya.runtime.nodes.Transform.create`
+    :meth:`~paya.runtime.nodes.Transform.releaseSRT`
+    :meth:`~paya.runtime.nodes.Transform.createOffsetGroups`
+    ``controlShapes/cs`` (instance of :class:`~paya.lib.controls.ControlShapesManager`)
+    :meth:`~paya.runtime.nodes.Transform.conformShapeNames`
+
+*   On :class:`~paya.runtime.nodes.Locator`:
+    :meth:`~paya.runtime.nodes.Locator.macro`
+    :meth:`~paya.runtime.nodes.Locator.createFromMacro`
+
+*   On :class:`~paya.runtime.nodes.NurbsCurve`:
+    :meth:`~paya.runtime.nodes.NurbsCurve.macro`
+    :meth:`~paya.runtime.nodes.NurbsCurve.createFromMacro`
+
+Additions to Plug Types
+-----------------------
+
+*   On :class:`~paya.runtime.plugs.Attribute`:
+    :meth:`~paya.runtime.plugs.Attribute.lock` (overload)
+    :meth:`~paya.runtime.plugs.Attribute.unlock` (overload)
+    :meth:`~paya.runtime.plugs.Attribute.hide`
+    :meth:`~paya.runtime.plugs.Attribute.show`
+    :meth:`~paya.runtime.plugs.Attribute.disable`
+    :meth:`~paya.runtime.plugs.Attribute.enable`
+    :meth:`~paya.runtime.plugs.Attribute.sendAbove`
+    :meth:`~paya.runtime.plugs.Attribute.sendBelow`
+    :meth:`~paya.runtime.plugs.Attribute.isAnimatableDynamic`
+    :meth:`~paya.runtime.plugs.Attribute.release`
+
+Additions to General Classes
+----------------------------
+
+*   On :class:`~paya.lib.controls.ControlShapesLibrary`:
+    :meth:`~paya.lib.controls.ControlShapesLibrary.load`
+    :meth:`~paya.lib.controls.ControlShapesLibrary.dump`
+    :meth:`~paya.lib.controls.ControlShapesLibrary.applyToControls`
+    :meth:`~paya.lib.controls.ControlShapesLibrary.addFromControl`
+    (plus magic methods)
+
+*   On :class:`~paya.lib.controls.ControlShapesManager`:
+    :meth:`~paya.lib.controls.ControlShapesManager.copyTo`
+    :meth:`~paya.lib.controls.ControlShapesManager.getColor`
+    :meth:`~paya.lib.controls.ControlShapesManager.setColor`
+    :meth:`~paya.lib.controls.ControlShapesManager.clearColor`
+    :meth:`~paya.lib.controls.ControlShapesManager.clear`
+    :meth:`~paya.lib.controls.ControlShapesManager.scale`
+    :meth:`~paya.lib.controls.ControlShapesManager.rotate`
+    :meth:`~paya.lib.controls.ControlShapesManager.setFromLib`
+    :meth:`~paya.lib.controls.ControlShapesManager.addToLib`
+    :meth:`~paya.lib.controls.ControlShapesManager.cycle`
+    (plus magic methods)
+
+*   On :class:`~paya.lib.attrs.Section`:
+    :meth:`~paya.lib.attrs.Section.sendAbove`
+    :meth:`~paya.lib.attrs.Section.sendBelow`
+    :meth:`~paya.lib.attrs.Section.collect`
+    (plus magic methods)
+
+*   On :class:`~paya.lib.attrs.Sections`:
+    :meth:`~paya.lib.attrs.Sections.names`
+    :meth:`~paya.lib.attrs.Sections.add`
+    :meth:`~paya.lib.attrs.Sections.clear`
+    (plus magic methods)
+
+------
+
+=============
+Version 0.4.3
+=============
+
+Bugs Fixed
+----------
+
+-   :meth:`paya.runtime.nodes.DependNode.makeName` ignores ``name/n`` arguments
+
+-----
+
+=============
+Version 0.4.2
+=============
+
+General Changes
+---------------
+
+=   :meth:`paya.runtime.plugs.Matrix.decomposeAndApply` and :meth:`paya.runtime.data.Matrix.decomposeAndApply`
+    escape into simpler / faster implementations when no ``rotateAxis``, ``jointOrient``, ``inverseScale`` or pivot
+    compensations are requested or required
+
+-----
+
+=============
+Version 0.4.1
+=============
+
+General Changes
+---------------
+
+*   Smarter defaults handling on :meth:`paya.runtime.nodes.IkHandle.create`
+*   Added :doc:`IK Handles <ik>` section to documentation
+*   Removed :meth:`~paya.lib.skel.Chain` subclasses to simplify
+
+Bugs Fixed
+----------
+
+*   :meth:`~paya.lib.skel.Chain.createFromCurve` fails with error about missing 'override' object
+*   Missing :meth:`~paya.lib.skel.Chain.createIkHandle`
+*   :meth:`~paya.lib.skel.Chain.orient` does not return ``self``
+
+-----
+
+===========
+Version 0.4
+===========
+
+General Changes
+---------------
+
+*   Naming arguments on :meth:`~paya.runtime.nodes.DependNode.createNode` and elsewhere have been simplified,
+    with many moved into :mod:`paya.config` instead.
+
+Additions to Modules
+--------------------
+
+*   Added :mod:`paya.config`
+*   Added :mod:`paya.lib.skel`, including :class:`~paya.lib.skel.Chain` and subclasses
+
+Additions to Data Types
+-----------------------
+
+*   On :class:`~paya.runtime.data.Vector`:
+    :meth:`~paya.runtime.data.Vector.rotateByAxisAngle`
+    :meth:`~paya.runtime.data.Vector.asScaleMatrix`
+
+*   On :class:`~paya.runtime.data.Matrix`:
+    :meth:`~paya.runtime.data.Matrix.decomposeAndApply`
+
+Additions / Changes to Plug Types
+---------------------------------
+
+*   On :class:`~paya.runtime.plugs.Attribute`:
+    :meth:`~paya.runtime.plugs.Attribute.release`
+
+*   On :class:`~paya.runtime.plugs.Compound`:
+    :meth:`~paya.runtime.plugs.Compound.release`
+    :meth:`~paya.runtime.plugs.Compound.splitInputs`
+
+*   On :class:`~paya.runtime.plugs.Vector`:
+    :meth:`~paya.runtime.plugs.Vector.rotateByAxisAngle`
+
+*   On :class:`~paya.runtime.plugs.Angle`:
+    :meth:`~paya.runtime.plugs.Angle.set`
+
+*   On :class:`~paya.runtime.plugs.EulerRotation`:
+    :meth:`~paya.runtime.plugs.EulerRotation.set` now auto-converts units when the value is an
+    :class:`~paya.runtime.data.EulerRotation`; added
+    :meth:`~paya.runtime.plugs.EulerRotation.asRotateMatrix`
+
+*   On :class:`~paya.runtime.plugs.Matrix`:
+    :meth:`~paya.runtime.plugs.Matrix.decomposeAndApply`
+
+Additions to Node Types
+-----------------------
+
+*   On :class:`~paya.runtime.nodes.Transform`:
+    :meth:`~paya.runtime.nodes.Transform.releaseSRT`
+    :meth:`~paya.runtime.nodes.Transform.getWorldMatrix`
+    :meth:`~paya.runtime.nodes.Transform.getWorldPosition`
+    :meth:`~paya.runtime.nodes.Transform.getRotateAxisMatrix`
+
+*   On :class:`~paya.runtime.nodes.Joint`:
+    :meth:`~paya.runtime.nodes.Joint.skinClusters`
+    :meth:`~paya.runtime.nodes.Joint.ikHandles`
+    :meth:`~paya.runtime.nodes.Joint.chainFromHere`
+    :meth:`~paya.runtime.nodes.Joint.getJointOrientMatrix`
+
+*   On :class:`~paya.runtime.nodes.IkHandle`:
+    :meth:`~paya.runtime.nodes.IkHandle.create`
+    :meth:`~paya.runtime.nodes.IkHandle.getEndJoint`
+    :meth:`~paya.runtime.nodes.IkHandle.getJointList` (overload for ``includeTip``)
+    :meth:`~paya.runtime.nodes.IkHandle.chain`
+    :meth:`~paya.runtime.nodes.IkHandle.setTwistVectors`
+    :meth:`~paya.runtime.nodes.IkHandle.setPolePoint`
+
+*   On :class:`~paya.runtime.nodes.NurbsCurve`:
+    :meth:`~paya.runtime.nodes.NurbsCurve.takeClosestPoint`
+    :meth:`~paya.runtime.nodes.NurbsCurve.takePointAtParam`
+    :meth:`~paya.runtime.nodes.NurbsCurve.takeParamAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.takePointAtFraction`
+    :meth:`~paya.runtime.nodes.NurbsCurve.distributePoints`
+
+Additions to General Classes
+----------------------------
+
+*   On :class:`~paya.lib.skel.Chain`:
+    :meth:`~paya.lib.skel.Chain.getFromStartEnd`
+    :meth:`~paya.lib.skel.Chain.getFromRoot`
+    :meth:`~paya.lib.skel.Chain.createFromMatrices`
+    :meth:`~paya.lib.skel.Chain.createFromPoints`
+    :meth:`~paya.lib.skel.Chain.createFromCurve`
+    :meth:`~paya.lib.skel.Chain.createFromCurve`
+    :meth:`~paya.lib.skel.Chain.orient`
+    :meth:`~paya.lib.skel.Chain.bones`
+    :meth:`~paya.lib.skel.Chain.vectors`
+    :meth:`~paya.lib.skel.Chain.points`
+    :meth:`~paya.lib.skel.Chain.contiguous`
+    :meth:`~paya.lib.skel.Chain.roots`
+    :meth:`~paya.lib.skel.Chain.length`
+    :meth:`~paya.lib.skel.Chain.insertJoints`
+    :meth:`~paya.lib.skel.Chain.skinClusters`
+    :meth:`~paya.lib.skel.Chain.ikHandles`
+    :meth:`~paya.lib.skel.Chain.downAxis`
+    :meth:`~paya.lib.skel.Chain.duplicate`
+    :meth:`~paya.lib.skel.Chain.rename`
+    :meth:`~paya.lib.skel.Chain.compose`
+    :meth:`~paya.lib.skel.Chain.explode`
+    :meth:`~paya.lib.skel.Chain.appendChain`
+    :meth:`~paya.lib.skel.Chain.getPolePoint`
+    :meth:`~paya.lib.skel.Chain.autoPreferredAngle`
+    :meth:`~paya.lib.skel.Chain.reset`
+    :meth:`~paya.lib.skel.Chain.createIkHandle`
+    :meth:`~paya.lib.skel.Chain.createIkHandles`
+
+*   On :class:`~paya.lib.skel.Bone`:
+    :meth:`~paya.lib.skel.Bone.insertJoints`
+
+----
+
+===========
+Version 0.3
+===========
+
+General Changes
+---------------
+
+The abstract plug tree has been reworked to make names more intuitive and to better support angles
+and euler rotations.
+
+Bugs Fixed
+----------
+
+*   Contextual naming misapplied when
+    :meth:`~paya.runtime.nodes.DependNode.createNode` is used for shapes
+*   Some :term:`universal` operators don't work properly when called on
+    :class:`paya.runtime.data.Point` rather than :class:`paya.runtime.data.Vector`
+
+Additions to Modules
+--------------------
+
+*   On :mod:`paya.lib.mathops`: :func:`~paya.lib.mathops.createMatrix` :func:`~paya.lib.mathops.asValue`
+
+Additions to Node Types
+-----------------------
+
+*   On :class:`~paya.runtime.nodes.FourByFourMatrix`:
+    :meth:`~paya.runtime.nodes.FourByFourMatrix.getAxis`
+    :meth:`~paya.runtime.nodes.FourByFourMatrix.getX`
+    :meth:`~paya.runtime.nodes.FourByFourMatrix.getY`
+    :meth:`~paya.runtime.nodes.FourByFourMatrix.getZ`
+    :meth:`~paya.runtime.nodes.FourByFourMatrix.getTranslate`
+    :attr:`translate/t`
+    :attr:`x` :attr:`y` :attr:`z`
+
+*   On :class:`~paya.runtime.nodes.Shape`: :meth:`~paya.runtime.nodes.Shape.createNode`
+
+Additions to Plug Types
+-----------------------
+
+*   On :class:`~paya.runtime.plugs.Attribute`:
+    :meth:`~paya.runtime.plugs.Attribute.plugType`
+
+*   On :class:`~paya.runtime.plugs.Angle`:
+    :meth:`~paya.runtime.plugs.Angle.get`
+
+*   On :class:`~paya.runtime.plugs.Compound`:
+    :meth:`~paya.runtime.plugs.Compound.__iter__`
+
+*   On :class:`~paya.runtime.plugs.Enum`:
+    :meth:`~paya.runtime.plugs.Enum.put`
+
+*   On :class:`~paya.runtime.plugs.EulerRotation`:
+    :meth:`~paya.runtime.plugs.EulerRotation.get`
+    :meth:`~paya.runtime.plugs.EulerRotation.isRotateChannel`
+    :meth:`~paya.runtime.plugs.EulerRotation.asQuaternion`
+    :meth:`~paya.runtime.plugs.EulerRotation.asRotateMatrix`
+
+*   On :class:`~paya.runtime.plugs.Math1D`:
+    :meth:`~paya.runtime.plugs.Math1D.sqrt`
+    :meth:`~paya.runtime.plugs.Math1D.__neg__`
+    :meth:`~paya.runtime.plugs.Math1D.abs`
+    :meth:`~paya.runtime.plugs.Math1D.cycle`
+    :meth:`~paya.runtime.plugs.Math1D.remap`
+    :meth:`~paya.runtime.plugs.Math1D.clamp`
+    :meth:`~paya.runtime.plugs.Math1D.minClamp`
+    :meth:`~paya.runtime.plugs.Math1D.min`
+    :meth:`~paya.runtime.plugs.Math1D.eq`
+    :meth:`~paya.runtime.plugs.Math1D.ne`
+    :meth:`~paya.runtime.plugs.Math1D.gt`
+    :meth:`~paya.runtime.plugs.Math1D.ge`
+    :meth:`~paya.runtime.plugs.Math1D.lt`
+    :meth:`~paya.runtime.plugs.Math1D.le`
+    :meth:`~paya.runtime.plugs.Math1D.choose`
+    :meth:`~paya.runtime.plugs.Math1D.blend`
+    :meth:`~paya.runtime.plugs.Math1D.unaryExpr`
+    :meth:`~paya.runtime.plugs.Math1D.degrees`
+    :meth:`~paya.runtime.plugs.Math1D.radians`
+    :meth:`~paya.runtime.plugs.Math1D.cos`
+    :meth:`~paya.runtime.plugs.Math1D.sin`
+    :meth:`~paya.runtime.plugs.Math1D.tan`
+    :meth:`~paya.runtime.plugs.Math1D.acos`
+    :meth:`~paya.runtime.plugs.Math1D.asin`
+    :meth:`~paya.runtime.plugs.Math1D.atan`
+    :meth:`~paya.runtime.plugs.Math1D.atTime`
+
+*   On :class:`~paya.runtime.plugs.Math3D`:
+    :meth:`~paya.runtime.plugs.Math3D.get`
+    :meth:`~paya.runtime.plugs.Math3D.blend`
+
+*   On :class:`~paya.runtime.plugs.Matrix`:
+    :meth:`~paya.runtime.plugs.Matrix.createLocator`
+    :meth:`~paya.runtime.plugs.Matrix.pick`
+    :meth:`~paya.runtime.plugs.Matrix.inverse`
+    :meth:`~paya.runtime.plugs.Matrix.asOffset`
+    :meth:`~paya.runtime.plugs.Matrix.getAxis`
+    :meth:`~paya.runtime.plugs.Matrix.getX`
+    :meth:`~paya.runtime.plugs.Matrix.getY`
+    :meth:`~paya.runtime.plugs.Matrix.getZ`
+    :meth:`~paya.runtime.plugs.Matrix.getTranslate`
+    :attr:`x` :attr:`y` :attr:`z` :attr:`translate/t`
+    :meth:`~paya.runtime.plugs.Matrix.transpose`
+    :meth:`~paya.runtime.plugs.Matrix.decompose`
+    :meth:`~paya.runtime.plugs.Matrix.hold`
+    :meth:`~paya.runtime.plugs.Matrix.asEulerRotation`
+    :meth:`~paya.runtime.plugs.Matrix.asQuaternion`
+
+*   On :class:`~paya.runtime.plugs.Quaternion`:
+    :meth:`~paya.runtime.plugs.Quaternion.inverse`
+    :meth:`~paya.runtime.plugs.Quaternion.normal`
+    :meth:`~paya.runtime.plugs.Quaternion.conjugate`
+    :meth:`~paya.runtime.plugs.Quaternion.blend`
+    :meth:`~paya.runtime.plugs.Quaternion.asEulerRotation`
+    :meth:`~paya.runtime.plugs.Quaternion.asAxisAngle`
+    :meth:`~paya.runtime.plugs.Quaternion.asRotateMatrix`
+
+*   On :class:`~paya.runtime.plugs.String`:
+    :meth:`~paya.runtime.plugs.String.put`
+
+*   On :class:`~paya.runtime.plugs.Vector`:
+    :meth:`~paya.runtime.plugs.Vector.dot`
+    :meth:`~paya.runtime.plugs.Vector.length`
+    :meth:`~paya.runtime.plugs.Vector.normal`
+    :meth:`~paya.runtime.plugs.Vector.cross`
+    :meth:`~paya.runtime.plugs.Vector.angle`
+    :meth:`~paya.runtime.plugs.Vector.asTranslateMatrix`
+    :meth:`~paya.runtime.plugs.Vector.asScaleMatrix`
+    :meth:`~paya.runtime.plugs.Vector.asEulerRotation`
+
+Additions to Data Types
+-----------------------
+
+*   On :class:`~paya.runtime.data.EulerRotation`:
+    :meth:`~paya.runtime.data.EulerRotation.__add__`
+    :meth:`~paya.runtime.data.EulerRotation.__radd__`
+    :meth:`~paya.runtime.data.EulerRotation.__sub__`
+    :meth:`~paya.runtime.data.EulerRotation.__mul__`
+    :meth:`~paya.runtime.data.EulerRotation.__rmul__`
+    :meth:`~paya.runtime.data.EulerRotation.__truediv__`
+    :meth:`~paya.runtime.data.EulerRotation.__rtruediv__`
+    :meth:`~paya.runtime.data.EulerRotation.__pow__`
+    :meth:`~paya.runtime.data.EulerRotation.__rpow__`
+
+*   On :class:`~paya.runtime.data.Matrix`:
+    :meth:`~paya.runtime.data.Matrix.createLocator`
+    :meth:`~paya.runtime.data.Matrix.decompose`
+    :meth:`~paya.runtime.data.Matrix.pick`
+    :meth:`~paya.runtime.data.Matrix.asOffset`
+    :meth:`~paya.runtime.data.Matrix.hold`
+    :meth:`~paya.runtime.data.Matrix.getAxis`
+    :meth:`~paya.runtime.data.Matrix.setAxis`
+    :meth:`~paya.runtime.data.Matrix.getX`
+    :meth:`~paya.runtime.data.Matrix.setX`
+    :meth:`~paya.runtime.data.Matrix.getY`
+    :meth:`~paya.runtime.data.Matrix.setY`
+    :meth:`~paya.runtime.data.Matrix.getZ`
+    :meth:`~paya.runtime.data.Matrix.setZ`
+    :meth:`~paya.runtime.data.Matrix.getTranslate`
+    :meth:`~paya.runtime.data.Matrix.setTranslate`
+    :attr:`~paya.runtime.data.Matrix.x`
+    :attr:`~paya.runtime.data.Matrix.y`
+    :attr:`~paya.runtime.data.Matrix.z`
+    :attr:`~paya.runtime.data.Matrix.translate` / :attr:`~paya.runtime.data.Matrix.t`
+
+*   On :class:`~paya.runtime.data.Point`:
+    :meth:`~paya.runtime.data.Point.__add__`
+    :meth:`~paya.runtime.data.Point.__radd__`
+    :meth:`~paya.runtime.data.Point.__sub__`
+    :meth:`~paya.runtime.data.Point.__rsub__`
+    :meth:`~paya.runtime.data.Point.__mul__`
+    :meth:`~paya.runtime.data.Point.__rmul__`
+    :meth:`~paya.runtime.data.Point.__truediv__`
+    :meth:`~paya.runtime.data.Point.__rtruediv__`
+    :meth:`~paya.runtime.data.Point.__pow__`
+    :meth:`~paya.runtime.data.Point.__rpow__`
+
+*   On :class:`~paya.runtime.data.Vector`:
+    :meth:`~paya.runtime.data.Vector.blend`
+    :meth:`~paya.runtime.data.Vector.dot`
+    :meth:`~paya.runtime.data.Vector.cross`
+    :meth:`~paya.runtime.data.Vector.angle`
+
+-----
+
+===========
+Version 0.2
+===========
+
+Additions
+---------
+
+*   A wide range of maths operators, spread across :doc:`paya/plugtypes` and :doc:`paya/datatypes`, with support for
+    bidirectional mixing of values and plugs
+*   Added  :meth:`~paya.runtime.plugs.AttributeMath16D.pick` and
+    :meth:`~paya.runtime.plugs.AttributeMath16D.asOffset`
+    to :class:`~paya.runtime.plugs.AttributeMath16D`
+*   Added  :meth:`~paya.runtime.data.Matrix.pick` and :meth:`~paya.runtime.data.Matrix.asOffset`
+    to :class:`~paya.runtime.data.Matrix`
+*   :meth:`~paya.runtime.plugs.Attribute.get` returns :ref:`more useful types <More Useful Query Types>`
+*   The double-chevron operator ``>>`` :ref:`now supports value-setting <Extended Chevrons>`
+*   :doc:`Contextual name management <naming_nodes>` with :class:`paya.lib.names.Name` and pipeline suffixes
+*   :ref:`Dodge unit conversion nodes <Preventing Unit Conversions>` with :class:`paya.lib.mathops.NativeUnits` and :func:`paya.lib.mathops.nativeUnits`
+
+-----
+
+===========
+Version 0.1
+===========
+
+Additions
+---------
+
+*   Patching engine
+*   :mod:`paya.runtime` interface

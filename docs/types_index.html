@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Types &mdash; paya 0.8.4 documentation</title>
+  <title>Types &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Node Types" href="pools/nodes_index.html" />
-    <link rel="prev" title="Sugar &amp; Style" href="sugar_and_style.html" /> 
+    <link rel="prev" title="Discovering Functionality" href="docs/basics/discovering_functionality.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +33,7 @@
             <img src="_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,40 +44,22 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Types</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pools/nodes_index.html">Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pools/plugs_index.html">Plugs (Attributes)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pools/comps_index.html">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pools/data_index.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/nodes_index.html">Node Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/comps_index.html">Component Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/plugs_index.html">Plug (Attribute) Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/data_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/containers_index.html">Container Subtypes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="paya.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="author.html">Author</a></li>
 </ul>
 
         </div>
@@ -108,7 +90,7 @@
 <h1>Types<a class="headerlink" href="#types" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="pools/nodes_index.html">Nodes</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="pools/nodes_index.html">Node Types</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/blendShape.html">BlendShape</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/cluster.html">Cluster</a></li>
@@ -129,13 +111,20 @@
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/nodes/remapValue.html">RemapValue</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/shape.html">Shape</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/subdiv.html">Subdiv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/nodes/transform.html">Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/nodes/vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pools/plugs_index.html">Plugs (Attributes)</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="pools/comps_index.html">Component Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pools/comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pools/plugs_index.html">Plug (Attribute) Types</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/bezierCurve.html">BezierCurve</a></li>
@@ -148,22 +137,32 @@
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/string.html">String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/plugs/vector.html">Vector</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pools/comps_index.html">Components</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pools/comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pools/comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="pools/data_index.html">Data</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="pools/data_index.html">Data Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pools/data/angle.html">Angle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/data/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/data/matrix.html">Matrix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/data/point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/data/quaternion.html">Quaternion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pools/data/vector.html">Vector</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pools/networks_index.html">Network Subtypes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks/curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks/curveUpVectorIkSplineStyleSampler.html">CurveUpVectorIkSplineStyleSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks/curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks/curveUpVectorPtKeysSampler.html">CurveUpVectorPtKeysSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks/curveUpVectorPtSampler.html">CurveUpVectorPtSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks/curveUpVectorRemapSampler.html">CurveUpVectorRemapSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pools/networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pools/containers_index.html">Container Subtypes</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -174,7 +173,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="sugar_and_style.html" class="btn btn-neutral float-left" title="Sugar &amp; Style" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="docs/basics/discovering_functionality.html" class="btn btn-neutral float-left" title="Discovering Functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pools/nodes_index.html" class="btn btn-neutral float-right" title="Node Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

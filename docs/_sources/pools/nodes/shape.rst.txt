@@ -6,30 +6,26 @@ paya.runtime.nodes.Shape
 
 .. py:class:: Shape(*args, **kwargs)
 
-    .. py:classmethod:: createShape(name=None, under=None, conformShapeName=True, intermediate=False)
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.Shape` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    .. py:classmethod:: createShape(name=None, parent=None, conformShapeName=None, intermediate=False)
     
         Basic shape constructor.
         
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, tuple, list, str, int
-        :param under/u: a custom destination parent; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool conformShapeName/csn: ignored if *under* was omitted;
-            rename the shape after it is reparented; defaults to True
+        :param str name/n: the shape name; defaults to a contextual name
+        :param parent/p: a custom destination parent; defaults to None
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool conformShapeName/csn: ignored if *parent* was omitted;
+            rename the shape after it is reparented; defaults to True if
+            *parent* was provided, otherwise False
         :param bool intermediate/i: create the shape as an intermediate
             object; defaults to False
         :return: The shape node.
         :rtype: :class:`Shape`
-    
-    .. py:classmethod:: createNode(name=None)
-    
-        Object-oriented version of :func:`pymel.core.general.createNode` with
-        managed naming.
-        
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, or list
-        :return: The constructed node.
-        :rtype: :class:`~pymel.core.general.PyNode`
     
     .. py:method:: toShape()
     
@@ -47,7 +43,7 @@ paya.runtime.nodes.Shape
     
     .. py:method:: conformName()
     
-        Conforms this shape's name to a Maya-standard name derived from the
+        Conforms this shape's name to a Maya-standard format derived from the
         transform parent.
         
         :return: ``self``

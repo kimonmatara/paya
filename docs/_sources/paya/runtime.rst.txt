@@ -4,36 +4,11 @@ paya.runtime
 
 .. py:module:: paya.runtime
 
-.. py:class:: Runtime
+.. py:class:: Runtime(*args, **kwargs)
 
-    Top-level **paya** interface. This object serves the entire
-    :py:mod:`paya.cmds` namespace which, in turn, imports the full contents
-    of :py:mod:`pymel.core`. Hence, it can be used as a drop-in replacement
-    for :py:mod:`pymel.core`:
-    
-    .. code-block:: python
-    
-        >>> import paya.runtime as r
-        >>> cube = r.PyNode('pCube1')
-    
-    Custom **paya** classes should always be retrieved via this object's
-    ``nodes``, ``plugs``, ``comps`` and ``data`` attributes, whether to access
-    a custom constructor method or for superclass calls inside template
-    classes.
-    
-    If ``patchOnLoad`` is set to ``True`` inside :py:mod:`paya.config`, PyMEL
-    will be patched to return **paya** types when this module is first
-    imported.
+
 
     .. py:method:: rehash()
     
         Reloads :py:mod:`paya.cmds` and clears the custom class caches,
         so that subsequent retrievals will trigger reloads.
-    
-    .. py:method:: start()
-    
-        Patches PyMEL to return custom paya types.
-    
-    .. py:method:: stop()
-    
-        Restores PyMEL to its 'factory' state.

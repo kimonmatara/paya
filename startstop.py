@@ -7,45 +7,34 @@ from paya.pools import pools
 global running
 running = False
 
-def start():
+def start(quiet=False):
     """
-    Starts a Paya session. PyMEL is patched to return Paya classes and,
-    unless *ignoreUnits* is ``True`` in :mod:`~paya.config`, creates a
-    few callbacks to monitor unit settings.
+    Patches PyMEL to return Paya classes.
     """
     global running
 
-    if running:
-        m.warning('Paya is already running.')
+    if running and not quiet:
+        m.warning('PyMEL is already patched.')
 
     else:
-        if not config['ignoreUnits']:
-            NativeUnits().addCallbacks()
-
         patchPyMEL(quiet=True)
         running = True
+        print("PyMEL has been patched.")
 
-        print("Welcome to Paya.")
-
-def stop():
+def stop(quiet=False):
     """
-    Stops the Paya session. PyMEL is reverted to its 'factory' state and any
-    callbacks are removed.
+    Reverts PyMEl to its 'factory' state.
     """
     global running
 
     if running:
-        if not config['ignoreUnits']:
-            NativeUnits().removeCallbacks()
-
         unpatchPyMEL(quiet=True)
 
         for pool in pools:
             pool.purge(quiet=True)
 
         running = False
+        print("PyMEL has been unpatched.")
 
-        print("Paya has been stopped.")
-
-    else:
-        m.warning("Paya is already stopped.")
+    elif not quiet:
+        m.warning("Paya is already unpatched.")

@@ -31,8 +31,7 @@ pyMELIsPatched = False
 # instantiations
 
 poolsToPatch = [pool for pool in _pl.pools \
-    if not isinstance(pool, _pl.ParsedSubtypeClassPool)]
-
+                if not isinstance(pool, _pl.ParsedNodeSubtypePool)]
 
 def patchPyMEL(quiet=False):
     """
@@ -60,17 +59,6 @@ def patchPyMEL(quiet=False):
 
             except _pl.UnsupportedLookupError:
                 return instance
-
-            if config['autoExpandSubtypes']:
-                if issubclass(pmcls, _nt.DependNode):
-                    if customCls.__supports_parsed_subtypes__:
-                        parsedSubcls = \
-                            customCls.getParsedSubclassForNode(instance)
-
-                        if parsedSubcls is not None:
-                            instance.__class__ = parsedSubcls
-                            instance.__paya_subtype_init__()
-                            return instance
 
             instance.__class__ = customCls
 

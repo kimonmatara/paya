@@ -4,12 +4,16 @@ paya.util.functions
 
 .. py:module:: paya.util.functions
 
+.. py:class:: Undefined
+
+
+
 .. py:class:: short(**mapping)
 
     Decorator with keyword arguments, used to mimic Maya's 'shorthand'
     flags.
     
-    Example:
+    :Example:
     
         .. code-block:: python
     
@@ -55,3 +59,18 @@ paya.util.functions
         only be used for tuples and lists; defaults to None
     :return: The flattened args.
     :rtype: list
+
+.. py:function:: sigCollectsKwargs(signature)
+
+    :param signature: the signature object
+    :type signature: :class:`inspect.Signature`
+    :return: ``True`` if the signature object collects keyword arguments,
+        otherwise ``False``.
+
+.. py:function:: sigWithAddedKwargs(signature, **kwargs)
+
+    :param signature: the original signature object
+    :type signature: :class:`inspect.Signature`
+    :param \*\*kwargs: defines keywords arguments, with defaults, to add to
+        the signature copy.
+    :return: A copy of *signature* with the passed keyword arguments mixed-in.

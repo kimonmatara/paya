@@ -6,12 +6,18 @@ paya.runtime.data.Vector
 
 .. py:class:: Vector(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.datatypes.Vector` :class:`~pymel.util.arrays.VectorN` :class:`~pymel.util.arrays.Array` :class:`~maya.OpenMaya.MVector`
+
     .. py:method:: createLocator(name=None, size=1.0)
     
         :shorthand: ``cl``
         
-        :param name/n: one or more optional name elements; defaults to None
-        :rtype name/n: None, list, int, str
+        :param str name/n: an optional name for the locator transform; defaults to
+            a contextual name
         :param float size/siz: a single scalar for the locator's
             ``localScale`` channels; defaults to 1.0
         :return: A locator with this 3D compound piped into its
@@ -96,11 +102,8 @@ paya.runtime.data.Vector
         Overloads :meth:`pymel.core.datatypes.Vector.__rpow__` to add
         support for 1D and 3D plugs.
     
-    .. py:method:: blend(other, weight=0.5, swap=False, includeLength=False, byVectorAngle=False)
+    .. py:method:: blend(other, weight=0.5, swap=False, byVectorAngle=None, includeLength=False, clockNormal=None, unwindSwitch=None)
     
-        If 'other' or 'weight' is a plug, then the return will also be a
-        plug.
-        
         :param other: the vector that will be fully active when 'weight'
             is 1.0 (or 0.0, if 'swap' is True)
         :type other: list, tuple, :class:`paya.runtime.data.Vector`,
@@ -110,12 +113,25 @@ paya.runtime.data.Vector
         :param bool swap/sw: swap operands around; defaults to False
         :param bool byVectorAngle/bva: blend by rotating one vector towards
             the other, rather than via linear value interpolation; defaults
-            to False
-        :param bool includeLength/ilg: ignored if 'byVectorAngle' is False;
-            blend vector lengths (magnitudes) as well; defaults to False
+            to ``True`` if *clockNormal* is provided, otherwise ``False``
+        :param bool includeLength/ilg: blend vector lengths (magnitudes)
+            as well; defaults to False
+        :param clockNormal/cn: an optional winding vector; providing this
+            will enable the unwinding options when blending by angle;
+            defaults to None
+        :type clockNormal/cn: None, tuple, list, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param int unwindSwitch/uws: ignored if *clockNormal* was omitted; an
+            integer value to pick an angle unwinding mode:
+        
+            - ``0`` for shortest (the default)
+            - ``1`` for positive
+            - ``2`` for negative
+        
         :return: The blended vector.
-        :rtype: :class:`paya.runtime.data.Vector` or
-            :class:`paya.runtime.plugs.Vector`
+        :rtype: :class:`paya.runtime.plugs.Vector`,
+            :class:`paya.runtime.data.Vector`
     
     .. py:method:: rotateByAxisAngle(axisVector, angle)
     
@@ -146,20 +162,30 @@ paya.runtime.data.Vector
         :return: The dot product.
         :rtype: :class:`Vector` or :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: cross(other, normalize=False)
+    .. py:method:: cross(other, normalize=False, inlineGate=None, guard=False)
     
         Returns the cross product of this vector and 'other'.
-        
-        Extends the base PyMEL method in these ways:
-        
-        -   Adds the 'normalize' keyword argument
-        -   Works with plugs as well as values (if 'other' is a plug,
-            the output will also be a plug)
         
         :param other: the other vector
         :type other: :class:`~paya.runtime.plugs.Math3D`, :class:`Vector`,
             :class:`Point`, list, str
         :param bool normalize/nr: normalize the output; defaults to False
+        :param bool guard/g: if the two vectors are in-line, then:
+        
+            -   if *other* is a plug, switch the
+                :class:`vectorProduct <paya.runtime.nodes.VectorProduct>`
+                to 'No Operation'
+        
+            -   if *other* is a value, return ``self``
+        
+            Defaults to ``False``.
+        :param inlineGate/ig: if you already have a boolean gate or
+            value state to indicate whether the vectors are in-line,
+            provide it here to prevent redundant checks; if this is
+            provided, *guard/g* will be overriden to ``True``; defaults
+            to ``None``
+        :type inlineGate/ig: :class:`bool`, :class:`str`,
+            :class:`~paya.runtime.plugs.Math1D`
         :return: The cross product.
         :rtype: :class:`Vector` or :class:`~paya.runtime.plugs.Math3D`
     

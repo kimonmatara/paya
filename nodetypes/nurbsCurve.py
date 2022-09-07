@@ -1,13 +1,9 @@
-import maya.OpenMaya as om
-import pymel.util as _pu
-import pymel.core.nodetypes as _nt
+import re
 
 from paya.geoshapext import ShapeExtensionMeta
 import paya.lib.nurbsutil as _nu
-from paya.lib.loopback import Loopback
-import paya.lib.nurbsutil as _nu
 import paya.lib.mathops as _mo
-import paya.lib.plugops as _po
+import paya.lib.typeman as _tm
 from paya.util import short
 import paya.runtime as r
 
@@ -38,13 +34,14 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
     @classmethod
     @short(
         degree='d',
-        under='u',
+        parent='p',
         name='n',
         conformShapeName='csn',
         intermediate='i',
         displayType='dt',
         bSpline='bsp',
-        lineWidth='lw'
+        lineWidth='lw',
+        dispCV='dcv'
     )
     def create(
             cls,
@@ -52,11 +49,12 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
             degree=3,
             name=None,
             bSpline=False,
-            under=None,
+            parent=None,
             displayType=None,
-            conformShapeName=True,
+            conformShapeName=None,
             intermediate=False,
-            lineWidth=None
+            lineWidth=None,
+            dispCV=True
     ):
         """
         Draws static or dynamic curves.
@@ -67,14 +65,14 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
         :param bool bSpline/bsp: only available if *degree* is 3; draw as a
             bSpline (similar to drawing by EP); defaults to False
         :param int degree/d: the curve degree; defaults to 3
-        :param under/u: an optional destination parent; no space conversion
+        :param parent/p: an optional destination parent; no space conversion
             will take place; if the parent has transforms, the curve shape
             will be transformed as well; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: str, int, None, tuple, list
-        :param bool conformShapeName/csn: if reparenting, rename the shape to match
-            the destination parent; defaults to True
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param str name/n: the shape name; defaults to ``None``
+        :param bool conformShapeName/csn: ignored if *parent* was omitted;
+            rename the shape after it is reparented; defaults to True if
+            *parent* was provided, otherwise False
         :param bool intermediate: set the shape to intermediate; defaults to
             False
         :param displayType/dt: if provided, an index or enum label:
@@ -85,12 +83,16 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
 
             If omitted, display overrides won't be activated at all.
         :type displayType/dt: None, int, str
+        :param bool dispCV/dcv: display CVs on the curve; defaults to True
         :param lineWidth/lw: an override for the line width; defaults to None
         :type lineWidth/lw: None, float
         :return: The curve shape.
         :rtype: :class:`NurbsCurve`
         """
-        points = _mo.expandVectorArgs(points)
+        if conformShapeName is None:
+            conformShapeName = True if parent else False
+
+        points = _tm.expandVectorArgs(points)
         num = len(points)
 
         if bSpline:
@@ -114,7 +116,7 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
                 )
             )
 
-        infos = [_mo.info(point) for point in points]
+        infos = [_tm.mathInfo(point) for point in points]
         points = [info[0] for info in infos]
         hasPlugs = any([info[2] for info in infos])
 
@@ -126,18 +128,27 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
             _points = points
 
         # Soft-draw
+
+        kwargs = {}
+
+        if not (parent and conformShapeName):
+            mt = re.match(r"^(.*?)Shape$", name)
+
+            if mt:
+                kwargs['name'] = mt.groups()[0]
+
         curveXf = r.curve(
-            name=cls.makeName(n=name),
             knot=_nu.getKnotList(num, drawDegree),
             point=_points,
-            degree=drawDegree
+            degree=drawDegree,
+            **kwargs
         )
 
         # Reparent
         curveShape = curveXf.getShape()
 
-        if under:
-            r.parent(curveShape, under, r=True, shape=True)
+        if parent:
+            r.parent(curveShape, parent, r=True, shape=True)
             r.delete(curveXf)
 
             if conformShapeName:
@@ -179,6 +190,7 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
         sections='s',
         degree='d',
         name='n',
+        conformShapeName='csn',
         lineWidth='lw'
     )
     def createArc(
@@ -191,6 +203,7 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
             degree=3,
             guard=None,
             name=None,
+            conformShapeName=None,
             lineWidth=None
     ):
         """
@@ -224,16 +237,18 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
             otherwise False.
         :param lineWidth/lw: an override for the line width; defaults to None
         :type lineWidth/lw: None, float
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: str, int, None, tuple, list
+        :param str name/n: the shape name; defaults to ``None``
+        :param bool conformShapeName/csn: ignored if *parent* was omitted;
+            rename the shape after it is reparented; defaults to True if
+            *parent* was provided, otherwise False
         :return: The curve shape.
         :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
         """
-        points = _mo.expandVectorArgs(*points)
+        points = _tm.expandVectorArgs(*points)
 
-        live = any((_mo.isPlug(point) for point in points)) \
-            or (directionVector and _mo.isPlug(directionVector)) \
-            or _mo.isPlug(radius)
+        live = any((_tm.isPlug(point) for point in points)) \
+            or (directionVector and _tm.isPlug(directionVector)) \
+            or _tm.isPlug(radius)
 
         output = r.plugs.NurbsCurve.createArc(
             points,
@@ -245,7 +260,8 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
             guard=guard
         )
 
-        shape = output.createShape(n=name)
+        shape = output.createShape(name=name,
+                                   conformShapeName=conformShapeName)
 
         if not live:
             shape.deleteHistory()
@@ -353,178 +369,6 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
 
         # If not worldSpace, revert to PyMEL method
         return r.nodetypes.NurbsCurve.length(self)
-
-
-    @short(
-        parametric='ar',
-        uniform='uni',
-        upVector='upv',
-        upObject='uo',
-        aimCurve='aic',
-        closestPoint='cp',
-        upVectorSampler='ups',
-        defaultToNormal='dtn',
-        globalScale='gs',
-        squashStretch='ss',
-        chain='cha',
-        displayLocalAxis='dla',
-        radius='rad',
-        rotateOrder='ro',
-        under='u',
-        freeze='fr',
-        decompose='dec',
-        plug='p'
-    )
-    def distributeJoints(self,
-                         numberFractionsOrParams,
-                         primaryAxis, secondaryAxis,
-
-                         parametric=False,
-                         uniform=False,
-
-                         upVector=None,
-                         upObject=None,
-                         aimCurve=None,
-                         closestPoint=True,
-
-                         upVectorSampler=None,
-                         defaultToNormal=None,
-
-                         globalScale=None,
-                         squashStretch=False,
-
-                         chain=False,
-                         displayLocalAxis=True,
-                         radius=1.0,
-                         rotateOrder='xyz',
-                         under=None,
-                         freeze=True,
-                         decompose=True,
-
-                         plug=False):
-        """
-        Distributes joints along this curve. Pass *plug/p=True* for live
-        connections.
-
-        :param numberFractionsOrParams: this should either be
-
-            -   A number of fractions or parameters to generate along the curve,
-                or
-            -   An explicit list of fractions or parameters at which to construct
-                the matrices
-
-        :param str primaryAxis: the primary (aim) matrix axis, for example
-            '-y'
-        :param str secondaryAxis: the secondary (up) matrix axis, for example
-            'x'
-        :param bool parametric/par: interpret *numberOrFractions* as
-            parameters, not fractions; defaults to ``False``
-        :param bool uniform/uni: if *parametric* is ``True``, and
-            *numberFractionsOrParams* is a number, initial parameters should
-            be distributed by length, not parametric space; defaults to
-            ``False``
-        :param upVector/upv: either
-
-            -   A single up vector, or
-            -   A list of up vectors (one per matrix)
-
-            If up vectors are provided on their own, they are used directly;
-            if they are combined with 'up objects' (*upObject*), they are
-            multiplied by the objects' world matrices, similar
-            to the 'Object Rotation Up' mode on :class:`motion path
-            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
-        :type upVector/upv: :class:`None`, :class:`str`, :class:`tuple`, :class:`list`,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`,
-            [:class:`None` | :class:`str` | :class:`tuple` | :class:`list` |
-            :class:`~paya.runtime.data.Vector` |
-            :class:`~paya.runtime.plugs.Vector`]
-        :param upObject/uo: this can be a single transform, or a list of
-            transforms (one per sample point); if provided on its own, used
-            as an aiming interest (similar to 'Object Up' mode on
-            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes); if
-            combined with *upVector*, the vector will be multiplied with the
-            object's matrix (similar to 'Object Rotation Up'); defaults to
-            ``None``
-        :type upObject/uo: ``None``, :class:`str`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param aimCurve/aic: a curve from which to pull aiming interests,
-            similar to the option on
-            :class:`curveWarp <paya.runtime.nodes.CurveWarp>`
-            nodes; defaults to ``None``
-        :type aimCurve/aic: None, str,
-            :class:`paya.runtime.plugs.NurbsCurve`,
-            :class:`paya.runtime.nodes.NurbsCurve`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
-            not matched parameters; defaults to ``True``
-        :param upVectorSampler/ups: an up vector sampler created using
-            :meth:`createUpVectorSampler`; defaults to ``None``
-        :type upVectorSampler/ups: None, str,
-            :class:`~paya.runtime.nodes.Network`,
-            :class:`~paya.runtime.networks.CurveUpVectorSampler`
-        :param bool defaultToNormal/dtn: when all other up vector options are
-            exhausted, don't fall back to any 'default' up vector sampler
-            previously created using
-            :meth:`createUpVectorSampler(
-                setAsDefault=True) <createUpVectorSampler>`;
-            instead, use the curve normal (the curve normal will be used anyway
-            if no default sampler is defined); defaults to ``False``
-        :param globalScale/gs: a baseline scaling factor; note that scale will
-            be normalized in all cases, so if this is value rather than a plug,
-            it will have no practical effect; defaults to ``None``
-        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
-        :param bool squashStretch/ss: allow squashing and stretching of the
-            *primaryAxis* on the output matrix; defaults to ``False``
-        :param bool chain/cha: create the joints as a contiguous chain with
-            aimed, rather than tangent-based, matrix orientation; defaults to
-            ``False``
-        :param bool displayLocalAxis/dla: display the local matrix
-            axes; defaults to ``True``
-        :param float radius/rad: the joint display radius; defaults to 1.0
-        :param rotateOrder/ro: the rotate order for the joint; defaults
-            to ``'xyz'``
-        :type rotateOrder/ro: ``None``, :class:`str`, :class:`int`,
-            :class:`~paya.runtime.plugs.Math1D`
-        :param under/u: an optional destination parent for the joints
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param bool freeze/fr: zero-out transformations (except translate)
-            at the initial pose; defaults to ``True``
-        :param bool decompose/dec: if ``False``, connect to
-            ``offsetParentMatrix`` instead of driving the joint's SRT
-            channels; note that, if *freeze* is requested, the initial matrix
-             will *always* be applied via decomposition and then frozen;
-             defaults to ``True``
-        :param bool plug/p: drive the joints dynamically; defaults to
-            ``False``
-        :return: The individual joints or a chain (if *chain* was requested).
-        :rtype: [:class:`~paya.runtime.nodes.Joint`] |
-            :class:`~paya.lib.skel.Chain`
-        """
-        matrices = self.distributeMatrices(
-            numberFractionsOrParams,
-            primaryAxis, secondaryAxis,
-            par=parametric, uni=uniform,
-            upv=upVector, uo=upObject,
-            aic=aimCurve, cp=closestPoint,
-            ups=upVectorSampler, dtn=defaultToNormal,
-            gs=globalScale, ss=squashStretch,
-            cha=chain, p=plug
-        )
-
-        joints = [r.nodes.Joint.create(wm=matrix, n=i+1,
-                                       u=under, ro=rotateOrder,
-                                       dla=displayLocalAxis,
-                                       fr=freeze, dec=decompose)\
-                  for i, matrix in enumerate(matrices)]
-
-        if chain:
-            for thisJoint, nextJoint in zip(joints, joints[1:]):
-                nextJoint.setParent(thisJoint)
-
-            return r.Chain(joints)
-
-        return joints
 
     #--------------------------------------------------------------------|
     #--------------------------------------------------------------------|    DEFORMERS

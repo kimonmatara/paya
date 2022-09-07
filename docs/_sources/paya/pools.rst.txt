@@ -4,95 +4,307 @@ paya.pools
 
 .. py:module:: paya.pools
 
-Defines the template class interfaces served by the ``nodes``,
-``plugs``, ``comps`` and ``data`` attributes on :py:mod:`paya.runtime`.
+.. py:class:: ClassPoolBrowser(pool)
 
-This module is not intended for direct use.
-
-.. py:function:: ispmcls()
-
-    :param cls: The class to query
-    :return: ``True`` if the class is a 'vanilla' PyMEL class,
-        otherwise ``False``.
-    :rtype: bool
-
-.. py:function:: iscustomcls()
-
-    :param cls: The class to query
-    :return: ``True`` if the class is a **paya** class,
-        otherwise ``False``.
-    :rtype: bool
+    Browsing wrapper for a class pool instance. Classes can be retrieved
+    using dotted or keyed syntax.
 
 .. py:class:: ClassPool
 
-    Abstract. Defines base functionality for all template class pools.
+    Abstract base class for collections of custom Paya classes.
 
-    .. py:staticmethod:: __new__()
+    .. py:method:: browse()
     
-        Create and return a new object.  See help(type) for accurate signature.
+        :return: A browser object for this pool.
+        :rtype: :class:`ClassPoolBrowser`.
     
-    .. py:method:: _getTemplateFilePath(clsname)
+    .. py:method:: dirPath()
     
-        Caution: For speed, this doesn't check for duplicates; the first
-        match is always returned.
+        :return: The full directory path for the template package.
+        :rtype: str
     
-    .. py:method:: getFromPyMELInstance(inst)
+    .. py:method:: longName()
     
-        Given a PyNode or PyMEL data type instance, returns a custom class
-        suitable for assignment.
+        :return: The long name of this pool, for example 'nodetypes'.
+        :rtype: str
+    
+    .. py:method:: shortName()
+    
+        :return: The short name of this pool, for example 'nodes'.
+        :rtype: str
+    
+    .. py:method:: purge(quiet=False)
+    
+        Purges cached information.
+    
+    .. py:method:: getMeta(clsname)
+    
+        :param str clsname: the name of the class being retrieved
+        :return: An appropriate metaclass for the requested class.
+        :rtype: type
+    
+    .. py:method:: inventBasesDict(clsname)
+    
+        :param clsname: the name of the class being retrieved
+        :raise NotImplementedError: Invention is not implemented for this pool.
+        :return: Bases and a dict that can be used to construct a stand-in
+            class in the absence of a template.
+        :rtype: (tuple, dict)
+    
+    .. py:method:: conformBases(clsname, bases)
+    
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
         
-        :param inst: the PyNode or PyMEL data type instance
-        :return: The custom class.
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+    
+    .. py:method:: conformDict(clsname, dct)
+    
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+        
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+    
+    .. py:method:: getBasesDictFromTemplate(clsname)
+    
+        Looks for a template for the requested class and, if one is found,
+        returns its conformed bases and dictionary.
+        
+        :param clsname: the name of the class being retrieved
+        :return: The bases and dictionary.
+        :rtype: (tuple, dict)
+    
+    .. py:method:: buildClass(clsname)
+    
+        Builds a final class. If a template is available, it is used.
+        Otherwise, if this pool implements invention, the class is invented.
+        If this pool doesn't implement invention, an exception is raised.
+        
+        :param str clsname: the name of the class to build
+        :raises MissingTemplateError: A template couldn't be found, and this
+            pool doesn't implement invention.
+        :return: The built class.
+        :rtype: type
     
     .. py:method:: getByName(clsname)
     
-        Returns a custom class by name.
+        Retrieves a Paya class by name.
+        
+        Previously-constructed classes are returned from a cache. If the class
+        is not in the cache then, if there's a template for it, information
+        from the template will be used to build the class. If there's no
+        template then, if this pool implements invention, the class will be
+        invented. Otherwise, an exception will be raised.
         
         :param str clsname: the name of the class to retrieve
-        :return: The custom class.
+        :raises MissingTemplateError: A template couldn't be found, and this
+            pool doesn't implement invention.
+        :return: The retrieved class.
+        :rtype: type
+
+.. py:class:: ShadowPool
+
+    Abstract base class for pools that directly shadow PyMEL namesakes.
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ClassPool`
+
+    .. py:method:: getFromPyMELInstance(inst)
     
-    .. py:method:: purge()
+        Given a PyMEL instance, returns an appropriate Paya class for
+        reassignment.
     
-        Clears the cache so that subsequent class lookups will trigger
-        reloads.
+    .. py:method:: inventBasesDict(clsname)
+    
+        :param clsname: the name of the class being retrieved
+        :raise NotImplementedError: Invention is not implemented for this pool.
+        :return: Bases and a dict that can be used to construct a stand-in
+            class in the absence of a template.
+        :rtype: (tuple, dict)
+    
+    .. py:method:: conformDict(clsname, dct)
+    
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+        
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+    
+    .. py:method:: conformBases(clsname, bases)
+    
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
+        
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+    
+    .. py:method:: getMeta(clsname)
+    
+        :param str clsname: the name of the class being retrieved
+        :return: An appropriate metaclass for the requested class.
+        :rtype: type
+    
+    .. py:method:: getPmBase(clsname)
+    
+        :param str clsname: the class being retrieved
+        :return: A PyMEL base for the requested class.
+        :rtype: type
 
 .. py:class:: NodeClassPool
 
-    Serves custom classes for **nodes**.
+    Administers custom Paya classes for nodes. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.nodes``.
 
-.. py:class:: PlugClassPool
+    .. rubric:: Inheritance
 
-    Serves custom classes for **plugs** (attributes) off of an inheritance tree
-    defined inside ``paya/plugtree.json``.
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
 
-    .. py:method:: getFromPyMELInstance(inst)
+    .. py:method:: conformDict(clsname, dct)
     
-        Overloads :py:meth:`ClassPool.getFromPyMELInstance` to implement
-        ``MPlug`` inspections.
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
         
-        :param inst: the PyNode or PyMEL data type instance
-        :return: The custom class.
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
 
 .. py:class:: CompClassPool
 
-    Serves custom classes for **components**.
+    Administers custom Paya classes for components. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.comps``.
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+
+.. py:class:: PlugClassPool
+
+    Administers custom Paya classes for plugs (attributes). Relies on
+    :mod:`~paya.plugtree`. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.plugs``.
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+
+    .. py:method:: getFromPyMELInstance(inst)
+    
+        Given a PyMEL instance, returns an appropriate Paya class for
+        reassignment.
+    
+    .. py:method:: getPmBase(clsname)
+    
+        :param str clsname: the class being retrieved
+        :return: A PyMEL base for the requested class.
+        :rtype: type
+    
+    .. py:method:: conformBases(clsname, bases)
+    
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
+        
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+
+.. py:function:: getRootDataClasses()
+
+    :return: Terminating classes detected from :mod:`pymel.core.datatypes`.
 
 .. py:class:: DataClassPool
 
-    Serves custom classes for **data objects**, for example
-    :class:`~pymel.core.datatypes.Matrix` instances returned by
-    :py:meth:`~pymel.core.nodetypes.Transform.getMatrix`.
+    Administers custom Paya classes for data types (e.g. vectors). An instance
+    of this pool can be accessed on :mod:`paya.runtime` as ``.data``.
 
-    .. py:method:: getByName(clsname)
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+
+.. py:class:: ParsedNodeSubtypePoolMeta(clsname, bases, dct)
+
+
+
+    .. rubric:: Inheritance
+
+    :class:`~builtins.type`
+
+.. py:class:: ParsedNodeSubtypePool
+
+
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+
+    .. py:method:: inventBasesDict(clsname)
     
-        Overloads :py:meth:`ClassPool.getByName` to prevent customisation of
-        sensitive types such as :py:class:`pymel.core.datatypes.MatrixN` by
-        raising ``UnsupportedLookupError``.
+        :raises NotImplementedError: Not supported on parsed-subtype pools.
+    
+    .. py:method:: buildClass(clsname)
+    
+        Builds a final class. If a template is available, it is used.
+        Otherwise, if this pool implements invention, the class is invented.
+        If this pool doesn't implement invention, an exception is raised.
         
-        :param str clsname: the name of the class to retrieve
-        :return: The custom class.
+        :param str clsname: the name of the class to build
+        :raises MissingTemplateError: A template couldn't be found, and this
+            pool doesn't implement invention.
+        :return: The built class.
+        :rtype: type
+    
+    .. py:method:: conformDict(clsname, dct)
+    
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+        
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+    
+    .. py:method:: conformBases(clsname, bases)
+    
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
+        
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
 
-.. py:function:: getPoolFromPmBase(pmbase)
+.. py:class:: ParsedNetworkSubtypePool
 
-    Given a PyMEL base class, returns the most appropriate class pool
-    to source a swap-in from.
+    Administers subtypes for 'network' nodes.
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ParsedNodeSubtypePool` :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+
+.. py:class:: ParsedContainerSubtypePool
+
+    Administers subtypes for 'container' nodes.
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ParsedNodeSubtypePool` :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`

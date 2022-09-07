@@ -1,3 +1,4 @@
+from paya.lib.typeman import plugCheck
 from paya.geoshapext import copyToShape
 from paya.util import short
 import paya.lib.nurbsutil as _nu
@@ -99,14 +100,14 @@ class BezierCurve:
     @copyToShape()
     @short(asPoint='ap', asIndex='ai', plug='p')
     def getCVAtAnchor(self, anchorIndex,
-                      asPoint=None, asIndex=None, plug=True):
+                      asPoint=None, asIndex=None, plug=False):
         """
         :param int anchorIndex: the index of the Bezier anchor to inspect
         :param bool asPoint/ap: return a CV point position (the default)
         :param bool asIndex/ai: return a CV index; this will always be a
             value, even if *plug* is ``True``
         :param plug/p: if *asPoint* is requested, return a plug, not just
-            a value; defaults to ``True``
+            a value; defaults to ``False``
         :return: The point at the root CV of the specified anchor.
         :rtype: :class:`int` | :class:`~paya.runtime.data.Point`
             | :class:`~paya.runtime.plugs.Vector`
@@ -131,11 +132,11 @@ class BezierCurve:
 
     @copyToShape()
     @short(plug='p')
-    def pointAtAnchor(self, anchorIndex, plug=True):
+    def pointAtAnchor(self, anchorIndex, plug=False):
         """
         :param int anchorIndex: the index of the Bezier anchor to inspect
         :param bool plug/p: return an attribute, not just a value; defaults
-            to ``True``
+            to ``False``
         :return: The position of the root CV at the specified anchor.
         :rtype: :class:`~paya.runtime.data.Point` | :class:`~paya.runtime.plugs.Vector`
         """
@@ -144,12 +145,14 @@ class BezierCurve:
     @copyToShape()
     @short(asPoint='ap',
            asIndex='ai',
-           plug='p')
+           plug='p',
+           asDict='ad')
     def getCVsAtAnchor(self,
                        anchorIndex,
                        asPoint=None,
                        asIndex=None,
-                       plug=True):
+                       asDict=False,
+                       plug=False):
         """
         :param int anchorIndex: the index of the anchor to inspect
         :param bool asPoint/ap: return CV point positions (the default)
@@ -157,7 +160,16 @@ class BezierCurve:
             returned as values, not scalar outputs, even if *plug* is
             ``True``
         :param plug/p: if *asPoint* is requested, return point outputs, not
-            just values; defaults to ``True``
+            just values; defaults to ``False``
+        :param bool asDict/ad: returns the information in a
+            dictionary with the following keys:
+
+            - ``'in'``: the in-tangent point or index (may be omitted)
+            - ``'root'``: the point or index for the main anchor CV
+            - ``'out'``: the out-tangent point or index (may be omitted)
+
+            Defaults to ``False``.
+
         :return: The CV indices or positions.
         :rtype: [:class:`int`] | [:class:`paya.runtime.plugs.Vector`] |
             [:class:`paya.runtime.data.Point`]
@@ -183,10 +195,10 @@ class BezierCurve:
 
     @copyToShape()
     @short(plug='p', anchors='a')
-    def getControlVerts(self, plug=True, anchors=False):
+    def getControlVerts(self, plug=False, anchors=False):
         """
         :param bool plug/p: return plugs rather than values;
-            defaults to ``True``
+            defaults to ``False``
         :param bool anchors/a: organise the return into bezier anchor groups;
             see :func:`paya.lib.nurbsutil.itemsAsBezierAnchors`; defaults to
             ``False``
@@ -205,7 +217,7 @@ class BezierCurve:
     #---------------------------------------------------|    Matrices
 
     @copyToShape(worldSpaceOnly=True)
-    @short(upVector='uvp',
+    @short(upVector='upv',
            upObject='uo',
            aimCurve='aic',
            closestPoint='cp',
@@ -214,6 +226,7 @@ class BezierCurve:
            globalScale='gs',
            squashStretch='ss',
            plug='p')
+    @plugCheck('upVector', 'globalScale')
     def matrixAtAnchor(self,
                       anchorIndex,
 
@@ -232,7 +245,7 @@ class BezierCurve:
                       globalScale=None,
                       squashStretch=False,
 
-                      plug=True):
+                      plug=None):
         """
         :param int anchorIndex: the index of the anchor at which to
             construct a matrix
@@ -279,14 +292,16 @@ class BezierCurve:
         :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
         :param bool squashStretch/ss: allow squashing and stretching of the
             *primaryAxis* on the output matrix; defaults to ``False``
-        :param bool plug/p: return a plug rather than a value (note that, if this
-            is ``False``, *globalScale* and *squashAndStretch* are ignored);
-            defaults to ``True``
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
         :return: A matrix at the specified anchor.
         :rtype: :class:`paya.runtime.data.Matrix`, :class:`paya.runtime.plugs.Matrix`
         """
-        return self.matrixAtParam(
-            self.paramAtAnchor(anchorIndex),
+        param = self.paramAtAnchor(anchorIndex)
+
+        out = self.matrixAtParam(
+            param,
 
             primaryAxis,
             secondaryAxis,
@@ -305,6 +320,7 @@ class BezierCurve:
 
             plug=plug
         )
+        return out
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    Editing

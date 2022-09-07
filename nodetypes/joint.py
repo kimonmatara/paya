@@ -1,4 +1,4 @@
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 from paya.util import short
 import maya.cmds as m
 import paya.runtime as r
@@ -11,7 +11,7 @@ class Joint:
     @classmethod
     @short(displayLocalAxis='dla',
            worldMatrix='wm',
-           under='u',
+           parent='p',
            name='n',
            freeze='fr',
            decompose='dec',
@@ -20,7 +20,7 @@ class Joint:
     def create(cls,
                displayLocalAxis=True,
                worldMatrix=None,
-               under=None,
+               parent=None,
                name=None,
                freeze=True,
                decompose=True,
@@ -34,11 +34,9 @@ class Joint:
         :type worldMatrix/wm: None, tuple, list, str,
             :class:`~paya.runtime.data.Matrix`,
             :class:`~paya.runtime.plugs.Matrix`
-        :param under/u: an optional destination parent for the joint
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param name/n: one or more name elements; defaults to ``None``
-        :type name/n: ``None``, :class:`str`, :class:`int`,
-            [``None`` | :class:`str` | :class:`int`]
+        :param parent/p: an optional destination parent for the joint
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param str name/n: a name for the joint; defaults to ``None``
         :param bool freeze/fr: zero-out transformations (except translate)
             at the initial pose; defaults to ``True``
         :param bool decompose/dec: if ``False``, connect to
@@ -55,17 +53,22 @@ class Joint:
         :rtype: :class:`~paya.runtime.nodes.Joint`
         """
         # Draw the joint, perform basic configurations
-        joint = cls.createNode(n=name)
+        kw = {}
+
+        if name is not None:
+            kw['name'] = name
+
+        joint = cls.createNode(**kw)
         joint.attr('displayLocalAxis').set(displayLocalAxis)
         joint.attr('radius').set(radius)
         rotateOrder >> joint.attr('rotateOrder')
 
-        if under is not None:
-            joint.setParent(under)
+        if parent is not None:
+            joint.setParent(parent, relative=worldMatrix is None)
 
         # Manage matrix
         if worldMatrix is not None:
-            worldMatrix, wmDim, wmIsPlug = _mo.info(worldMatrix)
+            worldMatrix, wmDim, wmIsPlug = _tm.mathInfo(worldMatrix)
 
             if freeze:
                 if wmIsPlug:
@@ -89,21 +92,27 @@ class Joint:
 
     #------------------------------------------------------------|    Visual testing
 
-    def insertCube(self, size=1.0):
+    @short(name='n')
+    def insertCube(self, size=1.0, name=None):
         """
         Inserts a poly cube under (including transform) under the joint
         to help test transformations visually.
 
+        :param str name/n: a name for the cube; defaults to ``None``
         :param float size/siz: a single scalar for the cube's width, height
             and depth; defaults to 1.0
         :return: The cube transform.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
+        kw = {}
+
+        if name is not None:
+            kw['name'] = name
+
         cube = r.polyCube(ch=False, w=size,
                           h=size, d=size,
-                          n=r.nodes.Mesh.makeName(
-                              '{}_test_cube'.format(self.basename())),
-                          sd=2, sh=2, sw=2)[0]
+                          sd=2, sh=2, sw=2,
+                          **kw)[0]
 
         r.parent(cube, self)
         cube.setMatrix(r.data.Matrix())

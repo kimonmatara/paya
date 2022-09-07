@@ -45,6 +45,34 @@ Paya attribute subtypes.
 
     Called on import to expand the explicit ``tree`` dictionary procedurally.
 
+.. py:function:: subtree(name, dct=None)
+
+    :param str name: the root node name
+    :raises KeyError: *name* was not found in the tree.
+    :param dict dct: the dictionary to start scanning from; defaults to
+        the global tree if omitted
+    :return: A sub-section of the tree, from the first encountered
+        occurence of *name*. The root itself won't be included.
+    :rtype: dict
+
+.. py:function:: flatKeys(*subtree)
+
+    :param dct \*subtree: an optional subtree dictionary to process;
+        if omitted, defaults to the global tree
+    :return: All keys in the tree, recursively, with duplicates removed.
+    :rtype: [:class:`str`]
+
+.. py:function:: getParent(key)
+
+    :param str key: The type to inspect.
+    :return: The parent type.
+    :rtype: :class:`str`
+
+.. py:function:: geoTypes()
+
+    :return: A flat list of all 'Geometry' children (recursively).
+    :rtype: [:class:`str`]
+
 .. py:function:: numericUnitTypeIs1D(unitType)
 
     :param int unitType: the MFnNumericData unit type value

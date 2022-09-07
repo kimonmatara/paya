@@ -6,7 +6,13 @@ paya.runtime.nodes.SkinCluster
 
 .. py:class:: SkinCluster(*args, **kwargs)
 
-    .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, nameFromGeo=False, geometry=None, influence=None, multi=False, replace=False, **kwargs)
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.SkinCluster` :class:`~paya.runtime.nodes.GeometryFilter` :class:`~pymel.core.nodetypes.GeometryFilter` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, geometry=None, influence=None, multi=False, replace=False, **kwargs)
     
         Lightweight convenience wrapper / constructor for skinClusters, with the
         following differences from the standard
@@ -16,7 +22,6 @@ paya.runtime.nodes.SkinCluster
             'influence' keyword arguments used instead on creation
         -   A select subset of flags are pre-loaded with common defaults (see
             below)
-        -   Added 'nameFromGeo / nag' option
         -   Added 'multi' option
         -   Added 'replace' option
         
@@ -25,9 +30,8 @@ paya.runtime.nodes.SkinCluster
         :param float dropoffRate/dr: see Maya help; defaults to 4.5
         :param maximumInfluences/mi: see Maya help; defaults to None
         :type maximumInfluences/mi: None, int
-        :param name/n: one or more name elements for the deformer; ignored if
-            'nameFromGeo' is True; defaults to None
-        :type name/n: list, tuple, None, str, int
+        :param str name/n: a name for the skinCluster node; defaults to
+            ``None``
         :param int normalizeWeights/nw: see Maya help; defaults to 1
             (interactive)
         :param bool obeyMaximumInfluences/omi: see Maya help; defaults to
@@ -36,8 +40,6 @@ paya.runtime.nodes.SkinCluster
         :param bool toSelectedBones/tsb: see Maya help; defaults to True
         :param int weightDistribution/wd: see Maya help; defaults to 0
             (distance)
-        :param bool nameFromGeo/nfg: derive deformer names from geometry
-            names; defaults to False
         :param geometry/g: the geometry to bind to; defaults to None
         :type geometry/g: list, tuple,
             :class:`~paya.runtime.nodes.DeformableShape`,
@@ -76,9 +78,8 @@ paya.runtime.nodes.SkinCluster
         
         :param geo: the geometry to copy to
         :type geo: str, :class:`~paya.runtime.nodes.DagNode`
-        :param name/n: one or more name elements for the new skinCluster;
-            defaults to None
-        :type name/n: None, str, int, list, tuple
+        :param str name/n: a name for the new skinCluster; defaults to
+            ``None``
         :param bool replace/rep: if the destination geometry already has a
             skinCluster, remove it; defaults to True
         :param bool weights/w: copy weights too; defaults to True
@@ -122,12 +123,11 @@ paya.runtime.nodes.SkinCluster
         a reversed geometry suitable for use as a pre-deformation blend shape
         target.
         
-        :param correctiveShape: the corrective shape
-        :type correctiveShape: str,
-            :class:`~paya.runtime.nodes.GeometryShape`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param name/n: one or more name elements for the new geometry;
-            these will be applied to its transform; defaults to None
-        :type name/n: None, str, int, tuple, list
+        :param correctiveShape: the corrective (sculpt) shape
+        :type correctiveShape: :class:`str`,
+            :class:`~pymel.core.general.Shape`,
+            :class:`~pymel.core.general.Transform`
+        :param str name/n: a name for the inverted shape node; defaults to
+            ``None``
         :return: The pre-deformation target.
         :rtype: :class:`~paya.runtime.nodes.GeometryShape`

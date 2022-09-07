@@ -170,7 +170,7 @@ def copyPlugFuncToShapeClassDict(plugFunc,
                 m.warning("Shape {} will be replaced.".format(callingShape))
                 origName = callingShape.basename()
                 callingShape.rename('tmp')
-                heroShape = heroPlug.createShape(under=pnt)
+                heroShape = heroPlug.createShape(p=pnt)
                 heroShape.rename(origName)
                 p.delete(callingShape)
                 outShapes.append(heroShape)

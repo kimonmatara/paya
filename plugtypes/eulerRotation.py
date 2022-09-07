@@ -2,7 +2,6 @@ import maya.OpenMaya as om
 import pymel.util as _pu
 import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
-import paya.lib.mathops as _mo
 from paya.util import short
 import paya.runtime as r
 
@@ -16,8 +15,8 @@ class EulerRotation:
         """
         :shorthand: ``cl``
 
-        :param name/n: one or more optional name elements; defaults to None
-        :rtype name/n: None, list, int, str
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
         :param rotateOrder/ro: the rotate order of this euler rotation;
             defaults to 'xyz'
         :type rotateOrder/ro: int, str,
@@ -26,7 +25,10 @@ class EulerRotation:
             ``rotate`` channels.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        loc = r.nodes.Locator.createNode(n=name).getParent()
+        if not name:
+            name = r.Name.make(nt='locator', xf=True)
+
+        loc = r.spaceLocator(n=name)
         rotateOrder >> loc.attr('ro')
         self >> loc.attr('r')
 

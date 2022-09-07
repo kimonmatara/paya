@@ -1,4 +1,4 @@
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import pymel.core.nodetypes as _nt
 from paya.util import short
 import paya.runtime as r
@@ -6,21 +6,22 @@ import paya.runtime as r
 
 class IkHandle:
 
+    #------------------------------------------------------------|    Constructors
+
     @classmethod
     @short(name='n', solver='sol', curve='c')
     def create(cls, name=None, **mayaOptions):
         """
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, or list
+        :param str name/n: a name for the node; defaults to ``None``
         :param \*\*mayaOptions: all overflow keyword arguments are forwarded
             to :func:`~pymel.core.animation.ikHandle`
         :return: The constructed node.
         :rtype: :class:`~pymel.core.general.PyNode`
         """
         buildKwargs = {
-            'name': cls.makeName(name),
             'solver': 'ikRPsolver',
-            'parentCurve': False
+            'parentCurve': False,
+            'name': name if name else cls.makeName()
         }
 
         buildKwargs.update(mayaOptions)
@@ -135,7 +136,7 @@ class IkHandle:
         :param bool maintainOffset/mo: preserve chain state; defaults to False
         :return: ``self``
         """
-        point, dim, isplug = _mo.info(point)
+        point, dim, isplug = _tm.mathInfo(point)
         chordStart = self.getStartJoint().getWorldPosition(p=True)
         poleVec = point-chordStart
 

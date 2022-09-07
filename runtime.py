@@ -1,47 +1,116 @@
+from functools import wraps
+import maya.cmds as m
+import maya.OpenMaya as om
+
+
 class Runtime:
-    """
-    Top-level **paya** interface. This object serves the entire
-    :py:mod:`paya.cmds` namespace which, in turn, imports the full contents
-    of :py:mod:`pymel.core`. Hence, it can be used as a drop-in replacement
-    for :py:mod:`pymel.core`:
 
-    .. code-block:: python
+    #--------------------------------------------------|    Instantiation
 
-        >>> import paya.runtime as r
-        >>> cube = r.PyNode('pCube1')
+    __instance__ = None
+    __depth__ = 0
 
-    Custom **paya** classes should always be retrieved via this object's
-    ``nodes``, ``plugs``, ``comps`` and ``data`` attributes, whether to access
-    a custom constructor method or for superclass calls inside template
-    classes.
+    def __new__(cls, *args, **kwargs):
+        if cls.__instance__ is None:
+            cls.__instance__ = object.__new__(cls)
 
-    If ``patchOnLoad`` is set to ``True`` inside :py:mod:`paya.config`, PyMEL
-    will be patched to return **paya** types when this module is first
-    imported.
-    """
+        return cls.__instance__
 
     def __init__(self):
-        import paya.config as config
-        import paya.startstop as _ss
-        self._ss = _ss
-
-        self.start = _ss.start
-        self.stop = _ss.stop
-
-        if config['patchOnLoad']:
-            _ss.start()
-
-        self.config = config
-
-        import paya.cmds
-        self.cmds = paya.cmds
-
+        import paya.startstop as startstop
         from paya.pools import pools
+        import paya.cmds as cmds
+        from paya.nativeunits import NativeUnits
 
-        for pool in pools:
-            setattr(self, pool.shortName(), pool.browse())
-
+        self._ss = startstop
+        self._cmds = cmds
         self._pools = pools
+        self._running = False
+        self._nu = NativeUnits
+
+    #--------------------------------------------------|    Interfaces
+
+    def __createControl(self):
+        return self.nodes.Transform.createControl
+
+    def __getattr(self, attrName):
+        return getattr(self._cmds, attrName)
+
+    @property
+    def running(self):
+        return Runtime.__depth__ > 0
+
+    #--------------------------------------------------|    Start / stop
+
+    def start(self):
+        if Runtime.__depth__ is 0:
+            # Patch PyMEL
+            self._ss.start(quiet=True)
+
+            # Attach attributes
+            Runtime.createControl = property(fget=Runtime.__createControl)
+            Runtime.__getattr__ = self.__getattr
+
+            for pool in self._pools:
+                setattr(self, pool.shortName(), pool.browse())
+
+            # Enforce native units
+            self._nu.start()
+
+            Runtime.__depth__ = 1
+            print("Paya has started successfully.")
+
+        else:
+            m.warning("Paya can't be started because it's already running.")
+
+    def stop(self):
+        if Runtime.__depth__ > 0:
+            # Unpatch PyMEL
+            self._ss.stop(quiet=True)
+
+            # Remove attributes
+            del(Runtime.__getattr__)
+            del(Runtime.createControl)
+
+            for pool in self._pools:
+                delattr(self, pool.shortName())
+
+            self._nu.stop()
+            Runtime.__depth__ = 0
+
+            print("Paya has stopped successfully.")
+
+        else:
+            m.warning("Paya can't stop because it's not running.")
+
+    def __enter__(self):
+        if Runtime.__depth__ is 0:
+            self.start()
+
+        else:
+            Runtime.__depth__ += 1
+
+        return self
+
+    def __exit__(self, *args):
+        if Runtime.__depth__ is 1:
+            self.stop()
+
+        else:
+            Runtime.__depth__ -= 1
+
+        return False
+
+    def __call__(self, f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            with self:
+                result = f(*args, **kwargs)
+            return result
+
+        return wrapper
+
+    #--------------------------------------------------|    Reloading
 
     def rehash(self):
         """
@@ -49,20 +118,18 @@ class Runtime:
         so that subsequent retrievals will trigger reloads.
         """
         from importlib import reload
-        reload(self.cmds)
+        reload(self._cmds)
+        print('Reloaded paya.cmds.')
 
         for pool in self._pools:
             pool.purge()
 
-    @property
-    def createControl(self):
-        return self.nodes.Transform.createControl
+        print('Purged class pools.')
 
-    def __getattr__(self, item):
-        return getattr(self.cmds, item)
+    #--------------------------------------------------|    Repr
 
     def __repr__(self):
-        state = 'active' if self._ss.running else 'inactive'
+        state = 'running' if self.running else 'stopped'
         return "<paya runtime: {}>".format(state)
 
 inst = Runtime()

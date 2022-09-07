@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Version 0.9 Release Notes &mdash; paya 0.9 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/tabs.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pre-0.9 Release Notes" href="older_release_notes.html" />
+    <link rel="prev" title="What’s New" href="../releasenotes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../releasenotes.html">What's New</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Version 0.9</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-breaking-changes">General Breaking Changes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#non-automatic-patching">Non-Automatic Patching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#persistent-native-units">Persistent Native Units</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#consistent-sampler-method-behaviour">Consistent Sampler Method Behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#breaking-changes-to-nurbs-and-bezier-curve-methods">Breaking Changes to NURBS and Bezier Curve Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#spun-off-overloads">Spun-Off Overloads</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dropped-support-for-full-components-in-arguments">Dropped Support for Full Components in Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-breaking-changes-on-nurbs-and-bezier-curves">Other Breaking Changes on NURBS and Bezier Curves</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nurbs-and-bezier-curves">NURBS and Bezier Curves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#miscellaneous-additions">Miscellaneous Additions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bugs-fixed">Bugs Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="older_release_notes.html">Older</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Basics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../types_index.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">paya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../releasenotes.html">What’s New</a> &raquo;</li>
+      <li>Version 0.9 Release Notes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/docs/releasenotes/v0_9_release_notes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="version-0-9-release-notes">
+<h1>Version 0.9 Release Notes<a class="headerlink" href="#version-0-9-release-notes" title="Permalink to this headline"></a></h1>
+<section id="general-breaking-changes">
+<h2>General Breaking Changes<a class="headerlink" href="#general-breaking-changes" title="Permalink to this headline"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Version 0.9 of Paya introduces changes that may break rigging code written in 0.8. These changes were necessary to
+clarify workflows, unify method interfaces and ringfence unpatched PyMEL scripts. Please read through these release
+notes carefully to understand where to perform refactoring if needed.</p>
+</div>
+<section id="non-automatic-patching">
+<h3>Non-Automatic Patching<a class="headerlink" href="#non-automatic-patching" title="Permalink to this headline"></a></h3>
+<p>Paya no longer automatically patches PyMEL as soon as <a class="reference internal" href="../../paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> is loaded. Patching must instead be started
+and stopped using <code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.start()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.stop()</span></code>, respectively, or, better yet, managed via
+new context-manager functionality on the <a class="reference internal" href="../../paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> object itself. The older behaviour is still available via
+a configuration flag. See <span class="xref std std-doc">Importing and Patching</span> for details.</p>
+<div class="admonition-background admonition">
+<p class="admonition-title">Background</p>
+<p>This change was made to better ringfence external scripts that rely on unpatched PyMEL.</p>
+</div>
+</section>
+<section id="persistent-native-units">
+<h3>Persistent Native Units<a class="headerlink" href="#persistent-native-units" title="Permalink to this headline"></a></h3>
+<p>As of version 0.9, all Paya methods will automatically switch Maya to native units before running, and switch it back to
+the original user setting when they’re done. The older behaviour is still available via a configuration flag. See
+<span class="xref std std-doc">Working with Native Units</span> for more details.</p>
+<div class="admonition-background admonition">
+<p class="admonition-title">Background</p>
+<p>Paya wants you to rig with Maya configured for centimeters and radians. Before version 0.9 this was not sufficiently
+signalled to newcomers, leading to unexpected results when different units were used.</p>
+</div>
+</section>
+<section id="consistent-sampler-method-behaviour">
+<h3>Consistent Sampler Method Behaviour<a class="headerlink" href="#consistent-sampler-method-behaviour" title="Permalink to this headline"></a></h3>
+<p>As of version 0.9, <span class="xref std std-term">sampler methods</span> across shapes and plugs will always default to a
+<span class="xref std std-term">static</span> (value) return unless <em>plug=True</em> is explicitly requested or another argument is passed-in as a plug.
+See <span class="xref std std-doc">Static vs Dynamic Sampling</span> for more details.</p>
+<div class="admonition-background admonition">
+<p class="admonition-title">Background</p>
+<p>Before version 0.9, sampler methods on <strong>shape</strong> classes defaulted to <span class="xref std std-term">static</span> returns (i.e. values), while
+their counterparts on namesake <strong>plug</strong> classes defaulted to <span class="xref std std-term">dynamic</span> returns (i.e. live outputs). This
+made it less intuitive to predict default behaviour:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Version 0.9 (Now)</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Version 0.8 (Before)</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">shape</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getShape</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="c1"># Result: [-18.055226981265214, 0.0, 3.430571513891263]</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldSpace&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="c1"># Result: [-18.055226981265214, 0.0, 3.430571513891263]</span>
+
+<span class="c1"># To get a plug output, pass plug=True in both cases:</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">plug</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># Result: NPCI.position</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">plug</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># Result: NPCI.position</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">shape</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">PyNode</span><span class="p">(</span><span class="s1">&#39;curve1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getShape</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shape</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="c1"># Result: [-18.055226981265214, 0.0, 3.430571513891263]</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="s1">&#39;worldSpace&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="c1"># Result: NPCI.position</span>
+</pre></div>
+</div>
+</div></div>
+</div>
+</section>
+</section>
+<section id="breaking-changes-to-nurbs-and-bezier-curve-methods">
+<h2>Breaking Changes to NURBS and Bezier Curve Methods<a class="headerlink" href="#breaking-changes-to-nurbs-and-bezier-curve-methods" title="Permalink to this headline"></a></h2>
+<section id="spun-off-overloads">
+<h3>Spun-Off Overloads<a class="headerlink" href="#spun-off-overloads" title="Permalink to this headline"></a></h3>
+<p>Further to the changes described above, some PyMEL methods on NURBS and Bezier curve shapes that were previously
+overloaded with features such as dynamic output (via a <em>plug/p</em> option) have been reverted, and the added functionality
+separated off. Specifically:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PyMEL Method</p></th>
+<th class="head"><p>Paya Variant</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.closestPoint" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">closestPoint()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.nearestPoint" title="paya.runtime.nodes.NurbsCurve.nearestPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nearestPoint()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.getCVs" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getCVs()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.getControlVerts" title="paya.runtime.nodes.NurbsCurve.getControlVerts"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getControlVerts()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.findParamFromLength" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">findParamFromLength()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.paramAtLength" title="paya.runtime.nodes.NurbsCurve.paramAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtLength()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">findLengthFromParam()</span></code></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.lengthAtParam" title="paya.runtime.nodes.NurbsCurve.lengthAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lengthAtParam()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.getPointAtParam" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPointAtParam()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.pointAtParam" title="paya.runtime.nodes.NurbsCurve.pointAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointAtParam()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.getParamAtPoint" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getParamAtPoint()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.paramAtPoint" title="paya.runtime.nodes.NurbsCurve.paramAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtPoint()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.normal" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normal()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.normalAtParam" title="paya.runtime.nodes.NurbsCurve.normalAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normalAtParam()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.tangent" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tangent()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.tangentAtParam" title="paya.runtime.nodes.NurbsCurve.tangentAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tangentAtParam()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-background admonition">
+<p class="admonition-title">Background</p>
+<p>This change was made because it was becoming very complicated to maintain ‘combination’ argument signatures on
+overloaded methods across shape and plug implementations.</p>
+</div>
+</section>
+<section id="dropped-support-for-full-components-in-arguments">
+<h3>Dropped Support for Full Components in Arguments<a class="headerlink" href="#dropped-support-for-full-components-in-arguments" title="Permalink to this headline"></a></h3>
+<p>Geometry methods no longer accept full component arguments (for example instances of
+<a class="reference internal" href="../../pools/comps/nurbsCurveParameter.html#paya.runtime.comps.NurbsCurveParameter" title="paya.runtime.comps.NurbsCurveParameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurveParameter</span></code></a> or string representations such as <code class="docutils literal notranslate"><span class="pre">curve1.u[0.532]</span></code>). Pass
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> instead:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Version 0.9 (Now)</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Version 0.8 (Before)</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">param</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mf">0.5</span><span class="p">]</span> <span class="c1"># yields NurbsCurveParameter instance</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="c1"># fails with TypeError</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="c1"># works</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">param</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="mf">0.5</span><span class="p">]</span> <span class="c1"># yields NurbsCurveParameter instance</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="c1"># works</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">pointAtParam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="c1"># also works</span>
+</pre></div>
+</div>
+</div></div>
+<div class="admonition-background admonition">
+<p class="admonition-title">Background</p>
+<p>This change was made to prevent expensive checks to disambiguate between string representations of components and
+attributes (where both could be used), and because such methods expect fully local information (e.g. the index of a
+CV on the current curve) anyway.</p>
+</div>
+</section>
+<section id="other-breaking-changes-on-nurbs-and-bezier-curves">
+<h3>Other Breaking Changes on NURBS and Bezier Curves<a class="headerlink" href="#other-breaking-changes-on-nurbs-and-bezier-curves" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">distributeAimingMatrices()</span></code> has been removed; use
+<a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeMatrices" title="paya.runtime.plugs.NurbsCurve.distributeMatrices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">distributeMatrices(...</span> <span class="pre">chain=True)</span></code></a> instead</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fitChain()</span></code> has been removed; use <a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeJoints" title="paya.runtime.plugs.NurbsCurve.distributeJoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">distributeJoints(...</span> <span class="pre">chain=True)</span></code></a>
+instead</p></li>
+</ul>
+</section>
+</section>
+<section id="new-features">
+<h2>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline"></a></h2>
+<section id="nurbs-and-bezier-curves">
+<h3>NURBS and Bezier Curves<a class="headerlink" href="#nurbs-and-bezier-curves" title="Permalink to this headline"></a></h3>
+<section id="parallel-transport">
+<h4>Parallel Transport<a class="headerlink" href="#parallel-transport" title="Permalink to this headline"></a></h4>
+<p>Version 0.9 includes implementations for <strong>parallel transport</strong> inspired by a
+<a class="reference external" href="https://www.sidefx.com/tutorials/parallel-transport/">Houdini tutorial by Manuel Casasola Merkle</a>, itself based on
+<a class="reference external" href="https://www.semanticscholar.org/paper/Parallel-Transport-Approach-to-Curve-Framing-Hanson-Ma/ed416d01742e5e704357538c6817312ca6d8cb38?p2df">paper by A. Hanson and Hui Ma</a>.</p>
+<p>Parallel transport can be leveraged using a new workflow based on a up vector samplers. These are configured once per
+curve, and picked up implicitly by methods such as <a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtParam" title="paya.runtime.plugs.NurbsCurve.matrixAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matrixAtParam()</span></code></a> or
+<a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeMatrices" title="paya.runtime.plugs.NurbsCurve.distributeMatrices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">distributeMatrices()</span></code></a>. See <span class="xref std std-doc">Up Vector Sampling</span> for more details.</p>
+</section>
+<section id="general">
+<h4>General<a class="headerlink" href="#general" title="Permalink to this headline"></a></h4>
+<p>Here’s a breakdown of all new methods and features on NURBS and Bezier curve shapes and plugs:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>API / PyMEL methods that deal with curve lengths, such as <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsCurve.html#pymel.core.nodetypes.NurbsCurve.length" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pymel.core.nodetypes.NurbsCurve.length()</span></code></a>, always
+run in local space. Paya counterparts, on the other hand, such as <code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtLength()</span></code> or
+the overloaded <a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.length" title="paya.runtime.nodes.NurbsCurve.length"><code class="xref py py-meth docutils literal notranslate"><span class="pre">length()</span></code></a> are space-aware: When called on a shape, a
+<em>worldSpace</em> keyword argument is made available; when called on a plug, the space is determined by the choice of
+plug (for example, <code class="docutils literal notranslate"><span class="pre">.local</span></code> or <code class="docutils literal notranslate"><span class="pre">.worldSpace</span></code> on <a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">nurbsCurve</span></code></a> nodes).</p></li>
+<li><p>New methods have been added to configure up vector samplers:
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.createUpVectorSampler" title="paya.runtime.nodes.NurbsCurve.createUpVectorSampler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createUpVectorSampler()</span></code></a>
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.getUpVectorSamplers" title="paya.runtime.nodes.NurbsCurve.getUpVectorSamplers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getUpVectorSamplers()</span></code></a>
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.getDefaultUpVectorSampler" title="paya.runtime.nodes.NurbsCurve.getDefaultUpVectorSampler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getDefaultUpVectorSampler()</span></code></a>
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.clearUpVectorSamplers" title="paya.runtime.nodes.NurbsCurve.clearUpVectorSamplers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clearUpVectorSamplers()</span></code></a></p></li>
+<li><p>Compound <span class="xref std std-term">sampler methods</span> such as <code class="xref py py-meth docutils literal notranslate"><span class="pre">matrixAtParam()</span></code> or
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">distributeMatrices()</span></code> will now use a default up vector sampler if one has been
+configured. New <em>upVectorSampler/ups</em> and <em>defaultToNormal/dtn</em> options have been added to override this default
+behaviour.</p></li>
+<li><p>Discrete up-vector sampling operations are also available for lower-level hacking:
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.upVectorAtParam" title="paya.runtime.nodes.NurbsCurve.upVectorAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">upVectorAtParam()</span></code></a>
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.upVectorAtPoint" title="paya.runtime.nodes.NurbsCurve.upVectorAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">upVectorAtPoint()</span></code></a>
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.upVectorAtFraction" title="paya.runtime.nodes.NurbsCurve.upVectorAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">upVectorAtFraction()</span></code></a>
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.upVectorAtLength" title="paya.runtime.nodes.NurbsCurve.upVectorAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">upVectorAtLength()</span></code></a></p></li>
+<li><p>Anchor-aware <span class="xref std std-term">sampler methods</span> on <a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve" title="paya.runtime.plugs.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a> now include:
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.paramAtAnchor" title="paya.runtime.plugs.BezierCurve.paramAtAnchor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramAtAnchor()</span></code></a>
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.paramsAtAnchors" title="paya.runtime.plugs.BezierCurve.paramsAtAnchors"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paramsAtAnchors()</span></code></a>
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.getCVAtAnchor" title="paya.runtime.plugs.BezierCurve.getCVAtAnchor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getCVAtAnchor()</span></code></a>
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.getCVsAtAnchor" title="paya.runtime.plugs.BezierCurve.getCVsAtAnchor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getCVsAtAnchor()</span></code></a>
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.pointAtAnchor" title="paya.runtime.plugs.BezierCurve.pointAtAnchor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointAtAnchor()</span></code></a>
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.getControlVerts" title="paya.runtime.plugs.BezierCurve.getControlVerts"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getControlVerts()</span></code></a>
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.matrixAtAnchor" title="paya.runtime.plugs.BezierCurve.matrixAtAnchor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matrixAtAnchor()</span></code></a></p></li>
+<li><p>Anchor-aware <span class="xref std std-term">editor methods</span> on <a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve" title="paya.runtime.plugs.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a> now include:
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.inbetweenAnchors" title="paya.runtime.plugs.BezierCurve.inbetweenAnchors"><code class="xref py py-meth docutils literal notranslate"><span class="pre">inbetweenAnchors()</span></code></a>
+<a class="reference internal" href="../../pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.subdivideAnchors" title="paya.runtime.plugs.BezierCurve.subdivideAnchors"><code class="xref py py-meth docutils literal notranslate"><span class="pre">subdivideAnchors()</span></code></a></p></li>
+<li><p>A new <a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.insertKnot" title="paya.runtime.plugs.NurbsCurve.insertKnot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">insertKnot()</span></code></a> method has been added to
+<a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>.</p></li>
+<li><p>A <em>dispCV/dcv=True</em> option has been added to <a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.createShape" title="paya.runtime.plugs.NurbsCurve.createShape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">createShape()</span></code></a> on
+<a class="reference internal" href="../../pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve" title="paya.runtime.plugs.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve</span></code></a> and to <a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.create" title="paya.runtime.nodes.NurbsCurve.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> on
+<a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a>.</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<section id="miscellaneous-additions">
+<h3>Miscellaneous Additions<a class="headerlink" href="#miscellaneous-additions" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">pn</span></code> shorthand has been added for <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.core.general.PyNode</span></code></a> on <a class="reference internal" href="../../paya/runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a>, allowing you to
+write <code class="docutils literal notranslate"><span class="pre">loc</span> <span class="pre">=</span> <span class="pre">r.pn('locator1')`</span></code> instead of <code class="docutils literal notranslate"><span class="pre">loc</span> <span class="pre">=</span> <span class="pre">r.PyNode('locator1')</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="bugs-fixed">
+<h2>Bugs Fixed<a class="headerlink" href="#bugs-fixed" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><span class="xref std std-term">Editor methods</span> on <a class="reference internal" href="../../pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a> and
+<a class="reference internal" href="../../pools/nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve" title="paya.runtime.nodes.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a> create intermediate shapes when the type changes between NURBS and Bezier</p></li>
+<li><p><a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector.angle" title="paya.runtime.data.Vector.angle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.data.Vector.angle()</span></code></a> returns <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> instead of <a class="reference internal" href="../../pools/data/angle.html#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a></p></li>
+<li><p><a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector.get" title="paya.runtime.plugs.Vector.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector.get()</span></code></a> sometimes returns <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> instead of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></p></li>
+<li><p><a class="reference internal" href="../../pools/nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve.create" title="paya.runtime.nodes.BezierCurve.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.nodes.BezierCurve.create()</span></code></a> creates unexpected shapes because the generated knot list is not
+suitable for a Bezier curve</p></li>
+<li><p><a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D.acos" title="paya.runtime.plugs.Math1D.acos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Math1D.acos()</span></code></a> leads to excessive error warnings when the input range is outside
+0.0 -&gt; 1.0</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../releasenotes.html" class="btn btn-neutral float-left" title="What’s New" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="older_release_notes.html" class="btn btn-neutral float-right" title="Pre-0.9 Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kimon Matara.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

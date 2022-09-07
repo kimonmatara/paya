@@ -1,0 +1,19 @@
+***************************
+Using the Runtime Interface
+***************************
+
+So far we've only used :mod:`paya.runtime` to manage patching, reverting to the customary :mod:`pymel.core` for
+calls to :class:`~pymel.core.general.PyNode`. In fact, while patching is active, :mod:`paya.runtime` serves the entire
+:mod:`pymel.core` namespace, and can be used as a drop-in replacement:
+
+.. code-block:: python
+
+    import paya.runtime as r
+    r.start()
+    cam = r.ls(type='camera')[0]
+
+The pass-through does not work when patching is inactive. This is done on purpose, to ensure that Paya rigging scripts
+are not attempted in an unpatched state.
+
+The :mod:`paya.runtime` object also gives you access to top-level interfaces and functions such as
+:meth:`~paya.lib.mathops.createMatrix`. (More on these later.)

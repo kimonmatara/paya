@@ -1,5 +1,6 @@
 import pymel.core.nodetypes as _nt
 import paya.runtime as r
+import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
 from paya.util import resolveFlags, short, cap
 
@@ -17,12 +18,16 @@ class Matrix:
 
         :shorthand: ``cl``
 
-        :param str name/n: one or more name elements; defaults to None
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
         :param float size/siz: the locator display scale; defaults to 1.0
         :return: The locator.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        loc = r.nodes.Locator.createNode(n=name).getParent()
+        if not name:
+            name = r.Name.make(nt='locator', xf=True)
+
+        loc = r.spaceLocator(n=name)
         loc.attr('displayLocalAxis').set(True)
         loc.attr('localScale').set([size] * 3)
 
@@ -43,7 +48,7 @@ class Matrix:
 
         :param other: a 16D value or plug
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 16:
             node = r.nodes.AddMatrix.createNode()
@@ -80,7 +85,7 @@ class Matrix:
 
         :param other: a value or plug of dimension 3 (left only) or 16.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 3 and swap:
             node = r.nodes.PointMatrixMult.createNode()
@@ -115,7 +120,7 @@ class Matrix:
 
         :param other: a 3D value or plug
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 3:
             node = r.nodes.PointMatrixMult.createNode()
@@ -193,7 +198,7 @@ class Matrix:
         )
 
         if default:
-            default = _mo.info(default)[0]
+            default = _tm.mathInfo(default)[0]
 
         if not any([translate, rotate, scale, shear]):
             return (default if default else self).hold()
@@ -474,7 +479,7 @@ class Matrix:
         #-------------------------------------|    Fast bail
 
         if fast:
-            decomposition = self.decompose(ro=xf.attr('ro'))
+            decomposition = matrix.decompose(ro=xf.attr('ro'))
 
             for channel, state in zip(
                 ['translate', 'rotate', 'scale', 'shear'],
@@ -490,7 +495,7 @@ class Matrix:
                         "Couldn't connect into attribute: {}".format(dest)
                     )
 
-            return self
+            return matrix
 
         #-------------------------------------|    Main implementation
 

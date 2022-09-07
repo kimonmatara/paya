@@ -36,7 +36,10 @@ def createWormRig(
     points = [startPoint+(spineVector * (1/3 * i)) for i in range(4)]
 
     spineCurve = r.nodes.BezierCurve.create(points, name='main').getParent()
-    aimCurve = spineCurve.duplicate(name='aim', managedNames=True)[0]
+
+    with r.Name('aim'):
+        aimCurve = spineCurve.duplicate()[0]
+
     aimCurve.attr('translateY').set(1.5)
     aimCurve.makeIdentity(apply=True)
 

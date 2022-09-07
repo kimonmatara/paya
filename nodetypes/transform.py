@@ -2,7 +2,6 @@ import maya.cmds as m
 import paya.config as config
 import pymel.util as _pu
 
-import paya.lib.names as _nm
 from paya.util import short, resolveFlags
 from paya.lib.controlshapes import controlShapes
 import paya.runtime as r
@@ -17,13 +16,15 @@ class Transform:
         dagPath='dp',
         name='n',
         rotateOrder='ro',
-        worldMatrix='wm'
+        worldMatrix='wm',
+        parent='p',
+        displayLocalAxis='dla'
     )
     def create(
             cls,
             dagPath=None,
             name=None,
-            under=None,
+            parent=None,
             displayLocalAxis=False,
             rotateOrder='xyz',
             worldMatrix=None
@@ -37,13 +38,11 @@ class Transform:
             ``worldMatrix`` will only be applied to the last (innermost)
             group; defaults to None
         :type dagPath/dp: None, str
-        :param name/n: one or more name elements; ignored if ``dagPath`` is
-            provided; defaults to None
-        :type name/n: int, str, list, tuple or None
-        :param under/u: an optional parent for the transform; if this is
+        :param str name/n: the node name; defaults to ``None``
+        :param parent/p: an optional parent for the transform; if this is
             combined with ``dagPath``, then this node's DAG path will be
             prepended; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool displayLocalAxis/dla: display the transform's local axes;
             defaults to False
         :param rotateOrder/ro: the transform's rotate order; defaults to 'xyz'
@@ -59,9 +58,9 @@ class Transform:
             fromRoot = dagPath.startswith('|')
             dagPath = dagPath.strip('|')
 
-            if under:
-                under = r.PyNode(under)
-                head = under.name(long=True)
+            if parent:
+                parent = r.PyNode(parent)
+                head = parent.name(long=True)
 
                 if dagPath.startswith('|'):
                     dagPath = dagPath[1:]
@@ -99,14 +98,15 @@ class Transform:
                 group = r.group(empty=True, name=requiredElem, **kwargs)
 
         else:
-            name = cls.makeName(n=name)
-            group = r.group(empty=True, n=name)
+            kwargs = {}
+
+            if parent:
+                kwargs['parent'] = parent
+
+            group = r.group(empty=True, n=name if name else cls.makeName(), **kwargs)
 
         if worldMatrix:
-            group.setMatrix(worldMatrix)
-
-        if under:
-            group.setParent(under)
+            group.setMatrix(worldMatrix, worldSpace=True)
 
         if displayLocalAxis:
             group.attr('displayLocalAxis').set(True)
@@ -116,43 +116,41 @@ class Transform:
         return group
 
     @classmethod
-    @short(
-        name='n',
-        under='u',
-        shape='sh',
-        color='col',
-        worldMatrix='wm',
-        keyable='k',
-        channelBox='cb',
-        rotateOrder='ro',
-        asControl='ac',
-        offsetGroups='og',
-        pickWalkParent='pwp',
-        lineWidth='lw'
-    )
-    def createControl(
-            cls,
-            name=None,
-            under=None,
-            shape='cube',
-            size=1.0,
-            color=None,
-            worldMatrix=None,
-            keyable=None,
-            channelBox=None,
-            rotateOrder='xyz',
-            asControl=True,
-            offsetGroups='offset',
-            pickWalkParent=None,
-            lineWidth=None
-    ):
+    @short(name='n',
+           parent='p',
+           shape='sh',
+           size='siz',
+           color='col',
+           worldMatrix='wm',
+           keyable='k',
+           channelBox='cb',
+           rotateOrder='ro',
+           asControl='ac',
+           offsetGroups='og',
+           pickWalkParent='pwp',
+           lineWidth='lw')
+    def createControl(cls,
+                      name=None,
+                      parent=None,
+                      shape='cube',
+                      size=1.0,
+                      color=None,
+                      worldMatrix=None,
+                      keyable=None,
+                      channelBox=None,
+                      rotateOrder='xyz',
+                      asControl=True,
+                      offsetGroups='offset',
+                      pickWalkParent=None,
+                      lineWidth=None):
+
         """
         Creates rig controls. Also available directly on :mod:`paya.runtime`.
 
-        :param name/n: one or more name elements
-        :type name/n: None, str, int, list
-        :param under/u: an optional parent for the control; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param str name/n: an optional explicit name for the control; defaults
+            to a contextual name
+        :param parent/p: an optional parent for the control; defaults to None
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
         :param str shape/sh: the name of a library shape to apply to the control;
             defaults to 'cube'
         :param color/col: an optional override color index for the control;
@@ -161,7 +159,7 @@ class Transform:
         :param float size: a uniform scaling factor for the control shape;
             defaults to 1.0
         :param worldMatrix/wm: the world matrix for the control; if this is
-            omitted then, if ``under`` is provided, the matrix is copied from the
+            omitted then, if *parent* is provided, the matrix is copied from the
             destination parent; otherwise, it defaults to the identity matrix
         :type worldMatrix/wm: list, :class:`~paya.runtime.data.Matrix`, None
         :param list keyable/k: a list of channels to set to keyable on the
@@ -184,30 +182,18 @@ class Transform:
         :return: The generated control.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        #--------------------------------------------------------|    Prep
-
-        if under:
-            under = r.PyNode(under)
-
-        if worldMatrix:
-            worldMatrix = r.data.Matrix(worldMatrix)
-
-        else:
-            if under:
-                worldMatrix = under.getMatrix(worldSpace=True)
-
-            else:
-                worldMatrix = r.data.Matrix()
-
-        #--------------------------------------------------------|    Build
 
         kwargs = {}
 
-        if under is not None:
-            kwargs['parent'] = under
+        kwargs['name'] = name if name else r.Name.make(
+            control=asControl,
+            nodeType=None if asControl else 'transform'
+        )
 
-        name = cls.makeName(name, control=asControl)
-        ct = r.group(empty=True, n=name, **kwargs)
+        if parent is not None:
+            kwargs['parent'] = parent
+
+        ct = r.group(empty=True, **kwargs)
 
         ct.setMatrix(worldMatrix, worldSpace=True)
         ct.attr('rotateOrder').set(rotateOrder)
@@ -233,34 +219,6 @@ class Transform:
         return ct
 
     #--------------------------------------------------------|    Shape / transform management
-
-    @short(managedNames='mn', name='n')
-    def duplicate(self, name=None, managedNames=False):
-        """
-        Overloads the base PyMEL method for added naming options.
-
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, tuple, list
-        :param bool managedNames/mn: inherit name elements from
-            :class:`~paya.lib.names.Name` blocks and apply type suffixes;
-            defaults to False
-        :return: The duplicated objects.
-        :rtype: [:class:`~paya.runtime.nodes.Transform`]
-        """
-        kwargs = {}
-
-        if name:
-            nameKwargs = {}
-
-            if managedNames:
-                nameKwargs['node'] = self
-
-            else:
-                nameKwargs['inheritNames'] = False
-
-            kwargs['name'] = _nm.make(name, **nameKwargs)
-
-        return r.nodetypes.Transform.duplicate(self, **kwargs)
 
     def toShape(self):
         """
@@ -421,44 +379,50 @@ class Transform:
 
     #--------------------------------------------------------|    Offset groups
 
-    def createOffsetGroups(self, *suffixes):
+    def createOffsetGroups(self, *descriptors):
         """
-        :param \*suffixes: one or more offset group suffixes; defaults to
-            'offset'
-        :type \*suffixes: list, tuple, str
-        :return: One or more transformationally-matched offset groups for this
-            transform, in order of innermost to outermost.
-        :type: list of :class:`~paya.runtime.nodes.Transform`
+        Creates transformationally-matched offset ('zero') groups.
+
+        :param \*descriptors: base names for the offset groups, from
+            innermost to outermost; if omitted, defaults to ``'offset'``
+        :type \*descriptors: :class:`str`, [:class:`str`]
+        :return: The offset groups, from innermost to outermost.
+        :rtype: [:class:`Transform`]
         """
-        suffixes = _pu.expandArgs(*suffixes)
+        # Wrangle names
+        descriptors = _pu.expandArgs(*descriptors)
 
-        if not suffixes:
-            suffixes = ['offset']
+        if (len(descriptors) is 1 \
+            and descriptors[0] is None) or not descriptors:
+            descriptors = ['offset']
 
-        bn = self.basename(sts=True, sns=True)
+        bn = self.basename(sns=True, sts=True, sdp=True)
 
+        # Prep details
         mtx = self.getMatrix(worldSpace=True)
         ro = self.attr('rotateOrder').get()
 
+        # Iterate
         lastChild = self
-
         out = []
 
-        with config(inheritNames=False):
-            for suffix in reversed(suffixes):
-                name = r.nodes.Transform.makeName(bn, suffix)
+        for descriptor in descriptors[::-1]:
+            with r.Name(bn, descriptor, inherit=False):
                 parent = lastChild.getParent()
                 kwargs = {}
 
                 if parent is not None:
                     kwargs['parent'] = parent
 
-                group = r.group(empty=True, n=name, **kwargs)
+                group = r.group(empty=True,
+                                name=r.nodes.Transform.makeName(),
+                                **kwargs)
+
                 group.setMatrix(mtx, worldSpace=True)
                 lastChild.setParent(group)
                 out.append(group)
 
-        return list(reversed(out))
+        return out[::-1]
 
     #--------------------------------------------------------|    Shapes
 
@@ -467,7 +431,8 @@ class Transform:
         shapeList='shl'
     )
     def conformShapeNames(self,
-            includeIntermediateShapes=False, shapeList=None):
+                          includeIntermediateShapes=False,
+                          shapeList=None):
         """
         Conforms the names of this transform's shape children to the Maya
         convention.

@@ -4,7 +4,7 @@ import pymel.util as _pu
 
 from paya.lib.typeman import plugCheck
 import paya.lib.mathops as _mo
-import paya.lib.plugops as _po
+import paya.lib.typeman as _tm
 import paya.lib.nurbsutil as _nu
 from paya.geoshapext import copyToShape
 from paya.util import short
@@ -64,7 +64,7 @@ class NurbsCurve:
         :return: An output for a circular arc.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        points = _mo.expandVectorArgs(*points)
+        points = _tm.expandVectorArgs(*points)
 
         num = len(points)
 
@@ -136,10 +136,10 @@ class NurbsCurve:
         #---------------------|    Gather info
 
         if degree is not None:
-            degree = _mo.info(degree)[0]
+            degree = _tm.mathInfo(degree)[0]
 
         if numCVs is not None:
-            numCVs = _mo.info(numCVs)[0]
+            numCVs = _tm.mathInfo(numCVs)[0]
 
         if numCVs is None and degree is None:
             degree = 1
@@ -160,8 +160,8 @@ class NurbsCurve:
 
         numSpans = numCVs - degree
 
-        startPoint = _mo.info(startPoint)[0]
-        endPoint = _mo.info(endPoint)[0]
+        startPoint = _tm.mathInfo(startPoint)[0]
+        endPoint = _tm.mathInfo(endPoint)[0]
         vector = endPoint - startPoint
         mag = vector.length()
 
@@ -189,6 +189,27 @@ class NurbsCurve:
         matrix = scaleMatrix * matrix
 
         return output.transform(matrix)
+
+    #---------------------------------------------------------------|
+    #---------------------------------------------------------------|    SHAPE GENERATION
+    #---------------------------------------------------------------|
+
+    @short(dispCV='dcv')
+    def createShape(self, dispCV=True, **kwargs):
+        """
+        Overloads :meth:`paya.runtime.plugs.Geometry.createShape` to add the
+        *dispCV/dcv* argument.
+
+        :param bool dispCV/dcv: display CVs on the curve shape; defaults to
+            ``True``
+        :param \*\*kwargs: forwarded to
+            :meth:`paya.runtime.plugs.Geometry.createShape`
+        :return: The generated shape.
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
+        """
+        shape = super(r.plugs.NurbsCurve, self).createShape(**kwargs)
+        shape.attr('dispCV').set(dispCV)
+        return shape
 
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    CODE UTILITIES
@@ -226,7 +247,7 @@ class NurbsCurve:
         :rtype: [:class:`float`, :class:`~paya.runtime.plugs.Math1D`]
         """
         if hasattr(numberFractionsOrParams, '__iter__'):
-            return [_mo.info(x)[0] for x in numberFractionsOrParams]
+            return [_tm.mathInfo(x)[0] for x in numberFractionsOrParams]
 
         else:
             number = numberFractionsOrParams
@@ -260,7 +281,7 @@ class NurbsCurve:
         :return: The ``nearestPointOnCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
         """
-        point, pointDim, pointIsPlug = _mo.info(point)
+        point, pointDim, pointIsPlug = _tm.mathInfo(point)
 
         if reuse:
             existingNodes = self.outputs(type='nearestPointOnCurve')
@@ -474,8 +495,8 @@ class NurbsCurve:
     #-----------------------------------------------|    PointOnCurveInfo
 
     def _findExistingInfoAtParam(self, param, turnOnPercentage=False):
-        param, paramDim, paramIsPlug = _mo.info(param)
-        turnOnPercentage, topDim, topIsPlug = _mo.info(turnOnPercentage)
+        param, paramDim, paramIsPlug = _tm.mathInfo(param)
+        turnOnPercentage, topDim, topIsPlug = _tm.mathInfo(turnOnPercentage)
         existingNodes = self.outputs(type='pointOnCurveInfo')
 
         for existingNode in existingNodes:
@@ -1345,7 +1366,7 @@ class NurbsCurve:
                 )
 
         else:
-            sampler = r.PyNode(sampler).expandClass()
+            sampler = r.PyNode(sampler).asSubtype()
 
         return sampler.sampleAtParam(param, plug=plug)
 
@@ -1495,76 +1516,73 @@ class NurbsCurve:
         :return: The sampler system.
         :rtype: :class:`~paya.runtime.networks.CurveUpVectorSampler`
         """
-        with r.Name('upVecSampler'):
-            if upVector is not None:
-                if aimCurve:
-                    raise NotImplementedError(
-                        "Unsupported combo: up vector and aim curve")
+        if upVector is not None:
+            if aimCurve:
+                raise NotImplementedError(
+                    "Unsupported combo: up vector and aim curve")
 
-                upvType, upvContent = _mo.describeAndConformVectorArg(upVector)
+            upvType, upvContent = _tm.describeAndConformVectorArg(upVector)
 
-                if upvType == 'keys':
-                    # Create a spline-style or parallel-transport segments system
-                    if parallelTransport:
-                        sampler = r.networks.CurveUpVectorPtKeysSampler.create(
-                            self,
-                            upvContent,
-                            resolution=resolution,
-                            interpolation=interpolation
-                        )
+            if upvType == 'keys':
+                # Create a spline-style or parallel-transport segments system
+                if parallelTransport:
+                    sampler = r.networks.CurveUpVectorPtKeysSampler.create(
+                        self,
+                        upvContent,
+                        resolution=resolution,
+                        interpolation=interpolation,
+                        unwindSwitch=unwindSwitch
+                    )
 
-                    else:
-                        sampler = r.networks.CurveUpVectorIkSplineStyleSampler.create(
-                            self,
-                            upvContent,
-                            interpolation=interpolation
-                        )
+                else:
+                    sampler = r.networks.CurveUpVectorIkSplineStyleSampler.create(
+                        self,
+                        upvContent,
+                        interpolation=interpolation)
 
-                elif upvType == 'single':
-                    # Create either a parallel-transport solution, or a motion-
-                    # path style set up
-                    if parallelTransport:
-                        if upObject is not None:
-                            raise NotImplementedError(
-                                "Unsupported combo: up vector and up object")
+            elif upvType == 'single':
+                # Create either a parallel-transport solution, or a motion-
+                # path style set up
+                if parallelTransport:
+                    if upObject is not None:
+                        raise NotImplementedError(
+                            "Unsupported combo: up vector and up object")
 
-                        sampler = r.networks.CurveUpVectorPtSampler.create(
-                            self,
-                            upvContent,
-                            resolution=resolution,
-                            interpolation=interpolation
-                        )
+                    sampler = r.networks.CurveUpVectorPtSampler.create(
+                        self,
+                        upvContent,
+                        resolution=resolution,
+                        interpolation=interpolation)
 
-                    else:
-                        sampler = r.networks.CurveUpVectorMpStyleSampler.create(
-                            self, uo=upObject, upv=upVector)
+                else:
+                    sampler = r.networks.CurveUpVectorMpStyleSampler.create(
+                        self, uo=upObject, upv=upVector)
 
-                else: # 'multi'
-                    raise ValueError(
-                        "upVector/upv should be a single up vector, or (param, "+
-                        "vector) pairs")
+            else: # 'multi'
+                raise ValueError(
+                    "upVector/upv should be a single up vector, or (param, "+
+                    "vector) pairs")
 
-            elif upObject is not None:
-                if aimCurve:
-                    raise NotImplementedError(
-                        "Unsupported combo: up object and aim curve")
+        elif upObject is not None:
+            if aimCurve:
+                raise NotImplementedError(
+                    "Unsupported combo: up object and aim curve")
 
-                sampler = r.networks.CurveUpVectorMpStyleSampler.create(
-                    self, uo=upObject, upv=upVector)
+            sampler = r.networks.CurveUpVectorMpStyleSampler.create(
+                self, uo=upObject, upv=upVector)
 
-            elif aimCurve is not None:
-                # Create an aim curve setup
-                sampler = r.networks.CurveUpVectorAimCurveSampler.create(
-                    self,
-                    aimCurve,
-                    closestPoint=closestPoint
-                )
+        elif aimCurve is not None:
+            # Create an aim curve setup
+            sampler = r.networks.CurveUpVectorAimCurveSampler.create(
+                self,
+                aimCurve,
+                closestPoint=closestPoint)
 
-            else:
-                sampler = r.networks.CurveUpVectorMpStyleSampler.create(self)
+        else:
+            sampler = r.networks.CurveUpVectorMpStyleSampler.create(self)
 
-            if setAsDefault:
-                sampler.setAsDefault()
+        if setAsDefault:
+            sampler.setAsDefault()
 
         return sampler
 
@@ -1575,7 +1593,7 @@ class NurbsCurve:
             created on this curve output.
         :rtype: [:class:`~paya.runtime.networks.CurveUpVectorSampler`]
         """
-        nodes = [output.node().expandClass() \
+        nodes = [output.node().asSubtype() \
                  for output in self.outputs(type='network', plugs=True)]
 
         return [node for node in nodes \
@@ -1590,7 +1608,8 @@ class NurbsCurve:
         """
         for output in self.outputs(type='network', plugs=True):
             if output.attrName() == 'defaultFor':
-                return output.node()
+                out = output.node().asSubtype()
+                return out
 
     @copyToShape(worldSpaceOnly=True)
     def clearUpVectorSamplers(self):
@@ -1643,7 +1662,7 @@ class NurbsCurve:
             upVector = upObject.getWorldPosition() - point
 
         elif aimCurve:
-            aimCurve = _po.asGeoPlug(aimCurve, ws=True)
+            aimCurve = _tm.asGeoPlug(aimCurve, ws=True)
 
             if closestPoint:
                 interest = aimCurve.nearestPoint(point, p=False)
@@ -1655,7 +1674,7 @@ class NurbsCurve:
 
         else:
             if upVectorSampler:
-                upVectorSampler = r.PyNode(upVectorSampler).expandClass()
+                upVectorSampler = r.PyNode(upVectorSampler).asSubtype()
 
             elif not defaultToNormal:
                 upVectorSampler = self.getDefaultUpVectorSampler()
@@ -1765,7 +1784,7 @@ class NurbsCurve:
         """
         if plug:
             if globalScale is not None:
-                globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
+                globalScale, gsDim, gsIsPlug = _tm.mathInfo(globalScale)
 
                 if gsIsPlug:
                     globalScale = globalScale.normal()
@@ -1781,7 +1800,7 @@ class NurbsCurve:
             tangent = poci.attr('tangent')
 
             if upVector is not None:
-                upVector = _mo.conformVectorArg(upVector)
+                upVector = _tm.conformVectorArg(upVector)
 
                 if upObject is not None:
                     upObject = r.PyNode(upObject)
@@ -1793,7 +1812,7 @@ class NurbsCurve:
                 upVector = interest-point
 
             elif aimCurve is not None:
-                aimCurve = _po.asGeoPlug(aimCurve, ws=True)
+                aimCurve = _tm.asGeoPlug(aimCurve, ws=True)
 
                 if closestPoint:
                     interest = aimCurve.nearestPoint(point, p=True)
@@ -1806,7 +1825,7 @@ class NurbsCurve:
 
             else:
                 if upVectorSampler is not None:
-                    upVectorSampler = r.PyNode(upVectorSampler).expandClass()
+                    upVectorSampler = r.PyNode(upVectorSampler).asSubtype()
 
                 elif not defaultToNormal:
                     upVectorSampler = self.getDefaultUpVectorSampler()
@@ -1941,7 +1960,7 @@ class NurbsCurve:
         """
         if plug:
             if globalScale is not None:
-                globalScale, gsDim, gsIsPlug = _mo.info(globalScale)
+                globalScale, gsDim, gsIsPlug = _tm.mathInfo(globalScale)
 
                 if gsIsPlug:
                     globalScale = globalScale.normal()
@@ -1964,7 +1983,7 @@ class NurbsCurve:
                 configKw['worldUpObject'] = upObject
 
             elif aimCurve is not None:
-                aimCurve = _po.asGeoPlug(aimCurve, ws=True)
+                aimCurve = _tm.asGeoPlug(aimCurve, ws=True)
 
                 if closestPoint:
                     interest = aimCurve.nearestPoint(point, p=True)
@@ -1977,7 +1996,7 @@ class NurbsCurve:
 
             else:
                 if upVectorSampler is not None:
-                    upVectorSampler = r.PyNode(upVectorSampler).expandClass()
+                    upVectorSampler = r.PyNode(upVectorSampler).asSubtype()
 
                 elif not defaultToNormal:
                     upVectorSampler = self.getDefaultUpVectorSampler()
@@ -2170,7 +2189,7 @@ class NurbsCurve:
             upVectors = [None] * num
 
         else:
-            descr, upVector = _mo.describeAndConformVectorArg(upVector)
+            descr, upVector = _tm.describeAndConformVectorArg(upVector)
 
             if descr == 'multi':
                 upVectors = upVector
@@ -2180,7 +2199,7 @@ class NurbsCurve:
                 upVectors = upVector
 
             elif descr == 'single':
-                upVectors = [_mo.conformVectorArg(upVector)] * num
+                upVectors = [_tm.conformVectorArg(upVector)] * num
 
             else:
                 raise ValueError(
@@ -2263,7 +2282,7 @@ class NurbsCurve:
         # Analyse up vector / up object
 
         if upVector is not None:
-            upVecType, upVector = _mo.describeAndConformVectorArg(upVector)
+            upVecType, upVector = _tm.describeAndConformVectorArg(upVector)
 
             if upVecType == 'multi':
                 if len(upVector) is not number:
@@ -2346,7 +2365,7 @@ class NurbsCurve:
 
         else:
             if upVectorSampler is not None:
-                upVectorSampler = r.PyNode(upVectorSampler).expandClass()
+                upVectorSampler = r.PyNode(upVectorSampler).asSubtype()
 
             elif not defaultToNormal:
                 upVectorSampler = self.getDefaultUpVectorSampler()
@@ -2365,7 +2384,7 @@ class NurbsCurve:
                 gsIsPlug = False
 
             else:
-                globalScale, gsDim, gsIsPlug = _mo.info(globalScales)
+                globalScale, gsDim, gsIsPlug = _tm.mathInfo(globalScales)
 
             if squashStretch:
                 aimIndex = 'xyz'.index(primaryAxis.strip('-'))
@@ -2535,6 +2554,178 @@ class NurbsCurve:
             plug=plug
         )
 
+    @copyToShape(worldSpaceOnly=True)
+    @short(
+        parametric='ar',
+        uniform='uni',
+        upVector='upv',
+        upObject='uo',
+        aimCurve='aic',
+        closestPoint='cp',
+        upVectorSampler='ups',
+        defaultToNormal='dtn',
+        globalScale='gs',
+        squashStretch='ss',
+        chain='cha',
+        displayLocalAxis='dla',
+        radius='rad',
+        rotateOrder='ro',
+        parent='p',
+        freeze='fr',
+        decompose='dec',
+        plug='p'
+    )
+    def distributeJoints(self,
+                         numberFractionsOrParams,
+                         primaryAxis, secondaryAxis,
+
+                         parametric=False,
+                         uniform=False,
+
+                         upVector=None,
+                         upObject=None,
+                         aimCurve=None,
+                         closestPoint=True,
+
+                         upVectorSampler=None,
+                         defaultToNormal=None,
+
+                         globalScale=None,
+                         squashStretch=False,
+
+                         chain=False,
+                         displayLocalAxis=True,
+                         radius=1.0,
+                         rotateOrder='xyz',
+                         parent=None,
+                         freeze=True,
+                         decompose=True,
+
+                         plug=False):
+        """
+        Distributes joints along this curve. Pass *plug/p=True* for live
+        connections.
+
+        :param numberFractionsOrParams: this should either be
+
+            -   A number of fractions or parameters to generate along the curve,
+                or
+            -   An explicit list of fractions or parameters at which to construct
+                the matrices
+
+        :param str primaryAxis: the primary (aim) matrix axis, for example
+            '-y'
+        :param str secondaryAxis: the secondary (up) matrix axis, for example
+            'x'
+        :param bool parametric/par: interpret *numberOrFractions* as
+            parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if *parametric* is ``True``, and
+            *numberFractionsOrParams* is a number, initial parameters should
+            be distributed by length, not parametric space; defaults to
+            ``False``
+        :param upVector/upv: either
+
+            -   A single up vector, or
+            -   A list of up vectors (one per matrix)
+
+            If up vectors are provided on their own, they are used directly;
+            if they are combined with 'up objects' (*upObject*), they are
+            multiplied by the objects' world matrices, similar
+            to the 'Object Rotation Up' mode on :class:`motion path
+            <paya.runtime.nodes.MotionPath>` nodes; defaults to ``None``
+        :type upVector/upv: :class:`None`, :class:`str`, :class:`tuple`, :class:`list`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`,
+            [:class:`None` | :class:`str` | :class:`tuple` | :class:`list` |
+            :class:`~paya.runtime.data.Vector` |
+            :class:`~paya.runtime.plugs.Vector`]
+        :param upObject/uo: this can be a single transform, or a list of
+            transforms (one per sample point); if provided on its own, used
+            as an aiming interest (similar to 'Object Up' mode on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes); if
+            combined with *upVector*, the vector will be multiplied with the
+            object's matrix (similar to 'Object Rotation Up'); defaults to
+            ``None``
+        :type upObject/uo: ``None``, :class:`str`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param aimCurve/aic: a curve from which to pull aiming interests,
+            similar to the option on
+            :class:`curveWarp <paya.runtime.nodes.CurveWarp>`
+            nodes; defaults to ``None``
+        :type aimCurve/aic: None, str,
+            :class:`paya.runtime.plugs.NurbsCurve`,
+            :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity,
+            not matched parameters; defaults to ``True``
+        :param upVectorSampler/ups: an up vector sampler created using
+            :meth:`createUpVectorSampler`; defaults to ``None``
+        :type upVectorSampler/ups: None, str,
+            :class:`~paya.runtime.nodes.Network`,
+            :class:`~paya.runtime.networks.CurveUpVectorSampler`
+        :param bool defaultToNormal/dtn: when all other up vector options are
+            exhausted, don't fall back to any 'default' up vector sampler
+            previously created using
+            :meth:`createUpVectorSampler(
+                setAsDefault=True) <createUpVectorSampler>`;
+            instead, use the curve normal (the curve normal will be used anyway
+            if no default sampler is defined); defaults to ``False``
+        :param globalScale/gs: a baseline scaling factor; note that scale will
+            be normalized in all cases, so if this is value rather than a plug,
+            it will have no practical effect; defaults to ``None``
+        :type globalScale/gs: None, float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool squashStretch/ss: allow squashing and stretching of the
+            *primaryAxis* on the output matrix; defaults to ``False``
+        :param bool chain/cha: create the joints as a contiguous chain with
+            aimed, rather than tangent-based, matrix orientation; defaults to
+            ``False``
+        :param bool displayLocalAxis/dla: display the local matrix
+            axes; defaults to ``True``
+        :param float radius/rad: the joint display radius; defaults to 1.0
+        :param rotateOrder/ro: the rotate order for the joint; defaults
+            to ``'xyz'``
+        :type rotateOrder/ro: ``None``, :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param parent/p: an optional destination parent for the joints
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param bool freeze/fr: zero-out transformations (except translate)
+            at the initial pose; defaults to ``True``
+        :param bool decompose/dec: if ``False``, connect to
+            ``offsetParentMatrix`` instead of driving the joint's SRT
+            channels; note that, if *freeze* is requested, the initial matrix
+             will *always* be applied via decomposition and then frozen;
+             defaults to ``True``
+        :param bool plug/p: drive the joints dynamically; defaults to
+            ``False``
+        :return: The individual joints or a chain (if *chain* was requested).
+        :rtype: [:class:`~paya.runtime.nodes.Joint`] |
+            :class:`~paya.lib.skel.Chain`
+        """
+        matrices = self.distributeMatrices(
+            numberFractionsOrParams,
+            primaryAxis, secondaryAxis,
+            par=parametric, uni=uniform,
+            upv=upVector, uo=upObject,
+            aic=aimCurve, cp=closestPoint,
+            ups=upVectorSampler, dtn=defaultToNormal,
+            gs=globalScale, ss=squashStretch,
+            cha=chain, p=plug
+        )
+
+        joints = [r.nodes.Joint.create(wm=matrix, n=i+1,
+                                       p=parent, ro=rotateOrder,
+                                       dla=displayLocalAxis,
+                                       fr=freeze, dec=decompose)\
+                  for i, matrix in enumerate(matrices)]
+
+        if chain:
+            for thisJoint, nextJoint in zip(joints, joints[1:]):
+                nextJoint.setParent(thisJoint)
+
+            return r.Chain(joints)
+
+        return joints
+
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    EDITING
     #---------------------------------------------------------------|
@@ -2681,7 +2872,7 @@ class NurbsCurve:
         :return: The combined curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        curves = [_po.asGeoPlug(curve) for curve in _pu.expandArgs(*curves)]
+        curves = [_tm.asGeoPlug(curve) for curve in _pu.expandArgs(*curves)]
         num = len(curves)
 
         if not num:
@@ -2902,7 +3093,7 @@ class NurbsCurve:
             ``extendCurve`` node; defaults to True
         :return: This curve, extended by the specified length.
         """
-        length = _mo.info(length)[0]
+        length = _tm.mathInfo(length)[0]
 
         if atBothEnds:
             length *= 0.5
@@ -2989,7 +3180,7 @@ class NurbsCurve:
         """
         lenPointOrVec, \
         lenPointOrVecDim, \
-        lenPointOrVecIsPlug = _mo.info(lenPointOrVec)
+        lenPointOrVecIsPlug = _tm.mathInfo(lenPointOrVec)
 
         if lenPointOrVecDim is 1:
             if useSegment:
@@ -3061,7 +3252,7 @@ class NurbsCurve:
         :return: The modified curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        cutLength, cutLengthDim, cutLengthIsPlug = _mo.info(length)
+        cutLength, cutLengthDim, cutLengthIsPlug = _tm.mathInfo(length)
 
         if atStart:
             cutLengths = [cutLength]
@@ -3145,7 +3336,7 @@ class NurbsCurve:
             )
 
         else:
-            vector = _mo.info(vector)[0]
+            vector = _tm.mathInfo(vector)[0]
             vector = vector.normal() * extendLength
 
             extension = self.extendByVector(
@@ -3237,7 +3428,7 @@ class NurbsCurve:
 
         if matchCurve:
             rebuildType = 2
-            matchCurve = _po.asGeoPlug(matchCurve)
+            matchCurve = _tm.asGeoPlug(matchCurve)
 
         mfn = self.getShapeMFn()
 
@@ -3369,7 +3560,7 @@ class NurbsCurve:
         :return: The blended curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        otherCurve = _po.asGeoPlug(otherCurve)
+        otherCurve = _tm.asGeoPlug(otherCurve)
         node = r.nodes.AvgCurves.createNode()
         node.attr('automaticWeight').set(False)
         node.attr('normalizeWeights').set(False)

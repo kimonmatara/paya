@@ -8,33 +8,30 @@ class Geometry:
     #---------------------------------------------------------|    Shape management
 
     @short(
-        under='u',
-        intermediate='i',
         name='n',
-        conformShapeName='csn',
-        managedNames='mn'
+        parent='p',
+        intermediate='i',
+        conformShapeName='csn'
     )
     def createShape(
             self,
             name=None,
-            under=None,
+            parent=None,
             intermediate=False,
-            conformShapeName=True
+            conformShapeName=None
     ):
         """
         Creates a shape node and connects this geometry output into its input.
 
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, list, tuple
-        :param bool managedNames/mn: use Paya name management; defaults to
-            True
-        :param under/u: a transform parent for the new shape; a new transform
+        :param str name/n: a name for the shape; defaults to ``None``
+        :param parent/p: a transform parent for the new shape; a new transform
             will be generated if this is omitted
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
         :param bool intermediate/i: make the shape an intermediate objects;
             defaults to False
-        :param bool conformShapeName/csn: ignored if 'under' is None; rename
-            the shape if it is reparented; defaults to True
+        :param bool conformShapeName/csn: ignored if *parent* was omitted;
+            rename the shape after it is reparented; defaults to True if
+            *parent* was provided, otherwise False
         :return: The new shape.
         :rtype: :class:`~paya.runtime.nodes.Shape`
         """
@@ -46,19 +43,12 @@ class Geometry:
         # Create the shape node; this will be nested under a transform we may
         # or may not keep
 
-        shape = cls.createNode(n=name)
-        xf = shape.getParent()
+        shape = cls.createShape(n=name,
+                                p=parent,
+                                csn=conformShapeName,
+                                i=intermediate)
+
         self >> shape.geoInput
-
-        if intermediate:
-            shape.attr('intermediateObject').set(True)
-
-        if under:
-            r.parent(shape, under, r=True, shape=True)
-            r.delete(xf)
-
-            if conformShapeName:
-                shape.conformName()
 
         return shape
 

@@ -1,0 +1,44 @@
+*************************************************
+paya.runtime.networks.CurveUpVectorMpStyleSampler
+*************************************************
+
+.. py:currentmodule:: paya.runtime.networks
+
+.. py:class:: CurveUpVectorMpStyleSampler(*args, **kwargs)
+
+    Works similarly to the 'follow' options on
+    :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes.
+    
+    .. note::
+    
+        Returned vectors won't be perpendicular to curve tangents, with the
+        expectation that they will be perpendicularized during subsequent
+        matrix construction.
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.networks.CurveUpVectorSampler` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    .. py:classmethod:: create(curve, upObject=None, upVector=None)
+    
+        If neither *upObject* nor *upVector* are specified, the system will
+        default to curve normals.
+        
+        :param curve: the curve on which to create the sampler
+        :type curve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param upObject/uo: if provided on its own, works as an aiming interest
+            (similar to 'Object Up' mode on
+            :class:`motionPath <paya.runtime.nodes.MotionPath>` nodes);
+            if combined with *upVector*, the object's world matrix is used to
+            multiply the up vector; defaults to ``None``
+        :type upObject/uo: str, :class:`~paya.runtime.nodes.Transform`
+        :param upVector/upv: if provided on its own, used as-is; if combined
+            with *upObject*, the object's world matrix is used to multiply
+            the up vector; defaults to ``None``
+        :type upVector/upv: None, list, tuple, str,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :return: The network system.
+        :rtype: :class:`CurveUpVectorMpStyleSampler`

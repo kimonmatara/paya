@@ -13,26 +13,16 @@ Node-naming utilities, usually called indirectly.
     :param str name: the string to conform
     :return: The Maya name.
 
-.. py:function:: conformElems(*elems)
+.. py:function:: conformElems(*elems, padding=<paya.util.functions.Undefined object at 0x0000011ED2B41688>)
 
-    Cleans up user name elements, typically specified through ``*args``
-    and / or the ``name/n`` keyword argument.
+    Cleans up user name elements wrangled by :class:`Name`.
     
     :param \*elems: one or more name elements, packed or unpacked
     :type \*elems: int, str
+    :param padding/pad: padding for any integer elements; defaults
+        to ``config['padding']``
     :return: The conformed elements.
     :rtype: list
-
-.. py:function:: isTypeSuffix(string)
-
-    Checks if 'string' looks like a type suffix, i.e. it's a group of
-    uppercase letters starting with a non-number, or is a value inside
-    :attr:`paya.lib.suffixes.suffixes`.
-    
-    :param string: The string to inspect
-    :return: ``True`` if 'string' looks like a type suffix, otherwise
-        ``False``.
-    :rtype: bool
 
 .. py:function:: shorten(name, stripNamespace=False, stripDagPath=False, stripTypeSuffix=False)
 
@@ -49,36 +39,5 @@ Node-naming utilities, usually called indirectly.
     :return: the modified name
     :rtype: str
 
-.. py:class:: Name(*elems, padding=None)
+.. py:class:: Name(*elems, suffix=<paya.util.functions.Undefined object at 0x0000011ED2B41688>, padding=<paya.util.functions.Undefined object at 0x0000011ED2B41688>, inherit=<paya.util.functions.Undefined object at 0x0000011ED2B41688>)
 
-    Context manager. Accumulates name elements hierarchically, and can also
-    be used to override config['padding'].
-    
-    :param elems: one or more name elements, packed or unpacked
-    :type elems: int, str
-    :param padding/pad: if provided, will be used to set padding defaults for
-        the block
-    :type padding/pad: None, int
-
-.. py:function:: make(*elems, name=None, node=None, nodeType=None, control=False, inheritNames=None)
-
-    Constructs Maya node names.
-    
-    :config keys: ``suffixNodes``, ``padding``, ``inheritNames``
-    :param \*elems: one or more name elements
-    :type \*elems: int, str, list
-    :param name/n: elements passed-through via a ``name`` argument;
-        these will always be prepended to \*elems; defaults to None
-    :type name/n: int, str, list, None
-    :param bool control/ct: ignore the *node* and *nodeType* arguments
-        and apply the Paya suffix for controls; defaults to False
-    :param node: ignored if ``nodeType`` has been provided; a node to inspect
-        to determine the node type suffix; defaults to None
-    :type node: None, str, :class:`~pymel.core.general.PyNode`
-    :param nodeType/nt: a reference node type for the suffix lookups, or
-        'payaControl' for controls; defaults to None
-    :type nodeType/nt: None, str
-    :param bool inheritNames/inh: inherit from :class:`Name` blocks; defaults
-        to the namesake flag in :mod:`paya.config`
-    :return: A Maya node name.
-    :rtype: str

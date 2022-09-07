@@ -1,4 +1,4 @@
-import paya.lib.plugops as _po
+import paya.lib.typeman as _tm
 import maya.cmds as m
 import maya.mel as mel
 import pymel.util as _pu
@@ -75,8 +75,7 @@ class CurveWarp:
         :param offset/off: a slide offset along the curve; defaults to
             0.0
         :type offset/off: float, :class:`~paya.runtime.plugs.Math1D`
-        :param name/n: one or more name elements for the node
-        :type name/n: None, str, int, list, tuple
+        :param str name/n: a name for the node; defaults to ``None``
         :return: The deformer node.
         :rtype: :class:`CurveWarp`
         """
@@ -110,7 +109,7 @@ class CurveWarp:
 
         # Config
         if aimCurve:
-            aimCurve = _po.asGeoPlug(aimCurve)
+            aimCurve = _tm.asGeoPlug(aimCurve)
             aimCurve >> node.attr('aimCurve')
             node.attr('aimMode').set(3)
 
@@ -133,8 +132,6 @@ class CurveWarp:
             node.attr('alignmentMode').set(index)
 
         node.attr('aimCurveMode').set(2 if closestPoint else 1)
-
-        name = cls.makeName(name)
-        node.rename(name)
+        node.rename(name if name else cls.makeName())
 
         return node

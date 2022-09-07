@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>paya.runtime.plugs.Vector &mdash; paya 0.8.4 documentation</title>
+  <title>paya.runtime.plugs.Vector &mdash; paya 0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
@@ -20,7 +20,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Component Types" href="../comps_index.html" />
+    <link rel="next" title="Data Types" href="../data_index.html" />
     <link rel="prev" title="paya.runtime.plugs.String" href="string.html" /> 
 </head>
 
@@ -33,7 +33,7 @@
             <img src="../../_static/logo_sidebar.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.8.4
+                0.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -44,31 +44,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Rigging</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../maths_rigging.html">Maths</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../joint_chains.html">Joint Chains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ik.html">IK Handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../deformers.html">Deformers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../geometry.html">Geometry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../controls.html">Controls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_attrs.html">User Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../naming_nodes.html">Node Names</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Customisation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../adding_oo_functionality.html">Adding Your Own Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../package_config.html">Package Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sugar_and_style.html">Sugar and Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/releasenotes.html">What's New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/req_and_install.html">Requirements and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/basics.html">Basics</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../types_index.html">Types</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Nodes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../plugs_index.html">Plugs (Attributes)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../nodes_index.html">Node Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Component Types</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
@@ -81,20 +66,18 @@
 <li class="toctree-l3"><a class="reference internal" href="math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="string.html">String</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Vector</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../comps_index.html">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networks_index.html">Network Subtypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../containers_index.html">Container Subtypes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../paya.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation.html">Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../licence.html">MIT License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
 </ul>
 
         </div>
@@ -128,7 +111,9 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.runtime.plugs.Vector">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Vector" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a> <a class="reference internal" href="compound.html#paya.runtime.plugs.Compound" title="paya.runtime.plugs.Compound"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compound</span></code></a> <a class="reference internal" href="attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.Vector.isTranslateChannel">
 <span class="sig-name descname"><span class="pre">isTranslateChannel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Vector.isTranslateChannel" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -176,7 +161,7 @@ channel of a transform node.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.Vector.blend">
-<span class="sig-name descname"><span class="pre">blend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byVectorAngle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Vector.blend" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">blend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byVectorAngle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clockNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwindSwitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Vector.blend" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -187,9 +172,22 @@ is 1.0 (or 0.0, if ‘swap’ is True)</p></li>
 <li><p><strong>swap/sw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – swap operands around; defaults to False</p></li>
 <li><p><strong>byVectorAngle/bva</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – blend by rotating one vector towards
 the other, rather than via linear value interpolation; defaults
-to False</p></li>
-<li><p><strong>includeLength/ilg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if ‘byVectorAngle’ is False;
-blend vector lengths (magnitudes) as well; defaults to False</p></li>
+to <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>clockNormal</em> is provided, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>includeLength/ilg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – blend vector lengths (magnitudes)
+as well; defaults to False</p></li>
+<li><p><strong>clockNormal/cn</strong> (None, tuple, list, str,
+<a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – an optional winding vector; providing this
+will enable the unwinding options when blending by angle;
+defaults to None</p></li>
+<li><p><strong>unwindSwitch/uws</strong> (int, str, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – <p>ignored if <em>clockNormal</em> was omitted; an
+integer value or plug to pick an angle unwinding mode:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> for shortest (the default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code> for positive</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code> for negative</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -209,7 +207,7 @@ blend vector lengths (magnitudes) as well; defaults to False</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>axisVector</strong> (list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>
 or <a class="reference internal" href="#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the vector around which to rotate this vector</p></li>
-<li><p><strong>angle</strong> (float, <code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code>, str or
+<li><p><strong>angle</strong> (float, <a class="reference internal" href="../data/angle.html#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a>, str or
 class:<cite>~paya.runtime.plugs.Math3D</cite>) – the angle of rotation</p></li>
 </ul>
 </dd>
@@ -269,17 +267,30 @@ class:<cite>~paya.runtime.plugs.Math3D</cite>) – the angle of rotation</p></li
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.Vector.cross">
-<span class="sig-name descname"><span class="pre">cross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Vector.cross" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the cross product of <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
-<dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">cross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guard</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inlineGate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Vector.cross" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference internal" href="math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – the other vector</p></li>
-<li><p><strong>normalize/nr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – normalize the output; defaults to False</p></li>
+<li><p><strong>other</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>,
+<a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<a class="reference internal" href="#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the other vector</p></li>
+<li><p><strong>normalize/nr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – normalize the output; defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>guard/g</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – switch the node to ‘No Operation’ when the
+input vectors are aligned in either direction; defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>inlineGate/ig</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if you have a precooked gate for alignment
+(typically the output of a comparison operation), provide it here
+to prevent redundant checks; if provided, will override <em>guard</em>
+to <code class="docutils literal notranslate"><span class="pre">True</span></code>; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Vector</span></code></a></p>
+<dd class="field-even"><p>The cross product.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -412,7 +423,7 @@ an identity matrix’s base vectors.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="string.html" class="btn btn-neutral float-left" title="paya.runtime.plugs.String" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../comps_index.html" class="btn btn-neutral float-right" title="Component Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../data_index.html" class="btn btn-neutral float-right" title="Data Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

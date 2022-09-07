@@ -1,5 +1,5 @@
 import pymel.core.datatypes as _dt
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import paya.runtime as r
 
 if not r.pluginInfo('quatNodes', q=True, loaded=True):
@@ -17,7 +17,7 @@ class Quaternion:
         Overloads :meth:`pymel.core.datatypes.Quaternion.__add__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 4):
@@ -50,7 +50,7 @@ class Quaternion:
         Overloads :meth:`pymel.core.datatypes.Quaternion.__radd__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 4):
@@ -85,7 +85,7 @@ class Quaternion:
         Overloads :meth:`pymel.core.datatypes.Quaternion.__sub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 4):
@@ -118,7 +118,7 @@ class Quaternion:
         Overloads :meth:`pymel.core.datatypes.Quaternion.__rsub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 4):
@@ -153,7 +153,7 @@ class Quaternion:
         Overloads :meth:`pymel.core.datatypes.Quaternion.__mul__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 4):
@@ -186,7 +186,7 @@ class Quaternion:
         Overloads :meth:`pymel.core.datatypes.Quaternion.__rmul__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if isplug:
             if dim in (1, 4):

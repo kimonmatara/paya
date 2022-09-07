@@ -6,7 +6,8 @@ import re
 
 import pymel.util as _pu
 
-from paya.util import short, pad
+import maya.cmds as m
+from paya.util import short, pad, undefined
 import paya.config as config
 import paya.lib.suffixes as _suf
 
@@ -35,18 +36,22 @@ def legalise(name):
     else:
         return '_'
 
-def conformElems(*elems):
+@short(padding='pad')
+def conformElems(*elems, padding=undefined):
     """
-    Cleans up user name elements, typically specified through ``*args``
-    and / or the ``name/n`` keyword argument.
+    Cleans up user name elements wrangled by :class:`Name`.
 
     :param \*elems: one or more name elements, packed or unpacked
     :type \*elems: int, str
+    :param padding/pad: padding for any integer elements; defaults
+        to ``config['padding']``
     :return: The conformed elements.
     :rtype: list
     """
     out = []
-    padding = config['padding']
+
+    if padding is undefined:
+        padding = config['padding']
 
     for elem in _pu.expandArgs(*elems):
         if isinstance(elem, int):
@@ -59,21 +64,6 @@ def conformElems(*elems):
 
     return out
 
-def isTypeSuffix(string):
-    """
-    Checks if 'string' looks like a type suffix, i.e. it's a group of
-    uppercase letters starting with a non-number, or is a value inside
-    :attr:`paya.lib.suffixes.suffixes`.
-
-    :param string: The string to inspect
-    :return: ``True`` if 'string' looks like a type suffix, otherwise
-        ``False``.
-    :rtype: bool
-    """
-    if re.match(r"^[A-Z][A-Z0-9]*$", string):
-        return True
-
-    return string in _suf.suffixes.values()
 
 @short(
     stripNamespace='sns',
@@ -114,7 +104,7 @@ def shorten(
         if len(underElems) > 1:
             lastElem = underElems[-1]
 
-            if isTypeSuffix(lastElem):
+            if _suf.isTypeSuffix(lastElem):
                 del(underElems[-1])
                 shortName = '_'.join(underElems)
 
@@ -123,97 +113,117 @@ def shorten(
 
     return name
 
+
 class Name:
-    """
-    Context manager. Accumulates name elements hierarchically, and can also
-    be used to override config['padding'].
-
-    :param elems: one or more name elements, packed or unpacked
-    :type elems: int, str
-    :param padding/pad: if provided, will be used to set padding defaults for
-        the block
-    :type padding/pad: None, int
-    """
     __elems__ = []
+    __suffix__ = config['suffixNodes']
+    __padding__ = undefined
+    __inherit__ = True
 
-    @short(padding='pad')
-    def __init__(self, *elems, padding=None):
-        self._elems = _pu.expandArgs(*elems)
-        self._padding = padding
+    @short(suffix='suf',
+           padding='pad',
+           inherit='i')
+    def __init__(self,
+                 *elems,
+                 suffix=undefined,
+                 padding=undefined,
+                 inherit=undefined):
+        self.elems = list(_pu.expandArgs(*elems))
+        self.suffix = suffix
+        self.padding = padding
+        self.inherit = inherit
 
     def __enter__(self):
-        if self._padding:
-            self._prev_padding = config['padding']
-            config['padding'] = self._padding
+        self._prev_elems = Name.__elems__
+        self._prev_suffix = Name.__suffix__
+        self._prev_padding = Name.__padding__
+        self._prev_inherit = Name.__inherit__
 
-        self._prev_elems = Name.__elems__[:]
-        Name.__elems__ += conformElems(self._elems)
+        Name.__elems__ = Name.__elems__ + self.elems
+
+        if self.suffix is not undefined:
+            Name.__suffix__ = self.suffix
+
+        if self.padding is not undefined:
+            Name.__padding__ = self.padding
+
+        if self.inherit is not undefined:
+            Name.__inherit__ = self.inherit
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self._padding:
-            config['padding'] = self._prev_padding
-
         Name.__elems__ = self._prev_elems
+        Name.__suffix__ = self._prev_suffix
+        Name.__padding__ = self._prev_padding
+        Name.__inherit__ = self._prev_inherit
 
         return False
 
-@short(name='n', nodeType='nt', control='ct', inheritNames='inh')
-def make(*elems, name=None, node=None,
-         nodeType=None, control=False, inheritNames=None):
-    """
-    Constructs Maya node names.
+    @classmethod
+    @short(nodeType='nt',
+           transform='xf',
+           suffix='suf',
+           padding='pad',
+           inherit='i',
+           control='ct')
+    def make(cls,
+             *elems,
+             nodeType=None,
+             transform=None,
+             suffix=undefined,
+             padding=undefined,
+             inherit=undefined,
+             control=False):
 
-    :config keys: ``suffixNodes``, ``padding``, ``inheritNames``
-    :param \*elems: one or more name elements
-    :type \*elems: int, str, list
-    :param name/n: elements passed-through via a ``name`` argument;
-        these will always be prepended to \*elems; defaults to None
-    :type name/n: int, str, list, None
-    :param bool control/ct: ignore the *node* and *nodeType* arguments
-        and apply the Paya suffix for controls; defaults to False
-    :param node: ignored if ``nodeType`` has been provided; a node to inspect
-        to determine the node type suffix; defaults to None
-    :type node: None, str, :class:`~pymel.core.general.PyNode`
-    :param nodeType/nt: a reference node type for the suffix lookups, or
-        'payaControl' for controls; defaults to None
-    :type nodeType/nt: None, str
-    :param bool inheritNames/inh: inherit from :class:`Name` blocks; defaults
-        to the namesake flag in :mod:`paya.config`
-    :return: A Maya node name.
-    :rtype: str
-    """
-    elems = list(_pu.expandArgs(*elems))
+        if suffix is undefined:
+            suffix = Name.__suffix__
 
-    if name:
-        elems = list(_pu.expandArgs(name)) + elems
+        if padding is undefined:
+            padding = Name.__padding__
 
-    elems = conformElems(elems)
+        if inherit is undefined:
+            inherit = Name.__inherit__
 
-    if inheritNames is None:
-        inheritNames = config['inheritNames']
+        elems = list(_pu.expandArgs(*elems))
 
-    if inheritNames:
-        if Name.__elems__:
+        if inherit:
             elems = Name.__elems__ + elems
 
-    if config['suffixNodes']:
-        if control:
-            nodeType = 'payaControl'
+        elems = conformElems(*elems, padding=padding)
 
-        else:
-            if nodeType is None:
-                if node:
-                    nodeType = _suf.getKeyFromNode(node)
+        isShape = False
+
+        if isinstance(suffix, str):
+            elems.append(suffix)
+
+        elif suffix:
+            if control:
+                suffix = _suf.suffixes['payaControl']
+
+            else:
+                if nodeType:
+                    elems.append(_suf.suffixes.get(nodeType, nodeType))
+
+                    isShape = (not transform) and ('shape' \
+                        in m.nodeType(nodeType, i=True, itn=True))
+
+        if elems:
+            name = '_'.join(elems)
+
+            if isShape:
+                name += 'Shape'
+
+            return legalise(name)
+
+        # No elements; if we have a node type, use it to improvise a name
 
         if nodeType:
-            suffix = _suf.suffixes.get(nodeType)
+            out = nodeType+'1'
 
-            if suffix:
-                elems.append(suffix)
+            if isShape:
+                out += 'Shape'
 
-    name = '_'.join(elems)
-    name = legalise(name)
+            return out
 
-    return name
+        return legalise('')

@@ -1,5 +1,4 @@
-import paya.lib.mathops as _mo
-import paya.lib.plugops as _po
+import paya.lib.typeman as _tm
 from paya.util import short
 import paya.runtime as r
 
@@ -62,7 +61,7 @@ class CurveUpVectorAimCurveSampler(r.networks.CurveUpVectorSampler):
         """
         nw = super(r.networks.CurveUpVectorAimCurveSampler, cls)._create(curve)
 
-        aimCurve = _po.asGeoPlug(aimCurve, worldSpace=True)
+        aimCurve = _tm.asGeoPlug(aimCurve, worldSpace=True)
         aimCurve >> nw.addAttr('aimCurve', at='message')
 
         if closestPoint:
@@ -99,9 +98,9 @@ class CurveUpVectorAimCurveSampler(r.networks.CurveUpVectorSampler):
         refPoint = curve.pointAtParam(param, p=plug)
 
         if self.byClosestPoint():
-            interest = curve.nearestPoint(refPoint, p=plug)
+            interest = aimCurve.nearestPoint(refPoint, p=plug)
 
         else:
-            interest = curve.pointAtParam(param, p=plug)
+            interest = aimCurve.pointAtParam(param, p=plug)
 
         return interest-refPoint

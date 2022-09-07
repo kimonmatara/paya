@@ -1,0 +1,60 @@
+************
+Native Units
+************
+
+.. warning::
+
+    **Version 0.9** of Paya introduces changes to how native units are managed.
+
+Paya wants you to build rigs with Maya configured for **centimeters** and **radians**. This eliminates
+``unitConversion`` nodes and greatly simplifies the implementation of the maths operators. Rig scenes can be switched to
+different units once a build is finished (and in fact *should* be switched to degrees for animator use).
+
+======================
+Enforcing Native Units
+======================
+
+As of **version 0.9**, native units are enforced by the :mod:`paya.runtime` context manager; the previous scene setting
+is always restored at the end of the block, even if errors are encountered in the meantime:
+
+.. code-block:: python
+
+
+    import pymel.core as p
+    import paya.runtime
+
+    with paya.runtime:
+        print(p.currentUnit(q=True, angle=True))
+        # Result: rad
+
+    print(p.currentUnit(q=True, angle=True))
+    # Result: deg
+
+=========================
+Rigging with Native Units
+=========================
+
+Rigging with native units is easier than you might think. Scripted rig builds typically manipulate measurements only
+indirectly, for example by reading them from guide objects, or a file, and passing them around. Units only become
+relevant for those occasions where values must be inspected, or specified, directly in code, and can be juggled using
+:func:`~pymel.internal.pmcmds.convertUnit`, :func:`util.radians() <pymel.util.arrays.radians>` and
+:func:`util.degrees() <pymel.util.arrays.degrees>`:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    with r:
+        # Rotate a cube 180 degrees around X
+        cube = r.PyNode('pCube1')
+        cube.attr('rx').set(r.util.radians(180.0))
+
+        # Print its current X rotation in degrees
+        rotation = cube.attr('rx').get()
+        print(r.util.degrees(rotation))
+
+        # Move the cube 10 inches forward
+        cube.attr('tz').set(float(r.convertUnit('10in', toUnit='cm')))
+
+        # Print its current depth in inches
+        print(r.convertUnit(str(cube.attr('tz').get()), toUnit='in'))

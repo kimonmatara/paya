@@ -12,14 +12,17 @@ class Locator:
         worldMatrix='wm',
         displayLocalAxis='dla',
         name='n',
-        size='siz'
+        conformShapeName='csn',
+        size='siz',
+        parent='p'
     )
     def create(
             cls,
             worldMatrix=None,
             displayLocalAxis=False,
+            conformShapeName=None,
             name=None,
-            under=None,
+            parent=None,
             size=1.0
     ):
         """
@@ -27,22 +30,25 @@ class Locator:
         its transform.
 
         :param worldMatrix/wm: a world-matrix for the locator transform;
-            ignored if a custom parent is specified via *under*/*u*; defaults
+            ignored if a custom parent is specified via *parent*/*p*; defaults
             to None
         :param bool displayLocalAxis/dla: display local rotation axes; defaults to
             None
+        :param bool conformShapeName/csn: ignored if *parent* was omitted;
+            rename the shape after it is reparented; defaults to True if
+            *parent* was provided, otherwise False
         :param float size/siz: a convenience scalar for the locator
             ``localScale`` attribute; defaults to 1.0
-        :param under/u: a custom parent for the locator *shape*; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: None, str, int, tuple, list
+        :param parent/p: a custom parent for the locator *shape*; defaults to None
+        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+        :param str name/n: a name for the locator *shape*; defaults to
+            ``None``
         :return: The locator shape.
         :rtype: :class:`Locator`
         """
-        shape = cls.createShape(u=under, n=name)
+        shape = cls.createShape(p=parent, n=name, csn=conformShapeName)
 
-        if worldMatrix and under is None:
+        if worldMatrix and parent is None:
             shape.getParent().setMatrix(worldMatrix)
 
         shape.attr('localScale').set([size] * 3)

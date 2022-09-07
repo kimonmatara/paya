@@ -6,12 +6,18 @@ paya.runtime.plugs.Math3D
 
 .. py:class:: Math3D(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.plugs.Compound` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:method:: createLocator(name=None, size=1.0)
     
         :shorthand: ``cl``
         
-        :param name/n: one or more optional name elements; defaults to None
-        :rtype name/n: None, list, int, str
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
         :param float size/siz: a single scalar for the locator's
             ``localScale`` channels; defaults to 1.0
         :return: A locator with this 3D compound piped into its

@@ -2,7 +2,7 @@ from functools import reduce
 
 import pymel.util as _pu
 from paya.util import short
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import paya.runtime as r
 
 if not r.pluginInfo('quatNodes', q=True, loaded=True):
@@ -22,7 +22,7 @@ class Math1D:
         :param other: a value or plug of dimension 1, 2, 3 or 4
         """
 
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 1:
             node = r.nodes.AddDoubleLinear.createNode()
@@ -82,7 +82,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1, 2, 3
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 2, 3):
             node = r.nodes.PlusMinusAverage.createNode()
@@ -122,7 +122,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1 or 3
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 1:
             node = r.nodes.MultDoubleLinear.createNode()
@@ -160,7 +160,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1 or 3
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -201,7 +201,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1 or 3
         """
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -302,7 +302,7 @@ class Math1D:
         :return: This scalar, with sign copied from *other*.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        other, otherDim, otherIsPlug = _mo.info(other)
+        other, otherDim, otherIsPlug = _tm.mathInfo(other)
 
         thisAbs = self.abs()
 
@@ -359,7 +359,7 @@ class Math1D:
         node = r.nodes.CombinationShape.createNode()
         node.attr('combinationMethod').set(method)
 
-        elems = [self] + [_mo.info(item
+        elems = [self] + [_tm.mathInfo(item
             )[0] for item in _pu.expandArgs(*others)]
 
         for i, elem in enumerate(elems):
@@ -789,7 +789,8 @@ class Math1D:
 
         :rtype: :class:`Math1D`
         """
-        return self.unaryExpr('acos')
+        input = self.clamp(0, 1)
+        return input.unaryExpr('acos')
 
     def asin(self):
         """
@@ -821,7 +822,7 @@ class Math1D:
         :return: the sampled output
         :rtype: :class:`Math1D`
         """
-        time, dim, isplug = _mo.info(time)
+        time, dim, isplug = _tm.mathInfo(time)
 
         node = r.nodes.FrameCache.createNode()
         self >> node.attr('stream')

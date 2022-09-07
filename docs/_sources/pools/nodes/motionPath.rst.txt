@@ -6,6 +6,12 @@ paya.runtime.nodes.MotionPath
 
 .. py:class:: MotionPath(*args, **kwargs)
 
+
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.MotionPath` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     .. py:method:: configFollow(frontAxis, upAxis, worldUpVector=None, worldUpObject=None)
     
         Performs quick configuration of follow options. If no 'up' hints are
@@ -45,3 +51,19 @@ paya.runtime.nodes.MotionPath
         :param str axis: the axis to set, for example 'x'
         :return: ``self``
         :rtype: :class:`~paya.runtime.nodes.MotionPath`
+    
+    .. py:method:: getFrontAxis()
+    
+        Note that this doesn't check whether 'follow' is actually active
+        on the node.
+        
+        :return: The signed front axis, for example '-x'.
+        :rtype: str
+    
+    .. py:method:: getUpAxis()
+    
+        Note that this doesn't check whether 'follow' is actually active
+        on the node.
+        
+        :return: The signed up axis, for example '-z'.
+        :rtype: str

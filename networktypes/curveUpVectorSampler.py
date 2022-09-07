@@ -1,6 +1,4 @@
-from paya.lib.typeman import plugCheck
-import paya.lib.mathops as _mo
-import paya.lib.plugops as _po
+import paya.lib.typeman as _tm
 from paya.util import short
 import maya.cmds as m
 import paya.runtime as r
@@ -61,7 +59,7 @@ class CurveUpVectorSampler:
             index += 1
 
     def _tagCurve(self, curve):
-        curve = _po.asGeoPlug(curve)
+        curve = _tm.asGeoPlug(curve, worldSpace=True)
         curve >> self.addAttr('curve', at='message')
 
     def _initSamplesAttr(self):
@@ -153,7 +151,7 @@ class CurveUpVectorSampler:
 
     def _findSample(self, param):
         arr = self.attr('samples')
-        param, pdim, pisplug = _mo.info(param)
+        param, pdim, pisplug = _tm.mathInfo(param)
         indices = arr.getArrayIndices()
 
         for index in indices:
@@ -173,8 +171,8 @@ class CurveUpVectorSampler:
             "No matching sample found for parameter {}.".format(param))
 
     @short(plug='p')
-    @plugCheck('param')
-    def sampleAtParam(self, param, plug=True):
+    @_tm.plugCheck('param')
+    def sampleAtParam(self, param, plug=None):
         """
         :param param: the parameter to sample; if *plug* is ``False``, this
             must be a value

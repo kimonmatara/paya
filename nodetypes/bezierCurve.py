@@ -1,8 +1,11 @@
+import re
 from paya.geoshapext import ShapeExtensionMeta
+import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
 from paya.util import short
-import paya.runtime as r
 import paya.lib.nurbsutil as _nu
+import paya.runtime as r
+
 
 
 class BezierCurve(metaclass=ShapeExtensionMeta):
@@ -12,26 +15,22 @@ class BezierCurve(metaclass=ShapeExtensionMeta):
     #-----------------------------------------------------------------|
 
     @classmethod
-    @short(
-        degree='d',
-        under='u',
-        name='n',
-        conformShapeName='csn',
-        intermediate='i',
-        displayType='dt',
-        bSpline='bsp',
-        lineWidth='lw'
-    )
-    def create(
-            cls,
-            *points,
-            name=None,
-            under=None,
-            displayType=None,
-            conformShapeName=True,
-            intermediate=False,
-            lineWidth=None
-    ):
+    @short(name='n',
+           parent='p',
+           displayType='dt',
+           conformShapeName='csn',
+           intermediate='i',
+           lineWidth='lw',
+           dispCV='dcv')
+    def create(cls,
+               *points,
+               name=None, # shape name
+               parent=None,
+               displayType=None,
+               conformShapeName=None,
+               intermediate=False,
+               lineWidth=None,
+               dispCV=True):
         """
         Bezier curve constructor. Points can be static or dynamic.
 
@@ -42,12 +41,12 @@ class BezierCurve(metaclass=ShapeExtensionMeta):
         :param \*points: None, str, tuple, list,
             :class:`~paya.runtime.data.Point`,
             :class:`~paya.runtime.plugs.Vector`
-        :param name/n: one or more name elements; defaults to None
-        :type name/n: str, int, None, tuple, list
-        :param under/u: an optional destination parent; no space conversion
+        :param str name/n: a name for the curve *shape* node; defaults to a
+            contextual name
+        :param parent/p: an optional destination parent; no space conversion
             will take place; if the parent has transforms, the curve shape
             will be transformed as well; defaults to None
-        :type under/u: None, str, :class:`~paya.runtime.nodes.Transform`
+        :typeparent/p: None, str, :class:`~paya.runtime.nodes.Transform`
         :param displayType/dt: if provided, an index or enum label:
 
             - 0: 'Normal'
@@ -57,38 +56,55 @@ class BezierCurve(metaclass=ShapeExtensionMeta):
             If omitted, display overrides won't be activated at all.
         :type displayType/dt: None, int, str
         :param bool conformShapeName/csn: if reparenting, rename the shape to
-            match the destination parent; defaults to True
-        :param bool intermediate: set the shape to intermediate; defaults to
-            False
-        :param lineWidth/lw: an override for the line width; defaults to None
-        :type lineWidth/lw: None, float
+            match the destination parent; defaults to ``True`` if *parent* has
+            been specified, otherwise ``False``
+        :param bool intermediate/i: set the shape to intermediate; defaults to
+            ``False``
+        :param lineWidth/lw: an override for the line width; defaults to
+            ``None``
+        :type lineWidth/lw: ``None``, :class:`float`
+        :param bool dispCV/dcv: display CVs on the curve; defaults to ``True``
         :return: The curve shape.
         :rtype: :class:`BezierCurve`
         """
-        points = _mo.expandVectorArgs(points)
+
+        if conformShapeName is None:
+            conformShapeName = True if parent else False
+
+        if name is None:
+            name = cls.makeName()
+
+        points = _tm.expandVectorArgs(points)
 
         if points:
             num = len(points)
 
             if _nu.legalNumCVsForBezier(num):
-                infos = [_mo.info(point) for point in points]
+                infos = [_tm.mathInfo(point) for point in points]
                 points = [info[0] for info in infos]
                 hasPlugs = any((info[2] for info in infos))
 
                 if hasPlugs:
-                    _points = [_mo.asValue(point) for point in points]
+                    _points = [_tm.asValue(point) for point in points]
 
                 else:
                     _points = points
 
-                knots = _nu.getKnotList(num, 3)
+                knots = _nu.getKnotList(num, 3, bezier=True)
 
-                name = cls.makeName(name)
-                curveXf = r.curve(p=_points, k=knots, d=3, bezier=True, n=name)
+                kwargs = {}
+
+                if not (parent and conformShapeName):
+                    mt = re.match(r"^(.*?)Shape$", name)
+
+                    if mt:
+                        kwargs['name'] = mt.groups()[0]
+
+                curveXf = r.curve(p=_points, k=knots, d=3, bezier=True, **kwargs)
                 shape = curveXf.getShape()
 
-                if under:
-                    r.parent(shape, under, r=True, shape=True)
+                if parent:
+                    r.parent(shape, parent, r=True, shape=True)
                     r.delete(curveXf)
 
                     if conformShapeName:
@@ -106,7 +122,7 @@ class BezierCurve(metaclass=ShapeExtensionMeta):
                 )
 
         else:
-            shape = cls.createShape(n=name, u=under, csn=conformShapeName)
+            shape = cls.createShape(n=name, p=parent, csn=conformShapeName)
 
         # Post-config
         if displayType is not None:
@@ -116,12 +132,60 @@ class BezierCurve(metaclass=ShapeExtensionMeta):
         if intermediate:
             shape.attr('intermediateObject').set(intermediate)
 
+        shape.attr('dispCV').set(dispCV)
+
         return shape
+
+    @classmethod
+    @short(numAnchors='na')
+    def createLine(cls, startPt, endPt, numAnchors=2, **kwargs):
+        """
+        Convenience wrapper for :meth:`create` to quickly draw a straight
+        bezier line.
+
+        :param startPt: the start point
+        :type startPt: :class:`tuple`, :class:`list`,
+            :class:`str`, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param endPt: the end point
+        :type endPt: :class:`tuple`, :class:`list`,
+            :class:`str`, :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param int numAnchors/na: the number of anchors; defaults to 2
+        :param \*\*kwargs: forwarded to :meth:`create`
+        :return: The bezier curve shape.
+        :rtype: :class:`BezierCurve`
+        """
+        if numAnchors < 2:
+            raise ValueError("Need at least two anchors.")
+
+        startPt = _tm.conformVectorArg(startPt)
+        endPt = _tm.conformVectorArg(endPt)
+        numPoints = 4 + ((numAnchors-2) * 3)
+
+        internalWeights = _mo.floatRange(0, 1, numPoints)[1:-1]
+        allPoints = [startPt] + [startPt.blend(endPt,
+                w=weight) for weight in internalWeights] + [endPt]
+
+        return cls.create(allPoints, **kwargs)
 
     #-----------------------------------------------------------------|
     #-----------------------------------------------------------------|    Deformers
     #-----------------------------------------------------------------|
 
+    def clusterAnchor(self, anchorIndex, **kwargs):
+        """
+        :param int anchorIndex: the index of the anchor to cluster
+        :param \*\*kwargs:
+            forwarded to :meth:`paya.runtimes.nodes.Cluster.create`
+        :return: A cluster for the specified anchor.
+        :rtype: :class:`~paya.runtime.nodes.Cluster`
+        """
+        indices = self.getCVsAtAnchor(
+            anchorIndex, asDict=True, asIndex=True)
+        cvs = [self.comp('cv')[i] for i in indices]
+
+        return r.nodes.Cluster.create(cvs, **kwargs)
 
     @short(tolerance='tol', merge='mer', anchors='a')
     def clusterAll(self, merge=False, tolerance=1e-6, anchors=False):

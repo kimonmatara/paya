@@ -4,7 +4,7 @@ paya.lib.nurbsutil
 
 .. py:module:: paya.lib.nurbsutil
 
-.. py:function:: getKnotList(numCVs, degree)
+.. py:function:: getKnotList(numCVs, degree, bezier=False)
 
     Given a number of CVs and a degree, returns a knot list.
     
@@ -12,17 +12,6 @@ paya.lib.nurbsutil
     :param int degree: the degree; one of 1, 2, 3, 5 or 7
     :return: The knot list.
     :rtype: [int]
-
-.. py:function:: conformUParamArg(uParam)
-
-    If *uParam* is a component, returns its float form; otherwise returns
-    an attribute instance.
-    
-    :param uParam: the U curve parameter argument to conform
-    :type uParam: float, str,
-        :class:`~paya.runtime.comps.NurbsCurveParameter`,
-        :class:`~paya.runtime.plugs.Math1D`
-    :return: The conformed parameter.
 
 .. py:function:: itemsAsBezierAnchors(items)
 

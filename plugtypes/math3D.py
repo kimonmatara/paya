@@ -1,5 +1,5 @@
 from paya.util import short
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import paya.runtime as r
 
 
@@ -13,15 +13,18 @@ class Math3D:
         """
         :shorthand: ``cl``
 
-        :param name/n: one or more optional name elements; defaults to None
-        :rtype name/n: None, list, int, str
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
         :param float size/siz: a single scalar for the locator's
             ``localScale`` channels; defaults to 1.0
         :return: A locator with this 3D compound piped into its
             ``translate`` channel.
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        locShape = r.nodes.Locator.createNode(n=name)
+        if name is None:
+            name = r.Name.make(nt='locator', xf=True)
+
+        locShape = r.spaceLocator(n=name)
         locShape.attr("localScale").set([size] * 3)
         loc = locShape.getParent()
         self >> loc.attr('t')
@@ -53,7 +56,7 @@ class Math3D:
         """
         Implements **addition** (``+``).
         """
-        item, dim, isplug = _mo.info(other)
+        item, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.PlusMinusAverage.createNode()
@@ -83,7 +86,7 @@ class Math3D:
         """
         Implements **subtraction** (``-``).
         """
-        item, dim, isplug = _mo.info(other)
+        item, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.PlusMinusAverage.createNode()
@@ -114,7 +117,7 @@ class Math3D:
         """
         Implements **multiplication** (``*``).
         """
-        item, dim, isplug = _mo.info(other)
+        item, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -153,7 +156,7 @@ class Math3D:
         """
         Implements **division** (``/``).
         """
-        item, dim, isplug = _mo.info(other)
+        item, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -185,7 +188,7 @@ class Math3D:
         """
         Implements **power** (``**``).
         """
-        item, dim, isplug = _mo.info(other)
+        item, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()

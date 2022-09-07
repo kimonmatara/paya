@@ -2,7 +2,7 @@ import pymel.util as _pu
 import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
 from paya.util import short
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import paya.runtime as r
 
 
@@ -43,7 +43,7 @@ class Vector:
         """
         Implements **multiplication** (``*``).
         """
-        item, dim, isplug = _mo.info(other)
+        item, dim, isplug = _tm.mathInfo(other)
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -102,7 +102,7 @@ class Vector:
             swap=False,
             blendLength=False
     ):
-        other, dim, isplug = _mo.info(other)
+        other, dim, isplug = _tm.mathInfo(other)
 
         if swap:
             first, second = other, self
@@ -182,7 +182,7 @@ class Vector:
                 "A clock normal is required to perform angle unwinding."
             )
 
-        other, otherDim, otherIsPlug = _mo.info(other)
+        other, otherDim, otherIsPlug = _tm.mathInfo(other)
 
         if swap:
             first, second = other, self
@@ -208,7 +208,6 @@ class Vector:
             outVector = first.rotateByAxisAngle(clockNormal, angle)
 
         else:
-
             #-----------------------------------------|    Linear impl
 
             node = r.nodes.BlendColors.createNode()
@@ -287,28 +286,31 @@ class Vector:
         :return: This vector, normalized.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        with r.Name('normal'):
-            return self / self.length()
+        return self / self.length()
 
-    @short(normalize='nr')
-    def cross(self, other, normalize=False):
+    @short(normalize='nr', guard='g', inlineGate='ig')
+    def cross(self, other, normalize=False, guard=False, inlineGate=None):
         """
-        Returns the cross product of ``self`` and ``other``.
-
         :param other: the other vector
-        :type other: :class:`list`, :class:`tuple`, :class:`~paya.runtime.plugs.Math3D`
-        :param bool normalize/nr: normalize the output; defaults to False
-        :return: :class:`paya.runtime.plugs.Vector`
+        :type other: :class:`tuple`, :class:`list`,
+            :class:`str`,
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param bool normalize/nr: normalize the output; defaults to
+            ``False``
+        :param bool guard/g: switch the node to 'No Operation' when the
+            input vectors are aligned in either direction; defaults to
+            ``False``
+        :param bool inlineGate/ig: if you have a precooked gate for alignment
+            (typically the output of a comparison operation), provide it here
+            to prevent redundant checks; if provided, will override *guard*
+            to ``True``; defaults to ``None``
+        :return: The cross product.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        node = r.nodes.VectorProduct.createNode()
-        node.attr('operation').set(2)
-        self >> node.attr('input1')
-        other >> node.attr('input2')
-
-        if normalize:
-            node.attr('normalizeOutput').set(True)
-
-        return node.attr('output')
+        return r.nodes.VectorProduct.createAsCross(
+            self, other, nr=normalize, g=guard, ig=inlineGate
+        ).attr('output')
 
     @short(clockNormal='cn')
     def angle(self, other, clockNormal=None):
@@ -330,8 +332,8 @@ class Vector:
 
         else:
             complete = True
-            clockNormal, cnDim, cnIsPlug = _mo.info(clockNormal)
-            cross = self.cross(clockNormal) # correct
+            clockNormal, cnDim, cnIsPlug = _tm.mathInfo(clockNormal)
+            cross = self.cross(clockNormal)
 
         ab = r.createNode('angleBetween')
         self >> ab.attr('vector1')
@@ -356,7 +358,7 @@ class Vector:
         :return: The project of this vector onto *other*.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        other = _mo.info(other)[0]
+        other = _tm.mathInfo(other)[0]
         return (self.dot(other) / other.dot(other)) * other
 
     def rejectFrom(self, other):
@@ -370,7 +372,7 @@ class Vector:
         :return: The rejection of this vector from *other*.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        other = _mo.info(other)[0]
+        other = _tm.mathInfo(other)[0]
         cosTheta = self.dot(other, nr=True)
         rejection = self - (self.length() * cosTheta) * other.normal()
         return rejection

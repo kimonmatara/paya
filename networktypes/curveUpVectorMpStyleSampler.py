@@ -1,5 +1,5 @@
 from paya.networktypes.curveUpVectorSampler import NoMatchingSampleError
-import paya.lib.mathops as _mo
+import paya.lib.typeman as _tm
 import paya.runtime as r
 from paya.util import short
 
@@ -63,7 +63,7 @@ class CurveUpVectorMpStyleSampler(r.networks.CurveUpVectorSampler):
             upObject = r.PyNode(upObject)
 
         if upVector is not None:
-            upVector = _mo.conformVectorArg(upVector)
+            upVector = _tm.conformVectorArg(upVector)
 
         if upVector is not None:
             if upObject:
