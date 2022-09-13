@@ -1,4 +1,5 @@
 import re
+import maya.OpenMaya as om
 import maya.cmds as m
 import pymel.core as p
 
@@ -12,6 +13,37 @@ uncap = lambda x: x[0].lower()+x[1:]
 class Attribute:
 
     __math_dimension__ = None
+
+    #-----------------------------------------------------------------|    Unit management
+
+    def unitType(self):
+        """
+        :return: One of 'angle', 'distance', 'time' or ``None``.
+        :rtype: :class:`str` | ``None``
+        """
+        if self.isMulti():
+            self = self[0]
+
+        if self.isCompound():
+            types = [child.unitType() for child in self.getChildren()]
+
+            if len(set(types)) is 1:
+                return types[0]
+
+        else:
+            mobj = self.__apimplug__().attribute()
+            if mobj.hasFn(om.MFn.kUnitAttribute):
+                mfn = om.MFnUnitAttribute(mobj)
+                unitType = mfn.unitType()
+
+                if unitType == om.MFnUnitAttribute.kAngle:
+                    return 'angle'
+
+                if unitType == om.MFnUnitAttribute.kDistance:
+                    return 'distance'
+
+                if unitType == om.MFnUnitAttribute.kTime:
+                    return 'time'
 
     #-----------------------------------------------------------------|    Type management
 

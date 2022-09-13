@@ -26,9 +26,8 @@ class Vector:
         if not name:
             name = r.Name.make(nt='locator', xf=True)
 
-        locShape = r.spaceLocator(n=name)
-        locShape.attr("localScale").set([size] * 3)
-        loc = locShape.getParent()
+        loc = r.spaceLocator(n=name)
+        loc.attr("localScale").set([size] * 3)
         loc.attr('t').set(self)
         return loc
 

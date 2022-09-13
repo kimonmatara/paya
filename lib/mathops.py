@@ -1,5 +1,6 @@
 from collections import UserDict
 
+import maya.OpenMaya as om
 from paya.lib.typeman import *
 import pymel.util as _pu
 import pymel.core as p
@@ -18,6 +19,24 @@ axisVecs = {
     't': p.datatypes.Point([0,0,0]),
     'translate': p.datatypes.Point([0,0,0])
 }
+
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Units
+#--------------------------------------------------------------|
+
+def degToUI(degrees):
+    """
+    :param float degrees: an angle in degrees
+    :return: The original value if the Maya is set to degrees, otherwise
+        the value converted to radians.
+    :rtype: :class:`float`
+    """
+    degrees = float(degrees)
+
+    if om.MAngle.uiUnit() == om.MAngle.kRadians:
+        return _pu.radians(degrees)
+
+    return degrees
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Exceptions

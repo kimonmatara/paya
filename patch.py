@@ -107,6 +107,5 @@ def unpatchPyMEL(quiet=False):
         if not quiet:
             print("PyMEL unpatched successfully.")
 
-    else:
-        if not quiet:
-            m.warning("PyMEL is not patched.")
+    elif not quiet:
+        m.warning("PyMEL is not patched.")

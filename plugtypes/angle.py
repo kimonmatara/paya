@@ -6,6 +6,8 @@ import paya.runtime as r
 
 class Angle:
 
+    #-----------------------------------------------------------|    Get / set
+
     @short(plug='p')
     def get(self, plug=False, default=None, **kwargs):
         """
@@ -208,3 +210,31 @@ class Angle:
             method = pairs[switchSource][1]
 
             return method()
+
+    #--------------------------------------------------------------------|    Trigonometry
+
+    # See plugtypes.Math1D for the inverse functions
+
+    def cos(self):
+        """
+        Returns the trigonometric cosine.
+
+        :rtype: :class:`Math1D`
+        """
+        return self.asRadians().unaryExpr('cos')
+
+    def sin(self):
+        """
+        Returns the trigonometric sine.
+
+        :rtype: :class:`Math1D`
+        """
+        return self.asRadians().unaryExpr('sin')
+
+    def tan(self):
+        """
+        Returns the trigonometric tangent.
+
+        :rtype: :class:`Math1D`
+        """
+        return self.asRadians().unaryExpr('tan')

@@ -20,21 +20,25 @@ class Runtime:
         import paya.startstop as startstop
         from paya.pools import pools
         import paya.cmds as cmds
-        from paya.nativeunits import NativeUnits
+        import pymel.core
 
+        self._pmcore = self._fallback = pymel.core
         self._ss = startstop
         self._cmds = cmds
         self._pools = pools
         self._running = False
-        self._nu = NativeUnits
 
     #--------------------------------------------------|    Interfaces
+
+    @property
+    def pn(self):
+        return self._pmcore.PyNode
 
     def __createControl(self):
         return self.nodes.Transform.createControl
 
-    def __getattr(self, attrName):
-        return getattr(self._cmds, attrName)
+    def __getattr__(self, item):
+        return getattr(self._fallback, item)
 
     @property
     def running(self):
@@ -49,13 +53,10 @@ class Runtime:
 
             # Attach attributes
             Runtime.createControl = property(fget=Runtime.__createControl)
-            Runtime.__getattr__ = self.__getattr
+            self._fallback = self._cmds
 
             for pool in self._pools:
                 setattr(self, pool.shortName(), pool.browse())
-
-            # Enforce native units
-            self._nu.start()
 
             Runtime.__depth__ = 1
             print("Paya has started successfully.")
@@ -69,13 +70,12 @@ class Runtime:
             self._ss.stop(quiet=True)
 
             # Remove attributes
-            del(Runtime.__getattr__)
+            self._fallback = self._pmcore
             del(Runtime.createControl)
 
             for pool in self._pools:
                 delattr(self, pool.shortName())
 
-            self._nu.stop()
             Runtime.__depth__ = 0
 
             print("Paya has stopped successfully.")

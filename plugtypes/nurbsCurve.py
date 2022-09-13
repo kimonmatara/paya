@@ -2712,11 +2712,15 @@ class NurbsCurve:
             cha=chain, p=plug
         )
 
-        joints = [r.nodes.Joint.create(wm=matrix, n=i+1,
-                                       p=parent, ro=rotateOrder,
-                                       dla=displayLocalAxis,
-                                       fr=freeze, dec=decompose)\
-                  for i, matrix in enumerate(matrices)]
+        joints = []
+
+        for i, matrix in enumerate(matrices):
+            with r.Name(i+1):
+                joint = r.nodes.Joint.create(wm=matrix, p=parent,
+                                             ro=rotateOrder,
+                                             dla=displayLocalAxis,
+                                             fr=freeze, dec=decompose)
+                joints.append(joint)
 
         if chain:
             for thisJoint, nextJoint in zip(joints, joints[1:]):

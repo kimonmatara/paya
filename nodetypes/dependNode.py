@@ -248,9 +248,11 @@ class DependNode:
         :return: The node.
         :rtype: :class:`DependNode`
         """
+        name = name if name else cls.makeName()
+
         node = r.createNode(
             cls.__melnode__,
-            name=name if name else cls.makeName(),
+            name=name,
             **kwargs)
 
         if cls.__is_subtype__:

@@ -26,9 +26,10 @@ from pymel.core import *
 from paya.util import toOs
 from paya.lib.names import Name
 from paya.lib.mathops import createMatrix, \
-    createScaleMatrix, cm, csm
+    createScaleMatrix, cm, csm, degToUI
 from paya.lib.skel import Chain
 from paya.lib.controlshapes import controlShapes
+from paya.nativeunits import NativeUnits, nativeUnits
 
 def saveScriptEditor():
     """
@@ -60,5 +61,9 @@ def findMelProc(procName):
 
     raise RuntimeError("Not a MEL procedure.")
 
-pn = PyNode
+class NullCtx:
+    def __enter__(self):
+        return self
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return False

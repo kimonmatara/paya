@@ -19,7 +19,8 @@ def start(quiet=False):
     else:
         patchPyMEL(quiet=True)
         running = True
-        print("PyMEL has been patched.")
+        if not quiet:
+            print("PyMEL has been patched.")
 
 def stop(quiet=False):
     """
@@ -34,7 +35,9 @@ def stop(quiet=False):
             pool.purge(quiet=True)
 
         running = False
-        print("PyMEL has been unpatched.")
+
+        if not quiet:
+            print("PyMEL has been unpatched.")
 
     elif not quiet:
         m.warning("Paya is already unpatched.")

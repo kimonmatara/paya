@@ -8,13 +8,15 @@ class EulerRotation:
 
     #-----------------------------------------------------------|    Testing
 
-    @short(name='n')
-    def createLocator(self, name=None):
+    @short(name='n', size='siz')
+    def createLocator(self, name=None, size=1.0):
         """
         :shorthand: ``cl``
 
         :param str name/n: an optional name for the locator transform; defaults
             to a contextual name
+        :param float size/siz: a scalar for the locator's local scale;
+            defaults to 1.0
         :return: A locator with this euler rotation piped into its
             ``rotate`` channels.
         :rtype: :class:`~paya.runtime.nodes.Transform`
@@ -25,6 +27,7 @@ class EulerRotation:
         loc = r.spaceLocator(n=name)
         loc.attr('ro').set(self.order.lower())
         loc.attr('r').set(self)
+        loc.getShape().attr('localScale').set([size]*3)
         return loc
 
     cl = createLocator

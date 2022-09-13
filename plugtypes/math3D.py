@@ -4,6 +4,7 @@ import paya.runtime as r
 
 
 class Math3D:
+
     __math_dimension__ = 3
 
     #-----------------------------------------------------------|    Testing
@@ -24,9 +25,8 @@ class Math3D:
         if name is None:
             name = r.Name.make(nt='locator', xf=True)
 
-        locShape = r.spaceLocator(n=name)
-        locShape.attr("localScale").set([size] * 3)
-        loc = locShape.getParent()
+        loc = r.spaceLocator(n=name)
+        loc.getShape().attr("localScale").set([size] * 3)
         self >> loc.attr('t')
         return loc
 

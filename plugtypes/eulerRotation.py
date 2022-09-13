@@ -10,8 +10,8 @@ class EulerRotation:
 
     #-----------------------------------------------------------|    Testing
 
-    @short(name='n', rotateOrder='ro')
-    def createLocator(self, name=None, rotateOrder='xyz'):
+    @short(name='n', rotateOrder='ro', size='siz')
+    def createLocator(self, name=None, rotateOrder='xyz', size=1.0):
         """
         :shorthand: ``cl``
 
@@ -31,6 +31,7 @@ class EulerRotation:
         loc = r.spaceLocator(n=name)
         rotateOrder >> loc.attr('ro')
         self >> loc.attr('r')
+        loc.attr('localScale').set([size]*3)
 
         return loc
 

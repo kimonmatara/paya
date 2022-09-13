@@ -1,29 +1,75 @@
+from functools import wraps
 import maya.OpenMaya as om
 import maya.cmds as m
+from paya.util import short
+
 
 class NativeUnits:
-    """
-    Imposes native units, but restores them around scene-save operations so
-    that user settings are saved to file.
-    """
-    callbacks = []
-    userLinear = None
-    userAngular = None
-    track = True
 
-    #--------------------------------------------------|    Set
+    __depth__ = 0
+    __force__ = False
+    __callbacks__ = []
+    __track__ = True
+    __userLinear__ = None
+    __userAngular__ = None
 
+    #---------------------------------------------------|    Init
+
+    @short(force='f')
+    def __init__(self, force=False):
+        self.force = force
+
+    #---------------------------------------------------|    Context
+
+    def __enter__(self):
+        NativeUnits.__depth__ += 1
+
+        if NativeUnits.__depth__ is 1:
+            self.captureUserLinear()
+            self.captureUserAngular()
+
+            self.applyNativeLinear()
+            self.applyNativeAngular()
+
+        self.prev_force = NativeUnits.__force__
+
+        if not NativeUnits.__force__:
+            NativeUnits.__force__ = True
+
+        if NativeUnits.__force__ and not NativeUnits.__callbacks__:
+            self.addCallbacks()
+
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        NativeUnits.__force__ = self.prev_force
+
+        if (not NativeUnits.__force__) and NativeUnits.__callbacks__:
+            self.removeCallbacks()
+
+        NativeUnits.__depth__ -= 1
+
+        if NativeUnits.__depth__ is 0:
+            self.applyUserLinear()
+            self.applyUserAngular()
+
+            NativeUnits.__userLinear__ = NativeUnits.__userAngular__ = None
+
+        return False
+
+    #---------------------------------------------------|    Setting
+    
     @classmethod
     def setLinear(cls, setting):
-        cls.track = False
+        cls.__track__ = False
         om.MDistance.setUIUnit(setting)
-        cls.track = True
+        cls.__track__ = True
 
     @classmethod
     def setAngular(cls, setting):
-        cls.track = False
+        cls.__track__ = False
         om.MAngle.setUIUnit(setting)
-        cls.track = True
+        cls.__track__ = True
 
     @classmethod
     def getLinear(cls):
@@ -35,25 +81,25 @@ class NativeUnits:
 
     @classmethod
     def applyUserLinear(cls):
-        if cls.userLinear != cls.getLinear():
-            cls.setLinear(cls.userLinear)
+        if cls.__userLinear__ != cls.getLinear():
+            cls.setLinear(cls.__userLinear__)
             m.warning("Paya: Restored user linear unit.")
 
     @classmethod
     def applyUserAngular(cls):
-        if cls.userAngular != cls.getAngular():
-            cls.setAngular(cls.userAngular)
+        if cls.__userAngular__ != cls.getAngular():
+            cls.setAngular(cls.__userAngular__)
             m.warning("Paya: Restored user angular unit.")
 
     @classmethod
     def applyNativeLinear(cls):
-        if cls.userLinear != om.MDistance.kCentimeters:
+        if cls.__userLinear__ != om.MDistance.kCentimeters:
             cls.setLinear(om.MDistance.kCentimeters)
             m.warning("Paya: Switched Maya to centimeters.")
 
     @classmethod
     def applyNativeAngular(cls):
-        if cls.userAngular != om.MAngle.kRadians:
+        if cls.__userAngular__ != om.MAngle.kRadians:
             cls.setAngular(om.MAngle.kRadians)
             m.warning("Paya: Switched Maya to radians.")
 
@@ -61,11 +107,11 @@ class NativeUnits:
 
     @classmethod
     def captureUserLinear(cls):
-        cls.userLinear = om.MDistance.uiUnit()
+        cls.__userLinear__ = om.MDistance.uiUnit()
 
     @classmethod
     def captureUserAngular(cls):
-        cls.userAngular = om.MAngle.uiUnit()
+        cls.__userAngular__ = om.MAngle.uiUnit()
 
     #--------------------------------------------------|    Callbacks
 
@@ -88,43 +134,39 @@ class NativeUnits:
     def afterSaveCb(cls, *args):
         cls.applyNativeLinear()
         cls.applyNativeAngular()
-        
+
     #--------------------------------------------------|    Start / stop
-    
-    @classmethod
-    def start(cls):
-        if not cls.callbacks:
-            cls.captureUserLinear()
-            cls.applyNativeLinear()
-            
-            cls.captureUserAngular()
-            cls.applyNativeAngular()
-            
-            cls.callbacks = [
-                om.MEventMessage.addEventCallback(
-                    'linearUnitChanged', cls.linearUnitChangedCb),
-                om.MEventMessage.addEventCallback(
-                    'angularUnitChanged', cls.angularUnitChangedCb),
-                om.MSceneMessage.addCallback(
-                    om.MSceneMessage.kBeforeSave,
-                    cls.beforeSaveCb
-                ),
-                om.MSceneMessage.addCallback(
-                    om.MSceneMessage.kAfterSave,
-                    cls.afterSaveCb
-                )
-            ]
-            
-    @classmethod
-    def stop(cls):
-        if cls.callbacks:
-            for callback in cls.callbacks:
-                om.MMessage.removeCallback(callback)
 
-            cls.callbacks = []
+    @classmethod
+    def addCallbacks(cls):
+        cls.__callbacks__ = [
+            om.MEventMessage.addEventCallback(
+                'linearUnitChanged', cls.linearUnitChangedCb),
+            om.MEventMessage.addEventCallback(
+                'angularUnitChanged', cls.angularUnitChangedCb),
+            om.MSceneMessage.addCallback(
+                om.MSceneMessage.kBeforeSave,
+                cls.beforeSaveCb
+            ),
+            om.MSceneMessage.addCallback(
+                om.MSceneMessage.kAfterSave,
+                cls.afterSaveCb
+            )
+        ]
 
-            om.MDistance.setUIUnit(cls.userLinear)
-            om.MAngle.setUIUnit(cls.userAngular)
-            cls.userLinear = cls.userAngular = None
-            
-            
+    @classmethod
+    def removeCallbacks(cls):
+        for callback in cls.__callbacks__:
+            om.MMessage.removeCallback(callback)
+
+        cls.__callbacks__ = []
+
+def nativeUnits(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        with NativeUnits():
+            result = f(*args, **kwargs)
+
+        return result
+
+    return wrapper

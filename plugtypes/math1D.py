@@ -1,5 +1,7 @@
 from functools import reduce
+import math
 
+import maya.OpenMaya as om
 import pymel.util as _pu
 from paya.util import short
 import paya.lib.typeman as _tm
@@ -21,16 +23,13 @@ class Math1D:
 
         :param other: a value or plug of dimension 1, 2, 3 or 4
         """
-
         other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 1:
-            node = r.nodes.AddDoubleLinear.createNode()
-
-            self >> node.attr('input{}'.format(2 if swap else 1))
-            node.attr('input{}'.format(1 if swap else 2)).put(other, p=isplug)
-
-            return node.attr('output')
+            node = r.nodes.PlusMinusAverage.createNode()
+            self >> node.attr('input1D')[1 if swap else 0]
+            node.attr('input1D')[0 if swap else 1].put(other, p=isplug)
+            return node.attr('output1D')
 
         if dim is 2:
             node = r.nodes.PlusMinusAverage.createNode()
@@ -125,12 +124,11 @@ class Math1D:
         other, dim, isplug = _tm.mathInfo(other)
 
         if dim is 1:
-            node = r.nodes.MultDoubleLinear.createNode()
+            node = r.nodes.MultiplyDivide.createNode()
+            self >> node.attr('input{}X'.format(2 if swap else 1))
+            other >> node.attr('input{}X'.format(1 if swap else 2))
 
-            self >> node.attr('input{}'.format(2 if swap else 1))
-            other >> node.attr('input{}'.format(1 if swap else 2))
-
-            return node.attr('output')
+            return node.attr('outputX')
 
         if dim is 3:
             node = r.nodes.MultiplyDivide.createNode()
@@ -247,10 +245,10 @@ class Math1D:
         Implements unary negation (``-``).
         :return: ``self * -1.0``
         """
-        mdl = r.nodes.MultDoubleLinear.createNode()
-        self >> mdl.attr('input1')
-        mdl.attr('input2').set(-1.0)
-        return mdl.attr('output')
+        mdv = r.nodes.MultiplyDivide.createNode()
+        self >> mdv.attr('input1X')
+        mdv.attr('input2X').set(-1.0)
+        return mdl.attr('outputX')
 
     def normal(self, scalar=True):
         """
@@ -726,87 +724,146 @@ class Math1D:
 
     #--------------------------------------------------------------------|    Expression utils
 
-    def unaryExpr(self, operation):
+    def unaryExpr(self, operation, returnsRadians=False):
         """
-        Constructs an expression that calls the specified operation on 'self'.
-        Used to implement all the trig methods.
+        Configures an expression node to run a unary expression on this plug,
+        and returns its output.
 
-        :param str operation: The operation to call, for example *cos*
-        :return: The output plug of the expression node.
-        :rtype: :class:`Attribute`
+        :param str operation: the expression operation, for example ``'sin'``
+        :param bool returnsRadians: interpret the output as a radian return
+            (e.g. from a trigonometric function) and pipe into an angle
+            output; defaults to ``False``
+        :return: the expression output
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        expr = '{}({})'.format(operation,str(self))
-        node = r.nodes.Expression.createNode(n=operation)
-        node.attr('expression').set('.O[0] = {}'.format(expr))
+        with r.Name(operation):
+            node = r.nodes.Expression.createNode()
+
+        expr = '.O[0] = {}({})'.format(operation, self)
+        node.attr('expression').set(expr)
         r.expression(node, e=True, alwaysEvaluate=False)
-        return node.attr('output')[0]
+
+        out = node.attr('output')[0]
+
+        if returnsRadians:
+            node.addAttr('angleOutput', at='doubleAngle', k=True)
+
+            with r.NativeUnits():
+                out >> node.attr('angleOutput')
+
+            out = node.attr('angleOutput')
+
+        return out
 
     #--------------------------------------------------------------------|    Trigonometry
 
-    def degrees(self):
+    def asAngle(self):
         """
-        Converts radians to degrees.
+        If this attribute is of type 'doubleAngle', it is returned as-is.
+        If it's of any other type, it's converted using Maya UI rules and
+        a 'doubleAngle' output for it returned.
 
-        :rtype: :class:`Math1D`
+        :return: The angle output.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        return self * 57.2958
+        unitType = self.unitType()
 
-    def radians(self):
-        """
-        Converts degrees to radians.
+        if unitType == 'angle':
+            return self
 
-        :rtype: :class:`Math1D`
-        """
-        return self * 0.0174533
+        with r.Name('asAngle'):
+            nw = r.nodes.Network.createNode()
 
-    def cos(self):
-        """
-        Returns the trigonometric cosine.
+        nw.addAttr('output', at='doubleAngle', k=True)
+        self >> nw.attr('output')
+        return nw.attr('output')
 
-        :rtype: :class:`Math1D`
+    def asRadians(self):
         """
-        return self.unaryExpr('cos')
+        :return: A unitless (type 'double') output representing radians.
+            Conversions are performed according to Maya rules.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
+        """
+        inp = self
+        unitType = self.unitType()
 
-    def sin(self):
-        """
-        Returns the trigonometric sine.
+        if unitType is None:
+            # Make sure it's double and not generic
+            if inp.type() != 'double':
+                with r.Name('asDouble'):
+                    nw = r.nodes.Network.createNode()
 
-        :rtype: :class:`Math1D`
-        """
-        return self.unaryExpr('sin')
+                nw.addAttr('output', at='double', k=True)
+                inp >> nw.attr('output')
+                inp = nw.attr('output')
 
-    def tan(self):
-        """
-        Returns the trigonometric tangent.
+            if om.MAngle.uiUnit() == om.MAngle.kRadians:
+                # No conversions necessary
+                return inp
 
-        :rtype: :class:`Math1D`
-        """
-        return self.unaryExpr('tan')
+            # Run through a unit conversion just for the multiplication
+            # functionality; return a double output
+
+            uc = r.nodes.UnitConversion.createNode()
+            inp >> uc.attr('input')
+            uc.attr('conversionFactor').set(math.pi / 180.0)
+            uc.addAttr('asDouble', k=True, at='double')
+            uc.attr('output') >> uc.attr('asDouble')
+
+            return uc.attr('asDouble')
+
+        if unitType == 'angle':
+            with r.Name('asRadians'):
+                nw = r.nodes.Network.createNode()
+
+            nw.addAttr('output', k=True, at='double')
+
+            with r.NativeUnits():
+                inp >> nw.attr('output')
+
+            return nw.attr('output')
+
+        # In all other cases, pipe into an angle attribute to get Maya
+        # to perform unit conversions on its own, then connect into
+        # a double output with native units to get the radians
+
+        with r.Name('asRadians'):
+            nw = r.nodes.Network.createNode()
+
+        nw.addAttr('asAngle', at='doubleAngle', k=True)
+        inp >> nw.attr('asAngle')
+        nw.addAttr('output', at='double', k=True)
+
+        with r.NativeUnits():
+            nw.attr('asAngle') >> nw.attr('output')
+
+        return nw.attr('output')
+
+    # See plugtypes.Angle for the forward functions
 
     def acos(self):
         """
         Returns the inverse trigonometric cosine.
 
-        :rtype: :class:`Math1D`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        input = self.clamp(0, 1)
-        return input.unaryExpr('acos')
+        return self.clamp(0, 1).unaryExpr('acos', returnsRadians=True)
 
     def asin(self):
         """
         Returns the inverse trigonometric sine.
 
-        :rtype: :class:`Math1D`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        return self.unaryExpr('asin')
+        return self.unaryExpr('asin', returnsRadians=True)
 
     def atan(self):
         """
         Returns the inverse trigonometric tangent.
 
-        :rtype: :class:`Math1D`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        return self.unaryExpr('atan')
+        return self.unaryExpr('atan', returnsRadians=True)
 
     #--------------------------------------------------------------------|    Sampling
 

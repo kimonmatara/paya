@@ -11,6 +11,41 @@ from paya.util import short, LazyModule, conditionalExpandArgs
 
 r = LazyModule('paya.runtime')
 
+# def get1DOutputAttrTypeForPolyadicOperation(*operands):
+#     """
+#     Given a bunch of operands, returns the appropriate output attribute
+#     type. Used by the maths operators.
+#
+#     :param \*operands: the input operands
+#     :return: One of 'double', 'doubleLinear', 'doubleAngle' or 'time'
+#     :rtype: :class:`str`
+#     """
+#     # Algorithm:
+#     # Conform operands to data or plug types
+#     # Find the first operand which isn't a simple type and take the type
+#     # from that
+#     # If all are simple types, return 'double'
+#
+#     out = None
+#
+#     for operand in operands:
+#         if isinstance(operand, p.Attribute):
+#             return operand.type()
+#             break
+#
+#         if isinstance(operand, str):
+#             return p.Attribute(operand).type()
+#
+#         if isinstance(operand, p.datatypes.Unit):
+#             return {
+#                 p.datatypes.Time: 'time',
+#                 p.datatypes.Angle: 'doubleAngle',
+#                 p.datatypes.Distance: 'doubleLinear'
+#             }.get(type(operand), 'double')
+#
+#     return 'double'
+
+
 @short(angle='a')
 def mathInfo(item, angle=False):
     """
