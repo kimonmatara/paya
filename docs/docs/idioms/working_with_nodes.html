@@ -21,24 +21,18 @@
   body {
     --color-code-background: #f8f8f8;
   --color-code-foreground: black;
-  --color-brand-primary: #b58e00;
-  --color-brand-content: #b58e00;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
-  --color-brand-primary: #d9a600;
-  --color-brand-content: #d9a600;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
-  --color-brand-primary: #d9a600;
-  --color-brand-content: #d9a600;
   
       }
     }
@@ -155,7 +149,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../../index.html">
   
   <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="../../_static/grad_transp_logo.png" alt="Logo"/>
+    <img class="sidebar-logo" src="../../_static/gradB_transp.png" alt="Logo"/>
   </div>
   
   
@@ -361,8 +355,8 @@ attribute on <a class="reference internal" href="../../paya/runtime.html#module-
 <p>More and more Paya classes also implement a higher-level <code class="docutils literal notranslate"><span class="pre">create()</span></code> method. On <a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,
 this includes, amongst other things, a <em>dagPath/dp</em> option to create, insert or retrieve nested groups:</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="cf3afd74-0a3a-49a9-915e-cc2165069272" name="6c7b0a78-d8e8-4c97-92b3-323cb854c3c0" type="radio">
-</input><label class="sd-tab-label" for="cf3afd74-0a3a-49a9-915e-cc2165069272">
+<input checked="checked" id="a1a38577-e4a1-46e7-9ad4-cad937f10c29" name="726f2df9-ef2f-4ea9-8097-78889bc26032" type="radio">
+</input><label class="sd-tab-label" for="a1a38577-e4a1-46e7-9ad4-cad937f10c29">
 Paya</label><div class="sd-tab-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="p">:</span>
     <span class="n">dfrmGroup</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">dagPath</span><span class="o">=</span><span class="s1">&#39;|rig|xform|deformers&#39;</span><span class="p">)</span> <span class="c1"># absolute</span>
@@ -370,8 +364,8 @@ Paya</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="e87be4b8-1804-462a-aab9-8a7ed6d071a0" name="6c7b0a78-d8e8-4c97-92b3-323cb854c3c0" type="radio">
-</input><label class="sd-tab-label" for="e87be4b8-1804-462a-aab9-8a7ed6d071a0">
+<input id="5477498b-a72a-41ef-bef4-d38534ab467c" name="726f2df9-ef2f-4ea9-8097-78889bc26032" type="radio">
+</input><label class="sd-tab-label" for="5477498b-a72a-41ef-bef4-d38534ab467c">
 Outliner</label><div class="sd-tab-content docutils">
 <figure class="align-center">
 <img alt="../../_images/dagHierarchy.png" src="../../_images/dagHierarchy.png" />
