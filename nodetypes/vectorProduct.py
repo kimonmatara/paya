@@ -1,5 +1,5 @@
 from paya.util import short
-import paya.lib.typeman as _mt
+import paya.lib.typeman as _tm
 import paya.runtime as r
 
 
