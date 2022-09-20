@@ -328,62 +328,50 @@ paya.runtime.plugs.Math1D
         :return: The blended output.
         :rtype: :class:`Math1D`
     
-    .. py:method:: unaryExpr(operation)
+    .. py:method:: unaryExpr(operation, returnsRadians=False)
     
-        Constructs an expression that calls the specified operation on 'self'.
-        Used to implement all the trig methods.
+        Configures an expression node to run a unary expression on this plug,
+        and returns its output.
         
-        :param str operation: The operation to call, for example *cos*
-        :return: The output plug of the expression node.
-        :rtype: :class:`Attribute`
+        :param str operation: the expression operation, for example ``'sin'``
+        :param bool returnsRadians: interpret the output as a radian return
+            (e.g. from a trigonometric function) and pipe into an angle
+            output; defaults to ``False``
+        :return: the expression output
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: degrees()
+    .. py:method:: asAngle()
     
-        Converts radians to degrees.
+        If this attribute is of type 'doubleAngle', it is returned as-is.
+        If it's of any other type, it's converted using Maya UI rules and
+        a 'doubleAngle' output for it returned.
         
-        :rtype: :class:`Math1D`
+        :return: The angle output.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
-    .. py:method:: radians()
+    .. py:method:: asRadians()
     
-        Converts degrees to radians.
-        
-        :rtype: :class:`Math1D`
-    
-    .. py:method:: cos()
-    
-        Returns the trigonometric cosine.
-        
-        :rtype: :class:`Math1D`
-    
-    .. py:method:: sin()
-    
-        Returns the trigonometric sine.
-        
-        :rtype: :class:`Math1D`
-    
-    .. py:method:: tan()
-    
-        Returns the trigonometric tangent.
-        
-        :rtype: :class:`Math1D`
+        :return: A unitless (type 'double') output representing radians.
+            Conversions are performed according to Maya rules.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: acos()
     
         Returns the inverse trigonometric cosine.
         
-        :rtype: :class:`Math1D`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: asin()
     
         Returns the inverse trigonometric sine.
         
-        :rtype: :class:`Math1D`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: atan()
     
         Returns the inverse trigonometric tangent.
         
-        :rtype: :class:`Math1D`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: atTime(time, relative=False)
     

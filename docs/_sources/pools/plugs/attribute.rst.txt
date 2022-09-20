@@ -12,6 +12,11 @@ paya.runtime.plugs.Attribute
 
     :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
+    .. py:method:: unitType()
+    
+        :return: One of 'angle', 'distance', 'time' or ``None``.
+        :rtype: :class:`str` | ``None``
+    
     .. py:method:: isAnimatableDynamic()
     
         :return: True if this is a dynamic attribute that can be exposed for

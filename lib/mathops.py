@@ -317,64 +317,17 @@ def multMatrices(*matrices):
 
 mm = multMatrices
 
-def createScaleMatrix(*args):
-    """
-    Quick method to create static or dynamic scale matrices. Takes one, three
-    or six arguments.
-
-    :shorthand: ``csm``
-    :param \*args:
-        If one argument is passed, the same scaling factor will be applied to
-        the XYZ base vectors.
-
-        If three arguments are passed, they will each be applied to the XYZ
-        base vectors.
-
-        If six arguments are passed then they will be interpreted as
-        *axis: scalar* pairs.
-
-    :return: The scale matrix.
-    :rtype: :class:`paya.runtime.data.Matrix` or
-        :class:`paya.runtime.plugs.Matrix`.
-    """
-    ln = len(args)
-
-    if ln is 1:
-        axes = ['x', 'y', 'z']
-        scalars = [args[0]] * 3
-
-    elif ln is 3:
-        axes = ['x', 'y', 'z']
-        scalars = args
-
-    elif ln is 6:
-        axes = list(map(lambda x: x.strip('-'), args[::2]))
-        scalars = args[1::2]
-
-    else:
-        raise RuntimeError("Number of arguments must be 1, 3 or 6.")
-
-    return r.createMatrix(
-        axes[0], axisVecs[axes[0]] * scalars[0],
-        axes[1], axisVecs[axes[1]] * scalars[1],
-        axes[2], axisVecs[axes[2]] * scalars[2]
-    )
-
-csm = createScaleMatrix
-
-@short(
-    preserveSecondLength='psl',
-    thirdLength='tl',
-    translate='t',
-    plug='p'
-)
-def createMatrix(
-        *rowHints,
-        preserveSecondLength=False,
-        thirdLength=None,
-        translate=None,
-        plug=None
-):
+@short(manageScale='ms',
+       preserveSecondLength='psl',
+       thirdLength='tl',
+       translate='t',
+       plug='p')
+def createMatrix(*rowHints,
+                 manageScale=True,
+                 preserveSecondLength=False,
+                 thirdLength=None,
+                 translate=None,
+                 plug=None):
     """
     Constructs static or dynamic transformation matrices.
 
@@ -407,6 +360,9 @@ def createMatrix(
     :type translate/t: :class:`str`, :class:`list`, :class:`tuple`,
         :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.data.Point`,
         :class:`~paya.runtime.plugs.Math3D`
+    :param bool manageScale/ms: set this to ``False`` to allow scale to be
+        defined by incidental operations; useful when you intend to discard
+        scale later anyway; defaults to ``True``
     :param bool preserveSecondLength/psl: ignored if six arguments were passed;
         preserve the second vector's length when performing orthogonal
         construction; defaults to True
@@ -430,15 +386,16 @@ def createMatrix(
         if plug is None and translateIsPlug:
             plug = True
 
-    if thirdLength is None:
-        thirdLengthIsDefined = False
+    if manageScale:
+        if thirdLength is None:
+            thirdLengthIsDefined = False
 
-    else:
-        thirdLengthIsDefined = True
-        thirdLength, thirdLengthDim, thirdLengthIsPlug = mathInfo(thirdLength)
+        else:
+            thirdLengthIsDefined = True
+            thirdLength, thirdLengthDim, thirdLengthIsPlug = mathInfo(thirdLength)
 
-        if plug is None and thirdLengthIsPlug:
-            plug = True
+            if plug is None and thirdLengthIsPlug:
+                plug = True
 
     if rowHints:
         ln = len(rowHints)
@@ -477,15 +434,12 @@ def createMatrix(
 
                 axis1, axis2 = axes
 
-                initMtx = createMatrix(
-                    axis1, _vec1, axis2, _vec2,
-                    p=False
-                ).pick(r=True)
+                initMtx = createMatrix(axis1, _vec1,
+                                       axis2, _vec2, p=False).pick(r=True)
 
                 node.attr('inputMatrix').set(initMtx)
 
                 # Configure
-
                 node.attr('primaryInputAxis').set(axisVecs[axis1])
                 node.attr('primaryMode').set(2)
 
@@ -500,48 +454,48 @@ def createMatrix(
 
                 matrix = node.attr('outputMatrix')
 
-                # Add scaling information
+                if manageScale:
+                    # Add scaling information
+                    absAxis1 = axes[0].strip('-')
+                    absAxis2 = axes[1].strip('-')
+                    absAxis3 = [ax for ax in 'xyz' if ax not in (absAxis1, absAxis2)][0]
 
-                absAxis1 = axes[0].strip('-')
-                absAxis2 = axes[1].strip('-')
-                absAxis3 = [ax for ax in 'xyz' if ax not in (absAxis1, absAxis2)][0]
+                    sVec1 = axisVecs[absAxis1] * vectors[0].length()
 
-                sVec1 = axisVecs[absAxis1] * vectors[0].length()
+                    sVec2 = axisVecs[absAxis2]
 
-                sVec2 = axisVecs[absAxis2]
+                    if preserveSecondLength:
+                        sVec2 *= vectors[1].length()
 
-                if preserveSecondLength:
-                    sVec2 *= vectors[1].length()
+                    else:
+                        sVec2 *= matrix.getAxis(absAxis2).length()
 
-                else:
-                    sVec2 *= matrix.getAxis(absAxis2).length()
+                    sVec3 = axisVecs[absAxis3]
 
-                sVec3 = axisVecs[absAxis3]
+                    if thirdLengthIsDefined:
+                        sVec3 *= thirdLength
 
-                if thirdLengthIsDefined:
-                    sVec3 *= thirdLength
+                    else:
+                        sVec3 *= matrix.getAxis(absAxis3).length()
 
-                else:
-                    sVec3 *= matrix.getAxis(absAxis3).length()
+                    scaleMtx = createMatrix(absAxis1, sVec1,
+                                            absAxis2, sVec2,
+                                            absAxis3, sVec3)
 
-                scaleMtx = createMatrix(
-                    absAxis1, sVec1, absAxis2, sVec2, absAxis3, sVec3
-                )
-
-                matrix = scaleMtx * matrix.pk(r=True)
+                    matrix = scaleMtx * matrix.pk(r=True)
 
                 # Add translate information
-
                 if translate is not None:
                     matrix = matrix * translate.asTranslateMatrix()
 
                 return matrix
 
-            else:
+            else: # Hard + explicit construction
                 matrix = r.nodes.FourByFourMatrix.createNode().attr('output')
 
-                if thirdLengthIsDefined:
-                    vectors[2] = vectors[2].normal() * thirdLength
+                if manageScale:
+                    if thirdLengthIsDefined:
+                        vectors[2] = vectors[2].normal() * thirdLength
 
                 for axis, vector in zip(axes, vectors):
                     absAxis = axis.strip('-')
@@ -556,9 +510,9 @@ def createMatrix(
 
                 return matrix
 
-        else:
+        else: # Soft implementation
             if ortho:
-                if thirdLength is None:
+                if manageScale and thirdLength is None:
                     thirdLength = 1.0 # for parity with aimMatrix
 
                 vec1, vec2 = vectors
@@ -584,26 +538,32 @@ def createMatrix(
                     vec3 = vec2.cross(vec1)
                     _vec2 = vec1.cross(vec3)
 
-                if preserveSecondLength:
-                    vec2 = _vec2.normal() * vec2.length()
+                if manageScale:
+                    if preserveSecondLength:
+                        vec2 = _vec2.normal() * vec2.length()
+
+                    else:
+                        vec2 = _vec2
+
+                    vec3 = vec3.normal() * thirdLength
 
                 else:
                     vec2 = _vec2
 
-                vec3 = vec3.normal() * thirdLength
-
                 absAxis3 = [ax for ax in 'xyz' if \
                     ax not in (absAxis1, absAxis2)][0]
 
-                return createMatrix(
-                    absAxis1, vec1, absAxis2, vec2, absAxis3, vec3,
-                    t=translate, p=False
-                )
+                return createMatrix(absAxis1, vec1,
+                                    absAxis2, vec2,
+                                    absAxis3, vec3,
+                                    t=translate,
+                                    p=False,
+                                    ms=manageScale)
 
-            else:
+            else: # Explicit construction
                 matrix = r.datatypes.Matrix()
 
-                if thirdLengthIsDefined:
+                if manageScale and thirdLengthIsDefined:
                     vectors[2] = vectors[2].normal() * thirdLength
 
                 for axis, vector in zip(axes, vectors):
@@ -620,10 +580,12 @@ def createMatrix(
                 return matrix
 
     else:
+        # Construct an identity matrix
+
         if plug:
             matrix = r.nodes.FourByFourMatrix.createNode().attr('output')
 
-            if thirdLengthIsDefined:
+            if manageScale and thirdLengthIsDefined:
                 (axisVecs['z'] * thirdLength) >> matrix.z
 
             if translate is not None:
@@ -634,7 +596,7 @@ def createMatrix(
         else:
             matrix = r.data.Matrix()
 
-            if thirdLengthIsDefined:
+            if manageScale and thirdLengthIsDefined:
                 matrix.z = axisVecs['z'] * thirdLength
 
             if translate is not None:
@@ -643,6 +605,51 @@ def createMatrix(
             return matrix
 
 cm = createMatrix
+
+def createScaleMatrix(*args):
+    """
+    Quick(er) method to create static or dynamic scale matrices. Takes one,
+    three or six arguments.
+
+    :shorthand: ``csm``
+    :param \*args:
+        If one argument is passed, the same scaling factor will be applied to
+        the XYZ base vectors.
+
+        If three arguments are passed, they will each be applied to the XYZ
+        base vectors.
+
+        If six arguments are passed then they will be interpreted as
+        *axis: scalar* pairs.
+
+    :return: The scale matrix.
+    :rtype: :class:`paya.runtime.data.Matrix` or
+        :class:`paya.runtime.plugs.Matrix`.
+    """
+    ln = len(args)
+
+    if ln is 1:
+        axes = ['x', 'y', 'z']
+        scalars = [args[0]] * 3
+
+    elif ln is 3:
+        axes = ['x', 'y', 'z']
+        scalars = args
+
+    elif ln is 6:
+        axes = list(map(lambda x: x.strip('-'), args[::2]))
+        scalars = args[1::2]
+
+    else:
+        raise RuntimeError("Number of arguments must be 1, 3 or 6.")
+
+    return createMatrix(
+        axes[0], axisVecs[axes[0]] * scalars[0],
+        axes[1], axisVecs[axes[1]] * scalars[1],
+        axes[2], axisVecs[axes[2]] * scalars[2]
+    )
+
+csm = createScaleMatrix
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Framing

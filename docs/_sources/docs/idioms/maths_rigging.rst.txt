@@ -1,0 +1,183 @@
+*************
+Maths Rigging
+*************
+
+Paya pulls functionality from PyMEL's data classes and Maya's utility nodes into a single rich API for maths rigging.
+Methods on data objects can also be called on attribute instances to perform one-off calculations or construct node
+networks as the occasion demands.
+
+For a full reference of methods and operators, see the data and plug (attribute) classes:
+
+.. list-table::
+    :widths: 50 50
+    :header-rows: 1
+
+    *   - Data
+        - Plug
+    *   - :class:`float`, :class:`int`, :class:`bool`
+        - :class:`paya.runtime.plugs.Math1D`
+    *   - :class:`paya.runtime.data.Angle`
+        - :class:`paya.runtime.plugs.Angle`
+    *   - :class:`paya.runtime.data.Vector` :class:`paya.runtime.data.Point`
+        - :class:`paya.runtime.plugs.Vector`
+    *   - :class:`paya.runtime.data.EulerRotation`
+        - :class:`paya.runtime.plugs.EulerRotation`
+    *   - :class:`paya.runtime.data.Quaternion`
+        - :class:`paya.runtime.plugs.Quaternion`
+    *   - :class:`paya.runtime.data.Matrix`
+        - :class:`paya.runtime.plugs.Matrix`
+
+===============
+Using Operators
+===============
+
+Maths operators, previously the preserve of PyMEL's data classes, have been extended to plugs (attributes). A couple
+points to remember:
+
+-   At least one of the operands must be a Paya plug or data class. If both operands are simple Python types, it becomes
+    impossible to source an implementation.
+
+-   If both operands are values, the result will always be a value. If *any* of the operands are plugs, the result will
+    always be a plug.
+
+The following example demonstrates mixing of values, plugs and dimensions to edit the length of a live vector:
+
+.. card::
+    :class-body: kcardbody
+
+    .. tab-set::
+        :class: ktabset
+
+        .. tab-item:: Viewport
+
+            .. card::
+                :img-background: rigging_with_maths/norm_vector.gif
+
+        .. tab-item:: Graph
+
+            .. card::
+                :img-background: rigging_with_maths/norm_vector.png
+
+    .. code-block:: python
+
+        # Capture points
+        point1 = r.PyNode('locator1').attr('worldPosition')
+        point2 = r.PyNode('locator2').attr('worldPosition')
+
+        # Get the vector, normalize, set length
+        vector = point2 - point1
+        vector = vector.normal() * 6.5
+
+        # Get a new end point, pipe into locator
+        point3 = point1 + vector
+        loc = r.spaceLocator()
+        point3 >> loc.attr('translate')
+
+===========================
+Point-Matrix Multiplication
+===========================
+
+In PyMEL, the ``*`` operator is used for both *vector-matrix* and *point-matrix* multiplication, with the latter
+performed when the left operand is an instance of :class:`~pymel.core.datatypes.Point` rather than
+:class:`~pymel.core.datatypes.Vector`.
+
+When the left operand is an *attribute*, Paya will always perform *vector-matrix* multiplication. This is because Maya
+doesn't distinguish between 'vector' and 'point' attributes.
+
+To get around this, Paya introduces the caret (``^``) as a dedicated operator for *point-matrix* multiplication. In the
+following example, this is used to capture and transform a live point:
+
+.. card::
+    :class-body: kcardbody
+
+    .. tab-set::
+        :class: ktabset
+
+        .. tab-item:: Viewport
+
+            .. card::
+                :img-background: rigging_with_maths/captured_point.gif
+
+        .. tab-item:: Graph
+
+            .. card::
+                :img-background: rigging_with_maths/captured_point.png
+
+    .. code-block:: python
+
+            # Capture elements
+            loc, cube = r.ls(sl=1)
+            point = loc.attr('worldPosition')
+            matrix = cube.attr('worldMatrix')
+
+            # Transform the point while maintaining offset
+            point ^= matrix.asOffset()
+
+            # Pipe into a locator
+            loc = r.spaceLocator()
+            point >> loc.attr('translate')
+
+=====================
+Working with Matrices
+=====================
+
+To **create matrices**, use Paya's top-level :func:`~paya.lib.mathops.createMatrix` function. Depending on arguments,
+this will perform orthogonal or explicit construction as efficiently as possible, and return a data object or plug
+instance. To **drive transforms**, use :meth:`~paya.runtime.plugs.Matrix.decomposeAndApply` or
+:meth:`~paya.runtime.plugs.Matrix.applyViaOpm`, both of which include useful options for pivots, offsets and so on.
+
+Here's an example of orthogonal construction using two vectors:
+
+.. card::
+    :class-body: kcardbody
+
+    .. tab-set::
+        :class: ktabset
+
+        .. tab-item:: Viewport
+
+            .. card::
+                :img-background: rigging_with_maths/ortho_matrix.gif
+
+        .. tab-item:: Graph
+
+            .. card::
+                :img-background: rigging_with_maths/ortho_matrix.png
+
+    .. code-block:: python
+
+        aimLoc, upLoc, slave = r.ls(sl=True)
+        aimVec = aimLoc.attr('worldPosition')
+        upVec = upLoc.attr('worldPosition')
+
+        matrix = r.createMatrix('z', aimVec, 'y', upVec, manageScale=False)
+        matrix.decomposeAndApply(slave, rotate=True)
+
+===============
+Testing Outputs
+===============
+
+To create a rivet, or just visualise the result of an operation, call :meth:`~paya.runtime.plugs.Vector.createLocator()`
+on a method's vector or matrix return:
+
+.. card::
+    :class-body: kcardbody
+
+    .. tab-set::
+        :class: ktabset
+
+        .. tab-item:: Viewport
+
+            .. card::
+                :img-background: rigging_with_maths/locator_output.gif
+
+        .. tab-item:: Graph
+
+            .. card::
+                :img-background: rigging_with_maths/locator_output.png
+
+    .. code-block:: python
+
+        locs = r.ls(sl=True)
+        points = [loc.attr('worldPosition') for loc in locs]
+        points[0].blend(points[1], weight=0.33).createLocator()

@@ -413,7 +413,7 @@ class Matrix:
             shear=None,
             compensatePivots=False,
             compensateJointOrient=True,
-            compensateRotateAxis=True,
+            compensateRotateAxis=False,
             compensateJointScale=True,
             worldSpace=False,
             maintainOffset=False
@@ -436,9 +436,8 @@ class Matrix:
             segmentScaleCompensate on joints; defaults to True
         :param bool compensateJointOrient/cjo: account for jointOrient on
             joints; defaults to True
-        :param bool compensateRotateAxis/cra: account for ``rotateAxis``,
-            set this to False to emulate Maya constraint behaviour; defaults
-            to True
+        :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
+            defaults to False
         :param bool compensatePivots/cp: compensate for pivots (non-joint
             transforms only); this is expensive, so defaults to False
         :return: ``self``
@@ -485,15 +484,16 @@ class Matrix:
                 ['translate', 'rotate', 'scale', 'shear'],
                 [translate, rotate, scale, shear]
             ):
-                dest = xf.attr(channel)
+                if state:
+                    dest = xf.attr(channel)
 
-                try:
-                    decomposition[channel] >> dest
+                    try:
+                        decomposition[channel] >> dest
 
-                except:
-                    r.warning(
-                        "Couldn't connect into attribute: {}".format(dest)
-                    )
+                    except:
+                        r.warning(
+                            "Couldn't connect into attribute: {}".format(dest)
+                        )
 
             return matrix
 

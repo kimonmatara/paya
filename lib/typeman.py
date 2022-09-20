@@ -492,10 +492,17 @@ def asGeoPlug(item, worldSpace=None):
     return xform.worldGeoOutput if worldSpace else xform.localGeoOutput
 
 def asValue(item):
-    """
-    Equivalent to :func:`asPlug(item).get() <asPlug>`.
-    """
-    return asPlug(item).get()
+    if isinstance(item, str):
+        try:
+            return p.Attribute(item).get()
+
+        except:
+            return item
+
+    elif isinstance(item, p.Attribute):
+        return item.get()
+
+    return item
 
 def asCompIndexOrPlug(item):
     """

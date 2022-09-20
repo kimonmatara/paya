@@ -1,27 +1,28 @@
-*************************
+=========================
 Discovering Functionality
-*************************
+=========================
 
-For a semi-structured introduction to Paya, visit the *Rigging* sections of this documentation in-order. For a flat
-reference of every Paya class, see :doc:`Types </types_index>`. Inside Maya, call :func:`help` on any class or method to
-print information from :doc:`Types </types_index>`, or use :func:`dir` for name lookups:
+You can pick up much of Paya just browsing for methods. The :doc:`Types </types_index>` appendix is a good starting
+point. To get the same information contextually within Maya, call :func:`help` on any Paya class:
 
 .. code-block:: python
 
     import paya.runtime as r
 
     with r:
-        # Get full class documentation
-        loc = r.PyNode('locator1')
-        cls = loc.__class__
-        help(cls) # prints information on paya.runtime.nodes.Transform
+        transform = r.group(empty=True)
+        transformClass = type(transform)
+        help(transformClass)
 
-        # Get information on a specific method
-        help(loc.createOffsetGroups)
+To look for a method based on a hunch, use :func:`dir` instead:
 
-        # Look for a method based on a hunch
-        for name in dir(loc):
-            if 'offsetGroup' in name.lower():
+.. code-block:: python
+
+    with r:
+        for name in dir(transformClass):
+            if 'offset' in name.lower():
                 print(name)
 
         # Result: createOffsetGroups
+
+After you've snooped around for a while, visit :doc:`Idioms </docs/idioms>` for workflow ideas.

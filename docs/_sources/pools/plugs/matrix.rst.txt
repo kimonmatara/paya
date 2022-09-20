@@ -157,7 +157,7 @@ paya.runtime.plugs.Matrix
         :return: dictionary of {channelName:decomposeMatrixOutput}
         :rtype: dict
     
-    .. py:method:: decomposeAndApply(transform, translate=None, rotate=None, scale=None, shear=None, compensatePivots=False, compensateJointOrient=True, compensateRotateAxis=True, compensateJointScale=True, worldSpace=False, maintainOffset=False)
+    .. py:method:: decomposeAndApply(transform, translate=None, rotate=None, scale=None, shear=None, compensatePivots=False, compensateJointOrient=True, compensateRotateAxis=False, compensateJointScale=True, worldSpace=False, maintainOffset=False)
     
         Decomposes and applies this matrix to a transform.
         
@@ -176,9 +176,8 @@ paya.runtime.plugs.Matrix
             segmentScaleCompensate on joints; defaults to True
         :param bool compensateJointOrient/cjo: account for jointOrient on
             joints; defaults to True
-        :param bool compensateRotateAxis/cra: account for ``rotateAxis``,
-            set this to False to emulate Maya constraint behaviour; defaults
-            to True
+        :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
+            defaults to False
         :param bool compensatePivots/cp: compensate for pivots (non-joint
             transforms only); this is expensive, so defaults to False
         :return: ``self``

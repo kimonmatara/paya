@@ -9,27 +9,41 @@ for an integrated and familiar experience.
 Included is the most comprehensive, and intuitive, implementation of :doc:`maths rigging using Python operators
 <maths_rigging>` available anywhere, with over 100 methods for linear algebra, trigonometry and more.
 
-Customisation is easy, and goes far beyond PyMEL's
-`virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to add support
-for attribute (including subtype), component and data types with true inheritance for the first time.
+Customisation goes far beyond PyMEL's
+`virtual classes <https://github.com/LumaPictures/pymel/blob/master/examples/customClasses.py>`_ system to include
+attribute (including subtype), component and data types with true inheritance for the first time.
 
-.. admonition:: New in version 0.9
+.. grid:: 2
+    :padding: 0
+    :gutter: 3
+    :margin: 3 0 0 0
 
-    *   Configure up vectors on NURBS and Bezier curves once, and have the information picked up automatically
-        by methods such as :meth:`~paya.runtime.nodes.NurbsCurve.matrixAtParam` or
-        :meth:`~paya.runtime.nodes.NurbsCurve.fitChain`
-    *   Brand new implementations for
-        `parallel transport <https://www.semanticscholar.org/paper/Parallel-Transport-Approach-to-Curve-Framing-Hanson-Ma/ed416d01742e5e704357538c6817312ca6d8cb38?p2df>`_
-    *   This version introduces a few **breaking changes** to streamline the codebase. See the
-        :doc:`release notes <releasenotes/v0_9_release_notes>` for the full lowdown.
+    .. grid-item-card:: Basics
+        :link: docs/basics
+        :link-type: doc
+
+        Install Paya, administer PyMEL patching and get tinkering.
+
+    .. grid-item-card:: Idioms
+        :link: docs/idioms
+        :link-type: doc
+
+        Discover workflows particularly suited to Paya.
+
+    .. grid-item-card:: Types
+        :link: types_index
+        :link-type: doc
+
+        Documentation for every method on every node, attribute, component and data class.
 
 
 .. toctree::
     :hidden:
+    :caption: User Guide
 
-    What's New <docs/releasenotes>
-    Requirements and Installation <docs/req_and_install>
+    Requirements and Installation <requirements_and_installation>
     Basics <docs/basics>
+    Idioms <docs/idioms>
 
 .. toctree::
     :caption: Appendices
@@ -37,3 +51,10 @@ for attribute (including subtype), component and data types with true inheritanc
 
     Types <types_index>
     Modules <paya>
+
+.. toctree::
+    :hidden:
+    :caption: Miscellaneous
+
+    author
+    MIT License <license>

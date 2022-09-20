@@ -100,10 +100,11 @@ class Chain:
         joints = []
 
         for i, matrix in enumerate(matrices):
-            joint = r.nodes.Joint.create(
-                wm=matrix, n=i+1,
-                p=joints[-1] if joints else parent
-            )
+            with r.Name(i+1):
+                joint = r.nodes.Joint.create(
+                    worldMatrix=matrix,
+                    p=joints[-1] if joints else parent
+                )
 
             joints.append(joint)
 
@@ -185,13 +186,13 @@ class Chain:
 
         if isinstance(upVectorOrCurve, (str, r.PyNode)):
             aimCurve = r.PyNode(upVectorOrCurve)
-            aimVectors = _mo.getAimVectors(points, col=True)
+            aimVectors = _mo.getAimVectors(points)
             aimVectors.append(aimVectors[-1])
 
             upVectors = []
 
             for point in points:
-                upPoint = aimCurve.takeClosestPoint(point)
+                upPoint = aimCurve.nearestPoint(point, worldSpace=True)
                 upVector = upPoint-point
                 upVectors.append(upVector)
 
@@ -498,8 +499,9 @@ class Chain:
                 baseMtx = self[i].getMatrix(worldSpace=True)
 
                 for cut in cuts:
-                    joint = r.nodes.Joint.create(
-                        p=self[i], n=('insertion', count+1))
+                    with r.Name('insertion', count+1):
+                        joint = r.nodes.Joint.create(p=self[i])
+
                     _applyJointSettings(settings, joint)
                     mtx = baseMtx.copy()
                     mtx.t = _pu.blend(startPoint, endPoint, weight=cut)
@@ -585,8 +587,8 @@ class Chain:
 
         for i, joint in enumerate(self):
             with r.Name(i+startNumber):
-                _name = r.nodes.Joint.makeName()
-            copy = joint.duplicate(n=_name, po=True)[0].releaseSRT()
+                copy = joint.duplicate(po=True)[0].releaseSRT()
+
             copies.append(copy)
 
         for copy, parent in zip(copies, parents):

@@ -46,7 +46,7 @@ class Runtime:
 
     #--------------------------------------------------|    Start / stop
 
-    def start(self):
+    def _start(self):
         if Runtime.__depth__ is 0:
             # Patch PyMEL
             self._ss.start(quiet=True)
@@ -64,7 +64,7 @@ class Runtime:
         else:
             m.warning("Paya can't be started because it's already running.")
 
-    def stop(self):
+    def _stop(self):
         if Runtime.__depth__ > 0:
             # Unpatch PyMEL
             self._ss.stop(quiet=True)
@@ -85,7 +85,7 @@ class Runtime:
 
     def __enter__(self):
         if Runtime.__depth__ is 0:
-            self.start()
+            self._start()
 
         else:
             Runtime.__depth__ += 1
@@ -94,7 +94,7 @@ class Runtime:
 
     def __exit__(self, *args):
         if Runtime.__depth__ is 1:
-            self.stop()
+            self._stop()
 
         else:
             Runtime.__depth__ -= 1

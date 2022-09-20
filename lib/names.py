@@ -192,29 +192,37 @@ class Name:
 
         elems = conformElems(*elems, padding=padding)
 
-        isShape = False
+        if transform:
+            isShape = False
 
-        if isinstance(suffix, str):
-            elems.append(suffix)
-
-        elif suffix:
-            if control:
-                suffix = _suf.suffixes['payaControl']
+        else:
+            if nodeType:
+                isShape = 'shape' in m.nodeType(nodeType, i=True, itn=True)
 
             else:
-                if nodeType:
-                    elems.append(_suf.suffixes.get(nodeType, nodeType))
+                isShape = False
 
-                    isShape = (not transform) and ('shape' \
-                        in m.nodeType(nodeType, i=True, itn=True))
+        # Don't append a suffix when there are no name elements
 
         if elems:
+            if isinstance(suffix, str):
+                elems.append(suffix)
+
+            elif suffix:
+                if control:
+                    suffix = _suf.suffixes['payaControl']
+
+                else:
+                    if nodeType:
+                        elems.append(_suf.suffixes.get(nodeType, nodeType))
+
             name = '_'.join(elems)
 
             if isShape:
                 name += 'Shape'
 
-            return legalise(name)
+            out = legalise(name)
+            return out
 
         # No elements; if we have a node type, use it to improvise a name
 

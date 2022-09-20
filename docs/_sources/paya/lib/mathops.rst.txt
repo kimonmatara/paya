@@ -4,6 +4,13 @@ paya.lib.mathops
 
 .. py:module:: paya.lib.mathops
 
+.. py:function:: degToUI(degrees)
+
+    :param float degrees: an angle in degrees
+    :return: The original value if the Maya is set to degrees, otherwise
+        the value converted to radians.
+    :rtype: :class:`float`
+
 .. py:function:: floatRange(start, end, numValues)
 
     A variant of Python's :class:`range` for floats and float plugs.
@@ -85,27 +92,7 @@ paya.lib.mathops
     :return: The matrix product.
     :rtype: :class:`paya.runtime.data.Matrix` or :class:`paya.runtime.plugs.Matrix`
 
-.. py:function:: createScaleMatrix(*args)
-
-    Quick method to create static or dynamic scale matrices. Takes one, three
-    or six arguments.
-    
-    :shorthand: ``csm``
-    :param \*args:
-        If one argument is passed, the same scaling factor will be applied to
-        the XYZ base vectors.
-    
-        If three arguments are passed, they will each be applied to the XYZ
-        base vectors.
-    
-        If six arguments are passed then they will be interpreted as
-        *axis: scalar* pairs.
-    
-    :return: The scale matrix.
-    :rtype: :class:`paya.runtime.data.Matrix` or
-        :class:`paya.runtime.plugs.Matrix`.
-
-.. py:function:: createMatrix(*rowHints, preserveSecondLength=False, thirdLength=None, translate=None, plug=None)
+.. py:function:: createMatrix(*rowHints, manageScale=True, preserveSecondLength=False, thirdLength=None, translate=None, plug=None)
 
     Constructs static or dynamic transformation matrices.
     
@@ -138,6 +125,9 @@ paya.lib.mathops
     :type translate/t: :class:`str`, :class:`list`, :class:`tuple`,
         :class:`~paya.runtime.data.Vector`, :class:`~paya.runtime.data.Point`,
         :class:`~paya.runtime.plugs.Math3D`
+    :param bool manageScale/ms: set this to ``False`` to allow scale to be
+        defined by incidental operations; useful when you intend to discard
+        scale later anyway; defaults to ``True``
     :param bool preserveSecondLength/psl: ignored if six arguments were passed;
         preserve the second vector's length when performing orthogonal
         construction; defaults to True
@@ -152,6 +142,26 @@ paya.lib.mathops
     :return: The constructed matrix.
     :rtype: :class:`paya.runtime.plugs.Matrix` or
         :class:`paya.runtime.data.Matrix`, depending on inputs.
+
+.. py:function:: createScaleMatrix(*args)
+
+    Quick(er) method to create static or dynamic scale matrices. Takes one,
+    three or six arguments.
+    
+    :shorthand: ``csm``
+    :param \*args:
+        If one argument is passed, the same scaling factor will be applied to
+        the XYZ base vectors.
+    
+        If three arguments are passed, they will each be applied to the XYZ
+        base vectors.
+    
+        If six arguments are passed then they will be interpreted as
+        *axis: scalar* pairs.
+    
+    :return: The scale matrix.
+    :rtype: :class:`paya.runtime.data.Matrix` or
+        :class:`paya.runtime.plugs.Matrix`.
 
 .. py:function:: deflipVectors(vectors)
 

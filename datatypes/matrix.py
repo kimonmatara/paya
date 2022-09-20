@@ -91,7 +91,7 @@ class Matrix:
             shear=None,
             compensatePivots=False,
             compensateJointOrient=True,
-            compensateRotateAxis=True,
+            compensateRotateAxis=False,
             compensateJointScale=True,
             worldSpace=False,
             maintainOffset=False
@@ -109,9 +109,8 @@ class Matrix:
             segmentScaleCompensate on joints; defaults to True
         :param bool compensateJointOrient/cjo: account for jointOrient on
             joints; defaults to True
-        :param bool compensateRotateAxis/cra: account for ``rotateAxis``,
-            set this to False to emulate Maya constraint behaviour; defaults
-            to True
+        :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
+            defaults to False
         :param bool compensatePivots/cp: compensate for pivots (non-joint
             transforms only); defaults to False
         :param bool worldSpace/ws: premultiply this matrix with the inverse
