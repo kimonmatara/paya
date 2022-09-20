@@ -1,3 +1,4 @@
+import maya.OpenMaya as om
 import pymel.core.datatypes as _dt
 import pymel.util as _pu
 from paya.util import short, LazyModule
@@ -450,7 +451,7 @@ class Vector:
 
             #-----------------------------------------|    Angle impl
 
-            angle = first.angle(second, cn=clockNormal)
+            angle = first.angleTo(second, cn=clockNormal)
             angle = angle.unwindSwitch(unwindSwitch)
 
             if not clockNormal:
@@ -604,8 +605,7 @@ class Vector:
         if hasPlugs:
             return r.nodes.VectorProduct.createAsCross(
                 self, other, nr=normalize, ig=inlineGate,
-                g=guard
-            )
+                g=guard).attr('output')
 
         if guard:
             dot = abs(self.dot(other))
@@ -627,8 +627,17 @@ class Vector:
         return out
 
     @short(clockNormal='cn')
-    def angle(self, other, clockNormal=None):
+    def angleTo(self, other, clockNormal=None):
         """
+        Differs from PyMEL's :meth:`pymel.core.datatypes.Vector.angle` in
+        the following ways:
+
+        -   Adds the *clockNormal* option
+        -   Unless plugs are involved, the return will be an instance of
+            :class:`~paya.runtime.data.Angle` rather than a :class:`float`
+        -   Unlike :meth:`pymel.core.datatypes.Vector.angle`, which always
+            returns radians, here UI units are use
+
         :param other: the other vector
         :type other: :class:`~paya.runtime.plugs.Math3D`,
             :class:`~paya.runtime.data.Vector`,
@@ -666,21 +675,27 @@ class Vector:
 
             if complete:
                 dot = cross.dot(other, normalize=True)
-                angle = dot.gt(0.0).ifElse(_pu.radians(360.0)-angle, angle)
+                angle = dot.gt(0.0).ifElse(r.degToUI(360.0)-angle, angle)
                 angle.__class__ = r.plugs.Angle
 
         else:
-            angle = _dt.Vector.angle(self, other)
+            radians = _dt.Vector.angle(self, other)
+            asRadians = om.MAngle.uiUnit() == om.MAngle.kRadians
 
             if complete:
                 dot = cross.dot(other, normalize=True)
 
                 if dot > 0.0:
-                    angle = _pu.radians(360.0)-angle
+                    radians = _pu.radians(360.0)-radians
 
-            angle = r.data.Angle(angle, unit='radians')
+            if asRadians:
+                angle = r.data.Angle(radians, unit='radians')
+
+            else:
+                angle = r.data.Angle(_pu.degrees(radians), unit='degrees')
 
         return angle
+
 
     def projectOnto(self, other):
         """
