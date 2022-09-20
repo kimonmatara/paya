@@ -189,8 +189,17 @@ paya.runtime.data.Vector
         :return: The cross product.
         :rtype: :class:`Vector` or :class:`~paya.runtime.plugs.Math3D`
     
-    .. py:method:: angle(other, clockNormal=None)
+    .. py:method:: angleTo(other, clockNormal=None)
     
+        Differs from PyMEL's :meth:`pymel.core.datatypes.Vector.angle` in
+        the following ways:
+        
+        -   Adds the *clockNormal* option
+        -   Unless plugs are involved, the return will be an instance of
+            :class:`~paya.runtime.data.Angle` rather than a :class:`float`
+        -   Unlike :meth:`pymel.core.datatypes.Vector.angle`, which always
+            returns radians, here UI units are use
+        
         :param other: the other vector
         :type other: :class:`~paya.runtime.plugs.Math3D`,
             :class:`~paya.runtime.data.Vector`,
