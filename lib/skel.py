@@ -797,7 +797,8 @@ class Chain:
         """
         assert self.contiguous(), "The chain is not contiguous."
 
-        val = _pu.radians(22.5)
+        #val = _pu.radians(22.5)
+        val = r.degToUI(22.5)
 
         if '-' in upAxis:
             val *= -1.0
@@ -1095,10 +1096,7 @@ class Bone(Chain):
             endUpVector = startUpVector.get() * endUpMatrix.asOffset()
             endUpVector = endUpVector.rejectFrom(downVector)
 
-            # Get slave ratios
             slaveRatios = twistChain.ratios()
-
-            # Iterate
 
             for i, slave in enumerate(twistChain):
                 if i is 0:
@@ -1112,11 +1110,9 @@ class Bone(Chain):
                     break
 
                 else:
-                    upVector = startUpVector.blend(
-                        endUpVector,
-                        bva=True,
-                        w=slaveRatios[i]
-                    )
+                    upVector = startUpVector.blend(endUpVector,
+                                                   byVectorAngle=True,
+                                                   weight=slaveRatios[i])
 
                     point = points[0].blend(points[1], w=slaveRatios[i])
 
