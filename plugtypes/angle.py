@@ -56,7 +56,7 @@ class Angle:
         :return: This angle, unwound and with the sign preserved.
         :rtype: :class:`Angle`
         """
-        out = self % _pu.radians(360.0)
+        out = self % r.degToUI(360.0)
         return out.setClass(type(self))
 
     def unwindPositive(self):
@@ -65,7 +65,7 @@ class Angle:
         :rtype: :class:`Angle`
         """
         out = self.unwind()
-        wind = _pu.radians(360.0)
+        wind = r.degToUI(360.0)
         isNeg = out.lt(0.0)
 
         corrected = wind + out
@@ -79,7 +79,7 @@ class Angle:
         :rtype: :class:`Angle`
         """
         out = self.unwind()
-        wind = _pu.radians(360.0)
+        wind = r.degToUI(360.0)
         isNeg = out.lt(0.0)
 
         corrected = out - wind
@@ -95,11 +95,11 @@ class Angle:
         """
         unwound = self.unwind()
 
-        over180 = unwound.gt(_pu.radians(180))
-        under180 = unwound.lt(_pu.radians(-180))
+        over180 = unwound.gt(r.degToUI(180))
+        under180 = unwound.lt(r.degToUI(-180))
 
-        over180Correction = unwound-_pu.radians(360.0)
-        under180Correction = _pu.radians(360.0)+unwound
+        over180Correction = unwound-r.degToUI(360.0)
+        under180Correction = r.degToUI(360.0)+unwound
 
         out = over180.ifElse(
             over180Correction,
@@ -154,7 +154,7 @@ class Angle:
 
         if switchIsPlug:
             unwound = self.unwind()
-            wind = _pu.radians(360.0)
+            wind = r.degToUI(360.0)
 
             #------------------------|    Positive
 
@@ -174,11 +174,11 @@ class Angle:
 
             #------------------------|    Shortest
 
-            over180 = unwound.gt(_pu.radians(180))
-            under180 = unwound.lt(_pu.radians(-180))
+            over180 = unwound.gt(r.degToUI(180))
+            under180 = unwound.lt(r.degToUI(-180))
 
-            over180Correction = unwound-_pu.radians(360.0)
-            under180Correction = _pu.radians(360.0)+unwound
+            over180Correction = unwound-r.degToUI.radians(360.0)
+            under180Correction = r.degToUI(360.0)+unwound
 
             shortestCorrection = over180.ifElse(
                 over180Correction,
