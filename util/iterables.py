@@ -219,11 +219,10 @@ def nudge_indices(indices, lst, offset):
 
     lst[:] = [lst[x] for x in flattened]
 
-
 def without_duplicates(iterable):
     """
     :param iterable: the iterable to inspect
-    :return: an ordered list of members in 'iterable', with duplicates
+    :return: an order-preserved list of members in 'iterable', with duplicates
         omitted.
     :rtype: list
     """
