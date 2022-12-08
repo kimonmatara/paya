@@ -1,4 +1,4 @@
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 import pymel.core.nodetypes as _nt
 from paya.util import short
 import paya.runtime as r
@@ -136,7 +136,7 @@ class IkHandle:
         :param bool maintainOffset/mo: preserve chain state; defaults to False
         :return: ``self``
         """
-        point, dim, isplug = _tm.mathInfo(point)
+        point, dim, put, isplug = _mo.info(point).values()
         chordStart = self.getStartJoint().getWorldPosition(p=True)
         poleVec = point-chordStart
 
