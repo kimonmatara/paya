@@ -17,25 +17,26 @@ class Runtime:
         return cls.__instance__
 
     def __init__(self):
-        import paya.startstop as startstop
+        import paya.startstop
         from paya.pools import pools
-        import paya.cmds as cmds
+        import paya.cmds
+        import paya.nativeunits
         import pymel.core
 
         self._pmcore = self._fallback = pymel.core
-        self._ss = startstop
-        self._cmds = cmds
+        self._ss = paya.startstop
+        self._cmds = paya.cmds
         self._pools = pools
         self._running = False
+
+        self.NativeUnits = paya.nativeunits.NativeUnits
+        self._NativeUnitsInstance = None
 
     #--------------------------------------------------|    Interfaces
 
     @property
     def pn(self):
         return self._pmcore.PyNode
-
-    def __createControl(self):
-        return self.nodes.Transform.createControl
 
     def __getattr__(self, item):
         return getattr(self._fallback, item)
@@ -46,58 +47,41 @@ class Runtime:
 
     #--------------------------------------------------|    Start / stop
 
-    def _start(self):
-        if Runtime.__depth__ is 0:
+    def __enter__(self):
+        Runtime.__depth__ += 1
+
+        if Runtime.__depth__ is 1:
             # Patch PyMEL
             self._ss.start(quiet=True)
 
             # Attach attributes
-            Runtime.createControl = property(fget=Runtime.__createControl)
             self._fallback = self._cmds
 
             for pool in self._pools:
                 setattr(self, pool.shortName(), pool.browse())
 
-            Runtime.__depth__ = 1
+            # Enter a NativeUnits context manager
+            self._NativeUnitsInstance = self.NativeUnits()
+            self._NativeUnitsInstance.__enter__()
+
             print("Paya has started successfully.")
 
-        else:
-            m.warning("Paya can't be started because it's already running.")
+        return self
 
-    def _stop(self):
-        if Runtime.__depth__ > 0:
-            # Unpatch PyMEL
-            self._ss.stop(quiet=True)
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        Runtime.__depth__ -= 1
+
+        if Runtime.__depth__ is 0:
+            # Exit the NativeUnits context manager
+            self._NativeUnitsInstance.__exit__(exc_type, exc_val, exc_tb)
 
             # Remove attributes
             self._fallback = self._pmcore
-            del(Runtime.createControl)
 
             for pool in self._pools:
                 delattr(self, pool.shortName())
 
-            Runtime.__depth__ = 0
-
             print("Paya has stopped successfully.")
-
-        else:
-            m.warning("Paya can't stop because it's not running.")
-
-    def __enter__(self):
-        if Runtime.__depth__ is 0:
-            self._start()
-
-        else:
-            Runtime.__depth__ += 1
-
-        return self
-
-    def __exit__(self, *args):
-        if Runtime.__depth__ is 1:
-            self._stop()
-
-        else:
-            Runtime.__depth__ -= 1
 
         return False
 
