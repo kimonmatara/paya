@@ -7,6 +7,19 @@ class TransformGuide(r.parts.PartGuide):
     @r.partCreator
     @short(worldMatrix='wm')
     def create(self, worldMatrix=None):
+        """
+        Guide for a :class:`~paya.runtime.parts.Transform` part.
+
+        .. note::
+
+            Control matrix vectors will be normalized when this guide is used
+            to create the rig part.
+
+        :param worldMatrix/wm: the initial control matrix; defaults to the
+            identity matrix
+        :type worldMatrix/wm: :class:`tuple`, :class:`list`,
+            :class:`~paya.runtime.data.Matrix`
+        """
 
         #---------------------------------------------------|    Control
 
@@ -24,6 +37,12 @@ class TransformGuide(r.parts.PartGuide):
     #-------------------------------------------------------|    Create part
 
     def getPartCreateArgsKwargs(self):
+        """
+        :return: Positional and keyword arguments that can be passed along
+            to the ``create()`` method on the associated
+            :class:`~paya.runtime.parts.Part` subclass.
+        :rtype: (:class:`tuple`, :class:`dict`)
+        """
         control = self.getByTag('control')[0]
         node = self.node()
 
