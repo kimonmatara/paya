@@ -1,6 +1,6 @@
 from paya.util import short
 import pymel.core.datatypes as _dt
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 import paya.runtime as r
 
 
@@ -41,7 +41,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__add__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -70,7 +70,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__radd__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -100,7 +100,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__sub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -130,7 +130,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rsub__` to add
         support for 1D or 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -162,7 +162,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__mul__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -190,7 +190,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rmul__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -220,7 +220,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__truediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -249,7 +249,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rtruediv__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -280,7 +280,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__pow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
@@ -309,7 +309,7 @@ class EulerRotation:
         Overloads :meth:`pymel.core.datatypes.EulerRotation.__rpow__` to add
         support for 1D and 3D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim in (1, 3):
