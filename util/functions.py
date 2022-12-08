@@ -2,8 +2,16 @@ import inspect
 from functools import wraps
 
 class Undefined:
+    """
+    An instance of this class, ``undefined`` in this module, is used across
+    Paya for keyword argument defaults for which ``None`` would not represent
+    omission.
+    """
     def __bool__(self):
         return False
+
+    def __repr__(self):
+        return '<undefined>'
 
 undefined = Undefined()
 
@@ -39,51 +47,86 @@ class short:
 
         return wrapper
 
-def resolveFlags(*flags):
+def resolveFlags(*flags, radio=None):
     """
-    Used to mimic Maya flag behaviour.
+    Resolves passed-in user option values by omission, Maya style.
 
-    If only a subset of flags are defined, then:
+    :Example:
 
-        -   If the subset are a mixture of True / False, the other flags are
-            set to False.
+        .. code-block:: python
 
-        -   If the subset are all True or all False, the remaining flags are
-            set to the opposite.
+            userVals = resolveFlags(True, None, None)
+            # True, False, False
 
-    If all flags are None, all flags are set to True.
-    If all flags are NOT None (i.e. all defined), they are all conformed to
-    booleans.
+            userVals = resolveFlags(False, None, None)
+            # False, True, True
 
-    :param flags: one or more user flag arguments
-    :return: The resolved flags.
-    :rtype: tuple
+            userVals = resolveFlags(None, None, None)
+            # True, True, True
+
+            userVals = resolveFlags(True, None, False)
+            # True, True, False
+
+            userVals = resolveFlags(None, None, None, radio=0)
+            # True, False, False
+
+            userVals = resolveFlags(None, False, None, radio=0)
+            # True, False, False
+
+            userVals = resolveFlags(True, None, True, radio=0)
+            # ValueError: Multiple radio selection.
+
+    :param \*flags: the passed-in user option values, in order
+    :type \*flags: :class:`bool`, ``None``
+    :param radio: if this is defined, it should be an integer specifying
+        which item should be ``True`` in a single-selection radio setup;
+        defaults to ``None``
+    :return: The resolved flag values, in order.
+    :rtype: :class:`tuple` [:class:`bool`]
     """
     numFlags = len(flags)
+    flags = [bool(flag) if flag is not None else flag for flag in flags]
 
-    if numFlags:
-        numNones = flags.count(None)
+    if radio is None:
+        defined = [flag for flag in flags if flag is not None]
+        numDefined = len(defined)
 
-        if numFlags is numNones:
+        if numDefined is 0:
             return [True] * numFlags
+        elif numDefined is numFlags:
+            return flags
+        else: # subset
+            numSet = len(set(defined))
 
-        else:
-            if numNones is 0:
-                return [bool(f) for f in flags]
-
+            if numSet is 1:
+                flags = [(not defined[0]) \
+                        if flag is None else flag for flag in flags]
             else:
-                flags = [bool(f) if f is not None else None for f in flags]
+                flags = [True \
+                        if flag is None else flag for flag in flags]
 
-                if True in flags:
-                    flags = [False if f is None else f for f in flags]
-
-                elif False in flags:
-                    flags = [True if f is None else f for f in flags]
-
-                return flags
+            return flags
 
     else:
-        return ()
+        _flags = [False] * numFlags
+
+        numTrues = flags.count(True)
+
+        if numTrues:
+            if numTrues > 1:
+                raise ValueError("Multiple radio selection.")
+            else:
+                _flags[flags.index(True)] = True
+        else:
+            numFalses = flags.count(False)
+
+            if numFalses is numFlags-1:
+                _flags[flags.index(None)] = True
+
+            else:
+                _flags[radio] = True
+
+        return _flags
 
 
 @short(gate='g')
