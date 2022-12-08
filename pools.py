@@ -10,11 +10,12 @@ import pymel.core.general
 import pymel.core.datatypes
 
 import paya
-import paya.config as config
 from paya.util import path_to_dotpath, LazyModule
-import paya.plugtree as _pt
+import paya.pluginfo as _pi
 
 payaroot = os.path.dirname(paya.__file__)
+
+uncap = lambda x: x[0].lower()+x[1:]
 
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    Errors
@@ -69,7 +70,6 @@ class ClassPool:
     """
     Abstract base class for collections of custom Paya classes.
     """
-
     __unsupported_lookups__ = []
     __singular__ = None # e.g. 'node'
     __plural__ = None # e.g. 'nodes'
@@ -111,7 +111,7 @@ class ClassPool:
         """
         return self.__plural__
 
-    #------------------------------------------------------------|    Purgings
+    #------------------------------------------------------------|    Purge
 
     def purge(self, quiet=False):
         """
@@ -129,6 +129,74 @@ class ClassPool:
             print("Purged {} classes.".format(self.__singular__))
 
     #------------------------------------------------------------|    Retrieval
+
+    def readClass(self, clsname):
+        """
+        Locates, sources and returns a class by name. No rebuilding or
+        cache management is performed.
+
+        :param str clsname: the name of the class to retrieve
+        :return: The retrieved class.
+        :rtype: :class:`str`
+        """
+        dirpath = self.dirPath()
+        requiredModBasename = clsname[0].lower()+clsname[1:]
+        foundModuleFile = None
+
+        for root, dirs, files in os.walk(dirpath):
+            for fil in files:
+                head, tail = os.path.splitext(fil)
+
+                if (head and head[0] in ('.', '_')) \
+                        or (not head) \
+                        or (tail != '.py'):
+                    continue
+
+                if head == requiredModBasename:
+                    foundModuleFile = os.path.join(root, fil)
+
+        if foundModuleFile is None:
+            raise MissingTemplateError(
+                "Couldn't find template for class '{}'.".format(clsname)
+            )
+
+        # Convert the file path to a dotpath and source the module
+        modName = path_to_dotpath(foundModuleFile)
+        exec("import "+modName) in locals()
+
+        mod = eval(modName)
+        return getattr(mod, clsname)
+
+    def getByName(self, clsname):
+        """
+        Retrieves a class by name. Lookups are cached.
+
+        :param str clsname: The name of the class to retrieved.
+        :return: The retrieved class.
+        :rtype: :class:`str`
+        """
+        if clsname in self.__unsupported_lookups__:
+            raise UnsupportedLookupError(
+                "This class pool does not serve '{}'.".format(clsname)
+            )
+
+        try:
+            return self._cache[clsname]
+
+        except KeyError:
+            self._cache[clsname] = cls = self.readClass(clsname)
+
+        return cls
+
+    #------------------------------------------------------------|    Repr
+
+    def __repr__(self):
+        return "{}()".format(self.__class__.__name__)
+
+
+class RebuiltClassPool(ClassPool):
+
+    __meta_base__ = type
 
     def getMeta(self, clsname):
         """
@@ -174,50 +242,13 @@ class ClassPool:
         :rtype: dict
         """
         dct = dct.copy()
-        dct['__module__'] = 'paya.{}.{}'.format(
-            self.longName(), clsname[0].lower()+clsname[1:])
+        dct['__module__'] = 'paya.runtime.'+self.shortName()
         dct['__paya_pool__'] = self
 
         return dct
 
     def getBasesDictFromTemplate(self, clsname):
-        """
-        Looks for a template for the requested class and, if one is found,
-        returns its conformed bases and dictionary.
-
-        :param clsname: the name of the class being retrieved
-        :return: The bases and dictionary.
-        :rtype: (tuple, dict)
-        """
-        dirpath = self.dirPath()
-        requiredModBasename = clsname[0].lower()+clsname[1:]
-        foundModuleFile = None
-
-        for root, dirs, files in os.walk(dirpath):
-            for fil in files:
-                head, tail = os.path.splitext(fil)
-
-                if (head and head[0] in ('.', '_')) \
-                        or (not head) \
-                        or (tail != '.py'):
-                    continue
-
-                if head == requiredModBasename:
-                    foundModuleFile = os.path.join(root, fil)
-
-
-        if foundModuleFile is None:
-            raise MissingTemplateError(
-                "Couldn't find template for class '{}'.".format(clsname)
-            )
-
-        # Convert the file path to a dotpath and source the module
-        modName = path_to_dotpath(foundModuleFile)
-        exec("import "+modName) in locals()
-
-        mod = eval(modName)
-
-        cls = getattr(mod, clsname)
+        cls = self.readClass(clsname)
         bases = self.conformBases(clsname, cls.__bases__)
         dct = self.conformDict(clsname, dict(cls.__dict__))
 
@@ -257,19 +288,11 @@ class ClassPool:
 
     def getByName(self, clsname):
         """
-        Retrieves a Paya class by name.
+        Retrieves a class by name. Lookups are cached.
 
-        Previously-constructed classes are returned from a cache. If the class
-        is not in the cache then, if there's a template for it, information
-        from the template will be used to build the class. If there's no
-        template then, if this pool implements invention, the class will be
-        invented. Otherwise, an exception will be raised.
-
-        :param str clsname: the name of the class to retrieve
-        :raises MissingTemplateError: A template couldn't be found, and this
-            pool doesn't implement invention.
+        :param str clsname: The name of the class to retrieved.
         :return: The retrieved class.
-        :rtype: type
+        :rtype: :class:`str`
         """
         if clsname in self.__unsupported_lookups__:
             raise UnsupportedLookupError(
@@ -280,18 +303,11 @@ class ClassPool:
             return self._cache[clsname]
 
         except KeyError:
-            cls = self.buildClass(clsname)
-            self._cache[clsname] = cls
+            self._cache[clsname] = cls = self.buildClass(clsname)
 
         return cls
 
-    #------------------------------------------------------------|    Repr
-
-    def __repr__(self):
-        return "{}()".format(self.__class__.__name__)
-
-
-class ShadowPool(ClassPool):
+class ShadowPool(RebuiltClassPool):
     """
     Abstract base class for pools that directly shadow PyMEL namesakes.
     """
@@ -354,12 +370,25 @@ class ShadowPool(ClassPool):
         # called for parsed subtypes
         def __new__(meta, clsname, bases, dct):
             modname = dct['__module__']
-            longPoolName = re.match(
-                r"^.*?paya\.([^\.]+types).*$",
-                modname
-            ).groups()[0]
 
-            pool = globals()['poolsByLongName'][longPoolName]
+            shortPoolNameMt = re.match(
+                r"^.*?paya\.runtime\.([^.]+).*$",
+                modname
+            )
+
+            if shortPoolNameMt:
+                shortPoolName = shortPoolNameMt.groups()[0]
+                pool = globals()['poolsByShortName'][shortPoolName]
+
+            else:
+                longPoolNameMt = re.match(
+                    r"^.*?paya\.([^.]+).*$",
+                    modname
+                )
+
+                longPoolName = longPoolNameMt.groups()[0]
+                pool = globals()['poolsByLongName'][longPoolName]
+
             dct['__paya_pool__'] = pool
 
             return super().__new__(meta, clsname, bases, dct)
@@ -421,6 +450,7 @@ class ShadowPool(ClassPool):
             return inst
 
         dct['__new__'] = __new__
+
         return dct
 
 
@@ -520,8 +550,19 @@ class NodeClassPool(ShadowPool):
     __doctitle__ ='Node Types'
 
     def conformDict(self, clsname, dct):
+        """
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+        """
         dct = super().conformDict(clsname, dct)
         dct['__is_subtype__'] = False
+
         return dct
 
 nodes = NodeClassPool()
@@ -545,7 +586,7 @@ comps = CompClassPool()
 class PlugClassPool(ShadowPool):
     """
     Administers custom Paya classes for plugs (attributes). Relies on
-    :mod:`~paya.plugtree`. A browser for this pool can
+    :mod:`~paya.pluginfo`. A browser for this pool can
     be accessed on :mod:`paya.runtime` as ``.plugs``.
     """
     __singular__ = 'plug'
@@ -559,9 +600,8 @@ class PlugClassPool(ShadowPool):
         Given a PyMEL instance, returns an appropriate Paya class for
         reassignment.
         """
-        mplug = inst.__apimplug__()
-        lookup = _pt.getTypeFromMPlug(mplug)
-        return self.getByName(lookup)
+        info = _pi.getInfoFromAttr(inst)
+        return self.getByName(info['key'])
 
     def getPmBase(self, clsname):
         """
@@ -583,13 +623,12 @@ class PlugClassPool(ShadowPool):
         :rtype: (type,)
         """
         # Requirements:
-        # The classname must be in the plugtree.
-        # The last of the bases must be a subclass of the plugtree
+        # The last of the bases must be a subclass of the plug tree
         # base.
 
         bases = [base for base in bases if base is not object]
 
-        ptPath = _pt.getPath(clsname)
+        ptPath = _pi.getPath(clsname)
         ln = len(ptPath)
 
         if ln is 1:
@@ -645,13 +684,10 @@ class DataClassPool(ShadowPool):
     __roots__ = getRootDataClasses()
     __pm_mod__ = pymel.core.datatypes
     __unsupported_lookups__ = ['VectorN', 'MatrixN', 'Array']
-    __doctitle__ ='Data Types'
+    __doctitle__ = 'Data Types'
 
 data = DataClassPool()
 
-#----------------------------------------------------------------|
-#----------------------------------------------------------------|    TENTATIVE PARSED SUBTYPES ALTERNATIVE
-#----------------------------------------------------------------|
 
 class ParsedNodeSubtypePoolMeta(type):
     def __new__(meta, clsname, bases, dct):
@@ -671,6 +707,7 @@ class ParsedNodeSubtypePoolMeta(type):
 
         return super().__new__(meta, clsname, bases, dct)
 
+
 class ParsedNodeSubtypePool(NodeClassPool,
                            metaclass=ParsedNodeSubtypePoolMeta):
 
@@ -682,14 +719,35 @@ class ParsedNodeSubtypePool(NodeClassPool,
             "Invention is not implemented for this pool.")
 
     def getCrossPoolRoot(self):
+        """
+        :return: A class from a 'base' class pool, to be used as the basis
+            for all classes returned by this one.
+        :rtype: :class:`type`
+        """
         nodeType = self.__nodeType__
 
         return nodes.getByName(nodeType[0].upper()+nodeType[1:])
 
     def attrName(self):
+        """
+        :return: The name of the string node attribute that will be inspected
+            for the type name.
+        :rtype: :class:`str`
+        """
         return '{}Type'.format(self.__nodeType__)
 
     def buildClass(self, clsname):
+        """
+        Builds a final class. If a template is available, it is used.
+        Otherwise, if this pool implements invention, the class is invented.
+        If this pool doesn't implement invention, an exception is raised.
+
+        :param str clsname: the name of the class to build
+        :raises MissingTemplateError: A template couldn't be found, and this
+            pool doesn't implement invention.
+        :return: The built class.
+        :rtype: type
+        """
         bases, dct = self.getBasesDictFromTemplate(clsname)
         cls = type(clsname, bases, dct)
         cls.__module__ = 'paya.runtime.'+self.shortName()
@@ -697,12 +755,32 @@ class ParsedNodeSubtypePool(NodeClassPool,
         return cls
 
     def conformDict(self, clsname, dct):
-        dct = ClassPool.conformDict(self, clsname, dct)
+        """
+        Given a class dictionary, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param dict dct: either an empty dictionary, or the dictionary of
+            a template class
+        :return: The dictionary.
+        :rtype: dict
+        """
+        dct = RebuiltClassPool.conformDict(self, clsname, dct)
         dct['__is_subtype__'] = True
 
         return dct
 
     def conformBases(self, clsname, bases):
+        """
+        Given a tuple of bases, returns a modified, where necessary,
+        version that can be used to construct a final class.
+
+        :param str clsname: the name of the class being retrieved
+        :param tuple bases: either an empty tuple, or bases retrieved from a
+            template class
+        :return: The bases.
+        :rtype: (type,)
+        """
         bases = [b for b in bases if b is not object]
         requiredBase = self.getCrossPoolRoot()
 
@@ -718,17 +796,46 @@ class ParsedNetworkSubtypePool(ParsedNodeSubtypePool):
 
 networks = ParsedNetworkSubtypePool()
 
-class ParsedContainerSubtypePool(ParsedNodeSubtypePool):
-    """
-    Administers subtypes for 'container' nodes.
-    """
 
-containers = ParsedContainerSubtypePool()
+# class ParsedContainerSubtypePool(ParsedNodeSubtypePool):
+#     """
+#     Administers subtypes for 'container' nodes.
+#     """
+#
+# containers = ParsedContainerSubtypePool()
+
+
+class PartClassPool(ClassPool):
+
+    __singular__ = 'part'
+    __plural__ = 'parts'
+    __doctitle__ = 'Part Types'
+
+parts = PartClassPool()
+
+
+# class GuideClassPool(ClassPool):
+#
+#     __singular__ = 'guide'
+#     __plural__ = 'guides'
+#     __doctitle__ = 'Guide Types'
+#
+# guides = GuideClassPool()
+#
+#
+# class RigClassPool(ClassPool):
+#
+#     __singular__ = 'rig'
+#     __plural__ = 'rigs'
+#     __doctitle__ = 'Rig Types'
+#
+# rigs = RigClassPool()
 
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    REGISTRY
 #----------------------------------------------------------------|
 
-pools = [nodes, comps, plugs, data, networks, containers]
+# pools = [nodes, comps, plugs, data, networks, containers, parts, guides, rigs]
+pools = [nodes, comps, plugs, data, networks, parts]
 poolsByShortName = {pool.shortName(): pool for pool in pools}
 poolsByLongName = {pool.longName():pool for pool in pools}
