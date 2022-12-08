@@ -78,10 +78,16 @@ class Locator:
         shape.attr('localPosition').set(macro['localPosition'])
         shape.attr('localScale').set(macro['localScale'])
 
-        return shape
+        for key in ('overrideEnabled', 'overrideColor'):
+            try:
+                shape.attr(key).set(macro[key])
+            except:
+                pass
 
-    def macro(self):
+    def macro(self, includeShapeDetails=False):
         """
+        :param bool includeShapeDetails: include information on overrides;
+            defaults to ``False``
         :return: A simplified representation of this locator shape,
             used by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict
@@ -90,6 +96,10 @@ class Locator:
 
         macro['localPosition'] = list(self.attr('localPosition').get())
         macro['localScale'] = list(self.attr('localScale').get())
+
+        if includeShapeDetails:
+            macro['overrideEnabled'] = self.attr('overrideEnabled').get()
+            macro['overrideColor'] = self.attr('overrideColor').get()
 
         return macro
 
