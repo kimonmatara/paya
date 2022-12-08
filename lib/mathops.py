@@ -1,9 +1,16 @@
+import warnings
 from collections import UserDict
 
 import maya.OpenMaya as om
 from paya.lib.typeman import *
+import paya.apiutil as _au
 import pymel.util as _pu
 import pymel.core as p
+
+from paya.util import LazyModule
+r = LazyModule('paya.runtime')
+
+uncap = lambda x: x[0].lower()+x[1:]
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Constants
@@ -24,19 +31,62 @@ axisVecs = {
 #--------------------------------------------------------------|    Units
 #--------------------------------------------------------------|
 
-def degToUI(degrees):
+def degToUI(val):
     """
-    :param float degrees: an angle in degrees
-    :return: The original value if the Maya is set to degrees, otherwise
-        the value converted to radians.
+    :param float val: An angle value in degrees.
+    :return: If the UI is set to radians, *val* converted to radians;
+        otherwise, the original *val*.
     :rtype: :class:`float`
     """
-    degrees = float(degrees)
+    val = float(val)
 
-    if om.MAngle.uiUnit() == om.MAngle.kRadians:
-        return _pu.radians(degrees)
+    if onRadians():
+        val = p.util.radians(val)
 
-    return degrees
+    return val
+
+def getUIAngleUnit():
+    """
+    :return: The current angle unit. Note that this will be returned in a
+        format that can be passed along to the data type constructors (e.g.
+        'degrees') rather than how it's returned by
+        :func:`~pymel.internal.pmcmds.currentUnit` (e.g. 'deg').
+    :rtype: :class:`str`
+    """
+    unit = om.MAngle.uiUnit()
+    unit = _au.enumIndexToKey(unit, om.MAngle)[1:]
+    return uncap(unit)
+
+def getUIDistanceUnit():
+    """
+    :return: The current distance unit. Note that this will be returned in a
+        format that can be passed along to the data type constructors (e.g.
+        'centimeters') rather than how it's returned by
+        :func:`~pymel.internal.pmcmds.currentUnit` (e.g. 'cm').
+    :rtype: :class:`str`
+    """
+    unit = om.MDistance.uiUnit()
+    unit = _au.enumIndexToKey(unit, om.MDistance)[1:]
+    return unit[0].lower()+unit[1:]
+
+def getUITimeUnit():
+    """
+    :return: The current time unit. Note that this will be returned in a
+        format that can be passed along to the data type constructors (e.g.
+        '24FPS') rather than how it's returned by
+        :func:`~pymel.internal.pmcmds.currentUnit` (e.g. 'film').
+    :rtype: :class:`str`
+    """
+    unit = om.MTime.uiUnit()
+    unit = _au.enumIndexToKey(unit, om.MTime)[1:]
+    return unit[0].lower()+unit[1:]
+
+def onRadians():
+    """
+    :return: ``True`` if the UI is set to radians, otherwise ``False``.
+    :rtype: ``bool``
+    """
+    return om.MAngle.uiUnit() == om.MAngle.kRadians
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Exceptions
@@ -46,6 +96,143 @@ class NoInterpolationKeysError(RuntimeError):
     """
     A blending or interpolation operation has no keys to work with.
     """
+
+#--------------------------------------------------------------|
+#--------------------------------------------------------------|    Arg inspections
+#--------------------------------------------------------------|
+
+def mathInfo(item):
+    p.warning("mathInfo() is deprecated. Use mathops.info() instead")
+    itemInfo = info(item)
+    return itemInfo['item'], itemInfo['dimension'], itemInfo['isPlug']
+
+@short(defaultUnitType='dut')
+def info(item, defaultUnitType=None, quiet=False):
+    """
+    Returns a dict with the following keys (ordered):
+
+    -   ``'item'``: The *item*, conformed to the most specific Paya type
+        possible.
+
+    -   ``'dimension'``: One of ``1``, ``2``, ``3``, ``4`` or ``16``.
+
+    -   ``'unitType'``: One of ``'angle'``, ``'distance'``, ``'time'`` or
+        ``None``.
+
+    -   ``'isPlug'``: ``True`` or ``False``.
+
+    Value conforming is performed in the following way:
+
+    -   If *item* is a :class:`bool`, it's returned as-is.
+    -   If *item* is a :class:`float` or :class:`int`, it's returned as-is
+        unless a *defaultUnitType* is specified, in which case a
+        :class:`~paya.runtime.data.Angle`,
+        :class:`~paya.runtime.data.Distance` or
+        :class:`~paya.runtime.data.Time` instance is returned. UI units
+        are used in every case.
+    -   If *item* is a list of floats or ints, then:
+
+        -   If its dimension is 3 then, if *defaultUnitType* is set to
+            ``'angle'``, it's instantiated as
+            :class:`~paya.runtime.data.EulerRotation`; otherwise, as
+            :class:`~paya.runtime.data.Vector`.
+
+        -   If its dimension is 4, then it's always returned as a
+            :class:`~paya.runtime.data.Quaternion`.
+
+        -   If its dimension is 16, then it's always returned as a
+            :class:`~paya.runtime.data.Matrix`.
+
+        -   In all other cases, it's returned as a list with members intact.
+
+    Plugs are returned as :class:`~paya.runtime.plugs.Attribute` instances,
+    with the subtype / unit strictly based on :class:`~maya.OpenMaya.MPlug`
+    analysis performed by :mod:`paya.pluginfo`.
+
+    :param item: The item to inspect and conform.
+    :param defaultUnitType/dut: one of ``'angle'``, ``'distance'``, ``'time'``
+        or ``None``.
+    :type defaultUnitType/dut: :class:`str`, ``None``
+    :param bool quiet: don't throw an error if *item* can't be conformed to
+        a math type, just pass-through the incomplete dictionary with the
+        ``'item'`` field populated with the original item
+    :return: The dictionary.
+    :rtype: :class:`dict`
+    """
+    # Establish order, so that .values() can be used for quick unpacking
+    # in Python 3.0
+    out = {'item': None, 'dimension': None, 'unitType': None, 'isPlug': False}
+
+    def fromAttr(x):
+        plugInfo = x.plugInfo()
+        out['dimension'] = plugInfo.get('mathDimension')
+        out['unitType'] = plugInfo.get('mathUnitType')
+        out['isPlug'] = True
+        out['item'] = x
+
+    if isinstance(item, p.Attribute):
+        fromAttr(item)
+    elif isinstance(item, bool):
+        out['dimension'] = 1
+        out['item'] = item
+    elif isinstance(item, (int, float)):
+        out['dimension'] = 1
+
+        if isinstance(item, p.datatypes.Unit):
+            out['item'] = item
+            out['unitType'] = uncap(item.__class__.__name__)
+
+        else:
+            if defaultUnitType is None:
+                out['item'] = item
+
+            else:
+                out['unitType'] = defaultUnitType
+
+                if defaultUnitType == 'angle':
+                    out['item'] = p.datatypes.Angle(
+                        item, unit=getUIAngleUnit())
+
+                elif defaultUnitType == 'distance':
+                    out['item'] = p.datatypes.Distance(
+                        item, unit=getUIDistanceUnit())
+
+                else:
+                    out['item'] = p.datatypes.Time(
+                        item, unit=getUITimeUnit())
+    elif isinstance(item, (tuple, list)):
+        if all([isinstance(member, (float, int)) for member in item]):
+            out['dimension'] = dimension = len(item)
+            if dimension is 3:
+                if defaultUnitType is None:
+                    out['item'] = p.datatypes.Vector(item)
+                else:
+                    if defaultUnitType == 'angle':
+                        out['item'] = p.datatypes.EulerRotation(
+                            item,
+                            unit=getUIAngleUnit()
+                        )
+                        out['unitType'] = 'angle'
+                    else:
+                        out['item'] = p.datatypes.Vector(item)
+            elif dimension is 16:
+                out['item'] = p.datatypes.Matrix(item)
+            elif dimension is 4:
+                out['item'] = p.datatypes.Quaternion(item)
+            else:
+                out['item'] = list(item)
+        else:
+            raise TypeError("Can't conform item: {}".format(item))
+    elif isinstance(item, p.datatypes.Array):
+        out['dimension'] = len(item.flat)
+        out['item'] = item
+    elif isinstance(item, str):
+        item = p.Attribute(item)
+        fromAttr(p.Attribute(item))
+    else:
+        out['item'] = item
+
+    return out
 
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Soft interpolation utilities
@@ -561,7 +748,7 @@ def createMatrix(*rowHints,
                                     ms=manageScale)
 
             else: # Explicit construction
-                matrix = r.datatypes.Matrix()
+                matrix = p.datatypes.Matrix()
 
                 if manageScale and thirdLengthIsDefined:
                     vectors[2] = vectors[2].normal() * thirdLength
@@ -594,7 +781,7 @@ def createMatrix(*rowHints,
             return matrix
 
         else:
-            matrix = r.data.Matrix()
+            matrix = p.datatypes.Matrix()
 
             if manageScale and thirdLengthIsDefined:
                 matrix.z = axisVecs['z'] * thirdLength
@@ -734,7 +921,7 @@ def pointsIntoUnitCube(points):
         scaleFactor = 1.0
 
     scaleMatrix = createScaleMatrix(scaleFactor)
-    return [r.data.Point(point) ^ scaleMatrix for point in points]
+    return [p.datatypes.Point(point) ^ scaleMatrix for point in points]
 
 @short(tolerance='tol')
 def getFramedAimAndUpVectors(points, upVector, tolerance=1e-7):
@@ -759,7 +946,7 @@ def getFramedAimAndUpVectors(points, upVector, tolerance=1e-7):
         [:class:`~paya.runtime.data.Vector`])
     """
     refVector = upVector
-    points = [r.data.Point(point) for point in points]
+    points = [p.datatypes.Point(point) for point in points]
     ln = len(points)
 
     if ln > 1:
@@ -1066,8 +1253,11 @@ def parallelTransport(normal, tangents, fromEnd=False):
     return outNormals
 
 @short(ratios='rat', unwindSwitch='uws')
-def blendCurveNormalSets(normalsA, normalsB,
-            tangents, ratios=None, unwindSwitch=0):
+def blendCurveNormalSets(normalsA,
+                         normalsB,
+                         tangents,
+                         ratios=None,
+                         unwindSwitch=0):
     """
     Blends between two sets of normals along a curve. The number of
     tangents, normalsA, normalsB and ratios must be the same. If any inputs
@@ -1157,6 +1347,9 @@ def blendCurveNormalSets(normalsA, normalsB,
         range(numRatios), tangents, normalsA,
         normalsB, ratios
     ):
+        normalA.setClass(r.plugs.Vector)
+        normalB.setClass(r.plugs.Vector)
+
         blended = normalA.blend(normalB,
                                 clockNormal=tangent,
                                 unwindSwitch=unwindSwitch,
@@ -1166,11 +1359,11 @@ def blendCurveNormalSets(normalsA, normalsB,
     return out
 
 @short(ratios='rat', unwindSwitch='uws')
-def blendBetweenCurveNormals(startNormal,
-                             endNormal,
-                             tangents,
-                             ratios=None,
-                             unwindSwitch=0):
+def bidirectionalParallelTransport(startNormal,
+                                   endNormal,
+                                   tangents,
+                                   ratios=None,
+                                   unwindSwitch=0):
     """
     Blends between a forward and backward parallel-transport solution. If
     either *startNormal* or *endNormal* are ``None``, the solution will
@@ -1205,7 +1398,7 @@ def blendBetweenCurveNormals(startNormal,
     :return: The normals.
     :rtype: [:class:`~paya.runtime.plugs.Vector`]
     """
-    if not(startNormal or endNormal):
+    if (startNormal is None) and (endNormal is None):
         raise ValueError(
             "Please provide a start normal and / or an end normal.")
 
@@ -1215,10 +1408,10 @@ def blendBetweenCurveNormals(startNormal,
 
     fwds = bwds = None
 
-    if startNormal:
+    if startNormal is not None:
         fwds = parallelTransport(startNormal, tangents)
 
-    if endNormal:
+    if endNormal is not None:
         bwds = parallelTransport(endNormal, tangents[::-1])[::-1]
 
     if fwds:
@@ -1226,4 +1419,5 @@ def blendBetweenCurveNormals(startNormal,
             return blendCurveNormalSets(fwds, bwds, tangents,
                                         rat=ratios, uws=unwindSwitch)
         return fwds
+
     return bwds
