@@ -1,8 +1,9 @@
 import pymel.core.nodetypes as _nt
+from pymel.util import expandArgs
 import paya.runtime as r
-import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
-from paya.util import resolveFlags, short, cap
+from paya.util import resolveFlags, short, cap, undefined
+from paya.config import takeUndefinedFromConfig
 
 
 class Matrix:
@@ -48,7 +49,7 @@ class Matrix:
 
         :param other: a 16D value or plug
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim is 16:
             node = r.nodes.AddMatrix.createNode()
@@ -85,7 +86,7 @@ class Matrix:
 
         :param other: a value or plug of dimension 3 (left only) or 16.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim is 3 and swap:
             node = r.nodes.PointMatrixMult.createNode()
@@ -120,7 +121,7 @@ class Matrix:
 
         :param other: a 3D value or plug
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim is 3:
             node = r.nodes.PointMatrixMult.createNode()
@@ -162,6 +163,19 @@ class Matrix:
 
         return node.attr('outputMatrix')
 
+    def normal(self):
+        """
+        :return: A version of this matrix with all axis vectors normalized.
+        :rtype: :class:`Matrix`
+        """
+        out = r.nodes.FourByFourMatrix.createNode()
+        self.x.normal() >> out.x
+        self.y.normal() >> out.y
+        self.z.normal() >> out.z
+        self.t >> out.t
+
+        return out.attr('output')
+
     @short(
         translate='t',
         rotate='r',
@@ -198,7 +212,7 @@ class Matrix:
         )
 
         if default:
-            default = _tm.mathInfo(default)[0]
+            default = _mo.info(default)['item']
 
         if not any([translate, rotate, scale, shear]):
             return (default if default else self).hold()
@@ -207,7 +221,7 @@ class Matrix:
 
         for chan, state in zip(
                 ['scale','shear','rotate','translate'],
-                [scale,shear,rotate,translate]
+                [scale, shear, rotate, translate]
         ):
             src = self if state else default
 
@@ -406,7 +420,7 @@ class Matrix:
     )
     def decomposeAndApply(
             self,
-            transform,
+            *slaves,
             translate=None,
             rotate=None,
             scale=None,
@@ -419,31 +433,39 @@ class Matrix:
             maintainOffset=False
     ):
         """
-        Decomposes and applies this matrix to a transform.
+        Decomposes and applies this matrix to one or more slave transforms.
 
-        :param transform: the transform node to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
         :param bool translate/t: apply translation
         :param bool rotate/r: apply rotation
         :param bool scale/s: apply scale
         :param bool shear/sh: apply shear
         :param bool maintainOffset/mo: maintain relative pose; defaults to
-            False
+            ``False``
         :param bool worldSpace/ws: premultiply this matrix with
             ``parentInverseMatrix`` on the transform to negate the
-            parent stack; defaults to False
+            parent stack; defaults to ``False``
         :param bool compensateJointScale/cjs: account for
-            segmentScaleCompensate on joints; defaults to True
-        :param bool compensateJointOrient/cjo: account for jointOrient on
-            joints; defaults to True
+            segmentScaleCompensate on joints; defaults to ``True``
+        :param bool compensateJointOrient/cjo: account for ``jointOrient`` on
+            joints; defaults to ``True``
         :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
-            defaults to False
+            defaults to ``False``
         :param bool compensatePivots/cp: compensate for pivots (non-joint
-            transforms only); this is expensive, so defaults to False
+            transforms only); this is expensive, so defaults to ``False``
         :return: ``self``
         :rtype: :class:`Matrix`
         """
         #-------------------------------------|    Prep / early bail
+
+        slaves = [r.PyNode(slave) for slave in expandArgs(*slaves)]
+
+        if not slaves:
+            raise ValueError("No slaves specified.")
+
+        if not slaves:
+            raise ValueError("No slaves specified.")
 
         translate, rotate, scale, shear = \
             resolveFlags(translate, rotate, scale, shear)
@@ -452,185 +474,239 @@ class Matrix:
             r.warning("No channels requested, skipping.")
             return self
 
-        xf = r.PyNode(transform)
-        isJoint = isinstance(xf, _nt.Joint)
-
-        if isJoint:
-            compensatePivots = False
-
-            fast = not any([compensateRotateAxis,
-                compensateJointScale, compensateJointOrient])
-
-        else:
-            compensateJointScale = compensateJointOrient = False
-            fast = not any([compensateRotateAxis, compensatePivots])
-
         #-------------------------------------|    Preprocessing
 
         matrix = self
 
-        if worldSpace:
-            matrix *= xf.attr('pim')[0]
-
         if maintainOffset:
-            matrix = xf.getMatrix() * matrix.asOffset()
+            matrix = matrix.asOffset()
 
-        #-------------------------------------|    Fast bail
+        #-------------------------------------|    Iterate
 
-        if fast:
-            decomposition = matrix.decompose(ro=xf.attr('ro'))
+        for slave in slaves:
+            _matrix = matrix
 
-            for channel, state in zip(
-                ['translate', 'rotate', 'scale', 'shear'],
-                [translate, rotate, scale, shear]
-            ):
-                if state:
-                    dest = xf.attr(channel)
+            if maintainOffset:
+                _matrix = slave.getMatrix(worldSpace=worldSpace) * _matrix
 
-                    try:
-                        decomposition[channel] >> dest
+            if worldSpace:
+                _matrix *= slave.attr('parentInverseMatrix')[0]
 
-                    except:
-                        r.warning(
-                            "Couldn't connect into attribute: {}".format(dest)
-                        )
+            _compensatePivots = compensatePivots
+            _compensateJointOrient = compensateJointOrient
+            _compensateRotateAxis = compensateRotateAxis
+            _compensateJointScale = compensateJointScale
 
-            return matrix
+            isJoint = isinstance(slave, _nt.Joint)
 
-        #-------------------------------------|    Main implementation
+            if isJoint:
+                _compensatePivots = False
 
-        #-------------------------|    Disassemble
+                fast = not any([
+                    _compensateRotateAxis,
+                    _compensateJointScale,
+                    _compensateJointOrient
+                ])
 
-        tmtx = matrix.pk(t=True)
+            else:
+                _compensateJointScale = _compensateJointOrient = False
+                fast = not (_compensateRotateAxis or _compensatePivots)
 
-        if isJoint and compensateJointScale:
-            pismtx = xf.attr('inverseScale').asScaleMatrix()
+            if fast:
+                decomposition = _matrix.decompose(ro=slave.attr('ro'))
 
-            matrix = xf.attr('segmentScaleCompensate').ifElse(
-                matrix * pismtx,
-                matrix
-                )
+                for channel, state in zip(
+                    ['translate', 'rotate', 'scale', 'shear'],
+                    [translate, rotate, scale, shear]
+                ):
+                    if state:
+                        dest = slave.attr(channel)
 
-        smtx = matrix.pk(s=True, sh=True)
-        rmtx = matrix.pk(r=True)
+                        try:
+                            decomposition[channel] >> dest
 
-        #-------------------------|    Rotation compensations
+                        except:
+                            r.warning(
+                                "Couldn't connect into attribute: {}".format(dest)
+                            )
 
-        if compensateRotateAxis:
-            ramtx = xf.getRotateAxisMatrix(p=True)
-            rmtx = ramtx.inverse() * rmtx
+            else:
+                #-------------------------|    Disassemble
 
-        if isJoint and compensateJointOrient:
-            jomtx = xf.getJointOrientMatrix(p=True)
-            rmtx *= jomtx.inverse()
+                tmtx = _matrix.pk(t=True)
 
-        #-------------------------|    Pivot compensations
+                if _compensateJointScale:
+                    pismtx = slave.attr('inverseScale').asScaleMatrix()
 
-        if compensatePivots and not isJoint:
-            # Solve as Maya would
+                    _matrix = slave.attr('segmentScaleCompensate').ifElse(
+                        _matrix * pismtx,
+                        _matrix
+                    ).setClass(r.plugs.Matrix)
 
-            ramtx = xf.getRotateAxisMatrix(p=True)
-            spmtx = xf.attr('scalePivot').asTranslateMatrix()
-            stmtx = xf.attr('scalePivotTranslate').asTranslateMatrix()
-            rpmtx = xf.attr('rotatePivot').asTranslateMatrix()
-            rtmtx = xf.attr('rotatePivotTranslate').asTranslateMatrix()
+                smtx = _matrix.pk(s=True, sh=True)
+                rmtx = _matrix.pk(r=True)
+                
+                #-------------------------|    Rotation compensations
 
-            partialMatrix = spmtx.inverse() * smtx * spmtx * stmtx * \
-                            rpmtx.inverse() * ramtx * rmtx * rpmtx * rtmtx
+                if _compensateRotateAxis:
+                    ramtx = slave.getRotateAxisMatrix(p=True)
+                    rmtx = ramtx.inverse() * rmtx
+        
+                if _compensateJointOrient:
+                    jomtx = slave.getJointOrientMatrix(p=True)
+                    rmtx *= jomtx.inverse()
+                    
+                #-------------------------|    Pivot compensations
 
-            # Capture and negate translation contribution
-            translateContribution = partialMatrix.pk(t=True)
-            tmtx *= translateContribution.inverse()
+                if _compensatePivots:
+                    # Solve as Maya would
+        
+                    ramtx = slave.getRotateAxisMatrix(p=True)
+                    spmtx = slave.attr('scalePivot').asTranslateMatrix()
+                    stmtx = slave.attr('scalePivotTranslate').asTranslateMatrix()
+                    rpmtx = slave.attr('rotatePivot').asTranslateMatrix()
+                    rtmtx = slave.attr('rotatePivotTranslate').asTranslateMatrix()
+        
+                    partialMatrix = spmtx.inverse() * smtx * spmtx * stmtx * \
+                                    rpmtx.inverse() * ramtx * rmtx * rpmtx * rtmtx
+        
+                    # Capture and negate translation contribution
+                    translateContribution = partialMatrix.pk(t=True)
+                    tmtx *= translateContribution.inverse()
+                    
+                #-------------------------|    Reassemble & apply
 
-        #-------------------------|    Reassemble & apply
+                _matrix = smtx * rmtx * tmtx
+                decomposition = _matrix.decompose(ro=slave.attr('ro'))
+        
+                for channel, state in zip(
+                        ('translate', 'rotate', 'scale', 'shear'),
+                        (translate, rotate, scale, shear)
+                ):
+                    if state:
+                        source = decomposition[channel]
+                        dest = slave.attr(channel)
+        
+                        try:
+                             source >> dest
+        
+                        except:
+                            r.warning(
+                                "Couldn't connect into attribute: {}".format(dest)
+                            )
 
-        matrix = smtx * rmtx * tmtx
-        decomposition = matrix.decompose(ro=xf.attr('ro'))
-
-        for channel, state in zip(
-                ('translate', 'rotate', 'scale', 'shear'),
-                (translate, rotate, scale, shear)
-        ):
-            if state:
-                source = decomposition[channel]
-                dest = xf.attr(channel)
-
-                try:
-                     source >> dest
-
-                except:
-                    r.warning(
-                        "Couldn't connect into attribute: {}".format(dest)
-                    )
-
-        return self
-
-    @short(
-        worldSpace='ws',
-        persistentCompensation='pc',
-        preserveInheritsTransform='pit',
-        maintainOffset='mo'
-    )
-    def applyViaOpm(
-            self,
-            transform,
-            worldSpace=False,
-            persistentCompensation=False,
-            preserveInheritsTransform=False,
-            maintainOffset=False
-    ):
+    @short(worldSpace='ws',
+           persistentCompensation='pc',
+           preserveInheritsTransform='pit',
+           maintainOffset='mo')
+    def applyViaOpm(self,
+                    *slaves,
+                    worldSpace=False,
+                    persistentCompensation=False,
+                    preserveInheritsTransform=False,
+                    maintainOffset=False):
         """
-        Uses this matrix to drive a transform via a connection into the
-        ``offsetParentMatrix``, with compensations against the transform's
+        Uses this matrix to drive one or more transforms via connections into
+        ``offsetParentMatrix``, with compensations against the transforms'
         SRT channels.
 
         .. warning::
 
-            When *worldSpace* is combined with *preserveInheritsTransform*,
-            the matrix will only be localised against the current parent.
-            The solution will break if the transform is subsequently
-            reparented.
+           When *worldSpace* is combined with *preserveInheritsTransform*,
+           the matrix will only be localised against the current parent.
+           The solution will break if the transform is subsequently
+           reparented.
 
-        :param transform: the transform to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
-        :param bool worldSpace/ws: drive the transform in world-space;
-            defaults to False
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
         :param bool maintainOffset/mo: preserve relative pose on application;
-            defaults to False
+           defaults to ``False``
         :param bool persistentCompensation/pc: compensate for the transform's
-            SRT channels persistently, so that the world pose will remain
-            the same even if they change; defaults to False
+           SRT channels persistently, so that the world pose will remain
+           the same even if they change; defaults to ``False``
         :param preserveInheritsTransform/pit: when *worldSpace* is
-            requested, don't edit the ``inheritsTransform`` attribute on
-            the transform; instead, localise against the current parent;
-            defaults to False
+           requested, don't edit the ``inheritsTransform`` attribute on
+           the transform; instead, localise against the current parent;
+           defaults to ``False``
         :return: ``self``
         :rtype: :class:`Matrix`
         """
+        slaves = [r.PyNode(slave) for slave in expandArgs(*slaves)]
+
+        if not slaves:
+            raise ValueError("No slaves specified.")
+
         matrix = self
-        xf = r.PyNode(transform)
 
         if maintainOffset:
-            matrix = xf.getMatrix(worldSpace=True) * matrix.asOffset()
+            matrix = matrix.asOffset()
 
-        if worldSpace:
-            if preserveInheritsTransform:
-                r.warning(
-                    "To preserve 'inheritsTransform', the driver "+
-                    "matrix for {} ".format(xf)+"will only be "+
-                    "localised against the current parent."
-                )
-                pnt = xf.getParent()
+        for slave in slaves:
+            _matrix = matrix
 
-                if pnt:
-                    matrix *= pnt.attr('wim')
+            if maintainOffset:
+                _matrix = slave.getMatrix(worldSpace=worldSpace) * _matrix
 
-            else:
-                xf.attr('inheritsTransform').set(False)
+            if worldSpace:
+                if preserveInheritsTransform:
+                    pnt = slave.getParent()
 
-        matrix = xf.attr('im'
-            ).get(p=persistentCompensation) * matrix
-        matrix >> xf.attr('opm')
+                    if pnt:
+                        _matrix *= pnt.attr('worldInverseMatrix')
+
+                else:
+                    slave.attr('inheritsTransform').set(False)
+
+            _matrix = slave.attr('inverseMatrix').get(
+                plug=persistentCompensation) * _matrix
+
+            _matrix >> slave.attr('offsetParentMatrix')
+
+    @short(worldSpace='ws',
+           maintainOffset='mo',
+           useOffsetParentMatrix='uop',
+           preserveInheritsTransform='pit')
+    @takeUndefinedFromConfig
+    def drive(self,
+               *slaves,
+               worldSpace=False,
+               maintainOffset=False,
+               useOffsetParentMatrix=undefined,
+               preserveInheritsTransform=False):
+        """
+        Drives one or more slaves using this matrix.
+
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
+        :param preserveInheritsTransform/pit: when *worldSpace* is requested,
+            don't edit the ``inheritsTransform`` attribute on the slave;
+            instead, localise against its current parent; defaults to
+            ``False``
+        :param bool maintainOffset/mo: preserve relative pose on application;
+           defaults to ``False``
+        :param bool useOffsetParentMatrix/uop: connect into
+            ``offsetParentMatrix`` instead of decomposing into SRT channels;
+            defaults to namesake configuration flag; it that's omitted too,
+            defaults to ``True`` if Maya >= 2022, otherwise ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+        """
+        if useOffsetParentMatrix:
+            return self.applyViaOpm(
+                *slaves,
+                worldSpace=worldSpace,
+                maintainOffset=maintainOffset,
+                preserveInheritsTransform=preserveInheritsTransform
+            )
+
+        return self.decomposeAndApply(*slaves,
+                                      worldSpace=worldSpace,
+                                      maintainOffset=maintainOffset)
 
     #--------------------------------------------------------------------|    Hold
 
