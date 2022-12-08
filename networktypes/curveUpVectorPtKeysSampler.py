@@ -100,7 +100,7 @@ class CurveUpVectorPtKeysSampler(r.networks.CurveUpVectorRemapSampler):
                     "should be of length "+
                     "paramUpVectorKeys-1.")
 
-            unwindSwitches = [_tm.mathInfo(x)[0] for x in unwindSwitch]
+            unwindSwitches = [_mo.info(x)['item'] for x in unwindSwitch]
 
         else:
             unwindSwitches = [unwindSwitch] * numSegments
@@ -163,7 +163,7 @@ class CurveUpVectorPtKeysSampler(r.networks.CurveUpVectorRemapSampler):
         # Run the parallel transport per-segment
         for i, infoPack in enumerate(infoPacks):
             with r.Name('segment', i+1, padding=2):
-                infoPack['normals'] = _mo.blendBetweenCurveNormals(
+                infoPack['normals'] = _mo.bidirectionalParallelTransport(
                     infoPack['startNormal'],
                     infoPack['endNormal'],
                     infoPack['tangents'],
