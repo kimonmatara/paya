@@ -1,5 +1,4 @@
 from collections import UserList
-import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
 from paya.util import short, LazyModule
 import pymel.util as _pu
@@ -1036,7 +1035,7 @@ class Bone(Chain):
         if numSlaves < 2:
             raise RuntimeError("Need two or more joints on the twist chain.")
 
-        globalScale = _tm.mathInfo(globalScale)[0]
+        globalScale = _mo.info(globalScale)['item']
 
         if downAxis is None:
             downAxis = self.downAxis()
@@ -1051,7 +1050,7 @@ class Bone(Chain):
             startUpVector = self[0].attr('wm').getAxis(upAxis)
 
         else:
-            startUpMatrix = _tm.mathInfo(startUpMatrix)[0]
+            startUpMatrix = _mo.info(startUpMatrix)['item']
             startUpVector = self[0].getMatrix(worldSpace=True).getAxis(upAxis)
             startUpVector *= startUpMatrix.asOffset()
             startUpVector.rejectFrom(downVector)
@@ -1091,7 +1090,7 @@ class Bone(Chain):
                 endUpMatrix = self[1].attr('wm')
 
             else:
-                endUpMatrix = _tm.mathInfo(endUpMatrix)[0]
+                endUpMatrix = _mo.info(endUpMatrix)['item']
 
             endUpVector = startUpVector.get() * endUpMatrix.asOffset()
             endUpVector = endUpVector.rejectFrom(downVector)
