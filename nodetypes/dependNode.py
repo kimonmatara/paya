@@ -4,6 +4,7 @@ import paya.lib.attrs as _atr
 from paya.util import short, resolveFlags, LazyModule, undefined
 import paya.pools as _pl
 import paya.lib.names as _nm
+import paya.lib.suffixes as _sf
 import maya.cmds as m
 import maya.OpenMaya as om
 
@@ -17,7 +18,7 @@ class MakeName:
                padding='pad',
                suffix='suf')
         def makeName(*elems,
-                     inherit=undefined,
+                     inherit=True,
                      padding=undefined,
                      suffix=undefined):
             """
@@ -65,8 +66,13 @@ class MakeName:
 
         return makeName
 
+class Suffix:
+    def __get__(self, inst, instype):
+        return _sf.suffixes.get(instype.__melnode__)
 
 class DependNode:
+
+    __suffix__ = Suffix()
 
     #-----------------------------------------------------------|    Subtype management
 
@@ -490,11 +496,16 @@ class DependNode:
         :param str attrName: the attribute name
         :param bool channelBox/cb: when in create mode, create the attribute
             as settable instead of keyable; defaults to None
+        :param attrSection/ats: the name of an attribute section under which
+            to nest the attribute; the section must exist; defaults to
+            ``None``
+        :type attrSection/ats: :class:`str`, ``None``
         :param \*\*kwargs: forwarded to
             :meth:`~pymel.core.nodetypes.DependNode.addAttr`
         :return: Where possible, the newly-created attribute.
         :rtype: None, :class:`~paya.runtime.plugs.Attribute`
         """
+        attrSection = kwargs.pop('attrSection', None)
         result = r.nodetypes.DependNode.addAttr(self, attrName, **kwargs)
 
         if 'query' in kwargs or 'edit' in kwargs:
@@ -511,6 +522,11 @@ class DependNode:
                     for child in plug.getChildren():
                         child.set(k=False)
                         child.set(cb=True)
+
+            if attrSection is not None:
+                section = self.attrSections[attrSection]
+                section.collect(attrName)[0]
+                plug = self.attr(attrName)
 
             return plug
 
@@ -633,8 +649,8 @@ class DependNode:
 
     def getReorderableAttrNames(self):
         """
-        :return: The names of attributes on this node that can be reordered
-            using :meth:`reorderAttrs` and related methods.
+        :return: The long names of attributes on this node that can be
+            reordered.
         :rtype: list of str
         """
         return [attr.attrName(
