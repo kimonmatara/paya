@@ -1,5 +1,5 @@
 from paya.lib.typeman import plugCheck
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 from paya.util import short
 import paya.runtime as r
 
@@ -422,7 +422,7 @@ class RemapValue:
         :return: An existing clone configured for the specified position.
         :rtype: :class:`RemapValue`
         """
-        position, pdim, pisplug = _tm.mathInfo(position)
+        position, pdim, put, pisplug = _mo.info(position).values()
 
         clones = self.getClones()
 
