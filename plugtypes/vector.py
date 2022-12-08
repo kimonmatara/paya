@@ -2,7 +2,7 @@ import pymel.util as _pu
 import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
 from paya.util import short
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 import paya.runtime as r
 
 
@@ -43,7 +43,7 @@ class Vector:
         """
         Implements **multiplication** (``*``).
         """
-        item, dim, isplug = _tm.mathInfo(other)
+        item, dim, unitType, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -102,7 +102,7 @@ class Vector:
             swap=False,
             blendLength=False
     ):
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, unitType, isplug = _mo.info(other).values()
 
         if swap:
             first, second = other, self
@@ -182,7 +182,7 @@ class Vector:
                 "A clock normal is required to perform angle unwinding."
             )
 
-        other, otherDim, otherIsPlug = _tm.mathInfo(other)
+        other, otherDim, unitType, otherIsPlug = _mo.info(other).values()
 
         if swap:
             first, second = other, self
@@ -198,8 +198,8 @@ class Vector:
 
             #-----------------------------------------|    Angle impl
 
-            angle = first.angleTo(second, cn=clockNormal)
-            angle = angle.unwindSwitch(unwindSwitch)
+            angle = first.angleTo(second, cn=clockNormal) # correct
+            angle = angle.unwindSwitch(unwindSwitch) # correct
 
             if not clockNormal:
                 clockNormal = first.cross(second)
@@ -231,27 +231,6 @@ class Vector:
             outVector = outVector.normal() * length
 
         return outVector
-
-
-    def rotateByAxisAngle(self, axisVector, angle):
-        """
-        :param axisVector: the vector around which to rotate this vector
-        :type axisVector: list, tuple, :class:`~paya.runtime.data.Vector`
-            or :class:`~paya.runtime.plugs.Vector`
-        :param angle: the angle of rotation
-        :type angle: float, :class:`~paya.runtime.data.Angle`, str or
-            class:`~paya.runtime.plugs.Math3D`
-        :return: This vector, rotated around ``axisVector`` by the specified
-            ``angle``.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
-        """
-        axisAngle = r.nodes.AxisAngleToQuat.createNode()
-        axisVector >> axisAngle.attr('inputAxis')
-        angle >> axisAngle.attr('inputAngle')
-        quat = axisAngle.attr('outputQuat')
-        matrix = quat.asRotateMatrix()
-
-        return self * matrix
 
     @short(normalize='nr')
     def dot(self, other, normalize=False):
@@ -309,7 +288,10 @@ class Vector:
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
         return r.nodes.VectorProduct.createAsCross(
-            self, other, nr=normalize, g=guard, ig=inlineGate
+            self, other,
+            normalize=normalize,
+            guard=guard,
+            inlineGate=inlineGate
         ).attr('output')
 
     @short(clockNormal='cn')
@@ -332,7 +314,8 @@ class Vector:
 
         else:
             complete = True
-            clockNormal, cnDim, cnIsPlug = _tm.mathInfo(clockNormal)
+            clockNormal, cnDim, cnUnitType, cnIsPlug = \
+                _mo.info(clockNormal).values()
             cross = self.cross(clockNormal)
 
         ab = r.createNode('angleBetween')
@@ -358,7 +341,7 @@ class Vector:
         :return: The project of this vector onto *other*.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        other = _tm.mathInfo(other)[0]
+        other = _mo.info(other)['item']
         return (self.dot(other) / other.dot(other)) * other
 
     def rejectFrom(self, other):
@@ -372,7 +355,7 @@ class Vector:
         :return: The rejection of this vector from *other*.
         :rtype: :class:`~paya.runtime.plugs.Vector`
         """
-        other = _tm.mathInfo(other)[0]
+        other = _mo.info(other)['item']
         cosTheta = self.dot(other, nr=True)
         rejection = self - (self.length() * cosTheta) * other.normal()
         return rejection
