@@ -89,6 +89,8 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
         :return: The curve shape.
         :rtype: :class:`NurbsCurve`
         """
+        name = name if name else cls.makeName()
+
         if conformShapeName is None:
             conformShapeName = True if parent else False
 
@@ -116,19 +118,18 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
                 )
             )
 
-        infos = [_tm.mathInfo(point) for point in points]
-        points = [info[0] for info in infos]
-        hasPlugs = any([info[2] for info in infos])
+        infos = [_mo.info(point) for point in points]
+        points = [info['item'] for info in infos]
+        hasPlugs = any([info['isPlug'] for info in infos])
 
         if hasPlugs:
-            _points = [info[0].get() if info[2]
-                else info[0] for info in infos]
+            _points = [info['item'].get() if info['isPlug']
+                else info['item'] for info in infos]
 
         else:
             _points = points
 
         # Soft-draw
-
         kwargs = {}
 
         if not (parent and conformShapeName):
@@ -310,14 +311,22 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
         if macro['form'] is 1:
             shape.attr('f').set(1)
 
+        for key in ('overrideEnabled', 'overrideColor'):
+            try:
+                shape.attr(key).set(macro[key])
+            except:
+                pass
+
         return shape
 
     #--------------------------------------------------------------------|
     #--------------------------------------------------------------------|    Macro
     #--------------------------------------------------------------------|
 
-    def macro(self):
+    def macro(self, includeShapeDetails=False):
         """
+        :param bool includeShapeDetails: include information on overrides;
+            defaults to ``False``
         :return: A simplified representation of this curve that can be used
             by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict
@@ -329,6 +338,10 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
         macro['form'] = self.attr('f').get()
         macro['point'] = list(map(list, self.getCVs()))
         macro['knotDomain'] = self.getKnotDomain()
+
+        if includeShapeDetails:
+            macro['overrideEnabled'] = self.attr('overrideEnabled').get()
+            macro['overrideColor'] = self.attr('overrideColor').get()
 
         return macro
 
