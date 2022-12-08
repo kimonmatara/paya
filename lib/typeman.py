@@ -10,93 +10,7 @@ import pymel.core as p
 from paya.util import short, LazyModule, conditionalExpandArgs
 
 r = LazyModule('paya.runtime')
-
-# def get1DOutputAttrTypeForPolyadicOperation(*operands):
-#     """
-#     Given a bunch of operands, returns the appropriate output attribute
-#     type. Used by the maths operators.
-#
-#     :param \*operands: the input operands
-#     :return: One of 'double', 'doubleLinear', 'doubleAngle' or 'time'
-#     :rtype: :class:`str`
-#     """
-#     # Algorithm:
-#     # Conform operands to data or plug types
-#     # Find the first operand which isn't a simple type and take the type
-#     # from that
-#     # If all are simple types, return 'double'
-#
-#     out = None
-#
-#     for operand in operands:
-#         if isinstance(operand, p.Attribute):
-#             return operand.type()
-#             break
-#
-#         if isinstance(operand, str):
-#             return p.Attribute(operand).type()
-#
-#         if isinstance(operand, p.datatypes.Unit):
-#             return {
-#                 p.datatypes.Time: 'time',
-#                 p.datatypes.Angle: 'doubleAngle',
-#                 p.datatypes.Distance: 'doubleLinear'
-#             }.get(type(operand), 'double')
-#
-#     return 'double'
-
-
-@short(angle='a')
-def mathInfo(item, angle=False):
-    """
-    :param item: a value or plug (simple or PyMEL type)
-    :param bool angle/a: unless already typed, instantiate using
-        angle / Euler rotation types; defaults to ``False``
-    :return: A tuple of: conformed item, item maths dimension (or None),
-        item is a plug
-    """
-    if isinstance(item, (float, int, bool)):
-        if angle:
-            item = r.data.Angle(item)
-
-        return item, 1, False
-
-    if isinstance(item, p.datatypes.Unit):
-        return item, 1, False
-
-    if isinstance(item, p.datatypes.Array):
-        return item, len(item), False
-
-    if isinstance(item, p.Attribute):
-        return item, item.__math_dimension__, True
-
-    if isinstance(item, str):
-        try:
-            item = p.Attribute(item)
-            return item, item.__math_dimension__, True
-        except:
-            return item, None, False
-
-    if hasattr(item, '__iter__'):
-        members = list(item)
-
-        if all((isScalarValue(member) for member in members)):
-            ln = len(members)
-
-            try:
-                cls = {
-                    3: p.datatypes.EulerRotation \
-                        if angle else p.datatypes.Vector,
-                    4: p.datatypes.Quaternion,
-                    16: p.datatypes.Matrix
-                }[ln]
-
-            except KeyError:
-                raise TypeError("Can't parse maths item: {}".format(item))
-
-            return cls(item), ln, False
-
-    raise TypeError("Can't parse maths item: {}".format(item))
+_mo = LazyModule('paya.lib.mathops')
 
 def isPyMELObject(item):
     """
@@ -337,7 +251,7 @@ def describeAndConformVectorArg(vector):
 
         if all(map(isParamVectorPair, vector)):
             outDescr = 'keys'
-            params = [mathInfo(pair[0])[0] for pair in vector]
+            params = [_mo.mathInfo(pair[0])[0] for pair in vector]
             vectors = [conformVectorArg(pair[1]) for pair in vector]
             outContent = list(zip(params, vectors))
 
@@ -360,7 +274,7 @@ def resolveNumberOrFractionsArg(arg):
     if isinstance(arg, int):
         return floatRange(0, 1, arg)
 
-    return [mathInfo(x)[0] for x in arg]
+    return [_mo.mathInfo(x)[0] for x in arg]
 
 def expandVectorArgs(*args):
     """
@@ -597,7 +511,7 @@ def forceVectorsAsPlugs(vectors):
     :rtype: [:class:`~paya.runtime.plugs.Vector`]
     """
 
-    vectorInfos = [mathInfo(vector) for vector in vectors]
+    vectorInfos = [_mo.mathInfo(vector) for vector in vectors]
     plugStates = [vectorInfo[2] for vectorInfo in vectorInfos]
 
     if all(plugStates):
