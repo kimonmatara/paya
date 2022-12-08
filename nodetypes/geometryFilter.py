@@ -2,7 +2,8 @@ import os
 
 import maya.cmds as m
 import paya.lib.xmlweights as _xw
-from paya.util import short
+import paya.lib.suffixes as _sf
+from paya.util import short, uncap
 import pymel.util as _pu
 import paya.runtime as r
 
@@ -325,3 +326,21 @@ class GeometryFilter:
             kwargs['ds'] = str(destShape)
 
         cmd(**kwargs)
+
+    #----------------------------------------------------|    Batch ops
+
+    def renameFromGeo(self):
+        shape = r.PyNode(r.deformer(self, q=True, geometry=True)[0])
+        xf = shape.getParent()
+        newname = "{}_{}".format(xf.basename(),
+                                 _sf.suffixes.get(self.__melnode__,
+                                                  self.__melnode__))
+        self.rename(newname)
+        return self
+
+    @classmethod
+    def renameAllFromGeos(cls):
+        nodes = r.ls(type=uncap(cls.__name__))
+
+        for node in nodes:
+            node.renameFromGeo()
