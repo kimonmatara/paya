@@ -1,6 +1,8 @@
 """
 Utilities for managing strings.
 """
+import string
+import math
 
 def pad(number, padding):
     """
@@ -36,3 +38,18 @@ def uncapitalize(st):
     return st[0].lower()+st[1:]
 
 uncap = uncapitalize
+
+def int_to_letter(number):
+    """
+    :param int number: the integer to convert to a letter (1-based)
+    :return: A letter representation of the given integer number
+        (0-based). Numbers larger than 25 will be indicated using
+        doubled letters.
+    """
+    number -= 1
+
+    if number is 0:
+        numWinds = 1
+    else:
+        numWinds = math.ceil(number / 26)
+    return string.ascii_lowercase[number % 26] * numWinds
