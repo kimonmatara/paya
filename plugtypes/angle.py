@@ -6,14 +6,35 @@ import paya.runtime as r
 
 class Angle:
 
+    #-----------------------------------------------------------|    Constructor
+
+    @classmethod
+    @short(attributeType='at')
+    def create(cls, node, attrName, **kwargs):
+        """
+        Creates a ``doubleAngle`` attribute.
+
+        :param node: the node on which to create the attribute
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param str attrName: the name of the attribute
+        :param \*\*kwargs: forwarded to
+            :meth:`paya.runtime.nodes.DependNode.addAttr`
+        :return: The generated attribute.
+        :rtype: :class:`Angle`
+        """
+        kwargs['attributeType'] = 'doubleAngle'
+        node = r.PyNode(node)
+        return node.addAttr(attrName, **kwargs)
+
     #-----------------------------------------------------------|    Get / set
 
     @short(plug='p')
     def get(self, plug=False, default=None, **kwargs):
         """
-        Overloads :py:meth:`paya.runtime.plugs.Attribute.get` to return
-        :class:`~paya.runtime.data.Angle` instances instead of
-        :class:`float`.
+        Overloads :py:meth:`paya.runtime.plugs.Attribute.get` to return an
+        :class:`~paya.runtime.data.Angle` instance instead of a
+        :class:`float`. The instance will have embedded unit information
+        (access via ``.unit``).
         """
         if plug:
             return self
@@ -28,9 +49,15 @@ class Angle:
 
     def set(self, *args, **kwargs):
         """
-        Overloads :meth:`~paya.runtime.plugs.Attribute.get` to ensure
-        that instances of :class:`~paya.runtime.data.Angle`
-        with units that don't match the UI setting are set correctly.
+        Overloads :meth:`~paya.runtime.plugs.Attribute.set` for improved unit
+        management. If the argument is a :class:`float`, then it will be set
+        directly. If the argument is an :class:`~paya.runtime.data.Angle`
+        instance with units that are different from the UI, it will be
+        converted accordingly.
+
+        To set values with a :class:`float` in degrees regardless of UI
+        setting, use :func:`~paya.lib.mathops.degToUI`, available on
+        :mod:`paya.runtime`.
         """
         if args:
             value = args[0]
@@ -51,64 +78,64 @@ class Angle:
 
     #-----------------------------------------------------------------|    Ranges
 
-    def unwind(self):
+    def unwind360(self):
         """
-        :return: This angle, unwound and with the sign preserved.
-        :rtype: :class:`Angle`
+        :return: This angle, rolled so that it always remains in the -360 ->
+        360 range.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        out = self % r.degToUI(360.0)
-        return out.setClass(type(self))
+        return (self % r.degToUI(360.0)).setClass(type(self))
+
+    def unwindShortest(self):
+        """
+        :return: This angle, unwound and, if over 180, converted to negative
+            form.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
+        """
+        unwound = self % _pu.radians(360.0)
+        over = unwound.gt(_pu.radians(180.0))
+
+        out = over.ifElse(
+            unwound - _pu.radians(360.0),
+            unwound
+        ).setClass(type(self))
+
+        return out
 
     def unwindPositive(self):
         """
         :return: The unwound positive form of the angle.
-        :rtype: :class:`Angle`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        out = self.unwind()
-        wind = r.degToUI(360.0)
-        isNeg = out.lt(0.0)
+        # Sign management is necessary because, unlike Python modulo,
+        # Maya expr modulo preserves sign
+        unwound = self % _pu.radians(360.0)
 
-        corrected = wind + out
+        isNeg = unwound.lt(0.0)
 
-        out = isNeg.ifElse(corrected, out)
-        return out.setClass(type(self))
+        out = isNeg.ifElse(
+            unwound + _pu.radians(360.0),
+            unwound
+        ).setClass(type(self))
+
+        return out
 
     def unwindNegative(self):
         """
         :return: The unwound negative form of the angle.
-        :rtype: :class:`Angle`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        out = self.unwind()
-        wind = r.degToUI(360.0)
-        isNeg = out.lt(0.0)
+        # Sign management is necessary because, unlike Python modulo,
+        # Maya expr modulo preserves sign
+        unwound = self % _pu.radians(360.0)
+        isNeg = unwound.lt(0.0)
 
-        corrected = out - wind
+        out = isNeg.ifElse(
+            unwound,
+            unwound - _pu.radians(360.0)
+        ).setClass(type(self))
 
-        out = isNeg.ifElse(out, corrected)
-        return out.setClass(type(self))
-
-    def unwindShortest(self):
-        """
-        :return: This angle, unwound and, if less than -180 or greater than
-            180, flipped.
-        :rtype: :class:`Angle`
-        """
-        unwound = self.unwind()
-
-        over180 = unwound.gt(r.degToUI(180))
-        under180 = unwound.lt(r.degToUI(-180))
-
-        over180Correction = unwound-r.degToUI(360.0)
-        under180Correction = r.degToUI(360.0)+unwound
-
-        out = over180.ifElse(
-            over180Correction,
-            under180.ifElse(
-                under180Correction,
-                unwound
-            ))
-
-        return out.setClass(type(self))
+        return out
 
     @short(
         shortestIndex='si',
@@ -117,124 +144,77 @@ class Angle:
     )
     def unwindSwitch(
             self,
-            switchSource,
+            switchAttr,
             shortestIndex=0,
             positiveIndex=1,
             negativeIndex=2
     ):
         """
-        Unwinds this angle using a mode picked using an integer value or plug
-        (typically an animator switcher attribute).
+        Unwinds this angle, with the 'shortest' / 'positive' / 'negative'
+        modes chosen from a user attribute (typically an enum). Useful for
+        twist setups.
 
-        :param switchSource: either an integer value to pick an
-            implementation, or an attribute of type ``enum`` or ``int`` to
-            switch between all implementations
-        :type switchSource: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param int shortestIndex/si: the attribute output value that should
-            activate 'shortest' mode; defaults to 0
-        :param int positiveIndex/pi: the attribute output value that should
-            activate 'positive' mode; defaults to 1
-        :param int negativeIndex/ni: the attribute output value that should
-            activate 'negative' mode; defaults to 2
-        :return: The switched output.
-        :rtype: :class:`Angle`
+        This method is more efficient than switching between the outputs of
+        :meth:`unwindShortest`, :meth:`unwindPositive` and
+        :meth:`unwindNegative`.
+
+        :param switchAttr: the switch attribute; should be of type ``enum``
+            or ``long``
+        :type switchAttr: str, :class:`~paya.runtime.plugs.Math1D`
+        :param int shortestIndex: the attribute index for 'shortest'; defaults
+            to 0
+        :param int positiveIndex: the attribute index for 'positive'; defaults
+            to 1
+        :param int negativeIndex: the attribute index for 'negative'; defaults
+            to 2
+        :return: The unwound angle.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
         """
-        if isinstance(switchSource, r.Attribute):
-            switchIsPlug = True
+        if isinstance(switchAttr, int):
+            if switchAttr is 0:
+                return self.unwindShortest()
 
-        elif isinstance(switchSource, str):
-            switchSource = r.Attribute(switchSource)
-            switchIsPlug = True
+            elif switchAttr is 1:
+                return self.unwindPositive()
 
-        elif isinstance(switchSource, int):
-            switchIsPlug = False
+            elif switchAttr is 2:
+                return self.unwindNegative()
 
-        else:
-            raise TypeError("Switch source not an integer or integer plug.")
+            else:
+                raise RuntimeError(
+                    "Invalid switch mode: {}".format(switchAttr)
+                )
 
-        if switchIsPlug:
-            unwound = self.unwind()
-            wind = r.degToUI(360.0)
+        unwound = self % _pu.radians(360.0)
+        isNeg = unwound.lt(0.0)
 
-            #------------------------|    Positive
+        positiveOutput = isNeg.ifElse(
+            unwound + _pu.radians(360.0),
+            unwound
+        )
 
-            isNeg = unwound.lt(0.0)
+        negativeOutput = isNeg.ifElse(
+            unwound,
+            unwound - _pu.radians(360.0)
+        )
 
-            correctedToPositive = isNeg.ifElse(
-                wind + unwound,
-                unwound
-            )
+        over = unwound.gt(_pu.radians(180.0))
 
-            #------------------------|    Negative
+        shortestOutput = over.ifElse(
+            unwound - _pu.radians(360.0),
+            unwound
+        )
 
-            correctedToNegative = isNeg.ifElse(
-                unwound,
-                unwound-wind
-            )
+        selector = r.Attribute(switchAttr)
 
-            #------------------------|    Shortest
+        pairs = zip(
+            [shortestIndex, positiveIndex, negativeIndex],
+            [shortestOutput, positiveOutput, negativeOutput]
+        )
 
-            over180 = unwound.gt(r.degToUI(180))
-            under180 = unwound.lt(r.degToUI(-180))
+        pairs = sorted(pairs, key=lambda x: x[0])
+        items = [pair[1] for pair in pairs]
 
-            over180Correction = unwound-r.degToUI.radians(360.0)
-            under180Correction = r.degToUI(360.0)+unwound
+        out = selector.choose(items).setClass(type(self))
 
-            shortestCorrection = over180.ifElse(
-                over180Correction,
-                under180.ifElse(
-                    under180Correction,
-                    unwound
-                ))
-
-            #------------------------|    Switch
-
-            pairs = zip(
-                [shortestIndex, positiveIndex, negativeIndex],
-                [shortestCorrection, correctedToPositive, correctedToNegative]
-            )
-
-            pairs = list(sorted(pairs, key=lambda x: x[0]))
-            outputs = [pair[1] for pair in pairs]
-
-            return switchSource.choose(outputs).setClass(type(self))
-
-        else:
-            pairs = zip(
-                [shortestIndex, positiveIndex, negativeIndex],
-                [self.unwindShortest, self.unwindPositive,
-                                    self.unwindNegative]
-            )
-
-            pairs = list(sorted(pairs, key=lambda x: x[0]))
-            method = pairs[switchSource][1]
-
-            return method()
-
-    #--------------------------------------------------------------------|    Trigonometry
-
-    # See plugtypes.Math1D for the inverse functions
-
-    def cos(self):
-        """
-        Returns the trigonometric cosine.
-
-        :rtype: :class:`Math1D`
-        """
-        return self.asRadians().unaryExpr('cos')
-
-    def sin(self):
-        """
-        Returns the trigonometric sine.
-
-        :rtype: :class:`Math1D`
-        """
-        return self.asRadians().unaryExpr('sin')
-
-    def tan(self):
-        """
-        Returns the trigonometric tangent.
-
-        :rtype: :class:`Math1D`
-        """
-        return self.asRadians().unaryExpr('tan')
+        return out
