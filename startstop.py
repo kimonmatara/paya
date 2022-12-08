@@ -1,5 +1,4 @@
 import maya.cmds as m
-import paya.config as config
 from paya.nativeunits import NativeUnits
 from paya.patch import patchPyMEL, unpatchPyMEL
 from paya.pools import pools
@@ -10,6 +9,11 @@ running = False
 def start(quiet=False):
     """
     Patches PyMEL to return Paya classes.
+
+    .. warning::
+
+        Should not be called directly. Use :mod:`paya.runtime` as a context
+        manager instead.
     """
     global running
 
@@ -25,6 +29,11 @@ def start(quiet=False):
 def stop(quiet=False):
     """
     Reverts PyMEl to its 'factory' state.
+
+    .. warning::
+
+        Should not be called directly. Use :mod:`paya.runtime` as a context
+        manager instead.
     """
     global running
 
