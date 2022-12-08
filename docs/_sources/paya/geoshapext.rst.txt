@@ -64,11 +64,11 @@ their shape counterparts.
 
 .. py:class:: ShapeExtensionMeta(clsname, bases, dct)
 
+    .. rubric:: Inheritance
+
+    :class:`~builtins.type`
+
     When this metaclass is assigned to, or used to rebuild, a template class
     for a geometry shape, it will look in the matching plug class for any
     methods decorated with :class:`@copyToShape <copyToShape>` and copy them
     over.
-
-    .. rubric:: Inheritance
-
-    :class:`~builtins.type`

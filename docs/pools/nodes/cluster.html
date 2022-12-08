@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.nodes.ClusterHandle" href="clusterHandle.html" /><link rel="prev" title="paya.runtime.nodes.BlendShape" href="blendShape.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.nodes.ClusterHandle" href="clusterHandle.html" /><link rel="prev" title="paya.runtime.nodes.Choice" href="choice.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
         <title>paya.runtime.nodes.Cluster - paya 1.0 documentation</title>
@@ -182,6 +182,7 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="../nodes_index.html">Node Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="choice.html">Choice</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Cluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="clusterHandle.html">ClusterHandle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="curveWarp.html">CurveWarp</a></li>
@@ -199,16 +200,20 @@
 <li class="toctree-l3"><a class="reference internal" href="motionPath.html">MotionPath</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="objectSet.html">ObjectSet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="proximityWrap.html">ProximityWrap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="remapValue.html">RemapValue</a></li>
 <li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uvPin.html">UvPin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../comps_index.html">Component Types</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../comps/meshVertex.html">MeshVertex</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
 </ul>
@@ -217,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../plugs/compound.html">Compound</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/geometry.html">Geometry</a></li>
@@ -251,12 +255,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../containers_index.html">Container Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/transformGuide.html">TransformGuide</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../paya.html">Modules</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/apiutil.html">paya.apiutil</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/cmds.html">paya.cmds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/config.html">paya.config</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/examples.html">paya.examples</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -268,11 +278,16 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/lib.html">paya.lib</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/bsnboltons.html">paya.lib.bsnboltons</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/controls.html">paya.lib.controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/evalgraph.html">paya.lib.evalgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/grouptree.html">paya.lib.grouptree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/layouttools.html">paya.lib.layouttools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/modettol.html">paya.lib.modettol</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/nurbsutil.html">paya.lib.nurbsutil</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/skintools.html">paya.lib.skintools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/symmetry.html">paya.lib.symmetry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/typeman.html">paya.lib.typeman</a></li>
@@ -280,12 +295,21 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/partcreator.html">paya.partcreator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/patch.html">paya.patch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../paya/plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/pluginfo.html">paya.pluginfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/pools.html">paya.pools</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/rigtypes.html">paya.rigtypes</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../paya/rigtypes/rig.html">paya.rigtypes.rig</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../paya/rigtypes/rig/rig.html">paya.rigtypes.rig.rig</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/startstop.html">paya.startstop</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/trunk.html">paya.trunk</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/util/accessor.html">paya.util.accessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/util/classes.html">paya.util.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/util/functions.html">paya.util.functions</a></li>
@@ -349,7 +373,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – a name for the cluster node; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – a name for the cluster node; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>*geos</strong> (None, str, tuple, list,
 <a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape" title="paya.runtime.nodes.DeformableShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code></a>,
 <a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – one or more geometries to bind</p></li>
@@ -360,17 +384,17 @@
 cluster; if provided, will override the <em>weightedNode</em> / <em>wn</em>
 argument for <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.cluster.html#pymel.core.animation.cluster" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">cluster()</span></code></a>; defaults to
 None</p></li>
-<li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – prevent deformation jumps when
+<li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – prevent deformation jumps when
 assigning a custom handle that has transform values; if provided,
 will override the <em>bindState</em> / <em>bs</em> argument for
 <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.core.animation/pymel.core.animation.cluster.html#pymel.core.animation.cluster" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">cluster()</span></code></a>; defaults to None</p></li>
-<li><p><strong>conformShapeName/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – when using a custom handle, rename
+<li><p><strong>conformShapeName/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – when using a custom handle, rename
 the <a class="reference internal" href="clusterHandle.html#paya.runtime.nodes.ClusterHandle" title="paya.runtime.nodes.ClusterHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterHandle</span></code></a> node accordingly;
 defaults to True</p></li>
-<li><p><strong>resetVisualOrigin/rvo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – when using a custom handle, modify
+<li><p><strong>resetVisualOrigin/rvo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – when using a custom handle, modify
 <code class="docutils literal notranslate"><span class="pre">origin</span></code> on the <a class="reference internal" href="clusterHandle.html#paya.runtime.nodes.ClusterHandle" title="paya.runtime.nodes.ClusterHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterHandle</span></code></a> node
 accordingly; defaults to True</p></li>
-<li><p><strong>intermediateShape/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – sets the ‘intermediate’ state of the
+<li><p><strong>intermediateShape/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – sets the ‘intermediate’ state of the
 <a class="reference internal" href="clusterHandle.html#paya.runtime.nodes.ClusterHandle" title="paya.runtime.nodes.ClusterHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterHandle</span></code></a> node; where a custom
 weighted node is specified, this defaults to True if the
 destination parent has hero shapes, otherwise False; if no custom
@@ -379,7 +403,7 @@ handle is specified, defaults to False</p></li>
 <a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>) – ignored if a custom handle is specified;
 modifes the initial matrix of the default cluster handle; defaults
 to None</p></li>
-<li><p><strong>freeze/fr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if <em>worldMatrix</em> was omitted, or if
+<li><p><strong>freeze/fr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – ignored if <em>worldMatrix</em> was omitted, or if
 a custom handle was specified; after applying custom
 transformations to the default handle, freeze transform and scale
 but preserve rotation; defaults to True</p></li>
@@ -419,19 +443,19 @@ for <code class="docutils literal notranslate"><span class="pre">handle</span></
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>transform</strong> (str, <a class="reference internal" href="transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the node to swap-in</p></li>
-<li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – prevent changes in deformation;
+<li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – prevent changes in deformation;
 defaults to False</p></li>
-<li><p><strong>intermediateShape/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – after reparenting the
+<li><p><strong>intermediateShape/i</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – after reparenting the
 <a class="reference internal" href="clusterHandle.html#paya.runtime.nodes.ClusterHandle" title="paya.runtime.nodes.ClusterHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterHandle</span></code></a> node, set it to
 intermediate; defaults to True if the destination parent has
 hero shapes, otherwise False</p></li>
-<li><p><strong>resetVisualOrigin/rvo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – edit the <code class="docutils literal notranslate"><span class="pre">origin</span></code> attribute
+<li><p><strong>resetVisualOrigin/rvo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – edit the <code class="docutils literal notranslate"><span class="pre">origin</span></code> attribute
 on the <a class="reference internal" href="clusterHandle.html#paya.runtime.nodes.ClusterHandle" title="paya.runtime.nodes.ClusterHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterHandle</span></code></a> so that it
 matches the new handle; defauls to True</p></li>
-<li><p><strong>deletePreviousHandle/dph</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – delete the current weighted node
+<li><p><strong>deletePreviousHandle/dph</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – delete the current weighted node
 after completing the swap</p></li>
-<li><p><strong>copyName/cn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – copy the name of the current weighted node</p></li>
-<li><p><strong>conformShapeName/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – after reparenting the
+<li><p><strong>copyName/cn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – copy the name of the current weighted node</p></li>
+<li><p><strong>conformShapeName/csn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – after reparenting the
 <a class="reference internal" href="clusterHandle.html#paya.runtime.nodes.ClusterHandle" title="paya.runtime.nodes.ClusterHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterHandle</span></code></a> node, rename it to
 match the destination transform; defaults to True</p></li>
 </ul>
@@ -451,7 +475,7 @@ match the destination transform; defaults to True</p></li>
 <dd><p>Renames the cluster node, cluster handle shape and weighted node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>*name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – if omitted, defaults to contextual naming</p>
+<dd class="field-odd"><p><strong>*name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – if omitted, defaults to contextual naming</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
@@ -509,14 +533,14 @@ if any.</p>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="blendShape.html">
+          <a class="prev-page" href="choice.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">paya.runtime.nodes.BlendShape</div>
+                <div class="title">paya.runtime.nodes.Choice</div>
                 
               </div>
             </a>

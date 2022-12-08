@@ -6,11 +6,11 @@ paya.runtime.data.Matrix
 
 .. py:class:: Matrix(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
     :class:`~pymel.core.datatypes.Matrix` :class:`~pymel.util.arrays.MatrixN` :class:`~pymel.util.arrays.Array` :class:`~maya.OpenMaya.MMatrix`
+
+
 
     .. py:method:: createLocator(size=1.0, name=None)
     
@@ -35,54 +35,78 @@ paya.runtime.data.Matrix
             or :class:`~paya.runtime.data.EulerRotation`}
         :rtype: dict
     
-    .. py:method:: decomposeAndApply(transform, translate=None, rotate=None, scale=None, shear=None, compensatePivots=False, compensateJointOrient=True, compensateRotateAxis=False, compensateJointScale=True, worldSpace=False, maintainOffset=False)
+    .. py:method:: decomposeAndApply(*slaves, translate=None, rotate=None, scale=None, shear=None, compensatePivots=False, compensateJointOrient=True, compensateRotateAxis=False, compensateJointScale=True, worldSpace=False, maintainOffset=False)
     
-        Decomposes and applies this matrix to a transform.
+        Decomposes and applies this matrix to one or more transform slaves.
         
-        :param transform: the transform node to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :param \*slaves: one or more transforms to pose
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
         :param bool translate/t: apply translation
         :param bool rotate/r: apply rotation
         :param bool scale/s: apply scale
         :param bool shear/sh: apply shear
         :param bool compensateJointScale/cjs: account for
-            segmentScaleCompensate on joints; defaults to True
+            segmentScaleCompensate on joints; defaults to ``True``
         :param bool compensateJointOrient/cjo: account for jointOrient on
-            joints; defaults to True
+            joints; defaults to ``True``
         :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
-            defaults to False
+            defaults to ``False``
         :param bool compensatePivots/cp: compensate for pivots (non-joint
-            transforms only); defaults to False
+            transforms only); defaults to ``False``
         :param bool worldSpace/ws: premultiply this matrix with the inverse
             of the transform's parent matrix to negate the parent stack;
-            defaults to False
+            defaults to ``False``
         :param bool maintainOffset/mo: this is here for parity with
-            :meth:`paya.runtime.plugs.Matrix.decomposeAndApply`; when True,
-            the transform won't be modified at all; defaults to False
+            :meth:`paya.runtime.plugs.Matrix.decomposeAndApply`; when
+            ``True``, the transform won't be modified at all; defaults to
+            ``False``
         :return: ``self``
         :rtype: :class:`Matrix`
     
-    .. py:method:: applyViaOpm(transform, worldSpace=False, persistentCompensation=False, preserveInheritsTransform=False, maintainOffset=False)
+    .. py:method:: applyViaOpm(*slaves, worldSpace=False, persistentCompensation=False, preserveInheritsTransform=False, maintainOffset=False)
     
-        Poses a transform by modifying its ``offsetParentMatrix`` attribute,
-        with SRT channels compensated.
+        Poses one or more transforms by modifying their ``offsetParentMatrix``
+        attribute, with SRT channels compensated.
         
-        :param transform: the transform to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :param \*slaves: one or more transforms to pose
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
         :param bool worldSpace/ws: drive the transform in world-space;
-            defaults to False
+            defaults to ``False``
         :param bool persistentCompensation/pc: unused; here for parity with
             :meth:`paya.runtime.plugs.Matrix.applyViaOpm`
         :param preserveInheritsTransform/pit: when *worldSpace* is
             requested, don't edit the ``inheritsTransform`` attribute on
-            the transform; instead, localise against the current parent;
-            defaults to False
+            the slave; instead, localise against the current parent;
+            defaults to ``False``
         :param bool maintainOffset/mo: this is here for parity with
-            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`; it won't have
-            any effect unless *worldSpace* is requested and
-            *preserveInheritsTransform* is False, in which case the object
-            pose will be preserved and its ``inheritsTransform`` attribute
-            will be set to False; defaults to False
+            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`; if set to ``True``,
+            no action will be taken, and ``self`` will be returned; defaults
+            to ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+    
+    .. py:method:: drive(*slaves, worldSpace=False, maintainOffset=False, useOffsetParentMatrix=<undefined>, preserveInheritsTransform=False)
+    
+        Poses one or more slaves using this matrix. (For the dynamic, true
+        attachment, see :class:`paya.runtime.plugs.Matrix.attach`.)
+        
+        :param \*slaves: one or more transforms to pose
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
+        :param preserveInheritsTransform/pit: when *worldSpace* is requested,
+            don't edit the ``inheritsTransform`` attribute on the slave;
+            instead, localise against its current parent; defaults to
+            ``False``
+        :param bool maintainOffset/mo: this is here for parity with
+            :meth:`paya.runtime.plugs.Matrix.attach`; if set to ``True``, no
+            action will be taken, and ``self`` will be returned; defaults to
+            ``False``
+        :param bool useOffsetParentMatrix/uop: connect into
+            ``offsetParentMatrix`` instead of decomposing into SRT channels;
+            defaults to namesake configuration flag; it that's omitted too,
+            defaults to ``True`` if Maya >= 2022, otherwise ``False``
         :return: ``self``
         :rtype: :class:`Matrix`
     
@@ -118,6 +142,11 @@ paya.runtime.data.Matrix
     
         Uses the exclusive-or operator (``^``) to implement
         **point-matrix multiplication** for 3D values and plugs.
+    
+    .. py:method:: normal()
+    
+        :return: A version of this matrix with all axis vectors normalized.
+        :rtype: :class:`Matrix`
     
     .. py:method:: pick(translate=None, rotate=None, scale=None, shear=None, default=None)
     

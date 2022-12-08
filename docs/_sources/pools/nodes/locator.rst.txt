@@ -6,11 +6,11 @@ paya.runtime.nodes.Locator
 
 .. py:class:: Locator(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
     :class:`~pymel.core.nodetypes.Locator` :class:`~paya.runtime.nodes.GeometryShape` :class:`~pymel.core.nodetypes.GeometryShape` :class:`~paya.runtime.nodes.Shape` :class:`~pymel.core.nodetypes.Shape` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
 
     .. py:classmethod:: create(worldMatrix=None, displayLocalAxis=False, conformShapeName=None, name=None, parent=None, size=1.0)
     
@@ -42,8 +42,10 @@ paya.runtime.nodes.Locator
         :return: The reconstructed locator shape.
         :rtype: :class:`Locator`
     
-    .. py:method:: macro()
+    .. py:method:: macro(includeShapeDetails=False)
     
+        :param bool includeShapeDetails: include information on overrides;
+            defaults to ``False``
         :return: A simplified representation of this locator shape,
             used by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict

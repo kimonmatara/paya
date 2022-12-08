@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="paya.runtime" href="runtime.html" /><link rel="prev" title="paya.plugtree" href="plugtree.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="paya.rigtypes" href="rigtypes.html" /><link rel="prev" title="paya.pluginfo" href="pluginfo.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
         <title>paya.pools - paya 1.0 documentation</title>
@@ -182,6 +182,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../pools/nodes_index.html">Node Types</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/blendShape.html">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/nodes/choice.html">Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/cluster.html">Cluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/clusterHandle.html">ClusterHandle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/curveWarp.html">CurveWarp</a></li>
@@ -199,16 +200,20 @@
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/motionPath.html">MotionPath</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/nodes/objectSet.html">ObjectSet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/nodes/proximityWrap.html">ProximityWrap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/remapValue.html">RemapValue</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/nodes/uvPin.html">UvPin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/nodes/vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../pools/comps_index.html">Component Types</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pools/comps/meshVertex.html">MeshVertex</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
 </ul>
@@ -217,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../pools/plugs/compound.html">Compound</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/geometry.html">Geometry</a></li>
@@ -251,12 +255,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../pools/networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../pools/containers_index.html">Container Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pools/parts/part.html">Part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/parts/partBase.html">PartBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/parts/partGuide.html">PartGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/parts/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/parts/transformGuide.html">TransformGuide</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../paya.html">Modules</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="apiutil.html">paya.apiutil</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmds.html">paya.cmds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config.html">paya.config</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="examples.html">paya.examples</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -268,11 +278,16 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="lib.html">paya.lib</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="lib/attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/bsnboltons.html">paya.lib.bsnboltons</a></li>
-<li class="toctree-l3"><a class="reference internal" href="lib/controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib/controls.html">paya.lib.controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib/evalgraph.html">paya.lib.evalgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib/grouptree.html">paya.lib.grouptree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib/layouttools.html">paya.lib.layouttools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib/modettol.html">paya.lib.modettol</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/nurbsutil.html">paya.lib.nurbsutil</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lib/skintools.html">paya.lib.skintools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/symmetry.html">paya.lib.symmetry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lib/typeman.html">paya.lib.typeman</a></li>
@@ -280,12 +295,21 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partcreator.html">paya.partcreator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="patch.html">paya.patch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluginfo.html">paya.pluginfo</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">paya.pools</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="rigtypes.html">paya.rigtypes</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="rigtypes/rig.html">paya.rigtypes.rig</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="rigtypes/rig/rig.html">paya.rigtypes.rig.rig</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="startstop.html">paya.startstop</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="trunk.html">paya.trunk</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="util/accessor.html">paya.util.accessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util/classes.html">paya.util.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="util/functions.html">paya.util.functions</a></li>
@@ -369,7 +393,7 @@ using dotted or keyed syntax.</p>
 <dd class="field-odd"><p>The full directory path for the template package.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -382,7 +406,7 @@ using dotted or keyed syntax.</p>
 <dd class="field-odd"><p>The long name of this pool, for example ‘nodetypes’.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -395,7 +419,7 @@ using dotted or keyed syntax.</p>
 <dd class="field-odd"><p>The short name of this pool, for example ‘nodes’.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -407,51 +431,93 @@ using dotted or keyed syntax.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.pools.ClassPool.getMeta">
-<span class="sig-name descname"><span class="pre">getMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.getMeta" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dt class="sig sig-object py" id="paya.pools.ClassPool.readClass">
+<span class="sig-name descname"><span class="pre">readClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.readClass" title="Permalink to this definition">#</a></dt>
+<dd><p>Locates, sources and returns a class by name. No rebuilding or
+cache management is performed.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class to retrieve</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An appropriate metaclass for the requested class.</p>
+<dd class="field-even"><p>The retrieved class.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.pools.ClassPool.inventBasesDict">
-<span class="sig-name descname"><span class="pre">inventBasesDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.inventBasesDict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.pools.ClassPool.getByName">
+<span class="sig-name descname"><span class="pre">getByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.getByName" title="Permalink to this definition">#</a></dt>
+<dd><p>Retrieves a class by name. Lookups are cached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the class to retrieved.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The retrieved class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.pools.RebuiltClassPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RebuiltClassPool</span></span><a class="headerlink" href="#paya.pools.RebuiltClassPool" title="Permalink to this definition">#</a></dt>
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.pools.RebuiltClassPool.getMeta">
+<span class="sig-name descname"><span class="pre">getMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.RebuiltClassPool.getMeta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An appropriate metaclass for the requested class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.pools.RebuiltClassPool.inventBasesDict">
+<span class="sig-name descname"><span class="pre">inventBasesDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.RebuiltClassPool.inventBasesDict" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>clsname</strong> – the name of the class being retrieved</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.10)"><strong>NotImplementedError</strong></a> – Invention is not implemented for this pool.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.11)"><strong>NotImplementedError</strong></a> – Invention is not implemented for this pool.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Bases and a dict that can be used to construct a stand-in
 class in the absence of a template.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>)</p>
+<dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.pools.ClassPool.conformBases">
-<span class="sig-name descname"><span class="pre">conformBases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.conformBases" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.pools.RebuiltClassPool.conformBases">
+<span class="sig-name descname"><span class="pre">conformBases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.RebuiltClassPool.conformBases" title="Permalink to this definition">#</a></dt>
 <dd><p>Given a tuple of bases, returns a modified, where necessary,
 version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
 template class</p></li>
 </ul>
 </dd>
@@ -459,21 +525,21 @@ template class</p></li>
 <dd class="field-even"><p>The bases.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a>,)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a>,)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.pools.ClassPool.conformDict">
-<span class="sig-name descname"><span class="pre">conformDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dct</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.conformDict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.pools.RebuiltClassPool.conformDict">
+<span class="sig-name descname"><span class="pre">conformDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dct</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.RebuiltClassPool.conformDict" title="Permalink to this definition">#</a></dt>
 <dd><p>Given a class dictionary, returns a modified, where necessary,
 version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
 a template class</p></li>
 </ul>
 </dd>
@@ -481,38 +547,20 @@ a template class</p></li>
 <dd class="field-even"><p>The dictionary.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.pools.ClassPool.getBasesDictFromTemplate">
-<span class="sig-name descname"><span class="pre">getBasesDictFromTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.getBasesDictFromTemplate" title="Permalink to this definition">#</a></dt>
-<dd><p>Looks for a template for the requested class and, if one is found,
-returns its conformed bases and dictionary.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> – the name of the class being retrieved</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The bases and dictionary.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.pools.ClassPool.buildClass">
-<span class="sig-name descname"><span class="pre">buildClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.buildClass" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.pools.RebuiltClassPool.buildClass">
+<span class="sig-name descname"><span class="pre">buildClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.RebuiltClassPool.buildClass" title="Permalink to this definition">#</a></dt>
 <dd><p>Builds a final class. If a template is available, it is used.
 Otherwise, if this pool implements invention, the class is invented.
 If this pool doesn’t implement invention, an exception is raised.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class to build</p>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class to build</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>MissingTemplateError</strong> – A template couldn’t be found, and this
@@ -522,33 +570,24 @@ pool doesn’t implement invention.</p>
 <dd class="field-odd"><p>The built class.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.pools.ClassPool.getByName">
-<span class="sig-name descname"><span class="pre">getByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ClassPool.getByName" title="Permalink to this definition">#</a></dt>
-<dd><p>Retrieves a Paya class by name.</p>
-<p>Previously-constructed classes are returned from a cache. If the class
-is not in the cache then, if there’s a template for it, information
-from the template will be used to build the class. If there’s no
-template then, if this pool implements invention, the class will be
-invented. Otherwise, an exception will be raised.</p>
+<dt class="sig sig-object py" id="paya.pools.RebuiltClassPool.getByName">
+<span class="sig-name descname"><span class="pre">getByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.RebuiltClassPool.getByName" title="Permalink to this definition">#</a></dt>
+<dd><p>Retrieves a class by name. Lookups are cached.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class to retrieve</p>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the class to retrieved.</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>MissingTemplateError</strong> – A template couldn’t be found, and this
-pool doesn’t implement invention.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The retrieved class.</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The retrieved class.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -558,9 +597,9 @@ pool doesn’t implement invention.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.pools.ShadowPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ShadowPool</span></span><a class="headerlink" href="#paya.pools.ShadowPool" title="Permalink to this definition">#</a></dt>
-<dd><p>Abstract base class for pools that directly shadow PyMEL namesakes.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.RebuiltClassPool" title="paya.pools.RebuiltClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuiltClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<p>Abstract base class for pools that directly shadow PyMEL namesakes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.pools.ShadowPool.getFromPyMELInstance">
 <span class="sig-name descname"><span class="pre">getFromPyMELInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ShadowPool.getFromPyMELInstance" title="Permalink to this definition">#</a></dt>
@@ -576,14 +615,14 @@ reassignment.</p>
 <dd class="field-odd"><p><strong>clsname</strong> – the name of the class being retrieved</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.10)"><strong>NotImplementedError</strong></a> – Invention is not implemented for this pool.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.11)"><strong>NotImplementedError</strong></a> – Invention is not implemented for this pool.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Bases and a dict that can be used to construct a stand-in
 class in the absence of a template.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>)</p>
+<dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -596,8 +635,8 @@ version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
 a template class</p></li>
 </ul>
 </dd>
@@ -605,7 +644,7 @@ a template class</p></li>
 <dd class="field-even"><p>The dictionary.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -618,8 +657,8 @@ version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
 template class</p></li>
 </ul>
 </dd>
@@ -627,7 +666,7 @@ template class</p></li>
 <dd class="field-even"><p>The bases.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a>,)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a>,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -637,13 +676,13 @@ template class</p></li>
 <span class="sig-name descname"><span class="pre">getMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ShadowPool.getMeta" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>An appropriate metaclass for the requested class.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -653,13 +692,13 @@ template class</p></li>
 <span class="sig-name descname"><span class="pre">getPmBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ShadowPool.getPmBase" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the class being retrieved</p>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the class being retrieved</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A PyMEL base for the requested class.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -669,10 +708,10 @@ template class</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.pools.NodeClassPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NodeClassPool</span></span><a class="headerlink" href="#paya.pools.NodeClassPool" title="Permalink to this definition">#</a></dt>
-<dd><p>Administers custom Paya classes for nodes. A browser for this pool can
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.RebuiltClassPool" title="paya.pools.RebuiltClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuiltClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<p>Administers custom Paya classes for nodes. A browser for this pool can
 be accessed on <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> as <code class="docutils literal notranslate"><span class="pre">.nodes</span></code>.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.pools.NodeClassPool.conformDict">
 <span class="sig-name descname"><span class="pre">conformDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dct</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.NodeClassPool.conformDict" title="Permalink to this definition">#</a></dt>
@@ -681,8 +720,8 @@ version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
 a template class</p></li>
 </ul>
 </dd>
@@ -690,7 +729,7 @@ a template class</p></li>
 <dd class="field-even"><p>The dictionary.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -700,20 +739,20 @@ a template class</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.pools.CompClassPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CompClassPool</span></span><a class="headerlink" href="#paya.pools.CompClassPool" title="Permalink to this definition">#</a></dt>
-<dd><p>Administers custom Paya classes for components. A browser for this pool can
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.RebuiltClassPool" title="paya.pools.RebuiltClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuiltClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<p>Administers custom Paya classes for components. A browser for this pool can
 be accessed on <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> as <code class="docutils literal notranslate"><span class="pre">.comps</span></code>.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.pools.PlugClassPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PlugClassPool</span></span><a class="headerlink" href="#paya.pools.PlugClassPool" title="Permalink to this definition">#</a></dt>
-<dd><p>Administers custom Paya classes for plugs (attributes). Relies on
-<a class="reference internal" href="plugtree.html#module-paya.plugtree" title="paya.plugtree"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plugtree</span></code></a>. A browser for this pool can
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.RebuiltClassPool" title="paya.pools.RebuiltClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuiltClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<p>Administers custom Paya classes for plugs (attributes). Relies on
+<a class="reference internal" href="pluginfo.html#module-paya.pluginfo" title="paya.pluginfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginfo</span></code></a>. A browser for this pool can
 be accessed on <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> as <code class="docutils literal notranslate"><span class="pre">.plugs</span></code>.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.pools.PlugClassPool.getFromPyMELInstance">
 <span class="sig-name descname"><span class="pre">getFromPyMELInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.PlugClassPool.getFromPyMELInstance" title="Permalink to this definition">#</a></dt>
@@ -726,13 +765,13 @@ reassignment.</p>
 <span class="sig-name descname"><span class="pre">getPmBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.PlugClassPool.getPmBase" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the class being retrieved</p>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the class being retrieved</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A PyMEL base for the requested class.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -745,8 +784,8 @@ version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
 template class</p></li>
 </ul>
 </dd>
@@ -754,7 +793,7 @@ template class</p></li>
 <dd class="field-even"><p>The bases.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a>,)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a>,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -774,10 +813,10 @@ template class</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.pools.DataClassPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataClassPool</span></span><a class="headerlink" href="#paya.pools.DataClassPool" title="Permalink to this definition">#</a></dt>
-<dd><p>Administers custom Paya classes for data types (e.g. vectors). An instance
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.RebuiltClassPool" title="paya.pools.RebuiltClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuiltClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<p>Administers custom Paya classes for data types (e.g. vectors). An instance
 of this pool can be accessed on <a class="reference internal" href="runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> as <code class="docutils literal notranslate"><span class="pre">.data</span></code>.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
@@ -791,13 +830,41 @@ of this pool can be accessed on <a class="reference internal" href="runtime.html
 <dt class="sig sig-object py" id="paya.pools.ParsedNodeSubtypePool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParsedNodeSubtypePool</span></span><a class="headerlink" href="#paya.pools.ParsedNodeSubtypePool" title="Permalink to this definition">#</a></dt>
 <dd><p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.NodeClassPool" title="paya.pools.NodeClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<p><a class="reference internal" href="#paya.pools.NodeClassPool" title="paya.pools.NodeClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.RebuiltClassPool" title="paya.pools.RebuiltClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuiltClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.pools.ParsedNodeSubtypePool.inventBasesDict">
 <span class="sig-name descname"><span class="pre">inventBasesDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ParsedNodeSubtypePool.inventBasesDict" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.10)"><strong>NotImplementedError</strong></a> – Not supported on parsed-subtype pools.</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.11)"><strong>NotImplementedError</strong></a> – Not supported on parsed-subtype pools.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.pools.ParsedNodeSubtypePool.getCrossPoolRoot">
+<span class="sig-name descname"><span class="pre">getCrossPoolRoot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ParsedNodeSubtypePool.getCrossPoolRoot" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A class from a ‘base’ class pool, to be used as the basis
+for all classes returned by this one.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.pools.ParsedNodeSubtypePool.attrName">
+<span class="sig-name descname"><span class="pre">attrName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pools.ParsedNodeSubtypePool.attrName" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the string node attribute that will be inspected
+for the type name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -810,7 +877,7 @@ Otherwise, if this pool implements invention, the class is invented.
 If this pool doesn’t implement invention, an exception is raised.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class to build</p>
+<dd class="field-odd"><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class to build</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>MissingTemplateError</strong> – A template couldn’t be found, and this
@@ -820,7 +887,7 @@ pool doesn’t implement invention.</p>
 <dd class="field-odd"><p>The built class.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -833,8 +900,8 @@ version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>dct</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – either an empty dictionary, or the dictionary of
 a template class</p></li>
 </ul>
 </dd>
@@ -842,7 +909,7 @@ a template class</p></li>
 <dd class="field-even"><p>The dictionary.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -855,8 +922,8 @@ version that can be used to construct a final class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the class being retrieved</p></li>
-<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
+<li><p><strong>clsname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the class being retrieved</p></li>
+<li><p><strong>bases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – either an empty tuple, or bases retrieved from a
 template class</p></li>
 </ul>
 </dd>
@@ -864,7 +931,7 @@ template class</p></li>
 <dd class="field-even"><p>The bases.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)">type</a>,)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.11)">type</a>,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -874,17 +941,16 @@ template class</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.pools.ParsedNetworkSubtypePool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParsedNetworkSubtypePool</span></span><a class="headerlink" href="#paya.pools.ParsedNetworkSubtypePool" title="Permalink to this definition">#</a></dt>
-<dd><p>Administers subtypes for ‘network’ nodes.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.ParsedNodeSubtypePool" title="paya.pools.ParsedNodeSubtypePool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParsedNodeSubtypePool</span></code></a> <a class="reference internal" href="#paya.pools.NodeClassPool" title="paya.pools.NodeClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.ParsedNodeSubtypePool" title="paya.pools.ParsedNodeSubtypePool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParsedNodeSubtypePool</span></code></a> <a class="reference internal" href="#paya.pools.NodeClassPool" title="paya.pools.NodeClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.RebuiltClassPool" title="paya.pools.RebuiltClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RebuiltClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<p>Administers subtypes for ‘network’ nodes.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.pools.ParsedContainerSubtypePool">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParsedContainerSubtypePool</span></span><a class="headerlink" href="#paya.pools.ParsedContainerSubtypePool" title="Permalink to this definition">#</a></dt>
-<dd><p>Administers subtypes for ‘container’ nodes.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="#paya.pools.ParsedNodeSubtypePool" title="paya.pools.ParsedNodeSubtypePool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParsedNodeSubtypePool</span></code></a> <a class="reference internal" href="#paya.pools.NodeClassPool" title="paya.pools.NodeClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeClassPool</span></code></a> <a class="reference internal" href="#paya.pools.ShadowPool" title="paya.pools.ShadowPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShadowPool</span></code></a> <a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
+<dt class="sig sig-object py" id="paya.pools.PartClassPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PartClassPool</span></span><a class="headerlink" href="#paya.pools.PartClassPool" title="Permalink to this definition">#</a></dt>
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference internal" href="#paya.pools.ClassPool" title="paya.pools.ClassPool"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassPool</span></code></a></p>
 </dd></dl>
 
 </section>
@@ -894,23 +960,23 @@ template class</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="runtime.html">
+          <a class="next-page" href="rigtypes.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">paya.runtime</div>
+                <div class="title">paya.rigtypes</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="plugtree.html">
+          <a class="prev-page" href="pluginfo.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">paya.plugtree</div>
+                <div class="title">paya.pluginfo</div>
                 
               </div>
             </a>

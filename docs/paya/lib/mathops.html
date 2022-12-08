@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.lib.names" href="names.html" /><link rel="prev" title="paya.lib.controlshapes" href="controlshapes.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.lib.modettol" href="modettol.html" /><link rel="prev" title="paya.lib.layouttools" href="layouttools.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
         <title>paya.lib.mathops - paya 1.0 documentation</title>
@@ -182,6 +182,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/nodes_index.html">Node Types</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/blendShape.html">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/choice.html">Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/cluster.html">Cluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/clusterHandle.html">ClusterHandle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/curveWarp.html">CurveWarp</a></li>
@@ -199,16 +200,20 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/motionPath.html">MotionPath</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/objectSet.html">ObjectSet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/proximityWrap.html">ProximityWrap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/remapValue.html">RemapValue</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/uvPin.html">UvPin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/comps_index.html">Component Types</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/comps/meshVertex.html">MeshVertex</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
 </ul>
@@ -217,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/compound.html">Compound</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/geometry.html">Geometry</a></li>
@@ -251,12 +255,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/containers_index.html">Container Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/part.html">Part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partBase.html">PartBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partGuide.html">PartGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/transformGuide.html">TransformGuide</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../../paya.html">Modules</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../apiutil.html">paya.apiutil</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../examples.html">paya.examples</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -268,11 +278,16 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="../lib.html">paya.lib</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
-<li class="toctree-l3"><a class="reference internal" href="controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="controls.html">paya.lib.controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evalgraph.html">paya.lib.evalgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grouptree.html">paya.lib.grouptree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouttools.html">paya.lib.layouttools</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modettol.html">paya.lib.modettol</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skintools.html">paya.lib.skintools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="typeman.html">paya.lib.typeman</a></li>
@@ -280,12 +295,21 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partcreator.html">paya.partcreator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pluginfo.html">paya.pluginfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../rigtypes.html">paya.rigtypes</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../rigtypes/rig.html">paya.rigtypes.rig</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rigtypes/rig/rig.html">paya.rigtypes.rig.rig</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startstop.html">paya.startstop</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../trunk.html">paya.trunk</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../util/accessor.html">paya.util.accessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../util/classes.html">paya.util.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../util/functions.html">paya.util.functions</a></li>
@@ -339,17 +363,136 @@
 <span id="paya-lib-mathops"></span><h1>paya.lib.mathops<a class="headerlink" href="#module-paya.lib.mathops" title="Permalink to this headline">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.mathops.degToUI">
-<span class="sig-name descname"><span class="pre">degToUI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degrees</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.degToUI" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">degToUI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.degToUI" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>degrees</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – an angle in degrees</p>
+<dd class="field-odd"><p><strong>val</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – An angle value in degrees.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The original value if the Maya is set to degrees, otherwise
-the value converted to radians.</p>
+<dd class="field-even"><p>If the UI is set to radians, <em>val</em> converted to radians;
+otherwise, the original <em>val</em>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.getUIAngleUnit">
+<span class="sig-name descname"><span class="pre">getUIAngleUnit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getUIAngleUnit" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The current angle unit. Note that this will be returned in a
+format that can be passed along to the data type constructors (e.g.
+‘degrees’) rather than how it’s returned by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">currentUnit()</span></code> (e.g. ‘deg’).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.getUIDistanceUnit">
+<span class="sig-name descname"><span class="pre">getUIDistanceUnit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getUIDistanceUnit" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The current distance unit. Note that this will be returned in a
+format that can be passed along to the data type constructors (e.g.
+‘centimeters’) rather than how it’s returned by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">currentUnit()</span></code> (e.g. ‘cm’).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.getUITimeUnit">
+<span class="sig-name descname"><span class="pre">getUITimeUnit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.getUITimeUnit" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The current time unit. Note that this will be returned in a
+format that can be passed along to the data type constructors (e.g.
+‘24FPS’) rather than how it’s returned by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">currentUnit()</span></code> (e.g. ‘film’).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.onRadians">
+<span class="sig-name descname"><span class="pre">onRadians</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.onRadians" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the UI is set to radians, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultUnitType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.info" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a dict with the following keys (ordered):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'item'</span></code>: The <em>item</em>, conformed to the most specific Paya type
+possible.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'dimension'</span></code>: One of <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">3</span></code>, <code class="docutils literal notranslate"><span class="pre">4</span></code> or <code class="docutils literal notranslate"><span class="pre">16</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'unitType'</span></code>: One of <code class="docutils literal notranslate"><span class="pre">'angle'</span></code>, <code class="docutils literal notranslate"><span class="pre">'distance'</span></code>, <code class="docutils literal notranslate"><span class="pre">'time'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'isPlug'</span></code>: <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+<p>Value conforming is performed in the following way:</p>
+<ul class="simple">
+<li><p>If <em>item</em> is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, it’s returned as-is.</p></li>
+<li><p>If <em>item</em> is a <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, it’s returned as-is
+unless a <em>defaultUnitType</em> is specified, in which case a
+<a class="reference internal" href="../../pools/data/angle.html#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Distance</span></code> or
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code> instance is returned. UI units
+are used in every case.</p></li>
+<li><p>If <em>item</em> is a list of floats or ints, then:</p>
+<ul>
+<li><p>If its dimension is 3 then, if <em>defaultUnitType</em> is set to
+<code class="docutils literal notranslate"><span class="pre">'angle'</span></code>, it’s instantiated as
+<a class="reference internal" href="../../pools/data/eulerRotation.html#paya.runtime.data.EulerRotation" title="paya.runtime.data.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>; otherwise, as
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>.</p></li>
+<li><p>If its dimension is 4, then it’s always returned as a
+<a class="reference internal" href="../../pools/data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a>.</p></li>
+<li><p>If its dimension is 16, then it’s always returned as a
+<a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>.</p></li>
+<li><p>In all other cases, it’s returned as a list with members intact.</p></li>
+</ul>
+</li>
+</ul>
+<p>Plugs are returned as <a class="reference internal" href="../../pools/plugs/attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> instances,
+with the subtype / unit strictly based on <code class="xref py py-class docutils literal notranslate"><span class="pre">MPlug</span></code>
+analysis performed by <a class="reference internal" href="../pluginfo.html#module-paya.pluginfo" title="paya.pluginfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.pluginfo</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – The item to inspect and conform.</p></li>
+<li><p><strong>defaultUnitType/dut</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>) – one of <code class="docutils literal notranslate"><span class="pre">'angle'</span></code>, <code class="docutils literal notranslate"><span class="pre">'distance'</span></code>, <code class="docutils literal notranslate"><span class="pre">'time'</span></code>
+or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>quiet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – don’t throw an error if <em>item</em> can’t be conformed to
+a math type, just pass-through the incomplete dictionary with the
+<code class="docutils literal notranslate"><span class="pre">'item'</span></code> field populated with the original item</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The dictionary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -357,13 +500,13 @@ the value converted to radians.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.mathops.floatRange">
 <span class="sig-name descname"><span class="pre">floatRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numValues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.floatRange" title="Permalink to this definition">#</a></dt>
-<dd><p>A variant of Python’s <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> for floats and float plugs.</p>
+<dd><p>A variant of Python’s <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">range</span></code></a> for floats and float plugs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>start</strong> (float, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the minimum value</p></li>
 <li><p><strong>end</strong> (float, <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the maximum value</p></li>
-<li><p><strong>numValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the number of values to generate</p></li>
+<li><p><strong>numValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the number of values to generate</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -371,7 +514,7 @@ the value converted to radians.</p>
 inclusively.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>]</p>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -379,7 +522,9 @@ inclusively.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.lib.mathops.LinearInterpolator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LinearInterpolator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.LinearInterpolator" title="Permalink to this definition">#</a></dt>
-<dd><p>Simple, dict-like interpolator implementation, similar to a linear
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserDict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Collection" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sized" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sized</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Container" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></a></p>
+<p>Simple, dict-like interpolator implementation, similar to a linear
 animation curve in Maya. Works with any value type that can be handled by
 <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/functions/pymel.util.arrays/pymel.util.arrays.blend.html#pymel.util.arrays.blend" title="(in PyMEL v1.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.util.arrays.blend()</span></code></a>, but types should not be mixed.</p>
 <dl class="field-list">
@@ -393,8 +538,6 @@ animation curve in Maya. Works with any value type that can be handled by
 </div>
 </dd>
 </dl>
-<p class="rubric">Inheritance</p>
-<p><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserDict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Collection" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sized" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sized</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Container" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></a></p>
 </dd></dl>
 
 <dl class="py function">
@@ -411,7 +554,7 @@ If any internal member is <code class="docutils literal notranslate"><span class
 <dd class="field-even"><p>A list with no <code class="docutils literal notranslate"><span class="pre">None</span></code> members.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -433,7 +576,7 @@ autogenerated using <a class="reference internal" href="#paya.lib.mathops.floatR
 <dd class="field-even"><p>A list with no <code class="docutils literal notranslate"><span class="pre">None</span></code> members.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -505,20 +648,20 @@ populate the matrix rows. This may result in a non-orthornormal
 </div>
 <p>If this argument is omitted, an identity matrix will be returned.</p>
 </p></li>
-<li><p><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>,
+<li><p><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>,
 <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
 <a class="reference internal" href="../../pools/plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – A <strong>translate</strong> component for the matrix; this can be
 a point value or plug; defaults to None</p></li>
-<li><p><strong>manageScale/ms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – set this to <code class="docutils literal notranslate"><span class="pre">False</span></code> to allow scale to be
+<li><p><strong>manageScale/ms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set this to <code class="docutils literal notranslate"><span class="pre">False</span></code> to allow scale to be
 defined by incidental operations; useful when you intend to discard
 scale later anyway; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
-<li><p><strong>preserveSecondLength/psl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – ignored if six arguments were passed;
+<li><p><strong>preserveSecondLength/psl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – ignored if six arguments were passed;
 preserve the second vector’s length when performing orthogonal
 construction; defaults to True</p></li>
-<li><p><strong>thirdLength/tl</strong> (None, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>,
-<a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – ignored is six arguments were passed; if provided,
+<li><p><strong>thirdLength/tl</strong> (None, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – ignored is six arguments were passed; if provided,
 defines the third (derived) vector’s length; defaults to None</p></li>
-<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if you already know whether the passed arguments contain
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if you already know whether the passed arguments contain
 plugs, specify it here to avoid extraneous checks; if no arguments
 have been passed, this will specify whether the returned identity
 matrix is a plug or value; defaults to None</p></li>
@@ -589,7 +732,7 @@ to the preceding one. This is a value-only method.</p>
 <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the points</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – Fewer than two points were provided.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – Fewer than two points were provided.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Aiming vectors derived from the input points. The output list
@@ -628,7 +771,7 @@ are either blended from neighbours or swapped out for the user up vectors.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> ([tuple, list, <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]) – the starting points</p></li>
 <li><p><strong>upVector</strong> (tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – one up hint vector, or one vector per point</p></li>
-<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – any cross products below this length will be
+<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – any cross products below this length will be
 interpolated from neighbours; defaults to 1e-7</p></li>
 </ul>
 </dd>
@@ -655,15 +798,15 @@ for example ‘-y’.</p></li>
 for example ‘x’</p></li>
 <li><p><strong>upVector</strong> – either one up vector hint, or a list of up vectors
 (one per point)</p></li>
-<li><p><strong>squashStretch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – allow squash-and-stretch on the aiming vectors;
+<li><p><strong>squashStretch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – allow squash-and-stretch on the aiming vectors;
 defaults to False</p></li>
 <li><p><strong>globalScale/gs</strong> – an optional plug for the scale component; defaults
 to None</p></li>
-<li><p><strong>framed/fra</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if there are no plugs in the passed
+<li><p><strong>framed/fra</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if there are no plugs in the passed
 parameters, perform cross product framing via
 <a class="reference internal" href="#paya.lib.mathops.getFramedAimAndUpVectors" title="paya.lib.mathops.getFramedAimAndUpVectors"><code class="xref py py-func docutils literal notranslate"><span class="pre">getFramedAimAndUpVectors()</span></code></a> (recommended when drawing chains
 with triads, for example legs); defaults to False</p></li>
-<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – if <em>framed</em> is on, any cross products
+<li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – if <em>framed</em> is on, any cross products
 below this length will be interpolated from neighbours; defaults to
 1e-7</p></li>
 </ul>
@@ -673,7 +816,7 @@ below this length will be interpolated from neighbours; defaults to
 [tuple, list, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]</p>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.10)"><strong>NotImplementedError</strong></a> – <em>framed</em> was requested but some of
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.11)"><strong>NotImplementedError</strong></a> – <em>framed</em> was requested but some of
 the arguments were plugs</p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -701,7 +844,7 @@ first output normal is a pass-through of the <em>normal</em> argument.</p>
 <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the starting normal (or up vector)</p></li>
 <li><p><strong>tangents</strong> ([list, tuple, <a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
 <a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – the tangent samples along the curve</p></li>
-<li><p><strong>fromEnd/fe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – indicate that <em>normal</em> is at the end, not the
+<li><p><strong>fromEnd/fe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – indicate that <em>normal</em> is at the end, not the
 start, of the sequence, and solve accordingly; defaults to False</p></li>
 </ul>
 </dd>
@@ -745,7 +888,7 @@ floats will be generated automatically; defaults to None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – Unequal argument lengths.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – Unequal argument lengths.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The blended set of curve normals.</p>
@@ -758,8 +901,8 @@ floats will be generated automatically; defaults to None</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="paya.lib.mathops.blendBetweenCurveNormals">
-<span class="sig-name descname"><span class="pre">blendBetweenCurveNormals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startNormal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endNormal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwindSwitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.blendBetweenCurveNormals" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.lib.mathops.bidirectionalParallelTransport">
+<span class="sig-name descname"><span class="pre">bidirectionalParallelTransport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startNormal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endNormal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwindSwitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.bidirectionalParallelTransport" title="Permalink to this definition">#</a></dt>
 <dd><p>Blends between a forward and backward parallel-transport solution. If
 either <em>startNormal</em> or <em>endNormal</em> are <code class="docutils literal notranslate"><span class="pre">None</span></code>, the solution will
 only be performed in one direction and returned on its own.</p>
@@ -788,7 +931,7 @@ automatically; defaults to None</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – <p>One of:</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – <p>One of:</p>
 <ul class="simple">
 <li><p>Unequal numbers of tangents and ratios (if provided)</p></li>
 <li><p>Both <em>startNormal</em> and <em>endNormal</em> are <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
@@ -811,23 +954,23 @@ automatically; defaults to None</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="names.html">
+          <a class="next-page" href="modettol.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">paya.lib.names</div>
+                <div class="title">paya.lib.modettol</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="controlshapes.html">
+          <a class="prev-page" href="layouttools.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">paya.lib.controlshapes</div>
+                <div class="title">paya.lib.layouttools</div>
                 
               </div>
             </a>

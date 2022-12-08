@@ -6,11 +6,11 @@ paya.runtime.plugs.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
-    :class:`~paya.runtime.plugs.Geometry` :class:`~paya.runtime.plugs.Data` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+    :class:`~paya.runtime.plugs.Geometry` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
 
     .. py:classmethod:: createArc(*points, directionVector=None, radius=1.0, toggleArc=False, sections=8, degree=3, guard=None)
     
@@ -91,7 +91,8 @@ paya.runtime.plugs.NurbsCurve
             generate parameters, not fractions; defaults to ``False``
         :param bool uniform/uni: if generating parameters, distribute them
             by length, not parametric space; defaults to ``False``
-        :return: A list of scalars (fractions or parameters).
+        :return: If 'parametric' is True, a list of parameters; otherwise,
+             a list of fractions.
         :rtype: [:class:`float`, :class:`~paya.runtime.plugs.Math1D`]
     
     .. py:method:: initNearestPointOnCurve(point, reuse=True)
@@ -589,6 +590,28 @@ paya.runtime.plugs.NurbsCurve
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: distributeTangents(numberFractionsOrParams, plug=None, normalize=False, parametric=False, uniform=True)
+    
+        :param numberFractionsOrParams: this should either be
+        
+            -   A number of fractions or parameters to sample along the curve,
+                or
+            -   An explicit list of fractions or parameters at which to construct
+                the tangents
+        :param bool plug/p: return attribute outputs, not values; defaults to
+            ``False``
+        :param bool normalize/nr: normalize the tangents; defaults to
+            ``False``
+        :param bool parametric/par: interpret *numberOrFractions* as
+            parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if *parametric* is ``True``, and
+            *numberFractionsOrParams* is a number, initial parameters should
+            be distributed by length, not parametric space; defaults to
+            ``False``
+        :return: A list of tangents.
+        :rtype: [:class:`~paya.runtime.data.Vector`] |
+            [:class:`~paya.runtime.plugs.Vector`]
     
     .. py:method:: upVectorAtParam(param, sampler=None, plug=None)
     

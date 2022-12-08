@@ -6,11 +6,11 @@ paya.runtime.nodes.DependNode
 
 .. py:class:: DependNode(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
     :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
 
     .. py:method:: setSubtype(clsname)
     
@@ -62,7 +62,7 @@ paya.runtime.nodes.DependNode
         :return: ``self``
         :rtype: :class:`DependNode`
     
-    .. py:method:: makeName(*elems, inherit=<paya.util.functions.Undefined object at 0x000001C89F1B6848>, padding=<paya.util.functions.Undefined object at 0x000001C89F1B6848>, suffix=<paya.util.functions.Undefined object at 0x000001C89F1B6848>)
+    .. py:method:: makeName(*elems, inherit=True, padding=<undefined>, suffix=<undefined>)
     
         Constructs a node name based on :class:`~paya.lib.names.Name`
         contexts. Results will vary depending on whether this method is
@@ -199,6 +199,10 @@ paya.runtime.nodes.DependNode
         :param str attrName: the attribute name
         :param bool channelBox/cb: when in create mode, create the attribute
             as settable instead of keyable; defaults to None
+        :param attrSection/ats: the name of an attribute section under which
+            to nest the attribute; the section must exist; defaults to
+            ``None``
+        :type attrSection/ats: :class:`str`, ``None``
         :param \*\*kwargs: forwarded to
             :meth:`~pymel.core.nodetypes.DependNode.addAttr`
         :return: Where possible, the newly-created attribute.
@@ -242,8 +246,8 @@ paya.runtime.nodes.DependNode
     
     .. py:method:: getReorderableAttrNames()
     
-        :return: The names of attributes on this node that can be reordered
-            using :meth:`reorderAttrs` and related methods.
+        :return: The long names of attributes on this node that can be
+            reordered.
         :rtype: list of str
     
     .. py:method:: addSectionAttr(sectionName)

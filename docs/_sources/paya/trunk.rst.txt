@@ -1,0 +1,37 @@
+==========
+paya.trunk
+==========
+
+.. py:module:: paya.trunk
+
+.. py:class:: Trunk
+
+    A subclass of :class:`Trunk` is aware of the directory it was defined in.
+    This is useful for sourcing inherited dependencies (e.g. control shape
+    templates, weight files etc.) in rig or rig part construction.
+
+    .. py:classmethod:: getDir()
+    
+        :return: The directory this class was defined in.
+        :rtype: :class:`~pathlib.Path`
+    
+    .. py:classmethod:: getDirs()
+    
+        :return: The home directory of every :class:`Trunk` subclass in the
+            MRO.
+        :rtype: [:class:`~pathlib.Path`]
+    
+    .. py:classmethod:: findFiles(pattern, first=False, inherited=True)
+    
+        :param str pattern: a glob-style matching pattern, e.g. ``'*.json'``
+        :param bool first: return the first matching file; defaults to
+            ``False``
+        :param bool inherited/i: look inside the home directory of every
+            :class:`Trunk` subclass in the MRO; defaults to ``True``
+        :return: Either a single file path, or a list of file paths.
+        :rtype: :class:`~pathlib.Path`, [:class:`~pathlib.Path`]
+    
+    .. py:classmethod:: findFile(pattern, inherited=True)
+    
+        Equivalent to :meth:`findFiles(pattern, first=True [...])
+        <findFiles>`.

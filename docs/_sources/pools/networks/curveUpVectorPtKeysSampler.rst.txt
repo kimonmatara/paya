@@ -6,16 +6,16 @@ paya.runtime.networks.CurveUpVectorPtKeysSampler
 
 .. py:class:: CurveUpVectorPtKeysSampler(*args, **kwargs)
 
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.networks.CurveUpVectorRemapSampler` :class:`~paya.runtime.networks.CurveUpVectorSampler` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     Solves for parallel transport in both directions for each key segment,
     and blends between the solutions by angle, with unwinding options.
     
     Works similarly to
     :class:`~paya.runtime.networks.CurveUpVectorIkSplineStyleSampler`, but
     with properly-localised twist.
-
-    .. rubric:: Inheritance
-
-    :class:`~paya.runtime.networks.CurveUpVectorRemapSampler` :class:`~paya.runtime.networks.CurveUpVectorSampler` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
     .. py:classmethod:: create(curve, paramVectorKeys, interpolation='Linear', resolution=9, unwindSwitch=0)
     

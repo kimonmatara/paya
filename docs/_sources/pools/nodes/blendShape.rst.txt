@@ -6,6 +6,10 @@ paya.runtime.nodes.BlendShape
 
 .. py:class:: BlendShape(*args, **kwargs)
 
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.BlendShape` :class:`~paya.runtime.nodes.GeometryFilter` :class:`~pymel.core.nodetypes.GeometryFilter` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     Use the :class:`.targets <paya.lib.bsnboltons.Targets>` / ``.t`` interface
     to edit targets. See :class:`~paya.lib.bsnboltons.Targets`.
     
@@ -19,10 +23,6 @@ paya.runtime.nodes.BlendShape
         bsn.targets.add(sadGeo)
         bsn.targets.add(happyGeo)
         # etc.
-
-    .. rubric:: Inheritance
-
-    :class:`~pymel.core.nodetypes.BlendShape` :class:`~paya.runtime.nodes.GeometryFilter` :class:`~pymel.core.nodetypes.GeometryFilter` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
     .. py:classmethod:: create(*args, name=None, post=False, pre=False, after=False, automatic=False, parallel=False, before=False, split=False, frontOfChain=False, afterReference=False, **kwargs)
     

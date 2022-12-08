@@ -6,11 +6,11 @@ paya.runtime.nodes.SkinCluster
 
 .. py:class:: SkinCluster(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
     :class:`~pymel.core.nodetypes.SkinCluster` :class:`~paya.runtime.nodes.GeometryFilter` :class:`~pymel.core.nodetypes.GeometryFilter` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
 
     .. py:classmethod:: create(*args, bindMethod=0, dropoffRate=4.5, maximumInfluences=None, name=None, normalizeWeights=1, obeyMaximumInfluences=False, skinMethod=0, toSelectedBones=True, weightDistribution=0, geometry=None, influence=None, multi=False, replace=False, **kwargs)
     
@@ -131,3 +131,9 @@ paya.runtime.nodes.SkinCluster
             ``None``
         :return: The pre-deformation target.
         :rtype: :class:`~paya.runtime.nodes.GeometryShape`
+    
+    .. py:classmethod:: loadAll(sourceDir, method='index', worldSpace=None, positionTolerance=None)
+    
+        To-Dos:
+        - add option to just read weights, without recreating skins
+        - add option to filter for shapes

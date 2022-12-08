@@ -6,11 +6,11 @@ paya.runtime.plugs.Matrix
 
 .. py:class:: Matrix(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
-    :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+    :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
 
     .. py:method:: createLocator(size=1.0, name=None)
     
@@ -58,6 +58,11 @@ paya.runtime.plugs.Matrix
         **point-matrix multiplication** (reflected only).
         
         :param other: a 3D value or plug
+    
+    .. py:method:: normal()
+    
+        :return: A version of this matrix with all axis vectors normalized.
+        :rtype: :class:`Matrix`
     
     .. py:method:: pick(translate=None, rotate=None, scale=None, shear=None, default=None)
     
@@ -157,58 +162,80 @@ paya.runtime.plugs.Matrix
         :return: dictionary of {channelName:decomposeMatrixOutput}
         :rtype: dict
     
-    .. py:method:: decomposeAndApply(transform, translate=None, rotate=None, scale=None, shear=None, compensatePivots=False, compensateJointOrient=True, compensateRotateAxis=False, compensateJointScale=True, worldSpace=False, maintainOffset=False)
+    .. py:method:: decomposeAndApply(*slaves, translate=None, rotate=None, scale=None, shear=None, compensatePivots=False, compensateJointOrient=True, compensateRotateAxis=False, compensateJointScale=True, worldSpace=False, maintainOffset=False)
     
-        Decomposes and applies this matrix to a transform.
+        Decomposes and applies this matrix to one or more slave transforms.
         
-        :param transform: the transform node to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
         :param bool translate/t: apply translation
         :param bool rotate/r: apply rotation
         :param bool scale/s: apply scale
         :param bool shear/sh: apply shear
         :param bool maintainOffset/mo: maintain relative pose; defaults to
-            False
+            ``False``
         :param bool worldSpace/ws: premultiply this matrix with
             ``parentInverseMatrix`` on the transform to negate the
-            parent stack; defaults to False
+            parent stack; defaults to ``False``
         :param bool compensateJointScale/cjs: account for
-            segmentScaleCompensate on joints; defaults to True
-        :param bool compensateJointOrient/cjo: account for jointOrient on
-            joints; defaults to True
+            segmentScaleCompensate on joints; defaults to ``True``
+        :param bool compensateJointOrient/cjo: account for ``jointOrient`` on
+            joints; defaults to ``True``
         :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
-            defaults to False
+            defaults to ``False``
         :param bool compensatePivots/cp: compensate for pivots (non-joint
-            transforms only); this is expensive, so defaults to False
+            transforms only); this is expensive, so defaults to ``False``
         :return: ``self``
         :rtype: :class:`Matrix`
     
-    .. py:method:: applyViaOpm(transform, worldSpace=False, persistentCompensation=False, preserveInheritsTransform=False, maintainOffset=False)
+    .. py:method:: applyViaOpm(*slaves, worldSpace=False, persistentCompensation=False, preserveInheritsTransform=False, maintainOffset=False)
     
-        Uses this matrix to drive a transform via a connection into the
-        ``offsetParentMatrix``, with compensations against the transform's
+        Uses this matrix to drive one or more transforms via connections into
+        ``offsetParentMatrix``, with compensations against the transforms'
         SRT channels.
         
         .. warning::
         
-            When *worldSpace* is combined with *preserveInheritsTransform*,
-            the matrix will only be localised against the current parent.
-            The solution will break if the transform is subsequently
-            reparented.
+           When *worldSpace* is combined with *preserveInheritsTransform*,
+           the matrix will only be localised against the current parent.
+           The solution will break if the transform is subsequently
+           reparented.
         
-        :param transform: the transform to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
-        :param bool worldSpace/ws: drive the transform in world-space;
-            defaults to False
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
         :param bool maintainOffset/mo: preserve relative pose on application;
-            defaults to False
+           defaults to ``False``
         :param bool persistentCompensation/pc: compensate for the transform's
-            SRT channels persistently, so that the world pose will remain
-            the same even if they change; defaults to False
+           SRT channels persistently, so that the world pose will remain
+           the same even if they change; defaults to ``False``
         :param preserveInheritsTransform/pit: when *worldSpace* is
-            requested, don't edit the ``inheritsTransform`` attribute on
-            the transform; instead, localise against the current parent;
-            defaults to False
+           requested, don't edit the ``inheritsTransform`` attribute on
+           the transform; instead, localise against the current parent;
+           defaults to ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+    
+    .. py:method:: drive(*slaves, worldSpace=False, maintainOffset=False, useOffsetParentMatrix=<undefined>, preserveInheritsTransform=False)
+    
+        Drives one or more slaves using this matrix.
+        
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
+        :param preserveInheritsTransform/pit: when *worldSpace* is requested,
+            don't edit the ``inheritsTransform`` attribute on the slave;
+            instead, localise against its current parent; defaults to
+            ``False``
+        :param bool maintainOffset/mo: preserve relative pose on application;
+           defaults to ``False``
+        :param bool useOffsetParentMatrix/uop: connect into
+            ``offsetParentMatrix`` instead of decomposing into SRT channels;
+            defaults to namesake configuration flag; it that's omitted too,
+            defaults to ``True`` if Maya >= 2022, otherwise ``False``
         :return: ``self``
         :rtype: :class:`Matrix`
     

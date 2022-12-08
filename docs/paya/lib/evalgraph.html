@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.lib.mathops" href="mathops.html" /><link rel="prev" title="paya.lib.bsnboltons" href="bsnboltons.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.lib.grouptree" href="grouptree.html" /><link rel="prev" title="paya.lib.controls" href="controls.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
-        <title>paya.lib.controlshapes - paya 1.0 documentation</title>
+        <title>paya.lib.evalgraph - paya 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
@@ -182,6 +182,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/nodes_index.html">Node Types</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/bezierCurve.html">BezierCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/blendShape.html">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/choice.html">Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/cluster.html">Cluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/clusterHandle.html">ClusterHandle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/curveWarp.html">CurveWarp</a></li>
@@ -199,16 +200,20 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/motionPath.html">MotionPath</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/objectSet.html">ObjectSet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/proximityWrap.html">ProximityWrap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/remapValue.html">RemapValue</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/shape.html">Shape</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/skinCluster.html">SkinCluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/subdiv.html">Subdiv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/uvPin.html">UvPin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/nodes/vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/comps_index.html">Component Types</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/comps/meshVertex.html">MeshVertex</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
 </ul>
@@ -217,7 +222,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/compound.html">Compound</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/geometry.html">Geometry</a></li>
@@ -251,12 +255,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/containers_index.html">Container Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/part.html">Part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partBase.html">PartBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partGuide.html">PartGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/transformGuide.html">TransformGuide</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../../paya.html">Modules</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../apiutil.html">paya.apiutil</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cmds.html">paya.cmds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../config.html">paya.config</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../examples.html">paya.examples</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -268,11 +278,16 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="../lib.html">paya.lib</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bsnboltons.html">paya.lib.bsnboltons</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="controls.html">paya.lib.controls</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">paya.lib.evalgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grouptree.html">paya.lib.grouptree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouttools.html">paya.lib.layouttools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modettol.html">paya.lib.modettol</a></li>
 <li class="toctree-l3"><a class="reference internal" href="names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsutil.html">paya.lib.nurbsutil</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skintools.html">paya.lib.skintools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="symmetry.html">paya.lib.symmetry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="typeman.html">paya.lib.typeman</a></li>
@@ -280,12 +295,21 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../partcreator.html">paya.partcreator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../patch.html">paya.patch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pluginfo.html">paya.pluginfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pools.html">paya.pools</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../rigtypes.html">paya.rigtypes</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../rigtypes/rig.html">paya.rigtypes.rig</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rigtypes/rig/rig.html">paya.rigtypes.rig.rig</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../startstop.html">paya.startstop</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../trunk.html">paya.trunk</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../util/accessor.html">paya.util.accessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../util/classes.html">paya.util.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../util/functions.html">paya.util.functions</a></li>
@@ -335,88 +359,207 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-paya.lib.controlshapes">
-<span id="paya-lib-controlshapes"></span><h1>paya.lib.controlshapes<a class="headerlink" href="#module-paya.lib.controlshapes" title="Permalink to this headline">#</a></h1>
+          <section id="module-paya.lib.evalgraph">
+<span id="paya-lib-evalgraph"></span><h1>paya.lib.evalgraph<a class="headerlink" href="#module-paya.lib.evalgraph" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.lib.controlshapes.ControlShapesLibrary">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ControlShapesLibrary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.controlshapes.ControlShapesLibrary" title="Permalink to this definition">#</a></dt>
-<dd><p>Administers Paya control shapes. An instance of this class is available
-on <a class="reference internal" href="../runtime.html#module-paya.runtime" title="paya.runtime"><code class="xref py py-mod docutils literal notranslate"><span class="pre">paya.runtime</span></code></a> as <code class="docutils literal notranslate"><span class="pre">.controlShapes</span></code>.</p>
-<p class="rubric">Inheritance</p>
-<p><a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserDict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Collection" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sized" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sized</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a> <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Container" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.controlshapes.ControlShapesLibrary.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.controlshapes.ControlShapesLibrary.load" title="Permalink to this definition">#</a></dt>
-<dd><p>Loads the library content fromn <code class="docutils literal notranslate"><span class="pre">paya/lib/controlshapes.json</span></code>.</p>
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EvalGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dct</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph" title="Permalink to this definition">#</a></dt>
+<dd><p>Simple directed-acyclic-graph simulator. Good for rig build sequences etc.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+<dt class="field-odd">Construction by Dictionary</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p><a class="reference internal" href="#paya.lib.evalgraph.EvalGraph" title="paya.lib.evalgraph.EvalGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvalGraph</span></code></a> objects use a dictionary with the following structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="o">&lt;</span><span class="n">nodeName</span><span class="o">&gt;</span><span class="p">:</span> <span class="p">[</span><span class="n">inputNodeName</span><span class="p">,</span> <span class="n">inputNodeName</span><span class="o">...</span><span class="p">],</span>
+    <span class="o">&lt;</span><span class="n">nodeName</span><span class="o">&gt;</span><span class="p">:</span> <span class="p">[</span><span class="n">inputNodeName</span><span class="p">,</span> <span class="n">inputNodeName</span><span class="o">...</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A <a class="reference internal" href="#paya.lib.evalgraph.EvalGraph" title="paya.lib.evalgraph.EvalGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvalGraph</span></code></a> can be instantiated directly around such a
+dictionary, or via <a class="reference internal" href="#paya.lib.evalgraph.EvalGraph.fromSegments" title="paya.lib.evalgraph.EvalGraph.fromSegments"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fromSegments()</span></code></a>, which may be more intuitive.</p>
+<p><a class="reference internal" href="#paya.lib.evalgraph.EvalGraph" title="paya.lib.evalgraph.EvalGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graphs</span></code></a> cannot be edited after instantiation, only
+analysed and evaluated.</p>
+<p>To get a build sequence for the entire graph, either iterate over the
+object or call <a class="reference internal" href="#paya.lib.evalgraph.EvalGraph.getBuildSequence" title="paya.lib.evalgraph.EvalGraph.getBuildSequence"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getBuildSequence()</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.fromSegments">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromSegments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segments</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.fromSegments" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="n">EvalGraph</span><span class="o">.</span><span class="n">fromSegments</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span> <span class="c1"># evaluate</span>
+<span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>segments</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – a list of lists (or tuples) where each sublist
+describes left-to-right connections between two or more nodes</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.evalgraph.EvalGraph" title="paya.lib.evalgraph.EvalGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvalGraph</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.controlshapes.ControlShapesLibrary.dump">
-<span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.controlshapes.ControlShapesLibrary.dump" title="Permalink to this definition">#</a></dt>
-<dd><p>Dumps the library content into <code class="docutils literal notranslate"><span class="pre">paya/lib/controlshapes.json</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.controlshapes.ControlShapesLibrary.applyToControls">
-<span class="sig-name descname"><span class="pre">applyToControls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineWidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.controlshapes.ControlShapesLibrary.applyToControls" title="Permalink to this definition">#</a></dt>
-<dd><p>Adds shapes to the specified controls from the named library entry.</p>
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.nodes">
+<span class="sig-name descname"><span class="pre">nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startTerminals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endTerminals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orphan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">startTerminals</span></code>, <code class="docutils literal notranslate"><span class="pre">endTerminals</span></code> and <code class="docutils literal notranslate"><span class="pre">orphan</span></code> are
+omitted, all nodes will be returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – the name of the library entry to retrieve</p></li>
-<li><p><strong>controls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – the controls to add shapes to</p></li>
-<li><p><strong>replace/rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – replace existing shapes on the controls;
-defaults to True</p></li>
-<li><p><strong>lineWidth/lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – an override for the line width; defaults
-to None</p></li>
+<li><p><strong>startTerminals</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return only nodes with no inputs;
+defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>endTerminals</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return only nodes with no outputs;
+defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>orphan</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return only nodes with no inputs or outputs;
+defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The newly-generated control shape nodes.</p>
+<dd class="field-even"><p>A list of node names.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of <a class="reference internal" href="../../pools/nodes/shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a></p>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.controlshapes.ControlShapesLibrary.addFromControl">
-<span class="sig-name descname"><span class="pre">addFromControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.controlshapes.ControlShapesLibrary.addFromControl" title="Permalink to this definition">#</a></dt>
-<dd><p>Captures shape macros from the specified control and adds them under
-a new entry in the library.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>If the name already exists in the library, it will be overwritten.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Changes are not saved into <code class="docutils literal notranslate"><span class="pre">paya/lib/controlshapes.json</span></code> until
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">dump()</span></code> is called.</p>
-</div>
-<dl class="field-list simple">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.getNodeInputs">
+<span class="sig-name descname"><span class="pre">getNodeInputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.getNodeInputs" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the node whose input nodes to return</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The node’s inputs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.getNodeOutputs">
+<span class="sig-name descname"><span class="pre">getNodeOutputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.getNodeOutputs" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the node whose output nodes to return</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The node’s outputs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.getNodesUpstreamOf">
+<span class="sig-name descname"><span class="pre">getNodesUpstreamOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.getNodesUpstreamOf" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> – the node to trace from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>All nodes upstream of <em>node</em>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.getNodesDownstreamOf">
+<span class="sig-name descname"><span class="pre">getNodesDownstreamOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.getNodesDownstreamOf" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> – the node to trace from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>All nodes downstream of <em>node</em>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.getPath">
+<span class="sig-name descname"><span class="pre">getPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.getPath" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>control</strong> (str, <a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the control to inspect</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name for the new entry</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the start node</p></li>
+<li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the end node</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>NoControlShapesError</strong> – no control shapes were found under the
-control</p>
+<dd class="field-even"><p><strong>NoPathError</strong> – A path could not be found.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+<dd class="field-odd"><p>A path from the start to the end node.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.reduceTargetList">
+<span class="sig-name descname"><span class="pre">reduceTargetList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.reduceTargetList" title="Permalink to this definition">#</a></dt>
+<dd><p>Given a list of target nodes, returns another list with duplicates
+and implied nodes (i.e. nodes that are already upstream of other
+nodes) removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*targets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – the targets to process</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reduced target list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.evalgraph.EvalGraph.getBuildSequence">
+<span class="sig-name descname"><span class="pre">getBuildSequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.evalgraph.EvalGraph.getBuildSequence" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*targets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – optionally, a subset of target nodes to
+evaluate for; if omitted, the graph’s downstream-terminating
+nodes will be used as targets</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NonExistentNodeError</strong> – A specified target node does
+not exist.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The full build sequence.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -430,23 +573,23 @@ control</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="mathops.html">
+          <a class="next-page" href="grouptree.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">paya.lib.mathops</div>
+                <div class="title">paya.lib.grouptree</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="bsnboltons.html">
+          <a class="prev-page" href="controls.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">paya.lib.bsnboltons</div>
+                <div class="title">paya.lib.controls</div>
                 
               </div>
             </a>

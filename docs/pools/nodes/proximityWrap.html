@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.plugs.Enum" href="enum.html" /><link rel="prev" title="paya.runtime.plugs.BezierCurve" href="bezierCurve.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.nodes.RemapValue" href="remapValue.html" /><link rel="prev" title="paya.runtime.nodes.PointOnCurveInfo" href="pointOnCurveInfo.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
-        <title>paya.runtime.plugs.Compound - paya 1.0 documentation</title>
+        <title>paya.runtime.nodes.ProximityWrap - paya 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
@@ -179,57 +179,61 @@
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../../types_index.html">Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 has-children"><a class="reference internal" href="../nodes_index.html">Node Types</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/blendShape.html">BlendShape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/cluster.html">Cluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/clusterHandle.html">ClusterHandle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/curveWarp.html">CurveWarp</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/dagNode.html">DagNode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/deformableShape.html">DeformableShape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/dependNode.html">DependNode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/fourByFourMatrix.html">FourByFourMatrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/geometryFilter.html">GeometryFilter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/ikHandle.html">IkHandle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/joint.html">Joint</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/lattice.html">Lattice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/locator.html">Locator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/makeThreePointCircularArc.html">MakeThreePointCircularArc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/mesh.html">Mesh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/motionPath.html">MotionPath</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/nurbsCurve.html">NurbsCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/nurbsSurface.html">NurbsSurface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/pointOnCurveInfo.html">PointOnCurveInfo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/remapValue.html">RemapValue</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/shape.html">Shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/skinCluster.html">SkinCluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/subdiv.html">Subdiv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/transform.html">Transform</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../nodes/vectorProduct.html">VectorProduct</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../nodes_index.html">Node Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="choice.html">Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="clusterHandle.html">ClusterHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveWarp.html">CurveWarp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deformableShape.html">DeformableShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">FourByFourMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geometryFilter.html">GeometryFilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ikHandle.html">IkHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="joint.html">Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lattice.html">Lattice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="locator.html">Locator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="makeThreePointCircularArc.html">MakeThreePointCircularArc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motionPath.html">MotionPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="objectSet.html">ObjectSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">ProximityWrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="remapValue.html">RemapValue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uvPin.html">UvPin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../comps_index.html">Component Types</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../comps/meshVertex.html">MeshVertex</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attribute.html">Attribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Compound</a></li>
-<li class="toctree-l3"><a class="reference internal" href="enum.html">Enum</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">EulerRotation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="geometry.html">Geometry</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math3D.html">Math3D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quaternion.html">Quaternion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="string.html">String</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/angle.html">Angle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/attribute.html">Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/enum.html">Enum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/eulerRotation.html">EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/geometry.html">Geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/math1D.html">Math1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/math2D.html">Math2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/math3D.html">Math3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/matrix.html">Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/quaternion.html">Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/vector.html">Vector</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../data_index.html">Data Types</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -251,12 +255,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../containers_index.html">Container Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/transformGuide.html">TransformGuide</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../paya.html">Modules</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/apiutil.html">paya.apiutil</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/cmds.html">paya.cmds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/config.html">paya.config</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/examples.html">paya.examples</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -268,11 +278,16 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/lib.html">paya.lib</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/attrs.html">paya.lib.attrs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/bsnboltons.html">paya.lib.bsnboltons</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/controlshapes.html">paya.lib.controlshapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/controls.html">paya.lib.controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/evalgraph.html">paya.lib.evalgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/grouptree.html">paya.lib.grouptree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/layouttools.html">paya.lib.layouttools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/modettol.html">paya.lib.modettol</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/names.html">paya.lib.names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/nurbsutil.html">paya.lib.nurbsutil</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/skintools.html">paya.lib.skintools</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/suffixes.html">paya.lib.suffixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/symmetry.html">paya.lib.symmetry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/lib/typeman.html">paya.lib.typeman</a></li>
@@ -280,12 +295,21 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/partcreator.html">paya.partcreator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/patch.html">paya.patch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../paya/plugtree.html">paya.plugtree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/pluginfo.html">paya.pluginfo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/pools.html">paya.pools</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/rigtypes.html">paya.rigtypes</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../paya/rigtypes/rig.html">paya.rigtypes.rig</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../paya/rigtypes/rig/rig.html">paya.rigtypes.rig.rig</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/runtime.html">paya.runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../paya/startstop.html">paya.startstop</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/trunk.html">paya.trunk</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/util/accessor.html">paya.util.accessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/util/classes.html">paya.util.classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../paya/util/functions.html">paya.util.functions</a></li>
@@ -335,33 +359,13 @@
           </label>
         </div>
         <article role="main">
-          <section id="paya-runtime-plugs-compound">
-<h1>paya.runtime.plugs.Compound<a class="headerlink" href="#paya-runtime-plugs-compound" title="Permalink to this headline">#</a></h1>
+          <section id="paya-runtime-nodes-proximitywrap">
+<h1>paya.runtime.nodes.ProximityWrap<a class="headerlink" href="#paya-runtime-nodes-proximitywrap" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Compound">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Compound" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.runtime.nodes.ProximityWrap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProximityWrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.ProximityWrap" title="Permalink to this definition">#</a></dt>
 <dd><p class="rubric">Inheritance</p>
-<p><a class="reference internal" href="attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Compound.splitInputs">
-<span class="sig-name descname"><span class="pre">splitInputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Compound.splitInputs" title="Permalink to this definition">#</a></dt>
-<dd><p>Splits any compound-level input into per-child connections. The
-compound-level connection is maintained.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Compound.__iter__">
-<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Compound.__iter__" title="Permalink to this definition">#</a></dt>
-<dd><p>Extends iteration to compounds. If this is a compound AND a multi,
-array iteration will take precedence. In those cases, use
-<a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute.getChildren" title="(in PyMEL v1.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChildren()</span></code></a> to disambiguate.</p>
-</dd></dl>
-
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">ProximityWrap</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">WeightGeometryFilter</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.WeightGeometryFilter.html#pymel.core.nodetypes.WeightGeometryFilter" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeightGeometryFilter</span></code></a> <a class="reference internal" href="geometryFilter.html#paya.runtime.nodes.GeometryFilter" title="paya.runtime.nodes.GeometryFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryFilter</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.GeometryFilter.html#pymel.core.nodetypes.GeometryFilter" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryFilter</span></code></a> <a class="reference internal" href="dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
 </dd></dl>
 
 </section>
@@ -371,23 +375,23 @@ array iteration will take precedence. In those cases, use
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="enum.html">
+          <a class="next-page" href="remapValue.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">paya.runtime.plugs.Enum</div>
+                <div class="title">paya.runtime.nodes.RemapValue</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="bezierCurve.html">
+          <a class="prev-page" href="pointOnCurveInfo.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">paya.runtime.plugs.BezierCurve</div>
+                <div class="title">paya.runtime.nodes.PointOnCurveInfo</div>
                 
               </div>
             </a>

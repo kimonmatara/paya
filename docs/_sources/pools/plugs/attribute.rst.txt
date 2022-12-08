@@ -6,12 +6,51 @@ paya.runtime.plugs.Attribute
 
 .. py:class:: Attribute(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
     :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
+
+
+    .. py:classmethod:: create(node, attrName, **kwargs)
+    
+        Creates an attribute.
+        
+        :param node: the node on which to create the attribute
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param str attrName: the name of the attribute
+        :param \*\*kwargs: forwarded to
+            :meth:`paya.runtime.nodes.DependNode.addAttr`
+        :return: The generated attribute.
+        :rtype: :class:`Attribute`
+    
+    .. py:method:: splitInputs()
+    
+        Splits any compound-level input into per-child connections. The
+        compound-level connection is maintained.
+        
+        :return: ``self``
+    
+    .. py:method:: createProxy(node, longName=None, shortName=None)
+    
+        Creates a proxy of this attribute.
+        
+        :param node: the node on which to create the proxy
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param str longName/ln: a long name for the proxy attribute; defaults
+            this attribute's long name
+        :param str shortName/sn: a short name for the proxy attribute;
+            defaults this attribute's short name
+        :return: The proxy attribute.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: hasUnits()
+    
+        :return: ``True`` if this is a linear, angle or time attribute, or
+            a compound with any children for which this is ``True``, otherwise
+            ``False``.
+        :rtype: :class:`bool`
+    
     .. py:method:: unitType()
     
         :return: One of 'angle', 'distance', 'time' or ``None``.
@@ -21,6 +60,11 @@ paya.runtime.plugs.Attribute
     
         :return: True if this is a dynamic attribute that can be exposed for
             keying.
+    
+    .. py:method:: plugInfo()
+    
+        Calls :func:`paya.pluginfo.getInfoFromAttr` on this attribute and
+        returns the result.
     
     .. py:method:: plugType(inherited=False)
     

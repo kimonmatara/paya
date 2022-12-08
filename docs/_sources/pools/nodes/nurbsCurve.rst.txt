@@ -6,11 +6,11 @@ paya.runtime.nodes.NurbsCurve
 
 .. py:class:: NurbsCurve(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
     :class:`~pymel.core.nodetypes.NurbsCurve` :class:`~paya.runtime.nodes.CurveShape` :class:`~pymel.core.nodetypes.CurveShape` :class:`~paya.runtime.nodes.DeformableShape` :class:`~pymel.core.nodetypes.DeformableShape` :class:`~paya.runtime.nodes.GeometryShape` :class:`~pymel.core.nodetypes.GeometryShape` :class:`~paya.runtime.nodes.Shape` :class:`~pymel.core.nodetypes.Shape` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
 
     .. py:classmethod:: create(*points, degree=3, name=None, bSpline=False, parent=None, displayType=None, conformShapeName=None, intermediate=False, lineWidth=None, dispCV=True)
     
@@ -92,8 +92,10 @@ paya.runtime.nodes.NurbsCurve
         :return: A curve constructed using the macro.
         :rtype: :class:`NurbsCurve`.
     
-    .. py:method:: macro()
+    .. py:method:: macro(includeShapeDetails=False)
     
+        :param bool includeShapeDetails: include information on overrides;
+            defaults to ``False``
         :return: A simplified representation of this curve that can be used
             by :meth:`createFromMacro` to reconstruct it.
         :rtype: dict
@@ -825,6 +827,35 @@ paya.runtime.nodes.NurbsCurve
         :return: The sampled vector.
         :rtype: :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: distributeTangents(numberFractionsOrParams, plug=None, normalize=False, parametric=False, uniform=True, worldSpace=False)
+    
+        .. note::
+        
+            Added from a plug method; a *worldSpace/ws* keyword argument
+            has been added, defaulting to ``False``.
+        
+        .. rubric:: Documentation from :meth:`paya.runtime.plugs.NurbsCurve.distributeTangents`:
+        
+        :param numberFractionsOrParams: this should either be
+        
+            -   A number of fractions or parameters to sample along the curve,
+                or
+            -   An explicit list of fractions or parameters at which to construct
+                the tangents
+        :param bool plug/p: return attribute outputs, not values; defaults to
+            ``False``
+        :param bool normalize/nr: normalize the tangents; defaults to
+            ``False``
+        :param bool parametric/par: interpret *numberOrFractions* as
+            parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if *parametric* is ``True``, and
+            *numberFractionsOrParams* is a number, initial parameters should
+            be distributed by length, not parametric space; defaults to
+            ``False``
+        :return: A list of tangents.
+        :rtype: [:class:`~paya.runtime.data.Vector`] |
+            [:class:`~paya.runtime.plugs.Vector`]
     
     .. py:method:: upVectorAtParam(param, sampler=None, plug=None)
     

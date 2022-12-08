@@ -6,12 +6,36 @@ paya.runtime.plugs.Math1D
 
 .. py:class:: Math1D(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
-    :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+    :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
+
+
+    .. py:method:: convertUnit(*factor)
+    
+        Connects and configures a ``unitConversion`` node and returns its
+        output.
+        
+        :param \*factor: the conversion factor; if omitted, defaults to 1.0
+        :return: The output of the ``unitConversion`` node.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: asAngle()
+    
+        If this attribute is of type 'doubleAngle', it is returned as-is.
+        If it's of any other type, it's converted using Maya UI rules and
+        a 'doubleAngle' output for it returned.
+        
+        :return: The angle output.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
+    
+    .. py:method:: asRadians()
+    
+        :return: A unitless (type 'double') output representing radians.
+            Conversions are performed according to Maya rules.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
+    
     .. py:method:: __add__(other, swap=False)
     
         Implements **addition** (``+``).
@@ -295,18 +319,6 @@ paya.runtime.plugs.Math1D
             evaluated as a gating ``bool``.
         :rtype: ``Math1D``
     
-    .. py:method:: choose(outputs)
-    
-        Uses this attribute as an index selector for any number of other
-        outputs or values.
-        
-        Named 'choose' rather than 'select' to avoid shadowing the PyMEL
-        namesake. If all the outputs are of the same attribute type, the type
-        will be assigned to the output as well.
-        
-        :param list outputs: list of outputs from which to choose
-        :type outputs: [``Attribute``]
-    
     .. py:method:: ifElse(outputIfTrue, outputIfFalse)
     
         If-then-else output selector.
@@ -339,21 +351,6 @@ paya.runtime.plugs.Math1D
             output; defaults to ``False``
         :return: the expression output
         :rtype: :class:`~paya.runtime.plugs.Math1D`
-    
-    .. py:method:: asAngle()
-    
-        If this attribute is of type 'doubleAngle', it is returned as-is.
-        If it's of any other type, it's converted using Maya UI rules and
-        a 'doubleAngle' output for it returned.
-        
-        :return: The angle output.
-        :rtype: :class:`~paya.runtime.plugs.Angle`
-    
-    .. py:method:: asRadians()
-    
-        :return: A unitless (type 'double') output representing radians.
-            Conversions are performed according to Maya rules.
-        :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: acos()
     

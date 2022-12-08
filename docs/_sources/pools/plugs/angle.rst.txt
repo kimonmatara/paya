@@ -6,77 +6,83 @@ paya.runtime.plugs.Angle
 
 .. py:class:: Angle(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
-    :class:`~paya.runtime.plugs.Unit` :class:`~paya.runtime.plugs.Math1D` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+    :class:`~paya.runtime.plugs.Unit` :class:`~paya.runtime.plugs.Math1D` :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
+
+
+    .. py:classmethod:: create(node, attrName, **kwargs)
+    
+        Creates a ``doubleAngle`` attribute.
+        
+        :param node: the node on which to create the attribute
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param str attrName: the name of the attribute
+        :param \*\*kwargs: forwarded to
+            :meth:`paya.runtime.nodes.DependNode.addAttr`
+        :return: The generated attribute.
+        :rtype: :class:`Angle`
+    
     .. py:method:: get(plug=False, default=None, **kwargs)
     
-        Overloads :py:meth:`paya.runtime.plugs.Attribute.get` to return
-        :class:`~paya.runtime.data.Angle` instances instead of
-        :class:`float`.
+        Overloads :py:meth:`paya.runtime.plugs.Attribute.get` to return an
+        :class:`~paya.runtime.data.Angle` instance instead of a
+        :class:`float`. The instance will have embedded unit information
+        (access via ``.unit``).
     
     .. py:method:: set(*args, **kwargs)
     
-        Overloads :meth:`~paya.runtime.plugs.Attribute.get` to ensure
-        that instances of :class:`~paya.runtime.data.Angle`
-        with units that don't match the UI setting are set correctly.
+        Overloads :meth:`~paya.runtime.plugs.Attribute.set` for improved unit
+        management. If the argument is a :class:`float`, then it will be set
+        directly. If the argument is an :class:`~paya.runtime.data.Angle`
+        instance with units that are different from the UI, it will be
+        converted accordingly.
+        
+        To set values with a :class:`float` in degrees regardless of UI
+        setting, use :func:`~paya.lib.mathops.degToUI`, available on
+        :mod:`paya.runtime`.
     
-    .. py:method:: unwind()
+    .. py:method:: unwind360()
     
-        :return: This angle, unwound and with the sign preserved.
-        :rtype: :class:`Angle`
+        :return: This angle, rolled so that it always remains in the -360 ->
+        360 range.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
+    
+    .. py:method:: unwindShortest()
+    
+        :return: This angle, unwound and, if over 180, converted to negative
+            form.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: unwindPositive()
     
         :return: The unwound positive form of the angle.
-        :rtype: :class:`Angle`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: unwindNegative()
     
         :return: The unwound negative form of the angle.
-        :rtype: :class:`Angle`
+        :rtype: :class:`~paya.runtime.plugs.Angle`
     
-    .. py:method:: unwindShortest()
+    .. py:method:: unwindSwitch(switchAttr, shortestIndex=0, positiveIndex=1, negativeIndex=2)
     
-        :return: This angle, unwound and, if less than -180 or greater than
-            180, flipped.
-        :rtype: :class:`Angle`
-    
-    .. py:method:: unwindSwitch(switchSource, shortestIndex=0, positiveIndex=1, negativeIndex=2)
-    
-        Unwinds this angle using a mode picked using an integer value or plug
-        (typically an animator switcher attribute).
+        Unwinds this angle, with the 'shortest' / 'positive' / 'negative'
+        modes chosen from a user attribute (typically an enum). Useful for
+        twist setups.
         
-        :param switchSource: either an integer value to pick an
-            implementation, or an attribute of type ``enum`` or ``int`` to
-            switch between all implementations
-        :type switchSource: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :param int shortestIndex/si: the attribute output value that should
-            activate 'shortest' mode; defaults to 0
-        :param int positiveIndex/pi: the attribute output value that should
-            activate 'positive' mode; defaults to 1
-        :param int negativeIndex/ni: the attribute output value that should
-            activate 'negative' mode; defaults to 2
-        :return: The switched output.
-        :rtype: :class:`Angle`
-    
-    .. py:method:: cos()
-    
-        Returns the trigonometric cosine.
+        This method is more efficient than switching between the outputs of
+        :meth:`unwindShortest`, :meth:`unwindPositive` and
+        :meth:`unwindNegative`.
         
-        :rtype: :class:`Math1D`
-    
-    .. py:method:: sin()
-    
-        Returns the trigonometric sine.
-        
-        :rtype: :class:`Math1D`
-    
-    .. py:method:: tan()
-    
-        Returns the trigonometric tangent.
-        
-        :rtype: :class:`Math1D`
+        :param switchAttr: the switch attribute; should be of type ``enum``
+            or ``long``
+        :type switchAttr: str, :class:`~paya.runtime.plugs.Math1D`
+        :param int shortestIndex: the attribute index for 'shortest'; defaults
+            to 0
+        :param int positiveIndex: the attribute index for 'positive'; defaults
+            to 1
+        :param int negativeIndex: the attribute index for 'negative'; defaults
+            to 2
+        :return: The unwound angle.
+        :rtype: :class:`~paya.runtime.plugs.Angle`

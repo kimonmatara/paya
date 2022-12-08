@@ -6,7 +6,9 @@ paya.util.functions
 
 .. py:class:: Undefined
 
-
+    An instance of this class, ``undefined`` in this module, is used across
+    Paya for keyword argument defaults for which ``None`` would not represent
+    omission.
 
 .. py:class:: short(**mapping)
 
@@ -28,25 +30,42 @@ paya.util.functions
     
         Call self as a function.
 
-.. py:function:: resolveFlags(*flags)
+.. py:function:: resolveFlags(*flags, radio=None)
 
-    Used to mimic Maya flag behaviour.
+    Resolves passed-in user option values by omission, Maya style.
     
-    If only a subset of flags are defined, then:
+    :Example:
     
-        -   If the subset are a mixture of True / False, the other flags are
-            set to False.
+        .. code-block:: python
     
-        -   If the subset are all True or all False, the remaining flags are
-            set to the opposite.
+            userVals = resolveFlags(True, None, None)
+            # True, False, False
     
-    If all flags are None, all flags are set to True.
-    If all flags are NOT None (i.e. all defined), they are all conformed to
-    booleans.
+            userVals = resolveFlags(False, None, None)
+            # False, True, True
     
-    :param flags: one or more user flag arguments
-    :return: The resolved flags.
-    :rtype: tuple
+            userVals = resolveFlags(None, None, None)
+            # True, True, True
+    
+            userVals = resolveFlags(True, None, False)
+            # True, True, False
+    
+            userVals = resolveFlags(None, None, None, radio=0)
+            # True, False, False
+    
+            userVals = resolveFlags(None, False, None, radio=0)
+            # True, False, False
+    
+            userVals = resolveFlags(True, None, True, radio=0)
+            # ValueError: Multiple radio selection.
+    
+    :param \*flags: the passed-in user option values, in order
+    :type \*flags: :class:`bool`, ``None``
+    :param radio: if this is defined, it should be an integer specifying
+        which item should be ``True`` in a single-selection radio setup;
+        defaults to ``None``
+    :return: The resolved flag values, in order.
+    :rtype: :class:`tuple` [:class:`bool`]
 
 .. py:function:: conditionalExpandArgs(*args, gate=None)
 

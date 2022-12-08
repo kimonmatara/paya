@@ -6,6 +6,10 @@ paya.runtime.networks.CurveUpVectorAimCurveSampler
 
 .. py:class:: CurveUpVectorAimCurveSampler(*args, **kwargs)
 
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.networks.CurveUpVectorSampler` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
     Works similarly to the 'aim curve' mode of a
     :class:`curveWarp <paya.runtime.nodes.CurveWarp>` deformer.
     
@@ -14,10 +18,6 @@ paya.runtime.networks.CurveUpVectorAimCurveSampler
         Returned vectors won't be perpendicular to curve tangents, with the
         expectation that they will be perpendicularized during subsequent
         matrix construction.
-
-    .. rubric:: Inheritance
-
-    :class:`~paya.runtime.networks.CurveUpVectorSampler` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
     .. py:classmethod:: create(curve, aimCurve, closestPoint=True)
     

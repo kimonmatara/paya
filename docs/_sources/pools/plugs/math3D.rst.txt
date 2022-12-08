@@ -6,11 +6,11 @@ paya.runtime.plugs.Math3D
 
 .. py:class:: Math3D(*args, **kwargs)
 
-
-
     .. rubric:: Inheritance
 
-    :class:`~paya.runtime.plugs.Compound` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+    :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
 
     .. py:method:: createLocator(name=None, size=1.0)
     
@@ -85,3 +85,15 @@ paya.runtime.plugs.Math3D
         :param bool swap: swap the operands
         :return: The blended output.
         :rtype: :class:`AttributeMath3D`
+    
+    .. py:method:: rotateByAxisAngle(axisVector, angle)
+    
+        :param axisVector: the vector around which to rotate this vector
+        :type axisVector: list, tuple, :class:`~paya.runtime.data.Vector`
+            or :class:`~paya.runtime.plugs.Vector`
+        :param angle: the angle of rotation
+        :type angle: float, :class:`~paya.runtime.data.Angle`, str or
+            class:`~paya.runtime.plugs.Math3D`
+        :return: This vector, rotated around ``axisVector`` by the specified
+            ``angle``.
+        :rtype: :class:`~paya.runtime.plugs.Vector`

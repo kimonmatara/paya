@@ -4,12 +4,93 @@ paya.lib.mathops
 
 .. py:module:: paya.lib.mathops
 
-.. py:function:: degToUI(degrees)
+.. py:function:: degToUI(val)
 
-    :param float degrees: an angle in degrees
-    :return: The original value if the Maya is set to degrees, otherwise
-        the value converted to radians.
+    :param float val: An angle value in degrees.
+    :return: If the UI is set to radians, *val* converted to radians;
+        otherwise, the original *val*.
     :rtype: :class:`float`
+
+.. py:function:: getUIAngleUnit()
+
+    :return: The current angle unit. Note that this will be returned in a
+        format that can be passed along to the data type constructors (e.g.
+        'degrees') rather than how it's returned by
+        :func:`~pymel.internal.pmcmds.currentUnit` (e.g. 'deg').
+    :rtype: :class:`str`
+
+.. py:function:: getUIDistanceUnit()
+
+    :return: The current distance unit. Note that this will be returned in a
+        format that can be passed along to the data type constructors (e.g.
+        'centimeters') rather than how it's returned by
+        :func:`~pymel.internal.pmcmds.currentUnit` (e.g. 'cm').
+    :rtype: :class:`str`
+
+.. py:function:: getUITimeUnit()
+
+    :return: The current time unit. Note that this will be returned in a
+        format that can be passed along to the data type constructors (e.g.
+        '24FPS') rather than how it's returned by
+        :func:`~pymel.internal.pmcmds.currentUnit` (e.g. 'film').
+    :rtype: :class:`str`
+
+.. py:function:: onRadians()
+
+    :return: ``True`` if the UI is set to radians, otherwise ``False``.
+    :rtype: ``bool``
+
+.. py:function:: info(item, defaultUnitType=None, quiet=False)
+
+    Returns a dict with the following keys (ordered):
+    
+    -   ``'item'``: The *item*, conformed to the most specific Paya type
+        possible.
+    
+    -   ``'dimension'``: One of ``1``, ``2``, ``3``, ``4`` or ``16``.
+    
+    -   ``'unitType'``: One of ``'angle'``, ``'distance'``, ``'time'`` or
+        ``None``.
+    
+    -   ``'isPlug'``: ``True`` or ``False``.
+    
+    Value conforming is performed in the following way:
+    
+    -   If *item* is a :class:`bool`, it's returned as-is.
+    -   If *item* is a :class:`float` or :class:`int`, it's returned as-is
+        unless a *defaultUnitType* is specified, in which case a
+        :class:`~paya.runtime.data.Angle`,
+        :class:`~paya.runtime.data.Distance` or
+        :class:`~paya.runtime.data.Time` instance is returned. UI units
+        are used in every case.
+    -   If *item* is a list of floats or ints, then:
+    
+        -   If its dimension is 3 then, if *defaultUnitType* is set to
+            ``'angle'``, it's instantiated as
+            :class:`~paya.runtime.data.EulerRotation`; otherwise, as
+            :class:`~paya.runtime.data.Vector`.
+    
+        -   If its dimension is 4, then it's always returned as a
+            :class:`~paya.runtime.data.Quaternion`.
+    
+        -   If its dimension is 16, then it's always returned as a
+            :class:`~paya.runtime.data.Matrix`.
+    
+        -   In all other cases, it's returned as a list with members intact.
+    
+    Plugs are returned as :class:`~paya.runtime.plugs.Attribute` instances,
+    with the subtype / unit strictly based on :class:`~maya.OpenMaya.MPlug`
+    analysis performed by :mod:`paya.pluginfo`.
+    
+    :param item: The item to inspect and conform.
+    :param defaultUnitType/dut: one of ``'angle'``, ``'distance'``, ``'time'``
+        or ``None``.
+    :type defaultUnitType/dut: :class:`str`, ``None``
+    :param bool quiet: don't throw an error if *item* can't be conformed to
+        a math type, just pass-through the incomplete dictionary with the
+        ``'item'`` field populated with the original item
+    :return: The dictionary.
+    :rtype: :class:`dict`
 
 .. py:function:: floatRange(start, end, numValues)
 
@@ -26,6 +107,10 @@ paya.lib.mathops
 
 .. py:class:: LinearInterpolator(*args, **kwargs)
 
+    .. rubric:: Inheritance
+
+    :class:`~collections.UserDict` :class:`~collections.abc.MutableMapping` :class:`~collections.abc.Mapping` :class:`~collections.abc.Collection` :class:`~collections.abc.Sized` :class:`~collections.abc.Iterable` :class:`~collections.abc.Container`
+
     Simple, dict-like interpolator implementation, similar to a linear
     animation curve in Maya. Works with any value type that can be handled by
     :func:`pymel.util.arrays.blend`, but types should not be mixed.
@@ -39,10 +124,6 @@ paya.lib.mathops
             interp[20] = 40
             print(interp[11])
             # Result: 31.0
-
-    .. rubric:: Inheritance
-
-    :class:`~collections.UserDict` :class:`~collections.abc.MutableMapping` :class:`~collections.abc.Mapping` :class:`~collections.abc.Collection` :class:`~collections.abc.Sized` :class:`~collections.abc.Iterable` :class:`~collections.abc.Container`
 
 .. py:function:: chaseNones(source)
 
@@ -296,7 +377,7 @@ paya.lib.mathops
     :rtype: :class:`~paya.runtime.data.Vector`,
         :class:`~paya.runtime.plugs.Vector`
 
-.. py:function:: blendBetweenCurveNormals(startNormal, endNormal, tangents, ratios=None, unwindSwitch=0)
+.. py:function:: bidirectionalParallelTransport(startNormal, endNormal, tangents, ratios=None, unwindSwitch=0)
 
     Blends between a forward and backward parallel-transport solution. If
     either *startNormal* or *endNormal* are ``None``, the solution will

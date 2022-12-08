@@ -1,0 +1,30 @@
+*************************
+paya.runtime.nodes.Choice
+*************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: Choice(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.Choice` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:classmethod:: create(*inputs, name=None, unitInputsToDouble=False, selector=None)
+    
+        :param \*inputs: input plugs
+        :type \*inputs: :class:`paya.runtime.plugs.Attribute` |
+            [:class:`paya.runtime.plugs.Attribute`]
+        :param str name/n: an optional name for the node; defaults to contextual
+            naming
+        :param bool unitInputsToDouble/utd: if any of the inputs are of
+            type ``doubleLinear`` or ``doubleAngle``, convert them according
+            to Maya rules to ``double`` instead; defaults to ``False``
+        :param selector/s: an optional value or driver for the ``selector``
+            attribute; defaults to ``None``
+        :type selector/s: :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The configured ``choice`` node.
+        :rtype: :class:`Choice`

@@ -37,6 +37,31 @@ paya.pools
     
         Purges cached information.
     
+    .. py:method:: readClass(clsname)
+    
+        Locates, sources and returns a class by name. No rebuilding or
+        cache management is performed.
+        
+        :param str clsname: the name of the class to retrieve
+        :return: The retrieved class.
+        :rtype: :class:`str`
+    
+    .. py:method:: getByName(clsname)
+    
+        Retrieves a class by name. Lookups are cached.
+        
+        :param str clsname: The name of the class to retrieved.
+        :return: The retrieved class.
+        :rtype: :class:`str`
+
+.. py:class:: RebuiltClassPool
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ClassPool`
+
+
+
     .. py:method:: getMeta(clsname)
     
         :param str clsname: the name of the class being retrieved
@@ -73,15 +98,6 @@ paya.pools
         :return: The dictionary.
         :rtype: dict
     
-    .. py:method:: getBasesDictFromTemplate(clsname)
-    
-        Looks for a template for the requested class and, if one is found,
-        returns its conformed bases and dictionary.
-        
-        :param clsname: the name of the class being retrieved
-        :return: The bases and dictionary.
-        :rtype: (tuple, dict)
-    
     .. py:method:: buildClass(clsname)
     
         Builds a final class. If a template is available, it is used.
@@ -96,27 +112,19 @@ paya.pools
     
     .. py:method:: getByName(clsname)
     
-        Retrieves a Paya class by name.
+        Retrieves a class by name. Lookups are cached.
         
-        Previously-constructed classes are returned from a cache. If the class
-        is not in the cache then, if there's a template for it, information
-        from the template will be used to build the class. If there's no
-        template then, if this pool implements invention, the class will be
-        invented. Otherwise, an exception will be raised.
-        
-        :param str clsname: the name of the class to retrieve
-        :raises MissingTemplateError: A template couldn't be found, and this
-            pool doesn't implement invention.
+        :param str clsname: The name of the class to retrieved.
         :return: The retrieved class.
-        :rtype: type
+        :rtype: :class:`str`
 
 .. py:class:: ShadowPool
 
-    Abstract base class for pools that directly shadow PyMEL namesakes.
-
     .. rubric:: Inheritance
 
-    :class:`~paya.pools.ClassPool`
+    :class:`~paya.pools.RebuiltClassPool` :class:`~paya.pools.ClassPool`
+
+    Abstract base class for pools that directly shadow PyMEL namesakes.
 
     .. py:method:: getFromPyMELInstance(inst)
     
@@ -167,12 +175,12 @@ paya.pools
 
 .. py:class:: NodeClassPool
 
-    Administers custom Paya classes for nodes. A browser for this pool can
-    be accessed on :mod:`paya.runtime` as ``.nodes``.
-
     .. rubric:: Inheritance
 
-    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.RebuiltClassPool` :class:`~paya.pools.ClassPool`
+
+    Administers custom Paya classes for nodes. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.nodes``.
 
     .. py:method:: conformDict(clsname, dct)
     
@@ -187,22 +195,22 @@ paya.pools
 
 .. py:class:: CompClassPool
 
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.RebuiltClassPool` :class:`~paya.pools.ClassPool`
+
     Administers custom Paya classes for components. A browser for this pool can
     be accessed on :mod:`paya.runtime` as ``.comps``.
 
-    .. rubric:: Inheritance
-
-    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
-
 .. py:class:: PlugClassPool
 
-    Administers custom Paya classes for plugs (attributes). Relies on
-    :mod:`~paya.plugtree`. A browser for this pool can
-    be accessed on :mod:`paya.runtime` as ``.plugs``.
-
     .. rubric:: Inheritance
 
-    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.RebuiltClassPool` :class:`~paya.pools.ClassPool`
+
+    Administers custom Paya classes for plugs (attributes). Relies on
+    :mod:`~paya.pluginfo`. A browser for this pool can
+    be accessed on :mod:`paya.runtime` as ``.plugs``.
 
     .. py:method:: getFromPyMELInstance(inst)
     
@@ -232,32 +240,44 @@ paya.pools
 
 .. py:class:: DataClassPool
 
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.RebuiltClassPool` :class:`~paya.pools.ClassPool`
+
     Administers custom Paya classes for data types (e.g. vectors). An instance
     of this pool can be accessed on :mod:`paya.runtime` as ``.data``.
 
-    .. rubric:: Inheritance
-
-    :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
-
 .. py:class:: ParsedNodeSubtypePoolMeta(clsname, bases, dct)
-
-
 
     .. rubric:: Inheritance
 
     :class:`~builtins.type`
 
+
+
 .. py:class:: ParsedNodeSubtypePool
-
-
 
     .. rubric:: Inheritance
 
-    :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+    :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.RebuiltClassPool` :class:`~paya.pools.ClassPool`
+
+
 
     .. py:method:: inventBasesDict(clsname)
     
         :raises NotImplementedError: Not supported on parsed-subtype pools.
+    
+    .. py:method:: getCrossPoolRoot()
+    
+        :return: A class from a 'base' class pool, to be used as the basis
+            for all classes returned by this one.
+        :rtype: :class:`type`
+    
+    .. py:method:: attrName()
+    
+        :return: The name of the string node attribute that will be inspected
+            for the type name.
+        :rtype: :class:`str`
     
     .. py:method:: buildClass(clsname)
     
@@ -295,16 +315,15 @@ paya.pools
 
 .. py:class:: ParsedNetworkSubtypePool
 
+    .. rubric:: Inheritance
+
+    :class:`~paya.pools.ParsedNodeSubtypePool` :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.RebuiltClassPool` :class:`~paya.pools.ClassPool`
+
     Administers subtypes for 'network' nodes.
 
-    .. rubric:: Inheritance
-
-    :class:`~paya.pools.ParsedNodeSubtypePool` :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
-
-.. py:class:: ParsedContainerSubtypePool
-
-    Administers subtypes for 'container' nodes.
+.. py:class:: PartClassPool
 
     .. rubric:: Inheritance
 
-    :class:`~paya.pools.ParsedNodeSubtypePool` :class:`~paya.pools.NodeClassPool` :class:`~paya.pools.ShadowPool` :class:`~paya.pools.ClassPool`
+    :class:`~paya.pools.ClassPool`
+

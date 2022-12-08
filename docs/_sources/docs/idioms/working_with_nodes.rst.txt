@@ -111,10 +111,11 @@ This often eliminates the need to pass around *name* or *prefix* arguments altog
                     with r.Name(i, padding=2):
                         r.nodes.Locator.createNode()
 
-            for side in 'LR':
-                for limb in ('arm', 'leg'):
-                    with r.Name(side, limb):
-                        buildLimbLocators()
+            with r:
+                for side in 'LR':
+                    for limb in ('arm', 'leg'):
+                        with r.Name(side, limb):
+                            buildLimbLocators()
 
     .. grid-item::
 

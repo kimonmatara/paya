@@ -1,0 +1,19 @@
+============
+paya.apiutil
+============
+
+.. py:module:: paya.apiutil
+
+.. py:function:: enumIndexToKey(index, enumClass)
+
+    Given an integer enumerator index, returns the matching key.
+    
+    :param enumClass: A class with enumerator keys, for example
+        :class:`~maya.OpenMaya.MFn`,
+        :class:`~maya.OpenMaya.MFnNumericData`,
+        :class:`~maya.OpenMaya.MFnData`
+        etc.
+    :type enumClass: :class:`~maya.OpenMaya.MFn`
+    :param int index: the index for which to retrieve a key
+    :return: The key.
+    :rtype: :class:`str`
