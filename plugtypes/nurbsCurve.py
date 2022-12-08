@@ -136,10 +136,10 @@ class NurbsCurve:
         #---------------------|    Gather info
 
         if degree is not None:
-            degree = _tm.mathInfo(degree)[0]
+            degree = _mo.info(degree)['item']
 
         if numCVs is not None:
-            numCVs = _tm.mathInfo(numCVs)[0]
+            numCVs = _mo.info(numCVs)['item']
 
         if numCVs is None and degree is None:
             degree = 1
@@ -160,8 +160,8 @@ class NurbsCurve:
 
         numSpans = numCVs - degree
 
-        startPoint = _tm.mathInfo(startPoint)[0]
-        endPoint = _tm.mathInfo(endPoint)[0]
+        startPoint = _mo.info(startPoint)['item']
+        endPoint = _mo.info(endPoint)['item']
         vector = endPoint - startPoint
         mag = vector.length()
 
@@ -243,11 +243,12 @@ class NurbsCurve:
             generate parameters, not fractions; defaults to ``False``
         :param bool uniform/uni: if generating parameters, distribute them
             by length, not parametric space; defaults to ``False``
-        :return: A list of scalars (fractions or parameters).
+        :return: If 'parametric' is True, a list of parameters; otherwise,
+             a list of fractions.
         :rtype: [:class:`float`, :class:`~paya.runtime.plugs.Math1D`]
         """
         if hasattr(numberFractionsOrParams, '__iter__'):
-            return [_tm.mathInfo(x)[0] for x in numberFractionsOrParams]
+            return [_mo.info(x)['item'] for x in numberFractionsOrParams]
 
         else:
             number = numberFractionsOrParams
@@ -281,7 +282,8 @@ class NurbsCurve:
         :return: The ``nearestPointOnCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.NearestPointOnCurve`
         """
-        point, pointDim, pointIsPlug = _tm.mathInfo(point)
+        point, pointDim, pointUnitType, pointIsPlug = \
+            _mo.info(point).values()
 
         if reuse:
             existingNodes = self.outputs(type='nearestPointOnCurve')
@@ -495,8 +497,10 @@ class NurbsCurve:
     #-----------------------------------------------|    PointOnCurveInfo
 
     def _findExistingInfoAtParam(self, param, turnOnPercentage=False):
-        param, paramDim, paramIsPlug = _tm.mathInfo(param)
-        turnOnPercentage, topDim, topIsPlug = _tm.mathInfo(turnOnPercentage)
+        param, paramDim, paramUnitType, paramIsPlug = \
+            _mo.info(param).values()
+        turnOnPercentage, topDim, topUnitType, topIsPlug = \
+            _mo.info(turnOnPercentage).values()
         existingNodes = self.outputs(type='pointOnCurveInfo')
 
         for existingNode in existingNodes:
@@ -1329,6 +1333,47 @@ class NurbsCurve:
         param = self.paramAtPoint(point, plug=plug)
         return self.tangentAtParam(param, nr=normalize, p=plug)
 
+    @copyToShape()
+    @short(plug='p', normalize='nr')
+    def distributeTangents(self,
+                           numberFractionsOrParams,
+                           plug=None,
+                           normalize=False,
+                           parametric=False,
+                           uniform=True):
+        """
+        :param numberFractionsOrParams: this should either be
+
+            -   A number of fractions or parameters to sample along the curve,
+                or
+            -   An explicit list of fractions or parameters at which to construct
+                the tangents
+        :param bool plug/p: return attribute outputs, not values; defaults to
+            ``False``
+        :param bool normalize/nr: normalize the tangents; defaults to
+            ``False``
+        :param bool parametric/par: interpret *numberOrFractions* as
+            parameters, not fractions; defaults to ``False``
+        :param bool uniform/uni: if *parametric* is ``True``, and
+            *numberFractionsOrParams* is a number, initial parameters should
+            be distributed by length, not parametric space; defaults to
+            ``False``
+        :return: A list of tangents.
+        :rtype: [:class:`~paya.runtime.data.Vector`] |
+            [:class:`~paya.runtime.plugs.Vector`]
+        """
+        fractionsOrParams = self._resolveNumberFractionsOrParams(
+            numberFractionsOrParams,
+            par=parametric,
+            uni=uniform)
+
+        if parametric:
+            meth = self.tangentAtParam
+        else:
+            meth = self.tangentAtFraction
+
+        return [meth(x, p=plug, nr=normalize) for x in fractionsOrParams]
+
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    UP VECTORS
     #---------------------------------------------------------------|
@@ -1784,7 +1829,8 @@ class NurbsCurve:
         """
         if plug:
             if globalScale is not None:
-                globalScale, gsDim, gsIsPlug = _tm.mathInfo(globalScale)
+                globalScale, gsDim, gsUnitType, gsIsPlug = \
+                    _mo.info(globalScale).values()
 
                 if gsIsPlug:
                     globalScale = globalScale.normal()
@@ -1960,7 +2006,8 @@ class NurbsCurve:
         """
         if plug:
             if globalScale is not None:
-                globalScale, gsDim, gsIsPlug = _tm.mathInfo(globalScale)
+                globalScale, gsDim, gsUnitType, gsIsPlug = \
+                    _mo.info(globalScale).values()
 
                 if gsIsPlug:
                     globalScale = globalScale.normal()
@@ -2384,7 +2431,8 @@ class NurbsCurve:
                 gsIsPlug = False
 
             else:
-                globalScale, gsDim, gsIsPlug = _tm.mathInfo(globalScales)
+                globalScale, gsDim, gsUnitType, gsIsPlug = \
+                    _mo.info(globalScales).values()
 
             if squashStretch:
                 aimIndex = 'xyz'.index(primaryAxis.strip('-'))
@@ -3097,7 +3145,7 @@ class NurbsCurve:
             ``extendCurve`` node; defaults to True
         :return: This curve, extended by the specified length.
         """
-        length = _tm.mathInfo(length)[0]
+        length = _mo.info(length)['item']
 
         if atBothEnds:
             length *= 0.5
@@ -3184,7 +3232,8 @@ class NurbsCurve:
         """
         lenPointOrVec, \
         lenPointOrVecDim, \
-        lenPointOrVecIsPlug = _tm.mathInfo(lenPointOrVec)
+        lenPointOrVecUnitType, \
+        lenPointOrVecIsPlug = _mo.info(lenPointOrVec).values()
 
         if lenPointOrVecDim is 1:
             if useSegment:
@@ -3256,7 +3305,8 @@ class NurbsCurve:
         :return: The modified curve.
         :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
         """
-        cutLength, cutLengthDim, cutLengthIsPlug = _tm.mathInfo(length)
+        cutLength, cutLengthDim, cutLengthUnitType, cutLengthIsPlug = \
+            _mo.info(length).values()
 
         if atStart:
             cutLengths = [cutLength]
@@ -3340,7 +3390,7 @@ class NurbsCurve:
             )
 
         else:
-            vector = _tm.mathInfo(vector)[0]
+            vector = _mo.info(vector)['item']
             vector = vector.normal() * extendLength
 
             extension = self.extendByVector(
