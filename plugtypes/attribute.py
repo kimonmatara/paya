@@ -3,10 +3,12 @@ import maya.OpenMaya as om
 import maya.cmds as m
 import pymel.core as p
 
-from paya.plugtree import getPath
+import paya.pluginfo as _pi
 from paya.util import short
+import paya.lib.attrs as _atr
 import paya.runtime as r
 
+cap = lambda x: x[0].upper()+x[1:]
 uncap = lambda x: x[0].lower()+x[1:]
 
 
@@ -14,7 +16,226 @@ class Attribute:
 
     __math_dimension__ = None
 
-    #-----------------------------------------------------------------|    Unit management
+    #-----------------------------------------------------------------|    Constructor
+
+    @classmethod
+    def create(cls, node, attrName, **kwargs):
+        """
+        Creates an attribute.
+
+        :param node: the node on which to create the attribute
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param str attrName: the name of the attribute
+        :param \*\*kwargs: forwarded to
+            :meth:`paya.runtime.nodes.DependNode.addAttr`
+        :return: The generated attribute.
+        :rtype: :class:`Attribute`
+        """
+        node = r.PyNode(node)
+        return node.addAttr(attrName, **kwargs)
+
+    #-----------------------------------------------------------------|    Connections
+
+    def splitInputs(self):
+        """
+        Splits any compound-level input into per-child connections. The
+        compound-level connection is maintained.
+
+        :return: ``self``
+        """
+        if self.isCompound():
+            inputs = self.inputs(plugs=True)
+
+            if inputs:
+                input = inputs[0]
+
+                srcChildren = input.getChildren()
+                destChildren = self.getChildren()
+
+                for srcChild, destChild in zip(srcChildren, destChildren):
+                    srcChild >> destChild
+        else:
+            r.warning("Can't split inputs; not a compound.")
+
+        return self
+
+    #-----------------------------------------------------------------|    Proxy attributes
+
+    @short(longName='ln', shortName='sn')
+    def createProxy(self, node, longName=None, shortName=None):
+        """
+        Creates a proxy of this attribute.
+
+        :param node: the node on which to create the proxy
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param str longName/ln: a long name for the proxy attribute; defaults
+            this attribute's long name
+        :param str shortName/sn: a short name for the proxy attribute;
+            defaults this attribute's short name
+        :return: The proxy attribute.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+        """
+        _self = str(self)
+
+        if longName is None:
+            longName = self.attrName(longName=True)
+
+        if shortName is None:
+            shortName = self.attrName()
+
+        kw = {'proxy': _self}
+
+        if longName:
+            kw['longName'] = longName
+
+        if shortName:
+            kw['shortName'] = shortName
+
+        m.addAttr(str(node), **kw)
+        return node.attr(longName)
+
+    #-----------------------------------------------------------------|    Unit / type management
+
+    # @short(onlyIfUnits='ofu')
+    # def asDouble(self, onlyIfUnits=False):
+    #     if onlyIfUnits:
+    #         doPipe = self.type() in ('doubleLinear', 'doubleAngle')
+    #
+    #     else:
+    #         doPipe = True
+    #
+    #     if doPipe:
+    #         with r.Name('asDouble'):
+    #             node = r.nodes.Network.createNode()
+    #
+    #         node.addAttr('output', at='double')
+    #         self >> node.attr('output')
+    #
+    #         return node.attr('output')
+    #
+    #     return self
+
+    # def asUnitless(self):
+    #     attrType = self.type()
+    #
+    #     if attrType in ('double', 'float',)
+    #
+    #
+
+    # def isMath1D(self):
+    #     """
+    #     :return: ``True`` if this is a 1D scalar or similar.
+    #     :rtype: :class:`bool`
+    #     """
+    #     if self.isArray():
+    #         return False
+    #
+    #     if self.isCompound():
+    #         return False
+    #
+    #     if self.isMulti():
+    #         self = self[0]
+    #
+    #     mplug = self.__apimplug__()
+    #     mobj = mplug.attribute()
+    #
+    #     if mobj.hasFn(om.MFn.kNumericAttribute):
+    #         return True
+    #
+    #     if mobj.hasFn(om.MFn.kUnitAttribute):
+    #         return True
+    #
+    #     return False
+
+    # def _asType(self,
+    #             typ,
+    #             checkSkip=True,
+    #             outputOnThisNode=False,
+    #             allowUnitConversions=True):
+    #
+    #     if checkSkip and self.type() == typ:
+    #         return self
+    #
+    #     if outputOnThisNode:
+    #         targetNode = self.node()
+    #
+    #     else:
+    #         with r.Name('as{}'.format(cap(typ))):
+    #             targetNode = r.nodes.Network.createNode()
+    #
+    #     if (not allowUnitConversions) and \
+    #             (typ in ('doubleLinear',))
+
+        # if outputOnThisNode:
+        #     node = self.node()
+        #     attrName = '{}_as{}'.format(self.attrName(), cap(typ))
+        #
+        # else:
+        #     with r.Name('as{}'.format(cap(typ))):
+        #         node = r.nodes.Network.createNode()
+        #
+        #     attrName = 'output'
+        #
+        # if (not allowUnitConversions) and \
+        #         (typ in ('doubleLinear', 'doubleAngle')):
+        #     node.addAttr('typedInput', at='typed')
+        #     self >> node.attr('typedInput')
+        #     self = node.attr('typedInput')
+        #
+        # node.addAttr('output', at=typ)
+        # self >> node.attr('output')
+        # return node.attr('output')
+
+    # @short(allowUnitConversions='auc')
+    # def asDouble(self, allowUnitConversions=True):
+    #     return self._asType('double', allowUnitConversions=allowUnitConversions)
+    #
+    # @short(allowUnitConversions='auc')
+    # def asDoubleLinear(self, allowUnitConversions=True):
+    #     return self._asType('doubleLinear',
+    #                         allowUnitConversions=allowUnitConversions)
+    #
+    # @short(allowUnitConversions='auc')
+    # def asDoubleAngle(self, allowUnitConversions=True):
+    #     return self._asType('doubleAngle',
+    #                         allowUnitConversions=allowUnitConversions)
+    #
+    # @short(allowUnitConversions='auc')
+    # def asFloat(self, allowUnitConversions=True):
+    #     return self._asType('float',
+    #                         allowUnitConversions=allowUnitConversions)
+    #
+    # @short(allowUnitConversions='auc')
+    # def asDoubleOrFloat(self,
+    #                     allowUnitConversions=True):
+    #     if self.type() in ('float', 'double'):
+    #         return self
+    #
+    #     return self._asType('double', checkSkip=False)
+    #
+    # def asTyped(self):
+    #     return self._asType('typed')
+
+    def hasUnits(self):
+        """
+        :return: ``True`` if this is a linear, angle or time attribute, or
+            a compound with any children for which this is ``True``, otherwise
+            ``False``.
+        :rtype: :class:`bool`
+        """
+        if self.isMulti(): # to prevent crashes around API calls
+            self = self[0]
+
+        if self.isCompound():
+            for child in self.getChildren():
+                if child.hasUnits():
+                    return True
+
+            return False
+
+        mobj = self.__apimplug__().attribute()
+
+        return mobj.hasFn(om.MFn.kUnitAttribute)
 
     def unitType(self):
         """
@@ -32,6 +253,7 @@ class Attribute:
 
         else:
             mobj = self.__apimplug__().attribute()
+
             if mobj.hasFn(om.MFn.kUnitAttribute):
                 mfn = om.MFnUnitAttribute(mobj)
                 unitType = mfn.unitType()
@@ -46,6 +268,70 @@ class Attribute:
                     return 'time'
 
     #-----------------------------------------------------------------|    Type management
+
+    # def hasUnit(self):
+    #     """
+    #     :return: ``True`` if this is an angle, distance or time attribute.
+    #     :rtype: :class:`bool`
+    #     """
+    #     mobj = self.__apimobject__()
+    #     return mobj.hasFn(om.MFn.kUnitAttribute)
+    #
+    # def isTyped(self):
+    #     """
+    #     :return: ``True`` if this is a 'typed' data attribute, otherwise
+    #         ``False``.
+    #     :rtype: :class:`bool`
+    #     """
+    #     mobj = self.__apimobject__()
+    #     return mobj.hasFn(om.MFn.kTypedAttribute)
+    #
+    # def isGeneric(self):
+    #     """
+    #     :return: ``True`` if this is a 'generic' data attribute, otherwise
+    #         ``False``.
+    #     :rtype: :class:`bool`
+    #     """
+    #     mobj = self.__apimobject__()
+    #     return mobj.hasFn(om.MFn.kGenericAttribute)
+    #
+    # def isAngle(self):
+    #     """
+    #     :return: ``True`` if this is an angle (``doubleAngle``) attribute,
+    #         otherwise ``False``.
+    #     :rtype: :class:`bool`
+    #     """
+    #     mobj = self.__apimobject__()
+    #     if mobj.hasFn(om.MFn.kUnitAttribute):
+    #         mfn = om.MFnUnitAttribute(mobj)
+    #         return mfn.unitType() == om.MFnUnitAttribute.kAngle
+    #
+    #     return False
+    #
+    # def isDistance(self):
+    #     """
+    #     :return: ``True`` if this is a distance (``doubleLinear``) attribute,
+    #         otherwise ``False``.
+    #     :rtype: :class:`bool`
+    #     """
+    #     mobj = self.__apimobject__()
+    #     if mobj.hasFn(om.MFn.kUnitAttribute):
+    #         mfn = om.MFnUnitAttribute(mobj)
+    #         return mfn.unitType() == om.MFnUnitAttribute.kDistance
+    #
+    #     return False
+    #
+    # def isTime(self):
+    #     """
+    #     :return: ``True`` if this is a time attribute, otherwise ``False``.
+    #     :rtype: :class:`bool`
+    #     """
+    #     mobj = self.__apimobject__()
+    #     if mobj.hasFn(om.MFn.kUnitAttribute):
+    #         mfn = om.MFnUnitAttribute(mobj)
+    #         return mfn.unitType() == om.MFnUnitAttribute.kTime
+    #
+    #     return False
 
     def isAnimatableDynamic(self):
         """
@@ -69,6 +355,13 @@ class Attribute:
 
         return False
 
+    def plugInfo(self):
+        """
+        Calls :func:`paya.pluginfo.getInfoFromAttr` on this attribute and
+        returns the result.
+        """
+        return _pi.getInfoFromAttr(self)
+
     @short(inherited='i')
     def plugType(self, inherited=False):
         """
@@ -79,7 +372,8 @@ class Attribute:
         :return: The type information.
         :rtype: str or list
         """
-        out = getPath(self.__class__.__name__)
+        info = _pi.getInfoFromMPlug(self.__apimplug__())
+        out = _pi.getPath(info['key'])
 
         if inherited:
             return list(map(uncap, out))
@@ -154,8 +448,8 @@ class Attribute:
 
         See :meth:`lock` and :meth:`hide` for details.
         """
-        self.lock()
-        self.hide()
+        self.lock(recursive=recursive)
+        self.hide(recursive=recursive)
         return self
 
     @short(recursive='r')
@@ -349,20 +643,6 @@ class Attribute:
 
     #-----------------------------------------------------------------|    Reordering
 
-    def _sendAboveOrBelow(self, attrName, below=False):
-        thisName = self.attrName()
-
-        if below:
-            order = [attrName, thisName]
-
-        else:
-            order = [thisName, attrName]
-
-        node = self.node()
-        node.reorderAttrs(order)
-
-        return node.attr(thisName)
-
     def sendAbove(self, attrName):
         """
         Sends this attribute above another attribute in the channel box.
@@ -371,7 +651,16 @@ class Attribute:
         :return: This attribute, rebuilt.
         :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
-        return self._sendAboveOrBelow(attrName, below=False)
+        thisName = self.attrName(longName=True)
+        node = self.node()
+        allAttrNames = node.getReorderableAttrNames()
+        allAttrNames.remove(thisName)
+        targetIndex = allAttrNames.index(attrName)
+        head = allAttrNames[:targetIndex]
+        tail = allAttrNames[targetIndex:]
+        fullList = [head] + [thisName] + [tail]
+        _atr.reorder(node, fullList)
+        return node.attr(thisName)
 
     def sendBelow(self, attrName):
         """
@@ -381,7 +670,31 @@ class Attribute:
         :return: This attribute, rebuilt.
         :rtype: :class:`~paya.runtime.plugs.Attribute`
         """
-        return self._sendAboveOrBelow(attrName, below=True)
+        thisName = self.attrName(longName=True)
+        node = self.node()
+        allAttrNames = node.getReorderableAttrNames()
+        allAttrNames.remove(thisName)
+        targetIndex = allAttrNames.index(attrName)
+
+        head = allAttrNames[:targetIndex+1]
+        tail = allAttrNames[targetIndex+1:]
+        fullList = [head] + [thisName] + [tail]
+        _atr.reorder(node, fullList)
+        return node.attr(thisName)
+
+    #-----------------------------------------------------------------|    Extended iteration
+
+    def __iter__(self):
+        if self.isMulti():
+            for i in self._getArrayIndices()[1]:
+                yield self[i]
+        elif self.isCompound():
+            for child in self.getChildren():
+                yield child
+
+        else:
+            raise TypeError(("{} is not a multi-attribute "+
+                            "and cannot be iterated over.").format(self))
 
     #-----------------------------------------------------------------|    Array (multi) attributes
 
