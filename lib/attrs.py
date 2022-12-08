@@ -44,10 +44,10 @@ def _releasePlugsAndReturnStates(node):
 
 	#--------------------------------|    Get a list of all user-defined attrs
 
-	userAttrs = filter(
+	userAttrs = list(filter(
 		lambda x: x.get(k=True) or x.get(cb=True),
 		node.listAttr(ud=True)
-		)
+		))
 
 	# Expand to include parents and children
 
@@ -72,7 +72,7 @@ def _releasePlugsAndReturnStates(node):
 
 	#--------------------------------|    Aggregate all attrs, store lock info, unlock them
 
-	allInvolvedAttrs = map(str,userAttrs)
+	allInvolvedAttrs = [str(userAttr) for userAttr in userAttrs]
 
 	for pair in connections:
 		allInvolvedAttrs += pair
@@ -123,7 +123,6 @@ def reorder(node, *attrNames):
     attrNames = list(_pu.expandArgs(*attrNames))
 
     # Make sure undo queue is on
-
     undoState = {}
 
     for queryFlag in (
