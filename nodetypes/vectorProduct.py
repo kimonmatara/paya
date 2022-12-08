@@ -1,5 +1,5 @@
 from paya.util import short
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 import paya.runtime as r
 
 
@@ -49,24 +49,17 @@ class VectorProduct:
         """
         node = cls.createNode(name=name if name else cls.makeName())
 
-        input1, input1Dim, input1IsPlug = _tm.mathInfo(input1)
-        input2, input2Dim, input2IsPlug = _tm.mathInfo(input2)
+        input1, input1Dim, input1UnitType, input1IsPlug = \
+            _mo.info(input1).values()
+        input2, input2Dim, input2UnitType, input2IsPlug = \
+            _mo.info(input2).values()
 
         if inlineGate is not None:
             guard = True
 
         if guard:
-            if input1IsPlug:
-                input1 >> node.attr('input1')
-            else:
-                node.attr('input1').set(input1)
-                input1 = node.attr('input1')
-
-            if input2IsPlug:
-                input2 >> node.attr('input2')
-            else:
-                node.attr('input2').set(input2)
-                input2 = node.attr('input2')
+            node.attr('input1').put(input1, p=input1IsPlug)
+            node.attr('input2').put(input2, p=input2IsPlug)
 
             if inlineGate is None:
                 dot = input1.dot(input2, nr=True).abs()
