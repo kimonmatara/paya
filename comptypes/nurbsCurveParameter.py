@@ -138,8 +138,12 @@ class NurbsCurveParameter:
     @short(toParameter='tp')
     def subCurve(self, toParameter=None):
         """
-        :param toParameter:
-        :return:
+        :param toParameter/tp: the end parameter for the sub-curve range;
+            defaults to the domain end if omitted; defaults to ``None``
+        :type toParameter/tp: :class:`str`, :class:`int`, :class:`float`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The generated sub-curve shape.
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`
         """
         if toParameter is None:
             params = self.indices()
