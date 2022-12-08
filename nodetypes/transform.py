@@ -1,9 +1,8 @@
 import maya.cmds as m
-import paya.config as config
 import pymel.util as _pu
 
 from paya.util import short, resolveFlags
-from paya.lib.controlshapes import controlShapes
+from paya.lib.controls import controlShapes
 import paya.runtime as r
 
 
@@ -115,108 +114,108 @@ class Transform:
 
         return group
 
-    @classmethod
-    @short(name='n',
-           parent='p',
-           shape='sh',
-           size='siz',
-           color='col',
-           worldMatrix='wm',
-           keyable='k',
-           channelBox='cb',
-           rotateOrder='ro',
-           asControl='ac',
-           offsetGroups='og',
-           pickWalkParent='pwp',
-           lineWidth='lw')
-    def createControl(cls,
-                      name=None,
-                      parent=None,
-                      shape='cube',
-                      size=1.0,
-                      color=None,
-                      worldMatrix=None,
-                      keyable=None,
-                      channelBox=None,
-                      rotateOrder='xyz',
-                      asControl=True,
-                      offsetGroups='offset',
-                      pickWalkParent=None,
-                      lineWidth=None):
-
-        """
-        Creates rig controls. Also available directly on :mod:`paya.runtime`.
-
-        :param str name/n: an optional explicit name for the control; defaults
-            to a contextual name
-        :param parent/p: an optional parent for the control; defaults to None
-        :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
-        :param str shape/sh: the name of a library shape to apply to the control;
-            defaults to 'cube'
-        :param color/col: an optional override color index for the control;
-            defaults to None
-        :type color/col: int, None
-        :param float size: a uniform scaling factor for the control shape;
-            defaults to 1.0
-        :param worldMatrix/wm: the world matrix for the control; if this is
-            omitted then, if *parent* is provided, the matrix is copied from the
-            destination parent; otherwise, it defaults to the identity matrix
-        :type worldMatrix/wm: list, :class:`~paya.runtime.data.Matrix`, None
-        :param list keyable/k: a list of channels to set to keyable on the
-            control
-        :param list channelBox/cb: a list of channels to set to settable on the
-            control
-        :param rotateOrder/ro: the control's rotate order; defaults to 'xyz'
-        :type rotateOrder/ro: str, int
-        :param bool asControl/ac: if this is ``False``, create the control as a
-            group with no shapes and omit the controller tag; defaults to True
-        :param offsetGroups: the suffixes of one or more offset groups to create;
-            defaults to 'offset'
-        :type offsetGroups: list, str
-        :param pickWalkParent/pwp: an optional pick-walk parent for this control;
-            ignored if *asControl* is False; defaults to None
-        :type pickWalkParent/pwp: str,
-            :class:`~paya.runtime.nodes.DependNode`
-        :param float lineWidth/lw: an override for the control shapes' line
-            width; defaults to None
-        :return: The generated control.
-        :rtype: :class:`~paya.runtime.nodes.Transform`
-        """
-
-        kwargs = {}
-
-        kwargs['name'] = name if name else r.Name.make(
-            control=asControl,
-            nodeType=None if asControl else 'transform'
-        )
-
-        if parent is not None:
-            kwargs['parent'] = parent
-
-        ct = r.group(empty=True, **kwargs)
-
-        ct.setMatrix(worldMatrix, worldSpace=True)
-        ct.attr('rotateOrder').set(rotateOrder)
-
-        ct.createOffsetGroups(offsetGroups)
-        ct.maskAnimAttrs(k=keyable, cb=channelBox)
-
-        if asControl:
-            ct.isControl(True)
-
-            if shape:
-                ct.setCtShapesFromLib(shape, lw=lineWidth)
-
-            if size != 1.0:
-                ct.scaleCtShapes([size]*3)
-
-            if color is not None:
-                ct.colorCtShapes(color)
-
-            if pickWalkParent:
-                ct.setPickWalkParent(pickWalkParent)
-
-        return ct
+    # @classmethod
+    # @short(name='n',
+    #        parent='p',
+    #        shape='sh',
+    #        size='siz',
+    #        color='col',
+    #        worldMatrix='wm',
+    #        keyable='k',
+    #        channelBox='cb',
+    #        rotateOrder='ro',
+    #        asControl='ac',
+    #        offsetGroups='og',
+    #        pickWalkParent='pwp',
+    #        lineWidth='lw')
+    # def createControl(cls,
+    #                   name=None,
+    #                   parent=None,
+    #                   shape='cube',
+    #                   size=1.0,
+    #                   color=None,
+    #                   worldMatrix=None,
+    #                   keyable=None,
+    #                   channelBox=None,
+    #                   rotateOrder='xyz',
+    #                   asControl=True,
+    #                   offsetGroups='offset',
+    #                   pickWalkParent=None,
+    #                   lineWidth=None):
+    #     """
+    #     Creates rig controls. Also available directly on :mod:`paya.runtime`.
+    #
+    #     :param str name/n: an optional explicit name for the control; defaults
+    #         to a contextual name
+    #     :param parent/p: an optional parent for the control; defaults to None
+    #     :type parent/p: None, str, :class:`~paya.runtime.nodes.Transform`
+    #     :param str shape/sh: the name of a library shape to apply to the control;
+    #         defaults to 'cube'
+    #     :param color/col: an optional override color index for the control;
+    #         defaults to None
+    #     :type color/col: int, None
+    #     :param float size: a uniform scaling factor for the control shape;
+    #         defaults to 1.0
+    #     :param worldMatrix/wm: the world matrix for the control; if this is
+    #         omitted then, if *parent* is provided, the matrix is copied from the
+    #         destination parent; otherwise, it defaults to the identity matrix
+    #     :type worldMatrix/wm: list, :class:`~paya.runtime.data.Matrix`, None
+    #     :param list keyable/k: a list of channels to set to keyable on the
+    #         control
+    #     :param list channelBox/cb: a list of channels to set to settable on the
+    #         control
+    #     :param rotateOrder/ro: the control's rotate order; defaults to 'xyz'
+    #     :type rotateOrder/ro: str, int
+    #     :param bool asControl/ac: if this is ``False``, create the control as a
+    #         group with no shapes and omit the controller tag; defaults to True
+    #     :param offsetGroups: the suffixes of one or more offset groups to create;
+    #         defaults to 'offset'
+    #     :type offsetGroups: list, str
+    #     :param pickWalkParent/pwp: an optional pick-walk parent for this control;
+    #         ignored if *asControl* is False; defaults to None
+    #     :type pickWalkParent/pwp: str,
+    #         :class:`~paya.runtime.nodes.DependNode`
+    #     :param float lineWidth/lw: an override for the control shapes' line
+    #         width; defaults to None
+    #     :return: The generated control.
+    #     :rtype: :class:`~paya.runtime.nodes.Transform`
+    #     """
+    #     kwargs = {}
+    #
+    #     kwargs['name'] = name if name else r.Name.make(
+    #         control=asControl,
+    #         nodeType=None if asControl else 'transform'
+    #     )
+    #
+    #     if parent is not None:
+    #         kwargs['parent'] = parent
+    #
+    #     ct = r.group(empty=True, **kwargs)
+    #
+    #     if worldMatrix is not None:
+    #         ct.setMatrix(worldMatrix, worldSpace=True)
+    #
+    #     ct.attr('rotateOrder').set(rotateOrder)
+    #
+    #     ct.createOffsetGroups(offsetGroups)
+    #     ct.maskAnimAttrs(k=keyable, cb=channelBox)
+    #
+    #     if asControl:
+    #         ct.isControl(True)
+    #
+    #         if shape:
+    #             ct.setCtShapesFromLib(shape, lw=lineWidth)
+    #
+    #         if size != 1.0:
+    #            ct.scaleCtShapes(size)
+    #
+    #         if color is not None:
+    #             ct.colorCtShapes(color)
+    #
+    #         if pickWalkParent:
+    #             ct.setPickWalkParent(pickWalkParent)
+    #
+    #     return ct
 
     #--------------------------------------------------------|    Shape / transform management
 
@@ -252,6 +251,47 @@ class Transform:
         return self
 
     #--------------------------------------------------------|    Sampling
+
+    @short(includeNegative='ing')
+    def closestAxisToVector(self, refVector, includeNegative=True):
+        """
+        :param refVector: the vector to compare against
+        :param bool includeNegative/ing: Consider negative axes;
+            defaults to ``True``
+        :return: The most closely-aligned axis on this object to
+            ``refVector``, e.g. ``'-x'``.
+        :rtype: :class:`str`
+        """
+        axisVecs = {
+            'x': r.data.Vector([1, 0, 0]),
+            'y': r.data.Vector([0, 1, 0]),
+            'z': r.data.Vector([0, 0, 1])
+        }
+
+        if includeNegative:
+            axisVecs.update({
+                '-x': r.data.Vector([-1, 0, 0]),
+                '-y': r.data.Vector([0, -1, 0]),
+                '-z': r.data.Vector([0, 0, -1])
+            })
+
+        bestAxis = None
+        bestDot = None
+        objMatrix = self.getMatrix(worldSpace=True)
+
+        for axis, vector in axisVecs.items():
+            vector *= objMatrix
+            dot = vector.dot(refVector, normalize=True)
+
+            if bestDot is None:
+                bestDot = dot
+                bestAxis = axis
+
+            elif dot > bestDot:
+                bestDot = dot
+                bestAxis = axis
+
+        return bestAxis
 
     def closestOf(self, elems):
         """
@@ -414,10 +454,8 @@ class Transform:
                 if parent is not None:
                     kwargs['parent'] = parent
 
-                group = r.group(empty=True,
-                                name=r.nodes.Transform.makeName(),
-                                **kwargs)
-
+                thisName = r.nodes.Transform.makeName()
+                group = r.group(empty=True, name=thisName, **kwargs)
                 group.setMatrix(mtx, worldSpace=True)
                 lastChild.setParent(group)
                 out.append(group)
@@ -619,24 +657,6 @@ class Transform:
             for curveComponent in curveComponents:
                 point = r.pointPosition(curveComponent, local=True)
                 point ^= scaleMtx
-
-                r.move(curveComponent, point, ls=True, a=True)
-
-        for locator in locators:
-            scale = p.datatypes.Array(scale)
-            localScale = p.datatypes.Array(locator.attr('localScale').get())
-            newScale = localScale * scale
-            locator.attr('localScale').set(newScale)
-        curveComponents = self._getCurveComponents()
-        locators = self.getShapes(noIntermediate=True, type='locator')
-
-        if curveComponents:
-            scaleMtx = r.data.Vector(scale).asScaleMatrix()
-
-            for curveComponent in curveComponents:
-                point = r.pointPosition(curveComponent, local=True)
-                point ^= scaleMtx
-
                 r.move(curveComponent, point, ls=True, a=True)
 
         for locator in locators:
@@ -647,18 +667,22 @@ class Transform:
 
         return self
 
-    @short(lineWidth='lw')
-    def setCtShapesFromLib(self, libKey, lineWidth=None):
+    @short(lineWidth='lw', size='siz')
+    def setCtShapesFromLib(self, libKey, lineWidth=None, size=1.0):
         """
         Sets control shapes to the named library entry.
 
         :param str name: the name of the library entry, e.g. 'cube'
         :param float lineWidth/lw: an override for the line width;
             defaults to None
+        :param float size/siz: the shape scale; defaults to 1.0
         :return: The newly-generated control shapes.
         :rtype: list of :class:`~paya.runtime.nodes.Shape`
         """
         controlShapes.applyToControls(libKey, [self], lw=lineWidth)
+
+        if size != 1.0:
+            self.scaleCtShapes(size)
 
     @short(backward='back')
     def cycleCtShapes(self, backward=False):
@@ -728,6 +752,20 @@ class Transform:
     @short(clearOverrides='co')
     def colorCtShapes(self, *colorIndex, clearOverrides=True):
         """
+        :Color shorthands:
+
+            ::
+
+                    'white': 16,
+                    'blue': 6,
+                    'left': 6,
+                    'right': 13,
+                    'red': 13,
+                    'center': 14,
+                    'green': 14,
+                    'yellow': 17,
+                    'pink': 20
+
         :param \*colorIndex: if a color index is provided, it is used to set
             the override color on all control shapes; if ``None`` is passed,
             override colors are reset; if the argument is omitted, the first-
@@ -744,6 +782,19 @@ class Transform:
 
         if len(colorIndex):
             colorIndex = colorIndex[0]
+
+            if isinstance(colorIndex, str):
+                colorIndex = {
+                    'white': 16,
+                    'blue': 6,
+                    'left': 6,
+                    'right': 13,
+                    'red': 13,
+                    'center': 14,
+                    'green': 14,
+                    'yellow': 17,
+                    'pink': 20
+                }[colorIndex]
 
             if colorIndex is None:
                 shape.attr('overrideColor').set(0)
@@ -808,7 +859,7 @@ class Transform:
                 if isinstance(shape, r.nodetypes.NurbsCurve):
                     shape.attr('lineWidth').set(config['lineWidth'])
 
-        color = config['color']
+        color = config.get('color')
 
         if color is None:
             for shape in shapes:
@@ -841,148 +892,132 @@ class Transform:
             worldSpace=False,
             mirrorAxis=None,
             color=None,
-            lineWidth=None,
+            lineWidth=True,
             shape=None
     ):
-        """
-        Copies control shapes and / or color from this control to one or more
-        destination controls. The 'shape' and 'color' flags can be defined by
-        omission, Maya-style; for example, to copy only color, just pass
-        ``col=True``, and 'shape' will be set to ``False`` automatically
-        unless explicitly set.
+        #-------------------------------|    Resolve option flags
 
-        :param bool shape/sh: copy shapes; if this is ``False``, all other
-            arguments except ``color`` are ignored
-        :param bool color/col: copy color
-        :param bool lineWidth/lw: copy line width
-        :param \*destControls: one or more controls to copy shapes to
-        :type \*destControls: list, str,
-            :class:`~paya.runtime.nodes.Transform`
-        :param bool replace/rep: remove existing shapes on the destination
-            controls; defaults to True
-        :param bool worldSpace/ws: copy shapes in world space; defaults to
-            False
-        :param mirrorAxis/ma: a positive axis to flip when copying in local
-            space, or along which to mirror when copying in world space, for
-            example 'x';  defaults to ``None``
-        :type mirrorAxis/ma: ``None``, str
-        :return: The new control shapes.
-        :rtype: list of :class:`~paya.runtime.nodes.Shape`
-        """
+        shape, color = resolveFlags(shape, color)
+
+        if color:
+            srcColor = self.colorCtShapes()
+
+        if lineWidth:
+            srcLineWidth = self.getCtShapesLineWidth()
+
+        #-------------------------------|    Resolve destination controls
+
         destControls = list(map(r.PyNode, _pu.expandArgs(*destControls)))
 
-        if destControls:
-            shape, color, lineWidth = resolveFlags(shape, color, lineWidth)
+        if not destControls:
+            raise RuntimeError("No destination controls were specified.")
 
-            if not shape:
-                if color:
-                    col = self.colorCtShapes()
+        #-------------------------------|    Quick bail
 
-                    if col is not None:
-                        for destControl in destControls:
-                            destControl.colorCtShapes(col)
+        if not shape:
+            if color and srcColor is not None:
+                for destControl in destControls:
+                    destControl.colorCtShapes(srcColor)
 
-                if lineWidth:
-                    srcLineWidth = self.getCtShapesLineWidth()
 
-                    if srcLineWidth is not None:
-                        for destControl in destControls:
-                            destControl.setCtShapesLineWidth(srcLineWidth)
+            if lineWidth and srcLineWidth is not None:
+                for destControl in destControls:
+                    destControl.setCtShapesLineWidth(srcLineWidth)
 
-                return self
+            return self
 
-            # Prep main source
+        #-------------------------------|    Full copying
 
-            _srcGp = r.group(empty=True)
-            srcShapes = self.getCtShapes()
+        # Prep main source
+        _srcGp = r.group(empty=True)
+        srcShapes = self.getCtShapes()
 
-            if lineWidth:
-                srcLineWidth = self.getCtShapesLineWidth()
+        r.parent(srcShapes, _srcGp, r=True, shape=True, add=True)
+        srcGp = _srcGp.duplicate()[0]
+        r.delete(_srcGp)
 
-            r.parent(srcShapes, _srcGp, r=True, shape=True, add=True)
-            srcGp = _srcGp.duplicate()[0]
-            r.delete(_srcGp)
+        if mirrorAxis:
+            mirrorMtx = r.createMatrix()
+
+            setattr(mirrorMtx, mirrorAxis,
+            getattr(mirrorMtx, mirrorAxis)*-1.0)
+
+        if worldSpace:
+            matrix = self.getMatrix(worldSpace=True)
 
             if mirrorAxis:
-                mirrorMtx = r.createMatrix()
+                matrix *= mirrorMtx
 
-                setattr(mirrorMtx, mirrorAxis,
-                    getattr(mirrorMtx, mirrorAxis)*-1.0)
+            srcGp.setMatrix(matrix)
 
-            if worldSpace:
-                matrix = self.getMatrix(worldSpace=True)
+        elif mirrorAxis:
+            srcGp.setMatrix(mirrorMtx)
+            r.makeIdentity(srcGp, apply=True, t=True, r=True, s=True)
 
-                if mirrorAxis:
-                    matrix *= mirrorMtx
+        # Iterate
+        newShapes = []
 
-                srcGp.setMatrix(matrix)
+        for destControl in destControls:
+            oldShapes = destControl.getCtShapes()
+            config = self._getCtShapesConfig(oldShapes, tmplock=True)
 
-            elif mirrorAxis:
-                srcGp.setMatrix(mirrorMtx)
-                r.makeIdentity(srcGp, apply=True, t=True, r=True, s=True)
-
-            # Iterate
-
-            newShapes = []
-
-            for destControl in destControls:
-                oldShapes = destControl.getCtShapes()
-                config = self._getCtShapesConfig(oldShapes, tmplock=True)
-
-                if color:
-                    del(config['color'])
-
-                if lineWidth:
+            for flag, key in zip(
+                    (color, lineWidth),
+                    ('color', 'lineWidth')
+            ):
+                if flag:
                     try:
-                        del(config['lineWidth'])
-
+                        del(config[key])
                     except KeyError:
                         pass
 
-                if replace:
-                    r.delete(oldShapes)
+            if replace:
+                r.delete(oldShapes)
 
-                thisSrcGp = srcGp.duplicate()[0]
+            thisSrcGp = srcGp.duplicate()[0]
 
-                if worldSpace:
-                    thisSrcGp.setParent(destControl)
-                    r.makeIdentity(thisSrcGp,
-                        apply=True, t=True, r=True, s=True)
+            if worldSpace:
+                thisSrcGp.setParent(destControl)
+                r.makeIdentity(thisSrcGp,
+                    apply=True, t=True, r=True, s=True)
 
-                    thisSrcGp.setParent(None)
+                thisSrcGp.setParent(None)
 
-                theseNewShapes = thisSrcGp.getShapes()
-                r.parent(theseNewShapes, destControl, r=True, shape=True)
-                r.delete(thisSrcGp)
+            theseNewShapes = thisSrcGp.getShapes()
+            r.parent(theseNewShapes, destControl, r=True, shape=True)
+            r.delete(thisSrcGp)
 
-                self._applyCtShapesConfig(config, theseNewShapes)
-                newShapes += theseNewShapes
+            self._applyCtShapesConfig(config, theseNewShapes)
 
-                destControl.conformShapeNames()
+            newShapes += theseNewShapes
+            destControl.conformShapeNames()
 
-            r.delete(srcGp)
+        r.delete(srcGp)
 
-            if lineWidth:
-                if srcLineWidth is not None:
-                    for shape in newShapes:
-                        if isinstance(shape, r.nodetypes.NurbsCurve):
-                            shape.attr('lineWidth').set(srcLineWidth)
+        if color and srcColor is not None:
+            destControl.colorCtShapes(srcColor)
 
-            return newShapes
+        if lineWidth and srcLineWidth is not None:
+            for shape in newShapes:
+                if isinstance(shape, r.nodetypes.NurbsCurve):
+                    shape.attr('lineWidth').set(srcLineWidth)
 
-        else:
-            return []
+        return newShapes
 
-    def addCtShapesToLib(self, entryName):
+    @short(normalize='nr')
+    def addCtShapesToLib(self, entryName, normalize=True):
         """
         Captures this control's shapes into a new library entry for reuse via
         :meth:`setCtShapes`.
 
         :param str entryName: the name of the new library entry
+        :param bool normalize/nr: normalize points into a unit; defaults
+            to ``True``
         :return: ``self``
         :rtype: :class:`~paya.runtime.nodes.Transform`
         """
-        controlShapes.addFromControl(self, entryName)
+        controlShapes.addFromControl(self, entryName, normalize=normalize)
+        controlShapes.dump()
         return self
 
     def getCtShapesLineWidth(self):
