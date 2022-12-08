@@ -28,8 +28,9 @@ from paya.lib.names import Name
 from paya.lib.mathops import createMatrix, \
     createScaleMatrix, cm, csm, degToUI
 from paya.lib.skel import Chain
-from paya.lib.controlshapes import controlShapes
-from paya.nativeunits import NativeUnits, nativeUnits
+from paya.lib.controls import createControl, createControls, controlShapes
+from paya.partcreator import partCreator
+from paya.config import config
 
 def saveScriptEditor():
     """
