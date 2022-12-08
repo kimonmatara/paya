@@ -1,172 +1,147 @@
+import re
 from functools import wraps
 import maya.OpenMaya as om
 import maya.cmds as m
-from paya.util import short
 
+#----------------------------------------------------------------|
+#----------------------------------------------------------------|    UTIL
+#----------------------------------------------------------------|
+
+linearNames = {}
+angularNames = {}
+
+for mapping, cls in zip(
+        (linearNames, angularNames),
+        (om.MDistance, om.MAngle)
+):
+    for k, v in cls.__dict__.items():
+        if k.startswith('k'):
+            key = re.match(r"^k(.*)$", k).groups()[0]
+            key = key[0].lower()+key[1:]
+            mapping[v] = key
+
+#----------------------------------------------------------------|
+#----------------------------------------------------------------|    CONTEXT MANAGER
+#----------------------------------------------------------------|
 
 class NativeUnits:
+    """
+    Context manager. Sets Maya to native units (centimeters and radians)
+    across the block. This is enforced with callbacks for incidental
+    Maya events that might change the setting (e.g. opening scenes), but
+    not for explicit calls to :func:`~maya.cmds.currentUnit` or
+    :meth:`~maya.OpenMaya.MDistance.setUIUnit`.
 
+    This context manager is engaged automatically when :mod:`paya.runtime`
+    is entered as a context block.
+    """
+    __user_linear__ = None
+    __user_angular__ = None
+    __track_changes__ = True
     __depth__ = 0
-    __force__ = False
-    __callbacks__ = []
-    __track__ = True
-    __userLinear__ = None
-    __userAngular__ = None
 
-    #---------------------------------------------------|    Init
-
-    @short(force='f')
-    def __init__(self, force=False):
-        self.force = force
-
-    #---------------------------------------------------|    Context
+    #------------------------------------------------------|    Enter / Exit
 
     def __enter__(self):
         NativeUnits.__depth__ += 1
 
         if NativeUnits.__depth__ is 1:
-            self.captureUserLinear()
-            self.captureUserAngular()
+            NativeUnits.__user_linear__ = om.MDistance.uiUnit()
+            NativeUnits.__user_angular__ = om.MAngle.uiUnit()
 
-            self.applyNativeLinear()
-            self.applyNativeAngular()
+            om.MDistance.setUIUnit(om.MDistance.kCentimeters)
+            om.MAngle.setUIUnit(om.MAngle.kRadians)
 
-        self.prev_force = NativeUnits.__force__
-
-        if not NativeUnits.__force__:
-            NativeUnits.__force__ = True
-
-        if NativeUnits.__force__ and not NativeUnits.__callbacks__:
-            self.addCallbacks()
+            self._startCallbacks()
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        NativeUnits.__force__ = self.prev_force
-
-        if (not NativeUnits.__force__) and NativeUnits.__callbacks__:
-            self.removeCallbacks()
-
         NativeUnits.__depth__ -= 1
 
         if NativeUnits.__depth__ is 0:
-            self.applyUserLinear()
-            self.applyUserAngular()
+            self._stopCallbacks()
+            om.MDistance.setUIUnit(self.__user_linear__)
+            om.MAngle.setUIUnit(self.__user_angular__)
 
-            NativeUnits.__userLinear__ = NativeUnits.__userAngular__ = None
-
-        return False
-
-    #---------------------------------------------------|    Setting
-    
-    @classmethod
-    def setLinear(cls, setting):
-        cls.__track__ = False
-        om.MDistance.setUIUnit(setting)
-        cls.__track__ = True
+    #------------------------------------------------------|    Callbacks
 
     @classmethod
-    def setAngular(cls, setting):
-        cls.__track__ = False
-        om.MAngle.setUIUnit(setting)
-        cls.__track__ = True
+    def _startCallbacks(cls):
+        NativeUnits.__callbacks__ = [
+            om.MSceneMessage.addCallback(om.MSceneMessage.kAfterOpen,
+                                         NativeUnits.afterOpenCb),
+            om.MSceneMessage.addCallback(om.MSceneMessage.kBeforeSave,
+                                         NativeUnits.beforeSaveCb),
+            om.MSceneMessage.addCallback(om.MSceneMessage.kAfterSave,
+                                         NativeUnits.afterSaveCb),
+            om.MEventMessage.addEventCallback('linearUnitChanged',
+                                              cls.linearUnitChangedCb),
+            om.MEventMessage.addEventCallback('angularUnitChanged',
+                                              cls.angularUnitChangedCb)
+            ]
 
     @classmethod
-    def getLinear(cls):
-        return om.MDistance.uiUnit()
-
-    @classmethod
-    def getAngular(cls):
-        return om.MAngle.uiUnit()
-
-    @classmethod
-    def applyUserLinear(cls):
-        if cls.__userLinear__ != cls.getLinear():
-            cls.setLinear(cls.__userLinear__)
-            m.warning("Paya: Restored user linear unit.")
-
-    @classmethod
-    def applyUserAngular(cls):
-        if cls.__userAngular__ != cls.getAngular():
-            cls.setAngular(cls.__userAngular__)
-            m.warning("Paya: Restored user angular unit.")
-
-    @classmethod
-    def applyNativeLinear(cls):
-        if cls.__userLinear__ != om.MDistance.kCentimeters:
-            cls.setLinear(om.MDistance.kCentimeters)
-            m.warning("Paya: Switched Maya to centimeters.")
-
-    @classmethod
-    def applyNativeAngular(cls):
-        if cls.__userAngular__ != om.MAngle.kRadians:
-            cls.setAngular(om.MAngle.kRadians)
-            m.warning("Paya: Switched Maya to radians.")
-
-    #--------------------------------------------------|    Capture
-
-    @classmethod
-    def captureUserLinear(cls):
-        cls.__userLinear__ = om.MDistance.uiUnit()
-
-    @classmethod
-    def captureUserAngular(cls):
-        cls.__userAngular__ = om.MAngle.uiUnit()
-
-    #--------------------------------------------------|    Callbacks
-
-    @classmethod
-    def linearUnitChangedCb(cls, *args):
-       cls.captureUserLinear()
-       cls.applyNativeLinear()
-
-    @classmethod
-    def angularUnitChangedCb(cls, *args):
-        cls.captureUserAngular()
-        cls.applyNativeAngular()
-
-    @classmethod
-    def beforeSaveCb(cls, *args):
-        cls.applyUserLinear()
-        cls.applyUserAngular()
-
-    @classmethod
-    def afterSaveCb(cls, *args):
-        cls.applyNativeLinear()
-        cls.applyNativeAngular()
-
-    #--------------------------------------------------|    Start / stop
-
-    @classmethod
-    def addCallbacks(cls):
-        cls.__callbacks__ = [
-            om.MEventMessage.addEventCallback(
-                'linearUnitChanged', cls.linearUnitChangedCb),
-            om.MEventMessage.addEventCallback(
-                'angularUnitChanged', cls.angularUnitChangedCb),
-            om.MSceneMessage.addCallback(
-                om.MSceneMessage.kBeforeSave,
-                cls.beforeSaveCb
-            ),
-            om.MSceneMessage.addCallback(
-                om.MSceneMessage.kAfterSave,
-                cls.afterSaveCb
-            )
-        ]
-
-    @classmethod
-    def removeCallbacks(cls):
-        for callback in cls.__callbacks__:
+    def _stopCallbacks(cls):
+        for callback in NativeUnits.__callbacks__:
             om.MMessage.removeCallback(callback)
 
         cls.__callbacks__ = []
 
+    @classmethod
+    def afterOpenCb(cls, *args):
+        cls.__user_linear__ = om.MDistance.uiUnit()
+        cls.__user_angular__ = om.MAngle.uiUnit()
+
+        with NoChangeTracking():
+            om.MDistance.setUIUnit(om.MDistance.kCentimeters)
+            om.MAngle.setUIUnit(om.MAngle.kRadians)
+
+    @classmethod
+    def beforeSaveCb(cls, *args):
+        with NoChangeTracking():
+            om.MDistance.setUIUnit(NativeUnits.__user_linear__)
+            om.MAngle.setUIUnit(NativeUnits.__user_angular__)
+
+    @classmethod
+    def afterSaveCb(cls, *args):
+        with NoChangeTracking():
+            om.MDistance.setUIUnit(om.MDistance.kCentimeters)
+            om.MAngle.setUIUnit(om.MAngle.kRadians)
+
+    @classmethod
+    def linearUnitChangedCb(cls, *args):
+        if NativeUnits.__track_changes__:
+            NativeUnits.__user_linear__ = om.MDistance.uiUnit()
+
+    @classmethod
+    def angularUnitChangedCb(cls, *args):
+        if NativeUnits.__track_changes__:
+            NativeUnits.__user_angular__ = om.MAngle.uiUnit()
+
+
+class NoChangeTracking:
+    __depth__ = 0
+
+    def __enter__(self):
+        NoChangeTracking.__depth__ += 1
+
+        if NoChangeTracking.__depth__ is 1:
+            NativeUnits.__track__ = False
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        NoChangeTracking.__depth__ -= 1
+
+        if NoChangeTracking.__depth__ is 0:
+            NativeUnits.__track__ = True
+
 def nativeUnits(f):
+    """
+    Decorator version of :class:`NativeUnits`.
+    """
     @wraps(f)
     def wrapper(*args, **kwargs):
         with NativeUnits():
-            result = f(*args, **kwargs)
-
-        return result
+            return f(*args, **kwargs)
 
     return wrapper
