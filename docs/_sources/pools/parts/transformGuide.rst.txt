@@ -1,0 +1,34 @@
+*********************************
+paya.runtime.parts.TransformGuide
+*********************************
+
+.. py:currentmodule:: paya.runtime.parts
+
+.. py:class:: TransformGuide(groupNode)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.parttypes.partGuide.partGuide.PartGuide` :class:`~paya.parttypes.partBase.partBase.PartBase` :class:`~paya.trunk.Trunk`
+
+
+
+    .. py:classmethod:: create(worldMatrix=None)
+    
+        Guide for a :class:`~paya.runtime.parts.Transform` part.
+        
+        .. note::
+        
+            Control matrix vectors will be normalized when this guide is used
+            to create the rig part.
+        
+        :param worldMatrix/wm: the initial control matrix; defaults to the
+            identity matrix
+        :type worldMatrix/wm: :class:`tuple`, :class:`list`,
+            :class:`~paya.runtime.data.Matrix`
+    
+    .. py:method:: getPartCreateArgsKwargs()
+    
+        :return: Positional and keyword arguments that can be passed along
+            to the ``create()`` method on the associated
+            :class:`~paya.runtime.parts.Part` subclass.
+        :rtype: (:class:`tuple`, :class:`dict`)

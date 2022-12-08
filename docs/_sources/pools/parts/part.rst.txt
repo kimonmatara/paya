@@ -1,0 +1,35 @@
+***********************
+paya.runtime.parts.Part
+***********************
+
+.. py:currentmodule:: paya.runtime.parts
+
+.. py:class:: Part(groupNode)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.parttypes.partBase.partBase.PartBase` :class:`~paya.trunk.Trunk`
+
+    Base class for rig parts.
+
+    .. py:classmethod:: create()
+    
+        Stub constructor.
+        
+        :return: A fully configured empty part.
+        :rtype: :class:`Part`
+    
+    .. py:classmethod:: _getCreateNameContext()
+    
+        Called before a build wrapped by
+        :func:`~paya.part.partcreator.partCreator` to establish the naming
+        environment.
+        
+        Parts are named according to these rules:
+        
+        -   If there is no active :class:`~paya.lib.names.Name` block, the
+            name element will be set to ``'unnamed'``.
+        -   There must be no active namespace.
+        
+        :return: A configured context manager.
+        :rtype: :class:`~paya.lib.names.Name`

@@ -32,6 +32,9 @@ class Runtime:
         self.NativeUnits = paya.nativeunits.NativeUnits
         self._NativeUnitsInstance = None
 
+        for pool in self._pools:
+            setattr(self, pool.shortName(), pool.browse())
+
     #--------------------------------------------------|    Interfaces
 
     @property
@@ -57,8 +60,10 @@ class Runtime:
             # Attach attributes
             self._fallback = self._cmds
 
-            for pool in self._pools:
-                setattr(self, pool.shortName(), pool.browse())
+            # Here for reference. Can't be added / removed dynamically
+            # as used for subclassing in part classes
+            # for pool in self._pools:
+            #     setattr(self, pool.shortName(), pool.browse())
 
             # Enter a NativeUnits context manager
             self._NativeUnitsInstance = self.NativeUnits()
@@ -78,8 +83,10 @@ class Runtime:
             # Remove attributes
             self._fallback = self._pmcore
 
-            for pool in self._pools:
-                delattr(self, pool.shortName())
+            # Here for reference. Can't be added / removed dynamically
+            # as used for subclassing in part classes
+            # for pool in self._pools:
+            #     delattr(self, pool.shortName())
 
             print("Paya has stopped successfully.")
 

@@ -1,8 +1,8 @@
 import re
 
-from pymel.util import expandArgs, uncap
+from pymel.util import expandArgs
 from paya.trunk import Trunk
-from paya.util import short, resolveFlags
+from paya.util import short, resolveFlags, uncap
 from paya.lib.grouptree import GroupTree
 import paya.runtime as r
 
@@ -119,6 +119,7 @@ class PartBase(Trunk):
         """
         raise NotImplementedError
 
+    # Stub: finish this
     # @classmethod
     # @short(namespace='ns')
     # def reference(cls, namespace=None):
