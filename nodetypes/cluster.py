@@ -83,6 +83,7 @@ class Cluster:
         :return: The cluster node. To get the handle transform, use
             :meth:`getHandle`.
         """
+        r.select(cl=True)
 
         # Aggregate geometries
         allGeos = []
