@@ -1,4 +1,5 @@
 import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 from paya.util import short
 import maya.cmds as m
 import paya.runtime as r
@@ -151,7 +152,7 @@ class CurveUpVectorSampler:
 
     def _findSample(self, param):
         arr = self.attr('samples')
-        param, pdim, pisplug = _tm.mathInfo(param)
+        param, pdim, put, pisplug = _mo.info(param).values()
         indices = arr.getArrayIndices()
 
         for index in indices:
