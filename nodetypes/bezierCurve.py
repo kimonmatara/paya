@@ -80,9 +80,9 @@ class BezierCurve(metaclass=ShapeExtensionMeta):
             num = len(points)
 
             if _nu.legalNumCVsForBezier(num):
-                infos = [_tm.mathInfo(point) for point in points]
-                points = [info[0] for info in infos]
-                hasPlugs = any((info[2] for info in infos))
+                infos = [_mo.info(point) for point in points]
+                points = [info['item'] for info in infos]
+                hasPlugs = any((info['isPlug'] for info in infos))
 
                 if hasPlugs:
                     _points = [_tm.asValue(point) for point in points]
