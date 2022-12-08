@@ -1,7 +1,11 @@
 import re
+import os
+import xml.etree.ElementTree as ET
+
 import maya.cmds as m
 from paya.util import short
 import pymel.util as _pu
+import maya.cmds as m
 import paya.runtime as r
 
 
@@ -175,6 +179,102 @@ class SkinCluster:
                     geos.append(arg)
 
         return infls, geos
+
+    @classmethod
+    @short(
+        worldSpace='ws',
+        positionTolerance='pt',
+        method='m',
+        loadWeights='lw')
+    def createFromXMLFile(cls,
+                          xmlfile,
+                          method='index',
+                          worldSpace=None,
+                          positionTolerance=None,
+                          loadWeights=True):
+        # Open the XML file
+        tree = ET.parse(xmlfile)
+        root = tree.getroot()
+
+        # Get this information from the first available deformer entry:
+        # Shape name
+        # Deformer name (will assume it's a skinCluster)
+        # influence names
+
+        # Determine shape name
+        shapeEntry = root.find('shape')
+        shapeName = shapeEntry.attrib['name']
+        matches = m.ls(shapeName)
+
+        nm = len(matches)
+
+        if nm is 0:
+            raise RuntimeError(
+                "Shape doesn't exist: {}".format(shapeName))
+
+        if nm > 1:
+            raise RuntimeError(
+                "More than one match found for: {}".format(shapeName))
+
+        shape = matches[0]
+
+        # Determine deformer name
+        weightEntries = root.findall('weights')
+
+        deformerNames = list(set([weightEntry.attrib['deformer'] \
+                         for weightEntry in weightEntries]))
+
+        nm = len(deformerNames)
+
+        if nm > 1:
+            raise RuntimeError(
+                "More than one deformers specified inside: {}".format(xmlfile)
+            )
+
+        if nm is 0:
+            raise RuntimeError(
+                "No deformer information found inside: {}".format(xmlfile)
+            )
+
+        deformer = deformerNames[0]
+
+        # Deal with existing
+        existing = r.nodes.SkinCluster.getFromGeo(shape)
+
+        if existing:
+            r.delete(existing)
+
+        # Get influences
+        joints = [weightEntry.attrib['source'] \
+                  for weightEntry in weightEntries]
+
+        for joint in joints:
+            if not m.objExists(joint):
+                m.createNode('joint', n=joint)
+
+        # Create the deformer
+        args = joints + [shape]
+        kwargs = {
+            'tsb': True,
+            'n': deformerNames[0],
+            'bm': 0,
+            'dr': 4.5,
+            'nw': 1,
+            'omi': False,
+            'sm': 0,
+            'wd': 0
+        }
+
+        skin = r.skinCluster(*args, **kwargs)
+
+        # Load weights
+        if loadWeights:
+            skin.loadWeights(xmlfile,
+                             shape=shape,
+                             method=method,
+                             positionTolerance=positionTolerance)
+
+        return skin
 
     #------------------------------------------------------------|    Macros
 
@@ -477,3 +577,100 @@ class SkinCluster:
             )
 
         return outGeoXf
+
+    #----------------------------------------------------|    Scene archiving
+
+    @classmethod
+    @short(
+        vertexConnections='vc',
+        weightTolerance='wt',
+        weightPrecision='wp',
+        makedirs='md'
+    )
+    def dumpAll(cls,
+                destDir,
+                clearDir=False, # clear existing XML files
+                makedirs=False,
+                vertexConnections=None,
+                weightPrecision=None,
+                weightTolerance=None
+                ):
+        if os.path.isdir(destDir):
+            if clearDir:
+                listing = os.listdir(destDir)
+
+                for item in listing:
+                    head, tail = os.path.splitext(item)
+                    if tail == '.xml':
+                        fullPath = os.path.join(destDir, item)
+                        os.remove(fullPath)
+                        print('Removed file: {}'.format(fullPath))
+
+        else:
+            if makedirs:
+                os.makedirs(destDir)
+                print("Created directory: ", destDir)
+            else:
+                print("Directory doesn't exist: ", destDir)
+
+        skinClusters = r.ls(type='skinCluster')
+
+        count = 0
+        out = []
+
+        for skinCluster in skinClusters:
+            shape = r.skinCluster(skinCluster, q=True, geometry=True)[0]
+            filename = '{}_on_{}.xml'.format(
+                skinCluster.basename(), shape.basename())
+
+            fullpath = os.path.join(destDir, filename)
+
+            skinCluster.dumpWeights(
+                fullpath,
+                vertexConnections=vertexConnections,
+                weightPrecision=weightPrecision,
+                weightTolerance=weightTolerance
+            )
+
+            count += 1
+            out.append(fullpath)
+
+        if count:
+            print("Dumped {} skinClusters into: {}".format(count, destDir))
+        else:
+            print("No skinClusters were found to dump.")
+
+        return out
+
+    @classmethod
+    @short(method='m',
+           worldSpace='ws',
+           positionTolerance='pt')
+    def loadAll(cls,
+                sourceDir,
+                method='index',
+                worldSpace=None,
+                positionTolerance=None):
+        """
+        To-Dos:
+        - add option to just read weights, without recreating skins
+        - add option to filter for shapes
+        """
+        listing = os.listdir(sourceDir)
+        out = []
+
+        for item in listing:
+            head, tail = os.path.splitext(item)
+
+            if tail == '.xml':
+                fullPath = os.path.join(sourceDir, item)
+                out.append(r.nodes.SkinCluster.createFromXMLFile(
+                    fullPath,
+                    method=method,
+                    worldSpace=worldSpace,
+                    positionTolerance=positionTolerance,
+                    includeShapes=includeShapes,
+                    excludeShapes=excludeShapes
+                ))
+
+        return out
