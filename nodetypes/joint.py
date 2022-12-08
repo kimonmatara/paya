@@ -1,4 +1,4 @@
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 from paya.util import short
 import maya.cmds as m
 import paya.runtime as r
@@ -68,7 +68,8 @@ class Joint:
 
         # Manage matrix
         if worldMatrix is not None:
-            worldMatrix, wmDim, wmIsPlug = _tm.mathInfo(worldMatrix)
+            worldMatrix, wmDim, wmUt, wmIsPlug = \
+                _mo.info(worldMatrix).values()
 
             if freeze:
                 if wmIsPlug:
