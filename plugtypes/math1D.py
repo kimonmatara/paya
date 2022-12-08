@@ -4,7 +4,7 @@ import math
 import maya.OpenMaya as om
 import pymel.util as _pu
 from paya.util import short
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 import paya.runtime as r
 
 if not r.pluginInfo('quatNodes', q=True, loaded=True):
@@ -15,6 +15,107 @@ class Math1D:
 
     __math_dimension__ = 1
 
+    #-----------------------------------------------------------|    Unit management
+
+    def convertUnit(self, *factor):
+        """
+        Connects and configures a ``unitConversion`` node and returns its
+        output.
+
+        :param \*factor: the conversion factor; if omitted, defaults to 1.0
+        :return: The output of the ``unitConversion`` node.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+        """
+        node = r.nodes.UnitConversion.createNode()
+        self >> node.attr('input')
+
+        if factor:
+            factor[0] >> node.attr('conversionFactor')
+
+        return node.attr('output')
+
+    def asAngle(self):
+        """
+        If this attribute is of type 'doubleAngle', it is returned as-is.
+        If it's of any other type, it's converted using Maya UI rules and
+        a 'doubleAngle' output for it returned.
+
+        :return: The angle output.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
+        """
+        unitType = self.unitType()
+
+        if unitType == 'angle':
+            return self
+
+        with r.Name('asAngle'):
+            nw = r.nodes.Network.createNode()
+
+        nw.addAttr('output', at='doubleAngle', k=True)
+        self >> nw.attr('output')
+        return nw.attr('output')
+
+    def asRadians(self):
+        """
+        :return: A unitless (type 'double') output representing radians.
+            Conversions are performed according to Maya rules.
+        :rtype: :class:`~paya.runtime.plugs.Angle`
+        """
+        inp = self
+        unitType = self.unitType()
+
+        if unitType is None:
+            # Make sure it's double and not generic
+            if inp.type() != 'double':
+                with r.Name('asDouble'):
+                    nw = r.nodes.Network.createNode()
+
+                nw.addAttr('output', at='double', k=True)
+                inp >> nw.attr('output')
+                inp = nw.attr('output')
+
+            if om.MAngle.uiUnit() == om.MAngle.kRadians:
+                # No conversions necessary
+                return inp
+
+            # Run through a unit conversion just for the multiplication
+            # functionality; return a double output
+
+            uc = r.nodes.UnitConversion.createNode()
+            inp >> uc.attr('input')
+            uc.attr('conversionFactor').set(math.pi / 180.0)
+            uc.addAttr('asDouble', k=True, at='double')
+            uc.attr('output') >> uc.attr('asDouble')
+
+            return uc.attr('asDouble')
+
+        if unitType == 'angle':
+            with r.Name('asRadians'):
+                nw = r.nodes.Network.createNode()
+
+            nw.addAttr('output', k=True, at='double')
+
+            with r.NativeUnits():
+                inp >> nw.attr('output')
+
+            return nw.attr('output')
+
+        # In all other cases, pipe into an angle attribute to get Maya
+        # to perform unit conversions on its own, then connect into
+        # a double output with native units to get the radians
+
+        with r.Name('asRadians'):
+            nw = r.nodes.Network.createNode()
+
+        nw.addAttr('asAngle', at='doubleAngle', k=True)
+        inp >> nw.attr('asAngle')
+        nw.addAttr('output', at='double', k=True)
+
+        with r.NativeUnits():
+            nw.attr('asAngle') >> nw.attr('output')
+
+        return nw.attr('output')
+
     #-----------------------------------------------------------|    Addition
 
     def __add__(self, other, swap=False):
@@ -23,7 +124,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1, 2, 3 or 4
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, unitType, isplug = _mo.info(other).values()
 
         if dim is 1:
             node = r.nodes.PlusMinusAverage.createNode()
@@ -81,7 +182,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1, 2, 3
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 2, 3):
             node = r.nodes.PlusMinusAverage.createNode()
@@ -121,7 +222,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1 or 3
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim is 1:
             node = r.nodes.MultiplyDivide.createNode()
@@ -158,7 +259,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1 or 3
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -199,7 +300,7 @@ class Math1D:
 
         :param other: a value or plug of dimension 1 or 3
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -248,7 +349,7 @@ class Math1D:
         mdv = r.nodes.MultiplyDivide.createNode()
         self >> mdv.attr('input1X')
         mdv.attr('input2X').set(-1.0)
-        return mdl.attr('outputX')
+        return mdv.attr('outputX')
 
     def normal(self, scalar=True):
         """
@@ -300,7 +401,8 @@ class Math1D:
         :return: This scalar, with sign copied from *other*.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
-        other, otherDim, otherIsPlug = _tm.mathInfo(other)
+        other, otherDim, otherUnitType, otherIsPlug = \
+            _mo.info(other).values()
 
         thisAbs = self.abs()
 
@@ -357,8 +459,8 @@ class Math1D:
         node = r.nodes.CombinationShape.createNode()
         node.attr('combinationMethod').set(method)
 
-        elems = [self] + [_tm.mathInfo(item
-            )[0] for item in _pu.expandArgs(*others)]
+        elems = [self] + [_mo.info(item
+            )['item'] for item in _pu.expandArgs(*others)]
 
         for i, elem in enumerate(elems):
             elem >> node.attr('inputWeight')[i]
@@ -386,15 +488,15 @@ class Math1D:
         Implements the % operator (modulo).
         """
         if swap:
-            expr = str(other)+'%'+str(self)
-
+            op1, op2 = other, self
         else:
-            expr = str(self)+'%'+str(other)
+            op1, op2 = self, other
 
-        node = r.nodes.Expression.createNode(n='modulo')
-        node.attr('expression').set('.O[0] = {}'.format(expr))
-
-        return node.attr('output')[0]
+        expression = '.O[0] = {} % {}'.format(op1, op2)
+        node = r.nodes.Expression.createNode()
+        node.attr('expression').set(expression)
+        output = node.attr('output')[0]
+        return output.setClass(type(self))
 
     def __rmod__(self, other):
         return self.__mod__(other, swap=True)
@@ -654,36 +756,14 @@ class Math1D:
 
     #--------------------------------------------------------------------|    Gates
 
-    def choose(self, outputs):
-        """
-        Uses this attribute as an index selector for any number of other
-        outputs or values.
-
-        Named 'choose' rather than 'select' to avoid shadowing the PyMEL
-        namesake. If all the outputs are of the same attribute type, the type
-        will be assigned to the output as well.
-
-        :param list outputs: list of outputs from which to choose
-        :type outputs: [``Attribute``]
-        """
-        # the inline if-else is necessary otherwise r.Attribute will discard
-        # any custom class assignments
-        outputs = [r.Attribute(output) if not \
-            isinstance(output, r.Attribute) else output for output in outputs]
-
+    def choose(self, inputs):
         node = r.nodes.Choice.createNode()
         self >> node.attr('selector')
 
-        for i, output in enumerate(outputs):
-            output >> node.attr('input')[i]
+        for i, input in enumerate(inputs):
+            input >> node.attr('input')[i]
 
-        out = node.attr('output')
-        plugTypes = [type(output) for output in outputs]
-
-        if len(set(plugTypes)) is 1:
-            out.__class__ = plugTypes[0]
-
-        return out
+        return node.attr('output')
 
     def ifElse(
             self,
@@ -757,88 +837,6 @@ class Math1D:
 
     #--------------------------------------------------------------------|    Trigonometry
 
-    def asAngle(self):
-        """
-        If this attribute is of type 'doubleAngle', it is returned as-is.
-        If it's of any other type, it's converted using Maya UI rules and
-        a 'doubleAngle' output for it returned.
-
-        :return: The angle output.
-        :rtype: :class:`~paya.runtime.plugs.Angle`
-        """
-        unitType = self.unitType()
-
-        if unitType == 'angle':
-            return self
-
-        with r.Name('asAngle'):
-            nw = r.nodes.Network.createNode()
-
-        nw.addAttr('output', at='doubleAngle', k=True)
-        self >> nw.attr('output')
-        return nw.attr('output')
-
-    def asRadians(self):
-        """
-        :return: A unitless (type 'double') output representing radians.
-            Conversions are performed according to Maya rules.
-        :rtype: :class:`~paya.runtime.plugs.Angle`
-        """
-        inp = self
-        unitType = self.unitType()
-
-        if unitType is None:
-            # Make sure it's double and not generic
-            if inp.type() != 'double':
-                with r.Name('asDouble'):
-                    nw = r.nodes.Network.createNode()
-
-                nw.addAttr('output', at='double', k=True)
-                inp >> nw.attr('output')
-                inp = nw.attr('output')
-
-            if om.MAngle.uiUnit() == om.MAngle.kRadians:
-                # No conversions necessary
-                return inp
-
-            # Run through a unit conversion just for the multiplication
-            # functionality; return a double output
-
-            uc = r.nodes.UnitConversion.createNode()
-            inp >> uc.attr('input')
-            uc.attr('conversionFactor').set(math.pi / 180.0)
-            uc.addAttr('asDouble', k=True, at='double')
-            uc.attr('output') >> uc.attr('asDouble')
-
-            return uc.attr('asDouble')
-
-        if unitType == 'angle':
-            with r.Name('asRadians'):
-                nw = r.nodes.Network.createNode()
-
-            nw.addAttr('output', k=True, at='double')
-
-            with r.NativeUnits():
-                inp >> nw.attr('output')
-
-            return nw.attr('output')
-
-        # In all other cases, pipe into an angle attribute to get Maya
-        # to perform unit conversions on its own, then connect into
-        # a double output with native units to get the radians
-
-        with r.Name('asRadians'):
-            nw = r.nodes.Network.createNode()
-
-        nw.addAttr('asAngle', at='doubleAngle', k=True)
-        inp >> nw.attr('asAngle')
-        nw.addAttr('output', at='double', k=True)
-
-        with r.NativeUnits():
-            nw.attr('asAngle') >> nw.attr('output')
-
-        return nw.attr('output')
-
     # See plugtypes.Angle for the forward functions
 
     def acos(self):
@@ -879,7 +877,7 @@ class Math1D:
         :return: the sampled output
         :rtype: :class:`Math1D`
         """
-        time, dim, isplug = _tm.mathInfo(time)
+        time, dim, ut, isplug = _mo.info(time).values()
 
         node = r.nodes.FrameCache.createNode()
         self >> node.attr('stream')
