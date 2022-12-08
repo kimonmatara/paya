@@ -8,17 +8,18 @@ class NurbsCurveCV:
 
     def isRange(self):
         """
-        :return: True if this component represents a range.
-        :rtype: bool
+        :return: ``True`` if this component represents a range, otherwise
+            ``False`.
+        :rtype: :class:`bool`
         """
         return len(self.indices()) > 1
 
     def __int__(self):
         """
         :raises ValueError: Can't return an integer because this instance
-            represents a range of CVS.
+            represents a range of CVs.
         :return: The CV index.
-        :rtype: int
+        :rtype: :class:`int`
         """
         if self.isRange():
             raise ValueError("CV is a range.")
@@ -31,7 +32,7 @@ class NurbsCurveCV:
     def getWorldPosition(self, plug=False):
         """
         :alias: ``gwp``
-        :param bool plug/p: force a dynamic output; defaults to False
+        :param bool plug/p: force a dynamic output; defaults to ``False``
         :return: The world-space point position of the specified CV.
         """
         if self.isRange():
