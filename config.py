@@ -1,57 +1,70 @@
-import sys
+"""
+Reads ``config.json`` into a ``config`` dictionary on import.
+"""
+
+from functools import wraps
+import re
+import inspect
 import os
 import json
-from collections import UserDict
 
-class Config(UserDict):
-    """
-    Dict-like object, inserted into :attr:`sys.modules` as a module. Initial
-    values are read from ``paya/config.json`` on startup. Edits are only
-    valid for the current session. The object can also be used as a context
-    manager, with temporary overrides passed-in as keyword arguments:
-
-    .. code-block:: python
-
-        import paya.config as config
-
-        print(config['suffixNodes'])
-        # True
-
-        with config(suffixNodes=False):
-            print(config['suffixNodes'])
-        # False
-
-        print(config['suffixNodes'])
-        # False
-    """
-    class Overrides:
-        def __init__(self, inst, **overrides):
-            self.inst = inst
-            self.overrides = overrides
-
-        def __enter__(self):
-            self.prev = {k:self.inst[k] for k in self.overrides}
-            self.inst.update(self.overrides)
-
-            return self
-
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            self.inst.update(self.prev)
-
-            return False
-
-    def __call__(self, **overrides):
-        return self.Overrides(self, **overrides)
+from paya.util.functions import undefined
+import maya.cmds as m
 
 
-path = os.path.join(
-    os.path.dirname(__file__),
-    'config.json'
-)
+path = os.path.join(os.path.dirname(__file__), 'config.json')
 
 with open(path, 'r') as f:
     data = f.read()
 
-data = json.loads(data)
+config = json.loads(data)
 
-sys.modules['paya.config'] = Config(data)
+# If useOffsetParentMatrix is undefined in config, set it to True only if
+# Maya >= 2022, to avoid bugs with earlier implementations
+mayaIntVersion = int(re.findall(r"[0-9]{4}", m.about(version=True))[0])
+config.setdefault('useOffsetParentMatrix', mayaIntVersion >= 2022)
+
+
+class Config:
+    """
+    Context manager that takes overrides to ``config`` as keyword arguments.
+    """
+    def __init__(self, **overrides):
+        self._overrides = overrides
+
+    def __enter__(self):
+        self._prev_config = config.copy()
+        config.update(self._overrides)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        config.clear()
+        config.update(self._prev_config)
+
+
+def takeUndefinedFromConfig(f):
+    """
+    Function decorator. Intercepts any keyword arguments that have been set
+    to, or left at a default of,
+    :class:`undefined <paya.util.functions.Undefined>` and swaps them out with
+    values from ``config``.
+
+    :param f: the function to wrap
+    :return: The wrapped function.
+    """
+    params = inspect.signature(f).parameters
+    kwnames = [param.name for param in params.values() \
+             if param.kind == inspect.Parameter.KEYWORD_ONLY]
+
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        _kwargs = {}
+
+        for kwname in kwnames:
+            val = kwargs.get(kwname, params[kwname].default)
+            if val is undefined:
+                val = config[kwname]
+            _kwargs[kwname] = val
+
+        return f(*args, **_kwargs)
+
+    return wrapped
