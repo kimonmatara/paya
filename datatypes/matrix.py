@@ -2,11 +2,12 @@ from functools import reduce
 
 import pymel.core.nodetypes as _nt
 import pymel.core.datatypes as _dt
+from pymel.util import expandArgs
 
-import paya.lib.typeman as _tm
 import paya.lib.mathops as _mo
 import paya.runtime as r
-from paya.util import short, resolveFlags
+from paya.util import short, resolveFlags, undefined
+from paya.config import takeUndefinedFromConfig
 
 fieldsmap = {
     'x': ['a00','a01','a02'],
@@ -70,69 +71,20 @@ class Matrix:
             'shear': _dt.Vector(this.getShear('transform'))
         }
 
-    @short(
-        translate='t',
-        rotate='r',
-        scale='s',
-        shear='sh',
-        compensatePivots='cp',
-        compensateJointOrient='cjo',
-        compensateRotateAxis='cra',
-        compensateJointScale='cjs',
-        worldSpace='ws',
-        maintainOffset='mo'
-    )
-    def decomposeAndApply(
+    def _decomposeAndApply(
             self,
             transform,
-            translate=None,
-            rotate=None,
-            scale=None,
-            shear=None,
+            translate=True,
+            rotate=True,
+            scale=True,
+            shear=True,
             compensatePivots=False,
             compensateJointOrient=True,
             compensateRotateAxis=False,
             compensateJointScale=True,
-            worldSpace=False,
-            maintainOffset=False
+            worldSpace=False
     ):
-        """
-        Decomposes and applies this matrix to a transform.
-
-        :param transform: the transform node to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
-        :param bool translate/t: apply translation
-        :param bool rotate/r: apply rotation
-        :param bool scale/s: apply scale
-        :param bool shear/sh: apply shear
-        :param bool compensateJointScale/cjs: account for
-            segmentScaleCompensate on joints; defaults to True
-        :param bool compensateJointOrient/cjo: account for jointOrient on
-            joints; defaults to True
-        :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
-            defaults to False
-        :param bool compensatePivots/cp: compensate for pivots (non-joint
-            transforms only); defaults to False
-        :param bool worldSpace/ws: premultiply this matrix with the inverse
-            of the transform's parent matrix to negate the parent stack;
-            defaults to False
-        :param bool maintainOffset/mo: this is here for parity with
-            :meth:`paya.runtime.plugs.Matrix.decomposeAndApply`; when True,
-            the transform won't be modified at all; defaults to False
-        :return: ``self``
-        :rtype: :class:`Matrix`
-        """
         #-------------------------------------|    Prep
-
-        if maintainOffset:
-            return self
-
-        translate, rotate, scale, shear = \
-            resolveFlags(translate, rotate, scale, shear)
-
-        if not any([translate, rotate, scale, shear]):
-            r.warning("No channels requested, skipping.")
-            return self
 
         xf = r.PyNode(transform)
         isJoint = isinstance(xf, _nt.Joint)
@@ -166,11 +118,12 @@ class Matrix:
             ):
                 dest = xf.attr(channel)
 
-                try:
-                    dest.set(decomposition[channel])
+                if state:
+                    try:
+                        dest.set(decomposition[channel])
 
-                except:
-                    r.warning("Couldn't set attribute: {}".format(dest))
+                    except:
+                        r.warning("Couldn't set attribute: {}".format(dest))
 
             return self
 
@@ -180,7 +133,7 @@ class Matrix:
 
         tmtx = matrix.pk(t=True)
 
-        if isJoint and compensateJointScale and xf.attr('segmentScaleCompensate').get():
+        if compensateJointScale and xf.attr('segmentScaleCompensate').get():
             pismtx = xf.attr('inverseScale').get().asScaleMatrix()
             matrix *= pismtx
 
@@ -193,7 +146,7 @@ class Matrix:
             ramtx = xf.getRotateAxisMatrix()
             rmtx = ramtx.inverse() * rmtx
 
-        if isJoint and compensateJointOrient:
+        if compensateJointOrient:
             jomtx = xf.getJointOrientMatrix()
             rmtx *= jomtx.inverse()
 
@@ -237,49 +190,94 @@ class Matrix:
         return self
 
     @short(
+        translate='t',
+        rotate='r',
+        scale='s',
+        shear='sh',
+        compensatePivots='cp',
+        compensateJointOrient='cjo',
+        compensateRotateAxis='cra',
+        compensateJointScale='cjs',
         worldSpace='ws',
-        persistentCompensation='pc',
-        preserveInheritsTransform='pit',
         maintainOffset='mo'
     )
-    def applyViaOpm(
+    def decomposeAndApply(
             self,
-            transform,
+            *slaves,
+            translate=None,
+            rotate=None,
+            scale=None,
+            shear=None,
+            compensatePivots=False,
+            compensateJointOrient=True,
+            compensateRotateAxis=False,
+            compensateJointScale=True,
             worldSpace=False,
-            persistentCompensation=False,
-            preserveInheritsTransform=False,
             maintainOffset=False
     ):
         """
-        Poses a transform by modifying its ``offsetParentMatrix`` attribute,
-        with SRT channels compensated.
+        Decomposes and applies this matrix to one or more transform slaves.
 
-        :param transform: the transform to drive
-        :type transform: str, :class:`~paya.runtime.nodes.Transform`
-        :param bool worldSpace/ws: drive the transform in world-space;
-            defaults to False
-        :param bool persistentCompensation/pc: unused; here for parity with
-            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`
-        :param preserveInheritsTransform/pit: when *worldSpace* is
-            requested, don't edit the ``inheritsTransform`` attribute on
-            the transform; instead, localise against the current parent;
-            defaults to False
+        :param \*slaves: one or more transforms to pose
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        :param bool translate/t: apply translation
+        :param bool rotate/r: apply rotation
+        :param bool scale/s: apply scale
+        :param bool shear/sh: apply shear
+        :param bool compensateJointScale/cjs: account for
+            segmentScaleCompensate on joints; defaults to ``True``
+        :param bool compensateJointOrient/cjo: account for jointOrient on
+            joints; defaults to ``True``
+        :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
+            defaults to ``False``
+        :param bool compensatePivots/cp: compensate for pivots (non-joint
+            transforms only); defaults to ``False``
+        :param bool worldSpace/ws: premultiply this matrix with the inverse
+            of the transform's parent matrix to negate the parent stack;
+            defaults to ``False``
         :param bool maintainOffset/mo: this is here for parity with
-            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`; it won't have
-            any effect unless *worldSpace* is requested and
-            *preserveInheritsTransform* is False, in which case the object
-            pose will be preserved and its ``inheritsTransform`` attribute
-            will be set to False; defaults to False
+            :meth:`paya.runtime.plugs.Matrix.decomposeAndApply`; when
+            ``True``, the transform won't be modified at all; defaults to
+            ``False``
         :return: ``self``
         :rtype: :class:`Matrix`
         """
-        xf = r.PyNode(transform)
+        slaves = [r.PyNode(slave) for slave in expandArgs(*slaves)]
+
+        if not slaves:
+            raise ValueError("No slaves specified.")
 
         if maintainOffset:
-            matrix = xf.getMatrix(worldSpace=True)
+            r.warning("Maintain offset is on; no action will be taken.")
 
-        else:
-            matrix = self
+        translate, rotate, scale, shear = resolveFlags(
+            translate, rotate, scale, shear
+        )
+
+        if not any([translate, rotate, scale, shear]):
+            r.warning("No channels requested, skipping.")
+            return self
+
+        for slave in slaves:
+            self._decomposeAndApply(slave,
+                                    translate=translate,
+                                    rotate=rotate,
+                                    scale=scale,
+                                    shear=shear,
+                                    worldSpace=worldSpace,
+                                    compensatePivots=compensatePivots,
+                                    compensateJointOrient=compensateJointOrient,
+                                    compensateRotateAxis=compensateRotateAxis,
+                                    compensateJointScale=compensateJointScale)
+
+    def _applyViaOpm(
+            self,
+            transform,
+            worldSpace=False,
+            preserveInheritsTransform=False
+    ):
+        xf = r.PyNode(transform)
+        matrix = self
 
         if worldSpace:
             if preserveInheritsTransform:
@@ -296,6 +294,103 @@ class Matrix:
 
         return self
 
+    @short(
+        worldSpace='ws',
+        persistentCompensation='pc',
+        preserveInheritsTransform='pit',
+        maintainOffset='mo'
+    )
+    def applyViaOpm(
+            self,
+            *slaves,
+            worldSpace=False,
+            persistentCompensation=False,
+            preserveInheritsTransform=False,
+            maintainOffset=False
+    ):
+        """
+        Poses one or more transforms by modifying their ``offsetParentMatrix``
+        attribute, with SRT channels compensated.
+
+        :param \*slaves: one or more transforms to pose
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        :param bool worldSpace/ws: drive the transform in world-space;
+            defaults to ``False``
+        :param bool persistentCompensation/pc: unused; here for parity with
+            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`
+        :param preserveInheritsTransform/pit: when *worldSpace* is
+            requested, don't edit the ``inheritsTransform`` attribute on
+            the slave; instead, localise against the current parent;
+            defaults to ``False``
+        :param bool maintainOffset/mo: this is here for parity with
+            :meth:`paya.runtime.plugs.Matrix.applyViaOpm`; if set to ``True``,
+            no action will be taken, and ``self`` will be returned; defaults
+            to ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+        """
+        if maintainOffset:
+            return self
+
+        slaves = [r.PyNode(slave) for slave in expandArgs(*slaves)]
+
+        if not slaves:
+            raise ValueError("No slaves specified.")
+
+        for slave in slaves:
+            self._applyViaOpm(
+                slave,
+                worldSpace=worldSpace,
+                preserveInheritsTransform=preserveInheritsTransform
+            )
+
+    @short(worldSpace='ws',
+           maintainOffset='mo',
+           useOffsetParentMatrix='uop',
+           preserveInheritsTransform='pit')
+    @takeUndefinedFromConfig
+    def drive(self,
+               *slaves,
+               worldSpace=False,
+               maintainOffset=False,
+               useOffsetParentMatrix=undefined,
+               preserveInheritsTransform=False):
+        """
+        Poses one or more slaves using this matrix. (For the dynamic, true
+        attachment, see :class:`paya.runtime.plugs.Matrix.attach`.)
+
+        :param \*slaves: one or more transforms to pose
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
+        :param preserveInheritsTransform/pit: when *worldSpace* is requested,
+            don't edit the ``inheritsTransform`` attribute on the slave;
+            instead, localise against its current parent; defaults to
+            ``False``
+        :param bool maintainOffset/mo: this is here for parity with
+            :meth:`paya.runtime.plugs.Matrix.attach`; if set to ``True``, no
+            action will be taken, and ``self`` will be returned; defaults to
+            ``False``
+        :param bool useOffsetParentMatrix/uop: connect into
+            ``offsetParentMatrix`` instead of decomposing into SRT channels;
+            defaults to namesake configuration flag; it that's omitted too,
+            defaults to ``True`` if Maya >= 2022, otherwise ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+        """
+        if maintainOffset:
+            return self
+
+        if useOffsetParentMatrix:
+            return self.applyViaOpm(
+                *slaves,
+                worldSpace=worldSpace,
+                preserveInheritsTransform=preserveInheritsTransform
+            )
+
+        return self.decomposeAndApply(*slaves, worldSpace=worldSpace)
+
     #-----------------------------------------------------------|    Addition
 
     def __add__(self, other):
@@ -305,7 +400,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__add__` to add
         support for 16D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim is 16:
@@ -327,7 +422,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__add__` to add
         support for 16D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
 
@@ -352,7 +447,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__mul__` to add
         support for 16D plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim is 16:
@@ -374,7 +469,7 @@ class Matrix:
         Overloads :meth:`pymel.core.datatypes.Matrix.__rmul__` to add
         support for 3D and 16D plugs as well as simple types.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if isplug:
             if dim is 3:
@@ -411,7 +506,7 @@ class Matrix:
         Uses the exclusive-or operator (``^``) to implement
         **point-matrix multiplication** for 3D values and plugs.
         """
-        other, dim, isplug = _tm.mathInfo(other)
+        other, dim, ut, isplug = _mo.info(other).values()
 
         if dim is 3:
             if isplug:
@@ -475,6 +570,18 @@ class Matrix:
 
         return r.data.Matrix()
 
+    def normal(self):
+        """
+        :return: A version of this matrix with all axis vectors normalized.
+        :rtype: :class:`Matrix`
+        """
+        out = self.copy()
+        out.x = self.x.normal()
+        out.y = self.y.normal()
+        out.z = self.z.normal()
+
+        return out
+
     @short(
         translate='t',
         rotate='r',
@@ -515,7 +622,7 @@ class Matrix:
             return self.hold()
 
         if default:
-            default = _tm.mathInfo(default)[0]
+            default = _mo.info(default)['item']
 
         if not any([translate, rotate, scale, shear]):
             return (default if default else self).hold()
