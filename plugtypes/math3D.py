@@ -1,5 +1,5 @@
 from paya.util import short
-import paya.lib.typeman as _tm
+import paya.lib.mathops as _mo
 import paya.runtime as r
 
 
@@ -56,7 +56,7 @@ class Math3D:
         """
         Implements **addition** (``+``).
         """
-        item, dim, isplug = _tm.mathInfo(other)
+        item, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.PlusMinusAverage.createNode()
@@ -86,7 +86,7 @@ class Math3D:
         """
         Implements **subtraction** (``-``).
         """
-        item, dim, isplug = _tm.mathInfo(other)
+        item, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.PlusMinusAverage.createNode()
@@ -117,7 +117,7 @@ class Math3D:
         """
         Implements **multiplication** (``*``).
         """
-        item, dim, isplug = _tm.mathInfo(other)
+        item, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -156,7 +156,7 @@ class Math3D:
         """
         Implements **division** (``/``).
         """
-        item, dim, isplug = _tm.mathInfo(other)
+        item, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -188,7 +188,7 @@ class Math3D:
         """
         Implements **power** (``**``).
         """
-        item, dim, isplug = _tm.mathInfo(other)
+        item, dim, ut, isplug = _mo.info(other).values()
 
         if dim in (1, 3):
             node = r.nodes.MultiplyDivide.createNode()
@@ -236,3 +236,25 @@ class Math3D:
         weight >> node.attr('blender')
 
         return node.attr('output')
+
+    #-----------------------------------------------------------|    Vectors
+
+    def rotateByAxisAngle(self, axisVector, angle):
+        """
+        :param axisVector: the vector around which to rotate this vector
+        :type axisVector: list, tuple, :class:`~paya.runtime.data.Vector`
+            or :class:`~paya.runtime.plugs.Vector`
+        :param angle: the angle of rotation
+        :type angle: float, :class:`~paya.runtime.data.Angle`, str or
+            class:`~paya.runtime.plugs.Math3D`
+        :return: This vector, rotated around ``axisVector`` by the specified
+            ``angle``.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+        """
+        axisAngle = r.nodes.AxisAngleToQuat.createNode()
+        axisVector >> axisAngle.attr('inputAxis')
+        angle >> axisAngle.attr('inputAngle')
+        quat = axisAngle.attr('outputQuat')
+        matrix = quat.asRotateMatrix()
+
+        return self * matrix
