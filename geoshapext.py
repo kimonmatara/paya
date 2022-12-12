@@ -261,20 +261,27 @@ def copyPlugFuncToShapeClassDict(plugFunc,
 
             notes = None
 
+            src = ":meth:`paya.runtime.plugs.{}.{}`".format(
+                className,
+                plugFunc.__name__
+            )
+
             if worldSpaceOnly:
                 notes = \
-                """
-                Added from a plug method; only runs in world-space.
-                """
+                    "Adapted from {}; only runs in world space.".format(src)
 
             if addWorldSpace:
                 wrapper = short(worldSpace='ws')(wrapper)
+                notes = (
+                        "Adapted from {}; a *worldSpace/ws* "+
+                        "keyword argument has been added, "+
+                        "defaulting to ``False``").format(src)
 
-                notes = \
-                """
-                Added from a plug method; a *worldSpace/ws* keyword argument
-                has been added, defaulting to ``False``.
-                """
+                # notes = \
+                # """
+                # Adapted from a plug method; a *worldSpace/ws* keyword argument
+                # has been added, defaulting to ``False``.
+                # """
 
             notes = textwrap.fill(inspect.cleandoc(notes), width=60)
             wrapper.__doc__ = makeDoc([plugFunc], notes=notes)
