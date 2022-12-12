@@ -7,10 +7,128 @@ from functools import wraps
 import inspect
 import maya.cmds as m
 import pymel.core as p
-from paya.util import short, LazyModule, conditionalExpandArgs
+from paya.util import short, \
+    LazyModule, conditionalExpandArgs, resolveFlags
 
 r = LazyModule('paya.runtime')
 _mo = LazyModule('paya.lib.mathops')
+
+
+@short(distance='d',
+       angle='a')
+def conform(item,
+            distance=False, # Distance and Point
+            angle=False): # Angle and EulerRotation
+    """
+    Conforms to Paya types.
+
+    :param bool distance/d: prefer :class:`~paya.runtime.data.Distance`,
+        :class:`~paya.runtime.plugs.Distance` and
+        :class:`~paya.runtime.data.Point` wherever possible; defaults to
+        ``False``
+    :param bool angle/a: prefer :class:`~paya.runtime.data.EulerRotation`,
+        :class:`~paya.runtime.plugs.EulerRotation`,
+        :class:`~paya.runtime.data.Quaternion` and
+        :class:`~paya.runtime.plugs.Quaternion` wherever possible; defaults
+        to ``False``
+    :raises ValueError: The *item* could not be conformed to a Paya value,
+        node, component or plug type.
+    :return: The original *item* conformed to a Paya type.
+    """
+    if isinstance(item, bool):
+        return item
+
+    if isinstance(item, (int, float)): # will also catch Angle and Distance
+        if angle:
+            return r.data.Angle(item)
+        if distance:
+            return r.data.Distance(item)
+        return item
+
+    if isinstance(item, r.datatypes.Vector): # will also catch Point
+        if angle:
+            return r.data.EulerRotation(item)
+        if distance:
+            return r.data.Point(item)
+        return item
+
+    if isinstance(item, (tuple, list)):
+        num = len(item)
+
+        if num in (3, 4, 16):
+            if all([isinstance(x, (float, int)) for x in item]):
+                if num is 3:
+                    if angle:
+                        return r.data.EulerRotation(item)
+                    if distance:
+                        return r.data.Point(item)
+                    return r.data.Vector(item)
+
+                if num is 4:
+                    if distance:
+                        return r.data.Point(item)
+                    return r.data.Quaternion(item)
+
+                return r.data.Matrix(item)
+
+            else:
+                raise ValueError("Can't conform item: {}".format(item))
+        else:
+            raise ValueError("Can't conform item: {}".format(item))
+
+    if isinstance(item, p.util.arrays.Array):
+        if angle or distance:
+            num = len(item.flat)
+
+            if num is 3:
+                if angle:
+                    return r.data.EulerRotation(item)
+                return r.data.Point(item)
+
+            if num is 4:
+                if distance:
+                    return r.data.Point(item)
+                return r.data.Quaternion(item)
+
+        return item
+
+    if isinstance(item, str):
+        try:
+            item = r.PyNode(item)
+
+            if (angle or distance):
+                if isinstance(item, p.Attribute):
+                    dim = item.mathDimension()
+
+                    if dim is 1:
+                        if angle:
+                            return item.setClass(r.plugs.Angle)
+                        return item.setClass(r.plugs.Distance)
+                    elif dim is 3:
+                        if angle:
+                            return item.setClass(r.plugs.EulerRotation)
+
+            return item
+        except p.general.MayaObjectError:
+            return item
+
+    if isinstance(item, p.PyNode):
+        if angle or distance:
+            if isinstance(item, p.Attribute):
+                dim = item.mathDimension()
+
+                if dim is 1:
+                    if angle:
+                        return item.setClass(r.plugs.Angle)
+                    return item.setClass(r.plugs.Distance)
+                elif dim is 3:
+                    if angle:
+                        return item.setClass(r.plugs.EulerRotation)
+
+        return item
+
+    raise ValueError("Can't conform item: {}".format(item))
+
 
 def isPyMELObject(item):
     """
@@ -63,7 +181,7 @@ def isScalarPlug(item):
     except:
         return False
 
-    return item.__math_dimension__ is 1
+    return item.mathDimension() is 1
 
 def isScalarValueOrPlug(item):
     """
@@ -82,7 +200,7 @@ def isVectorValueOrPlug(item):
     :rtype: bool
     """
     if isinstance(item, (p.datatypes.Vector, p.datatypes.Point)) \
-        or (isinstance(item, r.plugs.Math3D)
+        or (isinstance(item, r.plugs.Vector)
             and not isinstance(item, r.plugs.EulerRotation)):
         return True
 
@@ -93,7 +211,7 @@ def isVectorValueOrPlug(item):
         except:
             return False
 
-        return (isinstance(plug, r.plugs.Math3D)
+        return (isinstance(plug, r.plugs.Vector)
             and not isinstance(plug, r.plugs.EulerRotation))
 
     if hasattr(item, '__iter__'):
@@ -130,11 +248,11 @@ def isTripleScalarValueOrPlug(item):
         return len(item) is 3
 
     if isinstance(item, p.Attribute):
-        return item.__math_dimension__ is 3
+        return item.mathDimension() is 3
 
     if isinstance(item, str):
         try:
-            return p.Attribute(item).__math_dimension__ is 3
+            return p.Attribute(item).mathDimension() is 3
 
         except:
             return False
