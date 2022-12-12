@@ -247,7 +247,7 @@ class Quaternion:
         Returns this quaternion as a rotation matrix.
 
         :return: The rotation matrix.
-        :rtype: :class:`~paya.attributeMath16D.AttributeMath16D`
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
         """
         node = r.nodes.ComposeMatrix.createNode()
         self >> node.attr('inputQuat')
