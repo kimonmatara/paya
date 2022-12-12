@@ -1220,86 +1220,6 @@ paya.runtime.plugs.NurbsCurve
         :return: The ``extendCurve`` node.
         :rtype: :class:`~paya.runtime.nodes.ExtendCurve`
     
-    .. py:method:: extendByVector(vector, atStart=False, multipleKnots=True, useSegment=False)
-    
-        :param vector: the vector along which to extend
-        :type vector: list, tuple, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param bool atStart/ats: extend from the start instead of the end;
-            defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool useSegment/seg: for improved accuracy, extend using an
-            attached line segment instead of the 'Linear' mode of an
-            ``extendCurve`` node; defaults to False
-        :return: This curve, extended along the specified vector.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: extendToPoint(point, atStart=False, multipleKnots=True, useSegment=False)
-    
-        :param point: the point to reach for
-        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param bool atStart/ats: extend from the start instead of the end;
-            defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool useSegment/seg: for improved accuracy, extend using an
-            attached line segment instead of the 'Linear' mode of an
-            ``extendCurve`` node; defaults to False
-        :return: This curve, extended to meet the specified point
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
-    .. py:method:: extendByLength(length, atStart=False, atBothEnds=False, multipleKnots=True, circular=False, linear=False, extrapolate=False)
-    
-        :param length: the length by which to extend
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool atStart/ats: extend from the start instead of the end;
-            defaults to False
-        :param bool atBothEnds/abe: extend from both ends; note that, in this
-            case, the length at either end will be halved; defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool circular/cir: use the 'circular' mode of the
-            ``extendCurve`` node; defaults to False
-        :param bool linear/lin: use the 'linear' mode of the
-            ``extendCurve`` node; defaults to False
-        :param bool extrapolate/ext: use the 'extrapolate' mode of the
-            ``extendCurve`` node; defaults to True
-        :return: This curve, extended by the specified length.
-    
-    .. py:method:: extend(lenPointOrVec, point=None, linear=None, circular=None, extrapolate=None, useSegment=False, multipleKnots=True, atStart=None, atBothEnds=None)
-    
-        Extends this curve in a variety of ways.
-        
-        :param lenPointOrVec: a length, point or vector for the extension
-        :type lenPointOrVec: float, tuple, list, str,
-            :class:`~paya.runtime.data.Point`
-            :class:`~paya.runtime.data.Vector`
-            :class:`~paya.runtime.plugs.Math1D`
-            :class:`~paya.runtime.plugs.Vector`
-        :param bool point: if *lenPointOrVec* is a 3D value or plug,
-            interpret it as a point rather than a vector; defaults to True
-            if *lenPointOrVec* is an instance of
-            :class:`~paya.runtime.data.Point`, otherwise False
-        :param bool linear/lin: if extending by distance, use the 'linear'
-            mode of the ``extendCurve`` node; defaults to True
-        :param bool circular/cir: if extending by distance, use the 'circular'
-            mode of the ``extendCurve`` node; defaults to False
-        :param bool extrapolate/ext: if extending by distance, use the
-            'extrapolate' mode of the ``extendCurve`` node; defaults to False
-        :param bool useSegment/seg: if extending by vector or point, don't use
-            an ``extendCurve`` node; for improved accuracy, attach a line
-            segment instead; defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool atStart/ats: extend from the start of the curve rather than the end;
-            defaults to False
-        :param bool atBothEnds/abe: if extending by length, extend from both
-            ends of the curve; defaults to False
-        :return: The extended curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-    
     .. py:method:: retract(length, atStart=None, atBothEnds=None)
     
         Retracts this curve.
@@ -1321,7 +1241,7 @@ paya.runtime.plugs.NurbsCurve
         :param targetLength: the target length
         :type targetLength: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool atStart/ats: anchor the curve at the end rather than the
-            start; defaults to False
+            start; defaults to ``False``
         :param vector: a vector along which to extend; this is recommended for
             spine setups where tangency should be more tightly controlled; if
             this is omitted, the *linear / circular / extrapolate* modes will
@@ -1329,15 +1249,110 @@ paya.runtime.plugs.NurbsCurve
         :type vector: None, tuple, list, :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
         :param bool circular/cir: ignored if *vector* was provided; use the
-            'circular' mode of the ``extendCurve`` node; defaults to False
+            'circular' mode of the ``extendCurve`` node; defaults to ``False``
         :param bool linear/lin: ignored if *vector* was provided;
             use the 'linear' mode of the ``extendCurve`` node; defaults to
-            False
+            ``False``
         :param bool extrapolate/ext: ignored if *vector* was provided;
             use the 'extrapolate' mode of the ``extendCurve`` node; defaults
-            to True
-        :param bool multipleKnots: keep multiple knots; defaults to True
+            to ``Tru``e``
+        :param bool multipleKnots: keep multiple knots; defaults to ``True``
         :return:
+    
+    .. py:method:: extendByLength(length, circular=None, linear=None, extrapolate=None, atStart=None, atEnd=None, multipleKnots=True)
+    
+        :param length: the length to add to the curve
+        :type length: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param bool circular: use a circular extension; defaults to ``False``
+        :param bool linear: use a linear extension; defaults to ``True``
+        :param bool extrapolate: use an extrapolated extension; defaults to
+            ``False``
+        :param bool atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param bool atEnd: extend at the start of the curve; defaults to
+            ``True``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :return: This curve output, extended accordingly.
+        :rtype: :class:`NurbsCurve`
+    
+    .. py:method:: extendByVector(vector, atStart=False, useSegment=False, multipleKnots=True)
+    
+        :param vector: the vector along which to extend
+        :type vector: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param bool useSegment/seg: uses an attached line segment for the
+            extension; defaults to ``False``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :return: This curve output, extended along the specified vector.
+        :rtype: :class:`NurbsCurve`
+    
+    .. py:method:: extendByPoint(point, atStart=False, useSegment=False, multipleKnots=True)
+    
+        :param point: the point towards which to extend
+        :type point: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param bool useSegment/seg: uses an attached line segment for the
+            extension; defaults to ``False``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :return: This curve output, extended towards the specified point.
+        :rtype: :class:`NurbsCurve`
+    
+    .. py:method:: extend(atStart=None, atEnd=None, point=None, vector=None, length=None, multipleKnots=True, useSegment=False)
+    
+        :param length: the length to add to the curve; defaults to ``None``
+        :type length: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param vector: the vector along which to extend; defaults to ``None``
+        :type vector: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param point: the point towards which to extend; defaults to ``None``
+        :type point: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param atEnd: extend at the start of the curve; defaults to
+            ``True``
+        :param bool useSegment/seg: uses an attached line segment for the
+            extension (vector / point only); defaults to ``False``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :raises ValueError: One of:
+        
+            -   More than one of *vector*, *point* or *length* were specified.
+            -   Both *atStart* and *atEnd* were specified when extending with
+                point / vector.
+            -   None of *vector*, *point* or *length* were specified.
+            -   The *useSegment* option was requested when extending by curve.
+        
+        :return: This curve output, extended accordingly.
+        :rtype: :class:`NurbsCurve`
+    
+    .. py:method:: squashStretch(squashy, stretchy, globalScale=None, vector=None)
+    
+        :param squashy: the user attribute to control how squashy the output
+            should be
+        :type squashy: :class:`str`, :class:`~paya.runtime.plugs.Math1D`
+        :param stretchy: the user attribute to control how stretchy the output
+            should be
+        :type stretchy: :class:`str`, :class:`~paya.runtime.plugs.Math1D`
+        :param globalScale/gs: (recommended) an attribute to use as a
+            normalizing factor for length calculations; defaults to ``None``
+        :type globalScale/gs: :class:`str`, :class:`~paya.runtime.plugs.Math1D`
+        :param vector/v: (recommended) an extension vector to use when the
+            curve is under-shot (e.g. an extracted animation control axis);
+            defaults to ``None``
+        :return: This curve output with added squash-stretch effects.
+        :rtype: :class:`NurbsCurve`
     
     .. py:method:: rebuild(spans=None, degree=None, keepRange=1, endKnots=0, keepEndPoints=True, keepTangents=True, keepControlPoints=False, tolerance=0.01, rebuildType=0, matchCurve=None)
     

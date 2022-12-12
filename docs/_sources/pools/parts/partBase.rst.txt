@@ -69,9 +69,10 @@ paya.runtime.parts.PartBase
             :meth:`~paya.runtime.nodes.DependNode.isControl` returns ``True``.
         :rtype: [:class:`~paya.runtime.nodes.Transform`]
     
-    .. py:method:: getPartScale()
+    .. py:method:: getPartScale(plug=False)
     
-        :return: A live scaling factor derived from the Y axis of the part
+        :param bool plug/p: return a live output, not just a value
+        :return: A scaling factor derived from the Y axis of the part
             group node's world matrix.
         :rtype: :class:`~paya.runtime.plugs.Double`
     

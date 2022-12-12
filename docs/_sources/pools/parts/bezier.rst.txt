@@ -101,20 +101,3 @@ paya.runtime.parts.Bezier
         :return: The squashy and stretchy attributes.
         :rtype: :class:`list` [:class:`~paya.runtime.plugs.Double`,
             :class:`~paya.runtime.plugs.Double`]
-    
-    .. py:method:: applySquashStretchToBezier(squashy, stretchy, vector, bezier)
-    
-        Returns a second Bezier curve with length adjusted according to the
-        *squashy* and *stretchy* attribute settings.
-        
-        :param squashy: the user ``'squashy'`` attribute
-        :type squashy: :class:`~paya.runtime.plugs.Double`
-        :param stretchy: the user ``'stretchy'`` attribute
-        :type stretchy: :class:`~paya.runtime.plugs.Double`
-        :param vector: the extension vector
-        :type vector: :class:`~paya.runtime.plugs.Double`
-        :param bezier: the Bezier curve to truncate or extend
-        :type bezier: :class:`~paya.runtime.nodes.BezierCurve`,
-            :class:`~paya.runtime.nodes.Transform`
-        :return: The length-adjusted Bezier curve.
-        :rtype: :class:`~paya.runtime.nodes.Transform`
