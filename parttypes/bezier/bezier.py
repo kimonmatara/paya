@@ -137,48 +137,50 @@ class Bezier(r.parts.Part):
             ).toTransform()
 
         bezier.setParent(self.tree['util'].node(inheritsTransform=False))
+        fullLengthStream = bezier.getHistoryPlug()
+
+        if addJoints:
+            #-------------------------------------------|    Up vector info
+
+            # Add the up vector sampler to the full-length curve in all
+            # cases
+
+            params = fullLengthStream.paramsAtAnchors()
+            upVectorSampler = fullLengthStream.createUpVectorSampler(
+                upVector=list(zip(params, liveUpVectors)),
+                parallelTransport=parallelTransport,
+                resolution=resolution
+            )
 
         #-------------------------------------------|    Squash-stretch
 
         if squashStretch:
-            if addJoints:
-                with r.Name('addJoints'):
-                    params = bezier.paramsAtAnchors()
-
-                    upVectorLengths = [r.Name(x+1, padding=3)(
-                        bezier.lengthAtParam)(param, p=True) for x, param \
-                                       in enumerate(bezier.paramsAtAnchors())]
-
             squashy, stretchy = self.addSquashStretchAttrs(controls)
+            outputStream = fullLengthStream.squashStretch(
+                squashy,
+                stretchy,
+                vector=controls[-1].attr('wm').getAxis(downAxis),
+                globalScale=self.getPartScale(p=True)
+            )
+        else:
+            outputStream = fullLengthStream
 
-            with r.Name('applySquashStretch'):
-                self.applySquashStretchToBezier(
-                    squashy,
-                    stretchy,
-                    controls[-1].attr('wm').getAxis(downAxis),
-                    bezier
-                )
+        outputStream >> bezier.attr('create')
 
         #-------------------------------------------|    Joints
 
         if addJoints:
 
-            #---------------------------------------|    Add up vector information
-
-            params = [r.Name(x+1, padding=3)(bezier.paramAtLength)(length,
-                    p=True) for x, length in enumerate(upVectorLengths)]
-
-            bezier.createUpVectorSampler(
-                upVector=list(zip(params, liveUpVectors)),
-                parallelTransport=parallelTransport
-            )
-
             #---------------------------------------|    Distribute
+
+            # Use the up-vector sampler from the full-length curve
+            # in all cases
 
             matrices = bezier.distributeMatrices(
                 numJoints, downAxis, upAxis,
-                globalScale=self.getPartScale(),
-                plug=True
+                globalScale=self.getPartScale(p=True),
+                plug=True,
+                upVectorSampler=upVectorSampler
             )
 
             for i, matrix in enumerate(matrices):
@@ -318,29 +320,3 @@ class Bezier(r.parts.Part):
                 attr.createProxy(node=control)
 
         return squashy, stretchy
-
-    def applySquashStretchToBezier(self, squashy, stretchy, vector, bezier):
-        """
-        Returns a second Bezier curve with length adjusted according to the
-        *squashy* and *stretchy* attribute settings.
-
-        :param squashy: the user ``'squashy'`` attribute
-        :type squashy: :class:`~paya.runtime.plugs.Double`
-        :param stretchy: the user ``'stretchy'`` attribute
-        :type stretchy: :class:`~paya.runtime.plugs.Double`
-        :param vector: the extension vector
-        :type vector: :class:`~paya.runtime.plugs.Double`
-        :param bezier: the Bezier curve to truncate or extend
-        :type bezier: :class:`~paya.runtime.nodes.BezierCurve`,
-            :class:`~paya.runtime.nodes.Transform`
-        :return: The length-adjusted Bezier curve.
-        :rtype: :class:`~paya.runtime.nodes.Transform`
-        """
-        scale = self.getPartScale()
-        stream = bezier.getHistoryPlug()
-        nativeLen = stream.length() * scale
-        liveLen = stream.length(plug=True)
-
-        targetLen = liveLen.gatedClamp(nativeLen, squashy, stretchy)
-        stream = stream.setLength(targetLen, vector=vector)
-        stream >> bezier.geoInput
