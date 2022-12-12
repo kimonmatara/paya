@@ -589,6 +589,11 @@ class PlugClassPool(ShadowPool):
     :mod:`~paya.pluginfo`. A browser for this pool can
     be accessed on :mod:`paya.runtime` as ``.plugs``.
     """
+    # To-Do: Could be a little faster:
+    # At the moment getFromPyMELInstance() only sources the plug info
+    # to the get the class name, and then that gets passed along to
+    # getByName() which re-sources the path for subsequent operations
+
     __singular__ = 'plug'
     __plural__ = 'plugs'
     __pm_mod__ = pymel.core.general
@@ -601,7 +606,35 @@ class PlugClassPool(ShadowPool):
         reassignment.
         """
         info = _pi.getInfoFromAttr(inst)
-        return self.getByName(info['key'])
+        return self.getByName(info['type'][-1])
+
+    def getByName(self, clsname):
+        try:
+            cls = self._cache[clsname]
+        except KeyError:
+            path = _pi.getPath(clsname)
+
+            self._cache[clsname] = cls = \
+                self.buildClassFromTreePath(path)
+
+        return cls
+
+    def buildClassFromTreePath(self, path):
+        clsname = path[-1]
+        try:
+            bases, dct = self.getBasesDictFromTemplate(clsname)
+        except MissingTemplateError:
+            bases, dct = self.inventBasesDict(clsname)
+
+        # Build the class from the bases and the dict
+        meta = self.getMeta(clsname)
+        cls = type.__new__(meta, clsname, bases, dct)
+
+        # Modify the module field into a 'runtime' format only after
+        # the class is built
+        cls.__module__ = 'paya.runtime.'+self.shortName()
+
+        return cls
 
     def getPmBase(self, clsname):
         """
@@ -627,18 +660,15 @@ class PlugClassPool(ShadowPool):
         # base.
 
         bases = [base for base in bases if base is not object]
-
         ptPath = _pi.getPath(clsname)
+
         ln = len(ptPath)
 
-        if ln is 1:
+        if clsname == 'Attribute':
             requiredBase = pymel.core.general.Attribute
-
-        elif ln is 2:
-            requiredBase = self.getByName('Attribute')
-
         else:
-            requiredBase = self.getByName(ptPath[-2])
+            requiredBaseName = ptPath[-2]
+            requiredBase = self.getByName(requiredBaseName)
 
         if not any([issubclass(
                 base, requiredBase) for base in bases]):
