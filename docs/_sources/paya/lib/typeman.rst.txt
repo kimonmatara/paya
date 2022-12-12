@@ -8,6 +8,23 @@ WIP -- unified type-checking methods for hybrid plug / value workflows.
 
 Functions in this module expect patched PyMEL.
 
+.. py:function:: conform(item, distance=False, angle=False)
+
+    Conforms to Paya types.
+    
+    :param bool distance/d: prefer :class:`~paya.runtime.data.Distance`,
+        :class:`~paya.runtime.plugs.Distance` and
+        :class:`~paya.runtime.data.Point` wherever possible; defaults to
+        ``False``
+    :param bool angle/a: prefer :class:`~paya.runtime.data.EulerRotation`,
+        :class:`~paya.runtime.plugs.EulerRotation`,
+        :class:`~paya.runtime.data.Quaternion` and
+        :class:`~paya.runtime.plugs.Quaternion` wherever possible; defaults
+        to ``False``
+    :raises ValueError: The *item* could not be conformed to a Paya value,
+        node, component or plug type.
+    :return: The original *item* conformed to a Paya type.
+
 .. py:function:: isPyMELObject(item)
 
     :param item: the item to inspect

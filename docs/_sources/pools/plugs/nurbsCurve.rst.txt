@@ -393,7 +393,7 @@ paya.runtime.plugs.NurbsCurve
         :return: The curve length at the specified fraction.
         :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
     
-    .. py:method:: lengthAtParam(param, plug=None)
+    .. py:method:: lengthAtParam(param, plug=None, checkDomain=True)
     
         Differs from the PyMEl / API
         :meth:`~pymel.core.nodetypes.NurbsCurve.findLengthFromParam` in that
@@ -401,6 +401,9 @@ paya.runtime.plugs.NurbsCurve
         
         :param param: the parameter to inspect
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool checkDomain/cd: perform gating against the current curve
+            knot domain to prevent sampling errors at the very start or end
+            of the curve; defaults to ``True``
         :param bool plug/p: force a dynamic output, or indicate that one or
             more of the arguments are plugs to skip checks; defaults to
             ``None``

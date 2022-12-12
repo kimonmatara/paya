@@ -8,10 +8,22 @@ paya.runtime.plugs.Vector
 
     .. rubric:: Inheritance
 
-    :class:`~paya.runtime.plugs.Math3D` :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+    :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
 
 
 
+    .. py:method:: createLocator(name=None, size=1.0)
+    
+        :shorthand: ``cl``
+        
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
+        :param float size/siz: a single scalar for the locator's
+            ``localScale`` channels; defaults to 1.0
+        :return: A locator with this 3D compound piped into its
+            ``translate`` channel.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+    
     .. py:method:: isTranslateChannel()
     
         :return: True if this is the ``translate`` channel of a transform
@@ -24,6 +36,22 @@ paya.runtime.plugs.Vector
         :class:`~paya.runtime.data.Point` values if this is the translate
         channel of a transform node.
     
+    .. py:method:: __add__(other, swap=False)
+    
+        Implements element-wise **addition** (``+``).
+    
+    .. py:method:: __radd__(other)
+    
+        Implements element-wise **reflected addition** (``-``).
+    
+    .. py:method:: __sub__(other, swap=False)
+    
+        Implements element-wise **subtraction** (``-``).
+    
+    .. py:method:: __rsub__(other)
+    
+        Implements element-wise **reflected subtraction** (``-``).
+    
     .. py:method:: __mul__(other, swap=False)
     
         Implements **multiplication** (``*``).
@@ -32,33 +60,51 @@ paya.runtime.plugs.Vector
     
         Implements **reflected multiplication** (``*``).
     
-    .. py:method:: __xor__(other)
+    .. py:method:: __neg__()
     
-        Uses the exclusive-or operator (``^``) to implement
-        **point-matrix multiplication**.
+        Implements element-wise **unary negation** (``-``).
+    
+    .. py:method:: __truediv__(other, swap=False)
+    
+        Implements element-wise **division** (``/``).
+    
+    .. py:method:: __rtruediv__(other)
+    
+        Implements element-wise **reflected division** (``/``).
+    
+    .. py:method:: __pow__(other, swap=False)
+    
+        Implements element-wise **power** (``**``).
+    
+    .. py:method:: __rpow__(other)
+    
+        Implements element-wise **reflected power** (``**``).
+    
+    .. py:method:: blend(other, weight=0.5, swap=False, includeLength=False, clockNormal=None, unwindSwitch=None)
+    
+        Blends this triple towards *other*. Blending will be linear or, if
+        *clockNormal* is provided, by vector angle.
         
-        :param other: a matrix value or plug
-    
-    .. py:method:: blend(other, weight=0.5, swap=False, byVectorAngle=None, includeLength=False, clockNormal=None, unwindSwitch=None)
-    
-        :param other: the vector that will be fully active when 'weight'
-            is 1.0 (or 0.0, if 'swap' is True)
-        :type other: list, tuple, :class:`paya.runtime.data.Vector`,
-            :class:`paya.runtime.plugs.Vector`
-        :param weight/w: the blending weight; defaults to 0.5
-        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool swap/sw: swap operands around; defaults to False
-        :param bool byVectorAngle/bva: blend by rotating one vector towards
-            the other, rather than via linear value interpolation; defaults
-            to ``True`` if *clockNormal* is provided, otherwise ``False``
-        :param bool includeLength/ilg: blend vector lengths (magnitudes)
-            as well; defaults to False
-        :param clockNormal/cn: an optional winding vector; providing this
-            will enable the unwinding options when blending by angle;
-            defaults to None
-        :type clockNormal/cn: None, tuple, list, str,
+        :param other: the triple or vector towards which to blend
+        :type other: :class:`list` [:class:`float`],
             :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
+            :class:`~paya.runtime.plugs.Math3D`,
+            :class:`str`
+        :param weight/w: 0.5: the blending weight; when this is 1.0, *other*
+            will take over fully; can be a value or plug; defaults to ``0.5``
+        :type weight/w: :class:`str`, :class:`float`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool swap/sw: swap the inputs around; defaults to ``False``
+        :param clockNormal/cn: if this is ``True``, this output and *other*
+            will be regarded as vectors, and blended by angle; should be
+            a vector perpendicular to both inputs; defaults to ``None``
+        :type clockNormal/cn: :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Math3D`,
+            :class:`str`
+        :param bool includeLength/ilg: ignored if *clockNormal* was omitted;
+            include vector lengths in the blending calculation; defaults to
+            ``False``
         :param unwindSwitch/uws: ignored if *clockNormal* was omitted; an
             integer value or plug to pick an angle unwinding mode:
         
@@ -67,22 +113,18 @@ paya.runtime.plugs.Vector
             - ``2`` for negative
         
         :type unwindSwitch/uws: int, str, :class:`~paya.runtime.plugs.Math1D`
-        :return: The blended vector.
-        :rtype: :class:`paya.runtime.plugs.Vector`
+        :return: The blended triple or vector.
+        :rtype: :class:`paya.runtime.plugs.Math3D`
     
-    .. py:method:: dot(other, normalize=False)
+    .. py:method:: __xor__(other)
     
-        Returns the dot product of ``self`` and ``other``.
+        Uses the exclusive-or operator (``^``) to implement
+        **point-matrix multiplication**.
         
-        :param other: the other vector
-        :type other: :class:`list`, :class:`tuple`, :class:`~paya.runtime.plugs.Math3D`
-        :param bool normalize/nr: normalize the output; defaults to False
-        :return: :class:`paya.runtime.plugs.Math1D`
+        :param other: a matrix value or plug
     
     .. py:method:: length()
     
-        Returns the length of this vector.
-        
         :return: The length of this vector.
         :rtype: :class:`~paya.runtime.plugs.Math1D`
     
@@ -90,6 +132,16 @@ paya.runtime.plugs.Vector
     
         :return: This vector, normalized.
         :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: dot(other, normalize=False)
+    
+        Returns the dot product of ``self`` and *other*.
+        
+        :param other: the other vector
+        :type other: :class:`list`, :class:`tuple`,
+            :class:`~paya.runtime.plugs.Math3D`
+        :param bool normalize/nr: normalize the output; defaults to ``False``
+        :return: :class:`paya.runtime.plugs.Math1D`
     
     .. py:method:: cross(other, normalize=False, guard=False, inlineGate=None)
     
@@ -100,7 +152,7 @@ paya.runtime.plugs.Vector
             :class:`~paya.runtime.plugs.Vector`
         :param bool normalize/nr: normalize the output; defaults to
             ``False``
-        :param bool guard/g: switch the node to 'No Operation' when the
+        :param bool guard/g: switch the node to ``'No Operation'`` when the
             input vectors are aligned in either direction; defaults to
             ``False``
         :param bool inlineGate/ig: if you have a precooked gate for alignment
@@ -113,15 +165,15 @@ paya.runtime.plugs.Vector
     .. py:method:: angleTo(other, clockNormal=None)
     
         :param other: the other vector
-        :type other: :class:`~paya.runtime.plugs.Math3D`,
+        :type other: :class:`~paya.runtime.plugs.Vector`,
             :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.data.Point`, list, str
         :param clockNormal/cn: provide this to get a 360 angle; defaults to
-            None
-        :type clockNormal/cn: None, list, tuple,
+            ``None``
+        :type clockNormal/cn: ``None``, :class:`list`, :class:`tuple`,
             :class:`~paya.runtime.plugs.Vector`,
             :class:`~paya.runtime.data.Vector`
-        :return: The angle from this vector to ``other``.
+        :return: The angle from this vector to *other*.
         :rtype: :class:`~paya.runtime.plugs.Angle`
     
     .. py:method:: projectOnto(other)
@@ -129,10 +181,11 @@ paya.runtime.plugs.Vector
         See https://en.wikipedia.org/wiki/Vector_projection.
         
         :param other: the vector onto which to project this one
-        :type other: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+        :type other: :class:`list`, :class:`tuple`, :class:`str`,
+            :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
         :return: The project of this vector onto *other*.
-        :rtype: :class:`~paya.runtime.plugs.Vector`
+        :rtype: :class:`Vector`
     
     .. py:method:: rejectFrom(other)
     
@@ -140,9 +193,22 @@ paya.runtime.plugs.Vector
         See https://en.wikipedia.org/wiki/Vector_projection.
         
         :param other: the vector from which to reject this one
-        :type other: list, tuple, str, :class:`~paya.runtime.data.Vector`,
+        :type other: :class:`list`, :class:`tuple`, :class:`str`,
+            :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
         :return: The rejection of this vector from *other*.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: rotateByAxisAngle(axisVector, angle)
+    
+        :param axisVector: the vector around which to rotate this vector
+        :type axisVector: list, tuple, :class:`~paya.runtime.data.Vector`
+            or :class:`~paya.runtime.plugs.Vector`
+        :param angle: the angle of rotation
+        :type angle: float, :class:`~paya.runtime.data.Angle`, str or
+            class:`~paya.runtime.plugs.Math3D`
+        :return: This vector, rotated around ``axisVector`` by the specified
+            ``angle``.
         :rtype: :class:`~paya.runtime.plugs.Vector`
     
     .. py:method:: asTranslateMatrix()
@@ -161,6 +227,11 @@ paya.runtime.plugs.Vector
         :return: The scale matrix.
         :rtype: :class:`~paya.runtime.plugs.Matrix`
     
+    .. py:method:: asRotateMatrix()
+    
+        :return: This vector's orientation as a rotate matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
     .. py:method:: asShearMatrix()
     
         Composes this output's three components into a shear matrix.
@@ -174,3 +245,14 @@ paya.runtime.plugs.Vector
         
         :return: A compound of three euler channels.
         :rtype: :class:`~paya.runtime.plugs.EulerRotation`
+    
+    .. py:method:: asQuaternion()
+    
+        :return: A quaternion representation of this vector's
+            orientation.
+        :rtype: :class:`~paya.runtime.plugs.Quaternion`
+    
+    .. py:method:: asAxisAngle()
+    
+        :return: An axis, angle representation of this vector.
+        :rtype: :class:`tuple` (:class:`Vector`, :class:`Angle`)

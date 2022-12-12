@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.plugs.Matrix" href="matrix.html" /><link rel="prev" title="paya.runtime.plugs.Math2D" href="math2D.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.parts.Part" href="part.html" /><link rel="prev" title="Part Types" href="../parts_index.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
-        <title>paya.runtime.plugs.Math3D - paya 1.0 documentation</title>
+        <title>paya.runtime.parts.Bezier - paya 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
@@ -217,22 +217,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="attribute.html">Attribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="enum.html">Enum</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">EulerRotation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="geometry.html">Geometry</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math2D.html">Math2D</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Math3D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quaternion.html">Quaternion</a></li>
-<li class="toctree-l3"><a class="reference internal" href="string.html">String</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/angle.html">Angle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/attribute.html">Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/distance.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/enum.html">Enum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/eulerRotation.html">EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/geometry.html">Geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/math1D.html">Math1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/matrix.html">Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/quaternion.html">Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/time.html">Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/vector.html">Vector</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../data_index.html">Data Types</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -254,12 +255,13 @@
 <li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../parts/transform.html">Transform</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../parts/transformGuide.html">TransformGuide</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Bezier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="part.html">Part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partBase.html">PartBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partGuide.html">PartGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transformGuide.html">TransformGuide</a></li>
 </ul>
 </li>
 </ul>
@@ -358,151 +360,155 @@
           </label>
         </div>
         <article role="main">
-          <section id="paya-runtime-plugs-math3d">
-<h1>paya.runtime.plugs.Math3D<a class="headerlink" href="#paya-runtime-plugs-math3d" title="Permalink to this headline">#</a></h1>
+          <section id="paya-runtime-parts-bezier">
+<h1>paya.runtime.parts.Bezier<a class="headerlink" href="#paya-runtime-parts-bezier" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Math3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.runtime.parts.Bezier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Bezier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groupNode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Bezier" title="Permalink to this definition">#</a></dt>
 <dd><p class="rubric">Inheritance</p>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Math</span></code> <a class="reference internal" href="attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.createLocator">
-<span class="sig-name descname"><span class="pre">createLocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.createLocator" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Shorthand</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">cl</span></code></p>
-</dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – an optional name for the locator transform;
-defaults to a contextual name</p></li>
-<li><p><strong>size/siz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – a single scalar for the locator’s
-<code class="docutils literal notranslate"><span class="pre">localScale</span></code> channels; defaults to 1.0</p></li>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Part</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">PartBase</span></code> <a class="reference internal" href="../../paya/trunk.html#paya.trunk.Trunk" title="paya.trunk.Trunk"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trunk</span></code></a></p>
+<p>Bezier ‘spine’ part. Features:</p>
+<ul class="simple">
+<li><p>scalable tangents</p></li>
+<li><p>squash / stretch / length preservation</p></li>
+<li><p>distributed (floating) joints</p></li>
+<li><p>parallel transport option for twist calculations</p></li>
 </ul>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A locator with this 3D compound piped into its
-<code class="docutils literal notranslate"><span class="pre">translate</span></code> channel.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.parts.Bezier.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorGroups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numJoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelTransport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowStartTranslate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowEndTranslate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Bezier.create" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anchorGroups</strong> – <p>a list of dictionaries (one per anchor), each
+comprising:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;in&#39;</span><span class="p">:</span> <span class="n">point</span> <span class="n">position</span> <span class="n">of</span> <span class="s1">&#39;in&#39;</span> <span class="n">tangent</span> <span class="n">CV</span> <span class="p">(</span><span class="k">if</span> <span class="n">present</span><span class="p">)</span>
+    <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="n">point</span> <span class="n">position</span> <span class="n">of</span> <span class="n">main</span> <span class="n">anchor</span> <span class="n">CV</span>
+    <span class="s1">&#39;out&#39;</span><span class="p">:</span> <span class="n">point</span> <span class="n">position</span> <span class="n">of</span> <span class="s1">&#39;out&#39;</span> <span class="n">tangent</span> <span class="n">CV</span> <span class="p">(</span><span class="k">if</span> <span class="n">present</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>upVectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – a list of up vectors (one per anchor)</p></li>
+<li><p><strong>numJoints/nj</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the number of joints to distribute along the
+curve; defaults to 12</p></li>
+<li><p><strong>parallelTransport/pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – ignored if <em>numJoints</em> is 0; use
+parallel transport to distribute twist along the curve; defaults
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>resolution/res</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – the number of parallel-transport solutions to
+generate along the curve; higher numbers improve accuracy at the
+expense of performance; defaults to 9</p></li>
+<li><p><strong>allowStartTranslate/ast</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – unlock translate channels on the
+start control; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>allowEndTranslate/aet</strong> – unlock translate channels on the
+end control; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.get" title="Permalink to this definition">#</a></dt>
-<dd><p>Overloads <a class="reference internal" href="attribute.html#paya.runtime.plugs.Attribute.get" title="paya.runtime.plugs.Attribute.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Attribute.get()</span></code></a> to return
-<a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__add__">
-<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__add__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>addition</strong> (<code class="docutils literal notranslate"><span class="pre">+</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__radd__">
-<span class="sig-name descname"><span class="pre">__radd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__radd__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>reflected addition</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__sub__">
-<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__sub__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>subtraction</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__rsub__">
-<span class="sig-name descname"><span class="pre">__rsub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__rsub__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>reflected subtraction</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__mul__">
-<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__mul__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__rmul__">
-<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__rmul__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>reflected multiplication</strong> (<code class="docutils literal notranslate"><span class="pre">*</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__neg__">
-<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__neg__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>unary negation</strong> (<code class="docutils literal notranslate"><span class="pre">-</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__truediv__">
-<span class="sig-name descname"><span class="pre">__truediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__truediv__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>division</strong> (<code class="docutils literal notranslate"><span class="pre">/</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__rtruediv__">
-<span class="sig-name descname"><span class="pre">__rtruediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__rtruediv__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>reflected division</strong> (<code class="docutils literal notranslate"><span class="pre">/</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__pow__">
-<span class="sig-name descname"><span class="pre">__pow__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__pow__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>power</strong> (<code class="docutils literal notranslate"><span class="pre">**</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.__rpow__">
-<span class="sig-name descname"><span class="pre">__rpow__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.__rpow__" title="Permalink to this definition">#</a></dt>
-<dd><p>Implements <strong>reflected power</strong> (<code class="docutils literal notranslate"><span class="pre">**</span></code>).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.blend">
-<span class="sig-name descname"><span class="pre">blend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.blend" title="Permalink to this definition">#</a></dt>
-<dd><p>Blends this output towards <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+<dt class="sig sig-object py" id="paya.runtime.parts.Bezier.createFromBezierAndUpVectors">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromBezierAndUpVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bezierGuide</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVectors</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Bezier.createFromBezierAndUpVectors" title="Permalink to this definition">#</a></dt>
+<dd><p>Lets you create the system using a ‘guide’ bezier curve and a list of
+up vectors (one per anchor).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<em>3D value</em><em> or </em><em>plug</em>) – the scalar value or plug towards which to blend</p></li>
-<li><p><strong>weight/w</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath1D</span></code>, <a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>, list, str) – the blend weight, where <em>other</em> takes over fully
-at 1.0; defaults to 0.5</p></li>
-<li><p><strong>swap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – swap the operands</p></li>
+<li><p><strong>bezierGuide</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>,
+<a class="reference internal" href="../nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve" title="paya.runtime.nodes.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,) – a guide Bezier curve</p></li>
+<li><p><strong>upVectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – a list of up vectors (one per anchor)</p></li>
+<li><p><strong>**kwargs</strong> – forwarded to <a class="reference internal" href="#paya.runtime.parts.Bezier.create" title="paya.runtime.parts.Bezier.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a></p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The blended output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AttributeMath3D</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.plugs.Math3D.rotateByAxisAngle">
-<span class="sig-name descname"><span class="pre">rotateByAxisAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axisVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math3D.rotateByAxisAngle" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.runtime.parts.Bezier.createFromTwoBeziers">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromTwoBeziers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mainBezier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upBezier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Bezier.createFromTwoBeziers" title="Permalink to this definition">#</a></dt>
+<dd><p>Lets you create the system using ‘main’ and ‘up’ guide curves.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bezierGuide</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>,
+<a class="reference internal" href="../nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve" title="paya.runtime.nodes.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,) – the main guide Bezier curve</p></li>
+<li><p><strong>upBezier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>,
+<a class="reference internal" href="../nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve" title="paya.runtime.nodes.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,) – the ‘up’ guide Bezier curve</p></li>
+<li><p><strong>closestPoint/cp</strong> – pull interests from the ‘up’ curve using
+closest point rather than matched parameter; set this to <code class="docutils literal notranslate"><span class="pre">True</span></code>
+if the two curve domains don’t match; defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>**kwargs</strong> – forwarded to <a class="reference internal" href="#paya.runtime.parts.Bezier.create" title="paya.runtime.parts.Bezier.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.parts.Bezier.getDrawMatrixFromAnchorGroupAndUpVector">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getDrawMatrixFromAnchorGroupAndUpVector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchorGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Bezier.getDrawMatrixFromAnchorGroupAndUpVector" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>axisVector</strong> (list, tuple, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>
-or <a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the vector around which to rotate this vector</p></li>
-<li><p><strong>angle</strong> (float, <a class="reference internal" href="../data/angle.html#paya.runtime.data.Angle" title="paya.runtime.data.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a>, str or
-class:<cite>~paya.runtime.plugs.Math3D</cite>) – the angle of rotation</p></li>
+<li><p><strong>anchorGroup</strong> – <p>a dictionary comprising:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;in&#39;</span><span class="p">:</span> <span class="n">point</span> <span class="n">position</span> <span class="n">of</span> <span class="s1">&#39;in&#39;</span> <span class="n">tangent</span> <span class="n">CV</span> <span class="p">(</span><span class="k">if</span> <span class="n">present</span><span class="p">)</span>
+    <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="n">point</span> <span class="n">position</span> <span class="n">of</span> <span class="n">main</span> <span class="n">anchor</span> <span class="n">CV</span>
+    <span class="s1">&#39;out&#39;</span><span class="p">:</span> <span class="n">point</span> <span class="n">position</span> <span class="n">of</span> <span class="s1">&#39;out&#39;</span> <span class="n">tangent</span> <span class="n">CV</span> <span class="p">(</span><span class="k">if</span> <span class="n">present</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>upVector</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>,
+<a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – the up vector for the anchor</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.parts.Bezier.addSquashStretchAttrs">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">addSquashStretchAttrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">controls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Bezier.addSquashStretchAttrs" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds synced <code class="docutils literal notranslate"><span class="pre">squashy</span></code> and <code class="docutils literal notranslate"><span class="pre">stretchy</span></code> attributes across a list
+of controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>controls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>]) – the controls to add the attributes to</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The squashy and stretchy attributes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<code class="xref py py-class docutils literal notranslate"><span class="pre">Double</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Double</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.parts.Bezier.applySquashStretchToBezier">
+<span class="sig-name descname"><span class="pre">applySquashStretchToBezier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">squashy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stretchy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bezier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Bezier.applySquashStretchToBezier" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a second Bezier curve with length adjusted according to the
+<em>squashy</em> and <em>stretchy</em> attribute settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>squashy</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Double</span></code>) – the user <code class="docutils literal notranslate"><span class="pre">'squashy'</span></code> attribute</p></li>
+<li><p><strong>stretchy</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Double</span></code>) – the user <code class="docutils literal notranslate"><span class="pre">'stretchy'</span></code> attribute</p></li>
+<li><p><strong>vector</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Double</span></code>) – the extension vector</p></li>
+<li><p><strong>bezier</strong> (<a class="reference internal" href="../nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve" title="paya.runtime.nodes.BezierCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">BezierCurve</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the Bezier curve to truncate or extend</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>This vector, rotated around <code class="docutils literal notranslate"><span class="pre">axisVector</span></code> by the specified
-<code class="docutils literal notranslate"><span class="pre">angle</span></code>.</p>
+<dd class="field-even"><p>The length-adjusted Bezier curve.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -516,23 +522,23 @@ class:<cite>~paya.runtime.plugs.Math3D</cite>) – the angle of rotation</p></li
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="matrix.html">
+          <a class="next-page" href="part.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">paya.runtime.plugs.Matrix</div>
+                <div class="title">paya.runtime.parts.Part</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="math2D.html">
+          <a class="prev-page" href="../parts_index.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">paya.runtime.plugs.Math2D</div>
+                <div class="title">Part Types</div>
                 
               </div>
             </a>

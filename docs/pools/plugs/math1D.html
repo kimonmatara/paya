@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.plugs.Math2D" href="math2D.html" /><link rel="prev" title="paya.runtime.plugs.Geometry" href="geometry.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.plugs.Matrix" href="matrix.html" /><link rel="prev" title="paya.runtime.plugs.Geometry" href="geometry.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
         <title>paya.runtime.plugs.Math1D - paya 1.0 documentation</title>
@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
@@ -365,6 +367,37 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Math1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math1D" title="Permalink to this definition">#</a></dt>
 <dd><p class="rubric">Inheritance</p>
 <p><code class="xref py py-class docutils literal notranslate"><span class="pre">Math</span></code> <a class="reference internal" href="attribute.html#paya.runtime.plugs.Attribute" title="paya.runtime.plugs.Attribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.Attribute.html#pymel.core.general.Attribute" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Attribute</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.plugs.Math1D.createAttr">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createAttr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributeType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math1D.createAttr" title="Permalink to this definition">#</a></dt>
+<dd><p>On <a class="reference internal" href="#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a> subclasses, overloads
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.Attribute.create()</span></code> to preload
+<em>attributeType</em> with a type appropriate for the class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attrName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the attribute</p></li>
+<li><p><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a>) – the node on which to create the attribute; if omitted,
+a free-standing <code class="docutils literal notranslate"><span class="pre">network</span></code> node will be created to hold the
+attribute; defaults to <code class="docutils literal notranslate"><span class="pre">double</span></code> for <a class="reference internal" href="#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>,
+<code class="docutils literal notranslate"><span class="pre">doubleAngle</span></code> for <a class="reference internal" href="angle.html#paya.runtime.plugs.Angle" title="paya.runtime.plugs.Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Angle</span></code></a>,
+<code class="docutils literal notranslate"><span class="pre">doubleLinear</span></code> for <a class="reference internal" href="distance.html#paya.runtime.plugs.Distance" title="paya.runtime.plugs.Distance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Distance</span></code></a> and
+<code class="docutils literal notranslate"><span class="pre">time</span></code> for <a class="reference internal" href="time.html#paya.runtime.plugs.Time" title="paya.runtime.plugs.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a></p></li>
+<li><p><strong>attributeType/at</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the type of the attribute to create;
+defaults to something sensible for this 1D class</p></li>
+<li><p><strong>**kwargs</strong> – forwarded to
+<a class="reference internal" href="../nodes/dependNode.html#paya.runtime.nodes.DependNode.addAttr" title="paya.runtime.nodes.DependNode.addAttr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addAttr()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The generated attribute.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>Attribute</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.Math1D.convertUnit">
 <span class="sig-name descname"><span class="pre">convertUnit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.Math1D.convertUnit" title="Permalink to this definition">#</a></dt>
@@ -1055,12 +1088,12 @@ defaults to False</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="math2D.html">
+          <a class="next-page" href="matrix.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">paya.runtime.plugs.Math2D</div>
+                <div class="title">paya.runtime.plugs.Matrix</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>

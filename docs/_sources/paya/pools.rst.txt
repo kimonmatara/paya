@@ -217,6 +217,14 @@ paya.pools
         Given a PyMEL instance, returns an appropriate Paya class for
         reassignment.
     
+    .. py:method:: getByName(clsname)
+    
+        Retrieves a class by name. Lookups are cached.
+        
+        :param str clsname: The name of the class to retrieved.
+        :return: The retrieved class.
+        :rtype: :class:`str`
+    
     .. py:method:: getPmBase(clsname)
     
         :param str clsname: the class being retrieved

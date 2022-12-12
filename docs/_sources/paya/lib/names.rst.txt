@@ -42,8 +42,27 @@ Node-naming utilities, usually called indirectly.
 
 .. py:class:: Name(*elems, suffix=<undefined>, padding=<undefined>, inherit=True, namespace=<undefined>, relativeNames=<undefined>, allowUnprefixedSuffixes=<undefined>)
 
+    .. rubric:: Inheritance
+
+    :class:`~contextlib.ContextDecorator`
+
     Context manager. Accumulates prefixes for default node names, and
     provides other useful overrides.
+    
+    This context manager can also be used as a decorator:
+    
+    .. code-block:: python
+    
+        @Name('build')
+        def build(*args, **kwargs):
+            pass
+    
+    Inside list comprehensions, it would take this form:
+    
+    .. code-block:: python
+    
+        locs = [Name('point', x+1, padding=3)(r.nodes.Locator.createNode)() for x in range(20)]
+        # Produces point_001_LOCT, point_002_LOCT etc.
     
     :param \*elems: one or more name elements to combine into a prefix
     :type \*elems: :class:`str`, :class:`int`

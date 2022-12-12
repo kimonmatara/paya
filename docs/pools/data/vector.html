@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
@@ -558,7 +560,7 @@ the output will also be a plug)</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<a class="reference internal" href="../plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>, <a class="reference internal" href="#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<li><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code>, <a class="reference internal" href="#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
 <a class="reference internal" href="point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, list, str) – the other vector</p></li>
 <li><p><strong>normalize/nr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – normalize the output; defaults to False</p></li>
 </ul>
@@ -579,7 +581,7 @@ the output will also be a plug)</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<a class="reference internal" href="../plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>, <a class="reference internal" href="#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
+<li><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code>, <a class="reference internal" href="#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
 <a class="reference internal" href="point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, list, str) – the other vector</p></li>
 <li><p><strong>normalize/nr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – normalize the output; defaults to False</p></li>
 <li><p><strong>guard/g</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – <p>if the two vectors are in-line, then:</p>
@@ -603,7 +605,7 @@ to <code class="docutils literal notranslate"><span class="pre">None</span></cod
 <dd class="field-even"><p>The cross product.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> or <a class="reference internal" href="../plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -623,7 +625,7 @@ returns radians, here UI units are use</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> (<a class="reference internal" href="../plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>,
+<li><p><strong>other</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code>,
 <a class="reference internal" href="#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
 <a class="reference internal" href="point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, list, str) – the other vector</p></li>
 <li><p><strong>clockNormal/cn</strong> (None, list, tuple,

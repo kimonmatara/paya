@@ -12,17 +12,19 @@ paya.runtime.plugs.Attribute
 
 
 
-    .. py:classmethod:: create(node, attrName, **kwargs)
+    .. py:classmethod:: createAttr(attrName, node=None, **kwargs)
     
         Creates an attribute.
         
-        :param node: the node on which to create the attribute
-        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
         :param str attrName: the name of the attribute
+        :param node: the node on which to create the attribute; if omitted,
+            a free-standing ``network`` node will be created to hold the
+            attribute; defaults to ``None``
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
         :param \*\*kwargs: forwarded to
-            :meth:`paya.runtime.nodes.DependNode.addAttr`
+            :meth:`~paya.runtime.nodes.DependNode.addAttr`
         :return: The generated attribute.
-        :rtype: :class:`Attribute`
+        :rtype: `Attribute`
     
     .. py:method:: splitInputs()
     
@@ -65,6 +67,12 @@ paya.runtime.plugs.Attribute
     
         Calls :func:`paya.pluginfo.getInfoFromAttr` on this attribute and
         returns the result.
+    
+    .. py:method:: mathDimension()
+    
+        :return: The math dimension of this
+            plug (e.g. 16 for a matrix), if any.
+        :rtype: :class:`int`, :class:`None`
     
     .. py:method:: plugType(inherited=False)
     

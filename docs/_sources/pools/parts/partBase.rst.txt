@@ -69,6 +69,12 @@ paya.runtime.parts.PartBase
             :meth:`~paya.runtime.nodes.DependNode.isControl` returns ``True``.
         :rtype: [:class:`~paya.runtime.nodes.Transform`]
     
+    .. py:method:: getPartScale()
+    
+        :return: A live scaling factor derived from the Y axis of the part
+            group node's world matrix.
+        :rtype: :class:`~paya.runtime.plugs.Double`
+    
     .. py:method:: getPatchbay(create=True)
     
         Returns a general-utility ``network`` node connected to this part's

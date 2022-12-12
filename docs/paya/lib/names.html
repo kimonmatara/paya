@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partGuide.html">PartGuide</a></li>
@@ -428,8 +430,21 @@ suffix; defaults to False</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="paya.lib.names.Name">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*elems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inherit=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relativeNames=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowUnprefixedSuffixes=&lt;undefined&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.names.Name" title="Permalink to this definition">#</a></dt>
-<dd><p>Context manager. Accumulates prefixes for default node names, and
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/contextlib.html#contextlib.ContextDecorator" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextDecorator</span></code></a></p>
+<p>Context manager. Accumulates prefixes for default node names, and
 provides other useful overrides.</p>
+<p>This context manager can also be used as a decorator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@Name</span><span class="p">(</span><span class="s1">&#39;build&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Inside list comprehensions, it would take this form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">locs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Name</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">)(</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Locator</span><span class="o">.</span><span class="n">createNode</span><span class="p">)()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)]</span>
+<span class="c1"># Produces point_001_LOCT, point_002_LOCT etc.</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

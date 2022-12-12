@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partGuide.html">PartGuide</a></li>
@@ -378,8 +380,8 @@ attribute on <a class="reference internal" href="../../paya/runtime.html#module-
 <p>More and more Paya classes also implement a higher-level <code class="docutils literal notranslate"><span class="pre">create()</span></code> method. On <a class="reference internal" href="../../pools/nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>,
 this includes, amongst other things, a <em>dagPath/dp</em> option to create, insert or retrieve nested groups:</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="7ecd2c61-01ee-4cb3-8750-cea9989c461d" name="f1f0103d-99b6-4b3c-961a-b0def7333e08" type="radio">
-</input><label class="sd-tab-label" for="7ecd2c61-01ee-4cb3-8750-cea9989c461d">
+<input checked="checked" id="e2439df4-9804-4c97-b882-53f3410bb468" name="9c0de75b-e5da-4d13-98b1-17bbd79e853c" type="radio">
+</input><label class="sd-tab-label" for="e2439df4-9804-4c97-b882-53f3410bb468">
 Paya</label><div class="sd-tab-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">r</span><span class="p">:</span>
     <span class="n">dfrmGroup</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">dagPath</span><span class="o">=</span><span class="s1">&#39;|rig|xform|deformers&#39;</span><span class="p">)</span> <span class="c1"># absolute</span>
@@ -387,8 +389,8 @@ Paya</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="d8cefc28-c40d-4fa0-b585-bbf3640b36dc" name="f1f0103d-99b6-4b3c-961a-b0def7333e08" type="radio">
-</input><label class="sd-tab-label" for="d8cefc28-c40d-4fa0-b585-bbf3640b36dc">
+<input id="c1aeede2-0b06-48a5-ae39-20e13cedb7dc" name="9c0de75b-e5da-4d13-98b1-17bbd79e853c" type="radio">
+</input><label class="sd-tab-label" for="c1aeede2-0b06-48a5-ae39-20e13cedb7dc">
 Outliner</label><div class="sd-tab-content docutils">
 <figure class="align-center">
 <img alt="../../_images/dagHierarchy.png" src="../../_images/dagHierarchy.png" />

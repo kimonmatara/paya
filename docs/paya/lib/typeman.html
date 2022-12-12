@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partGuide.html">PartGuide</a></li>
@@ -362,6 +364,34 @@
 <span id="paya-lib-typeman"></span><h1>paya.lib.typeman<a class="headerlink" href="#module-paya.lib.typeman" title="Permalink to this headline">#</a></h1>
 <p>WIP – unified type-checking methods for hybrid plug / value workflows.</p>
 <p>Functions in this module expect patched PyMEL.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.typeman.conform">
+<span class="sig-name descname"><span class="pre">conform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.conform" title="Permalink to this definition">#</a></dt>
+<dd><p>Conforms to Paya types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance/d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – prefer <code class="xref py py-class docutils literal notranslate"><span class="pre">Distance</span></code>,
+<a class="reference internal" href="../../pools/plugs/distance.html#paya.runtime.plugs.Distance" title="paya.runtime.plugs.Distance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Distance</span></code></a> and
+<a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a> wherever possible; defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>angle/a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – prefer <a class="reference internal" href="../../pools/data/eulerRotation.html#paya.runtime.data.EulerRotation" title="paya.runtime.data.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation" title="paya.runtime.plugs.EulerRotation"><code class="xref py py-class docutils literal notranslate"><span class="pre">EulerRotation</span></code></a>,
+<a class="reference internal" href="../../pools/data/quaternion.html#paya.runtime.data.Quaternion" title="paya.runtime.data.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a> and
+<a class="reference internal" href="../../pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion" title="paya.runtime.plugs.Quaternion"><code class="xref py py-class docutils literal notranslate"><span class="pre">Quaternion</span></code></a> wherever possible; defaults
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – The <em>item</em> could not be conformed to a Paya value,
+node, component or plug type.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The original <em>item</em> conformed to a Paya type.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="paya.lib.typeman.isPyMELObject">
 <span class="sig-name descname"><span class="pre">isPyMELObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.typeman.isPyMELObject" title="Permalink to this definition">#</a></dt>

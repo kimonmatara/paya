@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../pools/plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../pools/plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pools/plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pools/parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pools/parts/partGuide.html">PartGuide</a></li>
@@ -364,10 +366,107 @@
 <code class="xref py py-class docutils literal notranslate"><span class="pre">MPlug</span></code> instances and administer abstract Paya plug
 classes.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="paya.pluginfo.parseMFnEnums">
+<span class="sig-name descname"><span class="pre">parseMFnEnums</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pluginfo.parseMFnEnums" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs on startup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A mapping of <code class="docutils literal notranslate"><span class="pre">{enum</span> <span class="pre">name:</span> <span class="pre">paya</span> <span class="pre">class</span> <span class="pre">name}</span></code> for every enum on
+<code class="xref py py-class docutils literal notranslate"><span class="pre">maya.OpenMaya.MFn</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.pluginfo.parseMFnDataEnums">
+<span class="sig-name descname"><span class="pre">parseMFnDataEnums</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pluginfo.parseMFnDataEnums" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs on startup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A mapping of <code class="docutils literal notranslate"><span class="pre">{enum</span> <span class="pre">name:</span> <span class="pre">paya</span> <span class="pre">class</span> <span class="pre">name}</span></code> for every enum on
+<code class="xref py py-class docutils literal notranslate"><span class="pre">maya.OpenMaya.MFnData</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.pluginfo.parseMFnNumericDataEnums">
+<span class="sig-name descname"><span class="pre">parseMFnNumericDataEnums</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pluginfo.parseMFnNumericDataEnums" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs on startup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A mapping of <code class="docutils literal notranslate"><span class="pre">{enum</span> <span class="pre">name:</span> <span class="pre">paya</span> <span class="pre">class</span> <span class="pre">name}</span></code> for every enum on
+<code class="xref py py-class docutils literal notranslate"><span class="pre">maya.OpenMaya.MFnNumericData</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.pluginfo.parseMFnUnitAttributeEnums">
+<span class="sig-name descname"><span class="pre">parseMFnUnitAttributeEnums</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pluginfo.parseMFnUnitAttributeEnums" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs on startup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A mapping of <code class="docutils literal notranslate"><span class="pre">{enum</span> <span class="pre">name:</span> <span class="pre">paya</span> <span class="pre">class</span> <span class="pre">name}</span></code> for every enum on
+<code class="xref py py-class docutils literal notranslate"><span class="pre">maya.OpenMaya.MFnUnitAttribute</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.pluginfo.parsePerKeyInfo">
+<span class="sig-name descname"><span class="pre">parsePerKeyInfo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.pluginfo.parsePerKeyInfo" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs on startup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>A <code class="docutils literal notranslate"><span class="pre">{paya</span> <span class="pre">class</span> <span class="pre">name:</span> <span class="pre">info</span> <span class="pre">dict}</span></code> mapping, where <code class="docutils literal notranslate"><span class="pre">info</span></code>
+comprises:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;mathDimension&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="c1"># e.g. 3; may be omitted</span>
+    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="c1"># the class path,</span>
+    <span class="s1">&#39;mathUnitType&#39;</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># one of &#39;angle&#39;, &#39;distance&#39;, &#39;time&#39;; may be omitted</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="paya.pluginfo.getPath">
-<span class="sig-name descname"><span class="pre">getPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typeName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pluginfo.getPath" title="Permalink to this definition">#</a></dt>
-<dd><p>Rejigged in Paya 1.0: If <em>typeName</em> is not in the plug tree, a simple path
-from ‘Attribute’ will be invented.</p>
+<span class="sig-name descname"><span class="pre">getPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.pluginfo.getPath" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of a Paya class for which to retrieve
+an inheritance path</p></li>
+<li><p><strong>invent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if the class is not classified, invent a basic
+classification; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The inheritance path.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

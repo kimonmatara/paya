@@ -219,17 +219,18 @@
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pools/plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pools/plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pools/plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pools/plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pools/plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -253,6 +254,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="pools/parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/parts/partGuide.html">PartGuide</a></li>
@@ -370,15 +372,13 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__add__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__add__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.__add__">(Matrix method)</a>, <a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.__add__">[1]</a>
 </li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__add__">(Point method)</a>
 </li>
           <li><a href="pools/data/quaternion.html#paya.runtime.data.Quaternion.__add__">(Quaternion method)</a>, <a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.__add__">[1]</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__add__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__add__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__add__">[1]</a>
 </li>
         </ul></li>
         <li><a href="paya/geoshapext.html#paya.geoshapext.copyToShape.__call__">__call__() (copyToShape method)</a>
@@ -444,8 +444,6 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__mul__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__mul__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.__mul__">(Matrix method)</a>, <a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.__mul__">[1]</a>
 </li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__mul__">(Point method)</a>
@@ -458,11 +456,11 @@
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__neg__">__neg__() (Math1D method)</a>
 
         <ul>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__neg__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__neg__">(Point method)</a>
 </li>
           <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.__neg__">(Quaternion method)</a>
+</li>
+          <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__neg__">(Vector method)</a>
 </li>
         </ul></li>
         <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.__pow__">__pow__() (EulerRotation method)</a>
@@ -470,11 +468,9 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__pow__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__pow__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__pow__">(Point method)</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__pow__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__pow__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__pow__">[1]</a>
 </li>
         </ul></li>
         <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.__radd__">__radd__() (EulerRotation method)</a>
@@ -482,15 +478,13 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__radd__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__radd__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.__radd__">(Matrix method)</a>, <a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.__radd__">[1]</a>
 </li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__radd__">(Point method)</a>
 </li>
           <li><a href="pools/data/quaternion.html#paya.runtime.data.Quaternion.__radd__">(Quaternion method)</a>, <a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.__radd__">[1]</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__radd__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__radd__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__radd__">[1]</a>
 </li>
         </ul></li>
     </ul></td>
@@ -499,8 +493,6 @@
 
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__rmul__">(Math1D method)</a>
-</li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__rmul__">(Math3D method)</a>
 </li>
           <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.__rmul__">(Matrix method)</a>, <a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.__rmul__">[1]</a>
 </li>
@@ -516,11 +508,9 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__rpow__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__rpow__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__rpow__">(Point method)</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__rpow__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__rpow__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__rpow__">[1]</a>
 </li>
         </ul></li>
         <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.__rsub__">__rsub__() (EulerRotation method)</a>
@@ -528,13 +518,11 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__rsub__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__rsub__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__rsub__">(Point method)</a>
 </li>
           <li><a href="pools/data/quaternion.html#paya.runtime.data.Quaternion.__rsub__">(Quaternion method)</a>, <a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.__rsub__">[1]</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__rsub__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__rsub__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__rsub__">[1]</a>
 </li>
         </ul></li>
         <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.__rtruediv__">__rtruediv__() (EulerRotation method)</a>
@@ -542,11 +530,9 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__rtruediv__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__rtruediv__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__rtruediv__">(Point method)</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__rtruediv__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__rtruediv__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__rtruediv__">[1]</a>
 </li>
         </ul></li>
         <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.__rxor__">__rxor__() (Matrix method)</a>, <a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.__rxor__">[1]</a>
@@ -564,13 +550,11 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__sub__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__sub__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__sub__">(Point method)</a>
 </li>
           <li><a href="pools/data/quaternion.html#paya.runtime.data.Quaternion.__sub__">(Quaternion method)</a>, <a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.__sub__">[1]</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__sub__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__sub__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__sub__">[1]</a>
 </li>
         </ul></li>
         <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.__truediv__">__truediv__() (EulerRotation method)</a>
@@ -578,11 +562,9 @@
         <ul>
           <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.__truediv__">(Math1D method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.__truediv__">(Math3D method)</a>
-</li>
           <li><a href="pools/data/point.html#paya.runtime.data.Point.__truediv__">(Point method)</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__truediv__">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__truediv__">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__truediv__">[1]</a>
 </li>
         </ul></li>
         <li><a href="pools/data/vector.html#paya.runtime.data.Vector.__xor__">__xor__() (Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.__xor__">[1]</a>
@@ -613,6 +595,8 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.abs">abs() (Math1D method)</a>
 </li>
+        <li><a href="paya/lib/mathops.html#paya.lib.mathops.absAxis">absAxis() (in module paya.lib.mathops)</a>
+</li>
         <li><a href="paya/util/iterables.html#paya.util.iterables.absindex">absindex() (in module paya.util.iterables)</a>
 </li>
         <li><a href="paya/util/accessor.html#paya.util.accessor.Accessor">Accessor (class in paya.util.accessor)</a>
@@ -641,6 +625,8 @@
 </li>
         <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.addSectionAttr">addSectionAttr() (DependNode method)</a>
 </li>
+        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.addSquashStretchAttrs">addSquashStretchAttrs() (Bezier static method)</a>
+</li>
         <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.addVectorAttr">addVectorAttr() (DependNode method)</a>
 </li>
         <li><a href="pools/networks/curveUpVectorAimCurveSampler.html#paya.runtime.networks.CurveUpVectorAimCurveSampler.aimCurve">aimCurve() (CurveUpVectorAimCurveSampler method)</a>
@@ -659,21 +645,31 @@
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.appendChain">appendChain() (Chain method)</a>
 </li>
+        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.applySquashStretchToBezier">applySquashStretchToBezier() (Bezier method)</a>
+</li>
         <li><a href="paya/lib/controls.html#paya.lib.controls.ControlShapesLibrary.applyToControls">applyToControls() (ControlShapesLibrary method)</a>
 </li>
         <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.applyViaOpm">applyViaOpm() (Matrix method)</a>, <a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.applyViaOpm">[1]</a>
 </li>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.asAngle">asAngle() (Math1D method)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.asAxisAngle">asAxisAngle() (Quaternion method)</a>
-</li>
-        <li><a href="paya/lib/typeman.html#paya.lib.typeman.asCompIndexOrPlug">asCompIndexOrPlug() (in module paya.lib.typeman)</a>
-</li>
-        <li><a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.asEulerRotation">asEulerRotation() (Matrix method)</a>
+        <li><a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation.asAxisAngle">asAxisAngle() (EulerRotation method)</a>
 
         <ul>
+          <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.asAxisAngle">(Quaternion method)</a>
+</li>
+          <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.asAxisAngle">(Vector method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="paya/lib/typeman.html#paya.lib.typeman.asCompIndexOrPlug">asCompIndexOrPlug() (in module paya.lib.typeman)</a>
+</li>
+        <li><a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation.asEulerRotation">asEulerRotation() (EulerRotation method)</a>
+
+        <ul>
+          <li><a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.asEulerRotation">(Matrix method)</a>
+</li>
           <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.asEulerRotation">(Quaternion method)</a>
 </li>
           <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.asEulerRotation">(Vector method)</a>
@@ -696,6 +692,8 @@
         <ul>
           <li><a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.asQuaternion">(Matrix method)</a>
 </li>
+          <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.asQuaternion">(Vector method)</a>
+</li>
         </ul></li>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.asRadians">asRadians() (Math1D method)</a>
 </li>
@@ -703,6 +701,8 @@
 
         <ul>
           <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.asRotateMatrix">(Quaternion method)</a>
+</li>
+          <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.asRotateMatrix">(Vector method)</a>
 </li>
         </ul></li>
         <li><a href="pools/data/vector.html#paya.runtime.data.Vector.asScaleMatrix">asScaleMatrix() (Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.asScaleMatrix">[1]</a>
@@ -743,6 +743,8 @@
           <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.basename">(PartBase method)</a>
 </li>
         </ul></li>
+        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier">Bezier (class in paya.runtime.parts)</a>
+</li>
         <li><a href="pools/nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve">BezierCurve (class in paya.runtime.nodes)</a>
 
         <ul>
@@ -754,8 +756,6 @@
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.blend">blend() (Math1D method)</a>
 
         <ul>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.blend">(Math3D method)</a>
-</li>
           <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.blend">(NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.blend">[1]</a>
 </li>
           <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.blend">(Quaternion method)</a>
@@ -781,6 +781,8 @@
           <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.bones">(Chain method)</a>
 </li>
         </ul></li>
+        <li><a href="pools/plugs/boolean.html#paya.runtime.plugs.Boolean">Boolean (class in paya.runtime.plugs)</a>
+</li>
         <li><a href="paya/pools.html#paya.pools.ClassPool.browse">browse() (ClassPool method)</a>
 </li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.bSpline">bSpline() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.bSpline">[1]</a>
@@ -887,6 +889,8 @@
 </li>
         <li><a href="pools/nodes/motionPath.html#paya.runtime.nodes.MotionPath.configFollow">configFollow() (MotionPath method)</a>
 </li>
+        <li><a href="paya/lib/typeman.html#paya.lib.typeman.conform">conform() (in module paya.lib.typeman)</a>
+</li>
         <li><a href="paya/pools.html#paya.pools.ParsedNodeSubtypePool.conformBases">conformBases() (ParsedNodeSubtypePool method)</a>
 
         <ul>
@@ -946,7 +950,7 @@
         <li><a href="pools/plugs/angle.html#paya.runtime.plugs.Angle.create">create() (Angle class method)</a>
 
         <ul>
-          <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.create">(Attribute class method)</a>
+          <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.create">(Bezier class method)</a>
 </li>
           <li><a href="pools/nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve.create">(BezierCurve class method)</a>
 </li>
@@ -995,11 +999,19 @@
 </li>
         <li><a href="pools/nodes/vectorProduct.html#paya.runtime.nodes.VectorProduct.createAsCross">createAsCross() (VectorProduct class method)</a>
 </li>
+        <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.createAttr">createAttr() (Attribute class method)</a>
+
+        <ul>
+          <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.createAttr">(Math1D class method)</a>
+</li>
+        </ul></li>
         <li><a href="pools/nodes/remapValue.html#paya.runtime.nodes.RemapValue.createClone">createClone() (RemapValue method)</a>
 </li>
         <li><a href="paya/lib/controls.html#paya.lib.controls.createControl">createControl() (in module paya.lib.controls)</a>
 </li>
         <li><a href="paya/lib/controls.html#paya.lib.controls.createControls">createControls() (in module paya.lib.controls)</a>
+</li>
+        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.createFromBezierAndUpVectors">createFromBezierAndUpVectors() (Bezier class method)</a>
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromCurve">createFromCurve() (Chain class method)</a>
 </li>
@@ -1017,6 +1029,8 @@
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromPoints">createFromPoints() (Chain class method)</a>
 </li>
+        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.createFromTwoBeziers">createFromTwoBeziers() (Bezier class method)</a>
+</li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createIkHandle">createIkHandle() (Chain method)</a>
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createIkHandles">createIkHandles() (Chain method)</a>
@@ -1030,11 +1044,9 @@
         <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.createLocator">createLocator() (EulerRotation method)</a>, <a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation.createLocator">[1]</a>
 
         <ul>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.createLocator">(Math3D method)</a>
-</li>
           <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix.createLocator">(Matrix method)</a>, <a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.createLocator">[1]</a>
 </li>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.createLocator">(Vector method)</a>
+          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.createLocator">(Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.createLocator">[1]</a>
 </li>
         </ul></li>
         <li><a href="paya/lib/mathops.html#paya.lib.mathops.createMatrix">createMatrix() (in module paya.lib.mathops)</a>
@@ -1131,14 +1143,16 @@
 </li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Subtarget.disconnectShape">disconnectShape() (Subtarget method)</a>
 </li>
+        <li><a href="pools/plugs/distance.html#paya.runtime.plugs.Distance">Distance (class in paya.runtime.plugs)</a>
+</li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributeFractions">distributeFractions() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeFractions">[1]</a>
 </li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributeJoints">distributeJoints() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeJoints">[1]</a>
 </li>
-        <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributeLengths">distributeLengths() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeLengths">[1]</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributeLengths">distributeLengths() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeLengths">[1]</a>
+</li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributeMatrices">distributeMatrices() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeMatrices">[1]</a>
 </li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.distributeParams">distributeParams() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeParams">[1]</a>
@@ -1294,8 +1308,6 @@
 </li>
           <li><a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation.get">(EulerRotation method)</a>
 </li>
-          <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.get">(Math3D method)</a>
-</li>
           <li><a href="pools/plugs/quaternion.html#paya.runtime.plugs.Quaternion.get">(Quaternion method)</a>
 </li>
           <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.get">(Vector method)</a>
@@ -1342,6 +1354,8 @@
         <li><a href="paya/pools.html#paya.pools.ClassPool.getByName">getByName() (ClassPool method)</a>
 
         <ul>
+          <li><a href="paya/pools.html#paya.pools.PlugClassPool.getByName">(PlugClassPool method)</a>
+</li>
           <li><a href="paya/pools.html#paya.pools.RebuiltClassPool.getByName">(RebuiltClassPool method)</a>
 </li>
         </ul></li>
@@ -1398,6 +1412,8 @@
         <li><a href="paya/trunk.html#paya.trunk.Trunk.getDir">getDir() (Trunk class method)</a>
 </li>
         <li><a href="paya/trunk.html#paya.trunk.Trunk.getDirs">getDirs() (Trunk class method)</a>
+</li>
+        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.getDrawMatrixFromAnchorGroupAndUpVector">getDrawMatrixFromAnchorGroupAndUpVector() (Bezier static method)</a>
 </li>
         <li><a href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.getEndJoint">getEndJoint() (IkHandle method)</a>
 </li>
@@ -1485,6 +1501,8 @@
           <li><a href="pools/parts/transformGuide.html#paya.runtime.parts.TransformGuide.getPartCreateArgsKwargs">(TransformGuide method)</a>
 </li>
         </ul></li>
+        <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getPartScale">getPartScale() (PartBase method)</a>
+</li>
         <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getPatchbay">getPatchbay() (PartBase method)</a>
 </li>
         <li><a href="paya/lib/evalgraph.html#paya.lib.evalgraph.EvalGraph.getPath">getPath() (EvalGraph method)</a>
@@ -1733,8 +1751,12 @@
 </li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.isTransformSpace">isTransformSpace() (Target method)</a>
 </li>
-        <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.isTranslateChannel">isTranslateChannel() (Vector method)</a>
+        <li><a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation.isTranslateChannel">isTranslateChannel() (EulerRotation method)</a>
+
+        <ul>
+          <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.isTranslateChannel">(Vector method)</a>
 </li>
+        </ul></li>
         <li><a href="paya/lib/typeman.html#paya.lib.typeman.isTripleScalarValueOrPlug">isTripleScalarValueOrPlug() (in module paya.lib.typeman)</a>
 </li>
         <li><a href="paya/lib/suffixes.html#paya.lib.suffixes.isTypeSuffix">isTypeSuffix() (in module paya.lib.suffixes)</a>
@@ -1869,9 +1891,7 @@
 </li>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D">Math1D (class in paya.runtime.plugs)</a>
 </li>
-        <li><a href="pools/plugs/math2D.html#paya.runtime.plugs.Math2D">Math2D (class in paya.runtime.plugs)</a>
-</li>
-        <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D">Math3D (class in paya.runtime.plugs)</a>
+        <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.mathDimension">mathDimension() (Attribute method)</a>
 </li>
         <li><a href="pools/data/matrix.html#paya.runtime.data.Matrix">Matrix (class in paya.runtime.data)</a>
 
@@ -1902,6 +1922,8 @@
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.min">min() (Math1D method)</a>
 </li>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.minClamp">minClamp() (Math1D method)</a>
+</li>
+        <li><a href="paya/lib/mathops.html#paya.lib.mathops.missingAxis">missingAxis() (in module paya.lib.mathops)</a>
 </li>
         <li>
     module
@@ -2070,8 +2092,6 @@
 </li>
         <li><a href="paya/util/iterables.html#paya.util.iterables.nudge_indices">nudge_indices() (in module paya.util.iterables)</a>
 </li>
-        <li><a href="paya/cmds.html#paya.cmds.NullCtx">NullCtx (class in paya.cmds)</a>
-</li>
         <li><a href="pools/nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve.numAnchors">numAnchors() (BezierCurve method)</a>, <a href="pools/plugs/bezierCurve.html#paya.runtime.plugs.BezierCurve.numAnchors">[1]</a>
 </li>
         <li><a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.numCVs">numCVs() (NurbsCurve method)</a>
@@ -2141,6 +2161,16 @@
         <li><a href="paya/pools.html#paya.pools.ParsedNodeSubtypePool">ParsedNodeSubtypePool (class in paya.pools)</a>
 </li>
         <li><a href="paya/pools.html#paya.pools.ParsedNodeSubtypePoolMeta">ParsedNodeSubtypePoolMeta (class in paya.pools)</a>
+</li>
+        <li><a href="paya/pluginfo.html#paya.pluginfo.parseMFnDataEnums">parseMFnDataEnums() (in module paya.pluginfo)</a>
+</li>
+        <li><a href="paya/pluginfo.html#paya.pluginfo.parseMFnEnums">parseMFnEnums() (in module paya.pluginfo)</a>
+</li>
+        <li><a href="paya/pluginfo.html#paya.pluginfo.parseMFnNumericDataEnums">parseMFnNumericDataEnums() (in module paya.pluginfo)</a>
+</li>
+        <li><a href="paya/pluginfo.html#paya.pluginfo.parseMFnUnitAttributeEnums">parseMFnUnitAttributeEnums() (in module paya.pluginfo)</a>
+</li>
+        <li><a href="paya/pluginfo.html#paya.pluginfo.parsePerKeyInfo">parsePerKeyInfo() (in module paya.pluginfo)</a>
 </li>
         <li><a href="pools/parts/part.html#paya.runtime.parts.Part">Part (class in paya.runtime.parts)</a>
 </li>
@@ -2287,6 +2317,8 @@
           <li><a href="paya/lib/suffixes.html#module-paya.lib.suffixes">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     paya.lib.symmetry
 
@@ -2294,8 +2326,6 @@
           <li><a href="paya/lib/symmetry.html#module-paya.lib.symmetry">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     paya.lib.typeman
 
@@ -2566,8 +2596,12 @@
         </ul></li>
         <li><a href="pools/nodes/cluster.html#paya.runtime.nodes.Cluster.renameSystem">renameSystem() (Cluster method)</a>
 </li>
-        <li><a href="paya/lib/attrs.html#paya.lib.attrs.reorder">reorder() (in module paya.lib.attrs)</a>
+        <li><a href="pools/plugs/eulerRotation.html#paya.runtime.plugs.EulerRotation.reorder">reorder() (EulerRotation method)</a>
+
+        <ul>
+          <li><a href="paya/lib/attrs.html#paya.lib.attrs.reorder">(in module paya.lib.attrs)</a>
 </li>
+        </ul></li>
         <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.reorderAttrs">reorderAttrs() (DependNode method)</a>
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.reset">reset() (Chain method)</a>
@@ -2596,12 +2630,8 @@
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.roots">roots() (Chain method)</a>
 </li>
-        <li><a href="pools/plugs/math3D.html#paya.runtime.plugs.Math3D.rotateByAxisAngle">rotateByAxisAngle() (Math3D method)</a>
-
-        <ul>
-          <li><a href="pools/data/vector.html#paya.runtime.data.Vector.rotateByAxisAngle">(Vector method)</a>
+        <li><a href="pools/data/vector.html#paya.runtime.data.Vector.rotateByAxisAngle">rotateByAxisAngle() (Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.rotateByAxisAngle">[1]</a>
 </li>
-        </ul></li>
         <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.rotateCtShapes">rotateCtShapes() (Transform method)</a>
 </li>
         <li><a href="paya/runtime.html#paya.runtime.Runtime">Runtime (class in paya.runtime)</a>
@@ -2789,6 +2819,8 @@
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target">Target (class in paya.lib.bsnboltons)</a>
 </li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets">Targets (class in paya.lib.bsnboltons)</a>
+</li>
+        <li><a href="pools/plugs/time.html#paya.runtime.plugs.Time">Time (class in paya.runtime.plugs)</a>
 </li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.toBezier">toBezier() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.toBezier">[1]</a>
 </li>

@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
@@ -439,9 +441,9 @@ configures the start / end vectors.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>startVector</strong> (list, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<a class="reference internal" href="../plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – the start ‘up’ vector</p></li>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code>) – the start ‘up’ vector</p></li>
 <li><p><strong>endVector</strong> (list, <a class="reference internal" href="../data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>,
-<a class="reference internal" href="../plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – the end ‘up’ vector</p></li>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code>) – the end ‘up’ vector</p></li>
 <li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the chain axis to map to the ‘up’ vectors, for
 example ‘z’</p></li>
 <li><p><strong>downAxis/da</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – if you know the ‘bone’ axis of the chain,
@@ -462,7 +464,7 @@ provide it here to avoid extraneous calculations; defaults to None</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>point</strong> (list, tuple, <a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>
-or <a class="reference internal" href="../plugs/math3D.html#paya.runtime.plugs.Math3D" title="paya.runtime.plugs.Math3D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code></a>) – the point to aim towards</p></li>
+or <code class="xref py py-class docutils literal notranslate"><span class="pre">Math3D</span></code>) – the point to aim towards</p></li>
 <li><p><strong>maintainOffset/mo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – preserve chain state; defaults to False</p></li>
 </ul>
 </dd>

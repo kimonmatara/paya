@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="matrix.html">Matrix</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
@@ -1064,7 +1066,7 @@ more of the arguments are plugs to skip checks; defaults to
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.plugs.NurbsCurve.lengthAtParam">
-<span class="sig-name descname"><span class="pre">lengthAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.lengthAtParam" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">lengthAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkDomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.plugs.NurbsCurve.lengthAtParam" title="Permalink to this definition">#</a></dt>
 <dd><p>Differs from the PyMEl / API
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">findLengthFromParam()</span></code> in that
 it returns properly-spaced curve lengths.</p>
@@ -1072,6 +1074,9 @@ it returns properly-spaced curve lengths.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>param</strong> (float, <a class="reference internal" href="math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the parameter to inspect</p></li>
+<li><p><strong>checkDomain/cd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – perform gating against the current curve
+knot domain to prevent sampling errors at the very start or end
+of the curve; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – force a dynamic output, or indicate that one or
 more of the arguments are plugs to skip checks; defaults to
 <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>

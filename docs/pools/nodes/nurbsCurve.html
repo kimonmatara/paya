@@ -221,17 +221,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../plugs/angle.html">Angle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/attribute.html">Attribute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/distance.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/enum.html">Enum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/eulerRotation.html">EulerRotation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/geometry.html">Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/math1D.html">Math1D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../plugs/math2D.html">Math2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../plugs/math3D.html">Math3D</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/matrix.html">Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsCurve.html">NurbsCurve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsSurface.html">NurbsSurface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/quaternion.html">Quaternion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/time.html">Time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../plugs/vector.html">Vector</a></li>
 </ul>
 </li>
@@ -255,6 +256,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/bezier.html">Bezier</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
@@ -565,8 +567,9 @@ are collocated.</p>
 <span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.info" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.info" title="paya.runtime.plugs.NurbsCurve.info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.info()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.info" title="paya.runtime.plugs.NurbsCurve.info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.info()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -595,7 +598,9 @@ otherwise, a dictionary with the following keys: <code class="docutils literal n
 <span class="sig-name descname"><span class="pre">motionPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.motionPath" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.motionPath" title="paya.runtime.plugs.NurbsCurve.motionPath"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.motionPath()</span></code></a>; only runs
+in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.motionPath" title="paya.runtime.plugs.NurbsCurve.motionPath"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.motionPath()</span></code></a>:</p>
 <p>Creates a <code class="docutils literal notranslate"><span class="pre">motionPath</span></code> node and connects it to this curve. All other
@@ -619,7 +624,9 @@ attributes; sources can be plugs or values</p>
 <span class="sig-name descname"><span class="pre">motionPathAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.motionPathAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.motionPathAtParam" title="paya.runtime.plugs.NurbsCurve.motionPathAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.motionPathAtParam()</span></code></a>;
+only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.motionPathAtParam" title="paya.runtime.plugs.NurbsCurve.motionPathAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.motionPathAtParam()</span></code></a>:</p>
 <p>Creates a <code class="docutils literal notranslate"><span class="pre">motionPath</span></code> and hooks it up to the specified parameter.
@@ -650,7 +657,9 @@ attributes; sources can be plugs or values</p></li>
 <span class="sig-name descname"><span class="pre">motionPathAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.motionPathAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.motionPathAtFraction" title="paya.runtime.plugs.NurbsCurve.motionPathAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.motionPathAtFraction()</span></code></a>;
+only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.motionPathAtFraction" title="paya.runtime.plugs.NurbsCurve.motionPathAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.motionPathAtFraction()</span></code></a>:</p>
 <p>Creates a <code class="docutils literal notranslate"><span class="pre">motionPath</span></code> and hooks it up to the specified fraction.
@@ -682,7 +691,9 @@ attributes; sources can be plugs or values</p></li>
 <span class="sig-name descname"><span class="pre">infoAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turnOnPercentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.infoAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.infoAtParam" title="paya.runtime.plugs.NurbsCurve.infoAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.infoAtParam()</span></code></a>; only runs
+in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.infoAtParam" title="paya.runtime.plugs.NurbsCurve.infoAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.infoAtParam()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -728,8 +739,10 @@ otherwise, a dictionary with the followingk keys: <code class="docutils literal 
 <span class="sig-name descname"><span class="pre">getControlVerts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.getControlVerts" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getControlVerts" title="paya.runtime.plugs.NurbsCurve.getControlVerts"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getControlVerts()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getControlVerts" title="paya.runtime.plugs.NurbsCurve.getControlVerts"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getControlVerts()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -753,8 +766,10 @@ curve.</p>
 <span class="sig-name descname"><span class="pre">getControlVert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cvIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.getControlVert" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getControlVert" title="paya.runtime.plugs.NurbsCurve.getControlVert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getControlVert()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getControlVert" title="paya.runtime.plugs.NurbsCurve.getControlVert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getControlVert()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -779,8 +794,9 @@ to <code class="docutils literal notranslate"><span class="pre">False</span></co
 <span class="sig-name descname"><span class="pre">pointAt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramOrFraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.pointAt" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAt" title="paya.runtime.plugs.NurbsCurve.pointAt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAt()</span></code></a>;
+a <em>worldSpace/ws</em> keyword argument has been added,
+defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAt" title="paya.runtime.plugs.NurbsCurve.pointAt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAt()</span></code></a>:</p>
 <p>Dispatches <a class="reference internal" href="#paya.runtime.nodes.NurbsCurve.pointAtParam" title="paya.runtime.nodes.NurbsCurve.pointAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointAtParam()</span></code></a> if <code class="docutils literal notranslate"><span class="pre">parametric=True</span></code>, otherwise
@@ -798,8 +814,10 @@ parameter rather than a length fraction; defaults to <code class="docutils liter
 <span class="sig-name descname"><span class="pre">pointAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.pointAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtParam" title="paya.runtime.plugs.NurbsCurve.pointAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAtParam()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtParam" title="paya.runtime.plugs.NurbsCurve.pointAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAtParam()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -826,8 +844,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">pointAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.pointAtLength" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtLength" title="paya.runtime.plugs.NurbsCurve.pointAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAtLength()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtLength" title="paya.runtime.plugs.NurbsCurve.pointAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAtLength()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -852,8 +872,10 @@ has been added, defaulting to <code class="docutils literal notranslate"><span c
 <span class="sig-name descname"><span class="pre">pointAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.pointAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtFraction" title="paya.runtime.plugs.NurbsCurve.pointAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAtFraction()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.pointAtFraction" title="paya.runtime.plugs.NurbsCurve.pointAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.pointAtFraction()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -879,8 +901,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">nearestPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refPoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.nearestPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.nearestPoint" title="paya.runtime.plugs.NurbsCurve.nearestPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.nearestPoint()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.nearestPoint" title="paya.runtime.plugs.NurbsCurve.nearestPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.nearestPoint()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -906,8 +930,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">distributePoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberFractionsOrParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributePoints" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributePoints" title="paya.runtime.plugs.NurbsCurve.distributePoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributePoints()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributePoints" title="paya.runtime.plugs.NurbsCurve.distributePoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributePoints()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -945,8 +971,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">paramAtStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtStart" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtStart" title="paya.runtime.plugs.NurbsCurve.paramAtStart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtStart()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtStart" title="paya.runtime.plugs.NurbsCurve.paramAtStart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtStart()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -967,8 +995,10 @@ has been added, defaulting to <code class="docutils literal notranslate"><span c
 <span class="sig-name descname"><span class="pre">paramAtEnd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtEnd" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtEnd" title="paya.runtime.plugs.NurbsCurve.paramAtEnd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtEnd()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtEnd" title="paya.runtime.plugs.NurbsCurve.paramAtEnd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtEnd()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -989,8 +1019,10 @@ has been added, defaulting to <code class="docutils literal notranslate"><span c
 <span class="sig-name descname"><span class="pre">knotDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.knotDomain" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.knotDomain" title="paya.runtime.plugs.NurbsCurve.knotDomain"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.knotDomain()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.knotDomain" title="paya.runtime.plugs.NurbsCurve.knotDomain"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.knotDomain()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1012,8 +1044,10 @@ has been added, defaulting to <code class="docutils literal notranslate"><span c
 <span class="sig-name descname"><span class="pre">paramAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtPoint" title="paya.runtime.plugs.NurbsCurve.paramAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtPoint()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtPoint" title="paya.runtime.plugs.NurbsCurve.paramAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtPoint()</span></code></a>:</p>
 <p>This is a ‘forgiving’ implementation, and uses the closest point.</p>
@@ -1044,8 +1078,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">paramAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtFraction" title="paya.runtime.plugs.NurbsCurve.paramAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtFraction()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtFraction" title="paya.runtime.plugs.NurbsCurve.paramAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtFraction()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1071,8 +1107,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">paramAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.paramAtLength" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtLength" title="paya.runtime.plugs.NurbsCurve.paramAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtLength()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.paramAtLength" title="paya.runtime.plugs.NurbsCurve.paramAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.paramAtLength()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1098,8 +1136,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">distributeParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberFractionsOrParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeParams" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeParams" title="paya.runtime.plugs.NurbsCurve.distributeParams"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeParams()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeParams" title="paya.runtime.plugs.NurbsCurve.distributeParams"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeParams()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1137,8 +1177,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">lengthAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.lengthAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.lengthAtFraction" title="paya.runtime.plugs.NurbsCurve.lengthAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.lengthAtFraction()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.lengthAtFraction" title="paya.runtime.plugs.NurbsCurve.lengthAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.lengthAtFraction()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1161,11 +1203,13 @@ more of the arguments are plugs to skip checks; defaults to
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.nodes.NurbsCurve.lengthAtParam">
-<span class="sig-name descname"><span class="pre">lengthAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.lengthAtParam" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">lengthAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkDomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.lengthAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.lengthAtParam" title="paya.runtime.plugs.NurbsCurve.lengthAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.lengthAtParam()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.lengthAtParam" title="paya.runtime.plugs.NurbsCurve.lengthAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.lengthAtParam()</span></code></a>:</p>
 <p>Differs from the PyMEl / API
@@ -1175,6 +1219,9 @@ it returns properly-spaced curve lengths.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>param</strong> (float, <a class="reference internal" href="../plugs/math1D.html#paya.runtime.plugs.Math1D" title="paya.runtime.plugs.Math1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">Math1D</span></code></a>) – the parameter to inspect</p></li>
+<li><p><strong>checkDomain/cd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – perform gating against the current curve
+knot domain to prevent sampling errors at the very start or end
+of the curve; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – force a dynamic output, or indicate that one or
 more of the arguments are plugs to skip checks; defaults to
 <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
@@ -1194,8 +1241,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">lengthAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.lengthAtPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.lengthAtPoint" title="paya.runtime.plugs.NurbsCurve.lengthAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.lengthAtPoint()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.lengthAtPoint" title="paya.runtime.plugs.NurbsCurve.lengthAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.lengthAtPoint()</span></code></a>:</p>
 <p>This is a ‘forgiving’ implementation, and uses the closest point.</p>
@@ -1223,8 +1272,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">distributeLengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberFractionsOrParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeLengths" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeLengths" title="paya.runtime.plugs.NurbsCurve.distributeLengths"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeLengths()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeLengths" title="paya.runtime.plugs.NurbsCurve.distributeLengths"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeLengths()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1262,8 +1313,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">fractionAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.fractionAtPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.fractionAtPoint" title="paya.runtime.plugs.NurbsCurve.fractionAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.fractionAtPoint()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.fractionAtPoint" title="paya.runtime.plugs.NurbsCurve.fractionAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.fractionAtPoint()</span></code></a>:</p>
 <p>This is a ‘forgiving’ implementation, and uses the closest point.</p>
@@ -1291,8 +1344,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">fractionAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.fractionAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.fractionAtParam" title="paya.runtime.plugs.NurbsCurve.fractionAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.fractionAtParam()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.fractionAtParam" title="paya.runtime.plugs.NurbsCurve.fractionAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.fractionAtParam()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1318,8 +1373,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">fractionAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.fractionAtLength" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.fractionAtLength" title="paya.runtime.plugs.NurbsCurve.fractionAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.fractionAtLength()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.fractionAtLength" title="paya.runtime.plugs.NurbsCurve.fractionAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.fractionAtLength()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1345,8 +1402,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">distributeFractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeFractions" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeFractions" title="paya.runtime.plugs.NurbsCurve.distributeFractions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeFractions()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeFractions" title="paya.runtime.plugs.NurbsCurve.distributeFractions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeFractions()</span></code></a>:</p>
 <p>Convenience method. Equivalent to
@@ -1369,8 +1428,10 @@ has been added, defaulting to <code class="docutils literal notranslate"><span c
 <span class="sig-name descname"><span class="pre">normalAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.normalAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtParam" title="paya.runtime.plugs.NurbsCurve.normalAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtParam()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtParam" title="paya.runtime.plugs.NurbsCurve.normalAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtParam()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1399,8 +1460,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">normalAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.normalAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtFraction" title="paya.runtime.plugs.NurbsCurve.normalAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtFraction()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtFraction" title="paya.runtime.plugs.NurbsCurve.normalAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtFraction()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1429,8 +1492,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">normalAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.normalAtLength" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtLength" title="paya.runtime.plugs.NurbsCurve.normalAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtLength()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtLength" title="paya.runtime.plugs.NurbsCurve.normalAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtLength()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1459,8 +1524,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">normalAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.normalAtPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtPoint" title="paya.runtime.plugs.NurbsCurve.normalAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtPoint()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.normalAtPoint" title="paya.runtime.plugs.NurbsCurve.normalAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.normalAtPoint()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1491,8 +1558,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">tangentAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.tangentAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtParam" title="paya.runtime.plugs.NurbsCurve.tangentAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtParam()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtParam" title="paya.runtime.plugs.NurbsCurve.tangentAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtParam()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1521,8 +1590,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">tangentAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.tangentAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtFraction" title="paya.runtime.plugs.NurbsCurve.tangentAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtFraction()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtFraction" title="paya.runtime.plugs.NurbsCurve.tangentAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtFraction()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1551,8 +1622,10 @@ False</p></li>
 <span class="sig-name descname"><span class="pre">tangentAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.tangentAtLength" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtLength" title="paya.runtime.plugs.NurbsCurve.tangentAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtLength()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtLength" title="paya.runtime.plugs.NurbsCurve.tangentAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtLength()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1581,8 +1654,10 @@ False</p></li>
 <span class="sig-name descname"><span class="pre">tangentAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.tangentAtPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtPoint" title="paya.runtime.plugs.NurbsCurve.tangentAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtPoint()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.tangentAtPoint" title="paya.runtime.plugs.NurbsCurve.tangentAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.tangentAtPoint()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1612,8 +1687,10 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">distributeTangents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberFractionsOrParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldSpace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeTangents" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; a <em>worldSpace/ws</em> keyword argument
-has been added, defaulting to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeTangents" title="paya.runtime.plugs.NurbsCurve.distributeTangents"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeTangents()</span></code></a>; a
+<em>worldSpace/ws</em> keyword argument has been added, defaulting
+to <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeTangents" title="paya.runtime.plugs.NurbsCurve.distributeTangents"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeTangents()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1654,7 +1731,9 @@ be distributed by length, not parametric space; defaults to
 <span class="sig-name descname"><span class="pre">upVectorAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtParam" title="paya.runtime.plugs.NurbsCurve.upVectorAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtParam()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtParam" title="paya.runtime.plugs.NurbsCurve.upVectorAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtParam()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1692,7 +1771,9 @@ sampler must have been configured on this curve using
 <span class="sig-name descname"><span class="pre">upVectorAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtFraction" title="paya.runtime.plugs.NurbsCurve.upVectorAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtFraction()</span></code></a>;
+only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtFraction" title="paya.runtime.plugs.NurbsCurve.upVectorAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtFraction()</span></code></a>:</p>
 <p>Converts <em>fraction</em> into a parameter and defers to
@@ -1714,7 +1795,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">upVectorAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtLength" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtLength" title="paya.runtime.plugs.NurbsCurve.upVectorAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtLength()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtLength" title="paya.runtime.plugs.NurbsCurve.upVectorAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtLength()</span></code></a>:</p>
 <p>Finds the parameter at the specified length and defers to
@@ -1736,7 +1819,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">upVectorAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.upVectorAtPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtPoint" title="paya.runtime.plugs.NurbsCurve.upVectorAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtPoint()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.upVectorAtPoint" title="paya.runtime.plugs.NurbsCurve.upVectorAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.upVectorAtPoint()</span></code></a>:</p>
 <p>Finds the closest parameter to the specified point and defers to
@@ -1758,7 +1843,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">createUpVectorSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwindSwitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upObject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelTransport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setAsDefault</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.createUpVectorSampler" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.createUpVectorSampler" title="paya.runtime.plugs.NurbsCurve.createUpVectorSampler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.createUpVectorSampler()</span></code></a>;
+only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.createUpVectorSampler" title="paya.runtime.plugs.NurbsCurve.createUpVectorSampler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.createUpVectorSampler()</span></code></a>:</p>
 <p>Depending on options, returns one of the following up-vector samplers:</p>
@@ -1852,7 +1939,9 @@ source for other sampling operations; defaults to <code class="docutils literal 
 <span class="sig-name descname"><span class="pre">getUpVectorSamplers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.getUpVectorSamplers" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getUpVectorSamplers" title="paya.runtime.plugs.NurbsCurve.getUpVectorSamplers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getUpVectorSamplers()</span></code></a>;
+only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getUpVectorSamplers" title="paya.runtime.plugs.NurbsCurve.getUpVectorSamplers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getUpVectorSamplers()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1871,7 +1960,8 @@ created on this curve output.</p>
 <span class="sig-name descname"><span class="pre">getDefaultUpVectorSampler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.getDefaultUpVectorSampler" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from <code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getDefault</span>
+<span class="pre">UpVectorSampler()</span></code>; only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.getDefaultUpVectorSampler" title="paya.runtime.plugs.NurbsCurve.getDefaultUpVectorSampler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.getDefaultUpVectorSampler()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -1890,7 +1980,9 @@ that was created on this curve with <code class="docutils literal notranslate"><
 <span class="sig-name descname"><span class="pre">clearUpVectorSamplers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.clearUpVectorSamplers" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.clearUpVectorSamplers" title="paya.runtime.plugs.NurbsCurve.clearUpVectorSamplers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.clearUpVectorSamplers()</span></code></a>;
+only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.clearUpVectorSamplers" title="paya.runtime.plugs.NurbsCurve.clearUpVectorSamplers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.clearUpVectorSamplers()</span></code></a>:</p>
 <p>Removes all up vector samplers and their dependencies.</p>
@@ -1906,7 +1998,9 @@ samplers.</p>
 <span class="sig-name descname"><span class="pre">matrixAtParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upObject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVectorSampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultToNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.matrixAtParam" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtParam" title="paya.runtime.plugs.NurbsCurve.matrixAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtParam()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtParam" title="paya.runtime.plugs.NurbsCurve.matrixAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtParam()</span></code></a>:</p>
 <div class="admonition note">
@@ -1975,7 +2069,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">matrixAtFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upObject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVectorSampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultToNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.matrixAtFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtFraction" title="paya.runtime.plugs.NurbsCurve.matrixAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtFraction()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtFraction" title="paya.runtime.plugs.NurbsCurve.matrixAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtFraction()</span></code></a>:</p>
 <div class="admonition note">
@@ -2043,7 +2139,8 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">matrixAtParamOrFraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramOrFraction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.matrixAtParamOrFraction" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from <code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtPa</span>
+<span class="pre">ramOrFraction()</span></code>; only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtParamOrFraction" title="paya.runtime.plugs.NurbsCurve.matrixAtParamOrFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtParamOrFraction()</span></code></a>:</p>
 <p>Dispatches <a class="reference internal" href="#paya.runtime.nodes.NurbsCurve.matrixAtParam" title="paya.runtime.nodes.NurbsCurve.matrixAtParam"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matrixAtParam()</span></code></a> or <a class="reference internal" href="#paya.runtime.nodes.NurbsCurve.matrixAtFraction" title="paya.runtime.nodes.NurbsCurve.matrixAtFraction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matrixAtFraction()</span></code></a>. See
@@ -2081,7 +2178,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">matrixAtPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.matrixAtPoint" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtPoint" title="paya.runtime.plugs.NurbsCurve.matrixAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtPoint()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtPoint" title="paya.runtime.plugs.NurbsCurve.matrixAtPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtPoint()</span></code></a>:</p>
 <p>Finds the closest parameter to <em>point</em> and dispatches
@@ -2116,7 +2215,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">matrixAtLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.matrixAtLength" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtLength" title="paya.runtime.plugs.NurbsCurve.matrixAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtLength()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.matrixAtLength" title="paya.runtime.plugs.NurbsCurve.matrixAtLength"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.matrixAtLength()</span></code></a>:</p>
 <p>Finds the parameter at <em>length</em> and dispatches
@@ -2151,7 +2252,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">distributeMatrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberFractionsOrParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upObject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVectorSampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultToNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeMatrices" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeMatrices" title="paya.runtime.plugs.NurbsCurve.distributeMatrices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeMatrices()</span></code></a>;
+only runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeMatrices" title="paya.runtime.plugs.NurbsCurve.distributeMatrices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeMatrices()</span></code></a>:</p>
 <dl class="field-list simple">
@@ -2242,7 +2345,9 @@ more of the arguments are plugs to skip checks; defaults to
 <span class="sig-name descname"><span class="pre">distributeJoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberFractionsOrParams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondaryAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upObject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aimCurve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closestPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVectorSampler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultToNormal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalScale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squashStretch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displayLocalAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotateOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xyz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freeze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decompose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsCurve.distributeJoints" title="Permalink to this definition">#</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Added from a plug method; only runs in world-space.</p>
+<p>Adapted from
+<a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeJoints" title="paya.runtime.plugs.NurbsCurve.distributeJoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeJoints()</span></code></a>; only
+runs in world space.</p>
 </div>
 <p class="rubric">Documentation from <a class="reference internal" href="../plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.distributeJoints" title="paya.runtime.plugs.NurbsCurve.distributeJoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">paya.runtime.plugs.NurbsCurve.distributeJoints()</span></code></a>:</p>
 <p>Distributes joints along this curve. Pass <em>plug/p=True</em> for live
