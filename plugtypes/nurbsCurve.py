@@ -7,7 +7,7 @@ import paya.lib.mathops as _mo
 import paya.lib.typeman as _tm
 import paya.lib.nurbsutil as _nu
 from paya.geoshapext import copyToShape
-from paya.util import short
+from paya.util import short, resolveFlags
 import paya.runtime as r
 
 
@@ -3078,283 +3078,6 @@ class NurbsCurve:
         return node
 
     @copyToShape(editsHistory=True)
-    @short(
-        multipleKnots='mul',
-        atStart='ats',
-        useSegment='seg'
-    )
-    def extendByVector(
-            self,
-            vector,
-            atStart=False,
-            multipleKnots=True,
-            useSegment=False
-    ):
-        """
-        :param vector: the vector along which to extend
-        :type vector: list, tuple, :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param bool atStart/ats: extend from the start instead of the end;
-            defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool useSegment/seg: for improved accuracy, extend using an
-            attached line segment instead of the 'Linear' mode of an
-            ``extendCurve`` node; defaults to False
-        :return: This curve, extended along the specified vector.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        points = self.getControlVerts(p=True)
-        startPoint = points[0 if atStart else -1]
-        endPoint = startPoint + vector
-
-        if useSegment:
-            segment = self.createLine(startPoint, endPoint)
-
-            if atStart:
-                inp = self.reverse()
-                out = inp.attach(segment, mul=multipleKnots)
-                return out.reverse()
-
-            else:
-                return self.attach(segment, mul=multipleKnots)
-
-        return self.initExtendCurve(
-            extendMethod='Point',
-            inputPoint=endPoint,
-            start=1 if atStart else 0,
-            removeMultipleKnots=not multipleKnots
-        ).attr('outputCurve')
-
-    @copyToShape(editsHistory=True)
-    @short(
-        multipleKnots='mul',
-        atStart='ats',
-        useSegment='seg'
-    )
-    def extendToPoint(
-            self,
-            point,
-            atStart=False,
-            multipleKnots=True,
-            useSegment=False
-    ):
-        """
-        :param point: the point to reach for
-        :type point: list, tuple, :class:`~paya.runtime.data.Point`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param bool atStart/ats: extend from the start instead of the end;
-            defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool useSegment/seg: for improved accuracy, extend using an
-            attached line segment instead of the 'Linear' mode of an
-            ``extendCurve`` node; defaults to False
-        :return: This curve, extended to meet the specified point
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        if useSegment:
-            allPoints = self.getControlVerts(p=True)
-            startPoint = allPoints[0 if atStart else -1]
-            segment = self.createLine(startPoint, point)
-
-            if atStart:
-                inp = self.reverse()
-                out = inp.attach(segment, kmk=multipleKnots)
-                return out.reverse()
-
-            else:
-                return self.attach(segment, kmk=multipleKnots)
-
-        return self.initExtendCurve(
-            extendMethod='Point',
-            inputPoint=point,
-            start=1 if atStart else 0,
-            removeMultipleKnots=not multipleKnots
-        ).attr('outputCurve')
-
-    @copyToShape(editsHistory=True)
-    @short(
-        atStart='ats',
-        atBothEnds='abe',
-        multipleKnots='mul',
-        circular='cir',
-        linear='lin',
-        extrapolate='ext'
-    )
-    def extendByLength(
-            self,
-            length,
-            atStart=False,
-            atBothEnds=False,
-            multipleKnots=True,
-            circular=False,
-            linear=False,
-            extrapolate=False
-    ):
-        """
-        :param length: the length by which to extend
-        :type length: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool atStart/ats: extend from the start instead of the end;
-            defaults to False
-        :param bool atBothEnds/abe: extend from both ends; note that, in this
-            case, the length at either end will be halved; defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool circular/cir: use the 'circular' mode of the
-            ``extendCurve`` node; defaults to False
-        :param bool linear/lin: use the 'linear' mode of the
-            ``extendCurve`` node; defaults to False
-        :param bool extrapolate/ext: use the 'extrapolate' mode of the
-            ``extendCurve`` node; defaults to True
-        :return: This curve, extended by the specified length.
-        """
-        length = _mo.info(length)['item']
-
-        if atBothEnds:
-            length *= 0.5
-
-        if circular:
-            extensionType = 'Circular'
-
-        elif linear:
-            extensionType = 'Linear'
-
-        else:
-            extensionType = 'Extrapolate'
-
-        if atStart:
-            start = 'Start'
-
-        elif atBothEnds:
-            start = 'Both'
-
-        else:
-            start = 'End'
-
-        return self.initExtendCurve(
-            extendMethod='Distance',
-            extensionType=extensionType,
-            distance=length,
-            removeMultipleKnots=not multipleKnots,
-            start=start
-        ).attr('outputCurve')
-
-    @copyToShape(editsHistory=True)
-    @short(
-        atStart='ats',
-        atBothEnds='abe',
-        point='pt',
-        linear='lin',
-        circular='cir',
-        extrapolate='ext',
-        useSegment='seg',
-        multipleKnots='mul'
-    )
-    def extend(
-            self,
-            lenPointOrVec,
-            point=None,
-            linear=None,
-            circular=None,
-            extrapolate=None,
-            useSegment=False,
-            multipleKnots=True,
-            atStart=None,
-            atBothEnds=None
-    ):
-        """
-        Extends this curve in a variety of ways.
-
-        :param lenPointOrVec: a length, point or vector for the extension
-        :type lenPointOrVec: float, tuple, list, str,
-            :class:`~paya.runtime.data.Point`
-            :class:`~paya.runtime.data.Vector`
-            :class:`~paya.runtime.plugs.Math1D`
-            :class:`~paya.runtime.plugs.Vector`
-        :param bool point: if *lenPointOrVec* is a 3D value or plug,
-            interpret it as a point rather than a vector; defaults to True
-            if *lenPointOrVec* is an instance of
-            :class:`~paya.runtime.data.Point`, otherwise False
-        :param bool linear/lin: if extending by distance, use the 'linear'
-            mode of the ``extendCurve`` node; defaults to True
-        :param bool circular/cir: if extending by distance, use the 'circular'
-            mode of the ``extendCurve`` node; defaults to False
-        :param bool extrapolate/ext: if extending by distance, use the
-            'extrapolate' mode of the ``extendCurve`` node; defaults to False
-        :param bool useSegment/seg: if extending by vector or point, don't use
-            an ``extendCurve`` node; for improved accuracy, attach a line
-            segment instead; defaults to False
-        :param bool multipleKnots/mul: keep multiple knots; defaults to
-            True
-        :param bool atStart/ats: extend from the start of the curve rather than the end;
-            defaults to False
-        :param bool atBothEnds/abe: if extending by length, extend from both
-            ends of the curve; defaults to False
-        :return: The extended curve.
-        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
-        """
-        lenPointOrVec, \
-        lenPointOrVecDim, \
-        lenPointOrVecUnitType, \
-        lenPointOrVecIsPlug = _mo.info(lenPointOrVec).values()
-
-        if lenPointOrVecDim is 1:
-            if useSegment:
-                raise RuntimeError(
-                    "Extension by segment is not available "+
-                    "for extension-by-length."
-                )
-
-            return self.extendByLength(
-                lenPointOrVec,
-                lin=linear,
-                cir=circular,
-                ext=extrapolate,
-                mul=multipleKnots,
-                ats=atStart,
-                abe=atBothEnds
-            )
-
-        if lenPointOrVecDim is 3:
-            if any([linear, circular, extrapolate]):
-                raise RuntimeError(
-                    "The linear / circular / extrapolate "+
-                    "modes are not available for "+
-                    "point / vector."
-                )
-
-            if atBothEnds:
-                raise RuntimeError(
-                    "Extension at both ends is not "+
-                    "available for point / vector."
-                )
-
-            if point is None:
-                if isinstance(lenPointOrVec, r.data.Point):
-                    point = True
-
-                else:
-                    point = False
-
-            if point:
-                meth = self.extendToPoint
-
-            else:
-                meth = self.extendByVector
-
-            return meth(
-                lenPointOrVec,
-                ats=atStart,
-                mul=multipleKnots,
-                seg=useSegment
-            )
-
-        raise TypeError(
-            "Not a 1D or 3D numerical type: {}".format(lenPointOrVec)
-        )
-
-    @copyToShape(editsHistory=True)
     @short(atStart='ats', atBothEnds='abe')
     def retract(self, length, atStart=None, atBothEnds=None):
         """
@@ -3416,7 +3139,7 @@ class NurbsCurve:
         :param targetLength: the target length
         :type targetLength: float, :class:`~paya.runtime.plugs.Math1D`
         :param bool atStart/ats: anchor the curve at the end rather than the
-            start; defaults to False
+            start; defaults to ``False``
         :param vector: a vector along which to extend; this is recommended for
             spine setups where tangency should be more tightly controlled; if
             this is omitted, the *linear / circular / extrapolate* modes will
@@ -3424,14 +3147,14 @@ class NurbsCurve:
         :type vector: None, tuple, list, :class:`~paya.runtime.data.Vector`,
             :class:`~paya.runtime.plugs.Vector`
         :param bool circular/cir: ignored if *vector* was provided; use the
-            'circular' mode of the ``extendCurve`` node; defaults to False
+            'circular' mode of the ``extendCurve`` node; defaults to ``False``
         :param bool linear/lin: ignored if *vector* was provided;
             use the 'linear' mode of the ``extendCurve`` node; defaults to
-            False
+            ``False``
         :param bool extrapolate/ext: ignored if *vector* was provided;
             use the 'extrapolate' mode of the ``extendCurve`` node; defaults
-            to True
-        :param bool multipleKnots: keep multiple knots; defaults to True
+            to ``Tru``e``
+        :param bool multipleKnots: keep multiple knots; defaults to ``True``
         :return:
         """
         baseLength = self.length(p=True)
@@ -3448,7 +3171,9 @@ class NurbsCurve:
         if vector is None:
             extension = self.extendByLength(
                 extendLength,
-                cir=circular, lin=linear, ext=extrapolate,
+                cir=circular,
+                lin=linear,
+                ext=extrapolate,
                 mul=multipleKnots,
                 ats=atStart
             )
@@ -3465,8 +3190,378 @@ class NurbsCurve:
             )
 
         retraction = self.retract(retractLength, ats=atStart)
-
         return baseLength.ge(targetLength).ifElse(retraction, extension)
+
+    @copyToShape(editsHistory=True)
+    @short(atStart='ats',
+           atEnd='ate',
+           point='pt',
+           linear='lin',
+           circular='cir',
+           extrapolate='ext',
+           multipleKnots='mul')
+    def extendByLength(self,
+                          length,
+                          circular=None,
+                          linear=None,
+                          extrapolate=None,
+                          atStart=None,
+                          atEnd=None,
+                          multipleKnots=True):
+        """
+        :param length: the length to add to the curve
+        :type length: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param bool circular: use a circular extension; defaults to ``False``
+        :param bool linear: use a linear extension; defaults to ``True``
+        :param bool extrapolate: use an extrapolated extension; defaults to
+            ``False``
+        :param bool atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param bool atEnd: extend at the start of the curve; defaults to
+            ``True``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :return: This curve output, extended accordingly.
+        :rtype: :class:`NurbsCurve`
+        """
+
+        if (atStart is None) and (atEnd is None):
+            atStart, atEnd = False, True
+
+        circular, linear, extrapolate = resolveFlags(
+            circular, linear, extrapolate,
+            radio=1
+        )
+
+        lenInfo = r.mathInfo(length)
+        length, lenIsPlug = lenInfo['item'], lenInfo['isPlug']
+
+        if lenIsPlug:
+            # Guard
+            lenIsZero = length.le(1e-7)
+            safeLength = length.minClamp(1.0)
+            length = lenIsZero.ifElse(safeLength, length)
+
+        elif length == 0.0:
+            r.warning("Requested length is 0.0, skipping.")
+            return self
+
+        #---------------------------|    Configure node
+
+        node = r.nodes.ExtendCurve.createNode()
+        self >> node.attr('inputCurve1')
+        node.attr('extensionType').set(0 if linear else 1 if circular else 2)
+        length >> node.attr('distance')
+
+        if atStart:
+            if atEnd:
+                node.attr('start').set(2)
+            else:
+                node.attr('start').set(1)
+        else:
+            node.attr('start').set(0)
+
+        node.attr('removeMultipleKnots').set(not multipleKnots)
+        output = node.attr('outputCurve')
+
+        if lenIsPlug:
+            # Guard
+            output = lenIsZero.ifElse(self, output)
+
+        return output
+
+    @copyToShape(editsHistory=True)
+    @short(atStart='ats',
+           useSegment='seg',
+           multipleKnots='mul')
+    def extendByVector(self,
+                       vector,
+                       atStart=False,
+                       useSegment=False,
+                       multipleKnots=True):
+        """
+        :param vector: the vector along which to extend
+        :type vector: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param bool useSegment/seg: uses an attached line segment for the
+            extension; defaults to ``False``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :return: This curve output, extended along the specified vector.
+        :rtype: :class:`NurbsCurve`
+        """
+        #---------------------------------|    Wrangle info
+
+        vector = r.conform(vector)
+        vecIsPlug = isinstance(vector, r.Attribute)
+
+        if (not vecIsPlug) and vector.length() <= 1e-7:
+            r.warning("Requested length is 0.0, skipping.")
+            return self
+
+        #---------------------------------|    Resolve end point
+
+        anchorCVIndex = 0 if atStart else self.numCVs()-1
+        anchor = self.pointAtCV(anchorCVIndex, plug=True)
+        point = anchor + vector
+
+        #---------------------------------|    Dispatch
+
+        if useSegment:
+            # NB no guarding necessary
+            line = self.createLine(anchor, point)
+
+            if atStart:
+                return self.reverse().attach(
+                    line, mul=multipleKnots).reverse()
+
+            return self.attach(line, mul=multipleKnots)
+
+        else:
+            node = r.nodes.ExtendCurve.createNode()
+
+            node.attr('distance').set(1.0) # for guarding
+            self >> node.attr('inputCurve1')
+            point >> node.attr('inputPoint')
+            node.attr('removeMultipleKnots').set(not multipleKnots)
+            node.attr('start').set(1 if atStart else 0)
+
+            if vecIsPlug:
+                # Guard by switching mode out
+                length = vector.length()
+                lenIsZero = length.le(1e-7)
+
+                methodWhenZero = node.addAttr('methodWhenZero', dv=0)
+                methodWhenNotZero = node.addAttr('methodWhenNotZero', dv=2)
+
+                lenIsZero.ifElse(methodWhenZero,
+                    methodWhenNotZero) >> node.attr('extendMethod')
+
+            output = node.attr('outputCurve')
+
+            if vecIsPlug:
+                output = lenIsZero.ifElse(self, output)
+
+            return output
+
+    @copyToShape(editsHistory=True)
+    @short(atStart='ats',
+           useSegment='seg',
+           multipleKnots='mul')
+    def extendByPoint(self,
+                       point,
+                       atStart=False,
+                       useSegment=False,
+                       multipleKnots=True):
+        """
+        :param point: the point towards which to extend
+        :type point: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param bool useSegment/seg: uses an attached line segment for the
+            extension; defaults to ``False``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :return: This curve output, extended towards the specified point.
+        :rtype: :class:`NurbsCurve`
+        """
+        point = r.conform(point)
+        pointIsPlug = isinstance(point, r.Attribute)
+
+        anchorCVIndex = 0 if atStart else self.numCVs()-1
+
+        if not pointIsPlug:
+            _anchor = self.pointAtCV(anchorCVIndex, plug=False)
+            _vec = point-_anchor
+
+            if _vec.length() <= 1e-7:
+                r.warning("Requested length is 0.0, skipping.")
+                return self
+
+        anchor = self.pointAtCV(anchorCVIndex, plug=True)
+
+        #---------------------------------|    Dispatch
+
+        if useSegment:
+            line = self.createLine(anchor, point)
+
+            if atStart:
+                return self.reverse().attach(
+                    line, mul=multipleKnots).reverse()
+
+            return self.attach(line, mul=multipleKnots)
+
+        else:
+            node = r.nodes.ExtendCurve.createNode()
+
+            node.attr('distance').set(1.0) # for guarding
+            self >> node.attr('inputCurve1')
+            point >> node.attr('inputPoint')
+            node.attr('removeMultipleKnots').set(not multipleKnots)
+            node.attr('start').set(1 if atStart else 0)
+
+            if vecIsPlug:
+                # Guard by switching mode out
+
+                vector = point-anchor
+                length = vector.length()
+                lenIsZero = length.le(1e-7)
+
+                methodWhenZero = node.addAttr('methodWhenZero', dv=0)
+                methodWhenNotZero = node.addAttr('methodWhenNotZero', dv=2)
+
+                lenIsZero.ifElse(methodWhenZero,
+                    methodWhenNotZero) >> node.attr('extendMethod')
+
+            output = node.attr('outputCurve')
+
+            if vecIsPlug:
+                output = lenIsZero.ifElse(self, output)
+
+            return output
+
+    @copyToShape(editsHistory=True)
+    @short(atStart='ats',
+           atEnd='ate',
+           point='pt',
+           vector='vec',
+           length='ln',
+           multipleKnots='mul',
+           useSegment='seg')
+    def extend(self,
+               atStart=None,
+               atEnd=None,
+               point=None,
+               vector=None,
+               length=None,
+               multipleKnots=True,
+               useSegment=False):
+        """
+        :param length: the length to add to the curve; defaults to ``None``
+        :type length: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+        :param vector: the vector along which to extend; defaults to ``None``
+        :type vector: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param point: the point towards which to extend; defaults to ``None``
+        :type point: :class:`list` [:class:`float`],
+            :class:`str`, :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Vector`
+        :param atStart: extend at the start of the curve; defaults to
+            ``False``
+        :param atEnd: extend at the start of the curve; defaults to
+            ``True``
+        :param bool useSegment/seg: uses an attached line segment for the
+            extension (vector / point only); defaults to ``False``
+        :param bool multipleKnots/mul: preserve multiple knots; defaults to
+            ``True``
+        :raises ValueError: One of:
+
+            -   More than one of *vector*, *point* or *length* were specified.
+            -   Both *atStart* and *atEnd* were specified when extending with
+                point / vector.
+            -   None of *vector*, *point* or *length* were specified.
+            -   The *useSegment* option was requested when extending by curve.
+
+        :return: This curve output, extended accordingly.
+        :rtype: :class:`NurbsCurve`
+        """
+
+        if point is not None:
+            if (vector is not None) or (length is not None):
+                raise ValueError(
+                    "Please specify a point, a vector or a length."
+                )
+
+            if atStart and atEnd:
+                raise ValueError(
+                    "Extending in both directions not available with point / vector."
+                )
+
+            return self.extendByPoint(
+                point,
+                atStart=atStart if atStart is not None else False,
+                multipleKnots=multipleKnots,
+                useSegment=useSegment
+            )
+
+        elif vector is not None:
+            if (point is not None) or (length is not None):
+                raise ValueError(
+                    "Please specify a point, a vector or a length."
+                )
+
+            if atStart and atEnd:
+                raise ValueError(
+                    "Extending in both directions not available with point / vector."
+                )
+
+            return self.extendByVector(
+                vector,
+                atStart=atStart if atStart is not None else False,
+                multipleKnots=multipleKnots,
+                useSegment=useSegment
+            )
+
+        elif length is not None:
+            if (point is not None) or (length is not None):
+                raise ValueError(
+                    "Please specify a point, a vector or a length."
+                )
+
+            if useSegment:
+                raise ValueError(
+                    "Option not available when extending by length: useSegment"
+                )
+
+            return self.extendByLength(
+                vector,
+                atStart=atStart,
+                atEnd=atEnd,
+                multipleKnots=multipleKnots
+            )
+
+        else:
+            raise ValueError("Insufficient hints.")
+
+    @copyToShape(editsHistory=True)
+    @short(globalScale='gs', vector='v')
+    def squashStretch(self,
+                      squashy,
+                      stretchy,
+                      globalScale=None,
+                      vector=None):
+        """
+        :param squashy: the user attribute to control how squashy the output
+            should be
+        :type squashy: :class:`str`, :class:`~paya.runtime.plugs.Math1D`
+        :param stretchy: the user attribute to control how stretchy the output
+            should be
+        :type stretchy: :class:`str`, :class:`~paya.runtime.plugs.Math1D`
+        :param globalScale/gs: (recommended) an attribute to use as a
+            normalizing factor for length calculations; defaults to ``None``
+        :type globalScale/gs: :class:`str`, :class:`~paya.runtime.plugs.Math1D`
+        :param vector/v: (recommended) an extension vector to use when the
+            curve is under-shot (e.g. an extracted animation control axis);
+            defaults to ``None``
+        :return: This curve output with added squash-stretch effects.
+        :rtype: :class:`NurbsCurve`
+        """
+        nativeLen = self.length()
+
+        if globalScale is not None:
+            nativeLen *= globalScale
+
+        liveLen = self.length(p=True)
+        targetLen = liveLen.gatedClamp(nativeLen, squashy, stretchy)
+
+        targetLen >> r.spaceLocator(n='test').addAttr('targetLen', k=1)
+        return self.setLength(targetLen, vector=vector)
 
     @copyToShape(editsHistory=True)
     @short(
