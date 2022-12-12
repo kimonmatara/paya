@@ -13,7 +13,42 @@ if not r.pluginInfo('quatNodes', q=True, loaded=True):
 
 class Math1D:
 
-    __math_dimension__ = 1
+    __create_attr_type__ = 'double'
+
+    @classmethod
+    @short(attributeType='at')
+    def createAttr(cls,
+               attrName,
+               node=None,
+               attributeType=None,
+               **kwargs):
+        """
+        On :class:`Math1D` subclasses, overloads
+        :meth:`paya.runtime.plugs.Attribute.create` to preload
+        *attributeType* with a type appropriate for the class.
+
+        :param str attrName: the name of the attribute
+        :param node: the node on which to create the attribute; if omitted,
+            a free-standing ``network`` node will be created to hold the
+            attribute; defaults to ``double`` for :class:`Math1D`,
+            ``doubleAngle`` for :class:`~paya.runtime.plugs.Angle`,
+            ``doubleLinear`` for :class:`~paya.runtime.plugs.Distance` and
+            ``time`` for :class:`~paya.runtime.plugs.Time`
+        :param str attributeType/at: the type of the attribute to create;
+            defaults to something sensible for this 1D class
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param \*\*kwargs: forwarded to
+            :meth:`~paya.runtime.nodes.DependNode.addAttr`
+        :return: The generated attribute.
+        :rtype: `Attribute`
+        """
+        if attributeType is None:
+            attributeType = cls.__create_attr_type__
+
+        return super(r.plugs.Math1D, cls).createAttr(attrName,
+                                                     node=node,
+                                                     at=attributeType,
+                                                     **kwargs)
 
     #-----------------------------------------------------------|    Unit management
 
