@@ -52,7 +52,6 @@ def patchPyMEL(quiet=False):
         # Patch instantiators
         def __new__(cls,*args,**kwargs):
             instance = cls.__old_new__(cls,*args,**kwargs)
-
             pmcls = type(instance)
             pool = pmcls.__paya_pool__
 
