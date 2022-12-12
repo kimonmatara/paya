@@ -8,8 +8,6 @@ from paya.config import takeUndefinedFromConfig
 
 class Matrix:
 
-    __math_dimension__ = 16
-
     #-----------------------------------------------------------|    Testing
 
     @short(name='n', size='siz')
