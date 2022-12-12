@@ -5,6 +5,7 @@ from paya.util import short
 import paya.runtime as r
 
 class Angle:
+    __create_attr_type__ = 'doubleAngle'
 
     #-----------------------------------------------------------|    Constructor
 
