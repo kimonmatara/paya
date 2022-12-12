@@ -9,7 +9,7 @@ class NurbsCurveCV:
     def isRange(self):
         """
         :return: ``True`` if this component represents a range, otherwise
-            ``False`.
+            ``False``.
         :rtype: :class:`bool`
         """
         return len(self.indices()) > 1
