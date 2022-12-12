@@ -11,8 +11,10 @@ import inspect
 
 import maya.cmds as m
 import pymel.core as p
-from paya.util import short, sigWithAddedKwargs
+from paya.util import short, sigWithAddedKwargs, LazyModule
 import paya.pools as pools
+
+r = LazyModule('paya.runtime')
 
 def makeDoc(sources, notes=None):
     """
