@@ -124,7 +124,7 @@ class PartBase(Trunk):
     # @short(namespace='ns')
     # def reference(cls, namespace=None):
     #     """
-    #     References-in the ``<uncapitzalized class name>.ma`` dependency from
+    #     References-in the ``<uncapitalized class name>.ma`` dependency from
     #     the :class:`trunk <paya.trunkTrunk>` directories.
     #
     #     :param str namespace/ns: a namespace for the reference; if omitted, one
@@ -176,6 +176,26 @@ class PartBase(Trunk):
         :rtype: :class:`paya.lib.grouptree.GroupTree`
         """
         return GroupTree(self)
+
+    def getPartScale(self):
+        """
+        :return: A live scaling factor derived from the Y axis of the part
+            group node's world matrix.
+        :rtype: :class:`~paya.runtime.plugs.Double`
+        """
+        node = self.node()
+
+        if not node.hasAttr('partScale'):
+            node.addAttr('partScale', k=False, cb=True, dv=1.0)
+
+        plug = node.attr('partScale')
+
+        if not plug.inputs():
+            plug.unlock()
+            node.attr('worldMatrix').getAxis('y').length() >> plug
+            plug.lock()
+
+        return plug
 
     #-----------------------------------------------------|    Meta-node scaffolding
 
