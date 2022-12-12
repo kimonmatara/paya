@@ -1,4 +1,5 @@
 import re
+from contextlib import nullcontext
 import maya.cmds as m
 from paya.util import uncap, int_to_letter, short
 import paya.runtime as r
@@ -110,7 +111,7 @@ class PartGuide(r.parts.PartBase):
         partClass = self.getPartClass()
 
         if r.Name.__elems__:
-            ctx = r.NullCtx()
+            ctx = nullcontext()
         else:
             ns = self.node().namespace()
 
