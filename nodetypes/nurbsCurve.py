@@ -375,10 +375,10 @@ class NurbsCurve(metaclass=ShapeExtensionMeta):
         """
         if plug:
             output = self.getGeoOutput(ws=worldSpace)
-            return output.length()
+            return output.length(plug=True)
 
         if worldSpace:
-            return self.attr('worldSpace')[0].length(p=False)
+            return self.attr('worldSpace')[0].length(plug=False)
 
         # If not worldSpace, revert to PyMEL method
         return r.nodetypes.NurbsCurve.length(self)
