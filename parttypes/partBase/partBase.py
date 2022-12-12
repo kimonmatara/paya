@@ -177,25 +177,30 @@ class PartBase(Trunk):
         """
         return GroupTree(self)
 
-    def getPartScale(self):
+    @short(plug='p')
+    def getPartScale(self, plug=False):
         """
-        :return: A live scaling factor derived from the Y axis of the part
+        :param bool plug/p: return a live output, not just a value
+        :return: A scaling factor derived from the Y axis of the part
             group node's world matrix.
         :rtype: :class:`~paya.runtime.plugs.Double`
         """
         node = self.node()
 
-        if not node.hasAttr('partScale'):
-            node.addAttr('partScale', k=False, cb=True, dv=1.0)
+        if plug:
+            if not node.hasAttr('partScale'):
+                node.addAttr('partScale', k=False, cb=True, dv=1.0)
 
-        plug = node.attr('partScale')
+            plug = node.attr('partScale')
 
-        if not plug.inputs():
-            plug.unlock()
-            node.attr('worldMatrix').getAxis('y').length() >> plug
-            plug.lock()
+            if not plug.inputs():
+                plug.unlock()
+                node.attr('worldMatrix').y.length() >> plug
+                plug.lock()
 
-        return plug
+            return plug
+
+        return node.getMatrix(worldSpace=True).y.length()
 
     #-----------------------------------------------------|    Meta-node scaffolding
 
