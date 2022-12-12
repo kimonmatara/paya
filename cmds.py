@@ -25,8 +25,9 @@ from pymel.core import *
 
 from paya.util import toOs
 from paya.lib.names import Name
+from paya.lib.typeman import conform
 from paya.lib.mathops import createMatrix, \
-    createScaleMatrix, cm, csm, degToUI
+    createScaleMatrix, cm, csm, degToUI, info as mathInfo
 from paya.lib.skel import Chain
 from paya.lib.controls import createControl, createControls, controlShapes
 from paya.partcreator import partCreator
@@ -61,10 +62,3 @@ def findMelProc(procName):
         return path
 
     raise RuntimeError("Not a MEL procedure.")
-
-class NullCtx:
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        return False
