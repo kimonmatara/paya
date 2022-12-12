@@ -3,12 +3,13 @@ Node-naming utilities, usually called indirectly.
 """
 
 import re
+from functools import wraps
+from contextlib import ContextDecorator
 
 import pymel.util as _pu
 import maya.cmds as m
 
 from paya.util import short, pad, undefined
-
 from paya.config import config, takeUndefinedFromConfig
 import paya.lib.suffixes as _suf
 
@@ -120,33 +121,48 @@ def shorten(
 #----------------------------------------------------------|    CONTEXTUAL
 #----------------------------------------------------------|
 
-class Name:
+class Name(ContextDecorator):
     """
-        Context manager. Accumulates prefixes for default node names, and
-        provides other useful overrides.
+    Context manager. Accumulates prefixes for default node names, and
+    provides other useful overrides.
 
-        :param \*elems: one or more name elements to combine into a prefix
-        :type \*elems: :class:`str`, :class:`int`
-        :param suffix/suf: if this is a string, it will be used a suffix for all
-            nodes; if it's ``True``, appropriate suffixes will be looked up;
-            if it's ``False``, no suffixes will be applied; defaults to
-            enclosing overrides, or the namesake configuration flag
-        :type suffix/suf: :class:`str`, :class:`bool`
-        :param padding/pad: the padding depth for any integer elements;
-            defaults to enclosing overrides, or the namesake configuration
-            flag
-        :type padding/pad: :class:`int`
-        :param bool inherit/i: inherit elements from enclosing :class:`Name`
-            blocks; defaults to ``True``
-        :param namespace/ns: set the namespace for the block; if omitted,
-            no namespace will be set
-        :type namespace/ns: :class:`str`
-        :param bool relativeNames/rel: switches to relative name lookups for
-            the block; defaults to enclosing overrides
-        :param bool allowUnprefixedSuffixes/aus: where no name elements have
-            been accumulated, allows, for example, a transform to be named
-            ``XFRM`` rather than ``transform1``; defaults to enclosing
-            overrides or the namesake configuration flag
+    This context manager can also be used as a decorator:
+
+    .. code-block:: python
+
+        @Name('build')
+        def build(*args, **kwargs):
+            pass
+
+    Inside list comprehensions, it would take this form:
+
+    .. code-block:: python
+
+        locs = [Name('point', x+1, padding=3)(r.nodes.Locator.createNode)() for x in range(20)]
+        # Produces point_001_LOCT, point_002_LOCT etc.
+
+    :param \*elems: one or more name elements to combine into a prefix
+    :type \*elems: :class:`str`, :class:`int`
+    :param suffix/suf: if this is a string, it will be used a suffix for all
+        nodes; if it's ``True``, appropriate suffixes will be looked up;
+        if it's ``False``, no suffixes will be applied; defaults to
+        enclosing overrides, or the namesake configuration flag
+    :type suffix/suf: :class:`str`, :class:`bool`
+    :param padding/pad: the padding depth for any integer elements;
+        defaults to enclosing overrides, or the namesake configuration
+        flag
+    :type padding/pad: :class:`int`
+    :param bool inherit/i: inherit elements from enclosing :class:`Name`
+        blocks; defaults to ``True``
+    :param namespace/ns: set the namespace for the block; if omitted,
+        no namespace will be set
+    :type namespace/ns: :class:`str`
+    :param bool relativeNames/rel: switches to relative name lookups for
+        the block; defaults to enclosing overrides
+    :param bool allowUnprefixedSuffixes/aus: where no name elements have
+        been accumulated, allows, for example, a transform to be named
+        ``XFRM`` rather than ``transform1``; defaults to enclosing
+        overrides or the namesake configuration flag
     """
     __elems__ = []
 
