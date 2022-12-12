@@ -824,8 +824,25 @@ class NurbsCurve:
             :class:`float` | :class:`~paya.runtime.plugs.Math1D`)
         """
         if plug:
-            return self.paramAtLength(0.0, p=True), \
-                   self.paramAtFraction(1.0, p=True)
+            found = [output for output in self.outputs(
+                plugs=True, type='network') if \
+                output.attrName() == 'domainQuery']
+
+            if found:
+                node = found[0].node()
+                return (node.attr('umin'), node.attr('umax'))
+
+            with r.Name('domainQuery'):
+                node = r.nodes.Network.createNode()
+
+            umin = node.addAttr('umin')
+            umax = node.addAttr('umax')
+
+            self.paramAtFraction(0.0, p=True) >> umin
+            self.paramAtFraction(1.0, p=True) >> umax
+            self >> node.addAttr('domainQuery', at='message')
+
+            return umin, umax
 
         self.evaluate()
         mfn = self.getShapeMFn()
@@ -975,9 +992,9 @@ class NurbsCurve:
         return self.length(plug=plug) * fraction
 
     @copyToShape()
-    @short(plug='p')
+    @short(plug='p', checkDomain='cd')
     @plugCheck('param')
-    def lengthAtParam(self, param, plug=None):
+    def lengthAtParam(self, param, plug=None, checkDomain=True):
         """
         Differs from the PyMEl / API
         :meth:`~pymel.core.nodetypes.NurbsCurve.findLengthFromParam` in that
@@ -985,6 +1002,9 @@ class NurbsCurve:
 
         :param param: the parameter to inspect
         :type param: float, :class:`~paya.runtime.plugs.Math1D`
+        :param bool checkDomain/cd: perform gating against the current curve
+            knot domain to prevent sampling errors at the very start or end
+            of the curve; defaults to ``True``
         :param bool plug/p: force a dynamic output, or indicate that one or
             more of the arguments are plugs to skip checks; defaults to
             ``None``
@@ -992,9 +1012,55 @@ class NurbsCurve:
         :rtype: :class:`~paya.runtime.plugs.Math1D`
         """
         if plug:
+            if checkDomain:
+                inf = _mo.info(param)
+
+                if inf['isPlug']:
+                    zero = r.plugs.Math1D.createAttr('zero')
+                    length = self.length(p=True)
+                    umin, umax = self.knotDomain(plug=True)
+                    midParam = umin.blend(umax, weight=0.5)
+
+                    isAtMin = param.le(umin)
+                    isAtMax = param.ge(umax)
+
+                    detachParam = isAtMin.ifElse(
+                        midParam,
+                        isAtMax.ifElse(
+                            midParam,
+                            param
+                        )
+                    )
+
+                    return isAtMin.ifElse(
+                        zero,
+                        isAtMax.ifElse(
+                            length,
+                            self.detach(detachParam, select=0)[0].length(plug=True)
+                        )
+                    )
+
+                else:
+                    umin, umax = self.knotDomain()
+
+                    if param <= umin:
+                        return r.plugs.Math1D.createAttr('zero')
+
+                    if param >= umax:
+                        return self.length(p=True)
+
+                    return self.detach(param, select=0)[0].length(plug=True)
             return self.detach(param, select=0)[0].length(plug=True)
 
         else:
+            umin, umax = self.knotDomain()
+
+            if param <= umin:
+                return 0.0
+
+            if param >= umax:
+                return self.length()
+
             # Use nodes instead of MFn to get a properly spaced reading
             output = self.detach(param, select=0)[0]
             length = output.length(p=False)
@@ -1472,16 +1538,16 @@ class NurbsCurve:
            closestPoint='cp'
            )
     def createUpVectorSampler(self,
-                            resolution=9,
-                            unwindSwitch=0,
-                            interpolation='Linear',
-                            aimCurve=None,
-                            closestPoint=True,
-                            upObject=None,
-                            upVector=None,
-                            parallelTransport=False,
-                            setAsDefault=True
-                            ):
+                              resolution=9,
+                              unwindSwitch=0,
+                              interpolation='Linear',
+                              aimCurve=None,
+                              closestPoint=True,
+                              upObject=None,
+                              upVector=None,
+                              parallelTransport=False,
+                              setAsDefault=True
+                              ):
         """
         Depending on options, returns one of the following up-vector samplers:
 
@@ -2327,7 +2393,6 @@ class NurbsCurve:
         aimVectors.append(aimVectors[-1])
 
         # Analyse up vector / up object
-
         if upVector is not None:
             upVecType, upVector = _tm.describeAndConformVectorArg(upVector)
 
@@ -2479,7 +2544,6 @@ class NurbsCurve:
                'globalScale')
     def distributeMatrices(
             self,
-
             numberFractionsOrParams,
 
             primaryAxis,
