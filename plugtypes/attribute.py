@@ -14,25 +14,31 @@ uncap = lambda x: x[0].lower()+x[1:]
 
 class Attribute:
 
-    __math_dimension__ = None
-
     #-----------------------------------------------------------------|    Constructor
 
     @classmethod
-    def create(cls, node, attrName, **kwargs):
+    def createAttr(cls, attrName, node=None, **kwargs):
         """
         Creates an attribute.
 
-        :param node: the node on which to create the attribute
-        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
         :param str attrName: the name of the attribute
+        :param node: the node on which to create the attribute; if omitted,
+            a free-standing ``network`` node will be created to hold the
+            attribute; defaults to ``None``
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
         :param \*\*kwargs: forwarded to
-            :meth:`paya.runtime.nodes.DependNode.addAttr`
+            :meth:`~paya.runtime.nodes.DependNode.addAttr`
         :return: The generated attribute.
-        :rtype: :class:`Attribute`
+        :rtype: `Attribute`
         """
-        node = r.PyNode(node)
+        if node is None:
+            node = cls._createFreeAttrNode()
         return node.addAttr(attrName, **kwargs)
+
+    @classmethod
+    def _createFreeAttrNode(cls):
+        with r.Name(cls.__name__):
+            return r.nodes.Network.createNode()
 
     #-----------------------------------------------------------------|    Connections
 
@@ -361,6 +367,14 @@ class Attribute:
         returns the result.
         """
         return _pi.getInfoFromAttr(self)
+
+    def mathDimension(self):
+        """
+        :return: The math dimension of this
+            plug (e.g. 16 for a matrix), if any.
+        :rtype: :class:`int`, :class:`None`
+        """
+        return self.plugInfo().get('mathDimension')
 
     @short(inherited='i')
     def plugType(self, inherited=False):
