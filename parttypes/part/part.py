@@ -1,4 +1,5 @@
 import re
+from contextlib import nullcontext
 
 from paya.lib.grouptree import GroupTree
 from paya.util import int_to_letter
@@ -51,7 +52,7 @@ class Part(r.parts.PartBase):
         # make sure it's not in use by any other part in the scene
 
         if r.Name.__elems__:
-            return r.NullCtx()
+            return nullcontext()
 
         num = 0
         base = 'unnamed'
