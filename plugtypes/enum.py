@@ -5,8 +5,7 @@ import paya.runtime as r
 
 
 class Enum:
-
-    __math_dimension__ = 1
+    __create_attr_type__ = 'enum'
 
     #-----------------------------------------------------------|    Mixed setting
 
