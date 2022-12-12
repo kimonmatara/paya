@@ -28,6 +28,37 @@ axisVecs = {
 }
 
 #--------------------------------------------------------------|
+#--------------------------------------------------------------|    Axis letter manipulation
+#--------------------------------------------------------------|
+
+def absAxis(axis):
+    """
+    Equivalent to:
+
+    .. code-block:: python
+
+        axis.strip('-')
+
+    :param str axis: the axis to strip
+    :return: The stripped axis.
+    :rtype: :class:`str`
+    """
+    return axis.strip('-')
+
+def missingAxis(*axes):
+    """
+    Given two axes (lowercase), returns the missing one. Negative signs are
+    stripped / ignored.
+
+    :param \*axes: the two available axes
+    :type \*axes: :class:`str`, :class:`list` [:class:`str`]
+    :return: The missing axis.
+    :rtype: :class:`str`
+    """
+    axes = [absAxis(axis) for axis in _pu.expandArgs(*axes)]
+    return [axis for axis in 'xyz' if axis not in axes][0]
+
+#--------------------------------------------------------------|
 #--------------------------------------------------------------|    Units
 #--------------------------------------------------------------|
 
