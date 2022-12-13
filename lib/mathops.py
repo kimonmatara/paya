@@ -58,6 +58,19 @@ def missingAxis(*axes):
     axes = [absAxis(axis) for axis in _pu.expandArgs(*axes)]
     return [axis for axis in 'xyz' if axis not in axes][0]
 
+def inventRotateOrder(downAxis, upAxis):
+    """
+    Returns an 'optimal' rotate order based on the given down and up axes.
+    
+    :param str downAxis: the down axis, e.g. ``'y'``
+    :param str upAxis: the up axis, e.g. ``'x'``
+    :return: The rotate order, e.g. ``'yxz'``.
+    :rtype: :class:``str``
+    """
+    return ''.join([absAxis(downAxis),
+                    absAxis(upAxis),
+                    missingAxis(downAxis, upAxis)])
+
 #--------------------------------------------------------------|
 #--------------------------------------------------------------|    Units
 #--------------------------------------------------------------|
@@ -1501,3 +1514,38 @@ def bevelTriadPoints(points, bevelLength):
     p2 = points[1] + (v2.normal() * hyp)
 
     return [points[0], p1, p2, points[2]]
+
+def unbevelTriadPoints(points):
+    """
+    Reverses the result of :func:`bevelTriadPoints`.
+
+    :param points: four points
+    :type points: :class:`list` [:class:`list` [:class:`float`],
+        :class:`str`, :class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :return: Three points.
+    :rtype: [:class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.data.Point`,
+    """
+    points = [conform(point) for point in points]
+
+    v1 = points[0]-points[1]
+    v2 = points[3]-points[2]
+
+    angle = v1.angleTo(v2)
+    angle *= 0.5
+
+    bevelVec = points[2]-points[1]
+    opp = bevelVec.length() * 0.5
+
+    angleIsPlug = isinstance(angle, p.Attribute)
+
+    if angleIsPlug:
+        sinAngle = angle.sin()
+    else:
+        sinAngle = _pu.sin(angle)
+
+    hyp = opp / sinAngle
+    peak = points[2] + (-v2.normal() * hyp)
+
+    return [points[0], peak, points[3]]
