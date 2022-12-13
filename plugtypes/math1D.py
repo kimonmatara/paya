@@ -872,7 +872,29 @@ class Math1D:
 
     #--------------------------------------------------------------------|    Trigonometry
 
-    # See plugtypes.Angle for the forward functions
+    def cos(self):
+        """
+        Returns the trigonometric cosine.
+
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        return self.clamp(0, 1).unaryExpr('cos')
+
+    def sin(self):
+        """
+        Returns the trigonometric sine.
+
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        return self.unaryExpr('sin')
+
+    def tan(self):
+        """
+        Returns the trigonometric tangent.
+
+        :rtype: :class:`~paya.runtime.plugs.Math1D`
+        """
+        return self.unaryExpr('tan')
 
     def acos(self):
         """
