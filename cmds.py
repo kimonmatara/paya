@@ -37,6 +37,7 @@ def saveScriptEditor():
     """
     Convenience wrapper for MEL's ``syncExecuterBackupFiles()``.
     """
+    # should deprecate soon, due to new Save All Script Editor tabs menu command
     mel.eval('syncExecuterBackupFiles')
 
 def findMelProc(procName):
