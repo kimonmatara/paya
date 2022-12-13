@@ -52,15 +52,25 @@ def takeUndefinedFromConfig(f):
     :return: The wrapped function.
     """
     params = inspect.signature(f).parameters
-    kwnames = [param.name for param in params.values() \
-             if param.kind == inspect.Parameter.KEYWORD_ONLY]
+
+    def paramQualifies(x):
+        kind = x.kind
+
+        return kind == x.KEYWORD_ONLY \
+            or (kind == x.POSITIONAL_OR_KEYWORD \
+            and x.default is not x.empty)
+
+    kwnames = [param.name for param \
+               in params.values() if paramQualifies(param)]
 
     @wraps(f)
     def wrapped(*args, **kwargs):
+
         _kwargs = {}
 
         for kwname in kwnames:
             val = kwargs.get(kwname, params[kwname].default)
+
             if val is undefined:
                 val = config[kwname]
             _kwargs[kwname] = val
