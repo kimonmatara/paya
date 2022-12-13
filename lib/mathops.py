@@ -1452,3 +1452,52 @@ def bidirectionalParallelTransport(startNormal,
         return fwds
 
     return bwds
+
+def bevelTriadPoints(points, bevelLength):
+    """
+    Given three point values or plugs, returns four points, to include
+    a 'bevel' cutoff of the specified length.
+
+    :param points: three points
+    :type points: :class:`list` [:class:`list` [:class:`float`],
+        :class:`str`, :class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param bevelLength: the length of the bevel side
+    :type bevelLength: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+    :return: Four points.
+    :rtype: [:class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.data.Point`,
+    """
+    #-----------------------------|    Conform args
+
+    points = [conform(point) for point in points]
+    bevelLength = conform(bevelLength)
+
+    #-----------------------------|    Get vectors
+
+    v1 = points[0]-points[1] # reversed, radiating
+    v2 = points[2]-points[1]
+
+    #-----------------------------|    Get angle
+
+    angle = v1.angleTo(v2)
+    angle *= 0.5
+
+    #-----------------------------|    Solve
+
+    angleIsPlug = isinstance(angle, p.Attribute)
+
+    if angleIsPlug:
+        sinAngle = angle.sin()
+    else:
+        sinAngle = _pu.sin(angle)
+
+    opp = bevelLength * 0.5
+    hyp = opp / sinAngle
+
+    #-----------------------------|    Plot
+
+    p1 = points[1] + (v1.normal() * hyp)
+    p2 = points[1] + (v2.normal() * hyp)
+
+    return [points[0], p1, p2, points[2]]
