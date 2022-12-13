@@ -61,6 +61,9 @@ class Vector:
             if self.isTranslateChannel():
                 return r.data.Point(result)
 
+        elif isinstance(result, (tuple, list)):
+            return r.data.Vector(result)
+
         return result
 
     #---------------------------------------------------------------|
