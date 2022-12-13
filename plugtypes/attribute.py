@@ -42,6 +42,24 @@ class Attribute:
 
     #-----------------------------------------------------------------|    Connections
 
+    @short(recursive='r')
+    def hasInputs(self, recursive=False):
+        """
+        :param bool recursive/r: if this is a compound, inspect children as
+            well
+        :return: ``True`` if this plug has inputs, otherwise ``False``.
+        :rtype: :class:`bool`
+        """
+        if self.inputs():
+            return True
+
+        if self.isCompound():
+            for child in self.getChildren():
+                if child.hasInputs():
+                    return True
+
+        return False
+
     def splitInputs(self):
         """
         Splits any compound-level input into per-child connections. The
