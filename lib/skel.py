@@ -1,4 +1,5 @@
 from collections import UserList
+from paya.config import undefined, takeUndefinedFromConfig
 import paya.lib.mathops as _mo
 from paya.util import short, LazyModule
 import pymel.util as _pu
@@ -111,13 +112,16 @@ class Chain:
 
     @classmethod
     @short(parent='p',
-           tolerance='tol')
+           tolerance='tol',
+           downAxis='da',
+           upAxis='ua')
+    @takeUndefinedFromConfig
     def createFromPoints(
             cls,
             points,
-            downAxis,
-            upAxis,
             upVector,
+            downAxis=undefined,
+            upAxis=undefined,
             parent=None,
             tolerance=1e-7
     ):
