@@ -262,6 +262,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partGuide.html">PartGuide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/transform.html">Transform</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/transformGuide.html">TransformGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/triad.html">Triad</a></li>
 </ul>
 </li>
 </ul>
@@ -421,7 +422,7 @@ exactly; no attempt is made to orient the chain.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.createFromPoints">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromPoints" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance=1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromPoints" title="Permalink to this definition">#</a></dt>
 <dd><p>Builds a chain from points. The side (‘up’) axis will be calculated
 using cross products, but those will be biased towards the reference
 up vector.</p>

@@ -34,7 +34,7 @@ paya.lib.skel
         :param parent/p: an optional parent for the chain; defaults to None
         :return: :class:`Chain`
     
-    .. py:classmethod:: createFromPoints(points, downAxis, upAxis, upVector, parent=None, tolerance=1e-07)
+    .. py:classmethod:: createFromPoints(points, upVector, downAxis=<undefined>, upAxis=<undefined>, parent=None, tolerance=1e-07)
     
         Builds a chain from points. The side ('up') axis will be calculated
         using cross products, but those will be biased towards the reference

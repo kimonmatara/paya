@@ -433,3 +433,18 @@ paya.lib.mathops
     
     :return: The normals.
     :rtype: [:class:`~paya.runtime.plugs.Vector`]
+
+.. py:function:: bevelTriadPoints(points, bevelLength)
+
+    Given three point values or plugs, returns four points, to include
+    a 'bevel' cutoff of the specified length.
+    
+    :param points: three points
+    :type points: :class:`list` [:class:`list` [:class:`float`],
+        :class:`str`, :class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :param bevelLength: the length of the bevel side
+    :type bevelLength: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
+    :return: Four points.
+    :rtype: [:class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.data.Point`,
