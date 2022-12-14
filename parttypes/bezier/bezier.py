@@ -183,12 +183,18 @@ class Bezier(r.parts.Part):
                 upVectorSampler=upVectorSampler
             )
 
+            joints = []
+
             for i, matrix in enumerate(matrices):
                 with r.Name(i+1, padding=3):
                     joint = r.nodes.Joint.create(
                         worldMatrix=matrix,
                         parent=self.tree['joints'].node()
                     )
+
+                joints.append(joint)
+
+            self.tag('joints', joints)
 
 
     @r.partCreator
