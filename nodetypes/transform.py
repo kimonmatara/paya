@@ -1051,3 +1051,47 @@ class Transform:
                 shape.attr('lineWidth').set(lineWidth)
 
         return self
+
+    #--------------------------------------------------------|    Anim spaces
+
+    @short(translate='t',
+           rotate='r',
+           scale='s',
+           slave='slv',
+           defaultValue='dv')
+    def createAnimSpace(self,
+                        labels,
+                        targets,
+                        slave=None,
+                        translate=None,
+                        rotate=None,
+                        scale=None,
+                        defaultValue=0):
+        """
+        :param slave/slv: the transform to constrain; if omitted, defaults to
+            the first available offset group
+        :type slave/slv: :class:`str`, :class:`~paya.runtime.nodes.Transform`
+        :param targets: the target transforms or matrices
+        :type targets: :class:`str`, :class:`~paya.runtime.plugs.Matrix`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param labels: labels for the enum attribute
+        :type labels: :class:`list` [:class:`str`]
+        :param bool translate/t: drive translate channels; defaults to
+            ``True``
+        :param bool rotate/r: drive rotate channels; defaults to ``True``
+        :param bool scale/s: drive scale channels; defaults to ``True``
+        :param defaultValue/dv: the default value for the enum attribute;
+            defaults to ``0``
+        :type defaultValue/dv: :class:`int`, :class:`str`
+        :return: The system's network node.
+        :rtype: :class:`~paya.runtime.networks.AnimSpaceSwitcher`
+        """
+        return r.networks.AnimSpaceSwitcher.create(
+            self,
+            labels,
+            targets,
+            slave=slave,
+            translate=translate,
+            rotate=rotate,
+            scale=scale
+        )
