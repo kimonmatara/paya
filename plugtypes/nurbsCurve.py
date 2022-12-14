@@ -3560,7 +3560,6 @@ class NurbsCurve:
         liveLen = self.length(p=True)
         targetLen = liveLen.gatedClamp(nativeLen, squashy, stretchy)
 
-        targetLen >> r.spaceLocator(n='test').addAttr('targetLen', k=1)
         return self.setLength(targetLen, vector=vector)
 
     @copyToShape(editsHistory=True)
