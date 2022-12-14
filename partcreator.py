@@ -18,6 +18,8 @@ def partCreator(f):
                 self._postCreate()
 
             allNodes = tracker.getNodes()
+            groupNode.tag('dependencies', allNodes)
+
             xforms = [node for node in allNodes \
                 if isinstance(node, p.nodetypes.Transform)]
 
