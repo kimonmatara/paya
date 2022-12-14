@@ -489,7 +489,7 @@ class DependNode:
         return _atr.Sections(self, 'attrSections')
 
     @short(edit='e', query='q', channelBox='cb')
-    def addAttr(self, attrName, channelBox=None, **kwargs):
+    def addAttr(self, attrName, channelBox=None, attrSection=None, **kwargs):
         """
         Overloads :meth:`~pymel.core.nodetypes.DependNode.addAttr` to add the
         ``channelBox/cb`` option and to return ``self``. ``None`` will be
@@ -707,149 +707,57 @@ class DependNode:
 
     #-----------------------------------------------------------|    Tags
 
-    def getTags(self):
+    def tag(self, tag, *nodesOrAttrs):
         """
-        :return: All tags defined on this node.
-        :rtype: :class:`list` [:class:`str`]
-        """
-        out = []
+        Tags nodes or attributes for quick retrieval via :meth:`getByTag`
+        on this node.
 
-        tagsNode = self.getTagsNode()
-
-        if tagsNode is not None:
-            out = []
-
-            for plug in tagsNode.listAttr(ud=True):
-                if plug.type() == 'message':
-                    mt = re.match(r"(^.+?)_tag$", plug.attrName())
-
-                    if mt:
-                        out.append(mt.groups()[0])
-        return out
-
-    def clearTags(self, *tags):
-        """
-        :param \*tags: the tags to remove; if none are specified, all
-            tags will be removed
+        :param str tag: the tag to add to
+        :param \*nodesOrAttrs: nodes and/or attributes to add to the tag
+        :type \*nodesOrAttrs: :class:`~paya.runtime.plugs.Attribute`,
+            :class:`~paya.runtime.plugs.PyNode`,
+            :class:`str`
         :return: ``self``
-        :rtype: :class:`DependNode`
+        :rtype: :class:`~paya.runtime.nodes.DependNode`
         """
-        tagsNode = self.getTagsNode()
+        nodesOrAttrs = _pu.expandArgs(*nodesOrAttrs)
 
-        if tagsNode is not None:
-            tags = _pu.expandArgs(*tags)
-
-            if not tags:
-                self.lock()
-                r.delete(tagsNode)
-                self.unlock()
-                self.deleteAttr('tagsNode')
-                return self
-
-            existingTags = self.getTags()
-
-            for tag in tags:
-                attrName = '{}_tag'.format(tag)
-
-                if tagsNode.hasAttr(attrName):
-                    tagsNode.deleteAttr(attrName)
-                    existingTags.remove(tag)
-
-            if not existingTags:
-                r.delete(tagsNode)
-                self.deleteAttr('tagsNode')
+        if nodesOrAttrs:
+            tagger = r.networks.Tagger.getFromTaggingNode(self, create=True)
+            tagger.tag(tag, nodesOrAttrs)
+        else:
+            raise RuntimeError("No nodes or attributes were specified.")
 
         return self
 
-    @short(create='c')
-    def getTagsNode(self, create=False):
+    def clearTags(self, *tags):
         """
-        :param bool create/c: create the node if it doesn't exist;
-            defaults to ``False``
-        :return: The ``network`` node used by this node to hold tag
-            attributes.
-        :rtype: :class:`~paya.runtime.nodes.Network`, ``None``
-        """
-        if self.hasAttr('tagsNode'):
-            attr = self.attr('tagsNode')
-        elif create:
-            attr = self.addAttr('tagsNode', at='message', hidden=True)
-        else:
-            return
-
-        inputs = attr.inputs(type='network')
-
-        if inputs:
-            return inputs[0]
-        elif create:
-            with r.Name(self.basename(sts=True), 'tags', inherit=False):
-                tagsNode = r.nodes.Network.createNode()
-                tagsNode.attr('message') >> attr
-            return tagsNode
-
-    def tag(self, tag, *nodesOrAttrs):
-        """
-        Tags nodes or attributes for later retrieval via :meth:`getByTag`.
-
-        :param str tag: the tag to add items to
-        :param \*nodesOrAttrs: nodes or attributes to add in the tag
-        :type \*nodesOrAttrs: :class:`str`,
-            :class:`~paya.runtime.plugs.Attribute`,
-            :class:`~paya.runtime.plugs.DependNode`
+        :param \*tags: tags to clear; if none are specified, all tags will
+            be removed
+        :type \*tags: :class:`str`, :class:`list` [:class:`str`]
         :return: ``self``
-        :rtype: :class:`DependNode`
+        :rtype: :class:`~paya.runtime.nodes.DependNode`
         """
-        nodesOrAttrs = [r.PyNode(x) if not isinstance(x,
-            r.PyNode) else x for x in _pu.expandArgs(*nodesOrAttrs)]
+        tagger = r.networks.Tagger.getFromTaggingNode(self, create=False)
 
-        attrName = '{}_tag'.format(tag)
-        tagsNode = self.getTagsNode(c=True)
-
-        if tagsNode.hasAttr(attrName):
-            tagAttr = tagsNode.attr(attrName)
-            startIndex = tagAttr.getNextArrayIndex()
-        else:
-            tagAttr = tagsNode.addAttr(attrName,
-                at='message', multi=True, hidden=True)
-            startIndex = 0
-
-        for i, nodeOrAttr in enumerate(nodesOrAttrs, start=startIndex):
-            if isinstance(nodeOrAttr, r.Attribute):
-                src = nodeOrAttr
-            else:
-                src = nodeOrAttr.attr('message')
-
-            src >> tagAttr[i]
+        if tagger is not None:
+            tagger.clearTags(*tags, removeTaggerIfEmpty=True)
 
         return self
 
     def getByTag(self, tag):
         """
+        Retrieves nodes and / or attribues previously tagged using :meth:`tag`
+        on this node.
+
         :param str tag: the tag to inspect
-        :return: Nodes or attributes previously tagged on this node with
-            :meth:`tag` under the specified tag.
+        :return: Members of the specified tag.
         :rtype: :class:`list` [:class:`~paya.runtime.nodes.DependNode`,
             :class:`~paya.runtime.plugs.Attribute`]
         """
-        tagsNode = self.getTagsNode()
+        tagger = r.networks.Tagger.getFromTaggingNode(self, create=False)
 
-        if tagsNode is None:
+        if tagger is None:
             return []
 
-        attrName = '{}_tag'.format(tag)
-        out = []
-
-        if tagsNode.hasAttr(attrName):
-            tagsAttr = tagsNode.attr(attrName)
-            indices = tagsAttr.getArrayIndices()
-
-            for index in indices:
-                inputs = tagsAttr[index].inputs(plugs=True)
-
-                for input in inputs:
-                    if input.type() == 'message':
-                        out.append(input.node())
-                    else:
-                        out.append(input)
-
-        return out
+        return tagger.getByTag(tag)
