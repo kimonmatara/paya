@@ -11,7 +11,7 @@ class NoMatchingSampleError(RuntimeError):
     """
 
 
-class CurveUpVectorSampler:
+class CurveUpVectorSampler(r.networks.System):
     """
     Abstract base class for curve up vector samplers.
     """
