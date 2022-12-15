@@ -300,7 +300,7 @@ class Chain:
 
         return out
 
-    def contiguous(self):
+    def isContiguous(self):
         """
         :return: True if every member of this chain is a child of its
             predecessor, otherwise False.
@@ -313,6 +313,31 @@ class Chain:
                 return False
 
         return True
+
+    def isInline(self):
+        """
+        :return: ``True`` if this chain is in-line (in any direction),
+            otherwise ``False``.
+        :rtype: :class:`bool`
+        """
+        states = []
+        vectors = self.vectors()
+
+        if len(vectors) < 2:
+            raise RuntimeError("Need more than one bone.")
+
+        largestAcceptableDot = 1.0-1e-7
+
+        for i, vector in enumerate(vectors[1:], start=1):
+            prev = vectors[i-1]
+            dot = prev.dot(vector, normalize=True)
+            rejected = dot >= largestAcceptableDot
+            states.append(rejected)
+
+        if len(states) is 1:
+            return states[0]
+
+        return all([states])
 
     def roots(self):
         """
@@ -798,7 +823,7 @@ class Chain:
         :return: ``self``
         :rtype: :class:`Chain`
         """
-        assert self.contiguous(), "The chain is not contiguous."
+        assert self.isContiguous(), "The chain is not contiguous."
 
         #val = _pu.radians(22.5)
         val = r.degToUI(22.5)
