@@ -1,7 +1,12 @@
+import maya.cmds as m
 import paya.runtime as r
-from paya.util import short, resolveFlags
+from pymel.util import expandArgs
+from paya.util import short, resolveFlags, cap
 
 #------------------------------------------------------|    HELPERS
+
+def longChannelName(x):
+    return {'t': 'translate', 'r': 'rotate', 's': 'scale'}.get(x, x)
 
 def asMatrixPlug(x):
     if not isinstance(x, r.PyNode):
@@ -16,10 +21,31 @@ def asMatrixPlug(x):
 #------------------------------------------------------|    MAIN CLASS
 #------------------------------------------------------|
 
-class AnimSpaceSwitcher:
+class AnimSpaceSwitcher(r.networks.System):
     """
     Animation-space switching system.
     """
+    #--------------------------------------------------|    Acccesor(s)
+
+    @classmethod
+    def getFromControl(cls, control, channels=None, combo=None):
+        if channels:
+            channels = [longChannelName(x) for x in channels]
+
+        control = r.PyNode(control)
+        raise NotImplementedError
+        nodesThatTagControl = control.taggedBy()
+
+        systems = [network for network in \
+                   cls.getAll() if network.getControl() == control]
+
+        if channels or combo: # filter
+            def filterer(system):
+                usedChannels = [
+                    chan for chan in ['translate', 'rotate', 'scale'] \
+                    if getattr(system, 'uses{}'.format(cap(chan)))
+                ]
+
     #--------------------------------------------------|    Constructor(s)
 
     @classmethod
@@ -39,33 +65,9 @@ class AnimSpaceSwitcher:
                scale=None,
                attrName=None,
                defaultValue=0):
-        """
-        :param control: the control to carry the user attribute
-        :type control: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
-        :param slave/slv: the transform to constrain; if omitted, defaults to
-            the first offset group above *control*
-        :type slave/slv: :class:`str`, :class:`~paya.runtime.nodes.Transform`
-        :param targets: the target transforms or matrices
-        :type targets: :class:`str`, :class:`~paya.runtime.plugs.Matrix`,
-            :class:`~paya.runtime.nodes.Transform`
-        :param labels: labels for the enum attribute
-        :type labels: :class:`list` [:class:`str`]
-        :param bool translate/t: drive translate channels; defaults to
-            ``True``
-        :param bool rotate/r: drive rotate channels; defaults to ``True``
-        :param bool scale/s: drive scale channels; defaults to ``True``
-        :param str attrName/an: a name for the enum attribute; if omitted,
-            it will auto-generated as something like
-            ``'translate_rotate_space'``.
-        :param defaultValue/dv: the default value for the enum attribute;
-            defaults to ``0``
-        :type defaultValue/dv: :class:`int`, :class:`str`
-        :return: The system's network node.
-        :rtype: :class:`AnimSpaceSwitcher`
-        """
-        #------------------------------------------------|    Prep
 
-        # Resolve requested channels
+        #----------------------------------------------|    Check inputs
+
         translate, rotate, scale = resolveFlags(
             translate, rotate, scale
         )
@@ -73,158 +75,214 @@ class AnimSpaceSwitcher:
         if not any([translate, rotate, scale]):
             raise ValueError("No channels requested.")
 
+        numLabels = len(labels)
+        numTargets = len(targets)
+
+        if numLabels is 0:
+            raise ValueError("No labels specified.")
+
+        if numTargets is 0:
+            raise ValueError("No targets specified.")
+
+        if numLabels != numTargets:
+            raise ValueError("Miscmatched lengths or labels and targets.")
+
         control = r.PyNode(control)
 
         if slave is None:
-            if isinstance(control, r.nodetypes.Transform):
-                slave = control.getParent()
+            slave = control.getParent()
 
-            if slave is None:
-                raise RuntimeError(
-                    "Slave can't be auto-derived, "+
-                    "and must be specified explicitly."
+            if not slave:
+                raise ValueError(
+                    "Slave can't be auto-derived, specify explicitly."
                 )
         else:
             slave = r.PyNode(slave)
 
-        # Check target channels are free
-        for channel, state in zip(
+        channelStates = list(zip(
             ['translate', 'rotate', 'scale'],
             [translate, rotate, scale]
-        ):
-            if state:
-                if slave.attr(channel).hasInputs(recursive=True):
-                    raise RuntimeError(
-                        "Channel '{}' is occupied.".format(channel)
+        ))
+
+        # Check channels free on slave
+        for channelName, channelState in channelStates:
+            if control.attr(channelName).hasInputs(recursive=True):
+                raise RuntimeError(
+                    "Channel '{}' on {} is already occupied.".format(
+                        channelName, slave
                     )
+                )
 
-        # Check has targets, labels and same len
-        numTargets = len(targets)
-        numLabels = len(labels)
-
-        if not numTargets:
-            raise ValueError("Need one or more targets.")
-
-        if not numLabels:
-            raise ValueError("Need one or more labels.")
-
-        if numTargets != numLabels:
-            raise ValueError("Mismatched number of labels and targets.")
-
-        # Resolve attribute name
         if attrName is None:
-            prefix = '_'.join([channel for channel, state in zip(
-                ['translate', 'rotate', 'scale'],
-                [translate, rotate, scale]
-            ) if state])
+            elems = [channelName for \
+                     channelName, state in channelStates if state]
+            attrName = '_'.join(elems+['space'])
 
-            attrName = '{}_space'.format(prefix)
+        #----------------------------------------------|    Create node, tag
 
-        # Check doesn't exist
-        if control.hasAttr(attrName):
-            raise RuntimeError(
-                "Attribute already exists: {}".format(control.attr(attrName))
-            )
-
-        #------------------------------------------------|    Build
-
-        #-------------------------|    Create the attribute
-
-        if 'ANIM_SPACES' not in control.attrSections:
-            control.attrSections.add('ANIM_SPACES')
-
-        if isinstance(defaultValue, str):
-            defaultValue = labels.index(defaultValue)
-
-        attr = control.addAttr(
-            attrName,
-            at='enum',
-            enumName=':'.join(labels),
-            keyable=True,
-            dv=defaultValue
-        )
+        node = cls.createNode()
 
         with r.NodeTracker() as tracker:
 
-            #---------------------|    Configure choice node
+            #------------------------------------------|    Tagging
 
-            cho = r.nodes.Choice.createNode()
-            attr >> cho.attr('selector')
+            usedChannels = [channelState[0] for channelState \
+                            in channelStates if channelState[1]]
+
+            node.addAttr('usedChannels',
+                         dt='string').set(', '.join(usedChannels))
+
+            enumName = ':'.join(labels)
+            node.tag('slave', slave)
+            node.tag('control', control)
+            node.addAttr('labels', dt='string').set(enumName)
+            node.tag('targets', targets)
+            node.addAttr('attrName', dt='string').set(attrName)
+            node.addAttr('defaultValue', at='long', dv=defaultValue)
+
+            #------------------------------------------|    Main build
+
+            # Attribute
+            sectionName = 'SPACE_OPTIONS'
+
+            if sectionName not in control.attrSections:
+                control.attrSections.add(sectionName)
+
+            userAttr = control.addAttr(
+                attrName,
+                at='enum',
+                k=True,
+                dv=defaultValue,
+                enumName=enumName
+            )
+
+            node.tag('userAttr', userAttr)
+
+            # Choice node
+            choice = r.nodes.Choice.createNode()
 
             for i, target in enumerate(targets):
-                asMatrixPlug(target) >> cho.attr('input')[i]
+                asMatrixPlug(target) >> choice.attr('input')[i]
 
-            #---------------------|    Decompose and connect
+            userAttr >> choice.attr('selector')
 
-            matrix = cho.attr('output')
-            matrix *= slave.attr('parentInverseMatrix')
-            matrix = slave.getMatrix() * matrix.asOffset()
+            # Drive
+            driverMatrix = choice.attr('output')
+            driverMatrix *= slave.attr('parentInverseMatrix')[0]
+            driverMatrix = slave.getMatrix() * driverMatrix.asOffset()
+            driverMatrix.decomposeAndApply(
+                slave,
+                translate=translate,
+                rotate=rotate,
+                scale=scale
+            )
 
-            matrix.decomposeAndApply(slave,
-                                     t=translate,
-                                     r=rotate,
-                                     s=scale,
-                                     sh=False)
+        node.tag('allNodes', tracker.getNodes())
 
-        #-------------------------|    Create network, tag stuff
+        #----------------------------------------------|    Finish
 
-        nw = cls.createNode()
-        nw.tag('userAttr', attr)
-        nw.tag('control', control)
-        nw.tag('slave', slave)
-        nw.tag('allNodes', tracker.getNodes())
+        return node
 
-        nw.addAttr('usesTranslate', at='bool', dv=translate)
-        nw.addAttr('usesRotate', at='bool', dv=rotate)
-        nw.addAttr('usesScale', at='bool', dv=scale)
+    @classmethod
+    def createFromMacro(cls, macro):
+        macro = macro.copy()
+        control = macro.pop('control')
+        labels = macro.pop('labels')
+        targets = macro.pop('targets')
 
-        return nw
+        return cls.create(control, labels, targets, **macro)
+
+    #--------------------------------------------------|    Macro
+
+    def macro(self):
+        userAttr = self.getByTag('userAttr')[0]
+        attrName = userAttr.attrName(longName=True)
+        defaultValue = r.addAttr(userAttr, q=True, dv=True)
+
+        out = {
+            'attrName': attrName,
+            'labels': userAttr.getEnums().keys(),
+            'targets': [str(x).split('|')[-1] \
+                        for x in self.getByTag('targets')],
+            'defaultValue': defaultValue,
+            'control': str(userAttr.node()).split('|')[-1],
+            'slave': str(self.getByTag('slave')[0]).split('|')[-1]
+        }
+
+        out.update({channel: True for channel in self.getUsedChannels()})
+
+        return out
+
+    #--------------------------------------------------|    Inspections
+
+    def usesChannels(self, *channels):
+        if channels:
+            channels = [longChannelName(x) for x in expandArgs(*channels)]
+            return set(channels).issubset(set(self.getUsedChannels()))
+        raise ValueError("No channels specified.")
+
+    def getUsedChannels(self):
+        return [item.strip() for item \
+                 in self.attr('usedChannels').get().split(',')]
+
+    def getControl(self):
+        try:
+            return self.getByTag('control')[0]
+        except IndexError:
+            pass
+
+    def getUserAttr(self):
+        try:
+            return self.getByTag('userAttr')[0]
+        except IndexError:
+            pass
+
+    def getLabels(self):
+        attr = self.getUserAttr()
+
+        if attr is not None:
+            return attr.getEnums().keys()
+
+        return []
+
+    def getTargets(self):
+        return self.getByTag('targets')
 
     #--------------------------------------------------|    Destructor
 
     def remove(self):
-        """
-        Removes this system and all dependencies, including the user
-        attribute.
-        """
-        allNodes = self.getByTag('allNodes')
-        control = self.getByTag('control')[0]
+        # Capture some states
         slave = self.getByTag('slave')[0]
-
         mtx = slave.getMatrix(worldSpace=True)
 
+        # Get tagged elems
+        control = self.getByTag('control')[0]
+        userAttr = self.getByTag('userAttr')[0]
+        allNodes = self.getByTag('allNodes')
+
+        # Remove dependencies
         self.lock()
 
         for node in allNodes:
-            if r.objExists(node):
-                try:
+            try:
+                if r.objExists(node):
                     r.delete(node)
-                except:
-                    continue
-
-
-        slave.setMatrix(mtx, worldSpace=True)
-        attr = self.getByTag('userAttr')[0]
-        attr.release()
-        control.deleteAttr(attr.attrName())
-
-        if not control.attrSections['ANIM_SPACES']:
-            del(control.attrSections['ANIM_SPACES'])
+            except:
+                continue
 
         self.unlock()
-        self.clearTags()
+        slave.setMatrix(mtx, worldSpace=True)
+
+        # Remove user attribute
+        attrName = userAttr.attrName(longName=True)
+        if control.hasAttr(attrName):
+            control.deleteAttr(attrName)
+
+        if 'SPACE_OPTIONS' in control.attrSections:
+            section = control.attrSections['SPACE_OPTIONS']
+
+            if not section:
+                del(control.attrSections['SPACE_OPTIONS'])
+
+        # Remove self
         r.delete(self)
-
-    #--------------------------------------------------|    Inspections
-
-    @property
-    def usesTranslate(self):
-        return self.attr('usesTranslate').get()
-
-    @property
-    def usesRotate(self):
-        return self.attr('usesRotate').get()
-
-    @property
-    def usesScale(self):
-        return self.attr('usesScale').get()
