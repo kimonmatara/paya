@@ -5,6 +5,21 @@ import paya.runtime as r
 
 class Quaternion:
 
+    #-----------------------------------------------------------|    Testing
+
+    @short(name='n')
+    def createLocator(self, name=None):
+        kwargs = {}
+
+        if name:
+            kwargs['name'] = name
+
+        loc = r.spaceLocator(**kwargs)
+        self.asRotateMatrix().decomposeAndApply(loc, r=True)
+        return loc
+
+    cl = createLocator
+
     #-----------------------------------------------------------|    Value getting
 
     @short(plug='p')
@@ -103,27 +118,31 @@ class Quaternion:
 
     def __mul__(self, other, swap=False):
         """
-        Implements **multiplication** (``*``).
+        Implements **multiplication** (``*``). Slerp interpolation from
+        an identity quaternion will be used if *other* is a scalar.
 
         :param other: a value or plug of dimension 1 or 4
         """
         other, dim, ut, isplug = _mo.info(other).values()
 
-        if dim in (1, 4):
+        if dim is 1:
+            node = r.nodes.QuatSlerp.createNode()
+            node.attr('input1QuatW').set(1.0)
+            self >> node.attr('input2Quat')
+            other >> node.attr('inputT')
+
+            return node.attr('outputQuat')
+
+        if dim is 4:
             node = r.nodes.QuatProd.createNode()
 
             self >> node.attr('input{}Quat'.format(2 if swap else 1))
 
-            if dim is 1:
-                for dest in node.attr('input{}Quat'.format(1 if swap else 2)):
-                    other >> dest
-
-            else:
-                for src, dest in zip(
-                        other,
-                        node.attr('input{}Quat'.format(1 if swap else 2))
-                ):
-                    src >> dest
+            for src, dest in zip(
+                    other,
+                    node.attr('input{}Quat'.format(1 if swap else 2))
+            ):
+                src >> dest
 
             return node.attr('outputQuat')
 
