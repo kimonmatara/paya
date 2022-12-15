@@ -319,10 +319,6 @@ def createControl(
     if parent is not None:
         kwargs['parent'] = parent
 
-        if pickWalkParent is None:
-            if r.controller(parent, q=True):
-                pickWalkParent = parent
-
     kwargs['name'] = r.Name.make(
         control=asControl,
         nodeType=None if asControl else 'transform'
@@ -370,6 +366,7 @@ def createControl(
     offsetGroups='og',
     parent='p',
     pickWalkParent='pwp',
+    pickWalkInsets='pwi',
     shape='sh',
     shapeScale='ssc',
     color='col',
@@ -390,6 +387,7 @@ def createControls(
 
         offsetGroups='offset',
         parent=None,
+        pickWalkInsets=False,
         pickWalkParent=None,
 
         shape='cube',
@@ -433,6 +431,8 @@ def createControls(
     :param parent/p: a destination parent for the topmost offset group;
         defaults to ``None``
     :type parent/p: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+    :param bool pickWalkInsets/pwi: create a pick-walk hierarchy along
+        the nested inset controls; defaults to ``False``
     :param pickWalkParent/pwp: a pick-walk parent for the topmost control;
         if omitted, defaults to ``parent``, but only if ``parent`` is itself
         a control, otherwise ``None``
@@ -490,6 +490,12 @@ def createControls(
             'color': color,
             'asControl': asControl
         }
+
+        if i is 0:
+            if pickWalkParent is not None:
+                kwargs['pickWalkParent'] = pickWalkParent
+        elif pickWalkInsets:
+            kwargs['pickWalkParent'] = out[-1]
 
         with r.Name(theseElems):
             ct = createControl(**kwargs)
