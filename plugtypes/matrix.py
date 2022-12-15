@@ -722,6 +722,30 @@ class Matrix:
         self >> node.attr('inMatrix')
         return node.attr('outMatrix')
 
+    #--------------------------------------------------------------------|    Blending
+
+    @short(weight='w')
+    def blend(self, other, weight=0.5):
+        """
+        Blends this matrix towards *other*. When *weight* is at ``1.0``,
+        *other* will take over completely.
+
+        :param other: the matrix towards which to blend.
+        :type other: :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Matrix`,
+            :class:`~paya.runtime.plugs.Matrix`
+        :param weight/w: the blending weight; defaults to ``0.5``
+        :type weight/w: :class:`~paya.runtime.plugs.Math1D`,
+            :class:`float`
+        :return: The blended matrix.
+        :rtype: :class:`Matrix`
+        """
+        node = r.nodes.BlendMatrix.createNode()
+        self >> node.attr('inputMatrix')
+        other >> node.attr('target')[0].attr('targetMatrix')
+        weight >> node.attr('target')[0].attr('weight')
+        return node.attr('outputMatrix')
+
     #--------------------------------------------------------------------|    Conversions
 
     @short(rotateOrder='ro')
