@@ -7,7 +7,7 @@ import paya.apiutil as _au
 import pymel.util as _pu
 import pymel.core as p
 
-from paya.util import LazyModule
+from paya.util import LazyModule, short
 r = LazyModule('paya.runtime')
 
 uncap = lambda x: x[0].lower()+x[1:]
@@ -1031,8 +1031,7 @@ def getFramedAimAndUpVectors(points, upVector, tolerance=1e-7):
             upVecs.append(upVec)
 
         if upVecs.count(None) == len(upVecs):
-            upVecs = [refVector] * (len(aimVecs)-1)
-
+            upVecs = refVecs[:len(aimVecs)-1]
         else:
             # First, bias towards the reference vectors, dodging Nones
             _upVecs = []
@@ -1471,6 +1470,10 @@ def bevelTriadPoints(points, bevelLength):
     Given three point values or plugs, returns four points, to include
     a 'bevel' cutoff of the specified length.
 
+    .. warning::
+
+        Beta; does *not* guard against reversals.
+
     :param points: three points
     :type points: :class:`list` [:class:`list` [:class:`float`],
         :class:`str`, :class:`~paya.runtime.data.Point`,
@@ -1479,7 +1482,7 @@ def bevelTriadPoints(points, bevelLength):
     :type bevelLength: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
     :return: Four points.
     :rtype: [:class:`~paya.runtime.data.Point`,
-        :class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.data.Point`]
     """
     #-----------------------------|    Conform args
 
@@ -1519,6 +1522,10 @@ def unbevelTriadPoints(points):
     """
     Reverses the result of :func:`bevelTriadPoints`.
 
+    .. warning::
+
+        Beta; does *not* guard against reversals.
+
     :param points: four points
     :type points: :class:`list` [:class:`list` [:class:`float`],
         :class:`str`, :class:`~paya.runtime.data.Point`,
@@ -1549,3 +1556,152 @@ def unbevelTriadPoints(points):
     peak = points[2] + (-v2.normal() * hyp)
 
     return [points[0], peak, points[3]]
+
+# Below sort of works for strict FK, but doesn't account for stretch,
+#and contact is not achieved at reversals
+# def bevelFkTriadPoints(threePoints, bevelLength):
+#     """
+#     :Pseudo:
+#
+#         Get vecs
+#         Get angle between them
+#         Get the inner angles
+#
+#         Calculate edge lengths after bevel
+#         Rotate vectors and plot points
+#     """
+#     threePoints = [r.conform(point) for point in threePoints]
+#     bevelLength = r.conform(bevelLength)
+#
+#     #------------------------------|    Get vecs
+#
+#     v1 = threePoints[1]-threePoints[0]
+#     v2 = threePoints[2]-threePoints[1]
+#
+#     #------------------------------|    Do a 'soft' solve to capture initial lengths
+#
+#     _threePoints = [point.get() if isinstance(point,
+#             r.Attribute) else point for point in threePoints]
+#     _bevelLength = bevelLength.get() if isinstance(bevelLength,
+#             r.Attribute) else bevelLength
+#     _fourPoints = bevelTriadPoints(_threePoints, _bevelLength)
+#
+#     _v1 = _fourPoints[1]-_fourPoints[0]
+#     _v2 = _fourPoints[2]-_fourPoints[1]
+#     _v3 = _fourPoints[3]-_fourPoints[2]
+#
+#     _length1 = _v1.length()
+#     _length2 = _v2.length()
+#     _length3 = _v3.length()
+#
+#     #------------------------------|    Get angles
+#
+#     mainAngle = (-v1).angleTo(v2)
+#     isocAngle = mainAngle * 0.5
+#     innerAngle = _pu.radians(180.0)-(_pu.radians(90.0)+isocAngle)
+#
+#     #------------------------------|    Get a clock normal, walk vectors
+#
+#     clockNormal = v1.cross(v2)
+#     newV1 = v1.normal() * _length1
+#
+#     outPoint1 = threePoints[0]
+#     outPoint2 = outPoint1 + newV1
+#
+#     newV2 = newV1.rotateByAxisAngle(clockNormal, innerAngle).normal() * _length2
+#     outPoint3 = outPoint2 + newV2
+#
+#     newV3 = newV2.rotateByAxisAngle(clockNormal, innerAngle).normal() * _length3
+#     outPoint4 = outPoint3 + newV3
+#
+#     return [outPoint1, outPoint2, outPoint3, outPoint4]
+#
+# #Below sort of works, but end point doesn't register
+# def bevelTriadPoints2(threePoints, bevelLength, fallbackUpVector):
+#
+#     #----------------------------------------|    Conform inputs
+#
+#     threePoints = [r.conform(point) for point in threePoints]
+#     bevelLength = r.conform(bevelLength)
+#     fallbackUpVector = r.conform(fallbackUpVector)
+#
+#     #----------------------------------------|    Get vectors
+#
+#     v1 = threePoints[1]-threePoints[0]
+#     v2 = threePoints[2]-threePoints[1]
+#
+#     #----------------------------------------|    Get a guarded clock normal
+#
+#     dot = v1.dot(v2, normalize=True)
+#     absDot = dot.abs()
+#
+#     aligned = absDot.ge(1.0-1e-7)
+#
+#     clockNormal = v1.cross(
+#         aligned.ifElse(
+#             fallbackUpVector,
+#             v2
+#         )
+#     )
+#
+#     clockNormal = aligned.ifElse(
+#         fallbackUpVector,
+#         clockNormal
+#     )
+#
+#     #----------------------------------------|    Derive lengths based on straight line
+#
+#     halfBevelLength = bevelLength / 2
+#
+#     v1Length = v1.length() - halfBevelLength
+#     v2Length = bevelLength
+#     v3Length = v2.length() - halfBevelLength
+#
+#     #----------------------------------------|    Calc angles
+#
+#     mainAngle = (-v1).angleTo(v2)
+#     isocAngle = mainAngle / 2
+#
+#     innerAngle = _pu.radians(180.0)-(_pu.radians(90.0)+isocAngle)
+#
+#     #----------------------------------------|    Plot
+#
+#     outPoint1 = threePoints[0]
+#
+#     newV1 = v1.normal() * v1Length
+#     outPoint2 = outPoint1 + newV1
+#
+#     newV2 = newV1.rotateByAxisAngle(clockNormal, innerAngle).normal() * v2Length
+#     outPoint3 = outPoint2 + newV2
+#
+#     newV3 = newV2.rotateByAxisAngle(clockNormal, innerAngle).normal() * v3Length
+#     outPoint4 = outPoint3 + newV3
+#
+#     return [outPoint1, outPoint2, outPoint3, outPoint4]
+
+@short(forceUpVector='fuv')
+def getBevelVector(v1, v2, upVector, forceUpVector=False):
+    """
+    :param v1: the first vector
+    :param v2: the second vector
+    :param upVector: a fallback up vector to use when the two vectors
+        are aligned.
+    :return: Returns the 'connecting' (bevel) vector from *v1*
+        to *v2*. The vector will be normalized.
+    """
+    v1 = r.conform(v1)
+    v2 = r.conform(v2)
+
+    inline = v1.dot(v2, normalize=True).abs().ge(1-1e-7)
+
+    if forceUpVector:
+        clockNormal = upVector
+    else:
+        clockNormal = v1.cross(inline.ifElse(upVector, v2))
+        clockNormal = inline.ifElse(upVector, clockNormal).normal()
+
+    angle = (-v1).angleTo(v2)
+    halfAngle = angle*0.5
+    innerAngle = _pu.radians(180)-(_pu.radians(90)+halfAngle)
+
+    return v1.rotateByAxisAngle(clockNormal, innerAngle).normal()
