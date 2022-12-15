@@ -767,12 +767,16 @@ class Chain:
     )
     def createIkHandle(self,
                        jitter=False,
-                       upAxis=None,
                        upVector=None,
                        **kwargs):
         """
         Creates an IK handle for this chain.
 
+        :param bool jitter: if this chain is in-line, auto-configures
+            preferred angles to prevent lockout; *upAxis* will be required
+            for this; defaults to ``False``
+        :param upVector: used by *jitter*; a reference up vector to indicate
+            the wind direction of the jitter; defaults to ``None``
         :param \**kwargs: forwarded to
             :meth:`paya.runtime.nodes.IkHandle.create` with the following
             modifications:
@@ -787,10 +791,10 @@ class Chain:
         :rtype: :class:`~paya.runtime.nodes.IkHandle`
         """
         if jitter:
-            if upAxis is None:
-                raise ValueError("An up axis is required for jitter.")
+            if upVector is None:
+                raise ValueError("An up vector is required for IK jitter.")
 
-            self.jitterForIkHandle(upAxis, upVector=upVector)
+            self.jitterForIkHandle(upVector)
 
         settings = {
             'solver': 'ikRPsolver' if len(self) > 2 else 'ikSCsolver'
@@ -802,16 +806,14 @@ class Chain:
 
         return r.nodes.IkHandle.create(**settings)
 
-    def jitterForIkHandle(self, upAxis, upVector=None):
+    def jitterForIkHandle(self, upVector):
         """
         If this chain is in-line, auto-configures a slight value in the
         preferred angle of the bending ('up') axis of the internal joints
         in anticipation of an IK handle.
 
-        :param str upAxis: the chain's main bend ('up') axis, e.g. ``z``
-        :param upVector: a reference up vector; this is useful if you want
-            to indicate that the 'kink' should be reversed; defaults to
-            ``None``
+        :param upVector: a reference up vector to indicate the wind direction
+            of the jitter
         :type upVector: :class:`list` [:class:`float`],
             :class:`~paya.runtime.data.Vector`
         :return: ``self``
@@ -822,28 +824,19 @@ class Chain:
                 "At least three joints required for jitter."
             )
 
+        upVector = r.data.Vector(upVector)
+
         if self.isInline():
             jitter = _pu.radians(10)
 
-            upAxisIsNeg = '-' in upAxis
-            upAxis = _mo.absAxis(upAxis)
-
-            if upVector is not None:
-                upVector = r.data.Vector(upVector)
-
             for joint in self[:-1]:
-                thisUpAxisIsNeg = upAxisIsNeg
+                bestAxis = joint.closestAxisToVector(upVector)
 
-                if upVector is not None:
-                    upAxisVec = joint.getWorldMatrix().getAxis(upAxis)
-                    negUpAxisVec = upAxisVec * -1
+                bestAxisIsNeg = '-' in bestAxis
+                bestAxis = bestAxis.strip('-')
 
-                    if upVector.dot(negUpAxisVec,
-                        normalize=True) > upVector.dot(upAxisVec):
-                        thisUpAxisIsNeg = not thisUpAxisIsNeg
-
-                joint.attr('preferredAngle{}'.format(upAxis.upper())).set(
-                    (jitter * -1) if thisUpAxisIsNeg else jitter
+                joint.attr('preferredAngle{}'.format(bestAxis.upper())).set(
+                    (jitter * -1) if bestAxisIsNeg else jitter
                 )
 
         return self
