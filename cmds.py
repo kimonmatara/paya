@@ -29,7 +29,8 @@ from paya.lib.typeman import conform
 from paya.lib.mathops import createMatrix, \
     createScaleMatrix, cm, csm, degToUI, info as mathInfo
 from paya.lib.skel import Chain
-from paya.lib.controls import createControl, createControls, controlShapes
+from paya.lib.controls import createControl, \
+    createControls, controlShapes, getControls
 from paya.partcreator import partCreator
 from paya.config import config
 
