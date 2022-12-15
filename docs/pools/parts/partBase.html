@@ -246,6 +246,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../networks_index.html">Network Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../networks/animSpaceSwitcher.html">AnimSpaceSwitcher</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorIkSplineStyleSampler.html">CurveUpVectorIkSplineStyleSampler</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
@@ -501,6 +502,22 @@ group node’s world matrix.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.parts.PartBase.getPartScaleMatrix">
+<span class="sig-name descname"><span class="pre">getPartScaleMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.PartBase.getPartScaleMatrix" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return a live output, not just a value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A scale matrix derived from the part group node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.runtime.parts.PartBase.getPatchbay">
 <span class="sig-name descname"><span class="pre">getPatchbay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.PartBase.getPatchbay" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns a general-utility <code class="docutils literal notranslate"><span class="pre">network</span></code> node connected to this part’s
@@ -565,8 +582,8 @@ to <code class="docutils literal notranslate"><span class="pre">True</span></cod
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.runtime.parts.PartBase.clearTags">
-<span class="sig-name descname"><span class="pre">clearTags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.PartBase.clearTags" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.runtime.parts.PartBase.removeTags">
+<span class="sig-name descname"><span class="pre">removeTags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.PartBase.removeTags" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>*tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – the tag(s) to remove; if omitted, all tags will

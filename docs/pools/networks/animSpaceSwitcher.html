@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.nodes.ObjectSet" href="objectSet.html" /><link rel="prev" title="paya.runtime.nodes.NurbsCurve" href="nurbsCurve.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.networks.CurveUpVectorAimCurveSampler" href="curveUpVectorAimCurveSampler.html" /><link rel="prev" title="Network Subtypes" href="../networks_index.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
-        <title>paya.runtime.nodes.NurbsSurface - paya 1.0 documentation</title>
+        <title>paya.runtime.networks.AnimSpaceSwitcher - paya 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
@@ -179,36 +179,36 @@
 <p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../../types_index.html">Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../nodes_index.html">Node Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="clusterHandle.html">ClusterHandle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="curveWarp.html">CurveWarp</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="deformableShape.html">DeformableShape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">FourByFourMatrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="geometryFilter.html">GeometryFilter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ikHandle.html">IkHandle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="joint.html">Joint</a></li>
-<li class="toctree-l3"><a class="reference internal" href="lattice.html">Lattice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="locator.html">Locator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="makeThreePointCircularArc.html">MakeThreePointCircularArc</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesh.html">Mesh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="motionPath.html">MotionPath</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">NurbsSurface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="objectSet.html">ObjectSet</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pointOnCurveInfo.html">PointOnCurveInfo</a></li>
-<li class="toctree-l3"><a class="reference internal" href="proximityWrap.html">ProximityWrap</a></li>
-<li class="toctree-l3"><a class="reference internal" href="remapValue.html">RemapValue</a></li>
-<li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
-<li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="transform.html">Transform</a></li>
-<li class="toctree-l3"><a class="reference internal" href="uvPin.html">UvPin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vectorProduct.html">VectorProduct</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../nodes_index.html">Node Types</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/blendShape.html">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/cluster.html">Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/clusterHandle.html">ClusterHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/curveWarp.html">CurveWarp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/dagNode.html">DagNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/deformableShape.html">DeformableShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/dependNode.html">DependNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/fourByFourMatrix.html">FourByFourMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/geometryFilter.html">GeometryFilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/ikHandle.html">IkHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/joint.html">Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/lattice.html">Lattice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/locator.html">Locator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/makeThreePointCircularArc.html">MakeThreePointCircularArc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/mesh.html">Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/motionPath.html">MotionPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/objectSet.html">ObjectSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/proximityWrap.html">ProximityWrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/remapValue.html">RemapValue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/shape.html">Shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/skinCluster.html">SkinCluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/subdiv.html">Subdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/uvPin.html">UvPin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nodes/vectorProduct.html">VectorProduct</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../comps_index.html">Component Types</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -245,15 +245,15 @@
 <li class="toctree-l3"><a class="reference internal" href="../data/vector.html">Vector</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../networks_index.html">Network Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../networks/animSpaceSwitcher.html">AnimSpaceSwitcher</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorIkSplineStyleSampler.html">CurveUpVectorIkSplineStyleSampler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorPtKeysSampler.html">CurveUpVectorPtKeysSampler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorPtSampler.html">CurveUpVectorPtSampler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorRemapSampler.html">CurveUpVectorRemapSampler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../networks_index.html">Network Subtypes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">AnimSpaceSwitcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorIkSplineStyleSampler.html">CurveUpVectorIkSplineStyleSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorPtKeysSampler.html">CurveUpVectorPtKeysSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorPtSampler.html">CurveUpVectorPtSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorRemapSampler.html">CurveUpVectorRemapSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -362,13 +362,53 @@
           </label>
         </div>
         <article role="main">
-          <section id="paya-runtime-nodes-nurbssurface">
-<h1>paya.runtime.nodes.NurbsSurface<a class="headerlink" href="#paya-runtime-nodes-nurbssurface" title="Permalink to this headline">#</a></h1>
+          <section id="paya-runtime-networks-animspaceswitcher">
+<h1>paya.runtime.networks.AnimSpaceSwitcher<a class="headerlink" href="#paya-runtime-networks-animspaceswitcher" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="paya.runtime.nodes.NurbsSurface">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NurbsSurface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.NurbsSurface" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.runtime.networks.AnimSpaceSwitcher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AnimSpaceSwitcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.networks.AnimSpaceSwitcher" title="Permalink to this definition">#</a></dt>
 <dd><p class="rubric">Inheritance</p>
-<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.NurbsSurface.html#pymel.core.nodetypes.NurbsSurface" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsSurface</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">SurfaceShape</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.SurfaceShape.html#pymel.core.nodetypes.SurfaceShape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SurfaceShape</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">ControlPoint</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.ControlPoint.html#pymel.core.nodetypes.ControlPoint" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControlPoint</span></code></a> <a class="reference internal" href="deformableShape.html#paya.runtime.nodes.DeformableShape" title="paya.runtime.nodes.DeformableShape"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DeformableShape.html#pymel.core.nodetypes.DeformableShape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeformableShape</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryShape</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.GeometryShape.html#pymel.core.nodetypes.GeometryShape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometryShape</span></code></a> <a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Shape.html#pymel.core.nodetypes.Shape" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> <a class="reference internal" href="dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DagNode.html#pymel.core.nodetypes.DagNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Entity.html#pymel.core.nodetypes.Entity" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.ContainerBase.html#pymel.core.nodetypes.ContainerBase" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code></a> <a class="reference internal" href="dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Network.html#pymel.core.nodetypes.Network" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a> <a class="reference internal" href="../nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<p>Animation-space switching system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.networks.AnimSpaceSwitcher.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.networks.AnimSpaceSwitcher.create" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>control</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../nodes/dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a>) – the control to carry the user attribute</p></li>
+<li><p><strong>slave/slv</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the transform to constrain; if omitted, defaults to
+the first offset group above <em>control</em></p></li>
+<li><p><strong>targets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the target transforms or matrices</p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – labels for the enum attribute</p></li>
+<li><p><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – drive translate channels; defaults to
+<code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>rotate/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – drive rotate channels; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scale/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – drive scale channels; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>attrName/an</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – a name for the enum attribute; if omitted,
+it will auto-generated as something like
+<code class="docutils literal notranslate"><span class="pre">'translate_rotate_space'</span></code>.</p></li>
+<li><p><strong>defaultValue/dv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the default value for the enum attribute;
+defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The system’s network node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.networks.AnimSpaceSwitcher" title="paya.runtime.networks.AnimSpaceSwitcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnimSpaceSwitcher</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.networks.AnimSpaceSwitcher.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.networks.AnimSpaceSwitcher.remove" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes this system and all dependencies, including the user
+attribute.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -378,23 +418,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="objectSet.html">
+          <a class="next-page" href="curveUpVectorAimCurveSampler.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">paya.runtime.nodes.ObjectSet</div>
+                <div class="title">paya.runtime.networks.CurveUpVectorAimCurveSampler</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="nurbsCurve.html">
+          <a class="prev-page" href="../networks_index.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">paya.runtime.nodes.NurbsCurve</div>
+                <div class="title">Network Subtypes</div>
                 
               </div>
             </a>

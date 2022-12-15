@@ -246,6 +246,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/networks_index.html">Network Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/networks/animSpaceSwitcher.html">AnimSpaceSwitcher</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/networks/curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/networks/curveUpVectorIkSplineStyleSampler.html">CurveUpVectorIkSplineStyleSampler</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/networks/curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
@@ -397,6 +398,26 @@ stripped / ignored.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.inventRotateOrder">
+<span class="sig-name descname"><span class="pre">inventRotateOrder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.inventRotateOrder" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns an ‘optimal’ rotate order based on the given down and up axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>downAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the down axis, e.g. <code class="docutils literal notranslate"><span class="pre">'y'</span></code></p></li>
+<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the up axis, e.g. <code class="docutils literal notranslate"><span class="pre">'x'</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rotate order, e.g. <code class="docutils literal notranslate"><span class="pre">'yxz'</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>:class:<code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1003,6 +1024,26 @@ a ‘bevel’ cutoff of the specified length.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Four points.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
+<a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paya.lib.mathops.unbevelTriadPoints">
+<span class="sig-name descname"><span class="pre">unbevelTriadPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.mathops.unbevelTriadPoints" title="Permalink to this definition">#</a></dt>
+<dd><p>Reverses the result of <a class="reference internal" href="#paya.lib.mathops.bevelTriadPoints" title="paya.lib.mathops.bevelTriadPoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">bevelTriadPoints()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>points</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>],
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,
+<a class="reference internal" href="../../pools/plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – four points</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Three points.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>[<a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>,

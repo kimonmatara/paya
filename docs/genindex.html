@@ -244,6 +244,7 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="pools/networks_index.html">Network Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="pools/networks/animSpaceSwitcher.html">AnimSpaceSwitcher</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/networks/curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/networks/curveUpVectorIkSplineStyleSampler.html">CurveUpVectorIkSplineStyleSampler</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/networks/curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
@@ -644,6 +645,8 @@
         </ul></li>
         <li><a href="pools/data/vector.html#paya.runtime.data.Vector.angleTo">angleTo() (Vector method)</a>, <a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.angleTo">[1]</a>
 </li>
+        <li><a href="pools/networks/animSpaceSwitcher.html#paya.runtime.networks.AnimSpaceSwitcher">AnimSpaceSwitcher (class in paya.runtime.networks)</a>
+</li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.appendChain">appendChain() (Chain method)</a>
 </li>
         <li><a href="paya/lib/controls.html#paya.lib.controls.ControlShapesLibrary.applyToControls">applyToControls() (ControlShapesLibrary method)</a>
@@ -846,7 +849,7 @@
 </li>
         <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.clearTag">clearTag() (PartBase method)</a>
 </li>
-        <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.clearTags">clearTags() (PartBase method)</a>
+        <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.clearTags">clearTags() (DependNode method)</a>
 </li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.clearTransform">clearTransform() (Target method)</a>
 </li>
@@ -953,6 +956,8 @@
         <li><a href="pools/plugs/angle.html#paya.runtime.plugs.Angle.create">create() (Angle class method)</a>
 
         <ul>
+          <li><a href="pools/networks/animSpaceSwitcher.html#paya.runtime.networks.AnimSpaceSwitcher.create">(AnimSpaceSwitcher class method)</a>
+</li>
           <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.create">(Bezier class method)</a>
 </li>
           <li><a href="pools/nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve.create">(BezierCurve class method)</a>
@@ -1000,6 +1005,8 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.createAnimSpace">createAnimSpace() (Transform method)</a>
+</li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.createArc">createArc() (NurbsCurve class method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.createArc">[1]</a>
 </li>
         <li><a href="pools/nodes/vectorProduct.html#paya.runtime.nodes.VectorProduct.createAsCross">createAsCross() (VectorProduct class method)</a>
@@ -1370,8 +1377,12 @@
           <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Targets.getByPhysicalIndex">(Targets method)</a>
 </li>
         </ul></li>
-        <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getByTag">getByTag() (PartBase method)</a>
+        <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.getByTag">getByTag() (DependNode method)</a>
+
+        <ul>
+          <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getByTag">(PartBase method)</a>
 </li>
+        </ul></li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getByValue">getByValue() (Target method)</a>
 </li>
         <li><a href="paya/lib/mathops.html#paya.lib.mathops.getChainedAimMatrices">getChainedAimMatrices() (in module paya.lib.mathops)</a>
@@ -1452,10 +1463,10 @@
 </li>
         <li><a href="pools/nodes/deformableShape.html#paya.runtime.nodes.DeformableShape.getHistoryPlug">getHistoryPlug() (DeformableShape method)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.getIndexFromAlias">getIndexFromAlias() (BlendShape method)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pools/nodes/transform.html#paya.runtime.nodes.Transform.getIntermediateShapes">getIntermediateShapes() (Transform method)</a>
 </li>
         <li><a href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.getJointList">getJointList() (IkHandle method)</a>
@@ -1507,6 +1518,8 @@
 </li>
         </ul></li>
         <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getPartScale">getPartScale() (PartBase method)</a>
+</li>
+        <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getPartScaleMatrix">getPartScaleMatrix() (PartBase method)</a>
 </li>
         <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getPatchbay">getPatchbay() (PartBase method)</a>
 </li>
@@ -1562,7 +1575,13 @@
 </li>
         <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.getSubtypeClass">getSubtypeClass() (DependNode method)</a>
 </li>
-        <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getTags">getTags() (PartBase method)</a>
+        <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.getTags">getTags() (DependNode method)</a>
+
+        <ul>
+          <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.getTags">(PartBase method)</a>
+</li>
+        </ul></li>
+        <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.getTagsNode">getTagsNode() (DependNode method)</a>
 </li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.getTransform">getTransform() (Target method)</a>
 </li>
@@ -1628,10 +1647,12 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pools/nodes/deformableShape.html#paya.runtime.nodes.DeformableShape.hasHistory">hasHistory() (DeformableShape method)</a>
 </li>
-        <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.hasUnits">hasUnits() (Attribute method)</a>
+        <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.hasInputs">hasInputs() (Attribute method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.hasUnits">hasUnits() (Attribute method)</a>
+</li>
         <li><a href="pools/plugs/attribute.html#paya.runtime.plugs.Attribute.hide">hide() (Attribute method)</a>
 </li>
         <li><a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.hold">hold() (Matrix method)</a>
@@ -1710,6 +1731,8 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="paya/lib/mathops.html#paya.lib.mathops.inventRotateOrder">inventRotateOrder() (in module paya.lib.mathops)</a>
+</li>
         <li><a href="pools/plugs/matrix.html#paya.runtime.plugs.Matrix.inverse">inverse() (Matrix method)</a>
 
         <ul>
@@ -2557,9 +2580,11 @@
 </li>
         <li><a href="pools/nodes/remapValue.html#paya.runtime.nodes.RemapValue">RemapValue (class in paya.runtime.nodes)</a>
 </li>
-        <li><a href="pools/networks/curveUpVectorSampler.html#paya.runtime.networks.CurveUpVectorSampler.remove">remove() (CurveUpVectorSampler method)</a>
+        <li><a href="pools/networks/animSpaceSwitcher.html#paya.runtime.networks.AnimSpaceSwitcher.remove">remove() (AnimSpaceSwitcher method)</a>
 
         <ul>
+          <li><a href="pools/networks/curveUpVectorSampler.html#paya.runtime.networks.CurveUpVectorSampler.remove">(CurveUpVectorSampler method)</a>
+</li>
           <li><a href="pools/nodes/objectSet.html#paya.runtime.nodes.ObjectSet.remove">(ObjectSet method)</a>
 </li>
           <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.remove">(Target method)</a>
@@ -2587,6 +2612,8 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.removeTags">removeTags() (PartBase method)</a>
+</li>
         <li><a href="paya/lib/modettol.html#paya.lib.modettol.removeUnknown">removeUnknown() (in module paya.lib.modettol)</a>
 </li>
         <li><a href="paya/lib/modettol.html#paya.lib.modettol.removeUnknownNodes">removeUnknownNodes() (in module paya.lib.modettol)</a>
@@ -2811,8 +2838,12 @@
   <h2>T</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.tag">tag() (PartBase method)</a>
+        <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.tag">tag() (DependNode method)</a>
+
+        <ul>
+          <li><a href="pools/parts/partBase.html#paya.runtime.parts.PartBase.tag">(PartBase method)</a>
 </li>
+        </ul></li>
         <li><a href="paya/config.html#paya.config.takeUndefinedFromConfig">takeUndefinedFromConfig() (in module paya.config)</a>
 </li>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.tan">tan() (Math1D method)</a>
@@ -2837,10 +2868,10 @@
 </li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.toNurbs">toNurbs() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.toNurbs">[1]</a>
 </li>
-        <li><a href="paya/util/path.html#paya.util.path.toOs">toOs() (in module paya.util.path)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="paya/util/path.html#paya.util.path.toOs">toOs() (in module paya.util.path)</a>
+</li>
         <li><a href="paya/util/path.html#paya.util.path.toPosix">toPosix() (in module paya.util.path)</a>
 </li>
         <li><a href="pools/nodes/shape.html#paya.runtime.nodes.Shape.toShape">toShape() (Shape method)</a>
@@ -2884,6 +2915,8 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.unaryExpr">unaryExpr() (Math1D method)</a>
+</li>
+        <li><a href="paya/lib/mathops.html#paya.lib.mathops.unbevelTriadPoints">unbevelTriadPoints() (in module paya.lib.mathops)</a>
 </li>
         <li><a href="paya/util/strings.html#paya.util.strings.uncapitalize">uncapitalize() (in module paya.util.strings)</a>
 </li>

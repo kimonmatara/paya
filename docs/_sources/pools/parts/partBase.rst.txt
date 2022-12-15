@@ -76,6 +76,12 @@ paya.runtime.parts.PartBase
             group node's world matrix.
         :rtype: :class:`~paya.runtime.plugs.Double`
     
+    .. py:method:: getPartScaleMatrix(plug=False)
+    
+        :param bool plug/p: return a live output, not just a value
+        :return: A scale matrix derived from the part group node.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
     .. py:method:: getPatchbay(create=True)
     
         Returns a general-utility ``network`` node connected to this part's
@@ -109,7 +115,7 @@ paya.runtime.parts.PartBase
     
         :param str tag: the tag to remove
     
-    .. py:method:: clearTags(*tags)
+    .. py:method:: removeTags(*tags)
     
         :param \*tags: the tag(s) to remove; if omitted, all tags will
             be removed

@@ -26,6 +26,15 @@ paya.lib.mathops
     :return: The missing axis.
     :rtype: :class:`str`
 
+.. py:function:: inventRotateOrder(downAxis, upAxis)
+
+    Returns an 'optimal' rotate order based on the given down and up axes.
+    
+    :param str downAxis: the down axis, e.g. ``'y'``
+    :param str upAxis: the up axis, e.g. ``'x'``
+    :return: The rotate order, e.g. ``'yxz'``.
+    :rtype: :class:``str``
+
 .. py:function:: degToUI(val)
 
     :param float val: An angle value in degrees.
@@ -446,5 +455,17 @@ paya.lib.mathops
     :param bevelLength: the length of the bevel side
     :type bevelLength: :class:`float`, :class:`~paya.runtime.plugs.Math1D`
     :return: Four points.
+    :rtype: [:class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.data.Point`,
+
+.. py:function:: unbevelTriadPoints(points)
+
+    Reverses the result of :func:`bevelTriadPoints`.
+    
+    :param points: four points
+    :type points: :class:`list` [:class:`list` [:class:`float`],
+        :class:`str`, :class:`~paya.runtime.data.Point`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :return: Three points.
     :rtype: [:class:`~paya.runtime.data.Point`,
         :class:`~paya.runtime.data.Point`,

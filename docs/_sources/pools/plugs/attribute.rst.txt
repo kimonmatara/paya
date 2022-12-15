@@ -26,6 +26,13 @@ paya.runtime.plugs.Attribute
         :return: The generated attribute.
         :rtype: `Attribute`
     
+    .. py:method:: hasInputs(recursive=False)
+    
+        :param bool recursive/r: if this is a compound, inspect children as
+            well
+        :return: ``True`` if this plug has inputs, otherwise ``False``.
+        :rtype: :class:`bool`
+    
     .. py:method:: splitInputs()
     
         Splits any compound-level input into per-child connections. The

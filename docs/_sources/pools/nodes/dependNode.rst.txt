@@ -267,3 +267,43 @@ paya.runtime.nodes.DependNode
     
         :return: A zipped mapping of *section name: member attributes*.
         :rtype: list of tuple
+    
+    .. py:method:: getTags()
+    
+        :return: All tags defined on this node.
+        :rtype: :class:`list` [:class:`str`]
+    
+    .. py:method:: clearTags(*tags)
+    
+        :param \*tags: the tags to remove; if none are specified, all
+            tags will be removed
+        :return: ``self``
+        :rtype: :class:`DependNode`
+    
+    .. py:method:: getTagsNode(create=False)
+    
+        :param bool create/c: create the node if it doesn't exist;
+            defaults to ``False``
+        :return: The ``network`` node used by this node to hold tag
+            attributes.
+        :rtype: :class:`~paya.runtime.nodes.Network`, ``None``
+    
+    .. py:method:: tag(tag, *nodesOrAttrs)
+    
+        Tags nodes or attributes for later retrieval via :meth:`getByTag`.
+        
+        :param str tag: the tag to add items to
+        :param \*nodesOrAttrs: nodes or attributes to add in the tag
+        :type \*nodesOrAttrs: :class:`str`,
+            :class:`~paya.runtime.plugs.Attribute`,
+            :class:`~paya.runtime.plugs.DependNode`
+        :return: ``self``
+        :rtype: :class:`DependNode`
+    
+    .. py:method:: getByTag(tag)
+    
+        :param str tag: the tag to inspect
+        :return: Nodes or attributes previously tagged on this node with
+            :meth:`tag` under the specified tag.
+        :rtype: :class:`list` [:class:`~paya.runtime.nodes.DependNode`,
+            :class:`~paya.runtime.plugs.Attribute`]
