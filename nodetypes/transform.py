@@ -363,17 +363,40 @@ class Transform:
 
     gwp = getWorldPosition
 
-    @short(plug='p')
-    def getWorldMatrix(self, plug=False):
-        """:param bool plug/p: return a plug instead of a value; defaults to
-            False
+    @short(plug='p', asOffset='ao')
+    def getWorldMatrix(self, plug=False, asOffset=False):
+        """
+        The advantage of calling ``getWorldMatrix(plug=True,
+        asOffset=True)`` instead of
+        ``getWorldMatrix(plug=True).asOffset()`` is that, in the former
+        case, the output will be cached for subsequent retrievals.
+
+        :param bool plug/p: return a plug instead of a value; defaults to
+            ``False``
+        :param bool asOffset/ao: return the matrix as an identity
+            matrix; defaults to ``False``
         :return: The world matrix of this transform, as a value or plug.
-        :rtype: :class:`paya.runtime.data.Matrix` or
+        :rtype: :class:`paya.runtime.data.Matrix`,
             :class:`paya.runtime.plugs.Matrix`
         """
         if plug:
-            return self.attr('wm')
+            if asOffset:
+                if not self.hasAttr('worldMatrixAsOffset'):
+                    self.addAttr('worldMatrixAsOffset', at='matrix')
 
+                plug = self.attr('worldMatrixAsOffset')
+
+                if not plug.inputs():
+                    plug.unlock()
+                    self.attr('wm').asOffset() >> plug
+                    plug.lock()
+
+                return plug
+
+            return self.attr('worldMatrix')
+
+        if asOffset:
+            return r.data.Matrix()
         return self.getMatrix(worldSpace=True)
 
     gwm = getWorldMatrix
