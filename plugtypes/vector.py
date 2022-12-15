@@ -1,4 +1,4 @@
-from paya.util import short
+from paya.util import short, resolveFlags
 import paya.runtime as r
 
 
@@ -7,6 +7,106 @@ class Vector:
     #---------------------------------------------------------------|
     #---------------------------------------------------------------|    GENERAL
     #---------------------------------------------------------------|
+
+    #-----------------------------------------------------------|    Constructor
+
+    @classmethod
+    @short(angle='a',
+           time='t',
+           distance='d',
+           keyable='k',
+           channelBox='cb',
+           childSuffixes='cs',
+           defaultValue='dv',
+           asData='ad')
+    def createAttr(cls,
+                   attrName,
+                   node=None,
+                   angle=False,
+                   time=False,
+                   distance=False,
+                   keyable=None,
+                   channelBox=None,
+                   defaultValue=None,
+                   asData=False,
+                   childSuffixes='XYZ'):
+        """
+        Creates a :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.plugs.Point` or
+            :class:`~paya.runtime.plugs.EulerRotation` attribute.
+
+        :param str attrName: the attribute name
+        :param node: the node on which to add the attribute; if omitted, a
+            ``network`` node will be created; defaults to ``None``
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param bool angle/a: create an
+            :class:`~paya.runtime.plugs.EulerRotation`; defaults to ``False``
+        :param bool time/t: create a compound of three ``time`` channels;
+            defaults to ``False``
+        :param bool distance/d: create a :class:`~paya.runtime.plugs.Point`;
+            defaults to ``False``
+        :param bool keyable/k: make the children keyable; ignored if *asData*;
+            defaults to ``False``
+        :param bool channelBox/cb: make the children settable; ignored if
+            *asData*; defaults to ``False``
+        :param defaultValue/dv: a default value for the attribute (ignored if
+            *asData*)
+        :type defaultValue/dv: :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.data.Point`,
+            :class:`~paya.runtime.data.EulerRotation`
+        :param bool asData/ad: create as a non-compound 'data' attribute
+        :param bool childSuffixes/cs: ignored if *asData*; suffixes for the
+            child attributes
+        :return: The constructed attribute.
+        :rtype: :class:`~paya.runtime.plugs.Vector`,
+            :class:`~paya.runtime.plugs.Point`,
+            :class:`~paya.runtime.plugs.EulerRotation`
+        """
+        if node:
+            node = r.PyNode(node)
+        else:
+            node = cls._createFreeAttrNode()
+
+        if asData:
+            plug = node.addAttr(attrName, dt='double3')
+
+            if defaultValue is not None:
+                plug.set(defaultValue)
+
+            return plug
+
+        node.addAttr(attrName, at='double3', nc=3)
+
+        kwargs = {}
+
+        attrType = 'doubleLinear' if distance \
+            else 'doubleAngle' if angle \
+            else 'time' if time \
+            else 'double'
+
+        kwargs = {}
+
+        if keyable is not None:
+            kwargs['keyable'] = keyable
+
+        if channelBox is not None:
+            kwargs['channelBox'] = channelBox
+
+        for childSuffix in childSuffixes[:3]:
+            node.addAttr('{}{}'.format(attrName, childSuffix),
+                         parent=attrName,
+                         attributeType=attrType,
+                         **kwargs)
+
+        plug =  node.attr(attrName)
+
+        if defaultValue is not None:
+            for src, dest in zip(defaultValue, plug.getChildren()):
+                r.addAttr(dest, e=True, dv=src)
+                dest.set(src)
+
+        return plug
 
     #-----------------------------------------------------------|    Testing
 
