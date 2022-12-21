@@ -1,0 +1,81 @@
+**********************************
+paya.runtime.nodes.DeformableShape
+**********************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: DeformableShape(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.DeformableShape` :class:`~paya.runtime.nodes.GeometryShape` :class:`~pymel.core.nodetypes.GeometryShape` :class:`~paya.runtime.nodes.Shape` :class:`~pymel.core.nodetypes.Shape` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:method:: getGeoInput()
+    
+        Matched counterpart for :meth:`getGeoOutput`. Equivalent to
+        ``self.geoInput``.
+        
+        :return: The shape input, for example ``inMesh`` on a mesh node.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+    
+    .. py:method:: getGeoOutput(worldSpace=False)
+    
+        Convenience method; allows you to pick between the world- and local-
+        space abstract outputs using a keyword argument:
+        
+        .. code-block:: python
+        
+            def someMethod(self, worldSpace=False):
+        
+                # This
+                output = self.getGeoOutput(ws=worldSpace)
+                output.doSomething()
+        
+                # Instead of this
+                if worldSpace:
+                    output = self.worldGeoOutput
+        
+                else:
+                    output = self.localGeoOutput
+        
+                output.doSomething()
+        
+        
+        :param bool worldSpace/ws: return the world-space geometry output;
+            defaults to False
+        :return: The geometry output plug, for example ``outMesh`` on a mesh
+            shape.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+    
+    .. py:classmethod:: getPlugClass()
+    
+        :return: The geometry attribute subclass associated with this shape.
+        :rtype: :class:`~paya.runtime.plugs.Geometry`
+    
+    .. py:method:: deleteHistory()
+    
+        Deletes history on this node.
+        
+        :return: ``self``
+        :rtype: :class:`DeformableShape`
+    
+    .. py:method:: hasHistory()
+    
+        :return: True if this shape has history, otherwise False.
+        :rtype: bool
+    
+    .. py:method:: getOrigPlug(create=False)
+    
+        :param bool create/c: create the original geometry if it doesn't
+            already exist
+        :return: The output of the best candidate for an 'original geometry'
+            in this shape's history, or None
+        :rtype: :class:`~paya.runtime.plugs.Geometry`, None
+    
+    .. py:method:: getHistoryPlug(create=False)
+    
+        :param create/c: create a historical input if it doesn't already exist
+        :return: The input into this shape, or None
+        :rtype: :class:`~paya.runtime.plugs.Geometry`, None

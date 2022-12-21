@@ -1,0 +1,35 @@
+======================
+Importing and Patching
+======================
+
+.. _patchAsContext:
+
+Paya works by swapping-out PyMEL's classes on-the-fly using a fast
+`runtime patch <https://en.wikipedia.org/wiki/Monkey_patch>`_. To apply the patch, import :mod:`paya.runtime` and use it
+as a **context manager**:
+
+.. code-block:: python
+
+    # Order of imports doesn't matter
+    import pymel.core as pm
+    import paya.runtime
+
+    loc = pm.PyNode('locator1')
+    print(type(loc))
+    # Result: <class 'pymel.core.nodetypes.Transform'>
+
+    with paya.runtime:
+        loc = pm.PyNode('locator1') # re-instantiate
+        print(type(loc))
+        # Result: <class 'paya.runtime.nodes.Transform'>
+
+    # Patching is reversed as soon as the block is exited:
+    loc = pm.PyNode('locator1')
+    print(type(loc))
+    # Result: <class 'pymel.core.nodetypes.Transform'>
+
+
+Notice that, when called inside the context block, :class:`type() <type>` returns a different class:
+:class:`paya.runtime.nodes.Transform`. This is a subclass of the original :class:`pymel.core.nodetypes.Transform`, with
+added rigging methods such as :meth:`~paya.runtime.nodes.Transform.createOffsetGroups`. PyMEL's attribute, component and
+data classes are extended in the same way.

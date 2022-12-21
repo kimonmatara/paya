@@ -1,0 +1,24 @@
+================
+paya.nativeunits
+================
+
+.. py:module:: paya.nativeunits
+
+.. py:class:: NativeUnits
+
+    Context manager. Sets Maya to native units (centimeters and radians)
+    across the block. This is enforced with callbacks for incidental
+    Maya events that might change the setting (e.g. opening scenes), but
+    not for explicit calls to :func:`~maya.cmds.currentUnit` or
+    :meth:`~maya.OpenMaya.MDistance.setUIUnit`.
+    
+    This context manager is engaged automatically when :mod:`paya.runtime`
+    is entered as a context block.
+
+.. py:class:: NoChangeTracking
+
+
+
+.. py:function:: nativeUnits(f)
+
+    Decorator version of :class:`NativeUnits`.

@@ -1,0 +1,74 @@
+===============
+paya.geoshapext
+===============
+
+.. py:module:: paya.geoshapext
+
+Tools for adapting and copying functionality on geo plug classes over to
+their shape counterparts.
+
+.. py:function:: makeDoc(sources, notes=None)
+
+    :param sources: the functions to inspect for docstrings, in
+        order of preference
+    :type sources: [:class:`~types.FunctionType`]
+    :param notes: optional notes to prepend; defaults to ``None``
+    :return: The constructed docstring.
+    :rtype: str
+
+.. py:class:: copyToShape(**copyToShapeKwargs)
+
+    Decorator-with-arguments. Use it on plug functions to signal that they
+    should be copied over to the shape class. Any keyword arguments
+    captured by :meth:`__init__` are forwarded to
+    :func:`copyPlugFuncToShapeClassDict`.
+    
+    Note that the shape classes won't pick up these 'sends' unless they
+    are themselves built, or rebuilt, using :class:`ShapeExtensionMeta`.
+
+    .. py:method:: __call__(f)
+    
+        Call self as a function.
+
+.. py:function:: copyPlugFuncToShapeClassDict(plugFunc, dictKeys, className, shapeClassDict, editsHistory=False, worldSpaceOnly=False, bezierInterop=True, replace=False)
+
+    Copies a plug function (method) to the dictionary of an under-construction
+    shape class, with appropriate modifications.
+    
+    :param plugFunc: the function (method) on the plug class
+    :param dictKeys: all the dictionary keys under which the function appears
+        (there may be several if 'aliases' are used)
+    :type dictKeys: [:class:`str`]
+    :param str className: the shared name of the shape and plug classes
+    :param dict shapeClassDict: the dictionary of the shape class being
+        constructed
+    :param bool editsHistory/eh: indicates that the plug function should be
+        wrapped to use the shape's history input and return shapes; defaults to
+        ``False``
+    :param bool worldSpaceOnly/wso: don't add any *worldSpace/ws* keyword argument;
+        always run the method on the shape's world-space geo output; defaults
+        to ``False``
+    :param bool bezierInterop/bio: ignored if *editsHistory* is ``False``;
+        consider NURBS and Bezier types to be interoperable (i.e. connect
+        a NURBS output directly to a hero shape and vice versa, without
+        swapping the shape)
+
+.. py:function:: expandShapeClassDict(clsname, classDict)
+
+    Expands the dictionary of an under-construction shape class with any
+    methods in the namesake plugs class that have been decorated with
+    :class:`@copyToShape <copyToShape>`.
+    
+    :param str clsname: the name of the shape class
+    :param classDict: the dictionary of the shape class
+
+.. py:class:: ShapeExtensionMeta(clsname, bases, dct)
+
+    .. rubric:: Inheritance
+
+    :class:`~builtins.type`
+
+    When this metaclass is assigned to, or used to rebuild, a template class
+    for a geometry shape, it will look in the matching plug class for any
+    methods decorated with :class:`@copyToShape <copyToShape>` and copy them
+    over.

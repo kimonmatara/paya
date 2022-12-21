@@ -1,0 +1,21 @@
+===========
+paya.config
+===========
+
+.. py:module:: paya.config
+
+Reads ``config.json`` into a ``config`` dictionary on import.
+
+.. py:class:: Config(**overrides)
+
+    Context manager that takes overrides to ``config`` as keyword arguments.
+
+.. py:function:: takeUndefinedFromConfig(f)
+
+    Function decorator. Intercepts any keyword arguments that have been set
+    to, or left at a default of,
+    :class:`undefined <paya.util.functions.Undefined>` and swaps them out with
+    values from ``config``.
+    
+    :param f: the function to wrap
+    :return: The wrapped function.

@@ -1,0 +1,354 @@
+=============
+paya.lib.skel
+=============
+
+.. py:module:: paya.lib.skel
+
+.. py:class:: Chain(*joints)
+
+
+
+    .. py:classmethod:: getFromStartEnd(startJoint, endJoint)
+    
+        :param startJoint: the root joint for the chain
+        :type startJoint: str, :class:`~paya.runtime.nodes.Joint`
+        :param endJoint: the end (tip) joint for the chain
+        :type endJoint: str, :class:`~paya.runtime.nodes.Joint`
+        :return: A chain from the start joint to the end joint, inclusively.
+        :rtype: :class:`Chain`
+    
+    .. py:classmethod:: getFromRoot(rootJoint)
+    
+        :param startJoint: the root joint for the chain
+        :type startJoint: str, :class:`~paya.runtime.nodes.Joint`
+        :return: A chain from the specified root joint. The chain will
+            terminate before the first branch.
+        :rtype: :class:`Chain`
+    
+    .. py:classmethod:: createFromMatrices(matrices, parent=None)
+    
+        Creates a chain from matrices. The joints will match the matrices
+        exactly; no attempt is made to orient the chain.
+        
+        :param matrices: the matrices to use
+        :param parent/p: an optional parent for the chain; defaults to None
+        :return: :class:`Chain`
+    
+    .. py:classmethod:: createFromPoints(points, upVector, downAxis=<undefined>, upAxis=<undefined>, parent=None, tolerance=1e-07)
+    
+        Builds a chain from points. The side ('up') axis will be calculated
+        using cross products, but those will be biased towards the reference
+        up vector.
+        
+        :param points: a world position for each joint
+        :param str downAxis: the 'bone' axis; defaults to
+            ``paya.config.downAxis``
+        :param str upAxis: the axis to map to the up vector; defaults to
+            ``paya.config.upAxis``
+        :param upVector: one up vector hint, or one vector per point
+        :type upVector: tuple, list, :class:`~paya.runtime.data.Vector`,
+            [tuple, list, :class:`~paya.runtime.data.Vector`]
+        :param parent/p: an optional parent for the chain; defaults to None
+        :param float tolerance/tol: see
+            :func:`paya.lib.mathops.getChainedAimMatrices`
+        :return: The constructed chain.
+        :rtype: :class:`Chain`
+    
+    .. py:classmethod:: createFromCurve(curve, numberOrFractions, downAxis, upAxis, upVectorOrCurve, tolerance=1e-07)
+    
+        Draws a chain (once) along a curve. Either 'aimCurve' or 'upVector'
+        must be provided.
+        
+        :param numberOrFractions: this can either be a list of length
+            fractions, or a number
+        :param curve: the curve along which to distribute joints
+        :type curve: str or :class:`~pymel.core.general.PyNode`
+        :param str downAxis: the 'bone' axis
+        :param str upAxis: the axis to map to the up vector(s)
+        :param upVectorOrCurve: either an up vector, or an up curve
+        :type upVectorOrCurve: list, :class:`~paya.runtime.data.Vector`, str,
+            :class:`~paya.runtime.nodes.DagNode`
+        :param float tolerance/tol: see
+            :func:`paya.lib.mathops.getChainedAimMatrices`
+        :return: The constructed chain.
+        :rtype: :class:`Chain`
+    
+    .. py:method:: orient(downAxis, upAxis, upVector, tolerance=1e-07)
+    
+        Orients this chain.
+        
+        :param upVector: a reference up vector
+        :param str downAxis: the aiming (bone) axis
+        :param str upAxis: the axis to map to the up vector
+        :type upVector: list, :class:`~paya.runtime.data.Vector`
+        :param float tolerance/tol: see
+            :func:`paya.lib.mathops.getChainedAimMatrices`
+        :return: ``self``
+        :rtype: :class:`Chain`
+    
+    .. py:method:: bones()
+    
+        :return: One :class:`Bone` instance per overlapping pair of joints.
+        :rtype: :class:`list` of :class:`Bone`
+    
+    .. py:method:: points(plug=False)
+    
+        :param bool plug/p: return attributes instead of values; defaults to
+            False
+        :return: A world position for each joint in this chain.
+        :rtype: :class:`list` of :class:`~paya.runtime.data.Point`
+    
+    .. py:method:: vectors(plug=False)
+    
+        :param bool plug/p: return attributes instead of values; defaults to
+            False
+        :return: A vector for each bone in this chain.
+        :rtype: :class:`list` of :class:`~paya.runtime.plugs.Vector`
+            or :class:`~paya.runtime.data.Vector`
+    
+    .. py:method:: isContiguous()
+    
+        :return: True if every member of this chain is a child of its
+            predecessor, otherwise False.
+        :rtype: bool
+    
+    .. py:method:: isInline()
+    
+        :return: ``True`` if this chain is in-line (in any direction),
+            otherwise ``False``.
+        :rtype: :class:`bool`
+    
+    .. py:method:: roots()
+    
+        :return: The first joint, and any member which is not a child of its
+            predecessor.
+        :rtype: list
+    
+    .. py:method:: length(plug=False)
+    
+        :param bool plug/p: return an attribute instead of a value; defaults
+            to False
+        :return: The length of this chain.
+        :rtype: :class:`float` or :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: skinClusters()
+    
+        :return: Any skinClusters associated with any joint in this chain, in
+            no particular order.
+        :rtype: list
+    
+    .. py:method:: downAxis()
+    
+        :return: The 'bone' axis of this chain (e.g. 'x')
+        :rtype: str
+    
+    .. py:method:: ratios()
+    
+        :return: A length ratio for reach joint in this chain.
+        :rtype: list of float
+    
+    .. py:method:: insertJoints(*numberOrRatios, perBone=False)
+    
+        Inserts joints into this chain. This is an in-place operation.
+        
+        :param \*numberOrRatios: this can be passed either as a single
+            integer or one or more floats; if an integer is passed, this
+            number of joints will be uniformly distributed along the length
+            of this chain; if floats are passed, then joints will be inserted
+            at those length ratios
+        :type \*numberOrRatios: int, float, list, tuple
+        :param bool perBone/pb: perform the operation per bone in the chain;
+            defaults to False
+        :return: The newly-generated joints.
+        :rtype: list of :class:`~paya.runtime.nodes.Joint`
+    
+    .. py:method:: subdivide(*iterations)
+    
+        Recursively inserts joints to 'subdivide' this chain. This is an in
+        place operation. The chain will be edited and its membership updated.
+        
+        :param int \*iterations: the number of times to subdivide; defaults to
+            1 if omitted
+        :return: The newly-generated joints.
+        :rtype: list of :class:`~paya.runtime.nodes.Joint`
+    
+    .. py:method:: duplicate(startNumber=1)
+    
+        Duplicates this chain. Joints will be renamed with contextual. Use
+        :class:`~paya.lib.names.Name` blocks to modify.
+        
+        :param int startNumber/sn: the starting number for the joint renumbering;
+            defaults to ``1``
+        :return: The duplicated chain.
+        :rtype: :class:`Chain`
+    
+    .. py:method:: rename(startNumber=1)
+    
+        Renames this chain contextually. Use :class:`~paya.lib.names.Name`
+        blocks to modify.
+        
+        :param int startNumber/sn: the start number for the chain renumbering;
+            defaults to ``1``
+        :return: ``self``
+        :rtype: :class:`Chain`
+    
+    .. py:method:: compose()
+    
+        Ensures that every member of this chain is a child of its predecessor.
+    
+    .. py:method:: explode()
+    
+        Reparents every joint under the parent of the first joint.
+    
+    .. py:method:: appendChain(otherChain, replaceTip=True)
+    
+        This is an in-place operation. Splices ``otherChain`` to the bottom of
+        this chain and updates the membership.
+        
+        :param otherChain: the chain to append to this one
+        :type otherChain: list or :class:`Chain`
+        :param bool replaceTip/rt: replace this chain's tip joint; defaults
+            to True
+        :return: ``self``
+        :rtype: :class:`Chain`
+    
+    .. py:method:: reset()
+    
+        Sets rotations on every joint of this chain to [0.0, 0.0, 0.0].
+        
+        :return: ``self``
+    
+    .. py:method:: getPolePoint(distance=1.0)
+    
+        This method creates a temporary IK handle and samples its default
+        ``poleVector`` value. For this reason it will be affected by any
+        ``preferredAngle`` values.
+        
+        :param distance/d: the pole point's distance from the chain's chord
+            vector axis; defaults to 1.0
+        :type distance/d: float or int
+        :return: An inert world-position point target for a pole vector
+            constraint or
+            :meth:`~paya.runtime.nodes.IkHandle.setPolePoint`.
+        :rtype: :class:`~paya.runtime.data.Point`
+    
+    .. py:method:: ikHandles()
+    
+        :return: IK handles affecting this chain.
+        :rtype: :class:`list` of :class:`~paya.runtime.nodes.IkHandle`
+    
+    .. py:method:: createIkHandle(jitter=False, upVector=None, **kwargs)
+    
+        Creates an IK handle for this chain.
+        
+        :param bool jitter: if this chain is in-line, auto-configures
+            preferred angles to prevent lockout; *upAxis* will be required
+            for this; defaults to ``False``
+        :param upVector: used by *jitter*; a reference up vector to indicate
+            the wind direction of the jitter; defaults to ``None``
+        :param \**kwargs: forwarded to
+            :meth:`paya.runtime.nodes.IkHandle.create` with the following
+            modifications:
+        
+            -   ``startJoint`` and ``endJoint`` are overriden to the start and
+                end joints of this chain, respectively
+            -   Unless specified, the solver defaults to ``ikSCsolver`` if
+                there are only two joints in this chain, and ``ikRPsolver``
+                otherwise
+        
+        :return: The IK handle.
+        :rtype: :class:`~paya.runtime.nodes.IkHandle`
+    
+    .. py:method:: jitterForIkHandle(upVector)
+    
+        If this chain is in-line, auto-configures a slight value in the
+        preferred angle of the bending ('up') axis of the internal joints
+        in anticipation of an IK handle.
+        
+        :param upVector: a reference up vector to indicate the wind direction
+            of the jitter
+        :type upVector: :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Vector`
+        :return: ``self``
+        :rtype: Chain
+    
+    .. py:method:: createIkHandles()
+    
+        Creates one IK handle per bone in this chain. The IK handles will
+        all use a single-chain solver. The IK handles will be numbered.
+        Prefixes and padding can be specified using a
+        :class:`~paya.lib.name.Name` block.
+        
+        :return: The IK handles
+        :rtype: :class:`list` of :class:`~paya.runtime.nodes.IkHandle`
+    
+    .. py:method:: autoPreferredAngle(upAxis, upVector=None)
+    
+        Automatically configures ``preferredAngle`` on the internal joints to
+        prevent lockout when creating an IK handle on an in-line chain.
+        
+        :param upAxis: the dominant chain 'bend' axis, e.g. '-x'
+        :param upVector/upv: an optional 'up' vector; used to override wind
+            direction
+        :type upVector/upv: list, tuple or
+            :class:`~paya.runtime.data.Vector`
+        :raises AssertionError: the chain is not contiguous
+        :return: ``self``
+        :rtype: :class:`Chain`
+    
+    .. py:method:: driveTwistChain(twistChain, upAxis, globalScale, downAxis=None, startUpMatrix=None, endUpMatrix=None, maintainOffset=False, decompose=False, skipEnd=False)
+    
+        Drives a twist chain that was generated by duplicating this chain
+        and calling :meth:`subdivide` or :meth:`insertJoints` on the
+        duplicate. This method has no return value.
+        
+        :param twistChain: the chain to drive
+        :type twistChain: :class:`Chain`
+        :param str upAxis: the dominant 'curl' axis on this chain, e.g. 'x'
+        :param globalScale: a global scaling factor to normalize stretch
+        :type globalScale: int, float, :class:`~paya.runtime.plugs.Math1D`
+        :param downAxis/da: if you already know this chain's 'down' axis,
+            specify it here; defaults to None
+        :type downAxis/da: str, None
+        :param startUpMatrix/sum: an optional alternative matrix to govern
+            the start up vector (useful for effects like 'fixing' upper
+            shoulder twist); defaults to None
+        :type startUpMatrix/sum: None, list, tuple,
+            :class:`paya.runtime.plugs.Matrix`,
+            :class:`paya.runtime.data.Matrix`
+        :param endUpMatrix/eum: an optional alternative matrix to govern
+            the end up vector; defaults to None
+        :type endUpMatrix/eum: None, list, tuple,
+            :class:`paya.runtime.plugs.Matrix`,
+            :class:`paya.runtime.data.Matrix`
+        :param bool maintainOffset/mo: preserve offsets when applying
+            matrix connections; defaults to False
+        :param bool decompose/dec: drive by connecting into SRT channels
+            instead of offsetParentMatrix; defaults to False
+        :param bool skipEnd/ske: don't drive the end joint; defaults to False
+
+.. py:class:: Bone(*joints)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.lib.skel.Chain`
+
+
+
+    .. py:method:: bones()
+    
+        :return: One :class:`Bone` instance per overlapping pair of joints.
+        :rtype: :class:`list` of :class:`Bone`
+    
+    .. py:method:: ratios()
+    
+        :return: A length ratio for reach joint in this chain.
+        :rtype: list of float
+    
+    .. py:method:: vector(plug=False)
+    
+        :param bool plug/p: return an attribute instead of a value;
+            defaults to False
+        :return: The vector for this bone.
+        :rtype: :class:`paya.runtime.data.Vector` or
+            :class:`paya.runtime.plugs.Vector`

@@ -1,0 +1,34 @@
+****************************
+paya.runtime.networks.System
+****************************
+
+.. py:currentmodule:: paya.runtime.networks
+
+.. py:class:: System(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:classmethod:: matchesType(network, exactType=False, checkNodeType=True)
+    
+        :param network: The network node to inspect.
+        :type network: :class:`str`, :class:`~paya.runtime.nodes.Network`
+        :param bool checkNodeType: check that *network* is actually a network
+            node; set this to ``False`` if you know this already; defaults to
+            ``True``
+        :param bool exactType/et: match the exact class only, excluding
+            subclasses; defaults to ``False``
+        :return: ``True`` if *network* matches this class or a subclass of this
+            class.
+        :rtype: :class:`bool`
+    
+    .. py:classmethod:: getAll(exactType=False)
+    
+        :param bool exactType/et: match the exact class only, excluding
+            subclasses; defaults to ``False``
+        :return: All ``network`` nodes in the scene whose ``payaSubtype``
+            attribute is set to this class or a subclass of this class.
+        :rtype: :class:`list` [:class:`System`]

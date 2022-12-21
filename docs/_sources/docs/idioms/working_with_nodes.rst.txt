@@ -1,0 +1,159 @@
+******************
+Working with Nodes
+******************
+
+============
+Constructors
+============
+
+Aside from the usual Maya commands, Paya lets you create nodes using a standard set of *constructor methods*. These
+offer a range of useful options and help to unify disparate initialization procedures for complex systems like
+deformers.
+
+Constructors must be called on node *classes* rather than instances. Node classes can be accessed via a ``nodes``
+attribute on :mod:`paya.runtime` when patching is in effect. Here's an example of the basic
+:meth:`~paya.runtime.nodes.DependNode.createNode` constructor, available on every node class:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    with r:
+        transform = r.nodes.Transform.createNode()
+        # Result: transform1
+
+More and more Paya classes also implement a higher-level ``create()`` method. On :class:`~paya.runtime.nodes.Transform`,
+this includes, amongst other things, a *dagPath/dp* option to create, insert or retrieve nested groups:
+
+.. tab-set::
+
+    .. tab-item:: Paya
+
+        .. code-block:: python
+
+            with r:
+                dfrmGroup = r.nodes.Transform.create(dagPath='|rig|xform|deformers') # absolute
+                jointsGroup = r.nodes.Transform.create(dagPath='deformers|joints') # relative / best match
+
+    .. tab-item:: Outliner
+
+        .. figure:: working_with_nodes/dagHierarchy.png
+            :align: center
+
+Deformers are a priority target for ``create()``. So far, the method has been implemented on
+:class:`~paya.runtime.nodes.BlendShape`, :class:`~paya.runtime.nodes.Cluster`, :class:`~paya.runtime.nodes.CurveWarp`
+and :class:`~paya.runtime.nodes.SkinCluster`, with more to come.
+
+==========
+Node Names
+==========
+
+Explicit Naming
+---------------
+
+Paya methods that generate nodes (i.e. :doc:`constructors <constructors>`, or methods that call them) typically accept a
+Maya-style *name/n* keyword argument:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    with r:
+        r.nodes.Transform.createNode(n='L_eyeball')
+        # Result: L_eyeball
+
+When this argument is unavailable, or ignored, the name is generated contextually. By default, this is just the node
+type with a number suffix:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    with r:
+        r.nodes.Transform.createNode()
+        # Result: transform1
+
+But this isn't the only option.
+
+Implicit Naming
+---------------
+Default node names can be shaped using Paya's :class:`~paya.lib.names.Name` context manager. This accepts any number of
+string or integer positional arguments and joins them with underscores into a prefix. It also includes options to
+control number padding and studio-style type suffixing.
+
+Here's a variant of our original example, using :class:`~paya.lib.names.Name` rather than the *name/n* argument:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    with r:
+        with r.Name('L', 'eyeball'):
+            r.nodes.Transform.createNode()
+            # Result: L_eyeball_XFRM
+
+:class:`~paya.lib.names.Name` blocks can be nested across functions calls to accumulate prefixes in logical hierarchies.
+This often eliminates the need to pass around *name* or *prefix* arguments altogether:
+
+.. grid:: 2
+    :padding: 0
+    :gutter: 3
+    :margin: 3 0 0 0
+
+    .. grid-item::
+
+        .. code-block:: python
+
+            import paya.runtime as r
+
+            def buildLimbLocators():
+                for i in range(1, 4):
+                    with r.Name(i, padding=2):
+                        r.nodes.Locator.createNode()
+
+            with r:
+                for side in 'LR':
+                    for limb in ('arm', 'leg'):
+                        with r.Name(side, limb):
+                            buildLimbLocators()
+
+    .. grid-item::
+
+        .. figure:: working_with_nodes/name_blocks.png
+            :align: center
+
+In the above example, :class:`~paya.lib.names.Name` has automatically applied studio-style type suffixes (i.e.
+``XFRM`` for transforms and ``LOCT`` for locators). These can be suppressed per-block using *suffix=False*. Defaults for
+the *suffix* and *padding* arguments are read from ``paya/config.json`` on startup.
+
+.. tip::
+
+    To **rename** nodes using :class:`~paya.lib.names.Name` blocks, call the
+    :meth:`~paya.runtime.nodes.DependNode.rename` node method without any positional arguments:
+
+    .. code-block:: python
+
+        with r:
+            with r.Name('L', 'eyeball'):
+                eyeball = r.nodes.Transform.createNode()
+                # Result: L_eyeball_XFRM
+
+            with r.Name('R', 'eyeball'):
+                eyeball.rename()
+                # Result: R_eyeball_XFRM
+
+Customizing Type Suffixes
+-------------------------
+
+Paya's type suffixes have been parsed from the
+`'tags' in Maya's Node Index <https://help.autodesk.com/cloudhelp/2023/ENU/Maya-Tech-Docs/Nodes/index_tags.html>`_. They
+are mapped to node types, and loaded from ``paya/lib/suffixes.json`` into a ``suffixes`` dictionary inside
+:mod:`paya.lib.suffixes` on startup.
+
+To edit them, import :mod:`paya.lib.suffixes` and do one of the following:
+
+-   Edit ``suffixes.json`` and call :func:`paya.lib.suffixes.load` to update the dictionary without restarting Maya.
+-   Edit the dictionary (``paya.lib.suffixes.suffixes``) instead, and call :func:`paya.lib.suffixes.dump` to update the
+    file.
+-   Start a new scene, edit some node names interactively to indicate your preferred suffixes and call
+    :func:`paya.lib.suffixes.learnFromScene` followed by :func:`paya.lib.suffixes.dump`.

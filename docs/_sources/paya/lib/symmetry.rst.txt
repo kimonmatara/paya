@@ -1,0 +1,13 @@
+=================
+paya.lib.symmetry
+=================
+
+.. py:module:: paya.lib.symmetry
+
+.. py:class:: SymmetricModelling(**overrides)
+
+    Context manager. Applies overrides via
+    :func:`~pymel.internal.pmcmds.symmetricModelling` and reverts them on
+    block exit. Can also be used to bracket settings around routines that
+    might affect them, for example the symmetry-flipping modes of
+    :func:`~pymel.core.animation.blendShape`.

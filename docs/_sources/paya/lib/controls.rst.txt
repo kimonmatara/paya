@@ -1,0 +1,187 @@
+=================
+paya.lib.controls
+=================
+
+.. py:module:: paya.lib.controls
+
+.. py:class:: ControlShapesLibrary(filepath)
+
+    .. rubric:: Inheritance
+
+    :class:`~collections.UserDict` :class:`~collections.abc.MutableMapping` :class:`~collections.abc.Mapping` :class:`~collections.abc.Collection` :class:`~collections.abc.Sized` :class:`~collections.abc.Iterable` :class:`~collections.abc.Container`
+
+    Administers Paya control shapes. An instance of this class is available
+    on :mod:`paya.runtime` as ``.controlShapes``.
+
+    .. py:method:: load()
+    
+        Loads the library content fromn ``paya/lib/controlshapes.json``.
+        
+        :return: ``self``
+    
+    .. py:method:: dump()
+    
+        Dumps the library content into ``paya/lib/controlshapes.json``.
+        
+        :return: ``self``
+    
+    .. py:method:: applyToControls(name, controls, replace=True, lineWidth=None)
+    
+        Adds shapes to the specified controls from the named library entry.
+        
+        :param name: the name of the library entry to retrieve
+        :param list controls: the controls to add shapes to
+        :param bool replace/rep: replace existing shapes on the controls;
+            defaults to True
+        :param float lineWidth/lw: an override for the line width; defaults
+            to None
+        :return: The newly-generated control shape nodes.
+        :rtype: list of :class:`~paya.runtime.nodes.Shape`
+    
+    .. py:method:: addFromControl(control, name, normalize=True, includeShapeDetails=False)
+    
+        Captures shape macros from the specified control and adds them under
+        a new entry in the library.
+        
+        .. warning::
+        
+            If the name already exists in the library, it will be overwritten.
+        
+        .. note::
+        
+            Changes are not saved into ``paya/lib/controlshapes.json`` until
+            :meth:`~paya.lib.controls.ControlShapesLibrary.dump` is called.
+        
+        :param control: the control to inspect
+        :type control: str, :class:`~paya.runtime.nodes.Transform`
+        :param str name: the name for the new entry
+        :param bool normalize/nr: normalize points into a unit; defaults
+            to ``True``
+        :param bool includeShapeDetails: include information on override color
+            and visibility inputs; defaults to ``False``
+        :raises NoControlShapesError: no control shapes were found under the
+            control
+        :return: ``self``
+
+.. py:function:: dumpControlShapes(filePath, controls=None)
+
+    Dumps an archive of control shapes to the specified JSON file path.
+    
+    :param controls: a list of scene controls to work from; if omitted,
+        :func:`getControls` is used
+    :type controls: [:class:`~paya.runtime.nodes.Transform`, :class:`str`]
+    :param str filePath: The path to a JSON file.
+
+.. py:function:: loadControlShapes(filePath, controls=None)
+
+    Loads an archive of control shapes from the specified JSON file path and
+    applies them to controls in the scene.
+    
+    :param str filePath: The path to the JSON file.
+    :param controls: a list of scene controls to work from; if omitted,
+        information in the template itself is used
+
+.. py:function:: createControl(worldMatrix=None, keyable=None, channelBox=None, rotateOrder='xyz', offsetGroups='offset', parent=None, pickWalkParent=None, shape='cube', lineWidth=None, shapeScale=1.0, color=None, asControl=True)
+
+    Creates an animation control.
+    
+    :param worldMatrix/wm: the initial pose matrix; if omitted, defaults to
+        the identity matrix
+    :type worldMatrix/wm: :class:`list`, :class:`tuple`,
+        :class:`~paya.runtime.data.Matrix`
+    :param keyable/k: a list of channel names to make keyable on the
+        control; defaults to ``None``
+    :type keyable/b: [:class:`str`]
+    :param channelBox/cb: a list of channel names to make settable on the
+        control; defaults to ``None``
+    :type channelBox/cb: [:class:`str`]
+    :param rotateOrder/ro: the rotate order for the controls; defaults to
+        ``'xyz'``
+    :type rotateOrder/ro: :class:`int`, :class:`str`
+    :param offsetGroups/og: one or more basenames for offset groups;
+        defaults to ``'offset'``
+    :type offsetGroups/og: :class:`str`, [:class:`str`]
+    :param parent/p: a destination parent for the topmost offset group
+        (or the control itself, if no offset groups are requested);
+        defaults to ``None``
+    :type parent/p: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+    :param pickWalkParent/pwp: if omitted, defaults to ``parent``, but only if
+        ``parent`` is itself a control, otherwise ``None``
+    :type pickWalkParent/pwp: :class:`~paya.runtime.nodes.DependNode`,
+        :class:`str`
+    :param str shape/sh: the name of a library shape to apply to the control;
+        defaults to ``'cube'``
+    :param lineWidth/lw: an optonal override for the display curve thickness;
+        defaults to ``None``
+    :param float shapeScale/ssc: scaling factor for the control shape(s);
+        defaults to ``1.0``
+    :param color/col: a color for the control; this can be an index value,
+        or one of the shorthands supported by
+        :meth:`~paya.runtime.nodes.Transform.colorCtShapes`; defaults to
+        ``None``
+    :param bool asControl/ac: if this is ``False``, a simple group will be
+        created instead of a visible control; defaults to ``True``
+    :return: The animation control.
+    :rtype: :class:`~paya.runtime.nodes.Transform`
+
+.. py:function:: createControls(numControls=2, useLetters=True, insetScale=0.8, numberFromFirstInset=False, addVisibilitySwitches=True, worldMatrix=None, keyable=None, channelBox=None, rotateOrder='xyz', offsetGroups='offset', parent=None, pickWalkInsets=False, pickWalkParent=None, shape='cube', shapeScale=1.0, lineWidth=None, color=None, asControl=True)
+
+    Creates one or more (stacked) animation controls.
+    
+    :param int numControls/nc: the number of controls to generate; defaults to
+        ``2``
+    :param bool useLetters/let: number controls with letters, not numbers;
+        if this is set to ``False``, padding can be controlled via the
+        ``padding`` keyword argument on :class:`~paya.lib.names.Name`;
+        defaults to ``True``
+    :param float insetScale/iss: scale shapes by this amount for every inset
+        layer; defaults to ``0.8``
+    :param bool numberFromFirstInset/nfs: don't apply a number to the
+        topmost control; defaults to ``False``
+    :param bool addVisibilitySwitches/avs: for each inset control, add a
+        visibility option on the control above it; defaults to ``True``
+    :param worldMatrix/wm: the initial pose matrix; if omitted, defaults to
+        the identity matrix
+    :type worldMatrix/wm: :class:`list`, :class:`tuple`,
+        :class:`~paya.runtime.data.Matrix`
+    :param keyable/k: a list of channel names to make keyable on the
+        controls; defaults to ``None``
+    :type keyable/b: [:class:`str`]
+    :param channelBox/cb: a list of channel names to make settable on the
+        controls; defaults to ``None``
+    :type channelBox/cb: [:class:`str`]
+    :param rotateOrder/ro: the rotate order for the controls; defaults to
+        ``'xyz'``
+    :type rotateOrder/ro: :class:`int`, :class:`str`
+    :param offsetGroups/og: one or more basenames for offset groups to
+        add to the topmost control; defaults to ``'offset'``
+    :type offsetGroups/og: :class:`str`, [:class:`str`]
+    :param parent/p: a destination parent for the topmost offset group;
+        defaults to ``None``
+    :type parent/p: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+    :param bool pickWalkInsets/pwi: create a pick-walk hierarchy along
+        the nested inset controls; defaults to ``False``
+    :param pickWalkParent/pwp: a pick-walk parent for the topmost control;
+        if omitted, defaults to ``parent``, but only if ``parent`` is itself
+        a control, otherwise ``None``
+    :type pickWalkParent/pwp: :class:`~paya.runtime.nodes.DependNode`,
+        :class:`str`
+    :param str shape/sh: the name of a library shape to apply to the controls;
+        defaults to ``'cube'``
+    :param lineWidth/lw: an optonal override for the display curve thickness;
+        defaults to ``None``
+    :param float shapeScale/ssc: overall shape scaling factor for the control
+        system; defaults to ``1.0``
+    :param color/col: a color for the controls; this can be an index value,
+        or one of the shorthands supported by
+        :meth:`~paya.runtime.nodes.Transform.colorCtShapes`; defaults to
+        ``None``
+    :param bool asControl/ac: if this is ``False``, simple groups will be
+        created instead of controls with shapes; defaults to ``True``
+    :return: All the generated controls in a list, outermost to innermost.
+    :rtype: [:class:`~paya.runtime.nodes.Transform`]
+
+.. py:function:: getControls()
+
+    :return: All controls in the scene.
+    :rtype: [:class:`~paya.runtime.nodes.Transform`]

@@ -1,0 +1,281 @@
+*************************
+paya.runtime.plugs.Matrix
+*************************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: Matrix(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:method:: createLocator(size=1.0, name=None)
+    
+        Creates a locator and drives its SRT channels using this matrix.
+        
+        :shorthand: ``cl``
+        
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
+        :param float size/siz: the locator display scale; defaults to 1.0
+        :return: The locator.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+    
+    .. py:method:: __add__(other, swap=False)
+    
+        Implements **addition** (``+``).
+        
+        :param other: a 16D value or plug
+    
+    .. py:method:: __radd__(other)
+    
+        Implements **reflected addition** (``+``). See :meth:`__add__`.
+    
+    .. py:method:: mul(*others)
+    
+        Multiplies this matrix in a chained manner with ``*others``.
+        
+        :param others: the other matrices (unpacked list)
+        :type others: str, Matrix, Matrix, [list]
+        :return: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: __mul__(other, swap=False)
+    
+        Implements **multiplication** (``*``).
+        
+        :param other: a value or plug of dimension 3 (left only) or 16.
+    
+    .. py:method:: __rmul__(other)
+    
+        Implements **reflected multiplication** (``*``). See :meth:`__mul__`.
+    
+    .. py:method:: __rxor__(other)
+    
+        Uses the exclusive-or operator (``^``) to implement
+        **point-matrix multiplication** (reflected only).
+        
+        :param other: a 3D value or plug
+    
+    .. py:method:: normal()
+    
+        :return: A version of this matrix with all axis vectors normalized.
+        :rtype: :class:`Matrix`
+    
+    .. py:method:: pick(translate=None, rotate=None, scale=None, shear=None, default=None)
+    
+        Filters this matrix through one or more pickMatrix nodes, depending on
+        combinations with 'default'. Flags are defined by omission, Maya-style.
+        
+        :shorthand: pk
+        
+        :param bool translate/t: use translate
+        :param bool rotate/r: use rotate
+        :param bool scale/s: use scale
+        :param shear/sh: use shear
+        :param default: take omitted fields from this matrix; can be a value
+            or plug; defaults to None
+        :type default: list, :class:`~paya.runtime.data.Matrix`, str,
+            :class:`~paya.runtime.plugs.Matrix`
+        :return: The filtered matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: inverse()
+    
+        :return: The inverse of this matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: asOffset()
+    
+        Inverts this matrix once, to create an offset matrix. Equivalent to:
+        
+        .. code-block:: python
+        
+            self.get().inverse() * self
+        
+        :return: The offset matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: getAxis(axis, normalize=False)
+    
+        Extracts the specified axis from this matrix as a vector output. If
+        this is the output attribute of a fourByFourMatrix node, the method
+        will defer to methods in
+        :class:`~paya.runtime.nodes.FourByFourMatrix`.
+        
+        Used to implement the following properties: **x**, **y**, **z** and
+        **translate**/**t**. The property versions will always return
+        non-normalized outputs.
+        
+        :param str axis: the axis to extract, one of 'x', 'y', 'z', '-x',
+            '-y', '-z' or 'translate' / 't'.
+        :param bool normalize: normalize the extracted vector; defaults
+            to False
+        :return: :class:`Math3D`
+    
+    .. py:method:: getX(normalize=False)
+    
+        Extracts the X vector. Used to implement the **x** property.
+        
+        :param bool normalize: normalize the output; defaults to False
+        :return: the extracted vector
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: getY(normalize=False)
+    
+        Extracts the Y vector. Used to implement the **y** property.
+        
+        :param bool normalize: normalize the output; defaults to False
+        :return: the extracted vector
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: getZ(normalize=False)
+    
+        Extracts the Z vector. Used to implement the **z** property.
+        
+        :param bool normalize: normalize the output; defaults to False
+        :return: the extracted vector
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: getTranslate(normalize=False)
+    
+        Extracts the translation component. Used to implement the
+        **translate** / **t** property.
+        
+        :param bool normalize: normalize the output; defaults to False
+        :return: the extracted translation
+        :rtype: :class:`~paya.runtime.plugs.Math3D`
+    
+    .. py:method:: transpose()
+    
+        :return: The transposition of this matrix.
+        :rtype: :class:`~paya.runtime.plugs.Matrix`
+    
+    .. py:method:: decompose(rotateOrder='xyz')
+    
+        Connects and configures a ``decomposeMatrix`` node.
+        
+        :param rotateOrder/ro: the rotate order to apply; defaults to 'xyz'
+        :type rotateOrder/ro: str, int, Math1D
+        :return: dictionary of {channelName:decomposeMatrixOutput}
+        :rtype: dict
+    
+    .. py:method:: decomposeAndApply(*slaves, translate=None, rotate=None, scale=None, shear=None, compensatePivots=False, compensateJointOrient=True, compensateRotateAxis=False, compensateJointScale=True, worldSpace=False, maintainOffset=False)
+    
+        Decomposes and applies this matrix to one or more slave transforms.
+        
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        :param bool translate/t: apply translation
+        :param bool rotate/r: apply rotation
+        :param bool scale/s: apply scale
+        :param bool shear/sh: apply shear
+        :param bool maintainOffset/mo: maintain relative pose; defaults to
+            ``False``
+        :param bool worldSpace/ws: premultiply this matrix with
+            ``parentInverseMatrix`` on the transform to negate the
+            parent stack; defaults to ``False``
+        :param bool compensateJointScale/cjs: account for
+            segmentScaleCompensate on joints; defaults to ``True``
+        :param bool compensateJointOrient/cjo: account for ``jointOrient`` on
+            joints; defaults to ``True``
+        :param bool compensateRotateAxis/cra: account for ``rotateAxis``;
+            defaults to ``False``
+        :param bool compensatePivots/cp: compensate for pivots (non-joint
+            transforms only); this is expensive, so defaults to ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+    
+    .. py:method:: applyViaOpm(*slaves, worldSpace=False, persistentCompensation=False, preserveInheritsTransform=False, maintainOffset=False)
+    
+        Uses this matrix to drive one or more transforms via connections into
+        ``offsetParentMatrix``, with compensations against the transforms'
+        SRT channels.
+        
+        .. warning::
+        
+           When *worldSpace* is combined with *preserveInheritsTransform*,
+           the matrix will only be localised against the current parent.
+           The solution will break if the transform is subsequently
+           reparented.
+        
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
+        :param bool maintainOffset/mo: preserve relative pose on application;
+           defaults to ``False``
+        :param bool persistentCompensation/pc: compensate for the transform's
+           SRT channels persistently, so that the world pose will remain
+           the same even if they change; defaults to ``False``
+        :param preserveInheritsTransform/pit: when *worldSpace* is
+           requested, don't edit the ``inheritsTransform`` attribute on
+           the transform; instead, localise against the current parent;
+           defaults to ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+    
+    .. py:method:: drive(*slaves, worldSpace=False, maintainOffset=False, useOffsetParentMatrix=<undefined>, preserveInheritsTransform=False)
+    
+        Drives one or more slaves using this matrix.
+        
+        :param \*slaves: one or more transforms to drive
+        :type \*slaves: :class:`~paya.runtime.nodes.Transform`, :class:`str`
+        
+        :param bool worldSpace/ws: drive the slaves in world-space;
+           defaults to ``False``
+        :param preserveInheritsTransform/pit: when *worldSpace* is requested,
+            don't edit the ``inheritsTransform`` attribute on the slave;
+            instead, localise against its current parent; defaults to
+            ``False``
+        :param bool maintainOffset/mo: preserve relative pose on application;
+           defaults to ``False``
+        :param bool useOffsetParentMatrix/uop: connect into
+            ``offsetParentMatrix`` instead of decomposing into SRT channels;
+            defaults to namesake configuration flag; it that's omitted too,
+            defaults to ``True`` if Maya >= 2022, otherwise ``False``
+        :return: ``self``
+        :rtype: :class:`Matrix`
+    
+    .. py:method:: hold()
+    
+        Connects a holdMatrix node and returns its output.
+        
+        This is useful in situations where a method such as pick() has nothing
+        to do, but must return a new output to protect code branching.
+        
+        :return: The output of a holdMatrix node.
+        :rtype: :class:`HoldMatrix`
+    
+    .. py:method:: blend(other, weight=0.5)
+    
+        Blends this matrix towards *other*. When *weight* is at ``1.0``,
+        *other* will take over completely.
+        
+        :param other: the matrix towards which to blend.
+        :type other: :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Matrix`,
+            :class:`~paya.runtime.plugs.Matrix`
+        :param weight/w: the blending weight; defaults to ``0.5``
+        :type weight/w: :class:`~paya.runtime.plugs.Math1D`,
+            :class:`float`
+        :return: The blended matrix.
+        :rtype: :class:`Matrix`
+    
+    .. py:method:: asEulerRotation(rotateOrder='xyz')
+    
+        Returns the euler decomposition of this matrix.
+        
+        :param rotateOrder/ro: The rotate order, defaults to ``'xyz'``
+        :type rotateOrder/ro: int, str, Math1D
+        :return: The Euler rotation output.
+        :rtype: :class:`Math3D`
+    
+    .. py:method:: asQuaternion()
+    
+        Returns a quaternion output for this matrix's rotation.
+        
+        :return: The quaternion.
+        :rtype: :class:`Quaternion`

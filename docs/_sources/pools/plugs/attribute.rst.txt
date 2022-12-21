@@ -1,0 +1,240 @@
+****************************
+paya.runtime.plugs.Attribute
+****************************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: Attribute(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:classmethod:: createAttr(attrName, node=None, **kwargs)
+    
+        Creates an attribute.
+        
+        :param str attrName: the name of the attribute
+        :param node: the node on which to create the attribute; if omitted,
+            a free-standing ``network`` node will be created to hold the
+            attribute; defaults to ``None``
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param \*\*kwargs: forwarded to
+            :meth:`~paya.runtime.nodes.DependNode.addAttr`
+        :return: The generated attribute.
+        :rtype: `Attribute`
+    
+    .. py:method:: hasInputs(recursive=False)
+    
+        :param bool recursive/r: if this is a compound, inspect children as
+            well
+        :return: ``True`` if this plug has inputs, otherwise ``False``.
+        :rtype: :class:`bool`
+    
+    .. py:method:: splitInputs()
+    
+        Splits any compound-level input into per-child connections. The
+        compound-level connection is maintained.
+        
+        :return: ``self``
+    
+    .. py:method:: createProxy(node, longName=None, shortName=None)
+    
+        Creates a proxy of this attribute.
+        
+        :param node: the node on which to create the proxy
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :param str longName/ln: a long name for the proxy attribute; defaults
+            this attribute's long name
+        :param str shortName/sn: a short name for the proxy attribute;
+            defaults this attribute's short name
+        :return: The proxy attribute.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: hasUnits()
+    
+        :return: ``True`` if this is a linear, angle or time attribute, or
+            a compound with any children for which this is ``True``, otherwise
+            ``False``.
+        :rtype: :class:`bool`
+    
+    .. py:method:: unitType()
+    
+        :return: One of 'angle', 'distance', 'time' or ``None``.
+        :rtype: :class:`str` | ``None``
+    
+    .. py:method:: isAnimatableDynamic()
+    
+        :return: True if this is a dynamic attribute that can be exposed for
+            keying.
+    
+    .. py:method:: plugInfo()
+    
+        Calls :func:`paya.pluginfo.getInfoFromAttr` on this attribute and
+        returns the result.
+    
+    .. py:method:: mathDimension()
+    
+        :return: The math dimension of this
+            plug (e.g. 16 for a matrix), if any.
+        :rtype: :class:`int`, :class:`None`
+    
+    .. py:method:: plugType(inherited=False)
+    
+        Returns abstract type information for this plug.
+        
+        :param bool inherited/i: return the full hierarchy stack instead
+            of just a single type; defaults to False
+        :return: The type information.
+        :rtype: str or list
+    
+    .. py:method:: setClass(cls)
+    
+        Convenience method to enable chained dot notation when reassigning the
+        plug class (sometimes necessary for ambiguous output types, e.g. on
+        'choice' nodes). Returns ``self``.
+        
+        Equivalent to:
+        
+        .. code-block:: python
+        
+            self.__class__ = cls
+        
+        :param type cls: the class to assign
+        :return: This instance, with a reassigned class.
+        :rtype: :class:`Attribute`
+    
+    .. py:method:: get(plug=False, **kwargs)
+    
+        Extends :py:meth:`pymel.core.general.Attribute.get` with the ``plug``
+        keyword argument, which is useful when the decision whether to work
+        statically or dynamically rests with the end-user.
+        
+        :param bool plug/p: if True, return ``self``; defaults to False
+        :param \*\*kwargs: forwarded to the base method
+        :return: :class:`Attribute` or a value type
+    
+    .. py:method:: enable(recursive=False, force=False)
+    
+        Equivalent to:
+        
+        .. code-block:: python
+        
+            self.show()
+            self.unlock()
+        
+        See :meth:`show` and :meth:`unlock` for details.
+    
+    .. py:method:: disable(recursive=False)
+    
+        Equivalent to:
+        
+        .. code-block:: python
+        
+            self.lock()
+            self.hide()
+        
+        See :meth:`lock` and :meth:`hide` for details.
+    
+    .. py:method:: lock(recursive=False, **kwargs)
+    
+        Overloads :class:`~pymel.core.general.Attribute` to implement the
+        *recursive* option and return ``self``.
+        
+        :param bool recursive/r: if this is a compound, lock its children too;
+            defaults to False
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.general.Attribute.lock`
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: hide(recursive=False)
+    
+        Turns off *keyable* and *channelBox* for this attribute.
+        
+        :param bool recursive/r: if this is a compound, edit the children too;
+            defaults to False
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: unlock(recursive=False, force=False, **kwargs)
+    
+        Overloads :class:`~pymel.core.general.Attribute` to implement the
+        *recursive* and *force* options and return ``self``.
+        
+        :param bool recursive/r: if this is a compound, unlock the children
+            too; defaults to False
+        :param bool force/f: if this is the child of a compound, unlock the
+            compound parent too; defaults to False
+        :param \*\*kwargs: forwarded to
+            :meth:`~pymel.core.general.Attribute.unlock`
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: show(recursive=False, force=False, keyable=True)
+    
+        Unhides this attribute in the channel box.
+        
+        :param bool recursive/r: if this is a compound, edit the children
+            as well; defaults to False
+        :param bool force/f: if this is the child of a compound, edit the
+            parent attribute too; defaults to False
+        :param bool keyable/k: reveal by making the attribute keyable; if this
+            is False, the attribute will be made settable instead; defaults
+            to True
+        :return: ``self``
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: release(recursive=False, force=False)
+    
+        Unlocks this attribute and disconnects any inputs.
+        
+        :param bool force/f: if this is the child of a compound, release
+            the parent too; defaults to False
+        :param bool recursive/r: if this is a compound, release child
+            attributes too; defaults to False
+        :return:
+    
+    .. py:method:: put(source, plug=None)
+    
+        Helper for mixed plug / value workflows. If 'source' is an attribute,
+        it will be connected into this plug. Otherwise, this plug will be set
+        to 'source'.
+        
+        :param source: the source value or plug
+        :param plug/p: if you know whether 'source' is a plug or not, specify
+            if here; defaults to None
+        :type plug/p: bool or None
+        :return: self
+    
+    .. py:method:: isSectionAttr()
+    
+        :return: True if this attribute is a 'section' enum.
+        :rtype: bool
+    
+    .. py:method:: sendAbove(attrName)
+    
+        Sends this attribute above another attribute in the channel box.
+        
+        :param str attrName: the name of the 'anchor' attribute
+        :return: This attribute, rebuilt.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: sendBelow(attrName)
+    
+        Sends this attribute below another attribute in the channel box.
+        
+        :param str attrName: the name of the 'anchor' attribute
+        :return: This attribute, rebuilt.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: getNextArrayIndex(fillGaps=False)
+    
+        Returns the next available logical array index.
+        
+        :param bool fillGaps/fg: return the first available gap in the
+            logical array indices; defaults to False
+        :return: The index.
+        :rtype: int

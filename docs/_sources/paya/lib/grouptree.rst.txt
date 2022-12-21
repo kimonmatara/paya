@@ -1,0 +1,44 @@
+==================
+paya.lib.grouptree
+==================
+
+.. py:module:: paya.lib.grouptree
+
+.. py:class:: GroupTree(*node, owner=None, key=None)
+
+    Group trees are dict-like interfaces for quick generation of hierarchical
+    group structures with cascading prefixes.
+    
+    :Example:
+    
+    .. code-block:: python
+    
+        import paya.runtime as r
+        from paya.lib.grouptree import GroupTree
+    
+        with r:
+            group = r.PyNode('L_arm_XFRM')
+            tree = GroupTree(group)
+    
+            print(tree['controls']['shapers'].node())
+            # Result: L_arm_controls_shapers_XFRM
+
+    .. py:method:: root()
+    
+        :return: The root :class:`GroupTree` instance.
+        :rtype: :class:`GroupTree`.
+    
+    .. py:method:: keyPath()
+    
+        :return: All the keys leading up to this node.
+        :rtype: [:class:`str`]
+    
+    .. py:method:: node(inheritsTransform=None, hide=None, create=True)
+    
+        :param bool inheritsTransform/it: sets ``inheritsTransform`` on the
+            node; defaults to ``None``
+        :param bool create/c: create the group node if it doesn't exist;
+            defaults to ``True``
+        :param bool hide/h: hide the node; defaults to ``None``
+        :return: The transform node at the current key.
+        :rtype: :class:`~paya.runtime.nodes.Transform`

@@ -1,0 +1,26 @@
+=========================
+paya.examples.cubes_spine
+=========================
+
+.. py:module:: paya.examples.cubes_spine
+
+.. py:function:: makeSpineLevels(numLevels, numJoints)
+
+    Create two anchor-bezier
+    Draw controls at the anchors
+    Drive the bezier with the controls; use the controls to add up vector information
+    
+    
+    
+    Subdivide previous to get three-point bezier. This is the 'platform'
+    Draw inner controls
+    For each control:
+        Get a matrix at the matching inner platform anchor, use it to drive the control
+        (including tangent stretch)
+    
+    Create an offset curve
+    Cluster internal anchors to the inner controls
+    For the outer anchors:
+        Get tangent from platform curve
+        Get up vector and position from root bounds controls
+        Drive with matrices

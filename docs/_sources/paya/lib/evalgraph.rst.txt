@@ -1,0 +1,118 @@
+==================
+paya.lib.evalgraph
+==================
+
+.. py:module:: paya.lib.evalgraph
+
+.. py:class:: EvalGraph(dct)
+
+    Simple directed-acyclic-graph simulator. Good for rig build sequences etc.
+    
+    :Construction by Dictionary:
+    
+    :class:`EvalGraph` objects use a dictionary with the following structure:
+    
+    .. code-block:: python
+    
+        {
+            <nodeName>: [inputNodeName, inputNodeName...],
+            <nodeName>: [inputNodeName, inputNodeName...],
+            [...]
+        }
+    
+    A :class:`EvalGraph` can be instantiated directly around such a
+    dictionary, or via :meth:`fromSegments`, which may be more intuitive.
+    
+    :class:`Graphs <EvalGraph>` cannot be edited after instantiation, only
+    analysed and evaluated.
+    
+    To get a build sequence for the entire graph, either iterate over the
+    object or call :meth:`getBuildSequence`.
+
+    .. py:classmethod:: fromSegments(segments)
+    
+        :Example:
+        
+        .. code-block:: python
+        
+            items = [
+                ['A', 'C', 'D', 'G'],
+                ['B', 'C', 'E', 'H'],
+                ['E', 'F', 'G']
+            ]
+        
+            graph = EvalGraph.fromSegments(items)
+            print(list(graph)) # evaluate
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        
+        :param list segments: a list of lists (or tuples) where each sublist
+            describes left-to-right connections between two or more nodes
+        :rtype: :class:`EvalGraph`
+    
+    .. py:method:: nodes(startTerminals=False, endTerminals=False, orphan=False)
+    
+        If ``startTerminals``, ``endTerminals`` and ``orphan`` are
+        omitted, all nodes will be returned.
+        
+        :param bool startTerminals: return only nodes with no inputs;
+            defaults to ``False``
+        :param bool endTerminals: return only nodes with no outputs;
+            defaults to ``False``
+        :param bool orphan: return only nodes with no inputs or outputs;
+            defaults to ``False``
+        :return: A list of node names.
+        :rtype: [:class:`str`]
+    
+    .. py:method:: getNodeInputs(node)
+    
+        :param str node: the node whose input nodes to return
+        :return: The node's inputs.
+        :rtype: [:class:`str`]
+    
+    .. py:method:: getNodeOutputs(node)
+    
+        :param str node: the node whose output nodes to return
+        :return: The node's outputs.
+        :rtype: [:class:`str`]
+    
+    .. py:method:: getNodesUpstreamOf(node)
+    
+        :param node: the node to trace from
+        :return: All nodes upstream of *node*.
+        :rtype: [:class:`str`]
+    
+    .. py:method:: getNodesDownstreamOf(node)
+    
+        :param node: the node to trace from
+        :return: All nodes downstream of *node*.
+        :rtype: [:class:`str`]
+    
+    .. py:method:: getPath(start, end)
+    
+        :param str start: the start node
+        :param str end: the end node
+        :raises NoPathError: A path could not be found.
+        :return: A path from the start to the end node.
+        :rtype: [:class:`str`]
+    
+    .. py:method:: reduceTargetList(*targets)
+    
+        Given a list of target nodes, returns another list with duplicates
+        and implied nodes (i.e. nodes that are already upstream of other
+        nodes) removed.
+        
+        :param \*targets: the targets to process
+        :type \*targets: :class:`str`, [:class:`str`]
+        :return: The reduced target list.
+        :rtype: :class:`list`
+    
+    .. py:method:: getBuildSequence(targets=None)
+    
+        :param \*targets: optionally, a subset of target nodes to
+            evaluate for; if omitted, the graph's downstream-terminating
+            nodes will be used as targets
+        :type \*targets: :class:`str`, [:class:`str`]
+        :raises NonExistentNodeError: A specified target node does
+            not exist.
+        :return: The full build sequence.
+        :rtype: [:class:`str`]

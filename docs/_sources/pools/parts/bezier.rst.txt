@@ -1,0 +1,103 @@
+*************************
+paya.runtime.parts.Bezier
+*************************
+
+.. py:currentmodule:: paya.runtime.parts
+
+.. py:class:: Bezier(groupNode)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.parttypes.part.part.Part` :class:`~paya.parttypes.partBase.partBase.PartBase` :class:`~paya.trunk.Trunk`
+
+    Bezier 'spine' part. Features:
+    
+    -   scalable tangents
+    -   squash / stretch / length preservation
+    -   distributed (floating) joints
+    -   parallel transport option for twist calculations
+
+    .. py:classmethod:: create(anchorGroups, upVectors, numJoints=12, squashStretch=True, parallelTransport=False, resolution=9, allowStartTranslate=True, allowEndTranslate=True)
+    
+        :param anchorGroups: a list of dictionaries (one per anchor), each
+            comprising:
+        
+            ::
+        
+                {
+                    'in': point position of 'in' tangent CV (if present)
+                    'root': point position of main anchor CV
+                    'out': point position of 'out' tangent CV (if present)
+                }
+        
+        :param upVectors: a list of up vectors (one per anchor)
+        :type upVectors: :class:`list` [:class:`~paya.runtime.data.Vector`]
+        :param int numJoints/nj: the number of joints to distribute along the
+            curve; defaults to 12
+        :param bool parallelTransport/pt: ignored if *numJoints* is 0; use
+            parallel transport to distribute twist along the curve; defaults
+            to ``False``
+        :param int resolution/res: the number of parallel-transport solutions to
+            generate along the curve; higher numbers improve accuracy at the
+            expense of performance; defaults to 9
+        :param bool allowStartTranslate/ast: unlock translate channels on the
+            start control; defaults to ``True``
+        :param allowEndTranslate/aet: unlock translate channels on the
+            end control; defaults to ``True``
+    
+    .. py:classmethod:: createFromBezierAndUpVectors(bezierGuide, upVectors, **kwargs)
+    
+        Lets you create the system using a 'guide' bezier curve and a list of
+        up vectors (one per anchor).
+        
+        :param bezierGuide: a guide Bezier curve
+        :type bezierGuide: :class:`str`,
+            :class:`~paya.runtime.nodes.BezierCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+        :param upVectors: a list of up vectors (one per anchor)
+        :type upVectors: :class:`list` [:class:`~paya.runtime.data.Vector`]
+        :param \*\*kwargs: forwarded to :meth:`create`
+    
+    .. py:classmethod:: createFromTwoBeziers(mainBezier, upBezier, closestPoint=False, **kwargs)
+    
+        Lets you create the system using 'main' and 'up' guide curves.
+        
+        :param bezierGuide: the main guide Bezier curve
+        :type bezierGuide: :class:`str`,
+            :class:`~paya.runtime.nodes.BezierCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+        :param upBezier: the 'up' guide Bezier curve
+        :type upBezier: :class:`str`,
+            :class:`~paya.runtime.nodes.BezierCurve`,
+            :class:`~paya.runtime.nodes.Transform`,
+        :param closestPoint/cp: pull interests from the 'up' curve using
+            closest point rather than matched parameter; set this to ``True``
+            if the two curve domains don't match; defaults to ``False``
+        :param \*\*kwargs: forwarded to :meth:`create`
+    
+    .. py:staticmethod:: getDrawMatrixFromAnchorGroupAndUpVector(anchorGroup, upVector)
+    
+        :param anchorGroup: a dictionary comprising:
+        
+            ::
+        
+                {
+                    'in': point position of 'in' tangent CV (if present)
+                    'root': point position of main anchor CV
+                    'out': point position of 'out' tangent CV (if present)
+                }
+        
+        :param upVector: the up vector for the anchor
+        :type upVector: :class:`list`, :class:`tuple`,
+            :class:`~paya.runtime.data.Vector`
+    
+    .. py:staticmethod:: addSquashStretchAttrs(controls)
+    
+        Adds synced ``squashy`` and ``stretchy`` attributes across a list
+        of controls.
+        
+        :param controls: the controls to add the attributes to
+        :type controls: :class:`list` [:class:`~paya.runtime.nodes.Transform`]
+        :return: The squashy and stretchy attributes.
+        :rtype: :class:`list` [:class:`~paya.runtime.plugs.Double`,
+            :class:`~paya.runtime.plugs.Double`]

@@ -1,0 +1,26 @@
+********************************
+paya.runtime.nodes.ClusterHandle
+********************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: ClusterHandle(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.ClusterHandle` :class:`~paya.runtime.nodes.Shape` :class:`~pymel.core.nodetypes.Shape` :class:`~paya.runtime.nodes.DagNode` :class:`~pymel.core.nodetypes.DagNode` :class:`~paya.runtime.nodes.Entity` :class:`~pymel.core.nodetypes.Entity` :class:`~paya.runtime.nodes.ContainerBase` :class:`~pymel.core.nodetypes.ContainerBase` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:method:: getClusterNode()
+    
+        :return: The associated cluster node.
+        :rtype: :class:`~paya.runtime.nodes.Cluster`
+    
+    .. py:method:: resetVisualOrigin()
+    
+        Edits the 'origin' so that it overlaps the weighted node's
+        rotate pivot.
+        
+        :return: ``self``
+        :rtype: :class:`ClusterHandle`

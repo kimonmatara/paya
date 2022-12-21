@@ -1,0 +1,46 @@
+***********************************
+paya.runtime.nodes.FourByFourMatrix
+***********************************
+
+.. py:currentmodule:: paya.runtime.nodes
+
+.. py:class:: FourByFourMatrix(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.nodetypes.FourByFourMatrix` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:method:: getAxis(requestedAxis, normalize=False)
+    
+        Retrieves, or initialises, a compound 'proxy' that will govern all
+        the row fields for the requested axis.
+        
+        :param str requestedAxis: one of 'x', 'y', 'z', '-x', '-y', '-z',
+            'translate' or 't'
+        :param bool normalize/nr: normalize the extracted vector / point;
+            defaults to False
+        :return: The compound attribute, or its normalization / negation.
+        :rtype: :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: getX(normalize=False)
+    
+        Initialises or retrieves the compound 'proxy' for the X vector. See
+        :meth:`getAxis`. Used to implement the **x** property.
+    
+    .. py:method:: getY(normalize=False)
+    
+        Initialises or retrieves the compound 'proxy' for the Y vector. See
+        :meth:`getAxis`. Used to implement the **y** property.
+    
+    .. py:method:: getZ(normalize=False)
+    
+        Initialises or retrieves the compound 'proxy' for the Z vector. See
+        :meth:`getAxis`. Used to implement the **z** property.
+    
+    .. py:method:: getTranslate(normalize=False)
+    
+        Initialises or retrieves the compound 'proxy' for the translate row.
+        See :meth:`getAxis`. Used to implement the **translate** / **t**
+        property.

@@ -1,0 +1,49 @@
+***********************
+paya.runtime.data.Angle
+***********************
+
+.. py:currentmodule:: paya.runtime.data
+
+.. py:class:: Angle(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.datatypes.Angle` :class:`~paya.runtime.data.Unit` :class:`~pymel.core.datatypes.Unit` :class:`~builtins.float`
+
+
+
+    .. py:method:: unwindPositive()
+    
+        :return: The unwound positive form of the angle.
+        :rtype: :class:`Angle`
+    
+    .. py:method:: unwindNegative()
+    
+        :return: The unwound negative form of the angle.
+        :rtype: :class:`Angle`
+    
+    .. py:method:: unwind()
+    
+        :return: This angle, unwound, and with the sign preserved.
+        :class:`Angle`
+    
+    .. py:method:: unwindShortest()
+    
+        :return: This angle, unwound and, if less than -180 or greater than
+            180, flipped.
+        :rtype: :class:`Angle`
+    
+    .. py:method:: unwindSwitch(switchSource, shortestIndex=0, positiveIndex=1, negativeIndex=2)
+    
+        Unwinds this angle using a mode picked using an integer value.
+        
+        :param switchSource: an integer value to pick an implementation
+        :type switchSource: int
+        :param int shortestIndex/si: the integer value that should pick
+            :meth:`unwindShortest`; defaults to 0
+        :param int positiveIndex/pi: the integer value that should pick
+            :meth:`unwindPositive`; defaults to 1
+        :param int negativeIndex/ni: the integer value that should pick
+            :meth:`unwindNegative`; defaults to 2
+        :return: The switched output.
+        :rtype: :class:`Angle`

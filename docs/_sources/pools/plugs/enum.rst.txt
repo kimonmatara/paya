@@ -1,0 +1,23 @@
+***********************
+paya.runtime.plugs.Enum
+***********************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: Enum(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.plugs.Math1D` :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:method:: put(other, plug=None)
+    
+        Overloads :meth:`paya.runtime.plugs.Attribute.put` to account for enum
+        keys.
+    
+    .. py:method:: isSectionAttr()
+    
+        :return: True if this attribute is a 'section' enum.
+        :rtype: bool

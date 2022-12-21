@@ -1,0 +1,59 @@
+******************************************
+paya.runtime.networks.CurveUpVectorSampler
+******************************************
+
+.. py:currentmodule:: paya.runtime.networks
+
+.. py:class:: CurveUpVectorSampler(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.networks.System` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    Abstract base class for curve up vector samplers.
+
+    .. py:classmethod:: create(curve)
+    
+        Not for direct use; called by the subclasses.
+        
+        :param curve: the curve on which to create the sampler
+        :type curve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :return: The network system.
+        :rtype: :class:`CurveUpVectorSampler`
+    
+    .. py:method:: remove()
+    
+        Deletes this sampler system.
+    
+    .. py:method:: getDependencies()
+    
+        :return: All nodes, except this one, that were generated when this
+            system was first created.
+        :rtype: [:class:`~paya.runtime.nodes.DependNode``]
+    
+    .. py:method:: curve()
+    
+        :return: The curve output associated with this sampler system.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`
+    
+    .. py:method:: setAsDefault()
+    
+        Makes this the default up vector source for the associated
+        :meth:`curve output <curve>`.
+        
+        :return: ``self``
+        :rtype: `CurveUpVectorSampler`
+    
+    .. py:method:: sampleAtParam(param, plug=None)
+    
+        :param param: the parameter to sample; if *plug* is ``False``, this
+            must be a value
+        :type param: float, str, :class:`~paya.runtime.plugs.Math1D`
+        :param bool plug/p: force a dynamic output, or indicate that one or
+            more of the arguments are plugs to skip checks; defaults to
+            ``None``
+        :return: A vector output or value for the specified parameter.
+        :rtype: :class:`paya.runtime.data.Vector`,
+            :class:`paya.runtime.plugs.Vector`
