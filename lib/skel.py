@@ -36,6 +36,13 @@ class Chain:
         joints = map(r.PyNode, _pu.expandArgs(*joints))
         self.data = list(joints)
 
+    def copy(self):
+        """
+        :return: A copy of this instance (no actual joints will be copied).
+        :rtype: :class:`Chain`
+        """
+        return type(self)(list(self))
+
     @classmethod
     def getFromStartEnd(cls, startJoint, endJoint):
         """
@@ -114,7 +121,8 @@ class Chain:
     @short(parent='p',
            tolerance='tol',
            downAxis='da',
-           upAxis='ua')
+           upAxis='ua',
+           tipMatrix='tm')
     @takeUndefinedFromConfig
     def createFromPoints(
             cls,
@@ -123,7 +131,8 @@ class Chain:
             downAxis=undefined,
             upAxis=undefined,
             parent=None,
-            tolerance=1e-7
+            tolerance=1e-7,
+            tipMatrix=None
     ):
         """
         Builds a chain from points. The side ('up') axis will be calculated
@@ -131,6 +140,9 @@ class Chain:
         up vector.
 
         :param points: a world position for each joint
+        :type points: :class:`list` [:class:`list` [:class:`float`] |
+            :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.data.Vector`]
         :param str downAxis: the 'bone' axis; defaults to
             ``paya.config.downAxis``
         :param str upAxis: the axis to map to the up vector; defaults to
@@ -141,6 +153,11 @@ class Chain:
         :param parent/p: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getChainedAimMatrices`
+        :param tipMatrix/tm: an optional rotation matrix override for the tip
+            (end) joint; if provided, only orientation information will be
+            used; defaults to ``None``
+        :type tipMatrix/tm: ``None``, :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Matrix`
         :return: The constructed chain.
         :rtype: :class:`Chain`
         """
@@ -152,6 +169,15 @@ class Chain:
             tol=tolerance,
             fra=True
         )
+
+        if tipMatrix:
+            tipMatrix = r.data.Matrix(tipMatrix)
+            baseMatrix = matrices[-1]
+            tipMatrix = baseMatrix.pick(scale=True, shear=True) \
+                * tipMatrix.pick(rotate=True) \
+                * baseMatrix.pick(translate=True)
+
+            matrices[-1] = tipMatrix
 
         return cls.createFromMatrices(matrices, p=parent)
 
@@ -681,6 +707,7 @@ class Chain:
         :param bool replaceTip/rt: replace this chain's tip joint; defaults
             to True
         :return: ``self``
+        :rtype: :class:`Chain`
         :rtype: :class:`Chain`
         """
         if replaceTip:
