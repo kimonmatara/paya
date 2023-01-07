@@ -1601,8 +1601,8 @@ class NurbsCurve:
         :type unwindSwitch/uws: :class:`int`, :class:`str`,
             :class:`~paya.runtime.plugs.Math1D`,
             [:class:`int` | :class:`str` | :class:`~paya.runtime.plugs.Math1D`]
-        :param interpolation/i:: defines how to interpolate values from the
-            sparse parallel-transport solutions:
+        :param interpolation/i:: defines how to interpolate values from param:
+            vector pairs:
 
             -   ``0`` (``'None'``) (you wouldn't normally want this)
             -   ``1`` (``'Linear'``) (the default)
