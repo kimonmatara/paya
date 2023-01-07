@@ -31,6 +31,18 @@ axisVecs = {
 #--------------------------------------------------------------|    Axis letter manipulation
 #--------------------------------------------------------------|
 
+def flipAxis(axis):
+    """
+    Flips an axis letter, for example from ``-x`` to ``x``.
+
+    :param str axis: the axis to flip (e.g. ``y`` or ``-z``)
+    :return: The flipped axis letter.
+    :rtype: :class:`str`
+    """
+    if axis.startswith('-'):
+        return axis[1:]
+    return '-'+axis
+
 def absAxis(axis):
     """
     Equivalent to:
