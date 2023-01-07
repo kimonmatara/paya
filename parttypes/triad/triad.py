@@ -76,7 +76,7 @@ class Triad(r.parts.Part):
         )
 
         if ikJitter:
-            chain.jitterForIkHandle(upVector)
+            chain.autoPreferredAngle(upVector)
 
         return chain
 

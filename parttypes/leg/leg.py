@@ -69,7 +69,7 @@ class Leg(r.parts.Triad):
         )
 
         if ikJitter:
-            triad.jitterForIkHandle(upVector)
+            triad.autoPreferredAngle(upVector)
 
         #--------------------------------------|    Build foot
 

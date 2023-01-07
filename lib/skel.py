@@ -820,7 +820,7 @@ class Chain:
             if upVector is None:
                 raise ValueError("An up vector is required for IK jitter.")
 
-            self.jitterForIkHandle(upVector)
+            self.autoPreferredAngle(upVector)
 
         settings = {
             'solver': 'ikRPsolver' if len(self) > 2 else 'ikSCsolver'
@@ -832,7 +832,7 @@ class Chain:
 
         return r.nodes.IkHandle.create(**settings)
 
-    def jitterForIkHandle(self, upVector):
+    def autoPreferredAngle(self, upVector):
         """
         If this chain is in-line, auto-configures a slight value in the
         preferred angle of the bending ('up') axis of the internal joints
@@ -884,58 +884,6 @@ class Chain:
                 out.append(bone.createIkHandle())
 
         return out
-
-    @short(upVector='upv', flip='fl')
-    def autoPreferredAngle(self, upAxis, upVector=None):
-        """
-        Automatically configures ``preferredAngle`` on the internal joints to
-        prevent lockout when creating an IK handle on an in-line chain.
-
-        :param upAxis: the dominant chain 'bend' axis, e.g. '-x'
-        :param upVector/upv: an optional 'up' vector; used to override wind
-            direction
-        :type upVector/upv: list, tuple or
-            :class:`~paya.runtime.data.Vector`
-        :raises AssertionError: the chain is not contiguous
-        :return: ``self``
-        :rtype: :class:`Chain`
-        """
-        assert self.isContiguous(), "The chain is not contiguous."
-
-        #val = _pu.radians(22.5)
-        val = r.degToUI(22.5)
-
-        if '-' in upAxis:
-            val *= -1.0
-
-        upAxis = upAxis.strip('-')
-        axisIndex = 'xyz'.index(upAxis)
-
-        if upVector:
-            upVector = r.data.Vector(upVector).normal()
-
-        for joint in self[1:-1]:
-            thisVal = val
-
-            if upVector:
-                upAxisVector = joint.getMatrix(
-                    worldSpace=True).getAxis(upAxis).normal()
-
-                negUpAxisVector = -upAxisVector
-
-                dot = upAxisVector.dot(upVector)
-                negDot = negUpAxisVector.dot(upVector)
-
-                if negDot > dot:
-                    thisVal *= -1.0
-
-            euler = [0.0, 0.0, 0.0]
-            euler[axisIndex] = thisVal
-            euler = r.data.EulerRotation(euler, unit='radians')
-
-            joint.attr('preferredAngle').set(euler)
-
-        return self
 
     #------------------------------------------------------------|    Higher-level rigging
 
