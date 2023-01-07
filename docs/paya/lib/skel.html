@@ -260,6 +260,8 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/bezier.html">Bezier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/fkChain.html">FkChain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../pools/parts/leg.html">Leg</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../pools/parts/partGuide.html">PartGuide</a></li>
@@ -370,6 +372,19 @@
 <dt class="sig sig-object py" id="paya.lib.skel.Chain">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain" title="Permalink to this definition">#</a></dt>
 <dd><dl class="py method">
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.copy" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A copy of this instance (no actual joints will be copied).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.getFromStartEnd">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getFromStartEnd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startJoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endJoint</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.getFromStartEnd" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
@@ -769,6 +784,9 @@ to True</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

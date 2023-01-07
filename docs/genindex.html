@@ -258,6 +258,8 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="pools/parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="pools/parts/bezier.html">Bezier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pools/parts/fkChain.html">FkChain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pools/parts/leg.html">Leg</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/parts/part.html">Part</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/parts/partBase.html">PartBase</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pools/parts/partGuide.html">PartGuide</a></li>
@@ -629,8 +631,6 @@
 </li>
         <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.addSectionAttr">addSectionAttr() (DependNode method)</a>
 </li>
-        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.addSquashStretchAttrs">addSquashStretchAttrs() (Bezier static method)</a>
-</li>
         <li><a href="pools/nodes/dependNode.html#paya.runtime.nodes.DependNode.addVectorAttr">addVectorAttr() (DependNode method)</a>
 </li>
         <li><a href="pools/networks/curveUpVectorAimCurveSampler.html#paya.runtime.networks.CurveUpVectorAimCurveSampler.aimCurve">aimCurve() (CurveUpVectorAimCurveSampler method)</a>
@@ -941,8 +941,12 @@
 </li>
         <li><a href="pools/plugs/math1D.html#paya.runtime.plugs.Math1D.convertUnit">convertUnit() (Math1D method)</a>
 </li>
-        <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.copy">copy() (EulerRotation method)</a>
+        <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.copy">copy() (Chain method)</a>
+
+        <ul>
+          <li><a href="pools/data/eulerRotation.html#paya.runtime.data.EulerRotation.copy">(EulerRotation method)</a>
 </li>
+        </ul></li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.copyDeltaFrom">copyDeltaFrom() (Target method)</a>
 </li>
         <li><a href="paya/geoshapext.html#paya.geoshapext.copyPlugFuncToShapeClassDict">copyPlugFuncToShapeClassDict() (in module paya.geoshapext)</a>
@@ -960,8 +964,6 @@
         <li><a href="pools/plugs/angle.html#paya.runtime.plugs.Angle.create">create() (Angle class method)</a>
 
         <ul>
-          <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.create">(Bezier class method)</a>
-</li>
           <li><a href="pools/nodes/bezierCurve.html#paya.runtime.nodes.BezierCurve.create">(BezierCurve class method)</a>
 </li>
           <li><a href="pools/nodes/blendShape.html#paya.runtime.nodes.BlendShape.create">(BlendShape class method)</a>
@@ -1021,13 +1023,21 @@
           <li><a href="pools/plugs/vector.html#paya.runtime.plugs.Vector.createAttr">(Vector class method)</a>
 </li>
         </ul></li>
+        <li><a href="pools/parts/fkChain.html#paya.runtime.parts.FkChain.createChain">createChain() (FkChain class method)</a>
+
+        <ul>
+          <li><a href="pools/parts/leg.html#paya.runtime.parts.Leg.createChain">(Leg class method)</a>
+</li>
+          <li><a href="pools/parts/triad.html#paya.runtime.parts.Triad.createChain">(Triad class method)</a>
+</li>
+        </ul></li>
+        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.createChainFromBezierAndUpVectors">createChainFromBezierAndUpVectors() (Bezier class method)</a>
+</li>
         <li><a href="pools/nodes/remapValue.html#paya.runtime.nodes.RemapValue.createClone">createClone() (RemapValue method)</a>
 </li>
         <li><a href="paya/lib/controls.html#paya.lib.controls.createControl">createControl() (in module paya.lib.controls)</a>
 </li>
         <li><a href="paya/lib/controls.html#paya.lib.controls.createControls">createControls() (in module paya.lib.controls)</a>
-</li>
-        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.createFromBezierAndUpVectors">createFromBezierAndUpVectors() (Bezier class method)</a>
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromCurve">createFromCurve() (Chain class method)</a>
 </li>
@@ -1044,8 +1054,6 @@
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromMatrices">createFromMatrices() (Chain class method)</a>
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createFromPoints">createFromPoints() (Chain class method)</a>
-</li>
-        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.createFromTwoBeziers">createFromTwoBeziers() (Bezier class method)</a>
 </li>
         <li><a href="paya/lib/skel.html#paya.lib.skel.Chain.createIkHandle">createIkHandle() (Chain method)</a>
 </li>
@@ -1089,8 +1097,6 @@
           <li><a href="pools/nodes/shape.html#paya.runtime.nodes.Shape.createShape">(Shape class method)</a>
 </li>
         </ul></li>
-        <li><a href="pools/parts/triad.html#paya.runtime.parts.Triad.createSkeleton">createSkeleton() (Triad class method)</a>
-</li>
         <li><a href="pools/nodes/nurbsCurve.html#paya.runtime.nodes.NurbsCurve.createUpVectorSampler">createUpVectorSampler() (NurbsCurve method)</a>, <a href="pools/plugs/nurbsCurve.html#paya.runtime.plugs.NurbsCurve.createUpVectorSampler">[1]</a>
 </li>
         <li><a href="paya/examples/worm_rig.html#paya.examples.worm_rig.createWormRig">createWormRig() (in module paya.examples.worm_rig)</a>
@@ -1283,10 +1289,14 @@
 </li>
         <li><a href="paya/rigtypes/rig/rig.html#paya.rigtypes.rig.rig.Rig.findTrunkScene">findTrunkScene() (Rig class method)</a>
 </li>
+        <li><a href="pools/parts/fkChain.html#paya.runtime.parts.FkChain">FkChain (class in paya.runtime.parts)</a>
+</li>
         <li><a href="paya/lib/bsnboltons.html#paya.lib.bsnboltons.Target.flip">flip() (Target method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="paya/lib/mathops.html#paya.lib.mathops.flipAxis">flipAxis() (in module paya.lib.mathops)</a>
+</li>
         <li><a href="paya/lib/mathops.html#paya.lib.mathops.floatRange">floatRange() (in module paya.lib.mathops)</a>
 </li>
         <li><a href="paya/lib/typeman.html#paya.lib.typeman.forceVectorsAsPlugs">forceVectorsAsPlugs() (in module paya.lib.typeman)</a>
@@ -1436,8 +1446,6 @@
         <li><a href="paya/trunk.html#paya.trunk.Trunk.getDir">getDir() (Trunk class method)</a>
 </li>
         <li><a href="paya/trunk.html#paya.trunk.Trunk.getDirs">getDirs() (Trunk class method)</a>
-</li>
-        <li><a href="pools/parts/bezier.html#paya.runtime.parts.Bezier.getDrawMatrixFromAnchorGroupAndUpVector">getDrawMatrixFromAnchorGroupAndUpVector() (Bezier static method)</a>
 </li>
         <li><a href="pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle.getEndJoint">getEndJoint() (IkHandle method)</a>
 </li>
@@ -1844,6 +1852,8 @@
         <li><a href="paya/lib/suffixes.html#paya.lib.suffixes.learnFromHelp">learnFromHelp() (in module paya.lib.suffixes)</a>
 </li>
         <li><a href="paya/lib/suffixes.html#paya.lib.suffixes.learnFromScene">learnFromScene() (in module paya.lib.suffixes)</a>
+</li>
+        <li><a href="pools/parts/leg.html#paya.runtime.parts.Leg">Leg (class in paya.runtime.parts)</a>
 </li>
         <li><a href="paya/lib/names.html#paya.lib.names.legalise">legalise() (in module paya.lib.names)</a>
 </li>
