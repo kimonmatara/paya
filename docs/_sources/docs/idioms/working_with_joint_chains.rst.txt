@@ -1,0 +1,111 @@
+*************************
+Working with Joint Chains
+*************************
+
+Joint chains can be created and edited using Paya’s dedicated :class:`~paya.lib.skel.Chain class`. Instances of this
+class are returned by various methods, and the class itself is available on :mod:`paya.runtime`.
+
+=======
+Drawing
+=======
+
+To draw a chain with joints at specified points, use :meth:`~paya.lib.skel.Chain.createFromPoints`. Similarly to Maya’s
+aim constraints, this requires an up vector to resolve the secondary axis orientation. The following example uses the
+vector form of the world X axis:
+
+.. card::
+    :img-top: working_with_joint_chains/chain_from_points.gif
+
+    .. code-block:: python
+
+            points = [xform.getWorldPosition() for xform in r.ls(sl=True)]
+            upVector = [1, 0, 0]
+
+            with r.Name('L_leg'):
+                chain = r.Chain.createFromPoints(points, 'y', 'x', upVector)
+
+To draw a chain along a curve, use :meth:`~paya.lib.skel.Chain.createFromCurve`. This can take either an up vector or,
+similar to Maya’s ``curveWarp`` deformer, an up curve. The following example uses custom axes, with curves extracted
+from a NURBS surface to help visualise twist:
+
+.. card::
+    :img-top: working_with_joint_chains/chain_from_curve.gif
+
+    .. code-block:: python
+
+            mainCurve, upCurve = r.ls(sl=True)
+
+            with r.Name('spine'):
+                chain = r.Chain.createFromCurve(mainCurve, 12, '-x', 'z', upCurve)
+
+=======
+Loading
+=======
+
+If you’re not working on an instance of :class:`~paya.lib.skel.Chain` returned by one of the constructors described
+above, you’ll have to get one from existing joints. To load a chain from a root joint, use
+:meth:`~paya.runtime.plugs.Joint.chainFromHere` on :class:`paya.runtime.plugs.Joint`:
+
+.. code-block:: python
+
+    root = r.PyNode('joint1')
+    chain = root.chainFromHere()
+
+Alternatively, you could pass a joint list to :class:`~paya.lib.skel.Chain` itself:
+
+.. code-block:: python
+
+    chain = r.Chain(['joint1', 'joint2','joint3'])
+
+Standard Python slice notation can be used to get sub-ranges:
+
+.. code-block:: python
+
+    lowerBone = chain[1:]
+
+===============
+Editing Example
+===============
+
+In the following example, a leg chain and a foot chain are spliced together, reoriented and subdivided to create a twist
+chain which is then driven with full support for stretch and translation:
+
+
+.. card::
+    :img-top: working_with_joint_chains/leg_skel_edit.gif
+
+    .. code-block:: python
+
+            legChain = r.PyNode('joint1').chainFromHere()
+            footChain = r.PyNode('joint4').chainFromHere()
+            legChain.appendChain(footChain)
+
+            legChain.orient('y', 'x', [1, 0, 0])
+
+            with r.Name(padding=3):
+                legChain.rename('driver')
+                twistChain = legChain.duplicate(n='twist')
+
+            triad = twistChain[:3]
+            triad.subdivide(2)
+
+            # The initial twistChain now has outdated membership;
+            # reload it
+            twistChain = twistChain[0].chainFromHere()
+
+            # Set the start 'up' matrix to an identity matrix to 'anchor'
+            # the hip-level up vector
+
+            legChain.driveTwistChain(
+                twistChain, 'x', 1.0, startUpMatrix=r.data.Matrix()
+                )
+
+            # Display tweaks
+
+            for joint in legChain:
+                joint.attr('radius').set(1.5)
+                joint.attr('displayLocalAxis').set(False)
+
+            for joint in twistChain:
+                joint.attr('radius').set(0.5)
+                joint.attr('displayLocalAxis').set(True)

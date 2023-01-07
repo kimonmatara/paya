@@ -499,7 +499,6 @@ class Chain:
         :rtype: list of :class:`~paya.runtime.nodes.Joint`
         """
         # Resolve user ratios
-
         userRatios = self._resolveRatios(*numberOrRatios)
         jointRatios = self.ratios()
         lenSelf = len(self)
@@ -1192,7 +1191,6 @@ class Bone(Chain):
 
         else:
             # Resolve end up vector
-
             if endUpMatrix is None:
                 endUpMatrix = self[1].attr('wm')
 

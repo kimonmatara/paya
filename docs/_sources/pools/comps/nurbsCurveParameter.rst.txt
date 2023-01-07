@@ -1,0 +1,101 @@
+**************************************
+paya.runtime.comps.NurbsCurveParameter
+**************************************
+
+.. py:currentmodule:: paya.runtime.comps
+
+.. py:class:: NurbsCurveParameter(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~pymel.core.general.NurbsCurveParameter` :class:`~paya.runtime.comps.Component1DFloat` :class:`~pymel.core.general.Component1DFloat` :class:`~paya.runtime.comps.ContinuousComponent` :class:`~pymel.core.general.ContinuousComponent` :class:`~paya.runtime.comps.DimensionedComponent` :class:`~pymel.core.general.DimensionedComponent` :class:`~paya.runtime.comps.Component` :class:`~pymel.core.general.Component` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:method:: isRange()
+    
+        :return: True if this component represents a range.
+        :rtype: bool
+    
+    .. py:method:: index()
+    
+        :return: The U value at this parameter. If this is a range, only
+            the start of the range will be returned.
+        :rtype: :class:`float`
+    
+    .. py:method:: indices()
+    
+        :return: A tuple of either one or two indices
+            (representing a U range).
+        :rtype: (float), (float, float)
+    
+    .. py:method:: __float__()
+    
+        :return: This parameter as a float.
+        :raises ValueError: Can't return a float because this parameter
+            instance represents a range.
+        :rtype: :class:`float`
+    
+    .. py:method:: point(worldSpace=False, plug=False)
+    
+        :param bool worldSpace/ws: return a world-space position;
+            defaults to ``False``
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: A point position at this parameter.
+        :rtype: :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: getWorldPosition(plug=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: A world-space position at this parameter.
+        :rtype: :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.plugs.Vector`
+    
+    .. py:method:: fraction(plug=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: The curve length fraction at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: length(plug=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :return: The curve length at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: tangent(plug=False, normalize=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :param bool normalize/nr: return the normalized tangent;
+            defaults to ``False``
+        :return: The curve tangent at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: normal(plug=False, normalize=False)
+    
+        :param bool plug/p: return a plug rather than a value; defaults to
+            ``False``
+        :param bool normalize/nr: return the normalized normal;
+            defaults to ``False``
+        :return: The curve normal at this parameter.
+        :rtype: :class:`float` | :class:`~paya.runtime.plugs.Math1D`
+    
+    .. py:method:: detach()
+    
+        :return: The resulting shape segments.
+        :rtype: [:class:`~paya.runtime.nodes.NurbsCurve`]
+    
+    .. py:method:: subCurve(toParameter=None)
+    
+        :param toParameter/tp: the end parameter for the sub-curve range;
+            defaults to the domain end if omitted; defaults to ``None``
+        :type toParameter/tp: :class:`str`, :class:`int`, :class:`float`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The generated sub-curve shape.
+        :rtype: :class:`~paya.runtime.nodes.NurbsCurve`

@@ -1,0 +1,928 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="paya.runtime.nodes.UvPin" href="uvPin.html" /><link rel="prev" title="paya.runtime.nodes.Subdiv" href="subdiv.html" />
+
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+        <title>paya.runtime.nodes.Transform - paya 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">paya 1.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/gradB_transp.png" alt="Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/basics.html">Basics</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/basics/requirements_and_installation.html">Requirements and Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/basics/importing_and_patching.html">Importing and Patching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/basics/using_the_runtime_interface.html">Using the Runtime Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/basics/developing.html">Developing Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/basics/discovering_functionality.html">Discovering Functionality</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../docs/idioms.html">Idioms</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/idioms/working_with_nodes.html">Working with Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/idioms/maths_rigging.html">Maths Rigging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/idioms/working_with_joint_chains.html">Working with Joint Chains</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../types_index.html">Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../nodes_index.html">Node Types</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blendShape.html">BlendShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="clusterHandle.html">ClusterHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="curveWarp.html">CurveWarp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dagNode.html">DagNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deformableShape.html">DeformableShape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dependNode.html">DependNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fourByFourMatrix.html">FourByFourMatrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geometryFilter.html">GeometryFilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ikHandle.html">IkHandle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="joint.html">Joint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lattice.html">Lattice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="locator.html">Locator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="makeThreePointCircularArc.html">MakeThreePointCircularArc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motionPath.html">MotionPath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="objectSet.html">ObjectSet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pointOnCurveInfo.html">PointOnCurveInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="proximityWrap.html">ProximityWrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="remapValue.html">RemapValue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shape.html">Shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skinCluster.html">SkinCluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subdiv.html">Subdiv</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uvPin.html">UvPin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vectorProduct.html">VectorProduct</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../comps_index.html">Component Types</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../comps/meshVertex.html">MeshVertex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../comps/nurbsCurveCV.html">NurbsCurveCV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../comps/nurbsCurveParameter.html">NurbsCurveParameter</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../plugs_index.html">Plug (Attribute) Types</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/angle.html">Angle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/attribute.html">Attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/bezierCurve.html">BezierCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/boolean.html">Boolean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/distance.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/enum.html">Enum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/eulerRotation.html">EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/geometry.html">Geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/math1D.html">Math1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/matrix.html">Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsCurve.html">NurbsCurve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/nurbsSurface.html">NurbsSurface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/quaternion.html">Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/string.html">String</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/time.html">Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plugs/vector.html">Vector</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_index.html">Data Types</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data/angle.html">Angle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data/eulerRotation.html">EulerRotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data/matrix.html">Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data/point.html">Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data/quaternion.html">Quaternion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data/vector.html">Vector</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../networks_index.html">Network Subtypes</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../networks/animSpaceSwitcher.html">AnimSpaceSwitcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorAimCurveSampler.html">CurveUpVectorAimCurveSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorIkSplineStyleSampler.html">CurveUpVectorIkSplineStyleSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorMpStyleSampler.html">CurveUpVectorMpStyleSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorPtKeysSampler.html">CurveUpVectorPtKeysSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorPtSampler.html">CurveUpVectorPtSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorRemapSampler.html">CurveUpVectorRemapSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/curveUpVectorSampler.html">CurveUpVectorSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/system.html">System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../networks/tagger.html">Tagger</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parts_index.html">Part Types</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parts/bezier.html">Bezier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/fkChain.html">FkChain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/leg.html">Leg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/part.html">Part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/partBase.html">PartBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/partGuide.html">PartGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/transform.html">Transform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/transformGuide.html">TransformGuide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parts/triad.html">Triad</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../paya.html">Modules</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/apiutil.html">paya.apiutil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/cmds.html">paya.cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/config.html">paya.config</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/examples.html">paya.examples</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/examples/cubes_spine.html">paya.examples.cubes_spine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/examples/worm_rig.html">paya.examples.worm_rig</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/geoshapext.html">paya.geoshapext</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/lib.html">paya.lib</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/attrs.html">paya.lib.attrs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/bsnboltons.html">paya.lib.bsnboltons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/controls.html">paya.lib.controls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/evalgraph.html">paya.lib.evalgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/grouptree.html">paya.lib.grouptree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/layouttools.html">paya.lib.layouttools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/mathops.html">paya.lib.mathops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/modettol.html">paya.lib.modettol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/names.html">paya.lib.names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/nurbsutil.html">paya.lib.nurbsutil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/skel.html">paya.lib.skel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/skintools.html">paya.lib.skintools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/suffixes.html">paya.lib.suffixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/symmetry.html">paya.lib.symmetry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/typeman.html">paya.lib.typeman</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/lib/xmlweights.html">paya.lib.xmlweights</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/nativeunits.html">paya.nativeunits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/partcreator.html">paya.partcreator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/patch.html">paya.patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/pluginfo.html">paya.pluginfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/pools.html">paya.pools</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/rigtypes.html">paya.rigtypes</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../paya/rigtypes/rig.html">paya.rigtypes.rig</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../paya/rigtypes/rig/rig.html">paya.rigtypes.rig.rig</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/runtime.html">paya.runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/startstop.html">paya.startstop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../paya/trunk.html">paya.trunk</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../paya/util.html">paya.util</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/util/accessor.html">paya.util.accessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/util/classes.html">paya.util.classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/util/functions.html">paya.util.functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/util/iterables.html">paya.util.iterables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/util/modules.html">paya.util.modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/util/path.html">paya.util.path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../paya/util/strings.html">paya.util.strings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../author.html">Author</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">MIT License</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="paya-runtime-nodes-transform">
+<h1>paya.runtime.nodes.Transform<a class="headerlink" href="#paya-runtime-nodes-transform" title="Permalink to this headline">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform" title="Permalink to this definition">#</a></dt>
+<dd><p class="rubric">Inheritance</p>
+<p><a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Transform.html#pymel.core.nodetypes.Transform" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a> <a class="reference internal" href="dagNode.html#paya.runtime.nodes.DagNode" title="paya.runtime.nodes.DagNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DagNode.html#pymel.core.nodetypes.DagNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DagNode</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.Entity.html#pymel.core.nodetypes.Entity" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a> <code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.ContainerBase.html#pymel.core.nodetypes.ContainerBase" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContainerBase</span></code></a> <a class="reference internal" href="dependNode.html#paya.runtime.nodes.DependNode" title="paya.runtime.nodes.DependNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.nodetypes/pymel.core.nodetypes.DependNode.html#pymel.core.nodetypes.DependNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DependNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.general/pymel.core.general.PyNode.html#pymel.core.general.PyNode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyNode</span></code></a> <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.util.utilitytypes/pymel.util.utilitytypes.ProxyUnicode.html#pymel.util.utilitytypes.ProxyUnicode" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProxyUnicode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dagPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displayLocalAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotateOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xyz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">worldMatrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.create" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates transform nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dagPath/dp</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – an explicit DAG path; if provided, the minimum
+number of nodes required to match this DAG path will be
+generated; <code class="docutils literal notranslate"><span class="pre">displayLocalAxis</span></code>, <code class="docutils literal notranslate"><span class="pre">rotateOrder</span></code> and
+<code class="docutils literal notranslate"><span class="pre">worldMatrix</span></code> will only be applied to the last (innermost)
+group; defaults to None</p></li>
+<li><p><strong>name/n</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the node name; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>parent/p</strong> (None, str, <a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – an optional parent for the transform; if this is
+combined with <code class="docutils literal notranslate"><span class="pre">dagPath</span></code>, then this node’s DAG path will be
+prepended; defaults to None</p></li>
+<li><p><strong>displayLocalAxis/dla</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – display the transform’s local axes;
+defaults to False</p></li>
+<li><p><strong>rotateOrder/ro</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>None</em>) – the transform’s rotate order; defaults to ‘xyz’</p></li>
+<li><p><strong>worldMatrix/wm</strong> (None, list, tuple or
+<a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>) – an optional world matrix for the transform,
+applied to the SRT channels; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The transform.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.toShape">
+<span class="sig-name descname"><span class="pre">toShape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.toShape" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>If this node is a transform, its first shape child;
+otherwise, the node itself.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> or
+<a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.toTransform">
+<span class="sig-name descname"><span class="pre">toTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.toTransform" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>If this node is a shape, its parent; otherwise, the node
+itself.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a> or
+<a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.releaseSRT">
+<span class="sig-name descname"><span class="pre">releaseSRT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.releaseSRT" title="Permalink to this definition">#</a></dt>
+<dd><p>Unlocks and disconnects every SRT channel, recursively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.closestAxisToVector">
+<span class="sig-name descname"><span class="pre">closestAxisToVector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeNegative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.closestAxisToVector" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>refVector</strong> – the vector to compare against</p></li>
+<li><p><strong>includeNegative/ing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Consider negative axes;
+defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The most closely-aligned axis on this object to
+<code class="docutils literal notranslate"><span class="pre">refVector</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">'-x'</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.closestOf">
+<span class="sig-name descname"><span class="pre">closestOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elems</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.closestOf" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the closest amongst ‘elems’ to this transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>elems</strong> – a list of Python objects that, when instantiated into
+PyNodes, implement <code class="docutils literal notranslate"><span class="pre">getWorldPosition()</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The closest amongst ‘elems’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getWorldPosition">
+<span class="sig-name descname"><span class="pre">getWorldPosition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useLocatorShape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getWorldPosition" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the world translation of this transform. Pivots are ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Shorthand</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">gwp</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return an attribute instead of a value; if
+‘useLocatorShape’ is True then, where available, the locator
+shape’s ‘worldPosition’ attribute will be returned; otherwise,
+a ‘worldPosition’ attribute will be retrieved, or initialised,
+on the transform itself, with its input configured as self.t ^
+self.pm[0]; defaults to False</p></li>
+<li><p><strong>useLocatorShape/uls</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The position attribute or value.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a> or
+<a class="reference internal" href="../plugs/vector.html#paya.runtime.plugs.Vector" title="paya.runtime.plugs.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getWorldMatrix">
+<span class="sig-name descname"><span class="pre">getWorldMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getWorldMatrix" title="Permalink to this definition">#</a></dt>
+<dd><p>The advantage of calling <code class="docutils literal notranslate"><span class="pre">getWorldMatrix(plug=True,</span>
+<span class="pre">asOffset=True)</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">getWorldMatrix(plug=True).asOffset()</span></code> is that, in the former
+case, the output will be cached for subsequent retrievals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return a plug instead of a value; defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>asOffset/ao</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return the matrix as an identity
+matrix; defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The world matrix of this transform, as a value or plug.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a>,
+<a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getRotateAxisMatrix">
+<span class="sig-name descname"><span class="pre">getRotateAxisMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getRotateAxisMatrix" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the rotate axis as a rotation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>plug/p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – return an attribute instead of a value; this will
+be cooked only once, and afterwards retrieved via a
+‘rotateAxisMatrix’ attribute on the node; defaults to False</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The rotate axis matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.data.Matrix</span></code></a> or
+<a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">paya.runtime.plugs.Matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.makeIdentity">
+<span class="sig-name descname"><span class="pre">makeIdentity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.makeIdentity" title="Permalink to this definition">#</a></dt>
+<dd><p>Convenience wrapper for <code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.internal.pmcmds.makeIdentity()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – passed along to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">pymel.internal.pmcmds.makeIdentity()</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.createOffsetGroups">
+<span class="sig-name descname"><span class="pre">createOffsetGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">descriptors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.createOffsetGroups" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates transformationally-matched offset (‘zero’) groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*descriptors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – base names for the offset groups, from
+innermost to outermost; if omitted, defaults to <code class="docutils literal notranslate"><span class="pre">'offset'</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The offset groups, from innermost to outermost.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[<a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.conformShapeNames">
+<span class="sig-name descname"><span class="pre">conformShapeNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">includeIntermediateShapes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapeList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.conformShapeNames" title="Permalink to this definition">#</a></dt>
+<dd><p>Conforms the names of this transform’s shape children to the Maya
+convention.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>includeIntermediateShapes/iis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – process intermediate shapes
+as well</p></li>
+<li><p><strong>shapeList/shl</strong> (None, [str, <a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>]) – if this is provided, it will be used instead of
+scanning for the transform’s children; defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getHeroShapes">
+<span class="sig-name descname"><span class="pre">getHeroShapes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getHeroShapes" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All non-intermediate shapes under this transform.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getIntermediateShapes">
+<span class="sig-name descname"><span class="pre">getIntermediateShapes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getIntermediateShapes" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>All intermediate shapes under this transform.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getCtShapes">
+<span class="sig-name descname"><span class="pre">getCtShapes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getCtShapes" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Non-intermediate curve and locator shapes under this transform.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[<a class="reference internal" href="nurbsCurve.html#paya.runtime.nodes.NurbsCurve" title="paya.runtime.nodes.NurbsCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a> or
+<a class="reference internal" href="locator.html#paya.runtime.nodes.Locator" title="paya.runtime.nodes.Locator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Locator</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.rotateCtShapes">
+<span class="sig-name descname"><span class="pre">rotateCtShapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.rotateCtShapes" title="Permalink to this definition">#</a></dt>
+<dd><p>Rotates control shapes in local space. Locator shapes won’t be rotated,
+but their <code class="docutils literal notranslate"><span class="pre">localPosition</span></code> will. Note that rotation is expected in
+degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rotation</strong> (list, tuple, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Array.html#pymel.core.datatypes.Array" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>) – an iterable of three rotation values, in degrees</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.scaleCtShapes">
+<span class="sig-name descname"><span class="pre">scaleCtShapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.scaleCtShapes" title="Permalink to this definition">#</a></dt>
+<dd><p>Scales control shapes in local space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scale</strong> (list, tuple, <a class="reference external" href="https://help.autodesk.com/cloudhelp/2018/JPN/Maya-Tech-Docs/PyMel/generated/classes/pymel.core.datatypes/pymel.core.datatypes.Array.html#pymel.core.datatypes.Array" title="(in PyMEL v1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></a>) – an iterable of three scale values</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.setCtShapesFromLib">
+<span class="sig-name descname"><span class="pre">setCtShapesFromLib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">libKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineWidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.setCtShapesFromLib" title="Permalink to this definition">#</a></dt>
+<dd><p>Sets control shapes to the named library entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the library entry, e.g. ‘cube’</p></li>
+<li><p><strong>lineWidth/lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – an override for the line width;
+defaults to None</p></li>
+<li><p><strong>size/siz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – the shape scale; defaults to 1.0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The newly-generated control shapes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of <a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.cycleCtShapes">
+<span class="sig-name descname"><span class="pre">cycleCtShapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backward</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.cycleCtShapes" title="Permalink to this definition">#</a></dt>
+<dd><p>Steps through the library alphabetically and applies a different shape
+on each invocation. Useful for trying out different shapes quickly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>backward/back</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – cycle backwards instead of forwards;
+defaults to False</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The newly-generated control shapes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of <a class="reference internal" href="shape.html#paya.runtime.nodes.Shape" title="paya.runtime.nodes.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.clearCtShapes">
+<span class="sig-name descname"><span class="pre">clearCtShapes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.clearCtShapes" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes all non-intermediate curve or locator shapes under this
+transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.colorCtShapes">
+<span class="sig-name descname"><span class="pre">colorCtShapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">colorIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearOverrides</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.colorCtShapes" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Color shorthands</dt>
+<dd class="field-odd"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;white&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+<span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+<span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+<span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+<span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+<span class="s1">&#39;center&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+<span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+<span class="s1">&#39;yellow&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+<span class="s1">&#39;pink&#39;</span><span class="p">:</span> <span class="mi">20</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>*colorIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><em>None</em>) – if a color index is provided, it is used to set
+the override color on all control shapes; if <code class="docutils literal notranslate"><span class="pre">None</span></code> is passed,
+override colors are reset; if the argument is omitted, the first-
+encountered override color index is returned</p></li>
+<li><p><strong>clearOverrides/co</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – used only if <em>colorIndex</em> was set to
+<code class="docutils literal notranslate"><span class="pre">None</span></code>; set <code class="docutils literal notranslate"><span class="pre">overrideEnabled</span></code> to False as well; defaults to
+True</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>If <em>colorIndex</em> was provided, <code class="docutils literal notranslate"><span class="pre">self</span></code> is returned;
+otherwise, a color index.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a> or int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.addCtShapesToLib">
+<span class="sig-name descname"><span class="pre">addCtShapesToLib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.addCtShapesToLib" title="Permalink to this definition">#</a></dt>
+<dd><p>Captures this control’s shapes into a new library entry for reuse via
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">setCtShapes()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entryName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the name of the new library entry</p></li>
+<li><p><strong>normalize/nr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – normalize points into a unit; defaults
+to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.getCtShapesLineWidth">
+<span class="sig-name descname"><span class="pre">getCtShapesLineWidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.getCtShapesLineWidth" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The first encountered line width which is above 0.0
+(i.e. not the Maya default of -1.0), or None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.setCtShapesLineWidth">
+<span class="sig-name descname"><span class="pre">setCtShapesLineWidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lineWidth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.setCtShapesLineWidth" title="Permalink to this definition">#</a></dt>
+<dd><p>Sets the line width on NURBS control shapes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lineWidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>None</em>) – the line width to set; if None is passed,
+the line width will be set to -1.0</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.nodes.Transform.createAnimSpace">
+<span class="sig-name descname"><span class="pre">createAnimSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.nodes.Transform.createAnimSpace" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>slave/slv</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the transform to constrain; if omitted, defaults to
+the first available offset group</p></li>
+<li><p><strong>targets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../plugs/matrix.html#paya.runtime.plugs.Matrix" title="paya.runtime.plugs.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>,
+<a class="reference internal" href="#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – the target transforms or matrices</p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – labels for the enum attribute</p></li>
+<li><p><strong>translate/t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – drive translate channels; defaults to
+<code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>rotate/r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – drive rotate channels; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>scale/s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – drive scale channels; defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>defaultValue/dv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the default value for the enum attribute;
+defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The system’s network node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../networks/animSpaceSwitcher.html#paya.runtime.networks.AnimSpaceSwitcher" title="paya.runtime.networks.AnimSpaceSwitcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnimSpaceSwitcher</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="uvPin.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">paya.runtime.nodes.UvPin</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="subdiv.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">paya.runtime.nodes.Subdiv</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Kimon Matara
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    </body>
+</html>

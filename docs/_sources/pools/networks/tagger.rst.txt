@@ -1,0 +1,64 @@
+****************************
+paya.runtime.networks.Tagger
+****************************
+
+.. py:currentmodule:: paya.runtime.networks
+
+.. py:class:: Tagger(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.networks.System` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:classmethod:: create(node)
+    
+        Adds a tagger node to the specified *node*.
+        
+        :param node: the node to which to add a tagger system
+        :type node: :class:`str`, :class:`~paya.runtime.nodes.DependNode`
+        :return: The tagger node.
+        :rtype: :class:`~paya.runtime.networks.Tagger`
+    
+    .. py:classmethod:: getFromTaggingNode(taggingNode, create=False)
+    
+        :param taggingNode: The tagging node.
+        :type taggingNode: :class:`str`,
+            :class:`~paya.runtime.nodes.DependNode`
+        :param bool create: create a tagger if one was not found;
+            defaults to ``False``
+        :return: The tagger utility node, if present.
+        :rtype: :class:`Tagger`, ``None``
+    
+    .. py:method:: tag(tagName, *attrsOrNodes)
+    
+        Tags attributes or nodes for later retrieval via :meth:`getByTag`.
+        
+        :param str tagName: the tag to use
+        :param \*attrsOrNodes: the attributes or nodes to tags
+        :type \*attrNodes: :class:`str`,
+            :class:`~paya.runtime.plugs.Attribute`,
+            :class:`~paya.runtime.plugs.DependNode`
+        :return:
+    
+    .. py:method:: getByTag(tagName)
+    
+        :param str tagName: the tag to inspect
+        :return: Nodes and attributes tagged with the specified *tagName*.
+        :rtype: :class:`list` [:class:
+    
+    .. py:method:: getTags()
+    
+        :return: Tags in use.
+        :rtype: :class:`list` [:class:`str`]
+    
+    .. py:method:: clearTags(*tagNames, removeTaggerIfEmpty=False)
+    
+        :param \*tagNames: the tags to remove; if none are specified, all
+            tags will be removed
+        :type bool removeTaggerIfEmpty/rem: if all tags were removed, delete
+            this node as well; defaults to ``False``
+        :return: ``None`` if all tags were removed and *removeTaggerIfEmpty*
+            is ``True``, otherwise ``self``
+        :rtype: :class:`Tagger`, ``None``

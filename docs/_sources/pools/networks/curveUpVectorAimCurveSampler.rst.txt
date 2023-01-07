@@ -1,0 +1,63 @@
+**************************************************
+paya.runtime.networks.CurveUpVectorAimCurveSampler
+**************************************************
+
+.. py:currentmodule:: paya.runtime.networks
+
+.. py:class:: CurveUpVectorAimCurveSampler(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.networks.CurveUpVectorSampler` :class:`~paya.runtime.networks.System` :class:`~paya.runtime.nodes.Network` :class:`~pymel.core.nodetypes.Network` :class:`~paya.runtime.nodes.DependNode` :class:`~pymel.core.nodetypes.DependNode` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+    Works similarly to the 'aim curve' mode of a
+    :class:`curveWarp <paya.runtime.nodes.CurveWarp>` deformer.
+    
+    .. note::
+    
+        Returned vectors won't be perpendicular to curve tangents, with the
+        expectation that they will be perpendicularized during subsequent
+        matrix construction.
+
+    .. py:classmethod:: create(curve, aimCurve, closestPoint=True)
+    
+        :param curve: the curve on which to create the sampler
+        :type curve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param aimCurve: the curve from which to pull per-point aiming
+            interests
+        :type aimCurve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity
+            rather than matched parameter; defaults to ``True``
+        :return: The network system.
+        :rtype: :class:`CurveUpVectorAimCurveSampler`
+    
+    .. py:classmethod:: _create(curve, aimCurve, closestPoint=True)
+    
+        :param curve: the curve on which to create the sampler
+        :type curve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param aimCurve: the curve from which to pull per-point aiming
+            interests
+        :type aimCurve: str, :class:`paya.runtime.nodes.NurbsCurve`,
+            :class:`paya.runtime.nodes.Transform`,
+            :class:`paya.runtime.plugs.NurbsCurve`
+        :param bool closestPoint/cp: pull points from *aimCurve* by proximity
+            rather than matched parameter; defaults to ``True``
+        :return: The network system.
+        :rtype: :class:`CurveUpVectorAimCurveSampler`
+    
+    .. py:method:: byClosestPoint()
+    
+        :return: ``True`` if this sampler was configured to use closest-point
+            calculations, otherwise ``False``.
+        :rtype: bool
+    
+    .. py:method:: aimCurve()
+    
+        :return: The aim curve output connected to this system.
+        :rtype: :class:`~paya.runtime.plugs.NurbsCurve`

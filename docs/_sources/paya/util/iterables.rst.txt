@@ -1,0 +1,82 @@
+===================
+paya.util.iterables
+===================
+
+.. py:module:: paya.util.iterables
+
+.. py:function:: clampindex(index, numelems, absolute=False)
+
+    Clamps an index, whether negative or positive, so that it
+    remains within the range implied by numelems.
+    
+    :param int index: the index to clamp
+    :param int numelems: the number of elements in the iterable
+    :param bool absolute: clamp inside positive range
+    :return: The clamped index.
+    :rtype: int
+
+.. py:function:: index_in_range(index, numelems)
+
+    :return: True if the index is 'legal'. Essentially a pre-emptive
+        :class:`IndexError`.
+
+.. py:function:: absindex(index, numelems, loop=False)
+
+    Resolves a negative (reverse) index into a positive (forward) one.
+    
+    :param int index: the index to edit
+    :param int numelems: the number of elements in the iterable
+    :param bool loop: if this is ``False``, and the index is out of range,
+        :class:`IndexError` will be raised; otherwise, the index will be
+        wound over; defaults to False
+    :return: The resolved index.
+    :rtype: int
+
+.. py:function:: send_indices_relative(indicesToMove, refIndex, lst, after=True)
+
+    Sends members at the specified indices into one contiguous block after
+    ``refIndex``. This is an in-place operation
+    
+    :param list indicesToMove: the indices to move
+    :param int refIndex: the reference index
+    :param list lst: the list
+    :param bool after: insert the indices *after* the reference index;
+        defaults to ``True``
+    :rtype: None
+
+.. py:function:: send_indices_before(indicesToMove, refIndex, lst)
+
+    Equivalent to ``send_indices_relative(after=False)``.
+
+.. py:function:: send_indices_after(indicesToMove, refIndex, lst)
+
+    Equivalent to ``send_indices_relative(after=True)``.
+
+.. py:function:: nudge_index(index, lst, offset)
+
+    Nudges an index in the direction and distance specified by 'offset'.
+    
+    :param int index: the index of the member to nudge
+    :param list lst: the list to edit
+    :param int offset: the shift offset
+    :rtype: ``None``
+
+.. py:function:: nudge_indices(indices, lst, offset)
+
+    Suitable for multi-selection list reordering. It clamps for out-of-range
+    shifts, and maintains order within contiguous selection groups.
+    
+    This is an in-place operation.
+    
+    :param indices: the indices to nudge
+    :type indices: list of int
+    :param list lst: the list to edit
+    :param int offset: the shift offset
+    :rtype: ``None``
+
+.. py:function:: without_duplicates(iterable)
+
+    :param iterable: the iterable to inspect
+    :return: an order-preserved list of members in 'iterable', with duplicates
+        omitted.
+    :rtype: list

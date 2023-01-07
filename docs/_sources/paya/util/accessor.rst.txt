@@ -1,0 +1,23 @@
+==================
+paya.util.accessor
+==================
+
+.. py:module:: paya.util.accessor
+
+.. py:class:: Accessor(owner, name)
+
+    Utility class for nested interfaces.
+
+.. py:class:: AccessorOnNode(owner, attrName)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.util.accessor.Accessor`
+
+    Subclass of :class:`Accessor` with a few extra facilitiations for node-
+    level interfaces.
+
+    .. py:method:: node()
+    
+        :return: The owner node.
+        :rtype: :class:`~paya.runtime.nodes.DependNode`

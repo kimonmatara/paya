@@ -1,0 +1,136 @@
+=====================
+paya.rigtypes.rig.rig
+=====================
+
+.. py:module:: paya.rigtypes.rig.rig
+
+.. py:class:: Rig
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.trunk.Trunk`
+
+
+
+    .. py:classmethod:: getAssetName()
+    
+        :return: A basename for the asset associated with this rig class.
+            In this implementation, this is merely the non-capitalized name
+            of this class, but can be overriden freely.
+        :rtype: :class:`str`
+    
+    .. py:classmethod:: findTrunkScene(name)
+    
+        Convenience method. Looks for a Maya scene dependency across this
+        rig's :class:`trunk <paya.trunk.Trunk>` directories.
+        
+        :param str name: the name of the scene (e.g. ``'layout.ma'``); if
+            the extension is omitted, both Maya extensions (``'.ma'`` and
+            ``'.mb'``) will be considered
+        :return: The path to a matching scene, if one is found.
+        :rtype: :class:`~pathlib.Path`, ``None``
+    
+    .. py:classmethod:: exportAllToTrunkScene(name)
+    
+        Exports the full contents of the currently-open scene to the
+        :class:`trunk <paya.trunk.Trunk>` directory for this rig class.
+        
+        :Example:
+        
+        .. code-block:: python
+        
+            cls.exportAllToTrunkScene('layout.ma')
+        
+        :param str name: the name of the scene to save into; if the extension
+            is omitted, it will be set to ``'.ma'`` (``mayaAscii``)
+        :return: The full export path.
+        :rtype: :class:`~pathlib.Path`
+    
+    .. py:classmethod:: referenceTrunkScene(name, namespace=None)
+    
+        Locates and references the specified trunk scene.
+        
+        :param str name: the name of the scene to retrieve; if the extension
+            is omitted, both ASCII and binary scene files will be considered
+        :param str namespace/ns: a namespace for the reference; if omitted,
+            it will be set to the file basename; defaults to ``None``
+        :return: The retrieved file path.
+        :rtype: :class:`~pathlib.Path`
+    
+    .. py:classmethod:: unreferenceTrunkScene(name)
+    
+        Looks for any matches for the specified trunk scene amongst current
+        references and removes them.
+        
+        :param str name: the name of the trunk scene; if the extension is
+            omitted, both ASCII and binary scene files will be considered
+        :return: A list of matching reference paths that were removed
+            (without copy numbers).
+        :rtype: [:class:`~pathlib.Path`]
+    
+    .. py:classmethod:: getSnapshotsDir(create=False)
+    
+        :return: The directory for rig build snapshots. In this
+            implementation, it's ``'<maya project>/rig_build_snapshots'``,
+            but can be overriden freely.
+        :rtype: :class:`~pathlib.Path`
+    
+    .. py:classmethod:: snapshotExists(stageName)
+    
+        :param str stageName: the name of the stage for which to source a
+            snapshot
+        :return: ``True`` if there's a snapshot for the specified build
+            stage, otherwise ``False``.
+        :rtype: :class:`bool`
+    
+    .. py:classmethod:: removeSnapshot(stageName)
+    
+        Removes the snapshot for the specified stage name, if it exists.
+        
+        :param str stageName: the build stage for the snapshot
+    
+    .. py:classmethod:: clearSnapshots()
+    
+        Deletes the snapshots directory along with its contents.
+    
+    .. py:classmethod:: getSnapshotScene(stageName)
+    
+        :param str stageName: the name of the build stage for which to source
+            a snapshot scene.
+        :return: The path to a Maya scene snapshot for the specified stage.
+            Note that this does not check whether the file actually exists.
+        :rtype: :class:`~pathlib.Path`
+    
+    .. py:classmethod:: pruneSnapshots(dirtyStages=None)
+    
+        Performs housekeeping on build-stage snapshots. For every stage, if
+        there isn't a snapshot, snapshots for all downstream stages are also
+        deleted.
+        
+        :param dirtyStages: one or more stages for which snapshots should
+            be explicitly deleted, along with those of all their descendants;
+            defaults to ``None``
+        :type dirtyStages: :class:`str`, [:class:`str`]
+    
+    .. py:classmethod:: getBuildGraph()
+    
+        :return: An evaluation graph built off the connection segments
+            in the ``__graph__`` attribute on this class.
+        :rtype: :class:`~paya.lib.evalgraph.EvalGraph`
+    
+    .. py:classmethod:: build(targetStages=None, rebuildDependencies=True, clearSnapshots=False, dirtyStages=None)
+    
+        Runs a rig-building sequence.
+        
+        :param targetStages: one or more build stages to evaluate for; if this
+            is omitted, the entire build graph will be evaluated; defaults to
+            ``None``
+        :type targetStages: :class:`str`, [:class:`str`]
+        :param bool rebuildDependencies: rebuild stage dependencies instead of
+            relying on snapshots; defaults to ``True``
+        :param bool clearSnapshots: clear all snapshots before building;
+            defaults to ``False``
+        :param dirtyStages: one or more stages which should be considered
+            'dirty', meaning their snapshots, and those of their descendants,
+            should be cleared before building; defaults to ``None``
+        :type dirtyStages: :class:`str`, [:class:`str`]

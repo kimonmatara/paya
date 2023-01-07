@@ -1,0 +1,38 @@
+**************************
+paya.runtime.parts.FkChain
+**************************
+
+.. py:currentmodule:: paya.runtime.parts
+
+.. py:class:: FkChain(groupNode)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.parttypes.part.part.Part` :class:`~paya.parttypes.partBase.partBase.PartBase` :class:`~paya.trunk.Trunk`
+
+    Stub. Right now, it only implements :meth:`createChain`.
+
+    .. py:classmethod:: createChain(points, upVector, downAxis=<undefined>, upAxis=<undefined>, tipMatrix=None, opposite=False, parent=None)
+    
+        Thin wrapper for :meth:`paya.lib.skel.Chain.createFromPoints`.
+        
+        :param points: a world position for each joint; at least two points
+            are required
+        :type points: :class:`list` [:class:`list` [:class:`float`] |
+            :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.data.Vector`]
+        :param str downAxis: the 'bone' axis; defaults to
+            ``paya.config.downAxis``
+        :param str upAxis: the axis to map to the up vector; defaults to
+            ``paya.config.upAxis``
+        :param tipMatrix/tm: an optional rotation matrix override for the tip
+            (end) joint; if provided, only orientation information will be
+            used; defaults to ``None``
+        :param bool opposite: flips the (resolved) down axis; defaults to
+            ``False``
+        :param parent: an optional destination parent for the chain;
+            defaults to ``None``
+        :type parent: ``None``, :class:`str`,
+            :class:`~paya.runtime.nodes.Transform`
+        :return: The generated chain.
+        :rtype: :class:`Chain`

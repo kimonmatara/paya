@@ -1,0 +1,90 @@
+********************************
+paya.runtime.plugs.EulerRotation
+********************************
+
+.. py:currentmodule:: paya.runtime.plugs
+
+.. py:class:: EulerRotation(*args, **kwargs)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.runtime.plugs.Vector` :class:`~paya.runtime.plugs.Math` :class:`~paya.runtime.plugs.Attribute` :class:`~pymel.core.general.Attribute` :class:`~pymel.core.general.PyNode` :class:`~pymel.util.utilitytypes.ProxyUnicode`
+
+
+
+    .. py:method:: createLocator(name=None, rotateOrder='xyz', size=1.0)
+    
+        :shorthand: ``cl``
+        
+        :param str name/n: an optional name for the locator transform;
+            defaults to a contextual name
+        :param rotateOrder/ro: the rotate order of this euler rotation;
+            defaults to 'xyz'
+        :type rotateOrder/ro: :class:`int`, :class:`str`,
+            :class:`~paya.runtime.plugs.Attribute`
+        :return: A locator with this euler rotation piped into its
+            ``rotate`` channels.
+        :rtype: :class:`~paya.runtime.nodes.Transform`
+    
+    .. py:method:: get(plug=False, **kwargs)
+    
+        Overrides :meth:`~paya.runtime.plugs.Attribute.get` to return
+        :class:`~paya.runtime.data.EulerRotation` values. If this is the
+        ``rotate`` channel on a transform node, rotation order is taken
+        from the transform.
+    
+    .. py:method:: set(*args, **kwargs)
+    
+        Overloads :meth:`~paya.runtime.plugs.Attribute.get` to ensure
+        that instances of :class:`~paya.runtime.data.EulerRotation`
+        with units that don't match the UI setting are set correctly.
+    
+    .. py:method:: isTranslateChannel()
+    
+        :return: True if this is the ``translate`` channel of a transform
+            node, otherwise False.
+        :rtype: bool
+    
+    .. py:method:: isRotateChannel()
+    
+        :return: True if this is the ``rotate`` channel on a transform,
+            otherwise False.
+        :rtype: bool
+    
+    .. py:method:: reorder(newRotateOrder, rotateOrder='xyz')
+    
+        :param newRotateOrder: The new rotate order, e.g. ``'yxz'``.
+        :type newRotateOrder: :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param rotateOrder/ro: The old rotate order; defaults to ``'xyz'``
+        :type rotateOrder/ro: :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: The reordered euler rotation.
+        :rtype: :class:`EulerRotation`
+    
+    .. py:method:: asQuaternion(rotateOrder='xyz')
+    
+        :param rotateOrder/ro: the rotate order, defaults to 'xyz'
+        :type rotateOrder/ro: :class:`Math1D`, str, int
+        :return: A quaternion representation of this euler rotation.
+        :rtype: :class:`~paya.runtime.plugs.Quaternion`
+    
+    .. py:method:: asAxisAngle(rotateOrder='xyz')
+    
+        :param rotateOrder/ro: this output's rotate order
+        :type rotateOrder/ro: :class:`str`, :class:`int`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :return: An axis-angle representation of this euler rotation.
+        :rtype: :class:`tuple` (:class:`Vector`, :class:`Angle`)
+    
+    .. py:method:: asRotateMatrix(rotateOrder='xyz')
+    
+        :param rotateOrder/ro: the rotate order, defaults to 'xyz'
+        :type rotateOrder/ro: :class:`Math1D`, str, int
+        :return: This euler rotation as a matrix.
+        :rtype: :class:`~paya.runtime.plugs.Math3D`
+    
+    .. py:method:: asEulerRotation()
+    
+        Overrides :meth:`~paya.runtime.plugs.Vector.asEulerRotation` to
+        return ``self``.

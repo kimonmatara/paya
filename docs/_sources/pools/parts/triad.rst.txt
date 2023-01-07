@@ -1,0 +1,46 @@
+************************
+paya.runtime.parts.Triad
+************************
+
+.. py:currentmodule:: paya.runtime.parts
+
+.. py:class:: Triad(groupNode)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.parttypes.part.part.Part` :class:`~paya.parttypes.partBase.partBase.PartBase` :class:`~paya.trunk.Trunk`
+
+
+
+    .. py:classmethod:: createChain(points, upVector, tipMatrix=None, downAxis=<undefined>, upAxis=<undefined>, parent=None, ikJitter=False, opposite=False)
+    
+        Creates a three-point skeletal chain.
+        
+        :param points: a world position for each joint; three points
+            are required; excess points will be discarded
+        :type points: :class:`list` [:class:`list` [:class:`float`] |
+            :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.data.Vector`]
+        :param upVector: the main up vector hint for the chain; this will
+            guide cross product calculations to resolve orientations for
+            the main bend axis
+        :param tipMatrix: an optional rotation matrix override for the tip
+            (end) joint; if provided, only orientation information will be
+            used; defaults to ``None``
+        :type tipMatrix: ``None``, :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Matrix`
+        :return: The constructed chain.
+        :param str downAxis: the 'bone' axis; defaults to
+            ``paya.config.downAxis``
+        :param str upAxis: the axis to map to the up vector; defaults to
+            ``paya.config.upAxis``
+        :param parent: an optional destination parent for the chain;
+            defaults to ``None``
+        :type parent: ``None``, :class:`str`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param bool ikJitter: if this chain is in-line, auto-configures
+            preferred angles to prevent lockout; defaults to ``False``
+        :param bool opposite: flips the (resolved) down axis; defaults to
+            ``False``
+        :return: The generated chain.
+        :rtype: :class:`Chain`

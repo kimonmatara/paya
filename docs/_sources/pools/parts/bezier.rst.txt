@@ -1,0 +1,51 @@
+*************************
+paya.runtime.parts.Bezier
+*************************
+
+.. py:currentmodule:: paya.runtime.parts
+
+.. py:class:: Bezier(groupNode)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.parttypes.part.part.Part` :class:`~paya.parttypes.partBase.partBase.PartBase` :class:`~paya.trunk.Trunk`
+
+
+
+    .. py:classmethod:: createChainFromBezierAndUpVectors(numJoints, bezier, upVectors, downAxis=<undefined>, upAxis=<undefined>, opposite=False, resolution=9, parallelTransport=False, parent=None)
+    
+        Creates a chain from a guide Bezier curve and matched per-anchor
+        up vectors.
+        
+        :param int numJoints: the number of joints to generate
+        :param bezier: the guide bezier curve
+        :type bezier: :class:`str`, :class:`~paya.runtime.nodes.BezierCurve`,
+            :class:`~paya.runtime.nodes.Transform`
+        :param upVectors: one up vector per anchor on the Bezier curve
+        :type upVectors: :class:`list` [:class:`list` [:class:`float`] |
+            :class:`~paya.runtime.data.Vector`]
+        :param str downAxis: the 'bone' axis; defaults to
+            ``paya.config.downAxis``
+        :param str upAxis: the axis to map to the up vectors; defaults to
+            ``paya.config.upAxis``
+        :param bool opposite: flips the (resolved) down axis; defaults to
+            ``False``
+        :param parallelTransport: resolve up vector blending using parallel
+            transport; defaults to ``False``
+        :param int resolution/res: the number of parallel-transport solutions to
+             generate along the curve; higher numbers improve accuracy at the
+             expense of performance; defaults to 9
+        :param interpolation/i:: defines how to interpolate values from param:
+            vector pairs:
+        
+            -   ``0`` (``'None'``) (you wouldn't normally want this)
+            -   ``1`` (``'Linear'``) (the default)
+            -   ``2`` (``'Smooth'``)
+            -   ``3`` (``'Spline'``)
+        
+        :param parent: an optional destination parent for the chain;
+            defaults to ``None``
+        :type parent: ``None``, :class:`str`,
+            :class:`~paya.runtime.nodes.Transform`
+        :return: The generated chain.
+        :rtype: :class:`Chain`

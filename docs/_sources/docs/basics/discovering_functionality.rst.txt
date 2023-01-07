@@ -1,0 +1,28 @@
+=========================
+Discovering Functionality
+=========================
+
+You can pick up much of Paya just browsing for methods. The :doc:`Types </types_index>` appendix is a good starting
+point. To get the same information contextually within Maya, call :func:`help` on any Paya class:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    with r:
+        transform = r.group(empty=True)
+        transformClass = type(transform)
+        help(transformClass)
+
+To look for a method based on a hunch, use :func:`dir` instead:
+
+.. code-block:: python
+
+    with r:
+        for name in dir(transformClass):
+            if 'offset' in name.lower():
+                print(name)
+
+        # Result: createOffsetGroups
+
+After you've snooped around for a while, visit :doc:`Idioms </docs/idioms>` for workflow ideas.

@@ -1,0 +1,78 @@
+****************************
+paya.runtime.parts.PartGuide
+****************************
+
+.. py:currentmodule:: paya.runtime.parts
+
+.. py:class:: PartGuide(groupNode)
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.parttypes.partBase.partBase.PartBase` :class:`~paya.trunk.Trunk`
+
+
+
+    .. py:method:: addBuildSetting(name: str, defaultValue, **kwargs)
+    
+        Convenience method. Adds a settable-only attribute to a
+        'BUILD_SETTINGS' section on the group node. The *attributeType*
+        can be omitted if *defaultValue* is :class:`float`, :class:`bool`
+        or :class:`int`.
+        
+        :param str name: the attribute name
+        :param defaultValue: the starting value for the attribute
+        :param \*\*kwargs: forwarded to
+            :class:`~paya.runtime.nodes.DependNode.addAttr`, except for
+            *channelBox* / *keyable*, which will be overriden to ``True``
+            and ``False`` respectively
+        :return: The attribute.
+        :rtype: :class:`~paya.runtime.plugs.Attribute`
+    
+    .. py:method:: getBuildSettings()
+    
+        :return: A mapping of ``{attrName: attrValue}`` for each attribute
+            created using :meth:`addBuildSetting`.
+        :rtype: :class:`dict`
+    
+    .. py:classmethod:: getPartClass()
+    
+        :return: The associated part subclass.
+        :rtype: :class:`type`
+    
+    .. py:method:: getPartCreateArgsKwargs()
+    
+        :raise NotImplementedError: Not implemented on this class.
+        :return: Positional and keyword arguments that can be passed along
+            to the ``create()`` method on the associated
+            :class:`~paya.runtime.parts.Part` subclass.
+        :rtype: (:class:`tuple`, :class:`dict`)
+    
+    .. py:method:: createPart()
+    
+        Derives construction arguments from this guide and passed them along
+        to ``create()`` on the associated :class:`~paya.runtime.parts.Part`
+        subclass to build the part.
+        
+        If there is no active :class:`~paya.lib.names.Name` block, this guide's
+        innermost namespace will be used for the name.
+        
+        :return: The constructed part.
+        :rtype: :class:`~paya.runtime.parts.Part`
+    
+    .. py:classmethod:: _getCreateNameContext()
+    
+        Called before a build wrapped by
+        :func:`~paya.part.partcreator.partCreator` to establish the naming
+        environment.
+        
+        Guides are named according to these rules:
+        
+        -   The name element is always ``'guide'``; any enclosing blocks are
+            ignored.
+        -   There *must* be a namespace; if one is not active at the time of
+            build, one will be derived, either from active
+            :class:`~paya.lib.names.Name` elements or from the calling class
+            name.
+        
+        :return: A configured context manager.
+        :rtype: :class:`~paya.lib.names.Name`

@@ -1,0 +1,26 @@
+===========================
+Using the Runtime Interface
+===========================
+
+So far, we've only used :mod:`paya.runtime` to manage patching, reverting :mod:`pymel.core` for calls to PyMEL methods.
+In fact :mod:`paya.runtime` serves the entire :mod:`pymel.core` namespace, and can be used as a drop-in replacement.
+Note that context management is still required to return Paya classes:
+
+.. code-block:: python
+
+    import paya.runtime as r
+
+    cam = r.PyNode('persp')
+    print(type(cam))
+    # <class 'pymel.core.nodetypes.Transform'>
+
+    with r:
+        cam = r.PyNode('persp')
+        print(type(cam))
+        # <class 'paya.runtime.nodes.Transform'>
+
+Using :mod:`paya.runtime` in this way confers the following advantages:
+
+-   It more clearly signposts patched PyMEL.
+-   When patching is active, :mod:`paya.runtime` exposes additional top-level methods and interfaces such as
+    :func:`~paya.lib.mathops.createMatrix`.

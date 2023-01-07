@@ -1,0 +1,254 @@
+================
+paya.lib.typeman
+================
+
+.. py:module:: paya.lib.typeman
+
+WIP -- unified type-checking methods for hybrid plug / value workflows.
+
+Functions in this module expect patched PyMEL.
+
+.. py:function:: conform(item, distance=False, angle=False)
+
+    Conforms to Paya types.
+    
+    :param bool distance/d: prefer :class:`~paya.runtime.data.Distance`,
+        :class:`~paya.runtime.plugs.Distance` and
+        :class:`~paya.runtime.data.Point` wherever possible; defaults to
+        ``False``
+    :param bool angle/a: prefer :class:`~paya.runtime.data.EulerRotation`,
+        :class:`~paya.runtime.plugs.EulerRotation`,
+        :class:`~paya.runtime.data.Quaternion` and
+        :class:`~paya.runtime.plugs.Quaternion` wherever possible; defaults
+        to ``False``
+    :raises ValueError: The *item* could not be conformed to a Paya value,
+        node, component or plug type.
+    :return: The original *item* conformed to a Paya type.
+
+.. py:function:: isPyMELObject(item)
+
+    :param item: the item to inspect
+    :return: True if *item* is an instance of a PyMEl class, otherwise False
+    :rtype: bool
+
+.. py:function:: isPlug(item)
+
+    :param item: the item to inspect
+    :return: ``True`` if *item* represents an attribute, otherwise ``False``.
+    :rtype: :class:`bool`
+
+.. py:function:: isScalarValue(value)
+
+    :param value: the value to inspect
+    :return: ``True`` if *value* is an instance of :class:`int`,
+        :class:`float`, :class:`bool` or
+        :class:`~pymel.core.datatypes.Unit`
+    :rtype: :class:`bool`
+
+.. py:function:: isScalarPlug(item)
+
+    :param item: the item to inspect
+    :return: ``True`` if *item* is an :class:`~pymel.core.general.Attribute`
+        instance, or a string representations of a scalar (1D) Maya
+        attribute, otherwise ``False``
+    :rtype: :class:`bool`
+
+.. py:function:: isScalarValueOrPlug(item)
+
+    :param item: the item to inspect
+    :return: ``True`` if *item* represents a scalar value or plug,
+        otherwise ``False``.
+    :rtype: :class:`bool`
+
+.. py:function:: isVectorValueOrPlug(item)
+
+    :param item: the item to inspect
+    :return: ``True`` if *item* is a vector value or attribute, otherwise
+        False
+    :rtype: bool
+
+.. py:function:: isParamVectorPair(item)
+
+    :param item: the item to inspect
+    :return: ``True`` if *item* is a pair of *scalar: vector*, otherwise
+        ``False``
+
+.. py:function:: isTripleScalarValueOrPlug(item)
+
+    Three scalar plugs in a list will not return ``True``; they must be
+    delivered as a numeric compound instead.
+    
+    :param item: the item to inspect
+    :return: ``True`` if *item* represents a 3D vector or Euler rotation plug
+        or value, otherwise ``False``.
+    :rtype: ``bool``
+
+.. py:function:: conformVectorArg(arg, listLength=None)
+
+    For methods that expect a vector argument which may also be a multi
+    (for example *upVector* on
+    :meth:`~paya.runtime.plugs.NurbsCurve.distributeMatrices`). Attributes
+    are conformed but not checked for type.
+    
+    :param arg: strictly a single vector or a list of vectors; deeper nesting
+        will throw an error
+    :type arg: :class:`tuple` | :class:`list` | :class:`str`,
+        :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`,
+        [:class:`tuple` | :class:`list` | :class:`str`,
+        :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`]
+    :param listLength/ll: the preferred output length; defaults to ``None``
+    :type listLength/ll: ``None`` | :class:`int`
+    :return: A conformed vector, or list of conformed vectors.
+    :rtype: :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector` |
+        [:class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`]
+
+.. py:function:: describeAndConformVectorArg(vector)
+
+    Used by methods that receive multiple forms of up vector hints in a
+    single argument.
+    
+    :param vector: the argument to inspect
+    :raises RuntimeError: Couldn't parse the argument.
+    :return: One of:
+    
+            - tuple of ``'single'``, conformed vector value or plug
+            - tuple of ``'keys'``, list of conformed *param, vector* pairs
+            - tuple of ``'multi'``, list of conformed vectors
+    :rtype: One of:
+    
+            - (:class:`str`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`)
+            - (:class:`str`, [(:class:`int` | :class:`float` | :class:`~paya.runtime.plugs.Math1D`, :class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`))]
+            - (:class:`str`, [:class:`paya.runtime.data.Vector` | :class:`paya.runtime.plugs.Vector`])
+
+.. py:function:: resolveNumberOrFractionsArg(arg)
+
+    Loosely conforms a ``numberOrFractions`` user argument. If the
+    argument is an integer, a range of floats is returned. Otherwise,
+    the argument is passed through without further checking.
+
+.. py:function:: expandVectorArgs(*args)
+
+    Expands *args*, stopping at anything that looks like a vector value
+    or plug.
+    
+    :param \*args: the arguments to expand
+    :return: The expanded arguments.
+
+.. py:function:: asPlug(item, quiet=False)
+
+    If *item* is already an instance of
+    :class:`~pymel.core.general.Attribute`, it is passed through; otherwise,
+    it's used to create an instance of :class:`~pymel.core.general.Attribute`.
+    The advantage of checking first is that custom class assignments are
+    preserved.
+    
+    Use this form to check whether an attribute exists:
+    ``bool(asPlug(item, quiet=True))``
+    
+    :param item: the attribute instance or string
+    :type item: :class:`str` | :class:`~pymel.core.general.Attribute`
+    :param bool quiet: catch any errors raised when attempting to instantiate
+        :class:`~pymel.core.general.Attribute` and return ``None``; defaults
+        to ``False``
+    :return: The attribute instance.
+    :rtype: :class:`~pymel.core.general.Attribute`
+
+.. py:function:: asGeoPlug(item, worldSpace=None)
+
+    Attempts to extract a geometry output plug from *item*.
+    
+    :param item: the item to inspect
+    :type item: str, :class:`~paya.runtime.plugs.Geometry`,
+        :class:`~paya.runtime.nodes.Shape`,
+        :class:`~paya.runtime.nodes.Transform`,
+    :param bool worldSpace/ws: ignored if *item* is a plug; specifies
+        whether to pull the world-space or local-space output of a
+        geometry shape or transform; if omitted, defaults to ``False``
+        if *item* is a shape, and ``True`` if it's a transform
+    :raises TypeError: Can't extract a geo plug from *item*.
+    :return: The geometry output.
+    :rtype: :class:`~paya.runtime.plugs.Geometry`
+
+.. py:function:: asCompIndexOrPlug(item)
+
+    Used by methods which accept component arguments as indices
+    (integers or floats) or scalar plugs (for example, NURBS curve parameter
+    drivers), but not as instances of :class:`~pymel.core.general.Component`.
+    
+    If *item* is a simple scalar type, it's passed-through as-is. Otherwise,
+    if it describes a Maya component, its first index is returned as a float
+    or integer. Otherwise, an attempt is made to return it as an
+    :class:`~pymel.core.general.Attribute` instance. The attribute is not
+    checked for type.
+    
+    .. note::
+    
+        This method relies on the relevant Paya component type implementing
+        ``index()``, which may not always be the case.
+    
+    :param item: the item to conform
+    :raises TypeError: Can't parse specified item.
+    :return: A scalar index / parameter value or an attribute.
+    :rtype: :class:`int` | :class:`float` |
+        :class:`~pymel.core.general.Attribute`
+
+.. py:function:: conformPlugsInArg(arg)
+
+    Used by :class:`plugCheck`. Looks for plugs recursively in an argument
+    received by a Paya method; if any are found, they are conformed to
+    :class:`~paya.runtime.plugs.Attribute` instances.
+    
+    :param arg: an argument received by a Paya method
+    :return: tuple of:
+    
+        -   the original argument, with conformed plug members,
+        -   ``True`` if plugs were found, ``False`` if they weren't
+    
+    :rtype: :class:`tuple`
+
+.. py:function:: forceVectorsAsPlugs(vectors)
+
+    If any of the provided vectors are plugs, they are passed-through
+    as-is; those that aren't are used as values for array attributes
+    on a utility node, which are passed along instead.
+    
+    :param vectors: the vectors to inspect
+    :type vectors: [list, tuple,
+        :class:`~paya.runtime.data.Vector`,
+        :class:`~paya.runtime.plugs.Vector`]
+    :return: The conformed vector outputs.
+    :rtype: [:class:`~paya.runtime.plugs.Vector`]
+
+.. py:class:: plugCheck(*argNames)
+
+    Decorator-with-arguments for methods that take a *plug* keyword argument
+    which defaults to ``None``, meaning its behaviour will depend on whether
+    any incoming arguments are plugs.
+    
+    Instantiate it with a list of argument names; when the function is called,
+    if *plug* still resolves as ``None``, the arguments will be checked for
+    plugs, and the *plug* keyword overriden to ``True`` where necessary before
+    delegating to the original function. As a bonus, any plug arguments will
+    be conformed to :class:`~paya.runtime.plugs.Attribute` instances.
+    
+    If the plug is passed specifically by the user as ``True`` or ``False``,
+    the function will be called immediately--in essence the user becomes
+    responsible for any errors thence.
+    
+    :Example:
+    
+        .. code-block:: python
+    
+            @plugCheck('param')
+            def tangentAtParam(self, param, plug=None):
+                # At this point, if plug was passed-through as None, the
+                # decorator will have resolved it to True / False
+    
+                if plug:
+                    # Run the 'hard' implementation
+                else:
+                    # Run the 'soft' implementation
+
+    .. py:method:: __call__(f)
+    
+        Call self as a function.
