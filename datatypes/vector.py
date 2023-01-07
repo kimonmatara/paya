@@ -367,131 +367,154 @@ class Vector:
     
     #--------------------------------------------------------------------|    Blending
 
-    @short(
-        weight='w',
-        swap='sw',
-        byVectorAngle='bva',
-        clockNormal='cn',
-        includeLength='ilg',
-        unwindSwitch='uws'
-    )
-    def blend(
+    def _blendValues(
             self,
             other,
             weight=0.5,
-            swap=False,
-            byVectorAngle=None,
-            includeLength=False,
-            clockNormal=None,
-            unwindSwitch=None
+            swap=False
     ):
-        """
-        :param other: the vector that will be fully active when 'weight'
-            is 1.0 (or 0.0, if 'swap' is True)
-        :type other: list, tuple, :class:`paya.runtime.data.Vector`,
-            :class:`paya.runtime.plugs.Vector`
-        :param weight/w: the blending weight; defaults to 0.5
-        :type weight/w: float, :class:`~paya.runtime.plugs.Math1D`
-        :param bool swap/sw: swap operands around; defaults to False
-        :param bool byVectorAngle/bva: blend by rotating one vector towards
-            the other, rather than via linear value interpolation; defaults
-            to ``True`` if *clockNormal* is provided, otherwise ``False``
-        :param bool includeLength/ilg: blend vector lengths (magnitudes)
-            as well; defaults to False
-        :param clockNormal/cn: an optional winding vector; providing this
-            will enable the unwinding options when blending by angle;
-            defaults to None
-        :type clockNormal/cn: None, tuple, list, str,
-            :class:`~paya.runtime.data.Vector`,
-            :class:`~paya.runtime.plugs.Vector`
-        :param int unwindSwitch/uws: ignored if *clockNormal* was omitted; an
-            integer value to pick an angle unwinding mode:
-
-            - ``0`` for shortest (the default)
-            - ``1`` for positive
-            - ``2`` for negative
-
-        :return: The blended vector.
-        :rtype: :class:`paya.runtime.plugs.Vector`,
-            :class:`paya.runtime.data.Vector`
-        """
-        #---------------------------------------------|    Wrangle args
-
-        byVectorAngle = byVectorAngle or (clockNormal is not None)
-
-        if unwindSwitch is None:
-            unwindSwitch = 0
-
-        elif clockNormal is None:
-            raise ValueError(
-                "A clock normal is required to perform angle unwinding."
-            )
-
-        other, otherDim, otherUnitType, otherIsPlug = \
-            _mo.info(other).values()
-
-        if clockNormal:
-            clockNormal, cnDim, cnUt, cnIsPlug = _mo.info(clockNormal).values()
-
-        else:
-            cnIsPlug = False
-
-        weight, weightDim, weightUt, weightIsPlug = _mo.info(weight).values()
+        other = r.conform(other)
+        otherIsPlug = isinstance(other, r.Attribute)
+        weight = r.conform(weight)
+        weightIsPlug = isinstance(weight, r.Attribute)
 
         if swap:
             first, second = other, self
-            firstIsPlug = otherIsPlug
-            secondIsPlug = False
-
         else:
             first, second = self, other
-            firstIsPlug = False
-            secondIsPlug = otherIsPlug
 
-        if byVectorAngle:
+        if otherIsPlug or weightIsPlug:
+            # Hard implementation
+            node = r.nodes.BlendColors.createNode()
+            first >> node.attr('color2')
+            second >> node.attr('color1')
+            weight >> node.attr('blender')
 
-            #-----------------------------------------|    Angle impl
+            return node.attr('output')
 
-            angle = first.angleTo(second, cn=clockNormal)
+        # Soft implementation
+        return _pu.blend(first, second, weight)
+
+    def _blendVectors(
+            self,
+            other,
+            clockNormal,
+            weight=0.5,
+            swap=False,
+            includeLength=False,
+            unwindSwitch=None
+    ):
+        #--------------------------------|    Wrangle
+
+        other = r.conform(other)
+        otherIsPlug = isinstance(other, r.Attribute)
+
+        weight = r.conform(weight)
+        weightIsPlug = isinstance(weight, r.Attribute)
+
+        clockNormal = r.conform(clockNormal)
+        clockNormalIsPlug = isinstance(clockNormal, r.Attribute)
+
+        if unwindSwitch is None:
+            unwindSwitchIsPlug = False
+        else:
+            unwindSwitch = r.conform(unwindSwitch)
+            unwindSwitchIsPlug = isinstance(unwindSwitch, r.Attribute)
+
+        if swap:
+            first, second = other, self
+        else:
+            first, second = self, other
+
+        #--------------------------------|    Cook
+
+        angle = first.angleTo(second, clockNormal=clockNormal)
+
+        if unwindSwitch is not None:
             angle = angle.unwindSwitch(unwindSwitch)
 
-            if not clockNormal:
-                clockNormal = first.cross(second)
-
-            angle *= weight
-            outVector = first.rotateByAxisAngle(clockNormal, angle)
-
-        else:
-
-            #-----------------------------------------|    Linear impl
-
-            if otherIsPlug or weightIsPlug:
-                node = r.nodes.BlendColors.createNode()
-                node.attr('color2').put(first, p=firstIsPlug)
-                node.attr('color1').put(second, p=secondIsPlug)
-                weight >> node.attr('blender')
-
-                outVector = node.attr('output')
-
-            else:
-                outVector = _pu.blend(first, second, weight=weight)
+        angle *= weight
+        out = first.rotateByAxisAngle(clockNormal, angle)
 
         if includeLength:
             firstLength = first.length()
             secondLength = second.length()
 
-            if firstIsPlug:
-                length = firstLength.blend(secondLength, weight=weight)
-
-            elif secondIsPlug:
-                length = secondLength.blend(firstLength, w=weight, sw=True)
+            if any([isinstance(x, r.Attribute) \
+                    for x in (firstLength, secondLength, weight)]):
+                node = r.nodes.BlendTwoAttr.createNode()
+                firstLength >> node.attr('input')[0]
+                secondLength >> node.attr('input')[1]
+                weight >> node.attr('attributesBlender')
+                newLength = node.attr('output')
 
             else:
-                length = _pu.blend(firstLength, secondLength, w=weight)
+                newLength = _pu.blend(firstLength, secondLength, weight)
 
-            outVector = outVector.normal() * length
+            out = out.normal() * newLength
 
-        return outVector
+        return out
+
+    @short(weight='w',
+           swap='sw',
+           includeLength='ilg',
+           clockNormal='cn',
+           unwindSwitch='uws')
+    def blend(self,
+              other,
+              weight=0.5,
+              swap=False,
+              includeLength=False,
+              clockNormal=None,
+              unwindSwitch=None):
+        """
+        Blends this triple towards *other*. Blending will be linear or, if
+        *clockNormal* is provided, by vector angle.
+
+        :param other: the triple or vector towards which to blend
+        :type other: :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Math3D`,
+            :class:`str`
+        :param weight/w: 0.5: the blending weight; when this is 1.0, *other*
+            will take over fully; can be a value or plug; defaults to ``0.5``
+        :type weight/w: :class:`str`, :class:`float`,
+            :class:`~paya.runtime.plugs.Math1D`
+        :param bool swap/sw: swap the inputs around; defaults to ``False``
+        :param clockNormal/cn: if this is ``True``, this output and *other*
+            will be regarded as vectors, and blended by angle; should be
+            a vector perpendicular to both inputs; defaults to ``None``
+        :type clockNormal/cn: :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Vector`,
+            :class:`~paya.runtime.plugs.Math3D`,
+            :class:`str`
+        :param bool includeLength/ilg: ignored if *clockNormal* was omitted;
+            include vector lengths in the blending calculation; defaults to
+            ``False``
+        :param unwindSwitch/uws: ignored if *clockNormal* was omitted; an
+            integer value or plug to pick an angle unwinding mode:
+
+            - ``0`` for shortest (the default)
+            - ``1`` for positive
+            - ``2`` for negative
+
+        :type unwindSwitch/uws: int, str, :class:`~paya.runtime.plugs.Math1D`
+        :return: The blended triple or vector.
+        :rtype: :class:`paya.runtime.data.Vector`
+            | :class:`paya.runtime.plugs.Vector`
+        """
+
+        if clockNormal is None:
+            return self._blendValues(other, swap=swap, weight=weight)
+
+        return self._blendVectors(
+            other,
+            clockNormal,
+            swap=swap,
+            weight=weight,
+            includeLength=includeLength,
+            unwindSwitch=unwindSwitch
+        )
         
     #--------------------------------------------------------------------|    Vector operations
 
@@ -523,7 +546,7 @@ class Vector:
             return self * matrix
 
         else:
-            return self.rotateBy(axisVector, angle)
+            return r.data.Vector(self).rotateBy(axisVector, angle)
 
     @short(normalize='nr')
     def dot(self, other, normalize=False):
