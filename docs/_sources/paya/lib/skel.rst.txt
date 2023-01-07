@@ -34,13 +34,16 @@ paya.lib.skel
         :param parent/p: an optional parent for the chain; defaults to None
         :return: :class:`Chain`
     
-    .. py:classmethod:: createFromPoints(points, upVector, downAxis=<undefined>, upAxis=<undefined>, parent=None, tolerance=1e-07)
+    .. py:classmethod:: createFromPoints(points, upVector, downAxis=<undefined>, upAxis=<undefined>, parent=None, tolerance=1e-07, tipMatrix=None)
     
         Builds a chain from points. The side ('up') axis will be calculated
         using cross products, but those will be biased towards the reference
         up vector.
         
         :param points: a world position for each joint
+        :type points: :class:`list` [:class:`list` [:class:`float`] |
+            :class:`~paya.runtime.data.Point` |
+            :class:`~paya.runtime.data.Vector`]
         :param str downAxis: the 'bone' axis; defaults to
             ``paya.config.downAxis``
         :param str upAxis: the axis to map to the up vector; defaults to
@@ -51,6 +54,11 @@ paya.lib.skel
         :param parent/p: an optional parent for the chain; defaults to None
         :param float tolerance/tol: see
             :func:`paya.lib.mathops.getChainedAimMatrices`
+        :param tipMatrix/tm: an optional rotation matrix override for the tip
+            (end) joint; if provided, only orientation information will be
+            used; defaults to ``None``
+        :type tipMatrix/tm: ``None``, :class:`list` [:class:`float`],
+            :class:`~paya.runtime.data.Matrix`
         :return: The constructed chain.
         :rtype: :class:`Chain`
     

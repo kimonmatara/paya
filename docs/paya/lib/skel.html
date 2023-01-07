@@ -425,14 +425,16 @@ exactly; no attempt is made to orient the chain.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="paya.lib.skel.Chain.createFromPoints">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance=1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromPoints" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance=1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tipMatrix=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.createFromPoints" title="Permalink to this definition">#</a></dt>
 <dd><p>Builds a chain from points. The side (‘up’) axis will be calculated
 using cross products, but those will be biased towards the reference
 up vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> – a world position for each joint</p></li>
+<li><p><strong>points</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>] |
+<a class="reference internal" href="../../pools/data/point.html#paya.runtime.data.Point" title="paya.runtime.data.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a> |
+<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>]) – a world position for each joint</p></li>
 <li><p><strong>downAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the ‘bone’ axis; defaults to
 <code class="docutils literal notranslate"><span class="pre">paya.config.downAxis</span></code></p></li>
 <li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the axis to map to the up vector; defaults to
@@ -442,6 +444,10 @@ up vector.</p>
 <li><p><strong>parent/p</strong> – an optional parent for the chain; defaults to None</p></li>
 <li><p><strong>tolerance/tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – see
 <a class="reference internal" href="mathops.html#paya.lib.mathops.getChainedAimMatrices" title="paya.lib.mathops.getChainedAimMatrices"><code class="xref py py-func docutils literal notranslate"><span class="pre">paya.lib.mathops.getChainedAimMatrices()</span></code></a></p></li>
+<li><p><strong>tipMatrix/tm</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>],
+<a class="reference internal" href="../../pools/data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>) – an optional rotation matrix override for the tip
+(end) joint; if provided, only orientation information will be
+used; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

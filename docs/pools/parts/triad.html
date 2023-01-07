@@ -371,6 +371,44 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Triad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groupNode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Triad" title="Permalink to this definition">#</a></dt>
 <dd><p class="rubric">Inheritance</p>
 <p><code class="xref py py-class docutils literal notranslate"><span class="pre">Part</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">PartBase</span></code> <a class="reference internal" href="../../paya/trunk.html#paya.trunk.Trunk" title="paya.trunk.Trunk"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trunk</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="paya.runtime.parts.Triad.createSkeleton">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createSkeleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tipMatrix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upAxis=&lt;undefined&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ikJitter=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.runtime.parts.Triad.createSkeleton" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates just the skeletal chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> – a world position for each joint</p></li>
+<li><p><strong>upVector</strong> – the main up vector hint for the chain; this will
+guide cross product calculations to resolve orientations for
+the main bend axis</p></li>
+<li><p><strong>tipMatrix</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>],
+<a class="reference internal" href="../data/matrix.html#paya.runtime.data.Matrix" title="paya.runtime.data.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a>) – an optional rotation matrix override for the tip
+(end) joint; if provided, only orientation information will be
+used; defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>downAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the ‘bone’ axis; defaults to
+<code class="docutils literal notranslate"><span class="pre">paya.config.downAxis</span></code></p></li>
+<li><p><strong>upAxis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – the axis to map to the up vector; defaults to
+<code class="docutils literal notranslate"><span class="pre">paya.config.upAxis</span></code></p></li>
+<li><p><strong>parent</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>,
+<a class="reference internal" href="../nodes/transform.html#paya.runtime.nodes.Transform" title="paya.runtime.nodes.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a>) – an optional destination parent for the chain;
+defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>ikJitter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if this chain is in-line, auto-configures
+preferred angles to prevent lockout; defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The constructed chain.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The generated chain.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
