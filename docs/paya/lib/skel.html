@@ -872,8 +872,8 @@ otherwise</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.skel.Chain.jitterForIkHandle">
-<span class="sig-name descname"><span class="pre">jitterForIkHandle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.jitterForIkHandle" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="paya.lib.skel.Chain.autoPreferredAngle">
+<span class="sig-name descname"><span class="pre">autoPreferredAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upVector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.autoPreferredAngle" title="Permalink to this definition">#</a></dt>
 <dd><p>If this chain is in-line, auto-configures a slight value in the
 preferred angle of the bending (‘up’) axis of the internal joints
 in anticipation of an IK handle.</p>
@@ -905,32 +905,6 @@ Prefixes and padding can be specified using a
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="../../pools/nodes/ikHandle.html#paya.runtime.nodes.IkHandle" title="paya.runtime.nodes.IkHandle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IkHandle</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="paya.lib.skel.Chain.autoPreferredAngle">
-<span class="sig-name descname"><span class="pre">autoPreferredAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upVector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paya.lib.skel.Chain.autoPreferredAngle" title="Permalink to this definition">#</a></dt>
-<dd><p>Automatically configures <code class="docutils literal notranslate"><span class="pre">preferredAngle</span></code> on the internal joints to
-prevent lockout when creating an IK handle on an in-line chain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>upAxis</strong> – the dominant chain ‘bend’ axis, e.g. ‘-x’</p></li>
-<li><p><strong>upVector/upv</strong> (list, tuple or
-<a class="reference internal" href="../../pools/data/vector.html#paya.runtime.data.Vector" title="paya.runtime.data.Vector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></a>) – an optional ‘up’ vector; used to override wind
-direction</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.11)"><strong>AssertionError</strong></a> – the chain is not contiguous</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">self</span></code></p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#paya.lib.skel.Chain" title="paya.lib.skel.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chain</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

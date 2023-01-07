@@ -273,7 +273,7 @@ paya.lib.skel
         :return: The IK handle.
         :rtype: :class:`~paya.runtime.nodes.IkHandle`
     
-    .. py:method:: jitterForIkHandle(upVector)
+    .. py:method:: autoPreferredAngle(upVector)
     
         If this chain is in-line, auto-configures a slight value in the
         preferred angle of the bending ('up') axis of the internal joints
@@ -295,20 +295,6 @@ paya.lib.skel
         
         :return: The IK handles
         :rtype: :class:`list` of :class:`~paya.runtime.nodes.IkHandle`
-    
-    .. py:method:: autoPreferredAngle(upAxis, upVector=None)
-    
-        Automatically configures ``preferredAngle`` on the internal joints to
-        prevent lockout when creating an IK handle on an in-line chain.
-        
-        :param upAxis: the dominant chain 'bend' axis, e.g. '-x'
-        :param upVector/upv: an optional 'up' vector; used to override wind
-            direction
-        :type upVector/upv: list, tuple or
-            :class:`~paya.runtime.data.Vector`
-        :raises AssertionError: the chain is not contiguous
-        :return: ``self``
-        :rtype: :class:`Chain`
     
     .. py:method:: getTwistMap(twistChain)
     
