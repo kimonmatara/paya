@@ -79,6 +79,17 @@ paya.lib.mathops
     :return: ``True`` if the UI is set to radians, otherwise ``False``.
     :rtype: ``bool``
 
+.. py:function:: mathInfo(item)
+
+    Deprecated; here for backward compatibility.
+    
+    Equivalent to:
+    
+    .. code-block:: python
+    
+        values = list(info(item).values())
+        return [values[0], values[1], values[3]]
+
 .. py:function:: info(item, defaultUnitType=None, quiet=False)
 
     Returns a dict with the following keys (ordered):
