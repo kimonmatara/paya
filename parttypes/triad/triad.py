@@ -18,6 +18,8 @@ class Triad(r.parts.Part):
                     tipMatrix=None,
                     downAxis=undefined,
                     upAxis=undefined,
+                    numTopTwists=0,
+                    numBtmTwists=0,
                     parent=None,
                     ikJitter=False,
                     opposite=False):
@@ -37,7 +39,10 @@ class Triad(r.parts.Part):
             used; defaults to ``None``
         :type tipMatrix: ``None``, :class:`list` [:class:`float`],
             :class:`~paya.runtime.data.Matrix`
-        :return: The constructed chain.
+        :param int numTopTwists: the number of twist joints to insert on the
+            top (bicep / thigh) bone; defaults to ``0``
+        :param int numBtmTwists: the number of twist joints to insert on the
+            btm (forearm / shin) bone; defaults to ``0``
         :param str downAxis: the 'bone' axis; defaults to
             ``paya.config.downAxis``
         :param str upAxis: the axis to map to the up vector; defaults to
@@ -46,8 +51,9 @@ class Triad(r.parts.Part):
             defaults to ``None``
         :type parent: ``None``, :class:`str`,
             :class:`~paya.runtime.nodes.Transform`
-        :param bool ikJitter: if this chain is in-line, auto-configures
-            preferred angles to prevent lockout; defaults to ``False``
+        :param bool ikJitter: ignored if twist joints are involved; if this
+            chain is in-line, auto-configures preferred angles to prevent
+            lockout; defaults to ``False``
         :param bool opposite: flips the (resolved) down axis; defaults to
             ``False``
         :return: The generated chain.
@@ -75,7 +81,22 @@ class Triad(r.parts.Part):
             tipMatrix=tipMatrix
         )
 
-        if ikJitter:
+        #--------------------------------------|    Twists / jitter
+
+        if numTopTwists or numBtmTwists:
+            if numTopTwists:
+                topSegment = chain[:2]
+                topSegment.insertJoints(numTopTwists)
+
+            if numBtmTwists:
+                btmSegment = chain[1:]
+                btmSegment.insertJoints(numBtmTwists)
+
+            # Rescan
+            chain = chain[0].chainFromHere()
+            chain.rename()
+
+        elif ikJitter:
             chain.autoPreferredAngle(upVector)
 
         return chain

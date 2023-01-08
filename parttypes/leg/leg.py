@@ -13,6 +13,8 @@ class Leg(r.parts.Triad):
                     upVector,
                     downAxis=undefined,
                     upAxis=undefined,
+                    numTopTwists=0,
+                    numBtmTwists=0,
                     parent=None,
                     ikJitter=False,
                     opposite=False):
@@ -38,6 +40,10 @@ class Leg(r.parts.Triad):
             ``paya.config.downAxis``
         :param str upAxis: the axis to map to the up vector; defaults to
             ``paya.config.upAxis``
+        :param int numTopTwists: the number of twist joints to insert on the
+            top (bicep / thigh) bone; defaults to ``0``
+        :param int numBtmTwists: the number of twist joints to insert on the
+            btm (forearm / shin) bone; defaults to ``0``
         :param parent: an optional destination parent for the chain;
             defaults to ``None``
         :type parent: ``None``, :class:`str`,
@@ -60,16 +66,15 @@ class Leg(r.parts.Triad):
 
         #--------------------------------------|    Build triad
 
-        triad = r.Chain.createFromPoints(
+        triad = super().createChain(
             points[:3],
             upVector,
-            downAxis=downAxis,
-            upAxis=upAxis,
-            parent=parent
+            ikJitter=ikJitter,
+            parent=parent,
+            opposite=opposite,
+            numTopTwists=numTopTwists,
+            numBtmTwists=numBtmTwists
         )
-
-        if ikJitter:
-            triad.autoPreferredAngle(upVector)
 
         #--------------------------------------|    Build foot
 
