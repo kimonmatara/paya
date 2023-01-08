@@ -853,19 +853,18 @@ parts = PartClassPool()
 # guides = GuideClassPool()
 #
 #
-# class RigClassPool(ClassPool):
-#
-#     __singular__ = 'rig'
-#     __plural__ = 'rigs'
-#     __doctitle__ = 'Rig Types'
-#
-# rigs = RigClassPool()
+class RigClassPool(ClassPool):
+
+    __singular__ = 'rig'
+    __plural__ = 'rigs'
+    __doctitle__ = 'Rig Types'
+
+rigs = RigClassPool()
 
 #----------------------------------------------------------------|
 #----------------------------------------------------------------|    REGISTRY
 #----------------------------------------------------------------|
 
-# pools = [nodes, comps, plugs, data, networks, containers, parts, guides, rigs]
-pools = [nodes, comps, plugs, data, networks, parts]
+pools = [nodes, comps, plugs, data, networks, parts, rigs]
 poolsByShortName = {pool.shortName(): pool for pool in pools}
 poolsByLongName = {pool.longName():pool for pool in pools}
