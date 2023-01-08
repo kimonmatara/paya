@@ -13,6 +13,12 @@ from paya.lib.evalgraph import EvalGraph
 
 
 class Rig(Trunk):
+    """
+    ..warning::
+
+        This is a stub / beta class, and should not be relied on for
+        production purposes.
+    """
 
     #-------------------------------------------------------------|
     #-------------------------------------------------------------|    CONFIGURATION
@@ -89,17 +95,20 @@ class Rig(Trunk):
         fullPath = cls.getDir().joinpath(filename)
 
         m.file(fullPath.as_posix(),
+               preserveReferences=True,
+               exportUnloadedReferences=True,
                exportAll=True,
                options='v=0;',
                type='mayaAscii',
                force=True)
 
         print("Exported scene contents to: {}".format(fullPath))
+
         return fullPath
 
     @classmethod
     @short(namespace='ns')
-    def referenceTrunkScene(cls, name, namespace=None):
+    def referenceTrunkScene(cls, name, namespace=None, **kwargs):
         """
         Locates and references the specified trunk scene.
 
@@ -107,6 +116,7 @@ class Rig(Trunk):
             is omitted, both ASCII and binary scene files will be considered
         :param str namespace/ns: a namespace for the reference; if omitted,
             it will be set to the file basename; defaults to ``None``
+        :param \*\*kwargs: forwarded to ``file()``
         :return: The retrieved file path.
         :rtype: :class:`~pathlib.Path`
         """
@@ -120,11 +130,7 @@ class Rig(Trunk):
         if namespace is None:
             namespace = os.path.splitext(name)[0]
 
-        m.file(
-            path.as_posix(),
-            reference=True,
-            namespace=namespace
-        )
+        m.file(path.as_posix(), reference=True, namespace=namespace, **kwargs)
 
         return path
 
@@ -159,10 +165,7 @@ class Rig(Trunk):
         out = []
 
         for ref in refs:
-            basepath = re.match(
-                r"^(.*?)(?:{.*})?$",
-                ref
-            ).groups()[0]
+            basepath = re.match(r"^(.*?)(?:{.*})?$", ref).groups()[0]
 
             if basepath in matches:
                 m.file(ref, rr=True)
