@@ -1,0 +1,27 @@
+********************************
+paya.runtime.rigs.ReferenceBiped
+********************************
+
+.. py:currentmodule:: paya.runtime.rigs
+
+.. py:class:: ReferenceBiped
+
+    .. rubric:: Inheritance
+
+    :class:`~paya.rigtypes.rig.rig.Rig` :class:`~paya.trunk.Trunk`
+
+    ..warning::
+    
+        This is a stub / beta class, and should not be relied on for
+        production purposes.
+
+    .. py:classmethod:: getAssetDir()
+    
+        :return: The path to an ``assets`` subdirectory under the Maya project.
+        :rtype: :class:`~pathlib.Path`
+    
+    .. py:classmethod:: getModelScene()
+    
+        :return: The path to a model scene which, in this base class, is
+            ``model.ma`` under the path returned by :meth:`getAssetDir`.
+        :rtype: :class:`~pathlib.Path`

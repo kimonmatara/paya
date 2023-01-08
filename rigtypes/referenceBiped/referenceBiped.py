@@ -5,6 +5,12 @@ import paya.runtime as r
 
 
 class ReferenceBiped(r.rigs.Rig):
+    """
+    ..warning::
+
+        This is a stub / beta class, and should not be relied on for
+        production purposes.
+    """
 
     __graph__ = [
         ['init', 'buildParts', 'attachParts', 'bind', 'config']
@@ -16,11 +22,20 @@ class ReferenceBiped(r.rigs.Rig):
 
     @classmethod
     def getAssetDir(cls):
+        """
+        :return: The path to an ``assets`` subdirectory under the Maya project.
+        :rtype: :class:`~pathlib.Path`
+        """
         ws = Path(m.workspace(q=True, rd=True))
         return ws.joinpath('assets', cls.getAssetName())
 
     @classmethod
     def getModelScene(cls):
+        """
+        :return: The path to a model scene which, in this base class, is
+            ``model.ma`` under the path returned by :meth:`getAssetDir`.
+        :rtype: :class:`~pathlib.Path`
+        """
         return cls.getAssetDir().joinpath('model.ma')
 
     @classmethod

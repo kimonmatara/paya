@@ -1,8 +1,8 @@
-=====================
-paya.rigtypes.rig.rig
-=====================
+*********************
+paya.runtime.rigs.Rig
+*********************
 
-.. py:module:: paya.rigtypes.rig.rig
+.. py:currentmodule:: paya.runtime.rigs
 
 .. py:class:: Rig
 
@@ -10,7 +10,10 @@ paya.rigtypes.rig.rig
 
     :class:`~paya.trunk.Trunk`
 
-
+    ..warning::
+    
+        This is a stub / beta class, and should not be relied on for
+        production purposes.
 
     .. py:classmethod:: getAssetName()
     
@@ -46,7 +49,7 @@ paya.rigtypes.rig.rig
         :return: The full export path.
         :rtype: :class:`~pathlib.Path`
     
-    .. py:classmethod:: referenceTrunkScene(name, namespace=None)
+    .. py:classmethod:: referenceTrunkScene(name, namespace=None, **kwargs)
     
         Locates and references the specified trunk scene.
         
@@ -54,6 +57,7 @@ paya.rigtypes.rig.rig
             is omitted, both ASCII and binary scene files will be considered
         :param str namespace/ns: a namespace for the reference; if omitted,
             it will be set to the file basename; defaults to ``None``
+        :param \*\*kwargs: forwarded to ``file()``
         :return: The retrieved file path.
         :rtype: :class:`~pathlib.Path`
     
