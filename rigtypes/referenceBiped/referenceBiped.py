@@ -6,7 +6,7 @@ import paya.runtime as r
 
 class ReferenceBiped(r.rigs.Rig):
     """
-    ..warning::
+    .. warning::
 
         This is a stub / beta class, and should not be relied on for
         production purposes.

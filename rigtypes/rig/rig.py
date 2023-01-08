@@ -14,7 +14,7 @@ from paya.lib.evalgraph import EvalGraph
 
 class Rig(Trunk):
     """
-    ..warning::
+    .. warning::
 
         This is a stub / beta class, and should not be relied on for
         production purposes.
