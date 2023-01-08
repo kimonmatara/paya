@@ -158,6 +158,16 @@ class NoInterpolationKeysError(RuntimeError):
 #--------------------------------------------------------------|
 
 def mathInfo(item):
+    """
+    Deprecated; here for backward compatibility.
+
+    Equivalent to:
+
+    .. code-block:: python
+
+        values = list(info(item).values())
+        return [values[0], values[1], values[3]]
+    """
     p.warning("mathInfo() is deprecated. Use mathops.info() instead")
     itemInfo = info(item)
     return itemInfo['item'], itemInfo['dimension'], itemInfo['isPlug']
@@ -307,8 +317,8 @@ def floatRange(start, end, numValues):
         inclusively.
     :rtype: [:class:`float` | :class:`~paya.runtime.plugs.Math1D`]
     """
-    start, startDim, startIsPlug = mathInfo(start)
-    end, endDim, endIsPlug = mathInfo(end)
+    start, startDim, startUnitType, startIsPlug = info(start).values()
+    end, endDim, endUnitType, endIsPlug = info(end).values()
 
     hasPlugs = startIsPlug or endIsPlug
 
@@ -497,9 +507,9 @@ def blendScalars(scalarA, scalarB, weight=0.5):
     :type weight/w: float, str, :class:`~paya.runtime.plugs.Math1D`
     :return:
     """
-    scalarA, dimA, isPlugA = mathInfo(scalarA)
-    scalarB, dimB, isPlugB = mathInfo(scalarB)
-    weight, weightDim, weightIsPlug = mathInfo(weight)
+    scalarA, dimA, unitTypeA, isPlugA = info(scalarA).values()
+    scalarB, dimB, unitTypeB, isPlugB = info(scalarB).values()
+    weight, weightDim, weightUnitType, weightIsPlug = info(weight).values()
 
     if isPlugA or isPlugB or weightIsPlug:
         node = r.nodes.BlendTwoAttr.createNode()
@@ -533,7 +543,7 @@ def multMatrices(*matrices):
     plugStates = []
 
     for matrix in matrices:
-        matrix, dim, isplug = mathInfo(matrix)
+        matrix, dim, unittype, isplug = info(matrix).values()
 
         if not isplug:
             if outElems:
@@ -624,7 +634,8 @@ def createMatrix(*rowHints,
     #-------------------------------------------------------------|    Gather info
 
     if translate is not None:
-        translate, translateDim, translateIsPlug = mathInfo(translate)
+        translate, translateDim, \
+            translateUnitType, translateIsPlug = info(translate).values()
 
         if plug is None and translateIsPlug:
             plug = True
@@ -635,7 +646,10 @@ def createMatrix(*rowHints,
 
         else:
             thirdLengthIsDefined = True
-            thirdLength, thirdLengthDim, thirdLengthIsPlug = mathInfo(thirdLength)
+            thirdLength, \
+            thirdLengthDim, \
+            thirdLengthUnitType, \
+            thirdLengthIsPlug = info(thirdLength).values()
 
             if plug is None and thirdLengthIsPlug:
                 plug = True
@@ -650,12 +664,21 @@ def createMatrix(*rowHints,
             )
 
         axes = rowHints[::2]
-        vectorInfos = list(map(mathInfo, rowHints[1::2]))
+
+        # vectorInfos = list(map(mathInfo, rowHints[1::2]))
+        # vectors = [vectorInfo[0] for vectorInfo in vectorInfos]
+        #
+        # ortho = ln is 4
+        #
+        # if plug is None and any([vectorInfo[2] for vectorInfo in vectorInfos]):
+        #     plug = True
+
+        vectorInfos = [list(info(x).values()) for x in rowHints[1::2]]
         vectors = [vectorInfo[0] for vectorInfo in vectorInfos]
 
         ortho = ln is 4
 
-        if plug is None and any([vectorInfo[2] for vectorInfo in vectorInfos]):
+        if plug is None and any([vectorInfo[3] for vectorInfo in vectorInfos]):
             plug = True
 
     if plug is None:
@@ -941,7 +964,7 @@ def getAimVectors(points):
         will always be one member shorter than the input list.
     """
     if len(points) > 1:
-        points = [mathInfo(point)[0] for point in points]
+        points = [list(info(point).values())[0] for point in points]
 
         out = []
 
@@ -1116,8 +1139,12 @@ def getChainedAimMatrices(
         or control hierarchies.
     :rtype: [:class:`~paya.runtime.plugs.Matrix`]
     """
-    pointInfos = [mathInfo(point) for point in points]
+    # pointInfos = [mathInfo(point) for point in points]
+    # points = [pointInfo[0] for pointInfo in pointInfos]
+
+    pointInfos = [list(info(point).values()) for point in points]
     points = [pointInfo[0] for pointInfo in pointInfos]
+
     num = len(points)
 
     if globalScale is None:
@@ -1125,12 +1152,15 @@ def getChainedAimMatrices(
         gsIsPlug = False
 
     else:
-        globalScale, gsDim, gsIsPlug = mathInfo(globalScale)
+        globalScale, \
+        gsDim, \
+        gsUnitType, \
+        gsIsPlug = info(globalScale).values()
 
     upVectors = conformVectorArg(upVector, ll=num)
 
     hasPlugs = gsIsPlug \
-       or any((pointInfo[2] for pointInfo in pointInfos)) \
+       or any((pointInfo[3] for pointInfo in pointInfos)) \
        or any((isPlug(upVector) for upVector in upVectors))
 
     if hasPlugs and framed:
@@ -1238,14 +1268,17 @@ def parallelTransport(normal, tangents, fromEnd=False):
     if fromEnd:
         tangents = tangents[::-1]
 
-    normal, normalDim, normalIsPlug = mathInfo(normal)
-    tangentInfos = [mathInfo(tangent) for tangent in tangents]
+    normal, normalDim, normalUnitType, normalIsPlug = info(normal).values()
+    # tangentInfos = [mathInfo(tangent) for tangent in tangents]
+    # tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
+    tangentInfos = [list(info(tangent).values()) for tangent in tangents]
     tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
 
     normal = normal.rejectFrom(tangents[0]) # perpendicularise, otherwise
                                             # whole calc goes wonky
 
-    tangentPlugStates = [tangentInfo[2] for tangentInfo in tangentInfos]
+    # tangentPlugStates = [tangentInfo[2] for tangentInfo in tangentInfos]
+    tangentPlugStates = [tangentInfo[3] for tangentInfo in tangentInfos]
     hasTangentPlugs = any(tangentPlugStates)
 
     if hasTangentPlugs:
@@ -1368,26 +1401,30 @@ def blendCurveNormalSets(normalsA,
     else:
         raise ValueError("Unequal argment lengths.")
 
-    tangentInfos = [mathInfo(tangent) for tangent in tangents]
+    # tangentInfos = [mathInfo(tangent) for tangent in tangents]
+    tangentInfos = [list(info(tangent).values()) for tangent in tangents]
     tangents = [tangentInfo[0] for tangentInfo in tangentInfos]
     
-    normalAInfos = [mathInfo(normalA) for normalA in normalsA]
+    # normalAInfos = [mathInfo(normalA) for normalA in normalsA]
+    normalAInfos = [list(info(normalA).values()) for normalA in normalsA]
     normalsA = [normalAInfo[0] for normalAInfo in normalAInfos]
     
-    normalBInfos = [mathInfo(normalB) for normalB in normalsB]
+    # normalBInfos = [mathInfo(normalB) for normalB in normalsB]
+    normalBInfos = [list(info(normalB).values()) for normalB in normalsB]
     normalsB = [normalBInfo[0] for normalBInfo in normalBInfos]
 
-    ratioInfos = [mathInfo(ratio) for ratio in ratios]
+    # ratioInfos = [mathInfo(ratio) for ratio in ratios]
+    ratioInfos = [list(info(ratio).values()) for ratio in ratios]
     ratios = [ratioInfo[0] for ratioInfo in ratioInfos]
 
-    uwInfo = mathInfo(unwindSwitch)
+    uwInfo = list(info(unwindSwitch).values())
     unwindSwitch = uwInfo[0]
 
-    hasPlugs = uwInfo[2] \
-        or any((tangentInfo[2] for tangentInfo in tangentInfos)) \
-        or any((normalAInfo[2] for normalAInfo in normalAInfos)) \
-        or any((normalBInfo[2] for normalBInfo in normalBInfos)) \
-        or any((ratioInfo[2] for ratioInfo in ratioInfos))
+    hasPlugs = uwInfo[3] \
+        or any((tangentInfo[3] for tangentInfo in tangentInfos)) \
+        or any((normalAInfo[3] for normalAInfo in normalAInfos)) \
+        or any((normalBInfo[3] for normalBInfo in normalBInfos)) \
+        or any((ratioInfo[3] for ratioInfo in ratioInfos))
 
     if hasPlugs:
         tangents = forceVectorsAsPlugs(tangents)

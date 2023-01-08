@@ -369,7 +369,8 @@ def describeAndConformVectorArg(vector):
 
         if all(map(isParamVectorPair, vector)):
             outDescr = 'keys'
-            params = [_mo.mathInfo(pair[0])[0] for pair in vector]
+            # params = [_mo.mathInfo(pair[0])[0] for pair in vector]
+            params = [_mo.info(pair[0]).values()[0] for pair in vector]
             vectors = [conformVectorArg(pair[1]) for pair in vector]
             outContent = list(zip(params, vectors))
 
@@ -392,7 +393,8 @@ def resolveNumberOrFractionsArg(arg):
     if isinstance(arg, int):
         return floatRange(0, 1, arg)
 
-    return [_mo.mathInfo(x)[0] for x in arg]
+    # return [_mo.mathInfo(x)[0] for x in arg]
+    return [_mo.info(x).values()[0] for x in arg]
 
 def expandVectorArgs(*args):
     """
@@ -629,8 +631,10 @@ def forceVectorsAsPlugs(vectors):
     :rtype: [:class:`~paya.runtime.plugs.Vector`]
     """
 
-    vectorInfos = [_mo.mathInfo(vector) for vector in vectors]
-    plugStates = [vectorInfo[2] for vectorInfo in vectorInfos]
+    # vectorInfos = [_mo.mathInfo(vector) for vector in vectors]
+    vectorInfos = [_mo.info(vector).values() for vector in vectors]
+    # plugStates = [vectorInfo[2] for vectorInfo in vectorInfos]
+    plugStates = [vectorInfo[3] for vectorInfo in vectorInfos]
 
     if all(plugStates):
         return [vectorInfo[0] for vectorInfo in vectorInfos]
@@ -642,7 +646,7 @@ def forceVectorsAsPlugs(vectors):
     index = 0
 
     for vectorInfo in vectorInfos:
-        if vectorInfo[2]:
+        if vectorInfo[3]:
             out.append(vectorInfo[0])
 
         else:
