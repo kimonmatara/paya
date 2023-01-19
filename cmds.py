@@ -41,6 +41,8 @@ def saveScriptEditor():
     # should deprecate soon, due to new Save All Script Editor tabs menu command
     mel.eval('syncExecuterBackupFiles')
 
+test = None
+
 def findMelProc(procName):
     """
     Convenience wrapper for MEL's `whatIs`. Returns just a path to
